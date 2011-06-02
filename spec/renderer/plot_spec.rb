@@ -12,7 +12,9 @@ class Alf
       before { FileUtils.rm_rf output }
 
       it "should generate the graph" do
-        Renderer::Plot.render(plot)
+        Gnuplot.open do |gp|
+          Renderer::Plot.render(plot, gp)
+        end
         File.exists?(output).should be_true
       end
 

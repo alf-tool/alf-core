@@ -203,7 +203,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def build
       renamer = Renamer.new{|r| r.renaming = {abscissa => :x, ordinate => :y, series => :title}}
       grouper = Grouper.new{|g| g.attributes = [:x, :y]; g.as = :data}
-      datasetter = Grouper.new{|g| g.attributes = [:title, :data]; g.as = :dataset}
+      datasetter = Grouper.new{|g| g.attributes = [:title, :data]; g.as = :datasets}
       titler = Renamer.new{|r| r.renaming = {title => :title}}
       titler.pipe(datasetter.pipe(grouper.pipe(renamer.pipe(@input))))
     end
@@ -226,17 +226,23 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Render < Quickl::Command(__FILE__, __LINE__)
 
     options do |opt|
-      @text_output = false
+      @output = :hash
       opt.on("--text") do 
-        @text_output = true
+        @output = :text
+      end
+      opt.on("--plot") do 
+        @output = :plot
       end
     end
 
     def output(res)
-      if @text_output
-        Renderer::Text.render(res.to_a, $stdout)
-      else
-        res.each{|t| $stdout << t.inspect << "\n"}
+      case @output
+        when :text
+          Renderer::Text.render(res.to_a, $stdout)
+        when :plot
+          Renderer::Plot.render(res.to_a, $stdout)
+        when :hash
+          res.each{|t| $stdout << t.inspect << "\n"}
       end
     end
 

@@ -33,9 +33,12 @@ class Alf
         end
       end
 
-      def self.render(graph)
-        Gnuplot.open do |gp|
-          gp << to_plot(graph).to_gplot
+      def self.render(graph, io = $stdout)
+        case graph
+          when Hash
+            io << to_plot(graph).to_gplot << "\n"
+          when Array
+            graph.each{|t| render(t, io)}
         end
       end
 
