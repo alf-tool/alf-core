@@ -106,7 +106,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
       opt.on('--as x', 
              "Specify new group attribute name") do |value|
-        self.as = value
+        self.as = value.to_s.to_sym
       end
     end
 
@@ -134,7 +134,3 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
 end # class Alf
 require "alf/renderer/text"
-
-if $0 == __FILE__
-  Alf.run(ARGV, __FILE__)
-end
