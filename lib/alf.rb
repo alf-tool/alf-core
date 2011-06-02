@@ -109,6 +109,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Grouper
 
 end # class Alf
+require "alf/renderer/text"
 
 if $0 == __FILE__
   Alf.run(ARGV, __FILE__)
