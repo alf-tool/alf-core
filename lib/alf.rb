@@ -20,18 +20,25 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   # Install options
   options do |opt|
-    
-    # Show the help and exit
     opt.on_tail("--help", "Show help") do
       raise Quickl::Help
     end
-
-    # Show version and exit
     opt.on_tail("--version", "Show version") do
       raise Quickl::Exit, "#{program_name} #{Alf::VERSION} (c) 2011, Bernard Lambeau"
     end
-
+    @text_output = false
+    opt.on("--text") do 
+      @text_output = true
+    end
   end # Alf's options
+
+  def output(res)
+    if @text_output
+      Renderer::Text.render(res.to_a, $stdout)
+    else
+      res.each{|t| $stdout << t.inspect << "\n"}
+    end
+  end
 
   #
   # Common module for all pipeable nodes
@@ -45,8 +52,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def execute(args)
-      res = pipe(HashReader.new.pipe($stdin)).to_a
-      Renderer::Text.render(res, $stdout)
+      requester.output pipe(HashReader.new.pipe($stdin))
     end
 
   end # module Pipeable
