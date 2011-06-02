@@ -71,6 +71,45 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class HashReader
 
   # 
+  # Rename attributes
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  class Renamer < Quickl::Command(__FILE__, __LINE__)
+    include Pipeable
+
+    attr_accessor :renaming
+
+    def initialize
+      @renaming = {}
+      yield self if block_given?
+    end
+
+    # Install options
+    options do |opt|
+      opt.on('-r x,y', Array,
+             "Specify a renaming") do |value|
+        @renaming[value.first.to_sym] = value.last.to_sym
+      end
+    end
+
+    def each
+      @input.each do |tuple|
+        renamed = {}
+        tuple.each_pair do |k,v|
+          renamed[@renaming[k] || k] = v
+        end
+        yield(renamed)
+      end
+    end
+
+  end # class Renamer
+
+  # 
   # Group some attributes as a RVA
   #
   # SYNOPSIS
