@@ -44,6 +44,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    def execute(args)
+      res = pipe(HashReader.new.pipe($stdin)).to_a
+      Renderer::Text.render(res, $stdout)
+    end
+
   end # module Pipeable
 
   #
@@ -57,9 +62,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         begin
           h = Kernel.eval(line)
           raise "hash expected, got #{h}" unless h.is_a?(Hash)
-          yield(h)
         rescue Exception => ex
-          $stderr << "Skipping #{line}"
+          $stderr << "Skipping #{line.strip}: #{ex.message}\n"
+        else
+          yield(h)
         end
       end
     end
@@ -84,6 +90,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def initialize
       @attributes = @as = @input = nil
       yield self if block_given?
+    end
+
+    # Install options
+    options do |opt|
+      opt.on('--attributes x,y,z', Array,
+             "Specify grouping attributes") do |value|
+        self.attributes = value.collect{|c| c.to_sym}
+      end
+      opt.on('--as x', 
+             "Specify new group attribute name") do |value|
+        self.as = value
+      end
     end
 
     def each
