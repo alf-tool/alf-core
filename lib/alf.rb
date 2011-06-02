@@ -26,19 +26,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     opt.on_tail("--version", "Show version") do
       raise Quickl::Exit, "#{program_name} #{Alf::VERSION} (c) 2011, Bernard Lambeau"
     end
-    @text_output = false
-    opt.on("--text") do 
-      @text_output = true
-    end
   end # Alf's options
-
-  def output(res)
-    if @text_output
-      Renderer::Text.render(res.to_a, $stdout)
-    else
-      res.each{|t| $stdout << t.inspect << "\n"}
-    end
-  end
 
   #
   # Common module for all pipeable nodes
@@ -51,8 +39,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    def output(res)
+      res.each{|t| $stdout << t.inspect << "\n"}
+    end
+
     def execute(args)
-      requester.output pipe(HashReader.new.pipe($stdin))
+      output pipe(HashReader.new.pipe($stdin))
     end
 
   end # module Pipeable
@@ -131,6 +123,38 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Grouper
+
+  # 
+  # Renders its input according to a renderer
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  class Render < Quickl::Command(__FILE__, __LINE__)
+
+    options do |opt|
+      @text_output = false
+      opt.on("--text") do 
+        @text_output = true
+      end
+    end
+
+    def output(res)
+      if @text_output
+        Renderer::Text.render(res.to_a, $stdout)
+      else
+        res.each{|t| $stdout << t.inspect << "\n"}
+      end
+    end
+
+    def execute(args)
+      output HashReader.new.pipe($stdin)
+    end
+
+  end # class Render
 
 end # class Alf
 require "alf/renderer/text"
