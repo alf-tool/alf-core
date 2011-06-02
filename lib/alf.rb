@@ -1,0 +1,115 @@
+require 'alf/loader'
+#
+# alf - A commandline tool for relational inspired data manipulation
+#
+# SYNOPSIS
+#   #{program_name} [--version] [--help] COMMAND [cmd opts] ARGS...
+#
+# OPTIONS
+# #{summarized_options}
+#
+# COMMANDS
+# #{summarized_subcommands}
+#
+# See '#{program_name} help COMMAND' for more information on a specific command.
+#
+class Alf < Quickl::Delegator(__FILE__, __LINE__)
+
+  # Load the version now
+  require 'alf/version'
+
+  # Install options
+  options do |opt|
+    
+    # Show the help and exit
+    opt.on_tail("--help", "Show help") do
+      raise Quickl::Help
+    end
+
+    # Show version and exit
+    opt.on_tail("--version", "Show version") do
+      raise Quickl::Exit, "#{program_name} #{Alf::VERSION} (c) 2011, Bernard Lambeau"
+    end
+
+  end # Alf's options
+
+  #
+  # Common module for all pipeable nodes
+  #
+  module Pipeable
+    include Enumerable
+
+    def pipe(input)
+      @input = input
+      self
+    end
+
+  end # module Pipeable
+
+  #
+  # Reads the input pipe and convert each line to a ruby Hash
+  #
+  class HashReader
+    include Pipeable
+
+    def each
+      @input.each_line do |line|
+        begin
+          h = Kernel.eval(line)
+          raise "hash expected, got #{h}" unless h.is_a?(Hash)
+          yield(h)
+        rescue Exception => ex
+          $stderr << "Skipping #{line}"
+        end
+      end
+    end
+
+  end # class HashReader
+
+  # 
+  # Group some attributes as a RVA
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  class Grouper < Quickl::Command(__FILE__, __LINE__)
+    include Pipeable
+
+    attr_accessor :attributes
+    attr_accessor :as
+
+    def initialize
+      @attributes = @as = @input = nil
+      yield self if block_given?
+    end
+
+    def each
+      index = Hash.new{|h,k| h[k] = []} 
+      @input.each do |tuple|
+        key, rest = split_tuple(tuple)
+        index[key] << rest
+      end
+      index.each_pair do |k,v|
+        yield(k.merge(@as => v))
+      end
+    end
+
+    def split_tuple(tuple)
+      key, rest = tuple.dup, {}
+      @attributes.each do |a|
+        rest[a] = tuple[a]
+        key.delete(a)
+      end
+      [key,rest]
+    end
+
+  end # class Grouper
+
+end # class Alf
+
+if $0 == __FILE__
+  Alf.run(ARGV, __FILE__)
+end
