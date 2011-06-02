@@ -164,6 +164,57 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Grouper
 
   # 
+  # Groups and renamed everything to be plottable
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  class Plotter < Quickl::Command(__FILE__, __LINE__)
+    include Pipeable
+
+    attr_accessor :title
+    attr_accessor :abscissa
+    attr_accessor :ordinate
+    attr_accessor :series
+
+    def initialize
+      yield self if block_given?
+    end
+
+    # Install options
+    options do |opt|
+      opt.on('-t title', "Specify graph title") do |value|
+        self.title = value.to_sym
+      end
+      opt.on('-x abscissa', "Specify abscissa attribute") do |value|
+        self.abscissa = value.to_sym
+      end
+      opt.on('-y ordinate', "Specify ordinate attribute") do |value|
+        self.ordinate = value.to_sym
+      end
+      opt.on('-s series', "Specify series attribute") do |value|
+        self.series = value.to_sym
+      end
+    end
+
+    def build
+      renamer = Renamer.new{|r| r.renaming = {abscissa => :x, ordinate => :y, series => :title}}
+      grouper = Grouper.new{|g| g.attributes = [:x, :y]; g.as = :data}
+      datasetter = Grouper.new{|g| g.attributes = [:title, :data]; g.as = :dataset}
+      titler = Renamer.new{|r| r.renaming = {title => :title}}
+      titler.pipe(datasetter.pipe(grouper.pipe(renamer.pipe(@input))))
+    end
+
+    def each
+      build.each(&Proc.new)
+    end
+
+  end # class Plotter
+
+  # 
   # Renders its input according to a renderer
   #
   # SYNOPSIS
@@ -197,3 +248,4 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
 end # class Alf
 require "alf/renderer/text"
+require "alf/renderer/plot"
