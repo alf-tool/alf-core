@@ -199,7 +199,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # OPTIONS
   # #{summarized_options}
   #
-  class Renamer < Quickl::Command(__FILE__, __LINE__)
+  class Rename < Quickl::Command(__FILE__, __LINE__)
     include TupleTransformOperator
 
     attr_accessor :renaming
@@ -222,7 +222,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       Hash[*tuple.collect{|k,v| [@renaming[k] || k, v]}.flatten]
     end
 
-  end # class Renamer
+  end # class Rename
 
   # 
   # Group some attributes as a RVA
@@ -316,10 +316,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def build
-      renamer = Renamer.new{|r| r.renaming = {abscissa => :x, ordinate => :y, series => :title}}
+      renamer = Rename.new{|r| r.renaming = {abscissa => :x, ordinate => :y, series => :title}}
       grouper = Grouper.new{|g| g.attributes = [:x, :y]; g.as = :data}
       datasetter = Grouper.new{|g| g.attributes = [:title, :data]; g.as = :datasets}
-      titler = Renamer.new{|r| r.renaming = {title => :title}}
+      titler = Rename.new{|r| r.renaming = {title => :title}}
       titler.pipe(datasetter.pipe(grouper.pipe(renamer.pipe(@input))))
     end
 

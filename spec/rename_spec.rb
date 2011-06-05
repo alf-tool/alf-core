@@ -1,12 +1,12 @@
 require File.expand_path('../spec_helper', __FILE__)
 class Alf
-  describe Renamer do
+  describe Rename do
       
     let(:input) {[
       {:a => "a", :b => "b"},
     ]}
     let(:renamer){
-      Renamer.new{|g| g.renaming = {:a => :z}}
+      Rename.new{|g| g.renaming = {:a => :z}}
     }
     subject{ renamer.pipe(input) }
 
