@@ -15,8 +15,16 @@ require 'alf/loader'
 #
 class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
-  # Load the version now
-  require 'alf/version'
+  # Handles Alf's version 
+  module Version
+    MAJOR = 1
+    MINOR = 0
+    TINY  = 0
+    def self.to_s
+      [ MAJOR, MINOR, TINY ].join('.')
+    end
+  end 
+  VERSION = Version.to_s
 
   # Install options
   options do |opt|
