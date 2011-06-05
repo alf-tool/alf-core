@@ -37,8 +37,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # Alf's options
 
   #
-  # Marker for chain elements converting input streams
-  # to enumerable of tuples.
+  # Marker for chain elements converting input streams to enumerable 
+  # of tuples.
   #
   module TupleReader
     include Enumerable
@@ -109,6 +109,48 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class HashReader
 
   #
+  # Marker for chain elements converting tuple streams
+  #
+  module TupleWriter
+
+    #
+    # Pipes with a tuple stream, typically another operator or
+    # a TupleReader.
+    #
+    # This method simply sets _input_ under a variable instance of
+    # same name and returns self.
+    #
+    def pipe(input)
+      @input = input
+      self
+    end
+
+    #
+    # Executes the writing, outputting the resulting relation. 
+    #
+    # This method must be implemented by subclasses.
+    #
+    def execute(output = $stdout)
+    end
+
+  end # module TupleWriter
+
+  #
+  # Implements the TupleWriter contract through inspect
+  #
+  class HashWriter 
+    include TupleWriter
+
+    # @see TupleWriter#execute
+    def execute(output = $stdout)
+      @input.each do |tuple|
+        output << tuple.inspect << "\n"
+      end
+    end
+
+  end # class HashWriter
+
+  #
   # Marker for all operators on relations.
   # 
   module BaseOperator
@@ -126,12 +168,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
-    def output(res)
-      res.each{|t| $stdout << t.inspect << "\n"}
-    end
-
+    # 
+    # Executes this operator as a commandline
+    #
     def execute(args)
-      output pipe(HashReader.new.pipe($stdin))
+      [ HashReader.new, self, HashWriter.new ].inject($stdin) do |chain,n|
+        n.pipe(chain)
+      end.execute($stdout)
     end
 
   end # module Operator
