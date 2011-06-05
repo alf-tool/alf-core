@@ -40,7 +40,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for chain elements converting input streams
   # to enumerable of tuples.
   #
-  module Inputter
+  module TupleReader
     include Enumerable
 
     # Input stream
@@ -84,7 +84,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     undef_method :line2tuple
 
-  end # module Inputter
+  end # module TupleReader
 
   #
   # Common module for all pipeable nodes
@@ -108,13 +108,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module Pipeable
 
   #
-  # Implements the Inputter contract for a stream where each line is 
+  # Implements the TupleReader contract for a stream where each line is 
   # a ruby hash literal, as a tuple physical representation.
   #
   class HashReader
-    include Inputter
+    include TupleReader
 
-    # @see Inputter#line2tuple
+    # @see TupleReader#line2tuple
     def line2tuple(line)
       begin
         h = Kernel.eval(line)
