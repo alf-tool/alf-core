@@ -37,6 +37,56 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # Alf's options
 
   #
+  # Marker for chain elements converting input streams
+  # to enumerable of tuples.
+  #
+  module Inputter
+    include Enumerable
+
+    # Input stream
+    attr_reader :input
+
+    #
+    # Pipes with an input stream, typically a IO object
+    #
+    # This method simply sets _input_ under a variable instance of
+    # same name and returns self.
+    #
+    def pipe(input)
+      @input = input
+      self
+    end
+
+    #
+    # Yields the block with each tuple (converted from the
+    # input stream) in turn.
+    #
+    # Default implementation reads lines of the input stream and
+    # yields the block with <code>line2tuple(line)</code> on each
+    # of them
+    #
+    def each
+      input.each_line do |line| 
+        tuple = line2tuple(line)
+        yield tuple unless tuple.nil?
+      end
+    end
+
+    protected
+
+    #
+    # Converts a line previously read from the input stream
+    # to a tuple.
+    #
+    # This method MUST be implemented by subclasses.
+    #
+    def line2tuple(line)
+    end
+    undef_method :line2tuple
+
+  end # module Inputter
+
+  #
   # Common module for all pipeable nodes
   #
   module Pipeable
@@ -58,21 +108,22 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module Pipeable
 
   #
-  # Reads the input pipe and convert each line to a ruby Hash
+  # Implements the Inputter contract for a stream where each line is 
+  # a ruby hash literal, as a tuple physical representation.
   #
   class HashReader
-    include Pipeable
+    include Inputter
 
-    def each
-      @input.each_line do |line|
-        begin
-          h = Kernel.eval(line)
-          raise "hash expected, got #{h}" unless h.is_a?(Hash)
-        rescue Exception => ex
-          $stderr << "Skipping #{line.strip}: #{ex.message}\n"
-        else
-          yield(h)
-        end
+    # @see Inputter#line2tuple
+    def line2tuple(line)
+      begin
+        h = Kernel.eval(line)
+        raise "hash expected, got #{h}" unless h.is_a?(Hash)
+      rescue Exception => ex
+        $stderr << "Skipping #{line.strip}: #{ex.message}\n"
+        nil
+      else
+        return h
       end
     end
 
