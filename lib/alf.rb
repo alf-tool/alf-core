@@ -37,11 +37,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # Alf's options
 
   #
-  # Marker for chain elements converting input streams to enumerable 
-  # of tuples.
+  # Included by all elements of a tuple chain
   #
-  module TupleReader
-    include Enumerable
+  module Pipeable
 
     # Input stream
     attr_reader :input
@@ -56,6 +54,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @input = input
       self
     end
+
+  end # module Pipeable
+
+  #
+  # Marker for chain elements converting input streams to enumerable 
+  # of tuples.
+  #
+  module TupleReader
+    include Pipeable
+    include Enumerable
 
     #
     # Yields the block with each tuple (converted from the
@@ -112,18 +120,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for chain elements converting tuple streams
   #
   module TupleWriter
-
-    #
-    # Pipes with a tuple stream, typically another operator or
-    # a TupleReader.
-    #
-    # This method simply sets _input_ under a variable instance of
-    # same name and returns self.
-    #
-    def pipe(input)
-      @input = input
-      self
-    end
+    include Pipeable
 
     #
     # Executes the writing, outputting the resulting relation. 
@@ -154,19 +151,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for all operators on relations.
   # 
   module BaseOperator
+    include Pipeable
     include Enumerable
-
-    #
-    # Pipes with a tuple stream, typically another operator or
-    # a TupleReader.
-    #
-    # This method simply sets _input_ under a variable instance of
-    # same name and returns self.
-    #
-    def pipe(input)
-      @input = input
-      self
-    end
 
     # 
     # Executes this operator as a commandline
