@@ -362,6 +362,52 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Rename
 
   # 
+  # Nest some attributes as a new TUPLE-valued attribute
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
+  # attribute whose name is NEWNAME
+  #
+  class Nest < Quickl::Command(__FILE__, __LINE__)
+    include TupleTransformOperator
+
+    # Array of nesting attributes
+    attr_accessor :attributes
+
+    # New name for the nested attribute
+    attr_accessor :as
+
+    # Builds a Rename operator instance
+    def initialize
+      @attributes = []
+      @as = :nested
+      yield self if block_given?
+    end
+
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @as = args.pop.to_sym
+      @attributes = args.collect{|a| a.to_sym}
+      self
+    end
+
+    # @see TupleTransformOperator#tuple2tuple
+    def tuple2tuple(tuple)
+      others = Hash[*(tuple.keys - @attributes).collect{|k| [k,tuple[k]]}.flatten]
+      others[as] = Hash[attributes.collect{|k| [k, tuple[k]]}]
+      others
+    end
+
+  end # class Nest
+
+  # 
   # Group some attributes as a RVA
   #
   # SYNOPSIS
