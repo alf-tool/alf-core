@@ -6,9 +6,7 @@ class Alf
       {:a => "a", :b => "b"},
     ]}
     let(:renamer){
-      Renamer.new{|g|
-        g.renaming = {:a => :z}
-      }
+      Renamer.new{|g| g.renaming = {:a => :z}}
     }
     subject{ renamer.pipe(input) }
 

@@ -165,6 +165,31 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # module Operator
 
+  #
+  # Specialization of BaseOperator for operators that
+  # simply convert single tuples to single tuples.
+  #
+  module TupleTransformOperator
+    include BaseOperator
+
+    # @see BaseOperator#each
+    def each
+      @input.each do |tuple|
+        yield tuple2tuple(tuple)
+      end
+    end
+
+    protected 
+
+    #
+    # Transforms an input tuple to an output tuple
+    #
+    def tuple2tuple(tuple)
+    end
+    undef_method :tuple2tuple
+
+  end # module TupleTransformOperator
+
   # 
   # Rename attributes
   #
@@ -175,7 +200,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # #{summarized_options}
   #
   class Renamer < Quickl::Command(__FILE__, __LINE__)
-    include BaseOperator
+    include TupleTransformOperator
 
     attr_accessor :renaming
 
@@ -192,14 +217,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
-    def each
-      @input.each do |tuple|
-        renamed = {}
-        tuple.each_pair do |k,v|
-          renamed[@renaming[k] || k] = v
-        end
-        yield(renamed)
-      end
+    # @see TupleTransformOperator#tuple2tuple
+    def tuple2tuple(tuple)
+      Hash[*tuple.collect{|k,v| [@renaming[k] || k, v]}.flatten]
     end
 
   end # class Renamer
