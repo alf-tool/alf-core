@@ -189,7 +189,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     #
     # Configures the operator from arguments taken from
-    # command line
+    # command line. This method returns the operator itself.
     #
     def set_args(args)
     end
@@ -220,6 +220,48 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     undef_method :tuple2tuple
 
   end # module TupleTransformOperator
+
+  # 
+  # Normalizes the input tuple stream by forcing default values
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 VAL1 ...
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator rewrites tuples so as to ensure that all specified 
+  # attributes ATTR are defined and not nil. Missing or nil attributes
+  # are replaced by the associated default value. 
+  #
+  class Defaults < Quickl::Command(__FILE__, __LINE__)
+    include TupleTransformOperator
+
+    # Hash of source -> target attribute renamings
+    attr_accessor :defaults
+
+    # Builds a Rename operator instance
+    def initialize
+      @defaults = {}
+      yield self if block_given?
+    end
+
+    # @see BaseOperator#set_args
+    def set_args(args)
+      args.each_with_index{|a,i| args[i] = a.to_sym if i % 2 == 0}
+      @defaults = Hash[*args]
+      self
+    end
+
+    # @see TupleTransformOperator#tuple2tuple
+    def tuple2tuple(tuple)
+      norm = Hash[*tuple.collect{|k,v| [k, v.nil? ? @defaults[k] : v]}.flatten]
+      @defaults.merge(norm)
+    end
+
+  end # class Defaults
 
   # 
   # Rename some tuple attributes
@@ -255,6 +297,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see BaseOperator#set_args
     def set_args(args)
       @renaming = Hash[*args.collect{|c| c.to_sym}]
+      self
     end
 
     # @see TupleTransformOperator#tuple2tuple
