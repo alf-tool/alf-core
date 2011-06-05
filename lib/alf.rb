@@ -36,6 +36,29 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
   end # Alf's options
 
+  # 
+  # Show help about a specific command
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} COMMAND
+  #
+  class Help < Quickl::Command(__FILE__, __LINE__)
+    
+    # Let NoSuchCommandError be passed to higher stage
+    no_react_to Quickl::NoSuchCommand
+    
+    # Command execution
+    def execute(args)
+      if args.size != 1
+        puts super_command.help
+      else
+        cmd = has_command!(args.first, super_command)
+        puts cmd.help
+      end
+    end
+    
+  end # class Help
+
   #
   # Included by all elements of a tuple chain
   #
@@ -199,13 +222,23 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module TupleTransformOperator
 
   # 
-  # Rename attributes
+  # Rename some tuple attributes
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} OLD1 NEW1 ...
   #
   # OPTIONS
   # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This command renames OLD attributes as NEW as specified by 
+  # arguments. Attributes OLD should exist in the source relation 
+  # while attributes NEW should not.
+  #
+  # Example:
+  #   {:id => 1} -> alf rename id identifier -> {:identifier => 1}
+  #   {:a => 1, :b => 2} -> alf rename a A b B -> {:A => 1, :B => 2}
   #
   class Rename < Quickl::Command(__FILE__, __LINE__)
     include TupleTransformOperator
