@@ -408,6 +408,47 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Nest
 
   # 
+  # Unnest a TUPLE-valued attribute
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator unnests a tuple-valued attribute ATTR so as to 
+  # flatten it pairs with 'upstream' tuple.
+  #
+  class Unnest < Quickl::Command(__FILE__, __LINE__)
+    include TupleTransformOperator
+
+    # Name of the attribute to unnest
+    attr_accessor :attribute
+
+    # Builds a Rename operator instance
+    def initialize
+      @attribute = "nested"
+      yield self if block_given?
+    end
+
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @attribute = args.last.to_sym
+      self
+    end
+
+    # @see TupleTransformOperator#tuple2tuple
+    def tuple2tuple(tuple)
+      tuple = tuple.dup
+      nested = tuple.delete(@attribute) || {}
+      tuple.merge(nested)
+    end
+
+  end # class Unnest
+
+  # 
   # Group some attributes as a RVA
   #
   # SYNOPSIS
