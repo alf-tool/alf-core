@@ -87,27 +87,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module TupleReader
 
   #
-  # Common module for all pipeable nodes
-  #
-  module Pipeable
-    include Enumerable
-
-    def pipe(input)
-      @input = input
-      self
-    end
-
-    def output(res)
-      res.each{|t| $stdout << t.inspect << "\n"}
-    end
-
-    def execute(args)
-      output pipe(HashReader.new.pipe($stdin))
-    end
-
-  end # module Pipeable
-
-  #
   # Implements the TupleReader contract for a stream where each line is 
   # a ruby hash literal, as a tuple physical representation.
   #
@@ -128,6 +107,27 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class HashReader
+
+  #
+  # Common module for all pipeable nodes
+  #
+  module Pipeable
+    include Enumerable
+
+    def pipe(input)
+      @input = input
+      self
+    end
+
+    def output(res)
+      res.each{|t| $stdout << t.inspect << "\n"}
+    end
+
+    def execute(args)
+      output pipe(HashReader.new.pipe($stdin))
+    end
+
+  end # module Pipeable
 
   # 
   # Rename attributes
