@@ -264,6 +264,60 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Defaults
 
   # 
+  # Project input tuples on some attributes only
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 ATTR2 ...
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator projects tuples on attributes whose names are specified 
+  # as arguments. Note that, so far, this operator does NOT remove 
+  # duplicate tuples in the result and is therefore not equivalent to a
+  # true relational projection.
+  #
+  class Project < Quickl::Command(__FILE__, __LINE__)
+    include TupleTransformOperator
+
+    # Array of projection attributes
+    attr_accessor :attributes
+
+    # Is it a --allbut projection?
+    attr_accessor :allbut
+
+    # Builds a Rename operator instance
+    def initialize
+      @attributes = []
+      @allbut = false
+      yield self if block_given?
+    end
+
+    # Installs the options
+    options do |opt|
+      opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
+        @allbut = true
+      end
+    end
+
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @attributes = args.collect{|a| a.to_sym}
+      self
+    end
+
+    # @see TupleTransformOperator#tuple2tuple
+    def tuple2tuple(tuple)
+      @allbut ? 
+        tuple.delete_if{|k,v| attributes.include?(k)} :
+        tuple.delete_if{|k,v| !attributes.include?(k)}
+    end
+
+  end # class Project
+
+  # 
   # Rename some tuple attributes
   #
   # SYNOPSIS
