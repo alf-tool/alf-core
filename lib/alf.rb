@@ -109,11 +109,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class HashReader
 
   #
-  # Common module for all pipeable nodes
-  #
-  module Pipeable
+  # Marker for all operators on relations.
+  # 
+  module BaseOperator
     include Enumerable
 
+    #
+    # Pipes with a tuple stream, typically another operator or
+    # a TupleReader.
+    #
+    # This method simply sets _input_ under a variable instance of
+    # same name and returns self.
+    #
     def pipe(input)
       @input = input
       self
@@ -127,7 +134,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       output pipe(HashReader.new.pipe($stdin))
     end
 
-  end # module Pipeable
+  end # module Operator
 
   # 
   # Rename attributes
@@ -139,7 +146,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # #{summarized_options}
   #
   class Renamer < Quickl::Command(__FILE__, __LINE__)
-    include Pipeable
+    include BaseOperator
 
     attr_accessor :renaming
 
@@ -178,7 +185,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # #{summarized_options}
   #
   class Grouper < Quickl::Command(__FILE__, __LINE__)
-    include Pipeable
+    include BaseOperator
 
     attr_accessor :attributes
     attr_accessor :as
@@ -232,7 +239,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # #{summarized_options}
   #
   class Plotter < Quickl::Command(__FILE__, __LINE__)
-    include Pipeable
+    include BaseOperator
 
     attr_accessor :title
     attr_accessor :abscissa
