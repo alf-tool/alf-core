@@ -158,9 +158,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Executes this operator as a commandline
     #
     def execute(args)
+      set_args(args)
       [ HashReader.new, self, HashWriter.new ].inject($stdin) do |chain,n|
         n.pipe(chain)
       end.execute($stdout)
+    end
+
+    #
+    # Configures the operator from arguments taken from
+    # command line
+    #
+    def set_args(args)
     end
 
   end # module Operator
@@ -202,19 +210,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Rename < Quickl::Command(__FILE__, __LINE__)
     include TupleTransformOperator
 
+    # Hash of source -> target attribute renamings
     attr_accessor :renaming
 
+    # Builds a Rename operator instance
     def initialize
       @renaming = {}
       yield self if block_given?
     end
 
-    # Install options
-    options do |opt|
-      opt.on('-r x,y', Array,
-             "Specify a renaming") do |value|
-        @renaming[value.first.to_sym] = value.last.to_sym
-      end
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @renaming = Hash[*args.collect{|c| c.to_sym}]
     end
 
     # @see TupleTransformOperator#tuple2tuple

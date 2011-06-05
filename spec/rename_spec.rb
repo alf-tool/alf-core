@@ -5,15 +5,34 @@ class Alf
     let(:input) {[
       {:a => "a", :b => "b"},
     ]}
-    let(:renamer){
-      Rename.new{|g| g.renaming = {:a => :z}}
-    }
     subject{ renamer.pipe(input) }
 
-    it "should group as expected" do
-      subject.to_a.should == [
-        {:z => "a", :b => "b"},
-      ]
+    describe "When used through API" do 
+
+      let(:renamer){
+        Rename.new{|g| g.renaming = {:a => :z}}
+      }
+
+      it "should group as expected" do
+        subject.to_a.should == [
+          {:z => "a", :b => "b"},
+        ]
+      end
+
+    end
+
+    describe "When configured as from commandline" do
+
+      let(:renamer){
+        Rename.new{|g| g.set_args(['a', 'z'])}
+      }
+
+      it "should group as expected" do
+        subject.to_a.should == [
+          {:z => "a", :b => "b"},
+        ]
+      end
+
     end
 
   end 
