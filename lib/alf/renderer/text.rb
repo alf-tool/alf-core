@@ -49,7 +49,7 @@ class Alf
             when Float
               "%.7f" % value
             when Hash
-              to_s([value])
+              value.inspect
             when Array
               looks_a_relation?(value) ? 
                 Text.render(value) :
