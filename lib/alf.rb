@@ -583,6 +583,51 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Group
 
   # 
+  # Ungroup a RELATION-valued attribute
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator ungroup the relation-valued attribute whose
+  # name is ATTR
+  #
+  class Ungroup < Quickl::Command(__FILE__, __LINE__)
+    include BaseOperator
+
+    # Relation-value attribute to ungroup
+    attr_accessor :attribute
+  
+    # Creates a Group instance
+    def initialize
+      @attribute = :grouped
+      yield self if block_given?
+    end
+
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @attribute = args.pop.to_sym
+      self
+    end
+
+    # See BaseOperator#each
+    def each
+      @input.each do |tuple|
+        tuple = tuple.dup
+        subrel = tuple.delete(@attribute)
+        subrel.each do |subtuple|
+          yield(tuple.merge(subtuple))
+        end
+      end
+    end
+
+  end # class Ungroup
+
+  # 
   # Groups and renamed everything to be plottable
   #
   # SYNOPSIS
