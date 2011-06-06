@@ -520,37 +520,42 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Unnest
 
   # 
-  # Group some attributes as a RVA
+  # Group some attributes as a new RELATION-valued attribute
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
   #
   # OPTIONS
   # #{summarized_options}
   #
+  # DESCRIPTION
+  #
+  # This operator groups attributes ATTR1 to ATTRN as a new, relation-values
+  # attribute whose name is NEWNAME
+  #
   class Group < Quickl::Command(__FILE__, __LINE__)
     include BaseOperator
 
+    # Attributes on which grouping applies
     attr_accessor :attributes
+  
+    # Attribute name for grouping tuple 
     attr_accessor :as
 
+    # Creates a Group instance
     def initialize
-      @attributes = @as = @input = nil
+      @attributes = @as = nil
       yield self if block_given?
     end
 
-    # Install options
-    options do |opt|
-      opt.on('--attributes x,y,z', Array,
-             "Specify grouping attributes") do |value|
-        self.attributes = value.collect{|c| c.to_sym}
-      end
-      opt.on('--as x', 
-             "Specify new group attribute name") do |value|
-        self.as = value.to_s.to_sym
-      end
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @as = args.pop.to_sym
+      @attributes = args.collect{|a| a.to_sym}
+      self
     end
 
+    # See BaseOperator#each
     def each
       index = Hash.new{|h,k| h[k] = []} 
       @input.each do |tuple|
@@ -561,6 +566,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         yield(k.merge(@as => v))
       end
     end
+
+    protected
 
     def split_tuple(tuple)
       key, rest = tuple.dup, {}
