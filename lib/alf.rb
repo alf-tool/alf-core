@@ -3,7 +3,9 @@ require 'alf/loader'
 # alf - A commandline tool for relational inspired data manipulation
 #
 # SYNOPSIS
-#   #{program_name} [--version] [--help] COMMAND [cmd opts] ARGS...
+#   #{program_name} [--version] [--help] 
+#   #{program_name} help COMMAND
+#   #{program_name} COMMAND [cmd opts] ARGS ...
 #
 # OPTIONS
 # #{summarized_options}
