@@ -361,7 +361,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class Rename
 
-
   # 
   # Restrict input tuples to those for which an expression is true
   #
@@ -386,6 +385,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
 
       def build(tuple)
+        # TODO: refactor me to avoid instance_eval
         tuple.keys.each do |k|
           self.instance_eval <<-EOF
             def #{k}; @tuple[#{k.inspect}]; end
@@ -396,6 +396,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       def set(tuple)
         build(tuple) if @tuple.nil?
         @tuple = tuple
+        self
       end
 
     end # class TupleHandle
@@ -411,13 +412,22 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see BaseOperator#set_args
     def set_args(args)
-      @functor = Proc.new(args.first.to_s)
+      # TODO: refactor me to avoid Kernel.eval
+      @functor = Kernel.eval <<-EOF
+        lambda{ #{args.first} } 
+      EOF
+      self
     end
 
     # @see BaseOperator#each
     def each
       handle = TupleHandle.new
-      @input.each{|t| yield(t) if func.call(handle.set(t))}
+      # TODO: is there a way to avoid this ugly test??
+      if RUBY_VERSION <= "1.9"
+        @input.each{|t| yield(t) if handle.set(t).instance_eval(&@functor) }
+      else
+        @input.each{|t| yield(t) if handle.set(t).instance_exec(&@functor) }
+      end
     end
 
   end # class Restrict

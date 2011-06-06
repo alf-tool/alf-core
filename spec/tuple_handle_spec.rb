@@ -19,5 +19,10 @@ class Alf
       handle.world.should == "d"
     end
 
+    it "should allow instance evaluatin on exprs" do
+      handle.set(:tested => 1)
+      handle.instance_eval{ tested < 1 }.should be_false
+    end
+
   end   
 end
