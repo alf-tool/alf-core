@@ -528,7 +528,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # OPTIONS
   # #{summarized_options}
   #
-  class Grouper < Quickl::Command(__FILE__, __LINE__)
+  class Group < Quickl::Command(__FILE__, __LINE__)
     include BaseOperator
 
     attr_accessor :attributes
@@ -571,7 +571,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       [key,rest]
     end
 
-  end # class Grouper
+  end # class Group
 
   # 
   # Groups and renamed everything to be plottable
@@ -612,10 +612,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     def build
       renamer = Rename.new{|r| r.renaming = {abscissa => :x, ordinate => :y, series => :title}}
-      grouper = Grouper.new{|g| g.attributes = [:x, :y]; g.as = :data}
-      datasetter = Grouper.new{|g| g.attributes = [:title, :data]; g.as = :datasets}
+      group = Group.new{|g| g.attributes = [:x, :y]; g.as = :data}
+      datasetter = Group.new{|g| g.attributes = [:title, :data]; g.as = :datasets}
       titler = Rename.new{|r| r.renaming = {title => :title}}
-      titler.pipe(datasetter.pipe(grouper.pipe(renamer.pipe(@input))))
+      titler.pipe(datasetter.pipe(group.pipe(renamer.pipe(@input))))
     end
 
     def each
