@@ -361,6 +361,67 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class Rename
 
+
+  # 
+  # Restrict input tuples to those for which an expression is true
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} EXPR
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This command restricts tuples to those for which EXPR evaluates
+  # to true.
+  #
+  class Restrict < Quickl::Command(__FILE__, __LINE__)
+    include BaseOperator
+
+    class TupleHandle
+
+      def initialize
+        @tuple = nil
+      end
+
+      def build(tuple)
+        tuple.keys.each do |k|
+          self.instance_eval <<-EOF
+            def #{k}; @tuple[#{k.inspect}]; end
+          EOF
+        end
+      end
+
+      def set(tuple)
+        build(tuple) if @tuple.nil?
+        @tuple = tuple
+      end
+
+    end # class TupleHandle
+
+    # Hash of source -> target attribute renamings
+    attr_accessor :functor
+
+    # Builds a Rename operator instance
+    def initialize
+      @functor = lambda{ true }
+      yield self if block_given?
+    end
+
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @functor = Proc.new(args.first.to_s)
+    end
+
+    # @see BaseOperator#each
+    def each
+      handle = TupleHandle.new
+      @input.each{|t| yield(t) if func.call(handle.set(t))}
+    end
+
+  end # class Restrict
+
   # 
   # Nest some attributes as a new TUPLE-valued attribute
   #
