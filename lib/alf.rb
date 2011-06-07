@@ -182,6 +182,33 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class HashWriter
 
   #
+  # Provides a handle to implement a (TODO) fly design pattern
+  # on tuples.
+  #
+  class TupleHandle
+
+    def initialize
+      @tuple = nil
+    end
+
+    def build(tuple)
+      # TODO: refactor me to avoid instance_eval
+      tuple.keys.each do |k|
+        self.instance_eval <<-EOF
+          def #{k}; @tuple[#{k.inspect}]; end
+        EOF
+      end
+    end
+
+    def set(tuple)
+      build(tuple) if @tuple.nil?
+      @tuple = tuple
+      self
+    end
+
+  end # class TupleHandle
+
+  #
   # Marker for all operators on relations.
   # 
   module BaseOperator
@@ -388,29 +415,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Restrict < Quickl::Command(__FILE__, __LINE__)
     include BaseOperator
-
-    class TupleHandle
-
-      def initialize
-        @tuple = nil
-      end
-
-      def build(tuple)
-        # TODO: refactor me to avoid instance_eval
-        tuple.keys.each do |k|
-          self.instance_eval <<-EOF
-            def #{k}; @tuple[#{k.inspect}]; end
-          EOF
-        end
-      end
-
-      def set(tuple)
-        build(tuple) if @tuple.nil?
-        @tuple = tuple
-        self
-      end
-
-    end # class TupleHandle
 
     # Hash of source -> target attribute renamings
     attr_accessor :functor

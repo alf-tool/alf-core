@@ -1,8 +1,8 @@
 require File.expand_path('../spec_helper', __FILE__)
 class Alf
-  describe Restrict::TupleHandle do
+  describe TupleHandle do
 
-    let(:handle){ Restrict::TupleHandle.new }
+    let(:handle){ TupleHandle.new }
 
     it "should install methods properly" do
       handle.set(:hello => "a", :world => "b")
