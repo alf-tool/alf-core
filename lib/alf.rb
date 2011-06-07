@@ -57,6 +57,15 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end
 
   #
+  # Defines a generic relational command
+  #
+  def self.BaseOperator(file, line)
+    Command(file, line) do |b|
+      b.instance_module Alf::BaseOperator
+    end
+  end
+
+  #
   # Defines a command that simply transforms single tuples
   #
   def self.TupleTransformOperator(file, line)
@@ -511,8 +520,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This command restricts tuples to those for which EXPR evaluates
   # to true.
   #
-  class Restrict < Quickl::Command(__FILE__, __LINE__)
-    include BaseOperator
+  class Restrict < Alf::BaseOperator(__FILE__, __LINE__)
 
     # Hash of source -> target attribute renamings
     attr_accessor :functor
@@ -652,8 +660,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator groups attributes ATTR1 to ATTRN as a new, relation-values
   # attribute whose name is NEWNAME
   #
-  class Group < Quickl::Command(__FILE__, __LINE__)
-    include BaseOperator
+  class Group < Alf::BaseOperator(__FILE__, __LINE__)
 
     # Attributes on which grouping applies
     attr_accessor :attributes
@@ -713,8 +720,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator ungroup the relation-valued attribute whose
   # name is ATTR
   #
-  class Ungroup < Quickl::Command(__FILE__, __LINE__)
-    include BaseOperator
+  class Ungroup < Alf::BaseOperator(__FILE__, __LINE__)
 
     # Relation-value attribute to ungroup
     attr_accessor :attribute
