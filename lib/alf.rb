@@ -318,7 +318,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Hash of source -> target attribute renamings
     attr_accessor :defaults
 
-    # Builds a Rename operator instance
+    # Builds a Defaults operator instance
     def initialize
       @defaults = {}
       yield self if block_given?
@@ -407,7 +407,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Is it a --allbut projection?
     attr_accessor :allbut
 
-    # Builds a Rename operator instance
+    # Builds a Project operator instance
     def initialize
       @attributes = []
       @allbut = false
@@ -761,6 +761,32 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Render
+
+  # 
+  # Implements a small LISP-like DSL on top of Alf
+  #
+  module Lispy
+
+    def rename(who, renaming)
+      pipe(Rename.new{|r| r.renaming = renaming}, who)
+    end
+
+    private
+
+    def pipe(parent, child)
+      child = case child
+        when IO
+          HashReader.new(child)
+        when Array, Pipeable
+          child
+        else
+          raise ArgumentError, "Unable to pipe with #{child}"
+      end
+      parent.pipe(child)
+    end
+
+    extend Lispy
+  end # module Lispy
 
 end # class Alf
 require "alf/renderer/text"

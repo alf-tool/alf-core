@@ -5,34 +5,24 @@ class Alf
     let(:input) {[
       {:a => "a", :b => "b"},
     ]}
-    subject{ renamer.pipe(input) }
+    let(:expected){[
+      {:z => "a", :b => "b"},
+    ]}
 
-    describe "When used through API" do 
-
+    describe "When used through Lispy" do 
+      subject{ renamer.to_a }
       let(:renamer){
-        Rename.new{|g| g.renaming = {:a => :z}}
+        Lispy.rename(input, {:a => :z})
       }
-
-      it "should group as expected" do
-        subject.to_a.should == [
-          {:z => "a", :b => "b"},
-        ]
-      end
-
+      it{ should == expected }
     end
 
     describe "When configured as from commandline" do
-
+      subject{ renamer.pipe(input).to_a }
       let(:renamer){
         Rename.new{|g| g.set_args(['a', 'z'])}
       }
-
-      it "should group as expected" do
-        subject.to_a.should == [
-          {:z => "a", :b => "b"},
-        ]
-      end
-
+      it{ should == expected }
     end
 
   end 
