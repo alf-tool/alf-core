@@ -340,6 +340,49 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Defaults
 
   # 
+  # Extend input tuples with attributes whose value is computed
+  # with tuple expressions.
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 EXPR1 ATTR2 EXPR2...
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This command extend input tuples with new attributes names ATTR1 
+  # ATTR2, and so on. Values of those attributes are the result of
+  # evaluating EXPR1, EXPR2, etc on input tuples.
+  #
+  class Extend < Quickl::Command(__FILE__, __LINE__)
+    include TupleTransformOperator
+
+    # Builds an Extend operator instance
+    def initialize
+      @extensions = {}
+      @handle = TupleHandle.new
+      yield self if block_given?
+    end
+
+    # @see BaseOperator#set_args
+    def set_args(args)
+      @extensions = Hash[*args.each_slice(2).collect{|k,v|
+        [k.to_sym, @handle.compile(v)]
+      }.flatten]
+      self
+    end
+
+    # @see TupleTransformOperator#tuple2tuple
+    def tuple2tuple(tuple)
+      tuple.merge Hash[*@extensions.collect{|k,v|
+        [k, @handle.set(tuple).evaluate(v)]
+      }.flatten]
+    end
+
+  end # class Extend
+
+  # 
   # Project input tuples on some attributes only
   #
   # SYNOPSIS
