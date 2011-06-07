@@ -817,6 +817,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
                         r.as = nesting.keys.first}, child)
     end
 
+    # Factors an UNNEST operator
+    def unnest(child, attribute)
+      pipe(Unnest.new{|r| r.attribute = attribute}, child)
+    end
+
     private
 
     def pipe(parent, child)
