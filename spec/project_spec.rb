@@ -5,30 +5,47 @@ class Alf
     let(:input) {[
       {:a => "a", :b => "b"},
     ]}
-    subject{ proj.pipe(input) }
+
+    subject{ operator.to_a }
 
     describe "When used without --allbut" do
-      let(:proj){
-        Project.new.set_args(['a'])
-      }
+      let(:expected){[{:a => "a"}]}
 
-      it "should group as expected" do
-        subject.to_a.should == [
-          {:a => "a"}
-        ]
+      describe "when factored with commandline args" do
+        let(:operator){ Project.new.set_args(['a']).pipe(input) }
+        it { should == expected } 
       end
+
+      describe "when factored with Lispy" do
+        let(:operator){ Lispy.project(input, :a) }
+        it { should == expected } 
+      end
+
+      describe "when factored with Lispy with Array args" do
+        let(:operator){ Lispy.project(input, [:a]) }
+        it { should == expected } 
+      end
+
     end
 
-    describe "When used without --allbut" do
-      let(:proj){
-        Project.new{|p| p.allbut = true; p.set_args(['a'])}
-      }
+    describe "When used with --allbut" do
+      let(:expected){[{:b => "b"}]}
 
-      it "should group as expected" do
-        subject.to_a.should == [
-          {:b => "b"}
-        ]
+      describe "when factored with commandline args" do
+        let(:operator){ Project.new{|p| p.allbut = true}.set_args(['a']).pipe(input) }
+        it { should == expected } 
       end
+
+      describe "when factored with Lispy" do
+        let(:operator){ Lispy.allbut(input, :a) }
+        it { should == expected } 
+      end
+
+      describe "when factored with Lispy with Array args" do
+        let(:operator){ Lispy.allbut(input, [:a]) }
+        it { should == expected } 
+      end
+
     end
 
   end 

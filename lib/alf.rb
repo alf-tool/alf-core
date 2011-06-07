@@ -780,6 +780,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Extend.new{|op| op.extensions = extensions}, child)
     end
 
+    # Factors a PROJECT operator
+    def project(child, *attrs)
+      pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
+    end
+
+    # Factors a PROJECT-ALLBUT operator
+    def allbut(child, *attrs)
+      pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
+    end
+
     # Factors a RENAME operator
     def rename(child, renaming)
       pipe(Rename.new{|r| r.renaming = renaming}, child)
