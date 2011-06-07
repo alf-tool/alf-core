@@ -5,16 +5,21 @@ class Alf
     let(:input) {[
       {:a => "a", :b => "b", :c => "c"},
     ]}
-    subject{ nest.pipe(input) }
 
-    let(:nest){
-      Nest.new.set_args ["a", "b", "nested"]
-    }
+    let(:expected) {[
+      {:nested => {:a => "a", :b => "b"}, :c => "c"}
+    ]}
 
-    it "should group as expected" do
-      subject.to_a.should == [
-        {:nested => {:a => "a", :b => "b"}, :c => "c"}
-      ]
+    subject{ operator.to_a }
+
+    describe "when factored with commandline args" do
+      let(:operator){ Nest.new.set_args(["a", "b", "nested"]).pipe(input) }
+      it { should == expected }
+    end
+
+    describe "when factored with Lispy" do
+      let(:operator){ Lispy.nest(input, :nested => [:a, :b]) }
+      it { should == expected }
     end
 
   end 

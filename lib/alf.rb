@@ -806,9 +806,15 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Rename.new{|r| r.renaming = renaming}, child)
     end
 
-    # Factors a RENAME operator
+    # Factors a RESTRICT operator
     def restrict(child, functor)
       pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
+    end
+
+    # Factors a NEST operator
+    def nest(child, nesting)
+      pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
+                        r.as = nesting.keys.first}, child)
     end
 
     private
