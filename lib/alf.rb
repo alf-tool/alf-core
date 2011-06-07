@@ -1,4 +1,13 @@
-require 'alf/loader'
+def alf_required(retried)
+  ["enumerator", 
+   "quickl"].each{|req| require req}
+rescue LoadError
+  raise unless retried
+  require "rubygems"
+  alf_required(true)
+end
+alf_required(false)
+
 #
 # alf - A commandline tool for relational inspired data manipulation
 #
