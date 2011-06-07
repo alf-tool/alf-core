@@ -24,5 +24,30 @@ class Alf
       handle.instance_eval{ tested < 1 }.should be_false
     end
 
+    describe "compile" do
+      
+      it "should return a Proc" do
+        handle.compile("true").should be_a(Proc)
+      end
+
+    end
+
+    describe "evaluate" do
+      before{ handle.set(:a => 1, :b => 2) }
+      
+      it "should allow a String" do
+        handle.evaluate("a").should == 1
+      end
+      
+      it "should allow a Proc" do
+        handle.evaluate(lambda{ a }).should == 1
+      end
+
+      it "should allow the result of compile" do
+        handle.evaluate(handle.compile('a')).should == 1
+      end
+
+    end
+
   end   
 end

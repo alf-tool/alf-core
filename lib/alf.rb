@@ -187,10 +187,54 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class TupleHandle
 
+    # Creates an handle instance
     def initialize
       @tuple = nil
     end
 
+    #
+    # Sets the next tuple to use.
+    #
+    # This method installs the handle as a side effect 
+    # on first call. 
+    #
+    def set(tuple)
+      build(tuple) if @tuple.nil?
+      @tuple = tuple
+      self
+    end
+
+    # 
+    # Compiles a tuple expression and returns a lambda
+    # instance that can be passed to evaluate later.
+    # 
+    def compile(expr)
+      # TODO: refactor this to avoid relying on Kernel.eval
+      Kernel.eval "lambda{ #{expr} }"
+    end
+
+    #
+    # Evaluates an expression on the current tuple. Expression
+    # can be a lambda or a string (immediately compiled in the
+    # later case).
+    # 
+    def evaluate(expr)
+      expr = compile(expr) unless expr.is_a?(Proc)
+      if RUBY_VERSION < "1.9"
+        instance_eval &expr
+      else
+        instance_exec &expr
+      end
+    end
+
+    private
+
+    #
+    # Builds this handle with a tuple.
+    #
+    # This method should be called only once and installs 
+    # instance methods on the handle with keys of _tuple_.
+    #
     def build(tuple)
       # TODO: refactor me to avoid instance_eval
       tuple.keys.each do |k|
@@ -198,12 +242,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           def #{k}; @tuple[#{k.inspect}]; end
         EOF
       end
-    end
-
-    def set(tuple)
-      build(tuple) if @tuple.nil?
-      @tuple = tuple
-      self
     end
 
   end # class TupleHandle
@@ -421,7 +459,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Builds a Rename operator instance
     def initialize
-      @functor = lambda{ true }
+      @handle = TupleHandle.new
+      @functor = @handle.compile("true")
       yield self if block_given?
     end
 
@@ -432,20 +471,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       else
         args.first || "true"
       end
-      # TODO: refactor me to avoid Kernel.eval
-      @functor = Kernel.eval "lambda{ #{code} }"
+      @functor = @handle.compile(code)
       self
     end
 
     # @see BaseOperator#each
     def each
-      handle = TupleHandle.new
-      # TODO: is there a way to avoid this ugly test??
-      if RUBY_VERSION <= "1.9"
-        @input.each{|t| yield(t) if handle.set(t).instance_eval(&@functor) }
-      else
-        @input.each{|t| yield(t) if handle.set(t).instance_exec(&@functor) }
-      end
+      @input.each{|t| yield(t) if @handle.set(t).evaluate(@functor) }
     end
 
   end # class Restrict
