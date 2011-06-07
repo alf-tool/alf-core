@@ -5,23 +5,20 @@ class Alf
     let(:input) {[
       {:a => "a", :b => "b"},
     ]}
+
     let(:expected){[
       {:z => "a", :b => "b"},
     ]}
 
-    describe "When used through Lispy" do 
-      subject{ renamer.to_a }
-      let(:renamer){
-        Lispy.rename(input, {:a => :z})
-      }
+    subject{ operator.to_a }
+
+    describe "When factored with Lispy" do 
+      let(:operator){ Lispy.rename(input, {:a => :z}) }
       it{ should == expected }
     end
 
-    describe "When configured as from commandline" do
-      subject{ renamer.pipe(input).to_a }
-      let(:renamer){
-        Rename.new{|g| g.set_args(['a', 'z'])}
-      }
+    describe "When factored from commandline args" do
+      let(:operator){ Rename.new{|g| g.set_args(['a', 'z'])}.pipe(input) }
       it{ should == expected }
     end
 

@@ -767,8 +767,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   module Lispy
 
-    def rename(who, renaming)
-      pipe(Rename.new{|r| r.renaming = renaming}, who)
+    # Factors a DEFAULTS operator
+    def defaults(child, defaults)
+      pipe(Defaults.new{|d| d.defaults = defaults}, child)
+    end
+
+    # Factors a RENAME operator
+    def rename(child, renaming)
+      pipe(Rename.new{|r| r.renaming = renaming}, child)
     end
 
     private

@@ -5,16 +5,21 @@ class Alf
     let(:input) {[
       {:a => nil, :b => "b"},
     ]}
-    subject{ defs.pipe(input) }
 
-    let(:defs){
-      Defaults.new.set_args(['a', 1, 'c', "blue"])
-    }
+    let(:expected) {[
+      {:a => 1, :b => "b", :c => "blue"},
+    ]}
 
-    it "should group as expected" do
-      subject.to_a.should == [
-        {:a => 1, :b => "b", :c => "blue"},
-      ]
+    subject{ operator.to_a }
+
+    describe "When factored with Lispy" do 
+      let(:operator){ Lispy.defaults(input, :a => 1, :c => "blue") }
+      it{ should == expected }
+    end
+
+    describe "When factored from commandline args" do
+      let(:operator){ Defaults.new.set_args(['a', 1, 'c', "blue"]).pipe(input) }
+      it{ should == expected }
     end
 
   end 
