@@ -2,7 +2,7 @@ def alf_required(retried)
   ["enumerator", 
    "quickl"].each{|req| require req}
 rescue LoadError
-  raise unless retried
+  raise if retried
   require "rubygems"
   alf_required(true)
 end
@@ -709,12 +709,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       opt.on("--plot") do 
         @output = :plot
       end
+      opt.on("--yaml") do 
+        @output = :yaml
+      end
     end
 
     def output(res)
       case @output
         when :text
           Renderer::Text.render(res.to_a, $stdout)
+        when :yaml
+          require 'yaml'
+          $stdout << res.to_a.to_yaml
         when :plot
           Renderer::Plot.render(res.to_a, $stdout)
         when :hash
