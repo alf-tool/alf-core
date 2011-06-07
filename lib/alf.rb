@@ -510,14 +510,25 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       yield self if block_given?
     end
 
+    def self.functor(arg)
+      case arg
+        when String
+          TupleHandle.new.compile(arg)
+        when NilClass
+          TupleHandle.new.compile("true")
+        when Array
+          code = arg.empty? ?
+            "true" :
+            arg.each_slice(2).collect{|pair| "(" + pair.join("==") + ")"}.join(" and ")
+          TupleHandle.new.compile(code)
+        when Proc
+          arg
+      end
+    end
+
     # @see BaseOperator#set_args
     def set_args(args)
-      code = if args.size > 1
-        args.each_slice(2).collect{|pair| "(" + pair.join("==") + ")"}.join(" and ")
-      else
-        args.first || "true"
-      end
-      @functor = @handle.compile(code)
+      @functor = self.class.functor(args.size > 1 ? args : args.first)
       self
     end
 
@@ -793,6 +804,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Factors a RENAME operator
     def rename(child, renaming)
       pipe(Rename.new{|r| r.renaming = renaming}, child)
+    end
+
+    # Factors a RENAME operator
+    def restrict(child, functor)
+      pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
     end
 
     private

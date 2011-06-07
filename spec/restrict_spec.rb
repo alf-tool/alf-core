@@ -6,36 +6,41 @@ class Alf
       {:tested => 1, :other => "b"},
       {:tested => 30, :other => "a"},
     ]}
-    subject{ restrict.pipe(input) }
+
+    let(:expected){[
+      {:tested => 1, :other => "b"}
+    ]}
+
+    subject{ operator.to_a }
 
     describe "when used with no argument" do
-      let(:restrict){
-        Restrict.new.set_args []
-      }
-      it "should restrict as expected" do
-        subject.to_a.should == input
-      end
+      let(:operator){ Restrict.new.set_args([]).pipe(input) }
+      it { should == input }
     end
 
     describe "when used with a string" do
-      let(:restrict){
-        Restrict.new.set_args ["tested < 10"]
-      }
-      it "should restrict as expected" do
-        subject.to_a.should == [
-          {:tested => 1, :other => "b"}
-        ]
+      describe "when factored with commandline args" do
+        let(:operator){ Restrict.new.set_args(["tested < 10"]).pipe(input) }
+        it { should == expected }
+      end
+      describe "when factored with Lispy" do
+        let(:operator){ Lispy.restrict(input, "tested < 10") }
+        it { should == expected }
       end
     end
 
     describe "when used with arguments" do
-      let(:restrict){
-        Restrict.new.set_args ["tested", 1]
-      }
-      it "should restrict as expected" do
-        subject.to_a.should == [
-          {:tested => 1, :other => "b"}
-        ]
+      describe "when factored with commandline args" do
+        let(:operator){ Restrict.new.set_args(["tested", 1]).pipe(input) }
+        it { should == expected }
+      end
+      describe "when factored with Lispy and Proc" do
+        let(:operator){ Lispy.restrict(input, lambda{ tested < 10 }) }
+        it { should == expected }
+      end
+      describe "when factored with Lispy and array" do
+        let(:operator){ Lispy.restrict(input, [:tested, 1]) }
+        it { should == expected }
       end
     end
 
