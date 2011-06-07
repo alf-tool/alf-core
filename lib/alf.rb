@@ -822,6 +822,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Unnest.new{|r| r.attribute = attribute}, child)
     end
 
+    # Factors a GROUP operator
+    def group(child, grouping)
+      pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
+                         r.as = grouping.keys.first}, child)
+    end
+
+    # Factors an UNGROUP operator
+    def ungroup(child, attribute)
+      pipe(Ungroup.new{|r| r.attribute = attribute}, child)
+    end
+
     private
 
     def pipe(parent, child)
