@@ -358,6 +358,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Extend < Quickl::Command(__FILE__, __LINE__)
     include TupleTransformOperator
 
+    # Extensions as a Hash attr => lambda{...}
+    attr_accessor :extensions
+
     # Builds an Extend operator instance
     def initialize
       @extensions = {}
@@ -770,6 +773,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Factors a DEFAULTS operator
     def defaults(child, defaults)
       pipe(Defaults.new{|d| d.defaults = defaults}, child)
+    end
+
+    # Factors an EXTEND operator
+    def extend(child, extensions)
+      pipe(Extend.new{|op| op.extensions = extensions}, child)
     end
 
     # Factors a RENAME operator
