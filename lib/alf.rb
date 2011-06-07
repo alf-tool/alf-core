@@ -414,10 +414,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see BaseOperator#set_args
     def set_args(args)
+      code = if args.size > 1
+        args.each_slice(2).collect{|pair| "(" + pair.join("==") + ")"}.join(" and ")
+      else
+        args.first || "true"
+      end
       # TODO: refactor me to avoid Kernel.eval
-      @functor = Kernel.eval <<-EOF
-        lambda{ #{args.first} } 
-      EOF
+      @functor = Kernel.eval "lambda{ #{code} }"
       self
     end
 
