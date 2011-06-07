@@ -783,59 +783,59 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Factors a DEFAULTS operator
     def defaults(child, defaults)
-      pipe(Defaults.new{|d| d.defaults = defaults}, child)
+      _pipe(Defaults.new{|d| d.defaults = defaults}, child)
     end
 
     # Factors an EXTEND operator
     def extend(child, extensions)
-      pipe(Extend.new{|op| op.extensions = extensions}, child)
+      _pipe(Extend.new{|op| op.extensions = extensions}, child)
     end
 
     # Factors a PROJECT operator
     def project(child, *attrs)
-      pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
+      _pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
     end
 
     # Factors a PROJECT-ALLBUT operator
     def allbut(child, *attrs)
-      pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
+      _pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
     end
 
     # Factors a RENAME operator
     def rename(child, renaming)
-      pipe(Rename.new{|r| r.renaming = renaming}, child)
+      _pipe(Rename.new{|r| r.renaming = renaming}, child)
     end
 
     # Factors a RESTRICT operator
     def restrict(child, functor)
-      pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
+      _pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
     end
 
     # Factors a NEST operator
     def nest(child, nesting)
-      pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
+      _pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
                         r.as = nesting.keys.first}, child)
     end
 
     # Factors an UNNEST operator
     def unnest(child, attribute)
-      pipe(Unnest.new{|r| r.attribute = attribute}, child)
+      _pipe(Unnest.new{|r| r.attribute = attribute}, child)
     end
 
     # Factors a GROUP operator
     def group(child, grouping)
-      pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
+      _pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
                          r.as = grouping.keys.first}, child)
     end
 
     # Factors an UNGROUP operator
     def ungroup(child, attribute)
-      pipe(Ungroup.new{|r| r.attribute = attribute}, child)
+      _pipe(Ungroup.new{|r| r.attribute = attribute}, child)
     end
 
     private
 
-    def pipe(parent, child)
+    def _pipe(parent, child)
       child = case child
         when IO
           HashReader.new(child)
@@ -849,6 +849,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     extend Lispy
   end # module Lispy
+
+  module ShortcutOperator
+    include BaseOperator
+    include Lispy
+
+    def each
+      longexpr.each &Proc.new
+    end
+
+  end # module ShortcutOperator
 
 end # class Alf
 require "alf/renderer/text"
