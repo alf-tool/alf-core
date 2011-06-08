@@ -610,8 +610,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Builds a Rename operator instance
     def initialize
-      @handle = TupleHandle.new
-      @functor = @handle.compile("true")
+      @functor = TupleHandle.new.compile("true")
       yield self if block_given?
     end
 
@@ -633,13 +632,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see BaseOperator#set_args
     def set_args(args)
-      @functor = self.class.functor(args.size > 1 ? args : args.first)
+      @functor = Restrict.functor(args.size > 1 ? args : args.first)
       self
     end
 
     # @see BaseOperator#each
     def each
-      @input.each{|t| yield(t) if @handle.set(t).evaluate(@functor) }
+      handle = TupleHandle.new
+      @input.each{|t| yield(t) if handle.set(t).evaluate(@functor) }
     end
 
   end # class Restrict
