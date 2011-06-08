@@ -472,7 +472,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Builds an Extend operator instance
     def initialize
       @extensions = {}
-      @handle = TupleHandle.new
       yield self if block_given?
     end
 
@@ -486,8 +485,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
+      handle = TupleHandle.new
       tuple.merge Alf::Hash(@extensions.collect{|k,v|
-        [k, @handle.set(tuple).evaluate(v)]
+        [k, handle.set(tuple).evaluate(v)]
       })
     end
 
