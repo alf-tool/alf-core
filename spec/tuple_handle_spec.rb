@@ -27,7 +27,7 @@ class Alf
     describe "compile" do
       
       it "should return a Proc" do
-        handle.compile("true").should be_a(Proc)
+        TupleHandle.compile("true").should be_a(Proc)
       end
 
     end
@@ -44,7 +44,7 @@ class Alf
       end
 
       it "should allow the result of compile" do
-        handle.evaluate(handle.compile('a')).should == 1
+        handle.evaluate(TupleHandle.compile('a')).should == 1
       end
 
     end

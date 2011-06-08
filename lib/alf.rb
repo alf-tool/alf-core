@@ -304,7 +304,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Compiles a tuple expression and returns a lambda
     # instance that can be passed to evaluate later.
     # 
-    def compile(expr)
+    def self.compile(expr)
       # TODO: refactor this to avoid relying on Kernel.eval
       Kernel.eval "lambda{ #{expr} }"
     end
@@ -315,7 +315,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # later case).
     # 
     def evaluate(expr)
-      expr = compile(expr) unless expr.is_a?(Proc)
+      expr = TupleHandle.compile(expr) unless expr.is_a?(Proc)
       if RUBY_VERSION < "1.9"
         instance_eval &expr
       else
@@ -479,7 +479,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see BaseOperator#set_args
     def set_args(args)
       @extensions = Alf::Hash(args.each_slice(2).collect{|k,v|
-        [k.to_sym, @handle.compile(v)]
+        [k.to_sym, TupleHandle.compile(v)]
       })
       self
     end
@@ -610,21 +610,21 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Builds a Rename operator instance
     def initialize
-      @functor = TupleHandle.new.compile("true")
+      @functor = TupleHandle.compile("true")
       yield self if block_given?
     end
 
     def self.functor(arg)
       case arg
         when String
-          TupleHandle.new.compile(arg)
+          TupleHandle.compile(arg)
         when NilClass
-          TupleHandle.new.compile("true")
+          TupleHandle.compile("true")
         when Array
           code = arg.empty? ?
             "true" :
             arg.each_slice(2).collect{|pair| "(" + pair.join("==") + ")"}.join(" and ")
-          TupleHandle.new.compile(code)
+          TupleHandle.compile(code)
         when Proc
           arg
       end
