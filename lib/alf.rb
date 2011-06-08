@@ -759,19 +759,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # OPTIONS
   # #{summarized_options}
   #
-  class Render < Quickl::Command(__FILE__, __LINE__)
+  class Render < Alf::Command(__FILE__, __LINE__)
 
     options do |opt|
-      @output = :hash
-      opt.on("--text") do 
-        @output = :text
-      end
-      opt.on("--plot") do 
-        @output = :plot
-      end
-      opt.on("--yaml") do 
-        @output = :yaml
-      end
+      @output = :ruby
+      opt.on("--ruby"){ @output = :ruby }
+      opt.on("--text"){ @output = :text }
+      opt.on("--yaml"){ @output = :yaml }
+      opt.on("--plot"){ @output = :plot }
     end
 
     def output(res)
@@ -783,7 +778,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           $stdout << res.to_a.to_yaml
         when :plot
           Renderer::Plot.render(res.to_a, $stdout)
-        when :hash
+        when :ruby
           res.each{|t| $stdout << t.inspect << "\n"}
       end
     end
