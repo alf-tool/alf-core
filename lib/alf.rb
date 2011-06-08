@@ -413,52 +413,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module ShortcutOperator
 
   # 
-  # Sorts tuples in memory
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ATTR2...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # This operator sorts input tuples on ATTR1 then ATTR2, etc.
-  # and outputs them sorted after that.
-  #
-  class Sort < Alf::BaseOperator(__FILE__, __LINE__)
-
-    def initialize
-      @attributes = []
-      yield self if block_given?
-    end
-
-    def attributes=(attrs)
-      @attributes = attrs
-    end
-
-    def set_args(args)
-      self.attributes = args.collect{|c| c.to_sym}
-      self
-    end
-
-    def compare(t1,t2)
-      @attributes.each do |a|
-        ac = (t1[a] <=> t2[a])
-        return ac unless ac == 0
-      end
-      return 0
-    end
-
-    def each
-      tuples = @input.to_a
-      tuples.sort!{|k1,k2| compare(k1,k2)}
-      tuples.each(&Proc.new)
-    end
-
-  end # class Sort
-
-  # 
   # Normalizes the input tuple stream by forcing default values
   #
   # SYNOPSIS
@@ -883,6 +837,52 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Ungroup
+
+  # 
+  # Sorts tuples in memory
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 ATTR2...
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator sorts input tuples on ATTR1 then ATTR2, etc.
+  # and outputs them sorted after that.
+  #
+  class Sort < Alf::BaseOperator(__FILE__, __LINE__)
+
+    def initialize
+      @attributes = []
+      yield self if block_given?
+    end
+
+    def attributes=(attrs)
+      @attributes = attrs
+    end
+
+    def set_args(args)
+      self.attributes = args.collect{|c| c.to_sym}
+      self
+    end
+
+    def compare(t1,t2)
+      @attributes.each do |a|
+        ac = (t1[a] <=> t2[a])
+        return ac unless ac == 0
+      end
+      return 0
+    end
+
+    def each
+      tuples = @input.to_a
+      tuples.sort!{|k1,k2| compare(k1,k2)}
+      tuples.each(&Proc.new)
+    end
+
+  end # class Sort
 
   # 
   # Renders its input according to a renderer
