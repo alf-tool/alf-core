@@ -75,27 +75,78 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end
 
   # 
-  # Show help about a specific command
+  # Implements a small LISP-like DSL on top of Alf
   #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} COMMAND
-  #
-  class Help < Alf::Command(__FILE__, __LINE__)
-    
-    # Let NoSuchCommandError be passed to higher stage
-    no_react_to Quickl::NoSuchCommand
-    
-    # Command execution
-    def execute(args)
-      if args.size != 1
-        puts super_command.help
-      else
-        cmd = has_command!(args.first, super_command)
-        puts cmd.help
-      end
+  module Lispy
+
+    # Factors a DEFAULTS operator
+    def defaults(child, defaults)
+      _pipe(Defaults.new{|d| d.defaults = defaults}, child)
     end
-    
-  end # class Help
+
+    # Factors an EXTEND operator
+    def extend(child, extensions)
+      _pipe(Extend.new{|op| op.extensions = extensions}, child)
+    end
+
+    # Factors a PROJECT operator
+    def project(child, *attrs)
+      _pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
+    end
+
+    # Factors a PROJECT-ALLBUT operator
+    def allbut(child, *attrs)
+      _pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
+    end
+
+    # Factors a RENAME operator
+    def rename(child, renaming)
+      _pipe(Rename.new{|r| r.renaming = renaming}, child)
+    end
+
+    # Factors a RESTRICT operator
+    def restrict(child, functor)
+      _pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
+    end
+
+    # Factors a NEST operator
+    def nest(child, nesting)
+      _pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
+                        r.as = nesting.keys.first}, child)
+    end
+
+    # Factors an UNNEST operator
+    def unnest(child, attribute)
+      _pipe(Unnest.new{|r| r.attribute = attribute}, child)
+    end
+
+    # Factors a GROUP operator
+    def group(child, grouping)
+      _pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
+                         r.as = grouping.keys.first}, child)
+    end
+
+    # Factors an UNGROUP operator
+    def ungroup(child, attribute)
+      _pipe(Ungroup.new{|r| r.attribute = attribute}, child)
+    end
+
+    private
+
+    def _pipe(parent, child)
+      child = case child
+        when IO
+          HashReader.new(child)
+        when Array, Pipeable
+          child
+        else
+          raise ArgumentError, "Unable to pipe with #{child}"
+      end
+      parent.pipe(child)
+    end
+
+    extend Lispy
+  end # module Lispy
 
   #
   # Included by all elements of a tuple chain
@@ -323,6 +374,20 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     undef_method :tuple2tuple
 
   end # module TupleTransformOperator
+
+  #
+  # Specialization of BaseOperator for operators that are 
+  # shortcuts on longer expressions.
+  # 
+  module ShortcutOperator
+    include BaseOperator
+    include Lispy
+
+    def each
+      longexpr.each &Proc.new
+    end
+
+  end # module ShortcutOperator
 
   # 
   # Normalizes the input tuple stream by forcing default values
@@ -763,10 +828,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     options do |opt|
       @output = :ruby
-      opt.on("--ruby"){ @output = :ruby }
-      opt.on("--text"){ @output = :text }
-      opt.on("--yaml"){ @output = :yaml }
-      opt.on("--plot"){ @output = :plot }
+      opt.on("--ruby", "Render as ruby hashes"){ @output = :ruby }
+      opt.on("--text", "Render as a text table"){ @output = :text }
+      opt.on("--yaml", "Render as yaml"){ @output = :yaml }
+      opt.on("--plot", "Render as a plot"){ @output = :plot }
     end
 
     def output(res)
@@ -790,88 +855,27 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Render
 
   # 
-  # Implements a small LISP-like DSL on top of Alf
+  # Show help about a specific command
   #
-  module Lispy
-
-    # Factors a DEFAULTS operator
-    def defaults(child, defaults)
-      _pipe(Defaults.new{|d| d.defaults = defaults}, child)
-    end
-
-    # Factors an EXTEND operator
-    def extend(child, extensions)
-      _pipe(Extend.new{|op| op.extensions = extensions}, child)
-    end
-
-    # Factors a PROJECT operator
-    def project(child, *attrs)
-      _pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
-    end
-
-    # Factors a PROJECT-ALLBUT operator
-    def allbut(child, *attrs)
-      _pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
-    end
-
-    # Factors a RENAME operator
-    def rename(child, renaming)
-      _pipe(Rename.new{|r| r.renaming = renaming}, child)
-    end
-
-    # Factors a RESTRICT operator
-    def restrict(child, functor)
-      _pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
-    end
-
-    # Factors a NEST operator
-    def nest(child, nesting)
-      _pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
-                        r.as = nesting.keys.first}, child)
-    end
-
-    # Factors an UNNEST operator
-    def unnest(child, attribute)
-      _pipe(Unnest.new{|r| r.attribute = attribute}, child)
-    end
-
-    # Factors a GROUP operator
-    def group(child, grouping)
-      _pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
-                         r.as = grouping.keys.first}, child)
-    end
-
-    # Factors an UNGROUP operator
-    def ungroup(child, attribute)
-      _pipe(Ungroup.new{|r| r.attribute = attribute}, child)
-    end
-
-    private
-
-    def _pipe(parent, child)
-      child = case child
-        when IO
-          HashReader.new(child)
-        when Array, Pipeable
-          child
-        else
-          raise ArgumentError, "Unable to pipe with #{child}"
+  # SYNOPSIS
+  #   #{program_name} #{command_name} COMMAND
+  #
+  class Help < Alf::Command(__FILE__, __LINE__)
+    
+    # Let NoSuchCommandError be passed to higher stage
+    no_react_to Quickl::NoSuchCommand
+    
+    # Command execution
+    def execute(args)
+      if args.size != 1
+        puts super_command.help
+      else
+        cmd = has_command!(args.first, super_command)
+        puts cmd.help
       end
-      parent.pipe(child)
     end
-
-    extend Lispy
-  end # module Lispy
-
-  module ShortcutOperator
-    include BaseOperator
-    include Lispy
-
-    def each
-      longexpr.each &Proc.new
-    end
-
-  end # module ShortcutOperator
+    
+  end # class Help
 
 end # class Alf
 require "alf/renderer/text"
