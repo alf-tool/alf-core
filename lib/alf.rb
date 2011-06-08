@@ -48,6 +48,15 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # Alf's options
 
   #
+  # Converts an array of pairs to a Hash
+  #
+  def self.Hash(array)
+    h = {}
+    array.each{|pair| h[pair.first] = pair.last}
+    h
+  end
+
+  #
   # Defines a basic Alf command
   #
   def self.Command(file, line)
@@ -71,6 +80,15 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   def self.TupleTransformOperator(file, line)
     Command(file, line) do |b|
       b.instance_module Alf::TupleTransformOperator
+    end
+  end
+
+  #
+  # Defines a command that is a shortcut on a longer expression
+  #
+  def self.ShortcutOperator(file, line)
+    Command(file, line) do |b|
+      b.instance_module Alf::ShortcutOperator
     end
   end
 
@@ -424,7 +442,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
-      norm = Hash[*tuple.collect{|k,v| [k, v.nil? ? @defaults[k] : v]}.flatten]
+      norm = Alf::Hash(tuple.collect{|k,v| [k, v.nil? ? @defaults[k] : v]})
       @defaults.merge(norm)
     end
 
@@ -460,17 +478,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see BaseOperator#set_args
     def set_args(args)
-      @extensions = Hash[*args.each_slice(2).collect{|k,v|
+      @extensions = Alf::Hash(args.each_slice(2).collect{|k,v|
         [k.to_sym, @handle.compile(v)]
-      }.flatten]
+      })
       self
     end
 
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
-      tuple.merge Hash[*@extensions.collect{|k,v|
+      tuple.merge Alf::Hash(@extensions.collect{|k,v|
         [k, @handle.set(tuple).evaluate(v)]
-      }.flatten]
+      })
     end
 
   end # class Extend
@@ -566,7 +584,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
-      Hash[*tuple.collect{|k,v| [@renaming[k] || k, v]}.flatten]
+      Alf::Hash(tuple.collect{|k,v| [@renaming[k] || k, v]})
     end
 
   end # class Rename
@@ -648,7 +666,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # New name for the nested attribute
     attr_accessor :as
 
-    # Builds a Rename operator instance
+    # Builds a Nest operator instance
     def initialize
       @attributes = []
       @as = :nested
@@ -664,8 +682,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
-      others = Hash[*(tuple.keys - @attributes).collect{|k| [k,tuple[k]]}.flatten]
-      others[as] = Hash[attributes.collect{|k| [k, tuple[k]]}]
+      others = Alf::Hash((tuple.keys - @attributes).collect{|k| [k,tuple[k]]})
+      others[as] = Alf::Hash(attributes.collect{|k| [k, tuple[k]]})
       others
     end
 
