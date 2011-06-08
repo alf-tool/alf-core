@@ -46,5 +46,15 @@ class Alf
       it{ should == expected }
     end
 
+    describe "When used with descending order" do 
+      let(:operator){ Lispy.sort(input, [:second], :desc) }
+      let(:expected){[
+        {:first => "a", :second => 20, :third => true},
+        {:first => "b", :second => 10, :third => false},
+        {:first => "a", :second => 1,  :third => true},
+      ]}
+      it{ should == expected }
+    end
+
   end 
 end

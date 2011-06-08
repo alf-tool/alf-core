@@ -150,8 +150,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # Factors an SORT operator
-    def sort(child, attributes)
-      _pipe(Sort.new{|r| r.attributes = attributes}, child)
+    def sort(child, attributes, direction = :asc)
+      _pipe(Sort.new{|r| r.attributes = attributes;
+                         r.direction = direction}, child)
     end
 
     private
@@ -854,9 +855,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Sort < Alf::BaseOperator(__FILE__, __LINE__)
 
+    attr_reader :attributes
+    attr_accessor :direction
+
     def initialize
       @attributes = []
+      @direction = :asc
       yield self if block_given?
+    end
+
+    options do |opt|
+      opt.on('-r', '--reverse', "Sort in descending order"){
+        @direction = :desc
+      }
     end
 
     def attributes=(attrs)
@@ -878,7 +889,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     def each
       tuples = @input.to_a
-      tuples.sort!{|k1,k2| compare(k1,k2)}
+      if @direction == :asc
+        tuples.sort!{|k1,k2| compare(k1,k2)}
+      else
+        tuples.sort!{|k1,k2| compare(k2,k1)}
+      end
       tuples.each(&Proc.new)
     end
 
