@@ -413,7 +413,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module ShortcutOperator
 
   # 
-  # Normalizes the input tuple stream by forcing default values
+  # Normalize the input tuple stream by forcing default values
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 VAL1 ...
@@ -839,7 +839,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Ungroup
 
   # 
-  # Sorts tuples in memory
+  # Sort input tuples in memory and output them sorted
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ATTR2...
@@ -885,7 +885,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Sort
 
   # 
-  # Renders its input according to a renderer
+  # Render input tuples with a given strategy
   #
   # SYNOPSIS
   #   #{program_name} #{command_name}
