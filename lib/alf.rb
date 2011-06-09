@@ -355,6 +355,30 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     include Pipeable
     include Enumerable
 
+    #
+    # Yields each tuple in turn 
+    #
+    # This method is implemented in a way that ensures that all operators are 
+    # thread safe. It is not intended to be overriden, use _each instead.
+    # 
+    def each
+      dup._each &Proc.new
+    end
+
+    #
+    # Internal implementation of _each_
+    #
+    # This method yields each tuple in turn using do_each, which must be 
+    # implemented by subclasses. It always saves the first tuple in @first so 
+    # that operators that need such information can find it there.
+    #
+    def _each
+      @input.each do |tuple|
+        @first = tuple if @first.nil?
+        do_each(tuple, &Proc.new)
+      end
+    end
+
     # 
     # Executes this operator as a commandline
     #
