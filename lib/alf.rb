@@ -366,13 +366,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     #
-    # Configures the operator from arguments taken from
-    # command line. This method returns the operator itself.
+    # Configures the operator from arguments taken from command line. 
+    #
+    # This method is intended to be overriden by subclasses and must return the 
+    # operator itself.
     #
     def set_args(args)
+      self
     end
 
-  end # module Operator
+  end # module BaseOperator
 
   #
   # Specialization of BaseOperator for operators that
