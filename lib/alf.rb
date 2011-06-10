@@ -276,7 +276,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleWriter#execute
     def execute(output = $stdout)
-      @input.each do |tuple|
+      input.each do |tuple|
         output << tuple.inspect << "\n"
       end
     end
@@ -419,7 +419,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see BaseOperator#_each
     def _each
-      @input.each do |tuple|
+      input.each do |tuple|
         yield tuple2tuple(tuple)
       end
     end
@@ -699,7 +699,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see BaseOperator#_each
     def _each
       handle = TupleHandle.new
-      @input.each{|t| yield(t) if handle.set(t).evaluate(@functor) }
+      input.each{|t| yield(t) if handle.set(t).evaluate(@functor) }
     end
 
   end # class Restrict
@@ -833,7 +833,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # See BaseOperator#_prepare
     def _prepare
       @index = Hash.new{|h,k| h[k] = []} 
-      @input.each do |tuple|
+      input.each do |tuple|
         key, rest = split_tuple(tuple)
         @index[key] << rest
       end
@@ -893,7 +893,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # See BaseOperator#_each
     def _each
-      @input.each do |tuple|
+      input.each do |tuple|
         tuple = tuple.dup
         subrel = tuple.delete(@attribute)
         subrel.each do |subtuple|
@@ -955,7 +955,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def _each
-      tuples = @input.to_a
+      tuples = input.to_a
       if @direction == :asc
         tuples.sort!{|k1,k2| compare(k1,k2)}
       else
