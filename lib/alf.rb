@@ -217,12 +217,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # input stream) in turn.
     #
     # Default implementation reads lines of the input stream and
-    # yields the block with <code>line2tuple(line)</code> on each
+    # yields the block with <code>_line2tuple(line)</code> on each
     # of them
     #
     def each
       input.each_line do |line| 
-        tuple = line2tuple(line)
+        tuple = _line2tuple(line)
         yield tuple unless tuple.nil?
       end
     end
@@ -235,9 +235,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     # This method MUST be implemented by subclasses.
     #
-    def line2tuple(line)
+    def _line2tuple(line)
     end
-    undef_method :line2tuple
+    undef_method :_line2tuple
 
   end # module TupleReader
 
@@ -248,8 +248,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class HashReader
     include TupleReader
 
-    # @see TupleReader#line2tuple
-    def line2tuple(line)
+    # @see TupleReader#_line2tuple
+    def _line2tuple(line)
       begin
         h = Kernel.eval(line)
         raise "hash expected, got #{h}" unless h.is_a?(Hash)
@@ -431,7 +431,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see BaseOperator#_each
     def _each
       each_input_tuple do |tuple|
-        yield tuple2tuple(tuple)
+        yield _tuple2tuple(tuple)
       end
     end
 
@@ -440,9 +440,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     # Transforms an input tuple to an output tuple
     #
-    def tuple2tuple(tuple)
+    def _tuple2tuple(tuple)
     end
-    undef_method :tuple2tuple
+    undef_method :_tuple2tuple
 
   end # module TupleTransformOperator
 
@@ -497,8 +497,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#tuple2tuple
-    def tuple2tuple(tuple)
+    # @see TupleTransformOperator#_tuple2tuple
+    def _tuple2tuple(tuple)
       @defaults.merge Alf::Hash(tuple.collect{|k,v| 
         [k, v.nil? ? @defaults[k] : v]
       })
@@ -549,8 +549,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
-    # @see TupleTransformOperator#tuple2tuple
-    def tuple2tuple(tuple)
+    # @see TupleTransformOperator#_tuple2tuple
+    def _tuple2tuple(tuple)
       tuple.merge Alf::Hash(@extensions.collect{|k,v|
         [k, @handle.set(tuple).evaluate(v)]
       })
@@ -604,8 +604,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#tuple2tuple
-    def tuple2tuple(tuple)
+    # @see TupleTransformOperator#_tuple2tuple
+    def _tuple2tuple(tuple)
       @allbut ? 
         tuple.delete_if{|k,v|  attributes.include?(k)} :
         tuple.delete_if{|k,v| !attributes.include?(k)}
@@ -651,8 +651,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#tuple2tuple
-    def tuple2tuple(tuple)
+    # @see TupleTransformOperator#_tuple2tuple
+    def _tuple2tuple(tuple)
       Alf::Hash(tuple.collect{|k,v| [@renaming[k] || k, v]})
     end
 
@@ -753,8 +753,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#tuple2tuple
-    def tuple2tuple(tuple)
+    # @see TupleTransformOperator#_tuple2tuple
+    def _tuple2tuple(tuple)
       others = Alf::Hash((tuple.keys - @attributes).collect{|k| [k,tuple[k]]})
       others[as] = Alf::Hash(attributes.collect{|k| [k, tuple[k]]})
       others
@@ -795,8 +795,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#tuple2tuple
-    def tuple2tuple(tuple)
+    # @see TupleTransformOperator#_tuple2tuple
+    def _tuple2tuple(tuple)
       tuple = tuple.dup
       nested = tuple.delete(@attribute) || {}
       tuple.merge(nested)
