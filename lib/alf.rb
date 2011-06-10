@@ -587,7 +587,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
       @allbut ? 
-        tuple.delete_if{|k,v| attributes.include?(k)} :
+        tuple.delete_if{|k,v|  attributes.include?(k)} :
         tuple.delete_if{|k,v| !attributes.include?(k)}
     end
 
