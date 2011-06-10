@@ -443,6 +443,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     include BaseOperator
     include Lispy
 
+    protected 
+
     def _each
       longexpr.each &Proc.new
     end
@@ -482,10 +484,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    protected 
+
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
-      norm = Alf::Hash(tuple.collect{|k,v| [k, v.nil? ? @defaults[k] : v]})
-      @defaults.merge(norm)
+      @defaults.merge Alf::Hash(tuple.collect{|k,v| 
+        [k, v.nil? ? @defaults[k] : v]
+      })
     end
 
   end # class Defaults
@@ -524,6 +529,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       })
       self
     end
+
+    protected 
 
     # @see BaseOperator#_prepare
     def _prepare
@@ -584,6 +591,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    protected 
+
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
       @allbut ? 
@@ -628,6 +637,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @renaming = Hash[*args.collect{|c| c.to_sym}]
       self
     end
+
+    protected 
 
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
@@ -683,6 +694,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    protected 
+
     # @see BaseOperator#_each
     def _each
       handle = TupleHandle.new
@@ -727,6 +740,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    protected 
+
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
       others = Alf::Hash((tuple.keys - @attributes).collect{|k| [k,tuple[k]]})
@@ -766,6 +781,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @attribute = args.last.to_sym
       self
     end
+
+    protected 
 
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
@@ -872,6 +889,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    protected 
+
     # See BaseOperator#_each
     def _each
       @input.each do |tuple|
@@ -924,6 +943,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self.attributes = args.collect{|c| c.to_sym}
       self
     end
+
+    protected 
 
     def compare(t1,t2)
       @attributes.each do |a|
