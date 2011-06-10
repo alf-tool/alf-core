@@ -191,6 +191,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    protected
+
+    #
+    # Yields the block with each input tuple.
+    #
+    # This method should be preferred to <code>input.each</code> when possible.
+    #
+    def each_input_tuple
+      input.each &Proc.new
+    end
+
   end # module Pipeable
 
   #
@@ -276,7 +287,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleWriter#execute
     def execute(output = $stdout)
-      input.each do |tuple|
+      each_input_tuple do |tuple|
         output << tuple.inspect << "\n"
       end
     end
@@ -419,7 +430,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see BaseOperator#_each
     def _each
-      input.each do |tuple|
+      each_input_tuple do |tuple|
         yield tuple2tuple(tuple)
       end
     end
@@ -699,7 +710,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see BaseOperator#_each
     def _each
       handle = TupleHandle.new
-      input.each{|t| yield(t) if handle.set(t).evaluate(@functor) }
+      each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@functor) }
     end
 
   end # class Restrict
@@ -833,7 +844,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # See BaseOperator#_prepare
     def _prepare
       @index = Hash.new{|h,k| h[k] = []} 
-      input.each do |tuple|
+      each_input_tuple do |tuple|
         key, rest = split_tuple(tuple)
         @index[key] << rest
       end
@@ -893,7 +904,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # See BaseOperator#_each
     def _each
-      input.each do |tuple|
+      each_input_tuple do |tuple|
         tuple = tuple.dup
         subrel = tuple.delete(@attribute)
         subrel.each do |subtuple|
