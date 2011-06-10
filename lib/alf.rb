@@ -26,6 +26,13 @@ alf_required(false)
 #
 class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
+  ##############################################################################
+  #
+  # PUBLIC API
+  #
+  # Alf's public APIs are defined below. 
+  #
+  
   # Alf's version 
   VERSION = "1.0.0"
 
@@ -157,7 +164,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   ##############################################################################
   #
-  # Tools
+  # TOOLS
   #
   # The following modules and classes provide tools for implementing dataflow
   # elements.
