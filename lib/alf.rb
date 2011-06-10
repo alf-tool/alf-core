@@ -428,14 +428,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   module TupleTransformOperator
     include BaseOperator
 
+    protected 
+
     # @see BaseOperator#_each
     def _each
       each_input_tuple do |tuple|
         yield _tuple2tuple(tuple)
       end
     end
-
-    protected 
 
     #
     # Transforms an input tuple to an output tuple
