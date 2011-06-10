@@ -131,9 +131,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # Factors an SORT operator
-    def sort(child, attributes, direction = :asc)
-      _pipe(Sort.new{|r| r.attributes = attributes;
-                         r.direction = direction}, child)
+    def sort(child, ordering)
+      _pipe(Sort.new{|r| r.ordering = ordering}, child)
     end
 
     private
@@ -256,6 +255,37 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class TupleHandle
+
+  #
+  # Encapsulates tools for computing orders on tuples
+  #
+  class OrderingKey
+
+    def initialize(ordering = [])
+      @ordering = ordering
+      @sorter = nil
+    end
+
+    def order_by(attr, order = :asc)
+      @ordering << [attr, order]
+      @sorter = nil
+      self
+    end
+
+    def compare(t1,t2)
+      @ordering.each do |attr,order|
+        comp = (t1[attr] <=> t2[attr])
+        comp *= -1 if order == :desc
+        return comp unless comp == 0
+      end
+      return 0
+    end
+
+    def sorter
+      @sorter ||= lambda{|t1,t2| compare(t1, t2)}
+    end
+
+  end # class OrderingKey
 
   #
   # Provides tools for manipulating tuples
@@ -916,7 +946,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Sort input tuples in memory and output them sorted
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ATTR2...
+  #   #{program_name} #{command_name} ATTR1 ORDER1 ATTR2 ORDER2...
   #
   # OPTIONS
   # #{summarized_options}
@@ -928,48 +958,32 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Sort < Factory::BaseOperator(__FILE__, __LINE__)
 
-    attr_reader :attributes
-    attr_accessor :direction
-
     def initialize
-      @attributes = []
-      @direction = :asc
+      @ordering_key = OrderingKey.new
       yield self if block_given?
     end
 
-    options do |opt|
-      opt.on('-r', '--reverse', "Sort in descending order"){
-        @direction = :desc
-      }
+    def ordering=(ordering)
+      @ordering_key = OrderingKey.new(ordering)
     end
 
-    def attributes=(attrs)
-      @attributes = attrs
+    def order_by(attr, order = :asc)
+      @ordering_key.order_by(attr, order)
     end
 
     def set_args(args)
-      self.attributes = args.collect{|c| c.to_sym}
+      args.collect{|c| c.to_sym}.
+           each_slice(2).
+           each do |attr, order|
+        order_by(attr, order)
+      end
       self
     end
 
     protected 
 
-    def compare(t1,t2)
-      @attributes.each do |a|
-        ac = (t1[a] <=> t2[a])
-        return ac unless ac == 0
-      end
-      return 0
-    end
-
     def _each
-      tuples = input.to_a
-      if @direction == :asc
-        tuples.sort!{|k1,k2| compare(k1,k2)}
-      else
-        tuples.sort!{|k1,k2| compare(k2,k1)}
-      end
-      tuples.each(&Proc.new)
+      input.to_a.sort(&@ordering_key.sorter).each(&Proc.new)
     end
 
   end # class Sort
