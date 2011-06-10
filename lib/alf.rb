@@ -262,6 +262,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   module TupleTools
 
+    #
+    # Iterates over enum and yields the block on each element. 
+    # Collect block results as key/value pairs returns them as 
+    # a Hash.
+    #
     def tuple_collect(enum)
       tuple = {}
       enum.each do |elm| 
@@ -269,6 +274,20 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         tuple[k] = v
       end
       tuple
+    end
+
+    # 
+    # Splits a tuple over some attributes. Returns two tuples, the 
+    # first one with all key/value pairs on attributes and the second
+    # one with the rest.
+    # 
+    def tuple_split(tuple, attributes)
+      key, rest = tuple.dup, {}
+      attributes.each do |a|
+        rest[a] = tuple[a]
+        key.delete(a)
+      end
+      [key, rest]
     end
 
   end # module TupleTools
@@ -832,7 +851,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _prepare
       @index = Hash.new{|h,k| h[k] = []} 
       each_input_tuple do |tuple|
-        key, rest = split_tuple(tuple)
+        key, rest = tuple_split(tuple, @attributes)
         @index[key] << rest
       end
       self
@@ -843,15 +862,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @index.each_pair do |k,v|
         yield(k.merge(@as => v))
       end
-    end
-
-    def split_tuple(tuple)
-      key, rest = tuple.dup, {}
-      @attributes.each do |a|
-        rest[a] = tuple[a]
-        key.delete(a)
-      end
-      [key,rest]
     end
 
   end # class Group
