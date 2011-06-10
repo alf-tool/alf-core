@@ -37,15 +37,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   VERSION = "1.0.0"
 
   #
-  # Converts an array of pairs to a Hash
-  #
-  def self.Hash(array)
-    h = {}
-    array.each{|pair| h[pair.first] = pair.last}
-    h
-  end
-
-  #
   # Provides a factory over Alf operators and handles the interface with
   # Quickl for commandline support.
   # 
@@ -266,6 +257,22 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class TupleHandle
 
+  #
+  # Provides tools for manipulating tuples
+  #
+  module TupleTools
+
+    def tuple_collect(enum)
+      tuple = {}
+      enum.each do |elm| 
+        k, v = yield(elm)
+        tuple[k] = v
+      end
+      tuple
+    end
+
+  end # module TupleTools
+
   ##############################################################################
   #
   # READERS
@@ -345,7 +352,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for all operators on relations.
   # 
   module BaseOperator
-    include Pipeable, Enumerable
+    include Pipeable, Enumerable, TupleTools
 
     #
     # Yields each tuple in turn 
@@ -479,9 +486,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
-      @defaults.merge Alf::Hash(tuple.collect{|k,v| 
+      @defaults.merge tuple_collect(tuple){|k,v| 
         [k, v.nil? ? @defaults[k] : v]
-      })
+      }
     end
 
   end # class Defaults
@@ -515,9 +522,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see BaseOperator#set_args
     def set_args(args)
-      @extensions = Alf::Hash(args.each_slice(2).collect{|k,v|
+      @extensions = tuple_collect(args.each_slice(2)){|k,v|
         [k.to_sym, TupleHandle.compile(v)]
-      })
+      }
       self
     end
 
@@ -531,9 +538,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
-      tuple.merge Alf::Hash(@extensions.collect{|k,v|
+      tuple.merge tuple_collect(@extensions){|k,v|
         [k, @handle.set(tuple).evaluate(v)]
-      })
+      }
     end
 
   end # class Extend
@@ -633,7 +640,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
-      Alf::Hash(tuple.collect{|k,v| [@renaming[k] || k, v]})
+      tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
     end
 
   end # class Rename
@@ -735,8 +742,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleTransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
-      others = Alf::Hash((tuple.keys - @attributes).collect{|k| [k,tuple[k]]})
-      others[as] = Alf::Hash(attributes.collect{|k| [k, tuple[k]]})
+      others = tuple_collect(tuple.keys - @attributes){|k| [k,tuple[k]] }
+      others[as] = tuple_collect(attributes){|k| [k, tuple[k]] }
       others
     end
 
