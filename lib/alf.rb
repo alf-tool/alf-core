@@ -324,6 +324,27 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   ##############################################################################
   #
+  # BUFFERS
+  #
+  # Buffers allow holding tuples in memory or on disk and provided efficient
+  # accesses to them.
+  #
+
+  #
+  # Provides a basis buffer implementation and a factory over
+  # the different kinds of buffers available.
+  # 
+  class Buffer
+  end # class Buffer
+
+  # 
+  # Keeps tuples ordered on a specific key
+  #
+  class SortedBuffer < Buffer
+  end # class SortedBuffer
+  
+  ##############################################################################
+  #
   # READERS
   #
   # Readers are dataflow elements at the input boundary with the outside world.
