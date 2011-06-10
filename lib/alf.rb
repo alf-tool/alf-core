@@ -72,8 +72,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
+    extend Factory
   end # module Factory
-  extend Factory
 
   # 
   # Implements a small LISP-like DSL on top of Alf
@@ -338,8 +338,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for all operators on relations.
   # 
   module BaseOperator
-    include Pipeable
-    include Enumerable
+    include Pipeable, Enumerable
 
     #
     # Yields each tuple in turn 
@@ -426,8 +425,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # shortcuts on longer expressions.
   # 
   module ShortcutOperator
-    include BaseOperator
-    include Lispy
+    include BaseOperator, Lispy
 
     protected 
 
@@ -452,7 +450,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes ATTR are defined and not nil. Missing or nil attributes
   # are replaced by the associated default value. 
   #
-  class Defaults < Alf::TupleTransformOperator(__FILE__, __LINE__)
+  class Defaults < Factory::TupleTransformOperator(__FILE__, __LINE__)
 
     # Hash of source -> target attribute renamings
     attr_accessor :defaults
@@ -497,7 +495,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # ATTR2, and so on. Values of those attributes are the result of
   # evaluating EXPR1, EXPR2, etc on input tuples.
   #
-  class Extend < Alf::TupleTransformOperator(__FILE__, __LINE__)
+  class Extend < Factory::TupleTransformOperator(__FILE__, __LINE__)
 
     # Extensions as a Hash attr => lambda{...}
     attr_accessor :extensions
@@ -549,7 +547,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # duplicate tuples in the result and is therefore not equivalent to a
   # true relational projection.
   #
-  class Project < Alf::TupleTransformOperator(__FILE__, __LINE__)
+  class Project < Factory::TupleTransformOperator(__FILE__, __LINE__)
 
     # Array of projection attributes
     attr_accessor :attributes
@@ -607,7 +605,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   {:id => 1} -> alf rename id identifier -> {:identifier => 1}
   #   {:a => 1, :b => 2} -> alf rename a A b B -> {:A => 1, :B => 2}
   #
-  class Rename < Alf::TupleTransformOperator(__FILE__, __LINE__)
+  class Rename < Factory::TupleTransformOperator(__FILE__, __LINE__)
 
     # Hash of source -> target attribute renamings
     attr_accessor :renaming
@@ -647,7 +645,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This command restricts tuples to those for which EXPR evaluates
   # to true.
   #
-  class Restrict < Alf::BaseOperator(__FILE__, __LINE__)
+  class Restrict < Factory::BaseOperator(__FILE__, __LINE__)
 
     # Hash of source -> target attribute renamings
     attr_accessor :functor
@@ -704,7 +702,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
   # attribute whose name is NEWNAME
   #
-  class Nest < Alf::TupleTransformOperator(__FILE__, __LINE__)
+  class Nest < Factory::TupleTransformOperator(__FILE__, __LINE__)
 
     # Array of nesting attributes
     attr_accessor :attributes
@@ -751,7 +749,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator unnests a tuple-valued attribute ATTR so as to 
   # flatten it pairs with 'upstream' tuple.
   #
-  class Unnest < Alf::TupleTransformOperator(__FILE__, __LINE__)
+  class Unnest < Factory::TupleTransformOperator(__FILE__, __LINE__)
 
     # Name of the attribute to unnest
     attr_accessor :attribute
@@ -793,7 +791,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator groups attributes ATTR1 to ATTRN as a new, relation-values
   # attribute whose name is NEWNAME
   #
-  class Group < Alf::BaseOperator(__FILE__, __LINE__)
+  class Group < Factory::BaseOperator(__FILE__, __LINE__)
 
     # Attributes on which grouping applies
     attr_accessor :attributes
@@ -858,7 +856,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator ungroup the relation-valued attribute whose
   # name is ATTR
   #
-  class Ungroup < Alf::BaseOperator(__FILE__, __LINE__)
+  class Ungroup < Factory::BaseOperator(__FILE__, __LINE__)
 
     # Relation-value attribute to ungroup
     attr_accessor :attribute
@@ -904,7 +902,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator sorts input tuples on ATTR1 then ATTR2, etc.
   # and outputs them sorted after that.
   #
-  class Sort < Alf::BaseOperator(__FILE__, __LINE__)
+  class Sort < Factory::BaseOperator(__FILE__, __LINE__)
 
     attr_reader :attributes
     attr_accessor :direction
@@ -1001,7 +999,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # OPTIONS
   # #{summarized_options}
   #
-  class Render < Alf::Command(__FILE__, __LINE__)
+  class Render < Factory::Command(__FILE__, __LINE__)
 
     options do |opt|
       @output = :ruby
@@ -1055,7 +1053,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # SYNOPSIS
   #   #{program_name} #{command_name} COMMAND
   #
-  class Help < Alf::Command(__FILE__, __LINE__)
+  class Help < Factory::Command(__FILE__, __LINE__)
     
     # Let NoSuchCommandError be passed to higher stage
     no_react_to Quickl::NoSuchCommand
