@@ -362,7 +362,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # thread safe. It is not intended to be overriden, use _each instead.
     # 
     def each
-      dup._each &Proc.new
+      dup._prepare._each &Proc.new
     end
 
     # 
@@ -384,6 +384,29 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def set_args(args)
       self
     end
+
+    protected
+
+    #
+    # Prepares the iterator before subsequent call to _each.
+    #
+    # This method is intended to be overriden by suclasses to install what's 
+    # need for successful iteration. The default implementation does nothing.
+    # The method must return the operator itself.
+    #
+    def _prepare 
+      self
+    end
+
+    # 
+    # Internal implementation of the iterator.
+    #
+    # This method must be implemented by subclasses. It is safe to use instance
+    # variables (typically initialized in _prepare) here.
+    # 
+    def _each
+    end
+    undef_method :_each
 
   end # module BaseOperator
 
