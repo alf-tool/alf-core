@@ -365,20 +365,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       dup._each &Proc.new
     end
 
-    #
-    # Internal implementation of _each_
-    #
-    # This method yields each tuple in turn using do_each, which must be 
-    # implemented by subclasses. It always saves the first tuple in @first so 
-    # that operators that need such information can find it there.
-    #
-    def _each
-      @input.each do |tuple|
-        @first = tuple if @first.nil?
-        do_each(tuple, &Proc.new)
-      end
-    end
-
     # 
     # Executes this operator as a commandline
     #
@@ -408,8 +394,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   module TupleTransformOperator
     include BaseOperator
 
-    # @see BaseOperator#each
-    def each
+    # @see BaseOperator#_each
+    def _each
       @input.each do |tuple|
         yield tuple2tuple(tuple)
       end
@@ -434,7 +420,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     include BaseOperator
     include Lispy
 
-    def each
+    def _each
       longexpr.each &Proc.new
     end
 
@@ -670,7 +656,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # @see BaseOperator#each
-    def each
+    def _each
       handle = TupleHandle.new
       @input.each{|t| yield(t) if handle.set(t).evaluate(@functor) }
     end
@@ -798,7 +784,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # See BaseOperator#each
-    def each
+    def _each
       index = Hash.new{|h,k| h[k] = []} 
       @input.each do |tuple|
         key, rest = split_tuple(tuple)
@@ -854,7 +840,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # See BaseOperator#each
-    def each
+    def _each
       @input.each do |tuple|
         tuple = tuple.dup
         subrel = tuple.delete(@attribute)
@@ -914,7 +900,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       return 0
     end
 
-    def each
+    def _each
       tuples = @input.to_a
       if @direction == :asc
         tuples.sort!{|k1,k2| compare(k1,k2)}
