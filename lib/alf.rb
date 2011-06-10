@@ -683,7 +683,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
-    # @see BaseOperator#each
+    # @see BaseOperator#_each
     def _each
       handle = TupleHandle.new
       @input.each{|t| yield(t) if handle.set(t).evaluate(@functor) }
@@ -811,19 +811,24 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
-    # See BaseOperator#each
-    def _each
-      index = Hash.new{|h,k| h[k] = []} 
+    protected
+
+    # See BaseOperator#_prepare
+    def _prepare
+      @index = Hash.new{|h,k| h[k] = []} 
       @input.each do |tuple|
         key, rest = split_tuple(tuple)
-        index[key] << rest
+        @index[key] << rest
       end
-      index.each_pair do |k,v|
+      self
+    end
+
+    # See BaseOperator#_each
+    def _each
+      @index.each_pair do |k,v|
         yield(k.merge(@as => v))
       end
     end
-
-    protected
 
     def split_tuple(tuple)
       key, rest = tuple.dup, {}
@@ -867,7 +872,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
-    # See BaseOperator#each
+    # See BaseOperator#_each
     def _each
       @input.each do |tuple|
         tuple = tuple.dup
