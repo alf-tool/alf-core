@@ -26,16 +26,8 @@ alf_required(false)
 #
 class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
-  # Handles Alf's version 
-  module Version
-    MAJOR = 1
-    MINOR = 0
-    TINY  = 0
-    def self.to_s
-      [ MAJOR, MINOR, TINY ].join('.')
-    end
-  end 
-  VERSION = Version.to_s
+  # Alf's version 
+  VERSION = "1.0.0"
 
   #
   # Converts an array of pairs to a Hash
@@ -47,40 +39,41 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end
 
   #
-  # Defines a basic Alf command
-  #
-  def self.Command(file, line)
-    res = Quickl::Command(file, line)
-    Quickl.command_builder{|b| yield(b)} if block_given?
-    res
-  end
+  # Provides a factory over Alf operators and handles the interface with
+  # Quickl for commandline support.
+  # 
+  module Factory
 
-  #
-  # Defines a generic relational command
-  #
-  def self.BaseOperator(file, line)
-    Command(file, line) do |b|
-      b.instance_module Alf::BaseOperator
+    # @see Quickl::Command
+    def Command(file, line)
+      res = Quickl::Command(file, line)
+      Quickl.command_builder{|b| yield(b)} if block_given?
+      res
     end
-  end
 
-  #
-  # Defines a command that simply transforms single tuples
-  #
-  def self.TupleTransformOperator(file, line)
-    Command(file, line) do |b|
-      b.instance_module Alf::TupleTransformOperator
+    # @see BaseOperator
+    def BaseOperator(file, line)
+      Command(file, line) do |b|
+        b.instance_module Alf::BaseOperator
+      end
     end
-  end
 
-  #
-  # Defines a command that is a shortcut on a longer expression
-  #
-  def self.ShortcutOperator(file, line)
-    Command(file, line) do |b|
-      b.instance_module Alf::ShortcutOperator
+    # @see TupleTransformOperator
+    def TupleTransformOperator(file, line)
+      Command(file, line) do |b|
+        b.instance_module Alf::TupleTransformOperator
+      end
     end
-  end
+
+    # @see ShortcutOperator
+    def ShortcutOperator(file, line)
+      Command(file, line) do |b|
+        b.instance_module Alf::ShortcutOperator
+      end
+    end
+
+  end # module Factory
+  extend Factory
 
   # 
   # Implements a small LISP-like DSL on top of Alf
