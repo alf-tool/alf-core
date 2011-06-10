@@ -204,13 +204,21 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # module Pipeable
 
+  ##############################################################################
+  #
+  # PART I - Readers
+  #
+  # Readers are dataflow elements at the input boundary with the outside world.
+  # They typically convert IO streams as Enumerable tuple streams. All readers
+  # should follow the basis given by TupleReader.
+  #
+  
   #
   # Marker for chain elements converting input streams to enumerable 
   # of tuples.
   #
   module TupleReader
-    include Pipeable
-    include Enumerable
+    include Pipeable, Enumerable
 
     #
     # Yields the block with each tuple (converted from the
@@ -262,37 +270,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class HashReader
-
-  #
-  # Marker for chain elements converting tuple streams
-  #
-  module TupleWriter
-    include Pipeable
-
-    #
-    # Executes the writing, outputting the resulting relation. 
-    #
-    # This method must be implemented by subclasses.
-    #
-    def execute(output = $stdout)
-    end
-
-  end # module TupleWriter
-
-  #
-  # Implements the TupleWriter contract through inspect
-  #
-  class HashWriter 
-    include TupleWriter
-
-    # @see TupleWriter#execute
-    def execute(output = $stdout)
-      each_input_tuple do |tuple|
-        output << tuple.inspect << "\n"
-      end
-    end
-
-  end # class HashWriter
 
   #
   # Provides a handle to implement a (TODO) fly design pattern
@@ -1038,6 +1015,46 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
   end # class Help
+
+  ##############################################################################
+  #
+  # PART III - Writers
+  #
+  # Writers are dataflow elements at the output boundary with the outside world.
+  # They typically convert Enumerable tuple streams as IO output streams. All
+  # writers should follow the basis given by TupleWriter.
+  #
+  
+  #
+  # Marker for chain elements converting tuple streams
+  #
+  module TupleWriter
+    include Pipeable
+
+    #
+    # Executes the writing, outputting the resulting relation. 
+    #
+    # This method must be implemented by subclasses.
+    #
+    def execute(output = $stdout)
+    end
+
+  end # module TupleWriter
+
+  #
+  # Implements the TupleWriter contract through inspect
+  #
+  class HashWriter 
+    include TupleWriter
+
+    # @see TupleWriter#execute
+    def execute(output = $stdout)
+      each_input_tuple do |tuple|
+        output << tuple.inspect << "\n"
+      end
+    end
+
+  end # class HashWriter
 
 end # class Alf
 require "alf/renderer/text"
