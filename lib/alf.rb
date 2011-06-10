@@ -525,11 +525,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
+    # @see BaseOperator#_prepare
+    def _prepare
+      @handle = TupleHandle.new
+      self
+    end
+
     # @see TupleTransformOperator#tuple2tuple
     def tuple2tuple(tuple)
-      handle = TupleHandle.new
       tuple.merge Alf::Hash(@extensions.collect{|k,v|
-        [k, handle.set(tuple).evaluate(v)]
+        [k, @handle.set(tuple).evaluate(v)]
       })
     end
 
