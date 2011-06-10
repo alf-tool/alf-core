@@ -37,16 +37,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end 
   VERSION = Version.to_s
 
-  # Install options
-  options do |opt|
-    opt.on_tail("--help", "Show help") do
-      raise Quickl::Help
-    end
-    opt.on_tail("--version", "Show version") do
-      raise Quickl::Exit, "#{program_name} #{Alf::VERSION} (c) 2011, Bernard Lambeau"
-    end
-  end # Alf's options
-
   #
   # Converts an array of pairs to a Hash
   #
@@ -172,6 +162,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     extend Lispy
   end # module Lispy
 
+  ##############################################################################
+  #
+  # Tools
+  #
+  # The following modules and classes provide tools for implementing dataflow
+  # elements.
+  #
+  
   #
   # Included by all elements of a tuple chain
   #
@@ -204,9 +202,73 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # module Pipeable
 
+  #
+  # Provides a handle to implement a (TODO) fly design pattern on tuples.
+  #
+  class TupleHandle
+
+    # Creates an handle instance
+    def initialize
+      @tuple = nil
+    end
+
+    #
+    # Sets the next tuple to use.
+    #
+    # This method installs the handle as a side effect 
+    # on first call. 
+    #
+    def set(tuple)
+      build(tuple) if @tuple.nil?
+      @tuple = tuple
+      self
+    end
+
+    # 
+    # Compiles a tuple expression and returns a lambda
+    # instance that can be passed to evaluate later.
+    # 
+    def self.compile(expr)
+      # TODO: refactor this to avoid relying on Kernel.eval
+      Kernel.eval "lambda{ #{expr} }"
+    end
+
+    #
+    # Evaluates an expression on the current tuple. Expression
+    # can be a lambda or a string (immediately compiled in the
+    # later case).
+    # 
+    def evaluate(expr)
+      expr = TupleHandle.compile(expr) unless expr.is_a?(Proc)
+      if RUBY_VERSION < "1.9"
+        instance_eval &expr
+      else
+        instance_exec &expr
+      end
+    end
+
+    private
+
+    #
+    # Builds this handle with a tuple.
+    #
+    # This method should be called only once and installs 
+    # instance methods on the handle with keys of _tuple_.
+    #
+    def build(tuple)
+      # TODO: refactor me to avoid instance_eval
+      tuple.keys.each do |k|
+        self.instance_eval <<-EOF
+          def #{k}; @tuple[#{k.inspect}]; end
+        EOF
+      end
+    end
+
+  end # class TupleHandle
+
   ##############################################################################
   #
-  # PART I - Readers
+  # READERS
   #
   # Readers are dataflow elements at the input boundary with the outside world.
   # They typically convert IO streams as Enumerable tuple streams. All readers
@@ -271,71 +333,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class HashReader
 
+  ##############################################################################
   #
-  # Provides a handle to implement a (TODO) fly design pattern
-  # on tuples.
+  # OPERATORS
   #
-  class TupleHandle
-
-    # Creates an handle instance
-    def initialize
-      @tuple = nil
-    end
-
-    #
-    # Sets the next tuple to use.
-    #
-    # This method installs the handle as a side effect 
-    # on first call. 
-    #
-    def set(tuple)
-      build(tuple) if @tuple.nil?
-      @tuple = tuple
-      self
-    end
-
-    # 
-    # Compiles a tuple expression and returns a lambda
-    # instance that can be passed to evaluate later.
-    # 
-    def self.compile(expr)
-      # TODO: refactor this to avoid relying on Kernel.eval
-      Kernel.eval "lambda{ #{expr} }"
-    end
-
-    #
-    # Evaluates an expression on the current tuple. Expression
-    # can be a lambda or a string (immediately compiled in the
-    # later case).
-    # 
-    def evaluate(expr)
-      expr = TupleHandle.compile(expr) unless expr.is_a?(Proc)
-      if RUBY_VERSION < "1.9"
-        instance_eval &expr
-      else
-        instance_exec &expr
-      end
-    end
-
-    private
-
-    #
-    # Builds this handle with a tuple.
-    #
-    # This method should be called only once and installs 
-    # instance methods on the handle with keys of _tuple_.
-    #
-    def build(tuple)
-      # TODO: refactor me to avoid instance_eval
-      tuple.keys.each do |k|
-        self.instance_eval <<-EOF
-          def #{k}; @tuple[#{k.inspect}]; end
-        EOF
-      end
-    end
-
-  end # class TupleHandle
-
+  # Operators are dataflow elements that transform input tuples. They are all
+  # Enumerable of tuples.
+  #
+  
   #
   # Marker for all operators on relations.
   # 
@@ -954,6 +959,46 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class Sort
 
+  ##############################################################################
+  #
+  # WRITERS
+  #
+  # Writers are dataflow elements at the output boundary with the outside world.
+  # They typically convert Enumerable tuple streams as IO output streams. All
+  # writers should follow the basis given by TupleWriter.
+  #
+  
+  #
+  # Marker for chain elements converting tuple streams
+  #
+  module TupleWriter
+    include Pipeable
+
+    #
+    # Executes the writing, outputting the resulting relation. 
+    #
+    # This method must be implemented by subclasses.
+    #
+    def execute(output = $stdout)
+    end
+
+  end # module TupleWriter
+
+  #
+  # Implements the TupleWriter contract through inspect
+  #
+  class HashWriter 
+    include TupleWriter
+
+    # @see TupleWriter#execute
+    def execute(output = $stdout)
+      each_input_tuple do |tuple|
+        output << tuple.inspect << "\n"
+      end
+    end
+
+  end # class HashWriter
+
   # 
   # Render input tuples with a given strategy
   #
@@ -993,6 +1038,24 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class Render
 
+
+  ##############################################################################
+  #
+  # OTHER COMMANDS
+  #
+  # Below are general purpose commands provided by alf.
+  #
+
+  # Install options
+  options do |opt|
+    opt.on_tail("--help", "Show help") do
+      raise Quickl::Help
+    end
+    opt.on_tail("--version", "Show version") do
+      raise Quickl::Exit, "#{program_name} #{Alf::VERSION} (c) 2011, Bernard Lambeau"
+    end
+  end # Alf's options
+
   # 
   # Show help about a specific command
   #
@@ -1015,46 +1078,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
   end # class Help
-
-  ##############################################################################
-  #
-  # PART III - Writers
-  #
-  # Writers are dataflow elements at the output boundary with the outside world.
-  # They typically convert Enumerable tuple streams as IO output streams. All
-  # writers should follow the basis given by TupleWriter.
-  #
-  
-  #
-  # Marker for chain elements converting tuple streams
-  #
-  module TupleWriter
-    include Pipeable
-
-    #
-    # Executes the writing, outputting the resulting relation. 
-    #
-    # This method must be implemented by subclasses.
-    #
-    def execute(output = $stdout)
-    end
-
-  end # module TupleWriter
-
-  #
-  # Implements the TupleWriter contract through inspect
-  #
-  class HashWriter 
-    include TupleWriter
-
-    # @see TupleWriter#execute
-    def execute(output = $stdout)
-      each_input_tuple do |tuple|
-        output << tuple.inspect << "\n"
-      end
-    end
-
-  end # class HashWriter
 
 end # class Alf
 require "alf/renderer/text"
