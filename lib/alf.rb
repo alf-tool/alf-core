@@ -346,6 +346,74 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   ##############################################################################
   #
+  # AGGREGATORS
+  #
+  # Aggregators collect computation on tuples.
+  #
+  class Aggregator
+
+    def initialize(attribute)
+      @collector = lambda{|t| t[attribute]}
+    end
+
+    def least
+      nil
+    end
+
+    def happens(memo, tuple)
+      _happens(memo, @collector.call(tuple))
+    end
+
+    def finalize(memo)
+      memo
+    end
+
+    def aggregate(enum)
+      finalize(
+        enum.inject(least){|memo,tuple| 
+          happens(memo, tuple)
+        })
+    end
+
+    protected
+
+    def _happens(memo, tuple)
+    end
+
+  end # class Aggregator
+
+  class Count < Aggregator
+    def least(); 0; end
+    def happens(memo, tuple) memo + 1; end
+  end # class Count
+
+  class Sum < Aggregator
+    def least(); 0; end
+    def _happens(memo, val) memo + val; end
+  end # class Sum
+
+  class Avg < Aggregator
+    def least(); [0.0, 0.0]; end
+    def _happens(memo, val) [memo.first + val, memo.last + 1]; end
+    def finalize(memo) memo.first / memo.last end
+  end # class Sum
+
+  class Min < Aggregator
+    def least(); nil; end
+    def _happens(memo, val) 
+      memo.nil? ? val : (memo < val ? memo : val) 
+    end
+  end # class Min
+
+  class Max < Aggregator
+    def least(); nil; end
+    def _happens(memo, val) 
+      memo.nil? ? val : (memo > val ? memo : val) 
+    end
+  end # class Max
+
+  ##############################################################################
+  #
   # BUFFERS
   #
   # Buffers allow holding tuples in memory or on disk and provided efficient
