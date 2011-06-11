@@ -456,7 +456,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # thread safe. It is not intended to be overriden, use _each instead.
     # 
     def each
-      dup._prepare._each &Proc.new
+      op = self.dup
+      op._prepare
+      op._each &Proc.new
     end
 
     # 
@@ -486,10 +488,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     # This method is intended to be overriden by suclasses to install what's 
     # need for successful iteration. The default implementation does nothing.
-    # The method must return the operator itself.
     #
     def _prepare 
-      self
     end
 
     # 
@@ -628,7 +628,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see BaseOperator#_prepare
     def _prepare
       @handle = TupleHandle.new
-      self
     end
 
     # @see TupleTransformOperator#_tuple2tuple
@@ -930,7 +929,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         key, rest = tuple_split(tuple, @attributes)
         @index[key] << rest
       end
-      self
     end
 
     # See BaseOperator#_each
@@ -1031,7 +1029,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _prepare
       @buffer = SortedBuffer.new(@ordering_key)
       @buffer.add_all(input)
-      self
     end
 
     def _each
