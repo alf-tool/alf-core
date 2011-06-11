@@ -349,25 +349,66 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # Aggregators collect computation on tuples.
   #
+
+  #
+  # Base class for implementing operators.
+  #
   class Aggregator
 
+    #
+    # Creates an Aggregator instance.
+    #
+    # This constructor can be used either by passing an attribute
+    # argument or a block that will be evaluated on a TupleHandle
+    # instance set on each aggregated tuple.
+    #
+    #   Aggregator.new(:size) # will aggregate on tuple[:size]
+    #   Aggregator.new{ size * price } # ... on tuple[:size] * tuple[:price]
+    #
     def initialize(attribute = nil, &block)
       @handle = TupleHandle.new
       @functor = TupleHandle.compile(attribute || block)
     end
 
+    #
+    # Returns the least value, which is the one to use on an empty
+    # set.
+    #
+    # This method is intended to be overriden by subclasses; default 
+    # implementation returns nil.
+    # 
     def least
       nil
     end
 
+    # 
+    # This method is called on each aggregated tuple and must return
+    # an updated _memo_ value. It can be seen as the block typically
+    # given to Enumerable.inject.
+    #
+    # The default implementation collects the pre-value on the tuple 
+    # and delegates to _happens.
+    #
     def happens(memo, tuple)
       _happens(memo, @handle.set(tuple).evaluate(@functor))
     end
 
+    #
+    # This method finalizes a computation.
+    #
+    # Argument _memo_ is either _least_ or the result of aggregating 
+    # through _happens_. The default implementation simply returns
+    # _memo_. The method is intended to be overriden for complex 
+    # aggregations that need statefull information. See Avg for an 
+    # example 
+    #
     def finalize(memo)
       memo
     end
 
+    #
+    # Aggregates over an enumeration of tuples. 
+    #
     def aggregate(enum)
       finalize(
         enum.inject(least){|memo,tuple| 
@@ -377,27 +418,46 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected
 
-    def _happens(memo, tuple)
+    #
+    # @see happens.
+    #
+    # This method is intended to be overriden and returns _value_
+    # by default, making this aggregator a "Last" one...
+    #
+    def _happens(memo, value)
+      value
     end
 
   end # class Aggregator
 
+  # 
+  # Defines a COUNT aggregation operator
+  #
   class Count < Aggregator
     def least(); 0; end
     def happens(memo, tuple) memo + 1; end
   end # class Count
 
+  # 
+  # Defines a SUM aggregation operator
+  #
   class Sum < Aggregator
     def least(); 0; end
     def _happens(memo, val) memo + val; end
   end # class Sum
 
+  # 
+  # Defines an AVG aggregation operator
+  #
   class Avg < Aggregator
     def least(); [0.0, 0.0]; end
     def _happens(memo, val) [memo.first + val, memo.last + 1]; end
     def finalize(memo) memo.first / memo.last end
   end # class Sum
 
+  # 
+  # Defines a MIN aggregation operator
+  #
   class Min < Aggregator
     def least(); nil; end
     def _happens(memo, val) 
@@ -405,6 +465,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
   end # class Min
 
+  # 
+  # Defines a MAX aggregation operator
+  #
   class Max < Aggregator
     def least(); nil; end
     def _happens(memo, val) 
