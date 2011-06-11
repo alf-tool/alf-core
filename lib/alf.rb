@@ -370,8 +370,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       clazz.name.to_s =~ /([A-Za-z0-9_]+)$/
       basename = $1.downcase.to_sym
       instance_eval <<-EOF
-        def #{basename}(attr = nil, &block)
-          #{clazz}.new(attr, &block)
+        def #{basename}(*args, &block)
+          #{clazz}.new(*args, &block)
         end
       EOF
     end
