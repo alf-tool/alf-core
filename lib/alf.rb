@@ -266,6 +266,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @sorter = nil
     end
 
+    def self.coerce(arg)
+      OrderingKey.new(arg)
+    end
+
     def order_by(attr, order = :asc)
       @ordering << [attr, order]
       @sorter = nil
@@ -980,12 +984,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Sort < Factory::BaseOperator(__FILE__, __LINE__)
 
     def initialize
-      @ordering_key = OrderingKey.new
+      @ordering_key = OrderingKey.coerce([])
       yield self if block_given?
     end
 
     def ordering=(ordering)
-      @ordering_key = OrderingKey.new(ordering)
+      @ordering_key = OrderingKey.coerce(ordering)
     end
 
     def order_by(attr, order = :asc)
