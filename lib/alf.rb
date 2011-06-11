@@ -351,8 +351,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Aggregator
 
-    def initialize(attribute)
-      @collector = lambda{|t| t[attribute]}
+    def initialize(attribute = nil, &block)
+      @handle = TupleHandle.new
+      @functor = TupleHandle.compile(attribute || block)
     end
 
     def least
@@ -360,7 +361,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def happens(memo, tuple)
-      _happens(memo, @collector.call(tuple))
+      _happens(memo, @handle.set(tuple).evaluate(@functor))
     end
 
     def finalize(memo)

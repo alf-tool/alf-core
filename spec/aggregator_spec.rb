@@ -29,9 +29,9 @@ class Alf
       Max.new(:a).aggregate(input).should == 3
     end
 
-    #it "should allow specific tuple computations" do
-    #  Sum.new{ 1.0 * a * sign }.should == -7.0
-    #end
+    it "should allow specific tuple computations" do
+      Sum.new{ 1.0 * a * sign }.aggregate(input).should == -3.0
+    end
 
   end
 end
