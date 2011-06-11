@@ -309,13 +309,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def project(tuple)
-      if @allbut
-        res = tuple.dup
-        @attributes.each{|attr| res.delete(attr)}
-        res
-      else
-        tuple_collect(@attributes){|attr| [attr, tuple[attr]]}
+      split(tuple).first
+    end
+
+    def split(tuple)
+      projection, rest = {}, tuple.dup
+      attributes.each do |a|
+        projection[a] = tuple[a]
+        rest.delete(a)
       end
+      @allbut ? [rest, projection] : [projection, rest]
     end
 
   end # class ProjectionKey
@@ -369,6 +372,32 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # 
   class Buffer
   end # class Buffer
+
+  #
+  # Keep tuples in a Hash, according to a particular projection key
+  #
+  class HashBuffer < Buffer
+
+    def initialize(projection_key)
+      @projection_key = projection_key
+      @buffer = Hash.new{|h,k| h[k] = []}
+    end
+
+    def add_all(enum)
+      enum.each do |tuple|
+        key = @projection_key.project(tuple)
+        @buffer[key] << tuple
+      end
+    end
+
+    def each
+      proc = Proc.new
+      @buffer.values.each do |rel|
+        rel.each &proc
+      end
+    end
+
+  end # class HashBuffer
 
   # 
   # Keeps tuples ordered on a specific key
