@@ -220,7 +220,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # 
     def self.compile(expr)
       # TODO: refactor this to avoid relying on Kernel.eval
-      Kernel.eval "lambda{ #{expr} }"
+      expr.is_a?(Proc) ? expr : Kernel.eval("lambda{ #{expr} }")
     end
 
     #

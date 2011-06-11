@@ -26,8 +26,13 @@ class Alf
 
     describe "compile" do
       
-      it "should return a Proc" do
+      it "should return a Proc when passed a string" do
         TupleHandle.compile("true").should be_a(Proc)
+      end
+
+      it "should return the Proc when directly passed" do
+        x = lambda{ true }
+        TupleHandle.compile(x).should == x
       end
 
     end
