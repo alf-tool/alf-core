@@ -44,6 +44,10 @@ class Alf
         handle.evaluate("a").should == 1
       end
       
+      it "should allow a Symbol" do
+        handle.evaluate(:a).should == 1
+      end
+      
       it "should allow a Proc" do
         handle.evaluate(lambda{ a }).should == 1
       end
