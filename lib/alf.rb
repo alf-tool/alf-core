@@ -229,11 +229,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # later case).
     # 
     def evaluate(expr)
-      expr = TupleHandle.compile(expr) unless expr.is_a?(Proc)
       if RUBY_VERSION < "1.9"
-        instance_eval &expr
+        instance_eval &TupleHandle.compile(expr)
       else
-        instance_exec &expr
+        instance_exec &TupleHandle.compile(expr)
       end
     end
 
