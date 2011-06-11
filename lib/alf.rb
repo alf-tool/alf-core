@@ -292,10 +292,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module TupleTools
 
   # 
-  # 
+  # Defines a projection key
   # 
   class ProjectionKey
     include TupleTools
+
+    # Projection attributes
+    attr_accessor :attributes
+
+    # Allbut projection?
+    attr_accessor :allbut
 
     def initialize(attributes, allbut = false)
       @attributes = attributes
@@ -680,37 +686,34 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Project < Factory::TupleTransformOperator(__FILE__, __LINE__)
 
-    # Array of projection attributes
-    attr_accessor :attributes
-
-    # Is it a --allbut projection?
-    attr_accessor :allbut
-
     # Builds a Project operator instance
     def initialize
-      @attributes = []
-      @allbut = false
+      @projection_key = ProjectionKey.new([], false)
       yield self if block_given?
+    end
+
+    def attributes=(attrs)
+      @projection_key.attributes = attrs
+    end
+
+    def allbut=(allbut)
+      @projection_key.allbut = allbut
     end
 
     # Installs the options
     options do |opt|
       opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
-        @allbut = true
+        self.allbut = true
       end
     end
 
     # @see BaseOperator#set_args
     def set_args(args)
-      @attributes = args.collect{|a| a.to_sym}
+      self.attributes = args.collect{|a| a.to_sym}
       self
     end
 
     protected 
-
-    def _prepare
-      @projection_key = ProjectionKey.new(@attributes, @allbut)
-    end
 
     # @see TupleTransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
