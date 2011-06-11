@@ -275,20 +275,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       tuple
     end
 
-    # 
-    # Splits a tuple over some attributes. Returns two tuples, the 
-    # first one with all key/value pairs on attributes and the second
-    # one with the rest.
-    # 
-    def tuple_split(tuple, attributes)
-      key, rest = tuple.dup, {}
-      attributes.each do |a|
-        rest[a] = tuple[a]
-        key.delete(a)
-      end
-      [key, rest]
-    end
-
   end # module TupleTools
 
   # 
