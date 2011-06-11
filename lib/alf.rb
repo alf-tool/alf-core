@@ -257,41 +257,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class TupleHandle
 
   #
-  # Encapsulates tools for computing orders on tuples
-  #
-  class OrderingKey
-
-    def initialize(ordering = [])
-      @ordering = ordering
-      @sorter = nil
-    end
-
-    def self.coerce(arg)
-      OrderingKey.new(arg)
-    end
-
-    def order_by(attr, order = :asc)
-      @ordering << [attr, order]
-      @sorter = nil
-      self
-    end
-
-    def compare(t1,t2)
-      @ordering.each do |attr,order|
-        comp = (t1[attr] <=> t2[attr])
-        comp *= -1 if order == :desc
-        return comp unless comp == 0
-      end
-      return 0
-    end
-
-    def sorter
-      @sorter ||= lambda{|t1,t2| compare(t1, t2)}
-    end
-
-  end # class OrderingKey
-
-  #
   # Provides tools for manipulating tuples
   #
   module TupleTools
@@ -325,6 +290,64 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # module TupleTools
+
+  # 
+  # 
+  # 
+  class ProjectionKey
+    include TupleTools
+
+    def initialize(attributes, allbut = false)
+      @attributes = attributes
+      @allbut = allbut
+    end
+
+    def project(tuple)
+      if @allbut
+        res = tuple.dup
+        @attributes.each{|attr| res.delete(attr)}
+        res
+      else
+        tuple_collect(@attributes){|attr| [attr, tuple[attr]]}
+      end
+    end
+
+  end # class ProjectionKey
+
+  #
+  # Encapsulates tools for computing orders on tuples
+  #
+  class OrderingKey
+
+    def initialize(ordering = [])
+      @ordering = ordering
+      @sorter = nil
+    end
+
+    def self.coerce(arg)
+      OrderingKey.new(arg)
+    end
+
+    def order_by(attr, order = :asc)
+      @ordering << [attr, order]
+      @sorter = nil
+      self
+    end
+
+    def compare(t1,t2)
+      @ordering.each do |attr,order|
+        comp = (t1[attr] <=> t2[attr])
+        comp *= -1 if order == :desc
+        return comp unless comp == 0
+      end
+      return 0
+    end
+
+    def sorter
+      @sorter ||= lambda{|t1,t2| compare(t1, t2)}
+    end
+
+  end # class OrderingKey
 
   ##############################################################################
   #
@@ -685,11 +708,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
+    def _prepare
+      @projection_key = ProjectionKey.new(@attributes, @allbut)
+    end
+
     # @see TupleTransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
-      @allbut ? 
-        tuple.delete_if{|k,v|  attributes.include?(k)} :
-        tuple.delete_if{|k,v| !attributes.include?(k)}
+      @projection_key.project(tuple)
     end
 
   end # class Project
