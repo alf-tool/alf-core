@@ -345,6 +345,27 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Keeps tuples ordered on a specific key
   #
   class SortedBuffer < Buffer
+
+    def initialize(ordering_key)
+      @ordering_key = ordering_key
+      @buffer = []
+    end
+
+    def add_all(enum)
+      sorter = @ordering_key.sorter
+      @buffer = merge_sort(@buffer, enum.to_a.sort(&sorter), sorter)
+    end
+
+    def each
+      @buffer.each &Proc.new
+    end
+
+    private
+  
+    def merge_sort(s1, s2, sorter)
+      (s1 + s2).sort(&sorter)
+    end
+
   end # class SortedBuffer
   
   ##############################################################################
@@ -1007,8 +1028,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
+    def _prepare
+      @buffer = SortedBuffer.new(@ordering_key)
+      @buffer.add_all(input)
+      self
+    end
+
     def _each
-      input.to_a.sort(&@ordering_key.sorter).each(&Proc.new)
+      @buffer.each(&Proc.new)
     end
 
   end # class Sort
