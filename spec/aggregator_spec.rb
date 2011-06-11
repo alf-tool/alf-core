@@ -10,27 +10,27 @@ class Alf
     ]}
 
     it "should behave correctly on count" do
-      Aggregator::Count.new(:a).aggregate(input).should == 4
+      Aggregator.count(:a).aggregate(input).should == 4
     end
 
     it "should behave correctly on sum" do
-      Aggregator::Sum.new(:a).aggregate(input).should == 7
+      Aggregator.sum(:a).aggregate(input).should == 7
     end
 
     it "should behave correctly on avg" do
-      Aggregator::Avg.new(:a).aggregate(input).should == 7.0 / 4.0
+      Aggregator.avg(:a).aggregate(input).should == 7.0 / 4.0
     end
 
     it "should behave correctly on min" do
-      Aggregator::Min.new(:a).aggregate(input).should == 1
+      Aggregator.min(:a).aggregate(input).should == 1
     end
 
     it "should behave correctly on min" do
-      Aggregator::Max.new(:a).aggregate(input).should == 3
+      Aggregator.max(:a).aggregate(input).should == 3
     end
 
     it "should allow specific tuple computations" do
-      Aggregator::Sum.new{ 1.0 * a * sign }.aggregate(input).should == -3.0
+      Aggregator.sum{ 1.0 * a * sign }.aggregate(input).should == -3.0
     end
 
   end

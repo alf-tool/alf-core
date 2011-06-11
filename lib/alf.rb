@@ -356,6 +356,27 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Aggregator
 
     #
+    # Automatically installs factory methods for inherited classes.
+    #
+    # Example: 
+    #   class Sum < Aggregate   # will give a method Aggregator.sum
+    #     ...
+    #   end
+    #   Aggregator.sum(:size)   # factor an Sum aggregator on tuple[:size]
+    #   Aggregator.sum{ size }  # idem but works on any tuple expression
+    # 
+    def self.inherited(clazz)
+      # TODO: refactor this to use define_method
+      clazz.name.to_s =~ /([A-Za-z0-9_]+)$/
+      basename = $1.downcase.to_sym
+      instance_eval <<-EOF
+        def #{basename}(attr = nil, &block)
+          #{clazz}.new(attr, &block)
+        end
+      EOF
+    end
+
+    #
     # Creates an Aggregator instance.
     #
     # This constructor can be used either by passing an attribute
