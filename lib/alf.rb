@@ -364,23 +364,29 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class HashBuffer < Buffer
 
-    def initialize(projection_key)
+    def initialize(projection_key, default = [], &collector)
       @projection_key = projection_key
-      @buffer = Hash.new{|h,k| h[k] = []}
+      @buffer = Hash.new{|h,k| 
+        h[k] = default.dup
+      }
+      @collector = collector || lambda{|memo,tuple,key,rest|
+        memo << tuple
+      }
     end
 
     def add_all(enum)
       enum.each do |tuple|
-        key = @projection_key.project(tuple)
-        @buffer[key] << tuple
+        key, rest = @projection_key.split(tuple)
+        @buffer[key] = @collector.call(@buffer[key], tuple, key, rest)
       end
     end
 
-    def each
-      proc = Proc.new
-      @buffer.values.each do |rel|
-        rel.each &proc
-      end
+    def each_pair
+      @buffer.each_pair &Proc.new
+    end
+
+    def to_h
+      @buffer.dup
     end
 
   end # class HashBuffer
