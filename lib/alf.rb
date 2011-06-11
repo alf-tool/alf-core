@@ -959,21 +959,25 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Group < Factory::BaseOperator(__FILE__, __LINE__)
 
     # Attributes on which grouping applies
-    attr_accessor :attributes
+    attr_accessor :projection_key
   
     # Attribute name for grouping tuple 
     attr_accessor :as
 
     # Creates a Group instance
     def initialize
-      @attributes = @as = nil
+      @projection_key = ProjectionKey.new([], true)
       yield self if block_given?
+    end
+
+    def attributes=(attrs)
+      @projection_key.attributes = attrs
     end
 
     # @see BaseOperator#set_args
     def set_args(args)
       @as = args.pop.to_sym
-      @attributes = args.collect{|a| a.to_sym}
+      self.attributes = args.collect{|a| a.to_sym}
       self
     end
 
@@ -983,7 +987,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _prepare
       @index = Hash.new{|h,k| h[k] = []} 
       each_input_tuple do |tuple|
-        key, rest = tuple_split(tuple, @attributes)
+        key, rest = @projection_key.split(tuple)
         @index[key] << rest
       end
     end
