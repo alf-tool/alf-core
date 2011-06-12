@@ -56,10 +56,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
-    # @see TupleTransformOperator
-    def TupleTransformOperator(file, line)
+    # @see TransformOperator
+    def TransformOperator(file, line)
       Command(file, line) do |b|
-        b.instance_module Alf::TupleTransformOperator
+        b.instance_module Alf::TransformOperator
       end
     end
 
@@ -67,6 +67,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def ShortcutOperator(file, line)
       Command(file, line) do |b|
         b.instance_module Alf::ShortcutOperator
+      end
+    end
+
+    # @see CesureOperator
+    def CesureOperator(file, line)
+      Command(file, line) do |b|
+        b.instance_module Alf::CesureOperator
       end
     end
 
@@ -717,7 +724,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Specialization of Operator for operators that simply convert single tuples 
   # to single tuples.
   #
-  module TupleTransformOperator
+  module TransformOperator
     include Operator
 
     protected 
@@ -736,7 +743,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     undef_method :_tuple2tuple
 
-  end # module TupleTransformOperator
+  end # module TransformOperator
 
   #
   # Specialization of Operator for implementing operators that rely on a 
@@ -805,7 +812,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes ATTR are defined and not nil. Missing or nil attributes
   # are replaced by the associated default value. 
   #
-  class Defaults < Factory::TupleTransformOperator(__FILE__, __LINE__)
+  class Defaults < Factory::TransformOperator(__FILE__, __LINE__)
 
     # Hash of source -> target attribute renamings
     attr_accessor :defaults
@@ -825,7 +832,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#_tuple2tuple
+    # @see TransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
       @defaults.merge tuple_collect(tuple){|k,v| 
         [k, v.nil? ? @defaults[k] : v]
@@ -850,7 +857,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # ATTR2, and so on. Values of those attributes are the result of
   # evaluating EXPR1, EXPR2, etc on input tuples.
   #
-  class Extend < Factory::TupleTransformOperator(__FILE__, __LINE__)
+  class Extend < Factory::TransformOperator(__FILE__, __LINE__)
 
     # Extensions as a Hash attr => lambda{...}
     attr_accessor :extensions
@@ -876,7 +883,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @handle = TupleHandle.new
     end
 
-    # @see TupleTransformOperator#_tuple2tuple
+    # @see TransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
       tuple.merge tuple_collect(@extensions){|k,v|
         [k, @handle.set(tuple).evaluate(v)]
@@ -901,7 +908,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # duplicate tuples in the result and is therefore not equivalent to a
   # true relational projection.
   #
-  class Project < Factory::TupleTransformOperator(__FILE__, __LINE__)
+  class Project < Factory::TransformOperator(__FILE__, __LINE__)
 
     # Builds a Project operator instance
     def initialize
@@ -932,7 +939,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#_tuple2tuple
+    # @see TransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
       @projection_key.project(tuple)
     end
@@ -958,7 +965,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   {:id => 1} -> alf rename id identifier -> {:identifier => 1}
   #   {:a => 1, :b => 2} -> alf rename a A b B -> {:A => 1, :B => 2}
   #
-  class Rename < Factory::TupleTransformOperator(__FILE__, __LINE__)
+  class Rename < Factory::TransformOperator(__FILE__, __LINE__)
 
     # Hash of source -> target attribute renamings
     attr_accessor :renaming
@@ -977,7 +984,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#_tuple2tuple
+    # @see TransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
       tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
     end
@@ -1055,7 +1062,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
   # attribute whose name is NEWNAME
   #
-  class Nest < Factory::TupleTransformOperator(__FILE__, __LINE__)
+  class Nest < Factory::TransformOperator(__FILE__, __LINE__)
 
     # Array of nesting attributes
     attr_accessor :attributes
@@ -1079,7 +1086,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#_tuple2tuple
+    # @see TransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
       others = tuple_collect(tuple.keys - @attributes){|k| [k,tuple[k]] }
       others[as] = tuple_collect(attributes){|k| [k, tuple[k]] }
@@ -1102,7 +1109,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator unnests a tuple-valued attribute ATTR so as to 
   # flatten it pairs with 'upstream' tuple.
   #
-  class Unnest < Factory::TupleTransformOperator(__FILE__, __LINE__)
+  class Unnest < Factory::TransformOperator(__FILE__, __LINE__)
 
     # Name of the attribute to unnest
     attr_accessor :attribute
@@ -1121,7 +1128,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TupleTransformOperator#_tuple2tuple
+    # @see TransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
       tuple = tuple.dup
       nested = tuple.delete(@attribute) || {}
