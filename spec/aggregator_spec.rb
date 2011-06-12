@@ -25,8 +25,15 @@ class Alf
       Aggregator.min(:a).aggregate(input).should == 1
     end
 
-    it "should behave correctly on min" do
+    it "should behave correctly on max" do
       Aggregator.max(:a).aggregate(input).should == 3
+    end
+
+    it "should behave correctly on concat" do
+      Aggregator.concat(:a).aggregate(input).should == "1231"
+      Aggregator.concat(:a, :between => " ").aggregate(input).should == "1 2 3 1"
+      Aggregator.concat(:a, :before => "[", :after => "]").aggregate(input).should == "[1231]"
+      Aggregator.concat(:before => "[", :after => "]"){ a }.aggregate(input).should == "[1231]"
     end
 
     it "should allow specific tuple computations" do

@@ -355,6 +355,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Aggregator
 
+    # Aggregate options 
+    attr_reader :options
+
     #
     # Automatically installs factory methods for inherited classes.
     #
@@ -386,9 +389,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #   Aggregator.new(:size) # will aggregate on tuple[:size]
     #   Aggregator.new{ size * price } # ... on tuple[:size] * tuple[:price]
     #
-    def initialize(attribute = nil, &block)
+    def initialize(attribute = nil, options = {}, &block)
+      attribute, options = nil, attribute if attribute.is_a?(Hash)
       @handle = TupleHandle.new
+      @options = default_options.merge(options)
       @functor = TupleHandle.compile(attribute || block)
+    end
+
+    #
+    # Returns the default options to use
+    #
+    def default_options
+      {}
     end
 
     #
@@ -493,6 +505,23 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         memo.nil? ? val : (memo > val ? memo : val) 
       end
     end # class Max
+
+    # 
+    # Defines a CONCAT aggregation operator
+    # 
+    class Concat < Aggregator
+      def least(); ""; end
+      def default_options
+        {:before => "", :after => "", :between => ""}
+      end
+      def _happens(memo, val) 
+        memo << options[:between].to_s unless memo.empty?
+        memo << val.to_s
+      end
+      def finalize(memo)
+        options[:before].to_s + memo + options[:after].to_s
+      end
+    end
 
   end # class Aggregator
 
