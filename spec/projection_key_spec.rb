@@ -19,6 +19,18 @@ class Alf
 
     end
 
+    describe "to_ordering_key" do
+
+      specify "when passed an array" do
+        key = ProjectionKey.coerce [:a, :b]
+        okey = key.to_ordering_key
+        okey.attributes.should == [:a, :b]
+        okey.order_of(:a).should == :asc
+        okey.order_of(:b).should == :asc
+      end
+
+    end
+
     describe "split" do 
 
       subject{ key.split(tuple) }

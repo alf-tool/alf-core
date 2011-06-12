@@ -318,6 +318,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
+    def to_ordering_key
+      OrderingKey.new attributes.collect{|arg|
+        [arg, :asc]
+      }
+    end
+
     def project(tuple)
       split(tuple).first
     end
@@ -355,6 +361,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @ordering << [attr, order]
       @sorter = nil
       self
+    end
+
+    def order_of(attr)
+      @ordering.find{|arg| arg.first == attr}.last
     end
 
     def compare(t1,t2)
