@@ -56,27 +56,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
-    # @see TransformOperator
-    def TransformOperator(file, line)
-      Command(file, line) do |b|
-        b.instance_module Alf::TransformOperator
-      end
-    end
-
-    # @see ShortcutOperator
-    def ShortcutOperator(file, line)
-      Command(file, line) do |b|
-        b.instance_module Alf::ShortcutOperator
-      end
-    end
-
-    # @see CesureOperator
-    def CesureOperator(file, line)
-      Command(file, line) do |b|
-        b.instance_module Alf::CesureOperator
-      end
-    end
-
     extend Factory
   end # module Factory
 
@@ -866,7 +845,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes ATTR are defined and not nil. Missing or nil attributes
   # are replaced by the associated default value. 
   #
-  class Defaults < Factory::TransformOperator(__FILE__, __LINE__)
+  class Defaults < Factory::Operator(__FILE__, __LINE__)
+    include TransformOperator
 
     # Hash of source -> target attribute renamings
     attr_accessor :defaults
@@ -911,7 +891,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # ATTR2, and so on. Values of those attributes are the result of
   # evaluating EXPR1, EXPR2, etc on input tuples.
   #
-  class Extend < Factory::TransformOperator(__FILE__, __LINE__)
+  class Extend < Factory::Operator(__FILE__, __LINE__)
+    include TransformOperator
 
     # Extensions as a Hash attr => lambda{...}
     attr_accessor :extensions
@@ -962,7 +943,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # duplicate tuples in the result and is therefore not equivalent to a
   # true relational projection.
   #
-  class Project < Factory::TransformOperator(__FILE__, __LINE__)
+  class Project < Factory::Operator(__FILE__, __LINE__)
+    include TransformOperator
 
     # Builds a Project operator instance
     def initialize
@@ -1019,7 +1001,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   {:id => 1} -> alf rename id identifier -> {:identifier => 1}
   #   {:a => 1, :b => 2} -> alf rename a A b B -> {:A => 1, :B => 2}
   #
-  class Rename < Factory::TransformOperator(__FILE__, __LINE__)
+  class Rename < Factory::Operator(__FILE__, __LINE__)
+    include TransformOperator
 
     # Hash of source -> target attribute renamings
     attr_accessor :renaming
@@ -1116,7 +1099,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
   # attribute whose name is NEWNAME
   #
-  class Nest < Factory::TransformOperator(__FILE__, __LINE__)
+  class Nest < Factory::Operator(__FILE__, __LINE__)
+    include TransformOperator
 
     # Array of nesting attributes
     attr_accessor :attributes
@@ -1163,7 +1147,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator unnests a tuple-valued attribute ATTR so as to 
   # flatten it pairs with 'upstream' tuple.
   #
-  class Unnest < Factory::TransformOperator(__FILE__, __LINE__)
+  class Unnest < Factory::Operator(__FILE__, __LINE__)
+    include TransformOperator
 
     # Name of the attribute to unnest
     attr_accessor :attribute
@@ -1450,7 +1435,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # This operator computes quota values on input tuples.
   #
-  class Quota < Factory::CesureOperator(__FILE__, __LINE__)
+  class Quota < Factory::Operator(__FILE__, __LINE__)
+    include CesureOperator
 
     attr_accessor :by_key; alias :cesure_key :by_key
     attr_accessor :sort_key
