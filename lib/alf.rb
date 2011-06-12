@@ -307,6 +307,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @allbut = allbut
     end
 
+    def self.coerce(arg)
+      case arg
+        when Array
+          ProjectionKey.new(arg, false)
+        when OrderingKey
+          ProjectionKey.new(arg.attributes, false)
+        else
+          raise ArgumentError, "Unable to coerce #{arg} to a projection key"
+      end
+    end
+
     def project(tuple)
       split(tuple).first
     end
@@ -334,6 +345,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     def self.coerce(arg)
       OrderingKey.new(arg)
+    end
+
+    def attributes
+      @ordering.collect{|arg| arg.first}
     end
 
     def order_by(attr, order = :asc)

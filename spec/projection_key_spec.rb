@@ -2,6 +2,23 @@ require File.expand_path('../spec_helper', __FILE__)
 class Alf
   describe ProjectionKey do
 
+    describe "coerce" do
+      
+      specify "when passed an array" do
+        key = ProjectionKey.coerce [:a, :b]
+        key.attributes.should == [:a, :b]
+        key.allbut.should == false
+      end
+
+      specify "when passed an OrderingKey" do
+        okey = OrderingKey.new [[:a, :asc], [:b, :asc]]
+        key = ProjectionKey.coerce(okey)
+        key.attributes.should == [:a, :b]
+        key.allbut.should == false
+      end
+
+    end
+
     describe "split" do 
 
       subject{ key.split(tuple) }
