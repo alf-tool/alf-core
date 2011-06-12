@@ -738,6 +738,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # module TupleTransformOperator
 
+  #
+  # Specialization of Operator for implementing operators that rely on a 
+  # cesure algorithm.
+  #
   module CesureOperator
     include Operator
     
@@ -749,24 +753,24 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       each_input_tuple do |tuple|
         cur_key = proj_key.project(tuple)
         if cur_key != prev_key
-          _flush_cesure(prev_key, receiver) unless prev_key.nil?
-          _start_cesure(cur_key, receiver)
+          flush_cesure(prev_key, receiver) unless prev_key.nil?
+          start_cesure(cur_key, receiver)
           prev_key = cur_key
         end
-        _accumulate_cesure(tuple, receiver)
+        accumulate_cesure(tuple, receiver)
       end
     end
 
     def cesure_key
     end
 
-    def _start_cesure(key, receiver)
+    def start_cesure(key, receiver)
     end
 
-    def _accumulate_cesure(key, receiver)
+    def accumulate_cesure(key, receiver)
     end
 
-    def _flush_cesure(key, receiver)
+    def flush_cesure(key, receiver)
     end
 
   end # module CesureOperator
