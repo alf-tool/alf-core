@@ -1316,6 +1316,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     def initialize
       @by_key = ProjectionKey.new([], false)
+      @aggregators = {}
     end
 
     def by=(attrs)
@@ -1338,6 +1339,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see Operator#set_args
     def set_args(args)
+      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
+        [a, Aggregator.instance_eval(expr)]
+      end
       self
     end
 
@@ -1355,22 +1359,22 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       protected 
 
       def start_cesure(key, receiver)
-        @aggregations = tuple_collect(@aggregators) do |a,agg|
+        @aggs = tuple_collect(@aggregators) do |a,agg|
           [a, agg.least]
         end
       end
 
       def accumulate_cesure(tuple, receiver)
-        @aggregations = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.happens(@aggregations[a], tuple)]
+        @aggs = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.happens(@aggs[a], tuple)]
         end
       end
 
       def flush_cesure(key, receiver)
-        @aggregations = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.finalize(@aggregations[a])]
+        @aggs = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.finalize(@aggs[a])]
         end
-        receiver.call key.merge(@aggregations)
+        receiver.call key.merge(@aggs)
       end
 
     end # class SortBased
@@ -1378,7 +1382,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected 
     
     def _each
-      SortBased.new.pipe(input).each &Proc.new
+      SortBased.new(@by_key, @aggregators).pipe(input).each &Proc.new
     end
 
   end # class Summarize
