@@ -766,6 +766,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         end
         accumulate_cesure(tuple, receiver)
       end
+      flush_cesure(prev_key, receiver) unless prev_key.nil?
     end
 
     def cesure_key
@@ -774,7 +775,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def start_cesure(key, receiver)
     end
 
-    def accumulate_cesure(key, receiver)
+    def accumulate_cesure(tuple, receiver)
     end
 
     def flush_cesure(key, receiver)
@@ -1241,6 +1242,47 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Ungroup
+
+  # 
+  # Remove tuple duplicates from input tuples
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator remove duplicates from input tuples.
+  #
+  class NoDuplicates < Factory::Operator(__FILE__, __LINE__)
+
+    # Removes duplicates according to a complete order
+    class SortBased
+      include Alf::CesureOperator      
+
+      def cesure_key
+        @cesure_key ||= ProjectionKey.new([],true)
+      end
+
+      def accumulate_cesure(tuple, receiver)
+        @tuple = tuple
+      end
+
+      def flush_cesure(key, receiver)
+        receiver.call(@tuple)
+      end
+
+    end # class SortBased
+
+    protected 
+    
+    def _each
+      SortBased.new.pipe(input).each &Proc.new
+    end
+
+  end # class NoDuplicates
 
   # 
   # Sort input tuples in memory and output them sorted
