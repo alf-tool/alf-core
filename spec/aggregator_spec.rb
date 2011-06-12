@@ -36,6 +36,11 @@ class Alf
       Aggregator.concat(:before => "[", :after => "]"){ a }.aggregate(input).should == "[1231]"
     end
 
+    it "should behave correctly on collect" do
+      Aggregator.collect(:a).aggregate(input).should == [1, 2, 3, 1]
+      Aggregator.collect{ {:a => a, :sign => sign} }.aggregate(input).should == input
+    end
+
     it "should allow specific tuple computations" do
       Aggregator.sum{ 1.0 * a * sign }.aggregate(input).should == -3.0
     end

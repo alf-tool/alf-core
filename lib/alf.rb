@@ -506,6 +506,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end # class Max
 
+    #
+    # Defines a COLLECT aggregation operator
+    #
+    class Collect < Aggregator
+      def least(); []; end
+      def _happens(memo, val) 
+        memo << val
+      end
+    end
+
     # 
     # Defines a CONCAT aggregation operator
     # 
