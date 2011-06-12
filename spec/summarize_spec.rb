@@ -3,11 +3,11 @@ class Alf
   describe Summarize do
       
     let(:input) {[
-      {:a => "via_method", :time => 1},
+      {:a => "via_reader", :time => 2},
       {:a => "via_method", :time => 1},
       {:a => "via_method", :time => 2},
       {:a => "via_reader", :time => 4},
-      {:a => "via_reader", :time => 2},
+      {:a => "via_method", :time => 1},
     ]}
 
     let(:expected) {[
