@@ -1300,6 +1300,90 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class NoDuplicates
 
   # 
+  # Summarize tuples by a given subset of attributes
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator summarizes tuples and compute additional aggregations.
+  #
+  class Summarize < Factory::Operator(__FILE__, __LINE__)
+
+    def initialize
+      @by_key = ProjectionKey.new([], false)
+    end
+
+    def by=(attrs)
+      @by_key.attributes = attrs
+    end
+
+    def allbut=(allbut)
+      @by_key.allbut = allbut
+    end
+
+    # Installs the options
+    options do |opt|
+      opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
+        self.by = args.collect{|a| a.to_sym}
+      end
+      opt.on('-a', '--allbut', 'Apply a ALLBUT summarize') do
+        self.allbut = true
+      end
+    end
+
+    # @see Operator#set_args
+    def set_args(args)
+      self
+    end
+
+    # Summarizes according to a complete order
+    class SortBased
+      include Alf::CesureOperator      
+
+      attr_reader :cesure_key
+      attr_reader :aggregators     
+
+      def initialize(by_key, aggregators)
+        @cesure_key, @aggregators = by_key, aggregators
+      end
+
+      protected 
+
+      def start_cesure(key, receiver)
+        @aggregations = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.least]
+        end
+      end
+
+      def accumulate_cesure(tuple, receiver)
+        @aggregations = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.happens(@aggregations[a], tuple)]
+        end
+      end
+
+      def flush_cesure(key, receiver)
+        @aggregations = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.finalize(@aggregations[a])]
+        end
+        receiver.call key.merge(@aggregations)
+      end
+
+    end # class SortBased
+
+    protected 
+    
+    def _each
+      SortBased.new.pipe(input).each &Proc.new
+    end
+
+  end # class Summarize
+
+  # 
   # Sort input tuples in memory and output them sorted
   #
   # SYNOPSIS
