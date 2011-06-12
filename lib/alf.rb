@@ -1372,17 +1372,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @by_key.attributes = attrs
     end
 
-    def allbut=(allbut)
-      @by_key.allbut = allbut
-    end
-
     # Installs the options
     options do |opt|
       opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
         self.by = args.collect{|a| a.to_sym}
-      end
-      opt.on('-a', '--allbut', 'Apply a ALLBUT summarize') do
-        self.allbut = true
       end
     end
 
