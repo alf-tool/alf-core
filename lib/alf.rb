@@ -346,6 +346,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class OrderingKey
 
+    attr_reader :ordering
+
     def initialize(ordering = [])
       @ordering = ordering
       @sorter = nil
@@ -392,6 +394,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     def sorter
       @sorter ||= lambda{|t1,t2| compare(t1, t2)}
+    end
+
+    def +(other)
+      other = OrderingKey.coerce(other)
+      OrderingKey.new(@ordering + other.ordering)
     end
 
   end # class OrderingKey

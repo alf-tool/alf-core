@@ -59,5 +59,21 @@ class Alf
 
     end
 
+    describe "+" do
+
+      specify "when passed another key" do
+        key = OrderingKey.coerce [:a]
+        key2 = key + OrderingKey.coerce([[:b, :desc]])
+        key2.ordering.should == [[:a, :asc], [:b, :desc]]
+      end
+
+      specify "when passed another array" do
+        key = OrderingKey.coerce [:a]
+        key2 = key + [[:b, :desc]]
+        key2.ordering.should == [[:a, :asc], [:b, :desc]]
+      end
+
+    end
+
   end
 end
