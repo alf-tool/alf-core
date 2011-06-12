@@ -1276,10 +1276,25 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     end # class SortBased
 
+    # Removes duplicates by loading all in memory and filtering 
+    # them there 
+    class BufferBased
+      include Alf::Operator
+
+      def _prepare
+        @tuples = input.to_a.uniq
+      end
+
+      def _each
+        @tuples.each &Proc.new
+      end
+
+    end # class BufferBased
+
     protected 
     
     def _each
-      SortBased.new.pipe(input).each &Proc.new
+      BufferBased.new.pipe(input).each &Proc.new
     end
 
   end # class NoDuplicates
