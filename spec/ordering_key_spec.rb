@@ -18,6 +18,12 @@ class Alf
         key.order_of(:b).should == :asc
       end
 
+      specify "when passed an ordering key" do
+        key  = OrderingKey.coerce [:a, :b]
+        key2 = OrderingKey.coerce key
+        key.should == key2
+      end
+
       specify "when passed a projection key" do
         pkey = ProjectionKey.new [:a, :b]
         key = OrderingKey.coerce pkey

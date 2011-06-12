@@ -10,6 +10,12 @@ class Alf
         key.allbut.should == false
       end
 
+      specify "when passed a ProjectionKey" do
+        key = ProjectionKey.coerce [:a, :b]
+        key2 = ProjectionKey.coerce key
+        key2.should == key
+      end
+
       specify "when passed an OrderingKey" do
         okey = OrderingKey.new [[:a, :asc], [:b, :asc]]
         key = ProjectionKey.coerce(okey)

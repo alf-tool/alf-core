@@ -313,6 +313,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           ProjectionKey.new(arg, false)
         when OrderingKey
           ProjectionKey.new(arg.attributes, false)
+        when ProjectionKey
+          arg
         else
           raise ArgumentError, "Unable to coerce #{arg} to a projection key"
       end
@@ -358,6 +360,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           OrderingKey.new(arg)
         when ProjectionKey
           arg.to_ordering_key
+        when OrderingKey
+          arg
         else
           raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
       end
@@ -1427,7 +1431,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected 
     
     def _each
-      SortBased.new(@by_key, @aggregators).pipe(input).each &Proc.new
+      sort = Sort.new{|s| s.ordering = @by_key.to_ordering_key}.pipe(input)
+      SortBased.new(@by_key, @aggregators).pipe(sort).each &Proc.new
     end
 
   end # class Summarize
