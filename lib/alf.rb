@@ -1438,6 +1438,83 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Summarize
 
   # 
+  # Compute quota values on input tuples
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This operator computes quota values on input tuples.
+  #
+  class Quota < Factory::CesureOperator(__FILE__, __LINE__)
+
+    attr_accessor :by_key; alias :cesure_key :by_key
+    attr_accessor :sort_key
+    attr_accessor :aggregators
+
+    def initialize
+      @by_key       = ProjectionKey.new [], false
+      @ordering_key = OrderingKey.new []
+      @aggregators  = {}
+      yield self if block_given?
+    end
+
+    def by=(attrs)
+      @by_key = ProjectionKey.coerce(attrs)
+    end
+
+    def ordering=(attrs)
+      @ordering_key = OrderingKey.coerce(attrs)
+    end
+
+    # Installs the options
+    options do |opt|
+      opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
+        self.by = args.collect{|a| a.to_sym}
+      end
+      opt.on('--order=x,y,z', 'Specify order attributes', Array) do |args|
+        self.ordering = args.collect{|a| a.to_sym}
+      end
+    end
+
+    # @see Operator#set_args
+    def set_args(args)
+      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
+        [a, Aggregator.instance_eval(expr)]
+      end
+      self
+    end
+
+    def pipe(input)
+      o = @by_key.to_ordering_key + @ordering_key
+      super(Sort.new{|s| s.ordering = o}.pipe(input))
+    end
+
+    protected 
+
+    def start_cesure(key, receiver)
+      @aggs = tuple_collect(@aggregators) do |a,agg|
+        [a, agg.least]
+      end
+    end
+
+    def accumulate_cesure(tuple, receiver)
+      @aggs = tuple_collect(@aggregators) do |a,agg|
+        [a, agg.happens(@aggs[a], tuple)]
+      end
+      thisone = tuple_collect(@aggregators) do |a,agg|
+        [a, agg.finalize(@aggs[a])]
+      end
+      receiver.call tuple.merge(thisone)
+    end
+
+  end # class Quota
+
+  # 
   # Sort input tuples in memory and output them sorted
   #
   # SYNOPSIS
