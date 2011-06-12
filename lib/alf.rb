@@ -49,10 +49,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       res
     end
 
-    # @see BaseOperator
-    def BaseOperator(file, line)
+    # @see Operator
+    def Operator(file, line)
       Command(file, line) do |b|
-        b.instance_module Alf::BaseOperator
+        b.instance_module Alf::Operator
       end
     end
 
@@ -655,7 +655,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # Marker for all operators on relations.
   # 
-  module BaseOperator
+  module Operator
     include Pipeable, Enumerable, TupleTools
 
     #
@@ -711,18 +711,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     undef_method :_each
 
-  end # module BaseOperator
+  end # module Operator
 
   #
-  # Specialization of BaseOperator for operators that
+  # Specialization of Operator for operators that
   # simply convert single tuples to single tuples.
   #
   module TupleTransformOperator
-    include BaseOperator
+    include Operator
 
     protected 
 
-    # @see BaseOperator#_each
+    # @see Operator#_each
     def _each
       each_input_tuple do |tuple|
         yield _tuple2tuple(tuple)
@@ -739,11 +739,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module TupleTransformOperator
 
   #
-  # Specialization of BaseOperator for operators that are 
+  # Specialization of Operator for operators that are 
   # shortcuts on longer expressions.
   # 
   module ShortcutOperator
-    include BaseOperator, Lispy
+    include Operator, Lispy
 
     protected 
 
@@ -779,7 +779,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       yield self if block_given?
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       args.each_with_index{|a,i| args[i] = a.to_sym if i % 2 == 0}
       @defaults = Hash[*args]
@@ -824,7 +824,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       yield self if block_given?
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       @extensions = tuple_collect(args.each_slice(2)){|k,v|
         [k.to_sym, TupleHandle.compile(v)]
@@ -834,7 +834,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see BaseOperator#_prepare
+    # @see Operator#_prepare
     def _prepare
       @handle = TupleHandle.new
     end
@@ -887,7 +887,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       self.attributes = args.collect{|a| a.to_sym}
       self
@@ -932,7 +932,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       yield self if block_given?
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       @renaming = Hash[*args.collect{|c| c.to_sym}]
       self
@@ -961,7 +961,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This command restricts tuples to those for which EXPR evaluates
   # to true.
   #
-  class Restrict < Factory::BaseOperator(__FILE__, __LINE__)
+  class Restrict < Factory::Operator(__FILE__, __LINE__)
 
     # Hash of source -> target attribute renamings
     attr_accessor :functor
@@ -988,7 +988,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       @functor = Restrict.functor(args.size > 1 ? args : args.first)
       self
@@ -996,7 +996,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see BaseOperator#_each
+    # @see Operator#_each
     def _each
       handle = TupleHandle.new
       each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@functor) }
@@ -1033,7 +1033,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       yield self if block_given?
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       @as = args.pop.to_sym
       @attributes = args.collect{|a| a.to_sym}
@@ -1076,7 +1076,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       yield self if block_given?
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       @attribute = args.last.to_sym
       self
@@ -1107,7 +1107,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator groups attributes ATTR1 to ATTRN as a new, relation-values
   # attribute whose name is NEWNAME
   #
-  class Group < Factory::BaseOperator(__FILE__, __LINE__)
+  class Group < Factory::Operator(__FILE__, __LINE__)
 
     # Attributes on which grouping applies
     attr_accessor :projection_key
@@ -1125,7 +1125,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @projection_key.attributes = attrs
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       @as = args.pop.to_sym
       self.attributes = args.collect{|a| a.to_sym}
@@ -1134,7 +1134,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected
 
-    # See BaseOperator#_prepare
+    # See Operator#_prepare
     def _prepare
       @index = Hash.new{|h,k| h[k] = []} 
       each_input_tuple do |tuple|
@@ -1143,7 +1143,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
-    # See BaseOperator#_each
+    # See Operator#_each
     def _each
       @index.each_pair do |k,v|
         yield(k.merge(@as => v))
@@ -1166,7 +1166,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator ungroup the relation-valued attribute whose
   # name is ATTR
   #
-  class Ungroup < Factory::BaseOperator(__FILE__, __LINE__)
+  class Ungroup < Factory::Operator(__FILE__, __LINE__)
 
     # Relation-value attribute to ungroup
     attr_accessor :attribute
@@ -1177,7 +1177,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       yield self if block_given?
     end
 
-    # @see BaseOperator#set_args
+    # @see Operator#set_args
     def set_args(args)
       @attribute = args.pop.to_sym
       self
@@ -1185,7 +1185,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # See BaseOperator#_each
+    # See Operator#_each
     def _each
       each_input_tuple do |tuple|
         tuple = tuple.dup
@@ -1212,7 +1212,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator sorts input tuples on ATTR1 then ATTR2, etc.
   # and outputs them sorted after that.
   #
-  class Sort < Factory::BaseOperator(__FILE__, __LINE__)
+  class Sort < Factory::Operator(__FILE__, __LINE__)
 
     def initialize
       @ordering_key = OrderingKey.coerce([])
