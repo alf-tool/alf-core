@@ -350,7 +350,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def self.coerce(arg)
-      OrderingKey.new(arg)
+      case arg
+        when Array
+          if arg.all?{|a| a.is_a?(Symbol)}
+            arg = arg.collect{|a| [a, :asc]}
+          end
+          OrderingKey.new(arg)
+        when ProjectionKey
+          arg.to_ordering_key
+        else
+          raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
+      end
     end
 
     def attributes
