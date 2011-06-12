@@ -137,6 +137,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       _pipe(Ungroup.new{|r| r.attribute = attribute}, child)
     end
 
+    # Factors a SUMMARIZE operator
+    def summarize(child, by, aggregators = nil, &agg_builder)
+      aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
+      _pipe(Summarize.new{|r| r.by = by; 
+                              r.aggregators = aggregators}, child)
+    end
+
     # Factors an SORT operator
     def sort(child, ordering)
       _pipe(Sort.new{|r| r.ordering = ordering}, child)
@@ -1314,9 +1321,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Summarize < Factory::Operator(__FILE__, __LINE__)
 
+    attr_accessor :aggregators
+
     def initialize
       @by_key = ProjectionKey.new([], false)
       @aggregators = {}
+      yield self if block_given?
     end
 
     def by=(attrs)
