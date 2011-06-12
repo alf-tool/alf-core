@@ -714,8 +714,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module Operator
 
   #
-  # Specialization of Operator for operators that
-  # simply convert single tuples to single tuples.
+  # Specialization of Operator for operators that simply convert single tuples 
+  # to single tuples.
   #
   module TupleTransformOperator
     include Operator
@@ -737,6 +737,39 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     undef_method :_tuple2tuple
 
   end # module TupleTransformOperator
+
+  module CesureOperator
+    include Operator
+    
+    protected
+
+    # @see Operator#_each
+    def _each
+      receiver, proj_key, prev_key = Proc.new, cesure_key, nil
+      each_input_tuple do |tuple|
+        cur_key = proj_key.project(tuple)
+        if cur_key != prev_key
+          _flush_cesure(prev_key, receiver) unless prev_key.nil?
+          _start_cesure(cur_key, receiver)
+          prev_key = cur_key
+        end
+        _accumulate_cesure(tuple, receiver)
+      end
+    end
+
+    def cesure_key
+    end
+
+    def _start_cesure(key, receiver)
+    end
+
+    def _accumulate_cesure(key, receiver)
+    end
+
+    def _flush_cesure(key, receiver)
+    end
+
+  end # module CesureOperator
 
   #
   # Specialization of Operator for operators that are 
