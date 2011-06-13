@@ -629,14 +629,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # Readers are dataflow elements at the input boundary with the outside world.
   # They typically convert IO streams as Enumerable tuple streams. All readers
-  # should follow the basis given by TupleReader.
+  # should follow the basis given by Reader.
   #
   
   #
   # Marker for chain elements converting input streams to enumerable 
   # of tuples.
   #
-  module TupleReader
+  module Reader
     include Pipeable, Enumerable
 
     #
@@ -666,16 +666,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     undef_method :_line2tuple
 
-  end # module TupleReader
+  end # module Reader
 
   #
-  # Implements the TupleReader contract for a stream where each line is 
+  # Implements the Reader contract for a stream where each line is 
   # a ruby hash literal, as a tuple physical representation.
   #
   class HashReader
-    include TupleReader
+    include Reader
 
-    # @see TupleReader#_line2tuple
+    # @see Reader#_line2tuple
     def _line2tuple(line)
       begin
         h = Kernel.eval(line)
