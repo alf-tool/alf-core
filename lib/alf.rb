@@ -66,75 +66,75 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see Defaults
     def defaults(child, defaults, strict = false)
-      _pipe(Defaults.new(defaults, strict), child)
+      pipe(Defaults.new(defaults, strict), child)
     end
 
     def no_duplicates(child)
-      _pipe(NoDuplicates.new, child)
+      pipe(NoDuplicates.new, child)
     end
     
     # @see Extend
     def extend(child, extensions)
-      _pipe(Extend.new(extensions), child)
+      pipe(Extend.new(extensions), child)
     end
 
     # Factors a PROJECT operator
     def project(child, *attrs)
-      _pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
+      pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
     end
 
     # Factors a PROJECT-ALLBUT operator
     def allbut(child, *attrs)
-      _pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
+      pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
     end
 
     # Factors a RENAME operator
     def rename(child, renaming)
-      _pipe(Rename.new{|r| r.renaming = renaming}, child)
+      pipe(Rename.new{|r| r.renaming = renaming}, child)
     end
 
     # Factors a RESTRICT operator
     def restrict(child, functor)
-      _pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
+      pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
     end
 
     # Factors a NEST operator
     def nest(child, nesting)
-      _pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
+      pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
                         r.as = nesting.keys.first}, child)
     end
 
     # Factors an UNNEST operator
     def unnest(child, attribute)
-      _pipe(Unnest.new{|r| r.attribute = attribute}, child)
+      pipe(Unnest.new{|r| r.attribute = attribute}, child)
     end
 
     # Factors a GROUP operator
     def group(child, grouping)
-      _pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
+      pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
                          r.as = grouping.keys.first}, child)
     end
 
     # Factors an UNGROUP operator
     def ungroup(child, attribute)
-      _pipe(Ungroup.new{|r| r.attribute = attribute}, child)
+      pipe(Ungroup.new{|r| r.attribute = attribute}, child)
     end
 
     # Factors a SUMMARIZE operator
     def summarize(child, by, aggregators = nil, &agg_builder)
       aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
-      _pipe(Summarize.new{|r| r.by = by; 
+      pipe(Summarize.new{|r| r.by = by; 
                               r.aggregators = aggregators}, child)
     end
 
     # Factors an SORT operator
     def sort(child, ordering)
-      _pipe(Sort.new{|r| r.ordering = ordering}, child)
+      pipe(Sort.new{|r| r.ordering = ordering}, child)
     end
 
     private
 
-    def _pipe(parent, child)
+    def pipe(parent, child)
       child = case child
         when IO
           Reader::RubyHash.new(child)
