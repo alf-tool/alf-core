@@ -133,7 +133,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _pipe(parent, child)
       child = case child
         when IO
-          HashReader.new(child)
+          Reader::RubyHash.new(child)
         when Array, Reader, Operator
           child
         else
@@ -683,28 +683,28 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     undef_method :_line2tuple
 
-  end # module Reader
-
-  #
-  # Implements the Reader contract for a stream where each line is a ruby hash 
-  # literal (taken as a tuple physical representation).
-  #
-  class HashReader < Reader
-
-    # @see Reader#_line2tuple
-    def _line2tuple(line)
-      begin
-        h = Kernel.eval(line)
-        raise "hash expected, got #{h}" unless h.is_a?(Hash)
-      rescue Exception => ex
-        $stderr << "Skipping #{line.strip}: #{ex.message}\n"
-        nil
-      else
-        return h
+    #
+    # Implements the Reader contract for a stream where each line is a ruby 
+    # hash literal (taken as a tuple physical representation).
+    #
+    class RubyHash < Reader
+  
+      # @see Reader#_line2tuple
+      def _line2tuple(line)
+        begin
+          h = Kernel.eval(line)
+          raise "hash expected, got #{h}" unless h.is_a?(Hash)
+        rescue Exception => ex
+          $stderr << "Skipping #{line.strip}: #{ex.message}\n"
+          nil
+        else
+          return h
+        end
       end
-    end
+  
+    end # class RubyHash
 
-  end # class HashReader
+  end # module Reader
 
   ##############################################################################
   #
@@ -737,7 +737,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     def execute(args)
       set_args(args)
-      [ HashReader.new, self, HashWriter.new ].inject($stdin) do |chain,n|
+      [ Reader::RubyHash.new, self, HashWriter.new ].inject($stdin) do |chain,n|
         n.pipe(chain)
       end.execute($stdout)
     end
@@ -1699,7 +1699,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def execute(args)
-      output HashReader.new.pipe($stdin)
+      output Reader::RubyHash.new($stdin)
     end
 
   end # class Render
