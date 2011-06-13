@@ -59,7 +59,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     extend Factory
   end # module Factory
   
-
   # 
   # Implements a small LISP-like DSL on top of Alf
   #
