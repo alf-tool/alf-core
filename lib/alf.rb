@@ -940,8 +940,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   #   alf extend total "qty * price" big "qty > 100 ? true : false"
   #
-  # Attributes ATTRx should not already exist, no behavior is guaranteed if this 
-  # precondition is not respected.   
+  # Attributes ATTRx should not already exist, no behavior is guaranteed if 
+  # this precondition is not respected.   
   #
   class Extend < Factory::Operator(__FILE__, __LINE__)
     include TransformOperator
