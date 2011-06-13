@@ -1746,52 +1746,52 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Quota < Factory::Operator(__FILE__, __LINE__)
     include Operator::Cesure
 
-    attr_accessor :by_key; alias :cesure_key :by_key
-    attr_accessor :sort_key
+    # Quota by
+    attr_accessor :by
+
+    # Quota order
+    attr_accessor :order
+    
+    # Quota aggregations
     attr_accessor :aggregators
 
-    def initialize
-      @by_key       = ProjectionKey.new [], false
-      @ordering_key = OrderingKey.new []
-      @aggregators  = {}
-      yield self if block_given?
+    def initialize(by = [], order = [], aggregators = {})
+      @by, @order, @aggregators  = by, order, aggregators
     end
 
-    def by=(attrs)
-      @by_key = ProjectionKey.coerce(attrs)
-    end
-
-    def ordering=(attrs)
-      @ordering_key = OrderingKey.coerce(attrs)
-    end
-
-    # Installs the options
     options do |opt|
       opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-        self.by = args.collect{|a| a.to_sym}
+        @by = args.collect{|a| a.to_sym}
       end
       opt.on('--order=x,y,z', 'Specify order attributes', Array) do |args|
-        self.ordering = args.collect{|a| a.to_sym}
+        @order = args.collect{|a| a.to_sym}
       end
     end
 
     # @see Operator#set_args
     def set_args(args)
       @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a, Aggregator.instance_eval(expr)]
+        [a.to_sym, Aggregator.instance_eval(expr)]
       end
       self
     end
 
     # TODO: remove this (find another way)!!
     def input=(i)
-      o = @by_key.to_ordering_key + @ordering_key
-      sort = Sort.new{|s| s.ordering = o}
+      sort = Sort.new(cesure_key.to_ordering_key + ordering_key)
       sort.input = i
       super(sort)
     end
 
     protected 
+    
+    def cesure_key
+      ProjectionKey.coerce @by
+    end
+    
+    def ordering_key
+      OrderingKey.coerce @order
+    end
 
     def start_cesure(key, receiver)
       @aggs = tuple_collect(@aggregators) do |a,agg|
@@ -1810,7 +1810,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Quota
-
+  
   ############################################################################# OTHER COMMANDS
   #
   # Below are general purpose commands provided by alf.
