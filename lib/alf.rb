@@ -1526,11 +1526,9 @@ end # class Buffer
     protected 
     
     def longexpr
-      sort = Sort.new{|s| s.ordering = @by_key.to_ordering_key}
-      sort.input = input
-      sort_based = SortBased.new(@by_key, @aggregators)
-      sort_based.input = sort
-      sort_based
+      pipe SortBased.new(@by_key, @aggregators),
+           Sort.new{|s| s.ordering = @by_key.to_ordering_key},
+           input
     end
 
   end # class Summarize
