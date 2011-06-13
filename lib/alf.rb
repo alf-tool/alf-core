@@ -1615,7 +1615,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   
   #
-  # Marker for chain elements converting tuple streams
+  # Base class for implementing renderers.
+  #
+  # A renderer takes a tuple iterator as input and renders it on an output
+  # stream. Unlike operators, renderers are not tuple enumerators anymore
+  # and are typically used as chain end elements. 
   #
   class Renderer
 
@@ -1623,7 +1627,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     attr_accessor :input
     
     #
-    # Executes the writing, outputting the resulting relation. 
+    # Executes the rendering, outputting the resulting tuples. 
     #
     # This method must be implemented by subclasses.
     #
