@@ -132,6 +132,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
       pipe(Summarize.new(by, aggregators), child)
     end
+    
+    # @see Quota
+    def quota(child, by, order, aggregators = nil, &agg_builder)
+      aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
+      pipe(Quota.new(by, order, aggregators), child)
+    end
 
     private
 
