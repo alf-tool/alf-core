@@ -633,19 +633,40 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   
   #
-  # Marker for chain elements converting input streams to enumerable 
-  # of tuples.
+  # Base class for implementing tuple readers.
   #
-  module Reader
-    include Pipeable, Enumerable
+  # The contrat of a Reader is simply to be an Enumerable of tuple. Unlike 
+  # operators, however, readers are not expected to take tuple enumerators
+  # as input but IO objects, database tables, or something similar instead.
+  # This base class provides a default behavior for readers that works with 
+  # IO objects. It can be safely extended, overriden, or mimiced.
+  #
+  class Reader
+    include Enumerable
+    
+    # Input IO, or file name
+    attr_accessor :input
+
+    # Deprecated, use input= instead
+    def pipe(input)
+      @input = input
+      self
+    end
+        
+    #
+    # Creates a reader instance, with an optional input
+    #
+    def initialize(input = nil)
+      @input = input
+    end
 
     #
-    # Yields the block with each tuple (converted from the
-    # input stream) in turn.
+    # Yields the block with each tuple (converted from the input stream) in 
+    # turn.
     #
-    # Default implementation reads lines of the input stream and
-    # yields the block with <code>_line2tuple(line)</code> on each
-    # of them
+    # The default implementation reads lines of the input stream and yields the 
+    # block with <code>_line2tuple(line)</code> on each of them. This method
+    # may be overriden if this behavior does not fit reader's needs.
     #
     def each
       input.each_line do |line| 
@@ -657,10 +678,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected
 
     #
-    # Converts a line previously read from the input stream
-    # to a tuple.
+    # Converts a line previously read from the input stream to a tuple. 
     #
-    # This method MUST be implemented by subclasses.
+    # The line is simply ignored is this method return nil. Errors should be
+    # properly handled by raising exceptions. This method MUST be implemented 
+    # by subclasses unless each is overriden.
     #
     def _line2tuple(line)
     end
@@ -669,11 +691,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module Reader
 
   #
-  # Implements the Reader contract for a stream where each line is 
-  # a ruby hash literal, as a tuple physical representation.
+  # Implements the Reader contract for a stream where each line is a ruby hash 
+  # literal (taken as a tuple physical representation).
   #
-  class HashReader
-    include Reader
+  class HashReader < Reader
 
     # @see Reader#_line2tuple
     def _line2tuple(line)
