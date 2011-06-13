@@ -96,19 +96,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Rename.new(renaming), child)
     end
 
-    # Factors a RESTRICT operator
+    # @see Restrict
     def restrict(child, predicate)
       pipe(Restrict.new(predicate), child)
     end
 
-    # Factors a NEST operator
+    # @see Nest
     def nest(child, attributes, as)
       pipe(Nest.new(attributes, as), child)
     end
 
-    # Factors an UNNEST operator
+    # @see Unnest
     def unnest(child, attribute)
-      pipe(Unnest.new{|r| r.attribute = attribute}, child)
+      pipe(Unnest.new(attribute), child)
     end
 
     # Factors a GROUP operator
@@ -1425,7 +1425,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (nest enum [:city, :status], :loc_and_status)
+  #   (nest enum, [:city, :status], :loc_and_status)
   #
   # DESCRIPTION
   #
@@ -1475,13 +1475,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR
   #
-  # OPTIONS
-  # #{summarized_options}
+  # API & EXAMPLE
+  #
+  #   # On result of (nest enum, [:city, :status], :loc_and_status) 
+  #   (unnest enum, :loc_and_status)
   #
   # DESCRIPTION
   #
-  # This operator unnests a tuple-valued attribute ATTR so as to 
-  # flatten it pairs with 'upstream' tuple.
+  # This operator unnests the tuple-valued attribute named ATTR so as to 
+  # flatten its pairs with 'upstream' tuple. The latter should be such so that
+  # no name collision occurs. When used in shell, the name of the attribute to
+  # unnest is taken as the first command line argument:
+  #
+  #   alf unnest loc_and_status
   #
   class Unnest < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
@@ -1490,14 +1496,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     attr_accessor :attribute
 
     # Builds a Rename operator instance
-    def initialize
-      @attribute = "nested"
-      yield self if block_given?
+    def initialize(attribute = :nested)
+      @attribute = attribute
     end
 
     # @see Operator#set_args
     def set_args(args)
-      @attribute = args.last.to_sym
+      @attribute = args.first.to_sym
       self
     end
 
