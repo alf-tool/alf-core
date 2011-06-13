@@ -134,17 +134,24 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     private
 
-    def pipe(parent, child)
-      child = case child
+    # Coerces _arg_ as something that can be piped, an iterator of tuples
+    def to_iterator(arg)
+      case arg
         when IO
-          Reader::RubyHash.new(child)
+          Reader::RubyHash.new(arg)
         when Array, Reader, Operator
-          child
+          arg
         else
           raise ArgumentError, "Unable to pipe with #{child}"
       end
-      parent.input = child
-      parent
+    end
+    
+    def pipe(*elements)
+      elements = elements.reverse
+      elements[1..-1].inject(elements.first) do |chain, elm|
+        elm.input = to_iterator(chain)
+        elm
+      end
     end
 
     extend Lispy
