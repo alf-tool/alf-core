@@ -676,6 +676,51 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   ##############################################################################
   #
+  # RENDERERS
+  #
+  # Renderers are dataflow elements at the output boundary with the outside 
+  # world. They typically output Enumerable tuple streams on IO streams. 
+  # All renderers should follow the basis given by Renderer.
+  #
+  
+  #
+  # Base class for implementing renderers.
+  #
+  # A renderer takes a tuple iterator as input and renders it on an output
+  # stream. Unlike operators, renderers are not tuple enumerators anymore
+  # and are typically used as chain end elements. 
+  #
+  class Renderer
+
+    # Writer input
+    attr_accessor :input
+    
+    #
+    # Executes the rendering, outputting the resulting tuples. 
+    #
+    # This method must be implemented by subclasses.
+    #
+    def execute(output = $stdout)
+    end
+
+    #
+    # Implements the Renderer contract through inspect
+    #
+    class RubyHash < Renderer
+  
+      # @see Renderer#execute
+      def execute(output = $stdout)
+        input.each do |tuple|
+          output << tuple.inspect << "\n"
+        end
+      end
+  
+    end # class RubyHash
+
+  end # module Renderer
+
+  ##############################################################################
+  #
   # OPERATORS
   #
   # Operators are dataflow elements that transform input tuples. They are all
@@ -1604,51 +1649,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Sort
-
-  ##############################################################################
-  #
-  # WRITERS
-  #
-  # Writers are dataflow elements at the output boundary with the outside world.
-  # They typically convert Enumerable tuple streams as IO output streams. All
-  # writers should follow the basis given by Renderer.
-  #
-  
-  #
-  # Base class for implementing renderers.
-  #
-  # A renderer takes a tuple iterator as input and renders it on an output
-  # stream. Unlike operators, renderers are not tuple enumerators anymore
-  # and are typically used as chain end elements. 
-  #
-  class Renderer
-
-    # Writer input
-    attr_accessor :input
-    
-    #
-    # Executes the rendering, outputting the resulting tuples. 
-    #
-    # This method must be implemented by subclasses.
-    #
-    def execute(output = $stdout)
-    end
-
-    #
-    # Implements the Renderer contract through inspect
-    #
-    class RubyHash < Renderer
-  
-      # @see Renderer#execute
-      def execute(output = $stdout)
-        input.each do |tuple|
-          output << tuple.inspect << "\n"
-        end
-      end
-  
-    end # class RubyHash
-
-  end # module Renderer
 
   # 
   # Render input tuples with a given strategy
