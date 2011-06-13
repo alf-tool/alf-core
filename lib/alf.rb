@@ -1120,8 +1120,8 @@ end # class Buffer
   # When used in shell, the clipping/projection key is simply taken from
   # commandline arguments:
   #
-#   alf clip name city
-#   alf clip --allbut name city
+  #   alf clip name city
+  #   alf clip --allbut name city
   #
   class Clip < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
