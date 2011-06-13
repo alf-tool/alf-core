@@ -2,4 +2,3 @@
 * Refactor NEST to allow a Hash of :newname => [:nested, :attributes]
 * Refactor GROUP to allow a Hash of :newname => [:nested, :attributes]
 * Add PIVOT and UNPIVOT operators
-* Shouldn't PROJECT remove duplicates after all??
