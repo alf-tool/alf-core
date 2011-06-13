@@ -58,15 +58,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     extend Factory
   end # module Factory
+  
 
   # 
   # Implements a small LISP-like DSL on top of Alf
   #
   module Lispy
 
-    # Factors a DEFAULTS operator
-    def defaults(child, defaults)
-      _pipe(Defaults.new{|d| d.defaults = defaults}, child)
+    # @see Defaults
+    def defaults(child, defaults, strict = false)
+      _pipe(Defaults.new(defaults, strict), child)
     end
 
     # Factors an EXTEND operator
@@ -253,6 +254,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   module TupleTools
 
+    #
+    # Returns the first non nil values from arguments
+    #
+    def coalesce(*args)
+      args.find{|x| !x.nil?}
+    end
+    
     #
     # Iterates over enum and yields the block on each element. 
     # Collect block results as key/value pairs returns them as 
@@ -831,7 +839,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module ShortcutOperator
 
   # 
-  # Normalize the input tuple stream by forcing default values
+  # Normalize input tuples by forcing default values on missing attributes
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 VAL1 ...
@@ -839,28 +847,58 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # OPTIONS
   # #{summarized_options}
   #
+  # API
+  #
+  #   # Non strict mode
+  #   (defaults enum, :x => 1, :y => 'hello')
+  #
+  #   # Strict mode (--strict)
+  #   (defaults enum, {:x => 1, :y => 'hello'}, true)
+  #
   # DESCRIPTION
   #
-  # This operator rewrites tuples so as to ensure that all specified 
-  # attributes ATTR are defined and not nil. Missing or nil attributes
-  # are replaced by the associated default value. 
+  # This operator rewrites tuples so as to ensure that all values for specified 
+  # attributes ATTRx are defined and not nil. Missing or nil attributes are 
+  # replaced by the associated default value VALx.
+  #
+  # When used in shell, the hash of default values is built from commandline
+  # arguments ala Hash[...]. However, to keep type safety VALx are interpreted
+  # as ruby literals and built with Kernel.eval. This means that strings must 
+  # be doubly quoted. For the example of the API section:
+  #
+  #   alf defaults x 1 y "'hello'"
+  #
+  # When used in --strict mode, the operator simply project resulting tuples on
+  # attributes for which a default value has been specified. Using the strict 
+  # mode guarantess that the heading of all tuples is the same, and that no nil
+  # value ever remains. However, this operator never remove duplicates. 
   #
   class Defaults < Factory::Operator(__FILE__, __LINE__)
     include TransformOperator
 
-    # Hash of source -> target attribute renamings
+    # Default values as a ATTR -> VAL hash 
     attr_accessor :defaults
-
+    
+    # Strict mode?
+    attr_accessor :strict
+    
     # Builds a Defaults operator instance
-    def initialize
-      @defaults = {}
-      yield self if block_given?
+    def initialize(defaults = {}, strict = false)
+      @defaults = defaults
+      @strict = strict
+    end
+    
+    options do |opt|
+      opt.on('-s', '--strict', 'Strictly restrict to default attributes'){ 
+        self.strict = true 
+      }
     end
 
     # @see Operator#set_args
     def set_args(args)
-      args.each_with_index{|a,i| args[i] = a.to_sym if i % 2 == 0}
-      @defaults = Hash[*args]
+      @defaults = tuple_collect(args.each_slice(2)) do |k,v|
+        [k.to_sym, Kernel.eval(v)]
+      end
       self
     end
 
@@ -868,9 +906,15 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TransformOperator#_tuple2tuple
     def _tuple2tuple(tuple)
-      @defaults.merge tuple_collect(tuple){|k,v| 
-        [k, v.nil? ? @defaults[k] : v]
-      }
+      if strict
+        tuple_collect(@defaults){|k,v| 
+          [k, coalesce(tuple[v], v)] 
+        }
+      else
+        @defaults.merge tuple_collect(tuple){|k,v| 
+          [k, coalesce(v, @defaults[k])]
+        }
+      end
     end
 
   end # class Defaults
