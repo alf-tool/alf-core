@@ -649,7 +649,6 @@ end # class Buffer
     #
     def _line2tuple(line)
     end
-    undef_method :_line2tuple
 
     #
     # Implements the Reader contract for a stream where each line is a ruby 
@@ -786,7 +785,6 @@ end # class Buffer
     # 
     def _each
     end
-    undef_method :_each
 
     # 
     #
@@ -819,7 +817,6 @@ end # class Buffer
       #
       def _tuple2tuple(tuple)
       end
-      undef_method :_tuple2tuple
   
     end # module Transform
 
