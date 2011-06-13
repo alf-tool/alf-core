@@ -218,11 +218,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # instance methods on the handle with keys of _tuple_.
     #
     def build(tuple)
-      # TODO: refactor me to avoid instance_eval
       tuple.keys.each do |k|
-        self.instance_eval <<-EOF
-          def #{k}; @tuple[#{k.inspect}]; end
-        EOF
+        (class << self; self; end).send(:define_method, k) do
+          @tuple[k]
+        end
       end
     end
 
