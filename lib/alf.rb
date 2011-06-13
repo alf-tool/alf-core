@@ -70,9 +70,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       _pipe(Defaults.new(defaults, strict), child)
     end
 
-    # Factors an EXTEND operator
+    # @see Extend
     def extend(child, extensions)
-      _pipe(Extend.new{|op| op.extensions = extensions}, child)
+      _pipe(Extend.new(extensions), child)
     end
 
     # Factors a PROJECT operator
@@ -847,7 +847,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # OPTIONS
   # #{summarized_options}
   #
-  # API
+  # API & EXAMPLE
   #
   #   # Non strict mode
   #   (defaults enum, :x => 1, :y => 'hello')
@@ -921,19 +921,27 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   # 
   # Extend input tuples with attributes whose value is computed
-  # with tuple expressions.
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 EXPR1 ATTR2 EXPR2...
   #
-  # OPTIONS
-  # #{summarized_options}
+  # API & EXAMPLE
+  #
+  #   (extend enum, :total => lambda{ qty * price },
+  #                 :big   => lambda{ qty > 100 ? true : false }) 
   #
   # DESCRIPTION
   #
-  # This command extend input tuples with new attributes names ATTR1 
-  # ATTR2, and so on. Values of those attributes are the result of
-  # evaluating EXPR1, EXPR2, etc on input tuples.
+  # This command extend input tuples with new attributes (named ATTR1, ...)  
+  # whose value is the result of evaluating tuple expressions (i.e. EXPR1, ...).
+  # See main documentation about the semantics of tuple expressions. When used
+  # in shell, the hash of extensions is built from commandline arguments ala
+  # Hash[...]. Tuple expressions must be specified as code literals there:
+  #
+  #   alf extend total "qty * price" big "qty > 100 ? true : false"
+  #
+  # Attributes ATTRx should not already exist, no behavior is guaranteed if this 
+  # precondition is not respected.   
   #
   class Extend < Factory::Operator(__FILE__, __LINE__)
     include TransformOperator
@@ -942,9 +950,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     attr_accessor :extensions
 
     # Builds an Extend operator instance
-    def initialize
-      @extensions = {}
-      yield self if block_given?
+    def initialize(extensions = {})
+      @extensions = extensions
     end
 
     # @see Operator#set_args
