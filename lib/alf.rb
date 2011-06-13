@@ -1591,7 +1591,7 @@ end # class Buffer
     
     def longexpr
       pipe SortBased.new(@by_key, @aggregators),
-           Sort.new{|s| s.ordering = @by_key.to_ordering_key},
+           Sort.new(@by_key.to_ordering_key),
            input
     end
 
