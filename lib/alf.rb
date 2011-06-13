@@ -167,7 +167,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   
   #
-  # Provides a handle to implement a (TODO) fly design pattern on tuples.
+  # Provides a handle, implementing a flyweight design pattern on tuples.
   #
   class TupleHandle
 
