@@ -121,11 +121,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Ungroup.new(attribute), child)
     end
 
-    # Factors a SUMMARIZE operator
+    # @see Summarize
     def summarize(child, by, aggregators = nil, &agg_builder)
       aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
-      pipe(Summarize.new{|r| r.by = by; 
-                              r.aggregators = aggregators}, child)
+      pipe(Summarize.new(by, aggregators), child)
     end
 
     # Factors an SORT operator
@@ -1631,37 +1630,49 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Ungroup
 
   # 
-  # Summarize tuples by a given subset of attributes
+  # Summarize tuples by a key and compute aggregations
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} --by=KEY1,KEY2... AGG1 EXPR1...
   #
   # OPTIONS
   # #{summarized_options}
   #
+  # API & EXAMPLE
+  #
+  #   (summarize enum, [:supplier_id],
+  #                    :total_qty => Aggregator.sum(:quantity))
+  #
   # DESCRIPTION
   #
-  # This operator summarizes tuples and compute additional aggregations.
+  # This operator summarizes input tuples on the projection on KEY1,KEY2,...
+  # attributes and applies aggregate operators on sets of matching tuples.
+  # Introduced names AGG should be disjoint from KEY attributes.
+  #
+  # When used in shell, the aggregations are taken from commandline arguments
+  # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
+  # aggregation expression evaluated on Aggregator:
+  #
+  #   alf summarize --by=supplier_id total_qty "sum(:quantity)" 
   #
   class Summarize < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut
     
+    # By attributes
+    attr_accessor :by
+    
+    # Aggregations as a AGG => Aggregator(EXPR) hash 
     attr_accessor :aggregators
 
-    def initialize
-      @by_key = ProjectionKey.new([], false)
-      @aggregators = {}
-      yield self if block_given?
-    end
-
-    def by=(attrs)
-      @by_key.attributes = attrs
+    def initialize(by = [], aggregators = {})
+      @by = by
+      @aggregators = aggregators
     end
 
     # Installs the options
     options do |opt|
       opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-        self.by = args.collect{|a| a.to_sym}
+        @by = args.collect{|a| a.to_sym}
       end
     end
 
@@ -1710,8 +1721,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected 
     
     def longexpr
-      pipe SortBased.new(@by_key, @aggregators),
-           Sort.new(@by_key.to_ordering_key),
+      by_key = ProjectionKey.new(@by, false)
+      pipe SortBased.new(by_key, @aggregators),
+           Sort.new(by_key.to_ordering_key),
            input
     end
 
