@@ -1383,10 +1383,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This command restricts tuples to those for which EXPR evaluates to true.
   # EXPR must be a valid tuple expression that should return a truth-value.
   # When used in shell, the predicate is taken as a string and compiled with
-  # TupleHandle.compile. We also provide a shortcut for equality expressions
+  # TupleHandle.compile. We also provide a shortcut for equality expressions. 
+  # Note that, in that case, values are expected to be ruby code literals,
+  # evaluated with Kernel.eval. Therefore, strings must be doubly quoted.  
   #
   #   alf restrict "status > 20"
-  #   alf restrict city London
+  #   alf restrict city "'London'"
   #
   class Restrict < Factory::Operator(__FILE__, __LINE__)
 
@@ -1402,7 +1404,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see Operator#set_args
     def set_args(args)
       @predicate = if args.size > 1
-        TupleHandle.compile(args)
+        TupleHandle.compile  tuple_collect(args.each_slice(2)){|a,expr|
+          [a, Kernel.eval(expr)]
+        }
       else
         TupleHandle.compile(args.first)
       end
