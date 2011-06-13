@@ -76,9 +76,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Extend.new(extensions), child)
     end
 
-    # Factors a CLIP operator
+    # @see Clip
     def clip(child, attributes, allbut = false)
       pipe(Clip.new(attributes, allbut), child)
+    end
+
+    # @see Project
+    def project(child, attributes)
+      pipe(Project.new(attributes, false), child)
+    end
+
+    # @see Project
+    def allbut(child, attributes)
+      pipe(Project.new(attributes, true), child)
     end
 
     # Factors a RENAME operator
@@ -750,6 +760,7 @@ end # class Buffer
       set_args(args)
       [ Reader::RubyHash.new, self, Renderer::RubyHash.new ].inject($stdin) do |chain,n|
         n.input = chain
+        n
       end.execute($stdout)
     end
 
@@ -1131,7 +1142,7 @@ end # class Buffer
 
     # Installs the options
     options do |opt|
-      opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
+      opt.on('-a', '--allbut', 'Apply a ALLBUT clipping') do
         self.allbut = true
       end
     end
@@ -1152,6 +1163,76 @@ end # class Buffer
   end # class Clip
 
   ################################################################## relational
+
+  # 
+  # Relational projection
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 ATTR2 ...
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # API & EXAMPLE
+  #
+  #   # Project on name and city attributes
+  #   (project enum, [:name, :city])
+  #
+  #   # Project on all but name and city attributes
+  #   (allbut enum, [:name, :city])
+  #
+  # DESCRIPTION
+  #
+  # This operator projects tuples on attributes whose names are specified as 
+  # arguments. This is similar to clip, except that this ones is a truly 
+  # relational one, that is, it also removes duplicates tuples. 
+  # 
+  # When used in shell, the clipping/projection key is simply taken from
+  # commandline arguments:
+  #
+  #   alf project name city
+  #   alf project --allbut name city
+  #
+  class Project < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
+  
+    # Builds a Project operator instance
+    def initialize(attributes = [], allbut = false)
+      @projection_key = ProjectionKey.new(attributes, allbut)
+      yield self if block_given?
+    end
+  
+    def attributes=(attrs)
+      @projection_key.attributes = attrs
+    end
+  
+    def allbut=(allbut)
+      @projection_key.allbut = allbut
+    end
+  
+    # Installs the options
+    options do |opt|
+      opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
+        self.allbut = true
+      end
+    end
+  
+    # @see Operator#set_args
+    def set_args(args)
+      self.attributes = args.collect{|a| a.to_sym}
+      self
+    end
+  
+    protected 
+  
+    # @see Operator::Shortcut#longexpr
+    def longexpr
+      pipe NoDuplicates.new,
+           Clip.new(@projection_key.attributes, @projection_key.allbut),
+           input
+    end
+  
+  end # class Project
   
   # Extend input tuples with attributes whose value is computed
   #
