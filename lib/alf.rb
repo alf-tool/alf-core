@@ -1611,13 +1611,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # Writers are dataflow elements at the output boundary with the outside world.
   # They typically convert Enumerable tuple streams as IO output streams. All
-  # writers should follow the basis given by TupleWriter.
+  # writers should follow the basis given by Renderer.
   #
   
   #
   # Marker for chain elements converting tuple streams
   #
-  module TupleWriter
+  class Renderer
 
     # Writer input
     attr_accessor :input
@@ -1630,15 +1630,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def execute(output = $stdout)
     end
 
-  end # module TupleWriter
+  end # module Renderer
 
   #
-  # Implements the TupleWriter contract through inspect
+  # Implements the Renderer contract through inspect
   #
-  class HashWriter 
-    include TupleWriter
+  class HashWriter < Renderer
 
-    # @see TupleWriter#execute
+    # @see Renderer#execute
     def execute(output = $stdout)
       input.each do |tuple|
         output << tuple.inspect << "\n"
