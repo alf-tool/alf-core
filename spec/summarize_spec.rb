@@ -31,15 +31,5 @@ class Alf
       it { should == expected }
     end
 
-    describe "When factored with Lispy II" do
-      let(:operator){ 
-        Lispy.summarize(input, [:a]){
-          {:time_sum => Aggregator.sum(:time),
-           :time_max => Aggregator.max(:time)}
-        }
-      }
-      it { should == expected }
-    end
-
   end 
 end

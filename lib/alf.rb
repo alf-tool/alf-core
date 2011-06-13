@@ -61,82 +61,30 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Implements a small LISP-like DSL on top of Alf
   #
   module Lispy
-
-    # @see Defaults
-    def defaults(child, defaults, strict = false)
-      pipe(Defaults.new(defaults, strict), child)
-    end
-
-    # @see NoDuplicates
-    def no_duplicates(child)
-      pipe(NoDuplicates.new, child)
-    end
     
-    # @see Sort
-    def sort(child, ordering)
-      pipe(Sort.new{|r| r.ordering = ordering}, child)
-    end
-
-    # @see Extend
-    def extend(child, extensions)
-      pipe(Extend.new(extensions), child)
-    end
-
-    # @see Clip
-    def clip(child, attributes, allbut = false)
-      pipe(Clip.new(attributes, allbut), child)
-    end
-
-    # @see Project
-    def project(child, attributes)
-      pipe(Project.new(attributes, false), child)
+    [:Defaults,
+     :NoDuplicates,
+     :Sort,
+     :Clip,
+     :Project,
+     :Extend, 
+     :Rename,
+     :Restrict,
+     :Nest,
+     :Unnest,
+     :Group,
+     :Ungroup,
+     :Summarize,
+     :Quota ].each do |op_name|
+      meth_name = op_name.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1].to_sym
+      define_method(meth_name) do |child, *args|
+        pipe(Alf.const_get(op_name).new(*args), child)
+      end
     end
 
     # @see Project
     def allbut(child, attributes)
       pipe(Project.new(attributes, true), child)
-    end
-
-    # @see Rename
-    def rename(child, renaming)
-      pipe(Rename.new(renaming), child)
-    end
-
-    # @see Restrict
-    def restrict(child, predicate)
-      pipe(Restrict.new(predicate), child)
-    end
-
-    # @see Nest
-    def nest(child, attributes, as)
-      pipe(Nest.new(attributes, as), child)
-    end
-
-    # @see Unnest
-    def unnest(child, attribute)
-      pipe(Unnest.new(attribute), child)
-    end
-
-    # @see Group
-    def group(child, attributes, as)
-      pipe(Group.new(attributes, as), child)
-    end
-
-    # @see Ungroup
-    def ungroup(child, attribute)
-      pipe(Ungroup.new(attribute), child)
-    end
-
-    # @see Summarize
-    def summarize(child, by, aggregators = nil, &agg_builder)
-      aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
-      pipe(Summarize.new(by, aggregators), child)
-    end
-    
-    # @see Quota
-    def quota(child, by, order, aggregators = nil, &agg_builder)
-      aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
-      pipe(Quota.new(by, order, aggregators), child)
     end
 
     private
