@@ -155,27 +155,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   
   #
-  # Included by all elements of a tuple chain
-  #
-  module Pipeable
-
-    # Input stream
-    attr_accessor :input
-
-    protected
-
-    #
-    # Yields the block with each input tuple.
-    #
-    # This method should be preferred to <code>input.each</code> when possible.
-    #
-    def each_input_tuple
-      input.each &Proc.new
-    end
-
-  end # module Pipeable
-
-  #
   # Provides a handle to implement a (TODO) fly design pattern on tuples.
   #
   class TupleHandle
@@ -707,8 +686,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for all operators on relations.
   # 
   module Operator
-    include Pipeable, Enumerable, TupleTools
+    include Enumerable, TupleTools
 
+    # Operator input
+    attr_accessor :input
+    
     #
     # Yields each tuple in turn 
     #
@@ -752,7 +734,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _prepare 
     end
 
-    # 
     # Internal implementation of the iterator.
     #
     # This method must be implemented by subclasses. It is safe to use instance
@@ -761,6 +742,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _each
     end
     undef_method :_each
+
+    # 
+    #
+    # Yields the block with each input tuple.
+    #
+    # This method should be preferred to <code>input.each</code> when possible.
+    #
+    def each_input_tuple
+      input.each &Proc.new
+    end
 
     #
     # Specialization of Operator for operators that simply convert single tuples 
@@ -1627,8 +1618,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for chain elements converting tuple streams
   #
   module TupleWriter
-    include Pipeable
 
+    # Writer input
+    attr_accessor :input
+    
     #
     # Executes the writing, outputting the resulting relation. 
     #
@@ -1647,7 +1640,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see TupleWriter#execute
     def execute(output = $stdout)
-      each_input_tuple do |tuple|
+      input.each do |tuple|
         output << tuple.inspect << "\n"
       end
     end
