@@ -757,85 +757,85 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     undef_method :_each
 
-  end # module Operator
-
-  #
-  # Specialization of Operator for operators that simply convert single tuples 
-  # to single tuples.
-  #
-  module TransformOperator
-    include Operator
-
-    protected 
-
-    # @see Operator#_each
-    def _each
-      each_input_tuple do |tuple|
-        yield _tuple2tuple(tuple)
-      end
-    end
-
     #
-    # Transforms an input tuple to an output tuple
+    # Specialization of Operator for operators that simply convert single tuples 
+    # to single tuples.
     #
-    def _tuple2tuple(tuple)
-    end
-    undef_method :_tuple2tuple
-
-  end # module TransformOperator
-
-  #
-  # Specialization of Operator for implementing operators that rely on a 
-  # cesure algorithm.
-  #
-  module CesureOperator
-    include Operator
-    
-    protected
-
-    # @see Operator#_each
-    def _each
-      receiver, proj_key, prev_key = Proc.new, cesure_key, nil
-      each_input_tuple do |tuple|
-        cur_key = proj_key.project(tuple)
-        if cur_key != prev_key
-          flush_cesure(prev_key, receiver) unless prev_key.nil?
-          start_cesure(cur_key, receiver)
-          prev_key = cur_key
+    module Transform
+      include Operator
+  
+      protected 
+  
+      # @see Operator#_each
+      def _each
+        each_input_tuple do |tuple|
+          yield _tuple2tuple(tuple)
         end
-        accumulate_cesure(tuple, receiver)
       end
-      flush_cesure(prev_key, receiver) unless prev_key.nil?
-    end
+  
+      #
+      # Transforms an input tuple to an output tuple
+      #
+      def _tuple2tuple(tuple)
+      end
+      undef_method :_tuple2tuple
+  
+    end # module Transform
 
-    def cesure_key
-    end
+    #
+    # Specialization of Operator for implementing operators that rely on a 
+    # cesure algorithm.
+    #
+    module Cesure
+      include Operator
+      
+      protected
 
-    def start_cesure(key, receiver)
-    end
+      # @see Operator#_each
+      def _each
+        receiver, proj_key, prev_key = Proc.new, cesure_key, nil
+        each_input_tuple do |tuple|
+          cur_key = proj_key.project(tuple)
+          if cur_key != prev_key
+            flush_cesure(prev_key, receiver) unless prev_key.nil?
+            start_cesure(cur_key, receiver)
+            prev_key = cur_key
+          end
+          accumulate_cesure(tuple, receiver)
+        end
+        flush_cesure(prev_key, receiver) unless prev_key.nil?
+      end
 
-    def accumulate_cesure(tuple, receiver)
-    end
+      def cesure_key
+      end
 
-    def flush_cesure(key, receiver)
-    end
+      def start_cesure(key, receiver)
+      end
 
-  end # module CesureOperator
+      def accumulate_cesure(tuple, receiver)
+      end
 
-  #
-  # Specialization of Operator for operators that are 
-  # shortcuts on longer expressions.
-  # 
-  module ShortcutOperator
-    include Operator, Lispy
+      def flush_cesure(key, receiver)
+      end
 
-    protected 
+    end # module Cesure
 
-    def _each
-      longexpr.each &Proc.new
-    end
+    #
+    # Specialization of Operator for operators that are 
+    # shortcuts on longer expressions.
+    # 
+    module Shortcut
+      include Operator, Lispy
 
-  end # module ShortcutOperator
+      protected 
+
+      def _each
+        longexpr.each &Proc.new
+      end
+
+    end # module Shortcut
+
+  end # module Operator
 
   # 
   # Normalize input tuples by forcing default values on missing attributes
@@ -873,7 +873,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # value ever remains. However, this operator never remove duplicates. 
   #
   class Defaults < Factory::Operator(__FILE__, __LINE__)
-    include TransformOperator
+    include Operator::Transform
 
     # Default values as a ATTR -> VAL hash 
     attr_accessor :defaults
@@ -903,7 +903,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TransformOperator#_tuple2tuple
+    # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
       if strict
         tuple_collect(@defaults){|k,v| 
@@ -943,7 +943,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # this precondition is not respected.   
   #
   class Extend < Factory::Operator(__FILE__, __LINE__)
-    include TransformOperator
+    include Operator::Transform
 
     # Extensions as a Hash attr => lambda{...}
     attr_accessor :extensions
@@ -968,7 +968,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @handle = TupleHandle.new
     end
 
-    # @see TransformOperator#_tuple2tuple
+    # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
       tuple.merge tuple_collect(@extensions){|k,v|
         [k, @handle.set(tuple).evaluate(v)]
@@ -994,7 +994,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # true relational projection.
   #
   class Project < Factory::Operator(__FILE__, __LINE__)
-    include TransformOperator
+    include Operator::Transform
 
     # Builds a Project operator instance
     def initialize
@@ -1025,7 +1025,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TransformOperator#_tuple2tuple
+    # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
       @projection_key.project(tuple)
     end
@@ -1052,7 +1052,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   {:a => 1, :b => 2} -> alf rename a A b B -> {:A => 1, :B => 2}
   #
   class Rename < Factory::Operator(__FILE__, __LINE__)
-    include TransformOperator
+    include Operator::Transform
 
     # Hash of source -> target attribute renamings
     attr_accessor :renaming
@@ -1071,7 +1071,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TransformOperator#_tuple2tuple
+    # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
       tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
     end
@@ -1150,7 +1150,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attribute whose name is NEWNAME
   #
   class Nest < Factory::Operator(__FILE__, __LINE__)
-    include TransformOperator
+    include Operator::Transform
 
     # Array of nesting attributes
     attr_accessor :attributes
@@ -1174,7 +1174,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TransformOperator#_tuple2tuple
+    # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
       others = tuple_collect(tuple.keys - @attributes){|k| [k,tuple[k]] }
       others[as] = tuple_collect(attributes){|k| [k, tuple[k]] }
@@ -1198,7 +1198,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # flatten it pairs with 'upstream' tuple.
   #
   class Unnest < Factory::Operator(__FILE__, __LINE__)
-    include TransformOperator
+    include Operator::Transform
 
     # Name of the attribute to unnest
     attr_accessor :attribute
@@ -1217,7 +1217,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
 
-    # @see TransformOperator#_tuple2tuple
+    # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
       tuple = tuple.dup
       nested = tuple.delete(@attribute) || {}
@@ -1348,7 +1348,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Removes duplicates according to a complete order
     class SortBased
-      include Alf::CesureOperator      
+      include Alf::Operator::Cesure      
 
       def cesure_key
         @cesure_key ||= ProjectionKey.new([],true)
@@ -1431,7 +1431,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Summarizes according to a complete order
     class SortBased
-      include Alf::CesureOperator      
+      include Alf::Operator::Cesure      
 
       attr_reader :cesure_key
       attr_reader :aggregators     
@@ -1486,7 +1486,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator computes quota values on input tuples.
   #
   class Quota < Factory::Operator(__FILE__, __LINE__)
-    include CesureOperator
+    include Operator::Cesure
 
     attr_accessor :by_key; alias :cesure_key :by_key
     attr_accessor :sort_key
@@ -1679,7 +1679,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Render
-
 
   ##############################################################################
   #

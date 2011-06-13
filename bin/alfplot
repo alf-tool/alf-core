@@ -11,7 +11,8 @@ require "alf"
 # OPTIONS
 # #{summarized_options}
 #
-class Plot < Alf::ShortcutOperator(__FILE__, __LINE__)
+class Plot < Alf::Operator(__FILE__, __LINE__)
+  include Alf::Operator::Shortcut
 
   # Install options
   options do |opt|
