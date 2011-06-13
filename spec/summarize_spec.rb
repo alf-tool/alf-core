@@ -17,6 +17,13 @@ class Alf
 
     subject{ operator.to_a }
 
+    describe "When factored with commandline args" do
+      let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)"] }
+      let(:operator){ Summarize.new([:a],{}).set_args(aggs) }
+      before{ operator.input = input }
+      it { should == expected }
+    end
+
     describe "When factored with Lispy" do
       let(:aggs){{:time_sum => Aggregator.sum(:time),
                   :time_max => Aggregator.max(:time)}} 

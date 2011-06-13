@@ -143,7 +143,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         when Array, Reader, Operator
           arg
         else
-          raise ArgumentError, "Unable to pipe with #{child}"
+          raise ArgumentError, "Unable to pipe with #{arg.inspect}"
       end
     end
     
@@ -1680,7 +1680,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see Operator#set_args
     def set_args(args)
       @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a, Aggregator.instance_eval(expr)]
+        [a.to_sym, Aggregator.instance_eval(expr)]
       end
       self
     end
