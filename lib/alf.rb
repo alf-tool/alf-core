@@ -669,9 +669,7 @@ end # class Buffer
 
   end # module Reader
 
-  ##############################################################################
-  #
-  # RENDERERS
+  ############################################################################# RENDERERS
   #
   # Renderers are dataflow elements at the output boundary with the outside 
   # world. They typically output Enumerable tuple streams on IO streams. 
