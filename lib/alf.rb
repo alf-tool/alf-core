@@ -26,9 +26,7 @@ alf_required(false)
 #
 class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
-  ##############################################################################
-  #
-  # PUBLIC API
+  ############################################################################# PUBLIC API
   #
   # Alf's public APIs are defined below. 
   #
@@ -152,9 +150,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     extend Lispy
   end # module Lispy
 
-  ##############################################################################
-  #
-  # TOOLS
+  ############################################################################# TOOLS
   #
   # The following modules and classes provide tools for implementing dataflow
   # elements.
@@ -364,9 +360,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class OrderingKey
 
-  ##############################################################################
-  #
-  # AGGREGATORS
+  ############################################################################# AGGREGATORS
   #
   # Aggregators collect computation on tuples.
   #
@@ -556,9 +550,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   end # class Aggregator
 
-  ##############################################################################
-  #
-  # BUFFERS
+  ############################################################################# BUFFERS
   #
   # Buffers allow holding tuples in memory or on disk and provided efficient
   # accesses to them.
@@ -598,9 +590,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
 end # class Buffer
 
-  ##############################################################################
-  #
-  # READERS
+  ############################################################################# READERS
   #
   # Readers are dataflow elements at the input boundary with the outside world.
   # They typically convert IO streams as Enumerable tuple streams. All readers
@@ -728,9 +718,7 @@ end # class Buffer
 
   end # module Renderer
 
-  ##############################################################################
-  #
-  # OPERATORS
+  ############################################################################# OPERATORS
   #
   # Operators are dataflow elements that transform input tuples. They are all
   # Enumerable of tuples.
@@ -885,8 +873,11 @@ end # class Buffer
 
   end # module Operator
 
+  #################################################### non relational operators
+  
   # 
-  # Normalize input tuples by forcing default values on missing attributes
+  # Normalize input tuples by forcing default values on missing 
+  # attributes
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 VAL1 ...
@@ -1162,6 +1153,8 @@ end # class Buffer
 
   end # class Clip
 
+  ################################################################## relational
+  
   # Extend input tuples with attributes whose value is computed
   #
   # SYNOPSIS
@@ -1687,6 +1680,11 @@ end # class Buffer
 
   end # class Quota
 
+  ############################################################################# OTHER COMMANDS
+  #
+  # Below are general purpose commands provided by alf.
+  #
+
   # 
   # Render input tuples with a given strategy
   #
@@ -1697,7 +1695,7 @@ end # class Buffer
   # #{summarized_options}
   #
   class Render < Factory::Command(__FILE__, __LINE__)
-
+  
     options do |opt|
       @output = :ruby
       opt.on("--ruby", "Render as ruby hashes"){ @output = :ruby }
@@ -1705,7 +1703,7 @@ end # class Buffer
       opt.on("--yaml", "Render as yaml"){ @output = :yaml }
       opt.on("--plot", "Render as a plot"){ @output = :plot }
     end
-
+  
     def output(res)
       case @output
         when :text
@@ -1719,29 +1717,12 @@ end # class Buffer
           res.each{|t| $stdout << t.inspect << "\n"}
       end
     end
-
+  
     def execute(args)
       output Reader::RubyHash.new($stdin)
     end
-
+  
   end # class Render
-
-  ##############################################################################
-  #
-  # OTHER COMMANDS
-  #
-  # Below are general purpose commands provided by alf.
-  #
-
-  # Install options
-  options do |opt|
-    opt.on_tail("--help", "Show help") do
-      raise Quickl::Help
-    end
-    opt.on_tail("--version", "Show version") do
-      raise Quickl::Exit, "#{program_name} #{Alf::VERSION} (c) 2011, Bernard Lambeau"
-    end
-  end # Alf's options
 
   # 
   # Show help about a specific command
@@ -1765,6 +1746,22 @@ end # class Buffer
     end
     
   end # class Help
+
+  ############################################################################# MAIN
+  #
+  # Below is alf main command
+  #
+
+  # Install options
+  options do |opt|
+    opt.on_tail("--help", "Show help") do
+      raise Quickl::Help
+    end
+    opt.on_tail("--version", "Show version") do
+      raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
+                          " (c) 2011, Bernard Lambeau"
+    end
+  end # Alf's options
 
 end # class Alf
 require "alf/renderer/text"
