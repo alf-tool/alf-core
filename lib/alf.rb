@@ -97,8 +97,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # Factors a RESTRICT operator
-    def restrict(child, functor)
-      pipe(Restrict.new{|r| r.functor = Restrict.functor(functor)}, child)
+    def restrict(child, predicate)
+      pipe(Restrict.new{|r| r.predicate = Restrict.predicate(predicate)}, child)
     end
 
     # Factors a NEST operator
@@ -1356,16 +1356,16 @@ end # class Buffer
   #
   class Restrict < Factory::Operator(__FILE__, __LINE__)
 
-    # Hash of source -> target attribute renamings
-    attr_accessor :functor
+    # Restriction predicate
+    attr_accessor :predicate
 
     # Builds a Rename operator instance
     def initialize
-      @functor = TupleHandle.compile("true")
+      @predicate = TupleHandle.compile("true")
       yield self if block_given?
     end
 
-    def self.functor(arg)
+    def self.predicate(arg)
       case arg
         when String
           TupleHandle.compile(arg)
@@ -1383,7 +1383,7 @@ end # class Buffer
 
     # @see Operator#set_args
     def set_args(args)
-      @functor = Restrict.functor(args.size > 1 ? args : args.first)
+      @predicate = Restrict.predicate(args.size > 1 ? args : args.first)
       self
     end
 
@@ -1392,7 +1392,7 @@ end # class Buffer
     # @see Operator#_each
     def _each
       handle = TupleHandle.new
-      each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@functor) }
+      each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@predicate) }
     end
 
   end # class Restrict
