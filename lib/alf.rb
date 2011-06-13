@@ -193,8 +193,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # instance that can be passed to evaluate later.
     # 
     def self.compile(expr)
-      # TODO: refactor this to avoid relying on Kernel.eval
-      expr.is_a?(Proc) ? expr : Kernel.eval("lambda{ #{expr} }")
+      expr.is_a?(Proc) ? expr : eval("lambda{ #{expr} }")
     end
 
     #
