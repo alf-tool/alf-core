@@ -162,11 +162,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Input stream
     attr_accessor :input
 
-    def pipe(input)
-      @input = input
-      self
-    end
-    
     protected
 
     #
@@ -642,12 +637,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Input IO, or file name
     attr_accessor :input
 
-    # Deprecated, use input= instead
-    def pipe(input)
-      @input = input
-      self
-    end
-        
     #
     # Creates a reader instance, with an optional input
     #
@@ -738,7 +727,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def execute(args)
       set_args(args)
       [ Reader::RubyHash.new, self, HashWriter.new ].inject($stdin) do |chain,n|
-        n.pipe(chain)
+        n.input = chain
       end.execute($stdout)
     end
 
