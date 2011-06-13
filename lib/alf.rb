@@ -203,9 +203,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # 
     def evaluate(expr)
       if RUBY_VERSION < "1.9"
-        instance_eval &TupleHandle.compile(expr)
+        instance_eval(&TupleHandle.compile(expr))
       else
-        instance_exec &TupleHandle.compile(expr)
+        instance_exec(&TupleHandle.compile(expr))
       end
     end
 
@@ -585,7 +585,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
   
       def each
-        @buffer.each &Proc.new
+        @buffer.each(&Proc.new)
       end
   
       private
@@ -596,7 +596,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
     end # class Buffer::Sorted
     
-end # class Buffer
+  end # class Buffer
 
   ############################################################################# READERS
   #
@@ -748,7 +748,7 @@ end # class Buffer
     def each
       op = self.dup
       op._prepare
-      op._each &Proc.new
+      op._each(&Proc.new)
     end
 
     # 
@@ -798,7 +798,7 @@ end # class Buffer
     # This method should be preferred to <code>input.each</code> when possible.
     #
     def each_input_tuple
-      input.each &Proc.new
+      input.each(&Proc.new)
     end
 
     #
@@ -873,7 +873,7 @@ end # class Buffer
       protected 
 
       def _each
-        longexpr.each &Proc.new
+        longexpr.each(&Proc.new)
       end
 
     end # module Shortcut
@@ -1012,7 +1012,7 @@ end # class Buffer
       end
 
       def _each
-        @tuples.each &Proc.new
+        @tuples.each(&Proc.new)
       end
 
     end # class BufferBased
@@ -1022,7 +1022,7 @@ end # class Buffer
     def _each
       op = BufferBased.new
       op.input = input
-      op.each &Proc.new
+      op.each(&Proc.new)
     end
 
   end # class NoDuplicates
