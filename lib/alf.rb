@@ -91,9 +91,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Project.new(attributes, true), child)
     end
 
-    # Factors a RENAME operator
+    # @see Rename
     def rename(child, renaming)
-      pipe(Rename.new{|r| r.renaming = renaming}, child)
+      pipe(Rename.new(renaming), child)
     end
 
     # Factors a RESTRICT operator
@@ -1293,7 +1293,7 @@ end # class Buffer
   end # class Extend
 
   # 
-  # Rename some tuple attributes
+  # Rename attributes
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} OLD1 NEW1 ...
@@ -1301,15 +1301,18 @@ end # class Buffer
   # OPTIONS
   # #{summarized_options}
   #
+  # API & EXAMPLE
+  #
+  #   (rename enum, :name => :supplier_name, :city => supplied_city)
+  #
   # DESCRIPTION
   #
-  # This command renames OLD attributes as NEW as specified by 
-  # arguments. Attributes OLD should exist in the source relation 
-  # while attributes NEW should not.
+  # This command renames OLD attributes as NEW as specified by arguments. 
+  # Attributes OLD should exist in source tuples while attributes NEW should 
+  # not. When used in shell, renaming attributes are built ala Hash[...] from
+  # commandline arguments: 
   #
-  # Example:
-  #   {:id => 1} -> alf rename id identifier -> {:identifier => 1}
-  #   {:a => 1, :b => 2} -> alf rename a A b B -> {:A => 1, :B => 2}
+  #   alf rename name supplier_name city supplier_city
   #
   class Rename < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
@@ -1318,9 +1321,8 @@ end # class Buffer
     attr_accessor :renaming
 
     # Builds a Rename operator instance
-    def initialize
-      @renaming = {}
-      yield self if block_given?
+    def initialize(renaming = {})
+      @renaming = renaming
     end
 
     # @see Operator#set_args
