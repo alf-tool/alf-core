@@ -1740,14 +1740,22 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Compute quota values on input tuples
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} --by=KEY1,... --order=OR1... AGG1 EXPR1...
   #
   # OPTIONS
   # #{summarized_options}
   #
+  # API & EXAMPLE
+  #
+  #   (quota enum, [:supplier_id], [:quantity],
+  #                :position => Aggregator.count,
+  #                :sum_qty  => Aggregator.sum(:quantity))
+  #
   # DESCRIPTION
   #
   # This operator computes quota values on input tuples.
+  #
+  #   alf quota --by=supplier_id --order=quantity position count sum_qty "sum(:qty)"
   #
   class Quota < Factory::Operator(__FILE__, __LINE__)
     include Operator::Cesure
