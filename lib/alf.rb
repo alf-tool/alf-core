@@ -1398,7 +1398,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected 
     
     def _each
-      BufferBased.new.pipe(input).each &Proc.new
+      op = BufferBased.new
+      op.input = input
+      op.each &Proc.new
     end
 
   end # class NoDuplicates
@@ -1482,8 +1484,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected 
     
     def _each
-      sort = Sort.new{|s| s.ordering = @by_key.to_ordering_key}.pipe(input)
-      SortBased.new(@by_key, @aggregators).pipe(sort).each &Proc.new
+      sort = Sort.new{|s| s.ordering = @by_key.to_ordering_key}
+      sort.input = input
+      sort_based = SortBased.new(@by_key, @aggregators)
+      sort_based.input = sort
+      sort_based.each &Proc.new
     end
 
   end # class Summarize
@@ -1541,9 +1546,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
-    def pipe(input)
+    # TODO: remove this (find another way)!!
+    def input=(i)
       o = @by_key.to_ordering_key + @ordering_key
-      super(Sort.new{|s| s.ordering = o}.pipe(input))
+      sort = Sort.new{|s| s.ordering = o}
+      sort.input = i
+      super(sort)
     end
 
     protected 
