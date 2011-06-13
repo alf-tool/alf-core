@@ -366,7 +366,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
 
   #
-  # Base class for implementing operators.
+  # Base class for implementing aggregation operators.
   #
   class Aggregator
 
@@ -559,39 +559,39 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
 
   #
-  # Provides a basis buffer implementation and a factory over
-  # the different kinds of buffers available.
+  # Base class for implementing buffers.
   # 
   class Buffer
-  end # class Buffer
 
-  # 
-  # Keeps tuples ordered on a specific key
-  #
-  class SortedBuffer < Buffer
-
-    def initialize(ordering_key)
-      @ordering_key = ordering_key
-      @buffer = []
-    end
-
-    def add_all(enum)
-      sorter = @ordering_key.sorter
-      @buffer = merge_sort(@buffer, enum.to_a.sort(&sorter), sorter)
-    end
-
-    def each
-      @buffer.each &Proc.new
-    end
-
-    private
+    # 
+    # Keeps tuples ordered on a specific key
+    #
+    class Sorted < Buffer
   
-    def merge_sort(s1, s2, sorter)
-      (s1 + s2).sort(&sorter)
-    end
-
-  end # class SortedBuffer
+      def initialize(ordering_key)
+        @ordering_key = ordering_key
+        @buffer = []
+      end
   
+      def add_all(enum)
+        sorter = @ordering_key.sorter
+        @buffer = merge_sort(@buffer, enum.to_a.sort(&sorter), sorter)
+      end
+  
+      def each
+        @buffer.each &Proc.new
+      end
+  
+      private
+    
+      def merge_sort(s1, s2, sorter)
+        (s1 + s2).sort(&sorter)
+      end
+  
+    end # class Buffer::Sorted
+    
+end # class Buffer
+
   ##############################################################################
   #
   # READERS
@@ -1640,7 +1640,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected 
 
     def _prepare
-      @buffer = SortedBuffer.new(@ordering_key)
+      @buffer = Buffer::Sorted.new(@ordering_key)
       @buffer.add_all(input)
     end
 
