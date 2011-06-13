@@ -22,7 +22,7 @@ class Alf
     end
 
     describe "when factored with Lispy" do
-      let(:operator){ Lispy.group(input, :as => [:time, :b]) }
+      let(:operator){ Lispy.group(input, [:time, :b], :as) }
       it { should == expected }
     end
 

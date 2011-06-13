@@ -111,10 +111,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Unnest.new(attribute), child)
     end
 
-    # Factors a GROUP operator
-    def group(child, grouping)
-      pipe(Group.new{|r| r.attributes = grouping[grouping.keys.first]
-                         r.as = grouping.keys.first}, child)
+    # @see Group
+    def group(child, attributes, as)
+      pipe(Group.new(attributes, as), child)
     end
 
     # Factors an UNGROUP operator
@@ -1523,36 +1522,38 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
   #
-  # OPTIONS
-  # #{summarized_options}
+  # API & EXAMPLE
+  #
+  #   # Assuming supplies as input
+  #   (group enum, [:part_id, :quantity], :supplying)
   #
   # DESCRIPTION
   #
-  # This operator groups attributes ATTR1 to ATTRN as a new, relation-values
-  # attribute whose name is NEWNAME
+  # This operator groups attributes ATTR1 to ATTRN as a new, relation-valued
+  # attribute whose name is NEWNAME. When used in shell, names of grouped
+  # attributes are taken from commandline arguments, expected the last one
+  # which defines the new name to use:
+  #
+  #   alf group part_id quantity supplying
   #
   class Group < Factory::Operator(__FILE__, __LINE__)
 
     # Attributes on which grouping applies
-    attr_accessor :projection_key
+    attr_accessor :attributes
   
     # Attribute name for grouping tuple 
     attr_accessor :as
 
     # Creates a Group instance
-    def initialize
-      @projection_key = ProjectionKey.new([], true)
-      yield self if block_given?
-    end
-
-    def attributes=(attrs)
-      @projection_key.attributes = attrs
+    def initialize(attributes = [], as = :group)
+      @attributes = attributes
+      @as = as
     end
 
     # @see Operator#set_args
     def set_args(args)
       @as = args.pop.to_sym
-      self.attributes = args.collect{|a| a.to_sym}
+      @attributes = args.collect{|a| a.to_sym}
       self
     end
 
@@ -1560,9 +1561,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # See Operator#_prepare
     def _prepare
+      pkey = ProjectionKey.new(attributes, as)
       @index = Hash.new{|h,k| h[k] = []} 
       each_input_tuple do |tuple|
-        key, rest = @projection_key.split(tuple)
+        key, rest = pkey.split(tuple)
         @index[key] << rest
       end
     end
