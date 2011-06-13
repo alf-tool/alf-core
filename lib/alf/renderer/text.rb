@@ -116,7 +116,8 @@ class Alf
 
       end # class Table
 
-      def self.render(relation, buffer = "")
+      def execute(buffer = $stdout)
+        relation = input.to_a
         first = relation.first
         if first.nil?
           buffer << "+--+ Empty relation +--+\n"
@@ -128,7 +129,11 @@ class Alf
           Table.new(records, attrs).render(buffer)
         end
       end
-
+      
+      def self.render(relation, buffer = "")
+        new(relation).execute(buffer)
+      end
+      
     end # class Text
   end # class Renderer
 end # class Alf

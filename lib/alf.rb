@@ -694,6 +694,10 @@ end # class Buffer
     # Writer input
     attr_accessor :input
     
+    def initialize(input = nil)
+      @input = input
+    end
+    
     #
     # Executes the rendering, outputting the resulting tuples. 
     #

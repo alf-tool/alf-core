@@ -34,12 +34,18 @@ class Alf
         end
       end
 
-      def self.render(graph, io = $stdout)
+      def self.render(graph, buffer = $stdout)
         case graph
           when Hash
-            io << to_plot(graph).to_gplot << "\n"
+            render([graph], buffer)
           when Array
-            graph.each{|t| render(t, io)}
+            new(graph).execute(buffer)
+        end
+      end
+      
+      def execute(buffer = $output)
+        input.each do |tuple|
+          buffer << Plot.to_plot(tuple).to_gplot << "\n"
         end
       end
 
