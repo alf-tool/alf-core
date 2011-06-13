@@ -116,9 +116,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Group.new(attributes, as), child)
     end
 
-    # Factors an UNGROUP operator
+    # @see Ungroup
     def ungroup(child, attribute)
-      pipe(Ungroup.new{|r| r.attribute = attribute}, child)
+      pipe(Ungroup.new(attribute), child)
     end
 
     # Factors a SUMMARIZE operator
@@ -1484,7 +1484,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator unnests the tuple-valued attribute named ATTR so as to 
   # flatten its pairs with 'upstream' tuple. The latter should be such so that
   # no name collision occurs. When used in shell, the name of the attribute to
-  # unnest is taken as the first command line argument:
+  # unnest is taken as the first commandline argument:
   #
   #   alf unnest loc_and_status
   #
@@ -1584,13 +1584,20 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR
   #
-  # OPTIONS
-  # #{summarized_options}
+  # API & EXAMPLE
+  #
+  #   # On result of (group enum, [:part_id, :quantity], :supplying)
+  #   (ungroup enum, :supplying)
   #
   # DESCRIPTION
   #
-  # This operator ungroup the relation-valued attribute whose
-  # name is ATTR
+  # This operator ungroups the relation-valued attribute named ATTR and outputs
+  # tuples as the flattening of each of of its tuples merged with the upstream
+  # one. Sub relation should be such so that no name collision occurs. When 
+  # used in shell, the name of the attribute to ungroup is taken as the first 
+  # commandline argument:
+  #
+  #   alf ungroup supplying
   #
   class Ungroup < Factory::Operator(__FILE__, __LINE__)
 
@@ -1598,9 +1605,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     attr_accessor :attribute
   
     # Creates a Group instance
-    def initialize
-      @attribute = :grouped
-      yield self if block_given?
+    def initialize(attribute = :grouped)
+      @attribute = attribute
     end
 
     # @see Operator#set_args
