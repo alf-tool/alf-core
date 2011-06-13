@@ -67,10 +67,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Defaults.new(defaults, strict), child)
     end
 
+    # @see NoDuplicates
     def no_duplicates(child)
       pipe(NoDuplicates.new, child)
     end
     
+    # @see Sort
+    def sort(child, ordering)
+      pipe(Sort.new{|r| r.ordering = ordering}, child)
+    end
+
     # @see Extend
     def extend(child, extensions)
       pipe(Extend.new(extensions), child)
@@ -125,11 +131,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def summarize(child, by, aggregators = nil, &agg_builder)
       aggregators = aggregators || Aggregator.instance_eval(&agg_builder)
       pipe(Summarize.new(by, aggregators), child)
-    end
-
-    # Factors an SORT operator
-    def sort(child, ordering)
-      pipe(Sort.new{|r| r.ordering = ordering}, child)
     end
 
     private
