@@ -1341,13 +1341,10 @@ end # class Buffer
   end # class Rename
 
   # 
-  # Restrict input tuples to those for which an expression is true
+  # Restrict input tuples to those for which a predicate evaluates to true
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} EXPR
-  #
-  # OPTIONS
-  # #{summarized_options}
   #
   # DESCRIPTION
   #
@@ -1359,7 +1356,7 @@ end # class Buffer
     # Restriction predicate
     attr_accessor :predicate
 
-    # Builds a Rename operator instance
+    # Builds a Restrict operator instance
     def initialize
       @predicate = TupleHandle.compile("true")
       yield self if block_given?
