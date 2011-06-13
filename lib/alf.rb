@@ -202,18 +202,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         if expr.empty?
           compile(nil)
         else
-          compile expr.each_pair.collect{|pair| 
-            "(" + pair.join("==") + ")"
-          }.join(" and ")
+          # TODO: replace inspect by to_ruby
+          compile expr.each_pair.collect{|k,v| 
+            "(#{k} == #{v.inspect})"
+          }.join(" && ")
         end
       when Array
-        if expr.empty?
-          compile(nil)
-        else
-          compile expr.each_slice(2).collect{|pair| 
-            "(" + pair.join("==") + ")"
-          }.join(" and ")
-        end
+        compile(Hash[*expr])
       when String, Symbol
         eval("lambda{ #{expr} }")
       else
