@@ -98,7 +98,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Factors a RESTRICT operator
     def restrict(child, predicate)
-      pipe(Restrict.new{|r| r.predicate = Restrict.predicate(predicate)}, child)
+      pipe(Restrict.new(predicate), child)
     end
 
     # Factors a NEST operator
@@ -165,7 +165,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # The following modules and classes provide tools for implementing dataflow
   # elements.
   #
-  
+
   #
   # Provides a handle, implementing a flyweight design pattern on tuples.
   #
@@ -193,7 +193,24 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # instance that can be passed to evaluate later.
     # 
     def self.compile(expr)
-      expr.is_a?(Proc) ? expr : eval("lambda{ #{expr} }")
+      case expr
+      when Proc
+        expr
+      when NilClass
+        compile('true')
+      when Array
+        if expr.empty?
+          compile(nil)
+        else
+          compile expr.each_slice(2).collect{|pair| 
+            "(" + pair.join("==") + ")"
+          }.join(" and ")
+        end
+      when String, Symbol
+        eval("lambda{ #{expr} }")
+      else
+        raise ArgumentError, "Unable to compile #{expr} to a TupleHandle"
+      end
     end
 
     #
@@ -1339,15 +1356,29 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Rename
 
   # 
-  # Restrict input tuples to those for which a predicate evaluates to true
+  # Restrict input tuples to those to which a predicate evaluates to true
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} EXPR
+  #   #{program_name} #{command_name} ATTR1 VAL1 ...
+  #
+  # API & EXAMPLE
+  #
+  #   # Restrict to suppliers with status greater than 20
+  #   (restrict enum, lambda{ status > 20 })
+  #
+  #   # Restrict to suppliers that live in London
+  #   (restrict enum, lambda{ city == 'London' })
   #
   # DESCRIPTION
   #
-  # This command restricts tuples to those for which EXPR evaluates
-  # to true.
+  # This command restricts tuples to those for which EXPR evaluates to true.
+  # EXPR must be a valid tuple expression that should return a truth-value.
+  # When used in shell, the predicate is taken as a string and compiled with
+  # TupleHandle.compile. We also provide a shortcut for equality expressions
+  #
+  #   alf restrict "status > 20"
+  #   alf restrict city London
   #
   class Restrict < Factory::Operator(__FILE__, __LINE__)
 
@@ -1355,30 +1386,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     attr_accessor :predicate
 
     # Builds a Restrict operator instance
-    def initialize
-      @predicate = TupleHandle.compile("true")
+    def initialize(predicate = "true")
+      @predicate = TupleHandle.compile(predicate)
       yield self if block_given?
-    end
-
-    def self.predicate(arg)
-      case arg
-        when String
-          TupleHandle.compile(arg)
-        when NilClass
-          TupleHandle.compile("true")
-        when Array
-          code = arg.empty? ?
-            "true" :
-            arg.each_slice(2).collect{|pair| "(" + pair.join("==") + ")"}.join(" and ")
-          TupleHandle.compile(code)
-        when Proc
-          arg
-      end
     end
 
     # @see Operator#set_args
     def set_args(args)
-      @predicate = Restrict.predicate(args.size > 1 ? args : args.first)
+      @predicate = TupleHandle.compile(args.size > 1 ? args : args.first)
       self
     end
 
