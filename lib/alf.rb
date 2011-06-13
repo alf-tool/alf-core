@@ -69,6 +69,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       _pipe(Defaults.new(defaults, strict), child)
     end
 
+    def no_duplicates(child)
+      _pipe(NoDuplicates.new, child)
+    end
+    
     # @see Extend
     def extend(child, extensions)
       _pipe(Extend.new(extensions), child)
@@ -961,6 +965,68 @@ end # class Buffer
   end # class Defaults
 
   # 
+  # 
+  # Remove tuple duplicates from input tuples
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # API
+  #
+  #   (no_duplicates enum)
+  #
+  # DESCRIPTION
+  #
+  # This operator remove duplicates from input tuples. As defaults, it is a non
+  # relational operator that helps normalizing input for implementing relational
+  # operators. This one is centric in converting bags of tuples to sets of 
+  # tuples, as required by true relations.
+  #
+  class NoDuplicates < Factory::Operator(__FILE__, __LINE__)
+
+    # Removes duplicates according to a complete order
+    class SortBased
+      include Alf::Operator::Cesure      
+
+      def cesure_key
+        @cesure_key ||= ProjectionKey.new([],true)
+      end
+
+      def accumulate_cesure(tuple, receiver)
+        @tuple = tuple
+      end
+
+      def flush_cesure(key, receiver)
+        receiver.call(@tuple)
+      end
+
+    end # class SortBased
+
+    # Removes duplicates by loading all in memory and filtering 
+    # them there 
+    class BufferBased
+      include Alf::Operator
+
+      def _prepare
+        @tuples = input.to_a.uniq
+      end
+
+      def _each
+        @tuples.each &Proc.new
+      end
+
+    end # class BufferBased
+
+    protected 
+    
+    def _each
+      op = BufferBased.new
+      op.input = input
+      op.each &Proc.new
+    end
+
+  end # class NoDuplicates
+
   # Extend input tuples with attributes whose value is computed
   #
   # SYNOPSIS
@@ -1372,64 +1438,6 @@ end # class Buffer
     end
 
   end # class Ungroup
-
-  # 
-  # Remove tuple duplicates from input tuples
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name}
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # This operator remove duplicates from input tuples.
-  #
-  class NoDuplicates < Factory::Operator(__FILE__, __LINE__)
-
-    # Removes duplicates according to a complete order
-    class SortBased
-      include Alf::Operator::Cesure      
-
-      def cesure_key
-        @cesure_key ||= ProjectionKey.new([],true)
-      end
-
-      def accumulate_cesure(tuple, receiver)
-        @tuple = tuple
-      end
-
-      def flush_cesure(key, receiver)
-        receiver.call(@tuple)
-      end
-
-    end # class SortBased
-
-    # Removes duplicates by loading all in memory and filtering 
-    # them there 
-    class BufferBased
-      include Alf::Operator
-
-      def _prepare
-        @tuples = input.to_a.uniq
-      end
-
-      def _each
-        @tuples.each &Proc.new
-      end
-
-    end # class BufferBased
-
-    protected 
-    
-    def _each
-      op = BufferBased.new
-      op.input = input
-      op.each &Proc.new
-    end
-
-  end # class NoDuplicates
 
   # 
   # Summarize tuples by a given subset of attributes
