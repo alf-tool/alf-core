@@ -1034,6 +1034,70 @@ end # class Buffer
 
   end # class NoDuplicates
 
+  # 
+  # Sort input tuples according to a sort key
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 ORDER1 ATTR2 ORDER2...
+  #
+  # API & EXAMPLE
+  #
+  #   # sort on supplier name in ascending order
+  #   (sort [:name])
+  #
+  #   # sort on city then on name
+  #   (sort [:city, :name])
+  # 
+  #   # sort on city DESC then on name ASC
+  #   (sort [[:city, :desc], [:name, :asc]])
+  #
+  #   => See OrderingKey about specifying orderings
+  #
+  # DESCRIPTION
+  #
+  # This operator sorts input tuples on ATTR1 then ATTR2, etc. and outputs 
+  # them sorted after that. This is, of course, a non relational operator as 
+  # relations are unordered sets. It is provided to implement operators that
+  # need tuples to be sorted to work correctly. When used in shell, the key 
+  # ordering must be specified in its longest form:
+  #
+  #   alf sort name asc
+  #   alf sort city desc name asc
+  #
+  # LIMITATIONS
+  #
+  # The fact that the ordering must be completely specified with commandline
+  # arguments is a limitation, shortcuts should be provided in the future.
+  #
+  class Sort < Factory::Operator(__FILE__, __LINE__)
+  
+    def initialize(ordering_key = [])
+      @ordering_key = OrderingKey.coerce(ordering_key)
+      yield self if block_given?
+    end
+  
+    def ordering=(ordering)
+      @ordering_key = OrderingKey.coerce(ordering)
+    end
+  
+    def set_args(args)
+      self.ordering = args.collect{|c| c.to_sym}.each_slice(2).to_a
+      self
+    end
+  
+    protected 
+  
+    def _prepare
+      @buffer = Buffer::Sorted.new(@ordering_key)
+      @buffer.add_all(input)
+    end
+  
+    def _each
+      @buffer.each(&Proc.new)
+    end
+  
+  end # class Sort
+
   # Extend input tuples with attributes whose value is computed
   #
   # SYNOPSIS
@@ -1613,57 +1677,6 @@ end # class Buffer
     end
 
   end # class Quota
-
-  # 
-  # Sort input tuples in memory and output them sorted
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ORDER1 ATTR2 ORDER2...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # This operator sorts input tuples on ATTR1 then ATTR2, etc.
-  # and outputs them sorted after that.
-  #
-  class Sort < Factory::Operator(__FILE__, __LINE__)
-
-    def initialize
-      @ordering_key = OrderingKey.coerce([])
-      yield self if block_given?
-    end
-
-    def ordering=(ordering)
-      @ordering_key = OrderingKey.coerce(ordering)
-    end
-
-    def order_by(attr, order = :asc)
-      @ordering_key.order_by(attr, order)
-    end
-
-    def set_args(args)
-      args.collect{|c| c.to_sym}.
-           each_slice(2).
-           each do |attr, order|
-        order_by(attr, order)
-      end
-      self
-    end
-
-    protected 
-
-    def _prepare
-      @buffer = Buffer::Sorted.new(@ordering_key)
-      @buffer.add_all(input)
-    end
-
-    def _each
-      @buffer.each(&Proc.new)
-    end
-
-  end # class Sort
 
   # 
   # Render input tuples with a given strategy
