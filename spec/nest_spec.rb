@@ -19,7 +19,7 @@ class Alf
     end
 
     describe "when factored with Lispy" do
-      let(:operator){ Lispy.nest(input, :nested => [:a, :b]) }
+      let(:operator){ Lispy.nest(input, [:a, :b], :nested) }
       it { should == expected }
     end
 

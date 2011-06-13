@@ -102,9 +102,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # Factors a NEST operator
-    def nest(child, nesting)
-      pipe(Nest.new{|r| r.attributes = nesting[nesting.keys.first]
-                        r.as = nesting.keys.first}, child)
+    def nest(child, attributes, as)
+      pipe(Nest.new(attributes, as), child)
     end
 
     # Factors an UNNEST operator
@@ -1424,13 +1423,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
   #
-  # OPTIONS
-  # #{summarized_options}
+  # API & EXAMPLE
+  #
+  #   (nest enum [:city, :status], :loc_and_status)
   #
   # DESCRIPTION
   #
   # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
-  # attribute whose name is NEWNAME
+  # attribute whose name is NEWNAME. When used in shell, names of nested 
+  # attributes are taken from commandline arguments, expected the last one
+  # which defines the new name to use:
+  #
+  #   alf nest city status loc_and_status
   #
   class Nest < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
@@ -1442,10 +1446,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     attr_accessor :as
 
     # Builds a Nest operator instance
-    def initialize
-      @attributes = []
-      @as = :nested
-      yield self if block_given?
+    def initialize(attributes = [], as = :nested)
+      @attributes = attributes
+      @as = as
     end
 
     # @see Operator#set_args
