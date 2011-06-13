@@ -708,7 +708,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     def execute(args)
       set_args(args)
-      [ Reader::RubyHash.new, self, HashWriter.new ].inject($stdin) do |chain,n|
+      [ Reader::RubyHash.new, self, Renderer::RubyHash.new ].inject($stdin) do |chain,n|
         n.input = chain
       end.execute($stdout)
     end
@@ -1634,21 +1634,21 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def execute(output = $stdout)
     end
 
-  end # module Renderer
-
-  #
-  # Implements the Renderer contract through inspect
-  #
-  class HashWriter < Renderer
-
-    # @see Renderer#execute
-    def execute(output = $stdout)
-      input.each do |tuple|
-        output << tuple.inspect << "\n"
+    #
+    # Implements the Renderer contract through inspect
+    #
+    class RubyHash < Renderer
+  
+      # @see Renderer#execute
+      def execute(output = $stdout)
+        input.each do |tuple|
+          output << tuple.inspect << "\n"
+        end
       end
-    end
+  
+    end # class RubyHash
 
-  end # class HashWriter
+  end # module Renderer
 
   # 
   # Render input tuples with a given strategy
