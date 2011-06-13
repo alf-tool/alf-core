@@ -198,6 +198,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         expr
       when NilClass
         compile('true')
+      when Hash
+        if expr.empty?
+          compile(nil)
+        else
+          compile expr.each_pair.collect{|pair| 
+            "(" + pair.join("==") + ")"
+          }.join(" and ")
+        end
       when Array
         if expr.empty?
           compile(nil)
@@ -1393,7 +1401,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see Operator#set_args
     def set_args(args)
-      @predicate = TupleHandle.compile(args.size > 1 ? args : args.first)
+      @predicate = if args.size > 1
+        TupleHandle.compile(args)
+      else
+        TupleHandle.compile(args.first)
+      end
       self
     end
 

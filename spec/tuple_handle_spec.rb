@@ -29,7 +29,7 @@ class Alf
       it "should return a Proc when passed a string" do
         TupleHandle.compile("true").should be_a(Proc)
       end
-
+      
       it "should return the Proc when directly passed" do
         x = lambda{ true }
         TupleHandle.compile(x).should == x
@@ -51,7 +51,21 @@ class Alf
       it "should allow a Proc" do
         handle.evaluate(lambda{ a }).should == 1
       end
-
+      
+      it "should allow a Hash" do
+        handle.evaluate(:a => 1).should == true
+        handle.evaluate(:a => 2).should == false
+        handle.evaluate(:a => 1, :b => 1).should == false
+        handle.evaluate(:a => 1, :b => 2).should == true
+      end
+      
+      it "should allow an Array" do
+        handle.evaluate([:a, 1]).should == true
+        handle.evaluate([:a, 2]).should == false
+        handle.evaluate([:a, 1, :b, 1]).should == false
+        handle.evaluate([:a, 1, :b, 2]).should == true
+      end
+      
       it "should allow the result of compile" do
         handle.evaluate(TupleHandle.compile('a')).should == 1
       end
