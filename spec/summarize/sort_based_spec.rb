@@ -18,8 +18,9 @@ class Alf
     let(:by_key){ ProjectionKey.new([:a],false) }
     let(:aggs){{:time_sum => Aggregator.sum(:time),
                 :time_max => Aggregator.max(:time)}} 
-    let(:operator){ Summarize::SortBased.new(by_key, aggs).pipe(input) }
+    let(:operator){ Summarize::SortBased.new(by_key, aggs) }
 
+    before{ operator.input = input }
     subject{ operator.to_a }
 
     it { should == expected }

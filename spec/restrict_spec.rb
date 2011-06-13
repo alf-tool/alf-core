@@ -14,13 +14,15 @@ class Alf
     subject{ operator.to_a }
 
     describe "when used with no argument" do
-      let(:operator){ Restrict.new.set_args([]).pipe(input) }
+      let(:operator){ Restrict.new.set_args([]) }
+      before{ operator.input = input }
       it { should == input }
     end
 
     describe "when used with a string" do
       describe "when factored with commandline args" do
-        let(:operator){ Restrict.new.set_args(["tested < 10"]).pipe(input) }
+        let(:operator){ Restrict.new.set_args(["tested < 10"]) }
+        before{ operator.input = input }
         it { should == expected }
       end
       describe "when factored with Lispy" do
@@ -31,7 +33,8 @@ class Alf
 
     describe "when used with arguments" do
       describe "when factored with commandline args" do
-        let(:operator){ Restrict.new.set_args(["tested", 1]).pipe(input) }
+        let(:operator){ Restrict.new.set_args(["tested", 1]) }
+        before{ operator.input = input }
         it { should == expected }
       end
       describe "when factored with Lispy and Proc" do

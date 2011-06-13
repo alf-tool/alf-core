@@ -9,10 +9,10 @@ class Alf
 
     let(:reader){ Alf::HashReader.new }
 
-    subject{ reader.pipe(io) }
+    before{ reader.input = io }
 
     it "should be enumerable" do
-      subject.to_a.should == lines
+      reader.to_a.should == lines
     end
 
   end

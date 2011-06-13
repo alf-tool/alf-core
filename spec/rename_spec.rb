@@ -18,7 +18,8 @@ class Alf
     end
 
     describe "When factored from commandline args" do
-      let(:operator){ Rename.new{|g| g.set_args(['a', 'z'])}.pipe(input) }
+      let(:operator){ Rename.new{|g| g.set_args(['a', 'z'])} }
+      before{ operator.input = input }
       it{ should == expected }
     end
 

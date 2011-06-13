@@ -162,17 +162,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Input stream
     attr_accessor :input
 
-    #
-    # Pipes with an input stream, typically a IO object
-    #
-    # This method simply sets _input_ under a variable instance of
-    # same name and returns self.
-    #
     def pipe(input)
       @input = input
       self
     end
-
+    
     protected
 
     #

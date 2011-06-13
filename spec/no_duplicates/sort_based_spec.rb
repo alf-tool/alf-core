@@ -19,7 +19,8 @@ class Alf
     subject{ operator.to_a }
 
     describe "when factored with commandline args" do
-      let(:operator){ NoDuplicates::SortBased.new.pipe(input) }
+      let(:operator){ NoDuplicates::SortBased.new }
+      before{ operator.input = input }
       it { should == expected }
     end
 

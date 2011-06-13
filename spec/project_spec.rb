@@ -12,7 +12,8 @@ class Alf
       let(:expected){[{:a => "a"}]}
 
       describe "when factored with commandline args" do
-        let(:operator){ Project.new.set_args(['a']).pipe(input) }
+        let(:operator){ Project.new.set_args(['a']) }
+        before{ operator.input = input }
         it { should == expected } 
       end
 
@@ -32,7 +33,8 @@ class Alf
       let(:expected){[{:b => "b"}]}
 
       describe "when factored with commandline args" do
-        let(:operator){ Project.new{|p| p.allbut = true}.set_args(['a']).pipe(input) }
+        let(:operator){ Project.new{|p| p.allbut = true}.set_args(['a']) }
+        before{ operator.input = input }
         it { should == expected } 
       end
 

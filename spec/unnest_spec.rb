@@ -13,7 +13,8 @@ class Alf
     subject{ operator.to_a }
 
     describe "when factored with commandline args" do
-      let(:operator){ Unnest.new.set_args(["nested"]).pipe(input) }
+      let(:operator){ Unnest.new.set_args(["nested"]) }
+      before{ operator.input = input }
       it { should == expected }
     end
 

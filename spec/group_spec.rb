@@ -16,7 +16,8 @@ class Alf
     subject{ operator.to_a.sort{|k1,k2| k1[:a] <=> k2[:a]} }
 
     describe "when factored with commandline args" do
-      let(:operator){ Group.new.set_args([:time, :b, :as]).pipe(input) }
+      let(:operator){ Group.new.set_args([:time, :b, :as]) }
+      before{ operator.input = input }
       it { should == expected }
     end
 
