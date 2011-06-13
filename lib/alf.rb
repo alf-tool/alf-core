@@ -134,12 +134,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       child = case child
         when IO
           HashReader.new(child)
-        when Array, Pipeable
+        when Array, Reader, Operator
           child
         else
           raise ArgumentError, "Unable to pipe with #{child}"
       end
-      parent.pipe(child)
+      parent.input = child
+      parent
     end
 
     extend Lispy
@@ -159,7 +160,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   module Pipeable
 
     # Input stream
-    attr_reader :input
+    attr_accessor :input
 
     #
     # Pipes with an input stream, typically a IO object
