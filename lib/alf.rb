@@ -971,7 +971,7 @@ end # class Buffer
   # SYNOPSIS
   #   #{program_name} #{command_name}
   #
-  # API
+  # API & EXAMPLE
   #
   #   (no_duplicates enum)
   #
@@ -1453,7 +1453,8 @@ end # class Buffer
   # This operator summarizes tuples and compute additional aggregations.
   #
   class Summarize < Factory::Operator(__FILE__, __LINE__)
-
+    include Operator::Shortcut
+    
     attr_accessor :aggregators
 
     def initialize
@@ -1517,12 +1518,12 @@ end # class Buffer
 
     protected 
     
-    def _each
+    def longexpr
       sort = Sort.new{|s| s.ordering = @by_key.to_ordering_key}
       sort.input = input
       sort_based = SortBased.new(@by_key, @aggregators)
       sort_based.input = sort
-      sort_based.each &Proc.new
+      sort_based
     end
 
   end # class Summarize
