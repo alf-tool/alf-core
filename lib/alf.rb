@@ -78,14 +78,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       pipe(Extend.new(extensions), child)
     end
 
-    # Factors a PROJECT operator
-    def project(child, *attrs)
-      pipe(Project.new{|p| p.attributes = attrs.flatten}, child)
-    end
-
-    # Factors a PROJECT-ALLBUT operator
-    def allbut(child, *attrs)
-      pipe(Project.new{|p| p.attributes = attrs.flatten; p.allbut = true}, child)
+    # Factors a CLIP operator
+    def clip(child, attributes, allbut = false)
+      pipe(Clip.new(attributes, allbut), child)
     end
 
     # Factors a RENAME operator
@@ -1067,7 +1062,7 @@ end # class Buffer
   # LIMITATIONS
   #
   # The fact that the ordering must be completely specified with commandline
-  # arguments is a limitation, shortcuts should be provided in the future.
+  # arguments is a limitation, shortcuts could be provided in the future.
   #
   class Sort < Factory::Operator(__FILE__, __LINE__)
   
@@ -1097,6 +1092,75 @@ end # class Buffer
     end
   
   end # class Sort
+
+  # 
+  # Clip input tuples to some attributes only
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} ATTR1 ATTR2 ...
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # API & EXAMPLE
+  #
+  #   # Keep only name and city attributes
+  #   (clip enum, [:name, :city])
+  #
+  #   # Keep all but name and city attributes
+  #   (clip enum, [:name, :city], true)
+  #
+  # DESCRIPTION
+  #
+  # This operator clips tuples on attributes whose names are specified as 
+  # arguments. This is similar to the relational PROJECT operator, expect
+  # that this one does not removed duplicates that can occur from clipping.
+  # In other words, clipping may lead to bags of tuples instead of sets.
+  # 
+  # When used in shell, the clipping/projection key is simply taken from
+  # commandline arguments:
+  #
+#   alf clip name city
+#   alf clip --allbut name city
+  #
+  class Clip < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Transform
+
+    # Builds a Clip operator instance
+    def initialize(attributes = [], allbut = false)
+      @projection_key = ProjectionKey.new(attributes, allbut)
+      yield self if block_given?
+    end
+
+    def attributes=(attrs)
+      @projection_key.attributes = attrs
+    end
+
+    def allbut=(allbut)
+      @projection_key.allbut = allbut
+    end
+
+    # Installs the options
+    options do |opt|
+      opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
+        self.allbut = true
+      end
+    end
+
+    # @see Operator#set_args
+    def set_args(args)
+      self.attributes = args.collect{|a| a.to_sym}
+      self
+    end
+
+    protected 
+
+    # @see Operator::Transform#_tuple2tuple
+    def _tuple2tuple(tuple)
+      @projection_key.project(tuple)
+    end
+
+  end # class Clip
 
   # Extend input tuples with attributes whose value is computed
   #
@@ -1155,61 +1219,6 @@ end # class Buffer
     end
 
   end # class Extend
-
-  # 
-  # Project input tuples on some attributes only
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ATTR2 ...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # This operator projects tuples on attributes whose names are specified 
-  # as arguments. Note that, so far, this operator does NOT remove 
-  # duplicate tuples in the result and is therefore not equivalent to a
-  # true relational projection.
-  #
-  class Project < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Transform
-
-    # Builds a Project operator instance
-    def initialize
-      @projection_key = ProjectionKey.new([], false)
-      yield self if block_given?
-    end
-
-    def attributes=(attrs)
-      @projection_key.attributes = attrs
-    end
-
-    def allbut=(allbut)
-      @projection_key.allbut = allbut
-    end
-
-    # Installs the options
-    options do |opt|
-      opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
-        self.allbut = true
-      end
-    end
-
-    # @see Operator#set_args
-    def set_args(args)
-      self.attributes = args.collect{|a| a.to_sym}
-      self
-    end
-
-    protected 
-
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      @projection_key.project(tuple)
-    end
-
-  end # class Project
 
   # 
   # Rename some tuple attributes
