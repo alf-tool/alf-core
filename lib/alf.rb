@@ -378,9 +378,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
       
       def dataset(name)
-        file = Dir[File.join(@folder, "**/#{name}.rb")].first
-        if file
-          Reader::rash(file)
+        if file = Dir[File.join(@folder, "**/#{name}.*")].first
+          ext = File.extname(file)
+          if clazz = Reader.reader_class_by_file_extension(ext)
+            clazz.new(file)
+          else
+            raise "No reader associated to extension '#{ext}' (#{file})"
+          end
         else
           raise "No such dataset #{name}"
         end
