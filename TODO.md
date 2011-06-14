@@ -1,8 +1,8 @@
 * RENAME: add prefix, suffix and lambda renaming
   
-    (rename :suppliers, [:name, :city], :prefix => "supplier_")
-    (rename :suppliers, [:name, :city], :suffix => "_sup")
-    (rename :suppliers, [:name, :city], lambda{|name| name.upcase}) 
+        (rename :suppliers, [:name, :city], :prefix => "supplier_")
+        (rename :suppliers, [:name, :city], :suffix => "_sup")
+        (rename :suppliers, [:name, :city], lambda{|name| name.upcase}) 
 
 * NEST: provide a multi-nesting ability?
 
