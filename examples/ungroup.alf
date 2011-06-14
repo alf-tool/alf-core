@@ -1,0 +1,4 @@
+#!/usr/bin/env alf
+(ungroup \
+  (group :supplies, [:pid, :qty], :supplying), 
+  :supplying)

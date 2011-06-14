@@ -1671,7 +1671,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # API & EXAMPLE
   #
   #   # On result of (group enum, [:pid, :qty], :supplying)
-  #   (ungroup enum, :supplying)
+  #   (ungroup ..., :supplying)
   #
   # DESCRIPTION
   #
@@ -1681,7 +1681,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # used in shell, the name of the attribute to ungroup is taken as the first 
   # commandline argument:
   #
-  #   alf ungroup supplying
+  #   alf --input=... ungroup supplying
   #
   class Ungroup < Factory::Operator(__FILE__, __LINE__)
 
