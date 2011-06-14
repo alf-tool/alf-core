@@ -2017,7 +2017,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def execute(args)
       chain = [ 
         requester.renderer, 
-        Reader.alf_file(args.first || $stdin, requester)
+        Reader.alf(args.first || $stdin, requester.environment)
       ]
       requester.send(:pipe, *chain).execute($stdout)
     end
