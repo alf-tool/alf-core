@@ -684,10 +684,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       case input
       when String
         File.open(input, 'r') do |io|
-          io.each_line &Proc.new
+          io.each_line(&Proc.new)
         end
       when IO, StringIO
-        input.each_line &Proc.new
+        input.each_line(&Proc.new)
       else 
         raise "Unable to convert #{input} to an IO object"
       end
