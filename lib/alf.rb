@@ -1888,7 +1888,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
 
   # 
-  # Show input tuples in a friendly text rendering
+  # Output input tuples through a specific renderer
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} [DATASET...]
@@ -1975,7 +1975,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
   # Install options
   options do |opt|
-    @renderer = Renderer::Rash
+    @renderer = Renderer::Rash.new
     names = Renderer.renderer_names
     opt.on('--render=RENDERER', names.collect{|n| n.to_sym},
            "Specify the renderer to use (#{names.join(', ')})") do |name|
