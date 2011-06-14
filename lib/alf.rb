@@ -94,7 +94,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def to_iterator(arg)
       case arg
         when IO
-          Reader::RubyHash.new(arg)
+          Reader::Rash.new(arg)
         when Array, Reader, Operator
           arg
         when String, Symbol
@@ -137,7 +137,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       def dataset(name)
         file = Dir[File.join(@folder, "**/#{name}.rb")].first
         if file
-          Reader::RubyHash.new(file)
+          Reader::Rash.new(file)
         else
           raise "No such dataset #{name}"
         end
@@ -683,7 +683,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Implements the Reader contract for a stream where each line is a ruby 
     # hash literal (taken as a tuple physical representation).
     #
-    class RubyHash < Reader
+    class Rash < Reader
   
       # @see Reader#_line2tuple
       def _line2tuple(line)
@@ -698,7 +698,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         end
       end
   
-    end # class RubyHash
+    end # class Rash
 
   end # module Reader
 
@@ -739,7 +739,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     # Implements the Renderer contract through inspect
     #
-    class RubyHash < Renderer
+    class Rash < Renderer
   
       # @see Renderer#execute
       def execute(output = $stdout)
@@ -748,7 +748,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         end
       end
   
-    end # class RubyHash
+    end # class Rash
 
     # TODO: remove the require here
     autoload :Text, "alf/renderer/text"
@@ -790,7 +790,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       if r = requester
         # TODO: remove r.input.first hardcoding here
         chain = [
-          Renderer::RubyHash.new,
+          Renderer::Rash.new,
           self,
           r.input.first,
         ]

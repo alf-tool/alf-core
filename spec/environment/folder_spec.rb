@@ -11,7 +11,7 @@ class Alf
       
       describe "when called on existing" do
         let(:name){ "suppliers" }
-        it{ should be_a(Reader::RubyHash) }
+        it{ should be_a(Reader::Rash) }
       end
       
       describe "when called on unexisting" do
