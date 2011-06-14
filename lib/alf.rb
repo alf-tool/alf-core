@@ -721,6 +721,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Writer input
     attr_accessor :input
     
+    #
+    # Creates a renderer instance with an optional input
+    #
     def initialize(input = nil)
       @input = input
     end
@@ -747,6 +750,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
     end # class RubyHash
 
+    autoload :Text, "alf/renderer/text"
   end # module Renderer
 
   ############################################################################# OPERATORS
@@ -1928,5 +1932,3 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # Alf's options
 
 end # class Alf
-require "alf/renderer/text"
-require "alf/renderer/plot"
