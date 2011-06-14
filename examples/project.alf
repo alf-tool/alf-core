@@ -1,0 +1,2 @@
+#!/usr/bin/env alf
+(project :suppliers, [:name, :city])

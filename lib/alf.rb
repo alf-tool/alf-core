@@ -1953,6 +1953,39 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Show
 
   # 
+  # Executes an .alf file on current environment
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} [FILE]
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This command executes the .alf file passed as first argument (or what comes
+  # on standard input) as a alf query to be executed on the current environment.
+  #
+  class Exec < Factory::Command(__FILE__, __LINE__)
+    
+    def read(arg)
+      case arg
+      when IO
+        arg.readlines.join("\n")
+      when String
+        File.read(arg)
+      end
+    end
+    
+    def execute(args)
+      lines = read(args.first || $stdin)
+      query = requester.instance_eval(lines)
+      Renderer.text(query, $stdout)
+    end
+    
+  end # class Exec
+  
+  # 
   # Show help about a specific command
   #
   # SYNOPSIS
@@ -2019,5 +2052,5 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
                           " (c) 2011, Bernard Lambeau"
     end
   end # Alf's options
-
+  
 end # class Alf
