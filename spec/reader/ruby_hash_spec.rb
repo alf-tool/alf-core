@@ -7,11 +7,26 @@ class Alf
     let(:str)  { lines.collect{|s| s.inspect}.join("\n") }
     let(:io)   { StringIO.new(str) }
 
-    let(:reader){ Reader::RubyHash.new(io) }
+    describe "when called on a StringIO" do
+      
+      let(:reader){ Reader::RubyHash.new(io) }
+  
+      it "should be enumerable" do
+        reader.to_a.should == lines
+      end
 
-    it "should be enumerable" do
-      reader.to_a.should == lines
     end
+    
+    describe "when called on a String" do
+      
+      let(:file){ File.expand_path('../input.rb', __FILE__) }
+      let(:reader){ Reader::RubyHash.new(file) }
+  
+      it "should be enumerable" do
+        reader.to_a.should == lines
+      end
 
+    end
+    
   end
 end

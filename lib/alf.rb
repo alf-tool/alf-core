@@ -1,5 +1,6 @@
 def alf_required(retried)
   ["enumerator", 
+   "stringio", 
    "quickl"].each{|req| require req}
 rescue LoadError
   raise if retried
@@ -608,13 +609,26 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # may be overriden if this behavior does not fit reader's needs.
     #
     def each
-      input.each_line do |line| 
+      each_input_line do |line| 
         tuple = _line2tuple(line)
         yield tuple unless tuple.nil?
       end
     end
 
     protected
+    
+    def each_input_line
+      case input
+      when String
+        File.open(input, 'r') do |io|
+          io.each_line &Proc.new
+        end
+      when IO, StringIO
+        input.each_line &Proc.new
+      else 
+        raise "Unable to convert #{input} to an IO object"
+      end
+    end
 
     #
     # Converts a line previously read from the input stream to a tuple. 
