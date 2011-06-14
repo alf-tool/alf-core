@@ -750,7 +750,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
     end # class RubyHash
 
+    # TODO: remove the require here
     autoload :Text, "alf/renderer/text"
+    require "alf/renderer/plot"
   end # module Renderer
 
   ############################################################################# OPERATORS
