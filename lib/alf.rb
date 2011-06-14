@@ -701,17 +701,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected
     
-    def each_input_line
+    def with_input_io
       case input
-      when String
-        File.open(input, 'r') do |io|
-          io.each_line(&Proc.new)
-        end
       when IO, StringIO
-        input.each_line(&Proc.new)
-      else 
+        yield input
+      when String
+        File.open(input, 'r'){|io| yield io}
+      else
         raise "Unable to convert #{input} to an IO object"
       end
+    end
+    
+    def each_input_line
+      with_input_io{|io| io.each_line(&Proc.new)}
     end
 
     #
