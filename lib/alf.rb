@@ -870,6 +870,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end # class Rash
 
     require "alf/renderer/text"
+    require "alf/renderer/yaml"
   end # module Renderer
 
   ############################################################################# OPERATORS
