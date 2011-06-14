@@ -375,10 +375,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         # TODO: refactor this, because it allows getting out of the folder
         if File.exists?(name.to_s)
           name.to_s
-        elsif File.exists?(explicit = File.join(@folder, name.to_s))
+        elsif File.exists?(explicit = File.join(@folder, name.to_s)) &&
+              File.file?(explicit)
           explicit
         else
-          Dir[File.join(@folder, "**/#{name}.*")].first
+          Dir[File.join(@folder, "**/#{name}.*")].find do |f|
+            File.file?(f)
+          end
         end
       end
       

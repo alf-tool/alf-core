@@ -12,9 +12,15 @@ class Alf::Reader
     private
     
     def normalize(tuple)
-      return tuple unless tuple.is_a?(Hash)
-      tuple_collect(tuple) do |k,v|
-        [k.to_s.to_sym, normalize(v)]
+      case tuple
+      when Hash
+        tuple_collect(tuple) do |k,v|
+          [k.to_s.to_sym, normalize(v)]
+        end
+      when Array
+        tuple.collect{|x| normalize(x)}
+      else 
+        tuple
       end
     end
     
