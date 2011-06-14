@@ -424,6 +424,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       EOF
     end
 
+    def self.compile(expr, &block)
+      instance_eval(expr, &block)
+    end
+    
     #
     # Creates an Aggregator instance.
     #
@@ -1807,7 +1811,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see Operator#set_args
     def set_args(args)
       @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a.to_sym, Aggregator.instance_eval(expr)]
+        [a.to_sym, Aggregator.compile(expr)]
       end
       self
     end
@@ -1906,7 +1910,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # @see Operator#set_args
     def set_args(args)
       @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a.to_sym, Aggregator.instance_eval(expr)]
+        [a.to_sym, Aggregator.compile(expr)]
       end
       self
     end
