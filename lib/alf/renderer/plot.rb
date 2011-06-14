@@ -47,6 +47,7 @@ class Alf
         input.each do |tuple|
           buffer << Plot.to_plot(tuple).to_gplot << "\n"
         end
+        buffer
       end
 
     end # class Plot

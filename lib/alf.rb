@@ -731,6 +731,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Renderer
 
+    # Keeps the renderers
+    @@renderers = {}
+    
+    # Automatically installs rendering methods on the class itself
+    def self.inherited(clazz)
+      name = Tools.ruby_case(Tools.class_name(clazz)).to_sym
+      @@renderers[name] = clazz
+      (class << self; self; end).
+        send(:define_method, name) do |input, *args|
+          clazz.new(input).execute(*args)
+        end
+    end
+
     # Writer input
     attr_accessor :input
     
@@ -744,9 +757,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     # Executes the rendering, outputting the resulting tuples. 
     #
-    # This method must be implemented by subclasses.
+    # This method must be implemented by subclasses and must return the output
+    # buffer itself. 
     #
     def execute(output = $stdout)
+      output
     end
 
     #
@@ -759,6 +774,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         input.each do |tuple|
           output << tuple.inspect << "\n"
         end
+        output
       end
   
     end # class Rash

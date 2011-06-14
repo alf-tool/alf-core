@@ -128,6 +128,7 @@ class Alf
           }
           Table.new(records, attrs).render(buffer)
         end
+        buffer
       end
       
       def self.render(relation, buffer = "")
