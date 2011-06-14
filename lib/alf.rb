@@ -341,7 +341,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def to_iterator(arg)
       return arg if arg.is_a?(Array)
       return arg if arg.is_a?(Operator)
-      Reader.coerce(arg, environment)
+      env = respond_to?(:environment) ? environment : nil 
+      Reader.coerce(arg, env)
     end
     
     def pipe(*elements)
@@ -387,6 +388,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
     # Returns the default environment
     def self.default
+      Folder.new File.expand_path('../../examples', __FILE__)
+    end
+    
+    # Returns the examples environment
+    def self.examples
       Folder.new File.expand_path('../../examples', __FILE__)
     end
     
@@ -721,7 +727,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
     def input_text
-      with_input_io{|io| io.readlines.join("\n")}
+      with_input_io{|io| io.readlines.join}
     end
     
     def each_input_line
