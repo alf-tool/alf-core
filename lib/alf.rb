@@ -1609,8 +1609,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   # Assuming supplies as input
-  #   (group enum, [:pid, :qty], :supplying)
+  #   (group :supplies, [:pid, :qty], :supplying)
   #
   # DESCRIPTION
   #
@@ -1619,7 +1618,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes are taken from commandline arguments, expected the last one
   # which defines the new name to use:
   #
-  #   alf group pid qty supplying
+  #   alf --input=supplies group pid qty supplying
   #
   class Group < Factory::Operator(__FILE__, __LINE__)
 
