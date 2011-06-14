@@ -28,7 +28,7 @@ alf_required(false)
 class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
   # Alf's version 
-  VERSION = "1.0.0"
+  VERSION = "0.9.0"
 
   ############################################################################# TOOLS
   #
