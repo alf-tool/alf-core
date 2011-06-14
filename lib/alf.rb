@@ -335,20 +335,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Coerces _arg_ as something that can be piped, an iterator of tuples
     def to_iterator(arg)
-      case arg
-        when IO
-          Reader::rash(arg)
-        when Array, Reader, Operator
-          arg
-        when String, Symbol
-          if respond_to?(:environment)
-            environment.dataset(arg)
-          else
-            raise "No environment set"
-          end
-        else
-          raise ArgumentError, "Unable to pipe with #{arg.inspect}"
-      end
+      return arg if arg.is_a?(Array)
+      return arg if arg.is_a?(Operator)
+      Reader.coerce(arg, environment)
     end
     
     def pipe(*elements)
@@ -663,6 +652,25 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       x ? x.last : nil
     end
         
+    # Coerces an argument to a reader, using an optional environement
+    # to convert named datasets
+    def self.coerce(arg, environment = nil)
+      case arg
+      when Reader
+        arg
+      when IO
+        rash(arg)
+      when String, Symbol
+        if environment
+          environment.dataset(arg.to_sym)
+        else
+          raise "No environment set"
+        end
+      else
+        raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
+      end
+    end
+    
     # Input IO, or file name
     attr_accessor :input
 
