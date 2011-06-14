@@ -113,6 +113,39 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     extend Lispy
   end # module Lispy
 
+  #
+  # Encapsulates the interface with the outside world, providing base iterators
+  # among others.
+  # 
+  class Environment
+    
+    #
+    # Specialization of Environment to work on files of a given folder
+    #
+    class Folder < Environment
+      
+      def initialize(folder)
+        @folder = folder
+      end
+      
+      def dataset(name)
+        file = Dir[File.join(@folder, "**/#{name}.rb")].first
+        if file
+          Reader::RubyHash.new(file)
+        else
+          raise "No such dataset #{name}"
+        end
+      end
+      
+    end # class Folder
+    
+    # Returns the default environment
+    def self.default
+      Folder.new File.expand_path('../../examples', __FILE__)
+    end
+    
+  end # class Environment
+
   ############################################################################# TOOLS
   #
   # The following modules and classes provide tools for implementing dataflow
