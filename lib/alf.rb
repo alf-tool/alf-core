@@ -26,131 +26,9 @@ alf_required(false)
 # See '#{program_name} help COMMAND' for more information on a specific command.
 #
 class Alf < Quickl::Delegator(__FILE__, __LINE__)
-
-  ############################################################################# PUBLIC API
-  #
-  # Alf's public APIs are defined below. 
-  #
   
   # Alf's version 
   VERSION = "1.0.0"
-
-  #
-  # Provides a factory over Alf operators and handles the interface with
-  # Quickl for commandline support.
-  # 
-  module Factory
-
-    # @see Quickl::Command
-    def Command(file, line)
-      res = Quickl::Command(file, line)
-      Quickl.command_builder{|b| yield(b)} if block_given?
-      res
-    end
-
-    # @see Operator
-    def Operator(file, line)
-      Command(file, line) do |b|
-        b.instance_module Alf::Operator
-      end
-    end
-
-    extend Factory
-  end # module Factory
-  
-  # 
-  # Implements a small LISP-like DSL on top of Alf
-  #
-  module Lispy
-    
-    [:Defaults,
-     :NoDuplicates,
-     :Sort,
-     :Clip,
-     :Project,
-     :Extend, 
-     :Rename,
-     :Restrict,
-     :Nest,
-     :Unnest,
-     :Group,
-     :Ungroup,
-     :Summarize,
-     :Quota ].each do |op_name|
-      meth_name = op_name.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1].to_sym
-      define_method(meth_name) do |child, *args|
-        pipe(Alf.const_get(op_name).new(*args), child)
-      end
-    end
-
-    # @see Project
-    def allbut(child, attributes)
-      pipe(Project.new(attributes, true), child)
-    end
-
-    private
-
-    # Coerces _arg_ as something that can be piped, an iterator of tuples
-    def to_iterator(arg)
-      case arg
-        when IO
-          Reader::Rash.new(arg)
-        when Array, Reader, Operator
-          arg
-        when String, Symbol
-          if respond_to?(:environment)
-            environment.dataset(arg)
-          else
-            raise "No environment set"
-          end
-        else
-          raise ArgumentError, "Unable to pipe with #{arg.inspect}"
-      end
-    end
-    
-    def pipe(*elements)
-      elements = elements.reverse
-      elements[1..-1].inject(elements.first) do |chain, elm|
-        elm.input = to_iterator(chain)
-        elm
-      end
-    end
-
-    extend Lispy
-  end # module Lispy
-
-  #
-  # Encapsulates the interface with the outside world, providing base iterators
-  # among others.
-  # 
-  class Environment
-    
-    #
-    # Specialization of Environment to work on files of a given folder
-    #
-    class Folder < Environment
-      
-      def initialize(folder)
-        @folder = folder
-      end
-      
-      def dataset(name)
-        file = Dir[File.join(@folder, "**/#{name}.rb")].first
-        if file
-          Reader::Rash.new(file)
-        else
-          raise "No such dataset #{name}"
-        end
-      end
-      
-    end # class Folder
-    
-    # Returns the default environment
-    def self.default
-      Folder.new File.expand_path('../../examples', __FILE__)
-    end
-    
-  end # class Environment
 
   ############################################################################# TOOLS
   #
@@ -158,6 +36,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # elements.
   #
 
+  # Provides tooling 
+  module Tools
+    
+    def ruby_case(s)
+      s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
+    end
+    
+    extend Tools
+  end # module Tools
+  
   #
   # Provides a handle, implementing a flyweight design pattern on tuples.
   #
@@ -379,6 +267,128 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class OrderingKey
+
+  ############################################################################# PUBLIC API
+  #
+  # Alf's public APIs are defined below. 
+  #
+
+  #
+  # Provides a factory over Alf operators and handles the interface with
+  # Quickl for commandline support.
+  # 
+  module Factory
+
+    # @see Quickl::Command
+    def Command(file, line)
+      res = Quickl::Command(file, line)
+      Quickl.command_builder{|b| yield(b)} if block_given?
+      res
+    end
+
+    # @see Operator
+    def Operator(file, line)
+      Command(file, line) do |b|
+        b.instance_module Alf::Operator
+      end
+    end
+
+    extend Factory
+  end # module Factory
+  
+  # 
+  # Implements a small LISP-like DSL on top of Alf
+  #
+  module Lispy
+    
+    [:Defaults,
+     :NoDuplicates,
+     :Sort,
+     :Clip,
+     :Project,
+     :Extend, 
+     :Rename,
+     :Restrict,
+     :Nest,
+     :Unnest,
+     :Group,
+     :Ungroup,
+     :Summarize,
+     :Quota ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |child, *args|
+        pipe(Alf.const_get(op_name).new(*args), child)
+      end
+    end
+
+    # @see Project
+    def allbut(child, attributes)
+      pipe(Project.new(attributes, true), child)
+    end
+
+    private
+
+    # Coerces _arg_ as something that can be piped, an iterator of tuples
+    def to_iterator(arg)
+      case arg
+        when IO
+          Reader::Rash.new(arg)
+        when Array, Reader, Operator
+          arg
+        when String, Symbol
+          if respond_to?(:environment)
+            environment.dataset(arg)
+          else
+            raise "No environment set"
+          end
+        else
+          raise ArgumentError, "Unable to pipe with #{arg.inspect}"
+      end
+    end
+    
+    def pipe(*elements)
+      elements = elements.reverse
+      elements[1..-1].inject(elements.first) do |chain, elm|
+        elm.input = to_iterator(chain)
+        elm
+      end
+    end
+
+    extend Lispy
+  end # module Lispy
+
+  #
+  # Encapsulates the interface with the outside world, providing base iterators
+  # among others.
+  # 
+  class Environment
+    
+    #
+    # Specialization of Environment to work on files of a given folder
+    #
+    class Folder < Environment
+      
+      def initialize(folder)
+        @folder = folder
+      end
+      
+      def dataset(name)
+        file = Dir[File.join(@folder, "**/#{name}.rb")].first
+        if file
+          Reader::Rash.new(file)
+        else
+          raise "No such dataset #{name}"
+        end
+      end
+      
+    end # class Folder
+    
+    # Returns the default environment
+    def self.default
+      Folder.new File.expand_path('../../examples', __FILE__)
+    end
+    
+  end # class Environment
 
   ############################################################################# AGGREGATORS
   #
@@ -750,8 +760,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
     end # class Rash
 
-    # TODO: remove the require here
-    autoload :Text, "alf/renderer/text"
+    require "alf/renderer/text"
     require "alf/renderer/plot"
   end # module Renderer
 
