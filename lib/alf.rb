@@ -1892,8 +1892,23 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Below is alf main command
   #
 
+  # Environment instance to use to get base iterators
+  attr_reader :environment
+  
+  # Input dataset names
+  attr_reader :input
+  
+  # Creates a command instance
+  def initialize(env = Environment.default)
+    @environment = env
+  end
+  
   # Install options
   options do |opt|
+    opt.on('--input=x,y,z', 
+           'Specify input dataset names (defaults to stdin)', Array) do |input|
+      @input = input
+    end
     opt.on_tail("--help", "Show help") do
       raise Quickl::Help
     end
