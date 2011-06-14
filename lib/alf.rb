@@ -788,6 +788,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       Reader.register(:alf, [".alf"], self)
     end # class AlfFile
 
+    require "alf/reader/yaml"
   end # module Reader
 
   ############################################################################# RENDERERS
