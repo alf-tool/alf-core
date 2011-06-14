@@ -1342,8 +1342,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (extend enum, :total => lambda{ qty * price },
-  #                 :big   => lambda{ qty > 100 ? true : false }) 
+  #   (extend :supplies, :sp  => lambda{ "#{sid}/#{pid}" },
+  #                      :big => lambda{ qty > 100 ? true : false }) 
   #
   # DESCRIPTION
   #
@@ -1353,7 +1353,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # in shell, the hash of extensions is built from commandline arguments ala
   # Hash[...]. Tuple expressions must be specified as code literals there:
   #
-  #   alf extend total "qty * price" big "qty > 100 ? true : false"
+  #   alf --input=supplies extend sp '"#{sid}/#{pid}"' big "qty > 100 ? true : false"
   #
   # Attributes ATTRx should not already exist, no behavior is guaranteed if 
   # this precondition is not respected.   
@@ -1610,7 +1610,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # API & EXAMPLE
   #
   #   # Assuming supplies as input
-  #   (group enum, [:part_id, :quantity], :supplying)
+  #   (group enum, [:pid, :qty], :supplying)
   #
   # DESCRIPTION
   #
@@ -1619,7 +1619,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes are taken from commandline arguments, expected the last one
   # which defines the new name to use:
   #
-  #   alf group part_id quantity supplying
+  #   alf group pid qty supplying
   #
   class Group < Factory::Operator(__FILE__, __LINE__)
 
@@ -1671,7 +1671,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   # On result of (group enum, [:part_id, :quantity], :supplying)
+  #   # On result of (group enum, [:pid, :qty], :supplying)
   #   (ungroup enum, :supplying)
   #
   # DESCRIPTION
@@ -1726,8 +1726,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (summarize enum, [:supplier_id],
-  #                    :total_qty => Aggregator.sum(:quantity))
+  #   (summarize enum, [:sid],
+  #                    :total_qty => Aggregator.sum(:qty))
   #
   # DESCRIPTION
   #
@@ -1739,7 +1739,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
   # aggregation expression evaluated on Aggregator:
   #
-  #   alf summarize --by=supplier_id total_qty "sum(:quantity)" 
+  #   alf summarize --by=sid total_qty "sum(:qty)" 
   #
   class Summarize < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut
@@ -1826,15 +1826,15 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (quota enum, [:supplier_id], [:quantity],
+  #   (quota enum, [:sid], [:qty],
   #                :position => Aggregator.count,
-  #                :sum_qty  => Aggregator.sum(:quantity))
+  #                :sum_qty  => Aggregator.sum(:qty))
   #
   # DESCRIPTION
   #
   # This operator computes quota values on input tuples.
   #
-  #   alf quota --by=supplier_id --order=quantity position count sum_qty "sum(:qty)"
+  #   alf quota --by=sid --order=qty position count sum_qty "sum(:qty)"
   #
   class Quota < Factory::Operator(__FILE__, __LINE__)
     include Operator::Cesure
