@@ -1451,10 +1451,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # API & EXAMPLE
   #
   #   # Restrict to suppliers with status greater than 20
-  #   (restrict enum, lambda{ status > 20 })
+  #   (restrict :suppliers, lambda{ status > 20 })
   #
   #   # Restrict to suppliers that live in London
-  #   (restrict enum, lambda{ city == 'London' })
+  #   (restrict :suppliers, lambda{ city == 'London' })
   #
   # DESCRIPTION
   #
@@ -1465,8 +1465,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Note that, in that case, values are expected to be ruby code literals,
   # evaluated with Kernel.eval. Therefore, strings must be doubly quoted.  
   #
-  #   alf restrict "status > 20"
-  #   alf restrict city "'London'"
+  #   alf --input=suppliers restrict "status > 20"
+  #   alf --input=suppliers restrict city "'London'"
   #
   class Restrict < Factory::Operator(__FILE__, __LINE__)
 

@@ -1,0 +1,2 @@
+#!/usr/bin/env alf
+(restrict :suppliers, lambda{ status > 20 })
