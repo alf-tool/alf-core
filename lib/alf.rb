@@ -744,6 +744,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         end
     end
 
+    # Yields each (name,clazz) registered renderer pairs in turn
+    def self.each_renderer_pair
+      @@renderers.each_pair(&Proc.new)
+    end
+    
     # Writer input
     attr_accessor :input
     
@@ -1878,6 +1883,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # SYNOPSIS
   #   #{program_name} #{command_name} [DATASET...]
   #
+  # OPTIONS
+  # #{summarized_options}
+  #
   # DESCRIPTION
   #
   # When dataset names are specified as commandline args, request the environment 
@@ -1887,7 +1895,14 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Note that this command is not an operator and should not be piped anymore.
   #
   class Show < Factory::Command(__FILE__, __LINE__)
-  
+
+    options do |opt|
+      @renderer = Renderer::Text
+      Renderer.each_renderer_pair do |name,clazz|
+        opt.on("--#{name}", "Render output in #{name}"){ @renderer = clazz }
+      end
+    end
+      
     def execute(args)
       args = if args.empty?
         requester.input
@@ -1896,7 +1911,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
       args.each do |input|
         chain = [
-          Renderer::Text.new,
+          @renderer.new,
           input
         ]
         requester.send(:pipe, *chain).execute($stdout)
