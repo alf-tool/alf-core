@@ -732,12 +732,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   class Renderer
 
     # Keeps the renderers
-    @@renderers = {}
+    @@renderers = []
     
     # Automatically installs rendering methods on the class itself
-    def self.inherited(clazz)
-      name = Tools.ruby_case(Tools.class_name(clazz)).to_sym
-      @@renderers[name] = clazz
+    def self.register(name, description, clazz)
+      @@renderers << [name, description, clazz]
       (class << self; self; end).
         send(:define_method, name) do |input, *args|
           clazz.new(input).execute(*args)
@@ -745,8 +744,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # Yields each (name,clazz) registered renderer pairs in turn
-    def self.each_renderer_pair
-      @@renderers.each_pair(&Proc.new)
+    def self.each_renderer
+      @@renderers.each(&Proc.new)
     end
     
     # Writer input
@@ -782,6 +781,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         output
       end
   
+      Renderer.register("rash", "as ruby hashes", self)
     end # class Rash
 
     require "alf/renderer/text"
@@ -1898,8 +1898,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     options do |opt|
       @renderer = Renderer::Text
-      Renderer.each_renderer_pair do |name,clazz|
-        opt.on("--#{name}", "Render output in #{name}"){ @renderer = clazz }
+      Renderer.each_renderer do |name,descr,clazz|
+        opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz }
       end
     end
       
