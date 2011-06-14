@@ -97,6 +97,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           Reader::RubyHash.new(arg)
         when Array, Reader, Operator
           arg
+        when String, Symbol
+          if respond_to?(:environment)
+            environment.dataset(arg)
+          else
+            raise "No environment set"
+          end
         else
           raise ArgumentError, "Unable to pipe with #{arg.inspect}"
       end
@@ -775,10 +781,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     def execute(args)
       set_args(args)
-      [ Reader::RubyHash.new, self, Renderer::RubyHash.new ].inject($stdin) do |chain,n|
-        n.input = chain
-        n
-      end.execute($stdout)
+      if r = requester
+        chain = [
+          Renderer::RubyHash.new,
+          self,
+          r.input.first,
+        ]
+        r.send(:pipe, *chain).execute($stdout)
+      else
+        self
+      end
     end
 
     #
@@ -1891,6 +1903,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # Below is alf main command
   #
+  include Lispy
 
   # Environment instance to use to get base iterators
   attr_reader :environment
@@ -1905,6 +1918,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
   # Install options
   options do |opt|
+    @input = [ $stdin ]
     opt.on('--input=x,y,z', 
            'Specify input dataset names (defaults to stdin)', Array) do |input|
       @input = input
