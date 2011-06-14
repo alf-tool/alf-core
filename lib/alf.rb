@@ -1342,7 +1342,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (extend :supplies, :sp  => lambda{ "#{sid}/#{pid}" },
+  #   (extend :supplies, :sp  => lambda{ sid + "/" + pid },
   #                      :big => lambda{ qty > 100 ? true : false }) 
   #
   # DESCRIPTION
@@ -1353,7 +1353,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # in shell, the hash of extensions is built from commandline arguments ala
   # Hash[...]. Tuple expressions must be specified as code literals there:
   #
-  #   alf --input=supplies extend sp '"#{sid}/#{pid}"' big "qty > 100 ? true : false"
+  #   alf --input=supplies extend sp 'sid + "/" + pid' big "qty > 100 ? true : false"
   #
   # Attributes ATTRx should not already exist, no behavior is guaranteed if 
   # this precondition is not respected.   
@@ -1404,7 +1404,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (rename enum, :name => :supplier_name, :city => supplied_city)
+  #   (rename :suppliers, :name => :supplier_name, :city => :supplier_city)
   #
   # DESCRIPTION
   #
@@ -1413,7 +1413,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # not. When used in shell, renaming attributes are built ala Hash[...] from
   # commandline arguments: 
   #
-  #   alf rename name supplier_name city supplier_city
+  #   alf --input=suppliers rename name supplier_name city supplier_city
   #
   class Rename < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
