@@ -1838,48 +1838,37 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
 
   # 
-  # Render input tuples with a given strategy
+  # Show input tuples in a friendly text rendering
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} [DATASET...]
   #
-  # OPTIONS
-  # #{summarized_options}
+  # DESCRIPTION
   #
-  class Render < Factory::Command(__FILE__, __LINE__)
-  
-    options do |opt|
-      @output = :ruby
-      opt.on("--ruby", "Render as ruby hashes"){ @output = :ruby }
-      opt.on("--text", "Render as a text table"){ @output = :text }
-      opt.on("--yaml", "Render as yaml"){ @output = :yaml }
-      opt.on("--plot", "Render as a plot"){ @output = :plot }
-    end
-  
-    def output(res)
-      case @output
-        when :text
-          Renderer::Text.render(res.to_a, $stdout)
-        when :yaml
-          require 'yaml'
-          $stdout << res.to_a.to_yaml
-        when :plot
-          Renderer::Plot.render(res.to_a, $stdout)
-        when :ruby
-          res.each{|t| $stdout << t.inspect << "\n"}
-      end
-    end
+  # When dataset names are specified as commandline args, request the environment 
+  # to provide those datasets and print them. Otherwise, take what alf main command 
+  # would provide from its --input option (defaults to stdin).
+  #
+  # Note that this command is not an operator and should not be piped anymore.
+  #
+  class Show < Factory::Command(__FILE__, __LINE__)
   
     def execute(args)
-      if r = requester
-        chain = r.send(:to_iterator, r.input.first)
-        output chain
+      args = if args.empty?
+        requester.input
       else
-        self
+        args
+      end
+      args.each do |input|
+        chain = [
+          Renderer::Text.new,
+          input
+        ]
+        requester.send(:pipe, *chain).execute($stdout)
       end
     end
   
-  end # class Render
+  end # class Show
 
   # 
   # Show help about a specific command
