@@ -39,6 +39,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Provides tooling 
   module Tools
     
+    def class_name(clazz)
+      clazz.name.to_s =~ /([A-Za-z0-9_]+)$/
+      $1.to_sym
+    end
+    
     def ruby_case(s)
       s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
     end
@@ -414,9 +419,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #   Aggregator.sum{ size }  # idem but works on any tuple expression
     # 
     def self.inherited(clazz)
-      # TODO: refactor this to use define_method
-      clazz.name.to_s =~ /([A-Za-z0-9_]+)$/
-      basename = $1.downcase.to_sym
+      basename = Tools.ruby_case(Tools.class_name(clazz))
       instance_eval <<-EOF
         def #{basename}(*args, &block)
           #{clazz}.new(*args, &block)
