@@ -743,6 +743,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         end
     end
 
+    # Returns the names of registered renderers
+    def self.renderer_names
+      @@renderers.collect{|x| x.first}
+    end
+    
+    # Returns a renderer class by its name
+    def self.renderer_by_name(name)
+      @@renderers.find{|x| x.first.to_s == name.to_s}.last
+    end
+    
     # Yields each (name,clazz) registered renderer pairs in turn
     def self.each_renderer
       @@renderers.each(&Proc.new)
@@ -781,7 +791,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         output
       end
   
-      Renderer.register("rash", "as ruby hashes", self)
+      Renderer.register(:rash, "as ruby hashes", self)
     end # class Rash
 
     require "alf/renderer/text"
@@ -823,7 +833,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       if r = requester
         # TODO: remove r.input.first hardcoding here
         chain = [
-          Renderer::Rash.new,
+          r.renderer,
           self,
           r.input.first,
         ]
@@ -1951,9 +1961,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
   # Environment instance to use to get base iterators
   attr_reader :environment
-  
+
   # Input dataset names
   attr_reader :input
+  
+  # Output renderer
+  attr_reader :renderer
   
   # Creates a command instance
   def initialize(env = Environment.default)
@@ -1962,14 +1975,23 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
   # Install options
   options do |opt|
+    @renderer = Renderer::Rash
+    names = Renderer.renderer_names
+    opt.on('--render=RENDERER', names.collect{|n| n.to_sym},
+           "Specify the renderer to use (#{names.join(', ')})") do |name|
+      @renderer = Renderer.renderer_by_name(name).new
+    end
+    
     @input = [ $stdin ]
     opt.on('--input=x,y,z', 
            'Specify input dataset names (defaults to stdin)', Array) do |input|
       @input = input
     end
+    
     opt.on_tail("--help", "Show help") do
       raise Quickl::Help
     end
+    
     opt.on_tail("--version", "Show version") do
       raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
                           " (c) 2011, Bernard Lambeau"

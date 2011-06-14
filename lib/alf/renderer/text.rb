@@ -135,7 +135,7 @@ class Alf
         new(relation).execute(buffer)
       end
       
-      Renderer.register("text", "as a text table",  self)
+      Renderer.register(:text, "as a text table",  self)
     end # class Text
   end # class Renderer
 end # class Alf
