@@ -1725,8 +1725,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (summarize enum, [:sid],
-  #                    :total_qty => Aggregator.sum(:qty))
+  #   (summarize :supplies, [:sid],
+  #                         :total_qty => Aggregator.sum(:qty))
   #
   # DESCRIPTION
   #
@@ -1738,7 +1738,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
   # aggregation expression evaluated on Aggregator:
   #
-  #   alf summarize --by=sid total_qty "sum(:qty)" 
+  #   alf --input=supplies summarize --by=sid total_qty "sum(:qty)" 
   #
   class Summarize < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut

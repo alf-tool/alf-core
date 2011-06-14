@@ -1,0 +1,3 @@
+#!/usr/bin/env alf
+(summarize :supplies, [:sid],
+                      :total_qty => Aggregator.sum(:qty))
