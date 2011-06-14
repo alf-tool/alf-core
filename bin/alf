@@ -1,4 +1,8 @@
 #!/usr/bin/env ruby
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require "alf"
+if ARGV.empty? or 
+   (ARGV.size == 1 && File.exists?(ARGV.first))
+  ARGV.unshift "exec"
+end
 Alf.run(ARGV, __FILE__)
