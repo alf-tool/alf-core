@@ -1,0 +1,28 @@
+logical: 
+  - name: suppliers
+    heading:
+      - { name: sid,    domain: String,   mandatory: true }
+      - { name: name,   domain: String,   mandatory: true }
+      - { name: status, domain: Integer,  mandatory: true }
+      - { name: city,   domain: String,   mandatory: true }
+    constraints: 
+      - { name: pk, type: primary_key, attributes: [ sid ] }
+  - name: parts
+    heading:
+      - { name: pid,    domain: String,   mandatory: true }
+      - { name: name,   domain: String,   mandatory: true }
+      - { name: color,  domain: String,   mandatory: true }
+      - { name: weight, domain: Float,    mandatory: true }
+      - { name: city,   domain: String,   mandatory: true }
+    constraints: 
+      - { name: pk, type: primary_key, attributes: [ pid ] }
+  - name: supplies
+    heading:
+      - { name: sid,    domain: String,   mandatory: true }
+      - { name: pid,    domain: String,   mandatory: true }
+      - { name: qty,    domain: Integer,  mandatory: true }
+    constraints: 
+      - { name: pk, type: primary_key, attributes: [ sid, pid ] }
+      - { name: known_supplier, type: foreign_key, attributes: [ sid ], references: suppliers }
+      - { name: known_part,     type: foreign_key, attributes: [ pid ], references: parts }
+      
