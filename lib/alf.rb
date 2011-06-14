@@ -1509,7 +1509,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (nest enum, [:city, :status], :loc_and_status)
+  #   (nest :suppliers, [:city, :status], :loc_and_status)
   #
   # DESCRIPTION
   #
@@ -1518,7 +1518,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes are taken from commandline arguments, expected the last one
   # which defines the new name to use:
   #
-  #   alf nest city status loc_and_status
+  #   alf --input=suppliers nest city status loc_and_status
   #
   class Nest < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
