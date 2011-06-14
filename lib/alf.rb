@@ -1608,8 +1608,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   # On result of (nest :suppliers, [:city, :status], :loc_and_status) 
-  #   (unnest enum, :loc_and_status)
+  #   # Assuming nested = (nest :suppliers, [:city, :status], :loc_and_status) 
+  #   (unnest nested, :loc_and_status)
   #
   # DESCRIPTION
   #
@@ -1618,7 +1618,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # no name collision occurs. When used in shell, the name of the attribute to
   # unnest is taken as the first commandline argument:
   #
-  #   alf --input=... unnest loc_and_status
+  #   alf --input=nest unnest loc_and_status
   #
   class Unnest < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
@@ -1717,8 +1717,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   # On result of (group enum, [:pid, :qty], :supplying)
-  #   (ungroup ..., :supplying)
+  #   # Assuming grouped = (group enum, [:pid, :qty], :supplying)
+  #   (ungroup grouped, :supplying)
   #
   # DESCRIPTION
   #
@@ -1728,7 +1728,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # used in shell, the name of the attribute to ungroup is taken as the first 
   # commandline argument:
   #
-  #   alf --input=... ungroup supplying
+  #   alf --input=group ungroup supplying
   #
   class Ungroup < Factory::Operator(__FILE__, __LINE__)
 
