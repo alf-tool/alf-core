@@ -1871,7 +1871,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
   
     def execute(args)
-      output Reader::RubyHash.new($stdin)
+      if r = requester
+        chain = r.send(:to_iterator, r.input.first)
+        output chain
+      else
+        self
+      end
     end
   
   end # class Render
