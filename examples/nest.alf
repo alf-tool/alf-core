@@ -1,0 +1,2 @@
+#!/usr/bin/env alf
+(nest :suppliers, [:city, :status], :loc_and_status)
