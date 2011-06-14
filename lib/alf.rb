@@ -652,7 +652,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         clazz.new(*args)
       end
     end
-    
+
+    # Returns a reader instance for a given file extension
+    def self.reader_class_by_file_extension(ext)
+      x = @@readers.find{|r| r[1].include?(ext)}
+      x ? x.last : nil
+    end
+        
     # Input IO, or file name
     attr_accessor :input
 
