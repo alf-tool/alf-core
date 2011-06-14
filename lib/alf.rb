@@ -306,6 +306,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   module Lispy
     
+    def compile(expr, &block)
+      instance_eval(expr, &block)
+    end
+    
     [:Defaults,
      :NoDuplicates,
      :Sort,
@@ -767,7 +771,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       
       # @see Reader#each
       def each
-        op = Alf.new(environment).instance_eval input_text
+        op = Alf.new(environment).compile(input_text)
         op.each(&Proc.new)
       end
       
@@ -2006,18 +2010,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Exec < Factory::Command(__FILE__, __LINE__)
     
-    def read(arg)
-      case arg
-      when IO
-        arg.readlines.join("\n")
-      when String
-        File.read(arg)
-      end
-    end
-    
     def execute(args)
-      query = requester.instance_eval(read(args.first || $stdin))
-      chain = [ requester.renderer, query ]
+      chain = [ 
+        requester.renderer, 
+        Reader.alf_file(args.first || $stdin, requester)
+      ]
       requester.send(:pipe, *chain).execute($stdout)
     end
     
