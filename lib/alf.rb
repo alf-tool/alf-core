@@ -1978,9 +1978,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
     def execute(args)
-      lines = read(args.first || $stdin)
-      query = requester.instance_eval(lines)
-      Renderer.text(query, $stdout)
+      query = requester.instance_eval(read(args.first || $stdin))
+      chain = [ requester.renderer, query ]
+      requester.send(:pipe, *chain).execute($stdout)
     end
     
   end # class Exec
