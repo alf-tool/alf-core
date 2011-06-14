@@ -1,0 +1,4 @@
+#!/usr/bin/env alf 
+(unnest \
+  (nest :suppliers, [:city, :status], :loc_and_status), 
+  :loc_and_status)

@@ -1561,7 +1561,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   # On result of (nest enum, [:city, :status], :loc_and_status) 
+  #   # On result of (nest :suppliers, [:city, :status], :loc_and_status) 
   #   (unnest enum, :loc_and_status)
   #
   # DESCRIPTION
@@ -1571,7 +1571,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # no name collision occurs. When used in shell, the name of the attribute to
   # unnest is taken as the first commandline argument:
   #
-  #   alf unnest loc_and_status
+  #   alf --input=... unnest loc_and_status
   #
   class Unnest < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
