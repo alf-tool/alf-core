@@ -782,6 +782,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def execute(args)
       set_args(args)
       if r = requester
+        # TODO: remove r.input.first hardcoding here
         chain = [
           Renderer::RubyHash.new,
           self,
