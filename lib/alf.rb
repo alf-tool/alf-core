@@ -337,7 +337,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def to_iterator(arg)
       case arg
         when IO
-          Reader::Rash.new(arg)
+          Reader::rash(arg)
         when Array, Reader, Operator
           arg
         when String, Symbol
@@ -380,7 +380,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       def dataset(name)
         file = Dir[File.join(@folder, "**/#{name}.rb")].first
         if file
-          Reader::Rash.new(file)
+          Reader::rash(file)
         else
           raise "No such dataset #{name}"
         end
@@ -641,6 +641,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   class Reader
     include Enumerable
+
+    # Registered readers
+    @@readers = []
+    
+    # Registers a reader associated with specific file extensions    
+    def self.register(name, extensions, clazz)
+      @@readers << [name, extensions, clazz]
+      (class << self; self; end).send(:define_method, name) do |*args|
+        clazz.new(*args)
+      end
+    end
     
     # Input IO, or file name
     attr_accessor :input
@@ -710,7 +721,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           return h
         end
       end
-  
+
+      Reader.register(:rash, [".rash"], self)  
     end # class Rash
 
   end # module Reader
