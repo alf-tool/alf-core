@@ -10,10 +10,11 @@ end
 alf_required(false)
 
 #
-# alf - A commandline tool for relational inspired data manipulation
+# alf - Classy data-manipulation dressed in a DSL (+ commandline)
 #
 # SYNOPSIS
 #   #{program_name} [--version] [--help] 
+#   #{program_name} [FILE.alf]
 #   #{program_name} help COMMAND
 #   #{program_name} COMMAND [cmd opts] ARGS ...
 #
