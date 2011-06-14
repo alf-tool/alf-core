@@ -370,7 +370,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         if file = Dir[File.join(@folder, "**/#{name}.*")].first
           ext = File.extname(file)
           if clazz = Reader.reader_class_by_file_extension(ext)
-            clazz.new(file)
+            clazz.new(file, self)
           else
             raise "No reader associated to extension '#{ext}' (#{file})"
           end
@@ -659,7 +659,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       when Reader
         arg
       when IO
-        rash(arg)
+        rash(arg, environment)
       when String, Symbol
         if environment
           environment.dataset(arg.to_sym)
@@ -671,14 +671,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
     
+    # Environment instance
+    attr_accessor :environment
+
     # Input IO, or file name
     attr_accessor :input
 
-    #
     # Creates a reader instance, with an optional input
     #
-    def initialize(input = nil)
+    def initialize(input = nil, environment = nil)
       @input = input
+      @environment = environment 
     end
 
     #
