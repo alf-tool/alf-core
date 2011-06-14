@@ -371,8 +371,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         @folder = folder
       end
       
+      def find_file(name)
+        # TODO: refactor this, because it allows getting out of the folder
+        if File.exists?(name.to_s)
+          name.to_s
+        elsif File.exists?(explicit = File.join(@folder, name.to_s))
+          explicit
+        else
+          Dir[File.join(@folder, "**/#{name}.*")].first
+        end
+      end
+      
       def dataset(name)
-        if file = Dir[File.join(@folder, "**/#{name}.*")].first
+        if file = find_file(name)
           ext = File.extname(file)
           if clazz = Reader.reader_class_by_file_extension(ext)
             clazz.new(file, self)

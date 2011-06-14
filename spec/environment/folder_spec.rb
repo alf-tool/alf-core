@@ -9,6 +9,11 @@ class Alf
       
       subject{ env.dataset(name) }
       
+      describe "when called on explicit file" do
+        let(:name){ "suppliers.rash" }
+        it{ should be_a(Reader::Rash) }
+      end
+      
       describe "when called on existing" do
         let(:name){ "suppliers" }
         it{ should be_a(Reader::Rash) }
