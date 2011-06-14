@@ -1825,15 +1825,15 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (quota enum, [:sid], [:qty],
-  #                :position => Aggregator.count,
-  #                :sum_qty  => Aggregator.sum(:qty))
+  #   (quota :supplies, [:sid], [:qty],
+  #                     :position => Aggregator.count,
+  #                     :sum_qty  => Aggregator.sum(:qty))
   #
   # DESCRIPTION
   #
   # This operator computes quota values on input tuples.
   #
-  #   alf quota --by=sid --order=qty position count sum_qty "sum(:qty)"
+  #   alf --input=supplies quota --by=sid --order=qty position count sum_qty "sum(:qty)"
   #
   class Quota < Factory::Operator(__FILE__, __LINE__)
     include Operator::Cesure
