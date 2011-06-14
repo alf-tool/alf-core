@@ -712,6 +712,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
     
+    def input_text
+      with_input_io{|io| io.readlines.join("\n")}
+    end
+    
     def each_input_line
       with_input_io{|io| io.each_line(&Proc.new)}
     end
@@ -727,8 +731,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     #
-    # Implements the Reader contract for a stream where each line is a ruby 
-    # hash literal (taken as a tuple physical representation).
+    # Specialization of the Reader contract for .rash files.
+    #
+    # A .rash file/stream contains one ruby hash literal on each line (taken as 
+    # a tuple physical representation). This reader simply decodes each of them 
+    # in turn with Kernel.eval, providing a state-less reader (in the sense 
+    # that tuples are not all loaded in memory). 
     #
     class Rash < Reader
   
@@ -747,6 +755,24 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
       Reader.register(:rash, [".rash"], self)  
     end # class Rash
+
+    #
+    # Specialization of the Reader contrat for .alf files.
+    #
+    # A .alf file simply contains a query expression in the Lispy DSL. This
+    # reader decodes and compile the expression and delegates the enumeration
+    # to the obtained operator.
+    #
+    class AlfFile < Reader
+      
+      # @see Reader#each
+      def each
+        op = Alf.new(environment).instance_eval input_text
+        op.each(&Proc.new)
+      end
+      
+      Reader.register(:alf, [".alf"], self)
+    end # class AlfFile
 
   end # module Reader
 
