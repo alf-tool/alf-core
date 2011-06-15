@@ -48,6 +48,14 @@ class Alf
         it { should == expected }
       end
     end
+    
+    describe "when no attributes are in common" do
+      before{ operator.datasets = [statuses, countries] }
+      let(:expected){
+        statuses.collect{|s| countries.collect{|c| c.merge(s)}}.flatten
+      }
+      it { should == expected }
+    end
 
   end 
 end
