@@ -762,6 +762,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @environment = environment 
     end
 
+    # 
+    # Sets the reader input
+    #
+    def pipe(input, env = environment)
+      @input = input
+    end
+    
     #
     # Yields the block with each tuple (converted from the input stream) in 
     # turn.
@@ -908,6 +915,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @input = input
     end
     
+    # 
+    # Sets the renderer input
+    #
+    def pipe(input, env = environment)
+      @input = Iterator.coerce(input, env)
+    end
+
     #
     # Executes the rendering, outputting the resulting tuples. 
     #
@@ -958,6 +972,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     def input=(*datasets)
       @datasets = datasets
+    end
+    
+    # 
+    # Sets the operator input
+    #
+    def pipe(input, env = environment)
+      raise NotImplementedError, "Operator#pipe should be overriden"
     end
     
     #
@@ -1025,6 +1046,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     module Unary
       include Operator 
       
+      # 
+      # Sets the operator input
+      #
+      def pipe(input, env = environment)
+        self.datasets = [ Iterator.coerce(input, env) ]
+      end
+
       #
       # Simply returns the first dataset
       #
@@ -1042,6 +1070,34 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
       
     end # module Unary
+    
+    # 
+    # Specialization of Operator for operators that work on a binary input
+    #
+    module Binary
+      include Operator 
+      
+      # Returns the left operand
+      def left
+        datasets.first
+      end
+      
+      # Returns the right operand
+      def right
+        datasets.last
+      end
+      
+      # 
+      # Sets the operator input
+      #
+      def pipe(input, env = environment)
+        unless input.is_a?(Array) && (input.size == 2)
+          raise ArgumentError, "Array of two iterators expected, #{input} found"
+        end
+        self.datasets = input.collect{|a| Iterator.coerce(a, env)}
+      end
+
+    end # module Binary
     
     #
     # Specialization of Operator for operators that simply convert single tuples 
@@ -2085,7 +2141,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     include Operator::Shortcut
     
     class HashBased
-      include Alf::Operator
+      include Operator::Binary
     
       class JoinBuffer
         
@@ -2117,14 +2173,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
       
       protected
-      
-      def left
-        datasets.first
-      end
-      
-      def right
-        datasets.last
-      end
       
       def _each
         buffer = JoinBuffer.new(right)
