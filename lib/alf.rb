@@ -958,13 +958,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Optional environment
     attr_accessor :environment
     
-    #
-    # Sets the operator input. 
-    #
-    def input=(*datasets)
-      @datasets = datasets
-    end
-    
     # 
     # Sets the operator input
     #
