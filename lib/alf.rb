@@ -23,12 +23,12 @@ alf_required(false)
 #
 # RELATIONAL COMMANDS
 # #{summarized_subcommands subcommands.select{|cmd| 
-#     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
+#     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
 # }}
 #
-# NON RELATIONAL COMMANDS
+# NON-RELATIONAL COMMANDS
 # #{summarized_subcommands subcommands.select{|cmd| 
-#     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
+#     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
 # }}
 #
 # OTHER NON-RELATIONAL COMMANDS
@@ -1353,7 +1353,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Compact
 
   # 
-  # Sort input tuples according to a sort key
+  # Sort input tuples according to an order relation
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ORDER1 ATTR2 ORDER2...
@@ -1418,7 +1418,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Sort
 
   # 
-  # Clip input tuples to some attributes only
+  # Clip input tuples to a subset of attributes
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ATTR2 ...
@@ -1489,7 +1489,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   ################################################################## relational
 
   # 
-  # Relational projection
+  # Relational projection (clip + compact)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ATTR2 ...
@@ -1558,7 +1558,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
   end # class Project
   
-  # Extend input tuples with attributes whose value is computed
+  #
+  # Relational extension (additional, computed attributes)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 EXPR1 ATTR2 EXPR2...
@@ -1617,7 +1618,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Extend
 
   # 
-  # Rename attributes
+  # Relational renaming (rename some attributes)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} OLD1 NEW1 ...
@@ -1665,7 +1666,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Rename
 
   # 
-  # Restrict input tuples to those to which a predicate evaluates to true
+  # Relational restriction (aka where, predicate filtering)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} EXPR
@@ -1848,7 +1849,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Union
   
   # 
-  # Nest some attributes as a new TUPLE-valued attribute
+  # Relational nesting (tuple-valued attributes)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
@@ -1900,7 +1901,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Nest
 
   # 
-  # Unnest a TUPLE-valued attribute
+  # Relational un-nesting (inverse of nest)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR
@@ -1948,7 +1949,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Unnest
 
   # 
-  # Group some attributes as a new RELATION-valued attribute
+  # Relational grouping (relation-valued attributes)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
@@ -2020,7 +2021,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Group
 
   # 
-  # Ungroup a RELATION-valued attribute
+  # Relational un-grouping (inverse of group)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR
@@ -2073,7 +2074,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Ungroup
 
   # 
-  # Summarize tuples by a key and compute aggregations
+  # Relational summarization (group-by + aggregate ops)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} --by=KEY1,KEY2... AGG1 EXPR1...
@@ -2173,7 +2174,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Summarize
 
   # 
-  # Compute quota values on input tuples
+  # Relational quota-queries (position, sum progression, etc.)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} --by=KEY1,... --order=OR1... AGG1 EXPR1...
@@ -2283,7 +2284,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
 
   # 
-  # Output input tuples through a specific renderer
+  # Output input tuples through a specific renderer (text, yaml, ...)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} [DATASET...]
