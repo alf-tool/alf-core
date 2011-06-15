@@ -335,7 +335,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def chain(*elements)
       elements = elements.reverse
       elements[1..-1].inject(elements.first) do |c, elm|
-        elm.datasets = to_datasets(c)
+        elm.pipe(c, _the_env)
         elm
       end
     end
@@ -369,18 +369,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     def _the_env
       respond_to?(:environment) ? environment : nil
-    end
-    
-    def to_datasets(arg)
-      if arg.is_a?(Array)
-        if arg.empty? || arg.first.is_a?(Hash)  
-          [ arg ]
-        else
-          arg.collect{|x| iterator(x)}
-        end
-      else
-        [ iterator(arg) ]
-      end
     end
     
     extend Lispy
@@ -1053,6 +1041,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       # Sets the operator input
       #
       def pipe(input, env = environment)
+        self.environment = env
         self.datasets = [ Iterator.coerce(input, env) ]
       end
 
@@ -1097,6 +1086,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         unless input.is_a?(Array) && (input.size == 2)
           raise ArgumentError, "Array of two iterators expected, #{input} found"
         end
+        self.environment = env
         self.datasets = input.collect{|a| Iterator.coerce(a, env)}
       end
 
@@ -1175,6 +1165,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       # Sets the operator input
       #
       def pipe(input, env = environment)
+        self.environment = env
         self.datasets = input
       end
       
