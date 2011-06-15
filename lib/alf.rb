@@ -964,20 +964,28 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # 
-    # Yields the block with each input tuple.
+    # Specialization of Operator for operators that work on a unary input
     #
-    # This method should be preferred to <code>input.each</code> when possible.
-    #
-    def each_input_tuple
-      input.each(&Proc.new)
-    end
+    module Unary
+      include Operator 
+      
+      # 
+      # Yields the block with each input tuple.
+      #
+      # This method should be preferred to <code>input.each</code> when possible.
+      #
+      def each_input_tuple
+        input.each(&Proc.new)
+      end
+      
+    end # module Unary
     
     #
     # Specialization of Operator for operators that simply convert single tuples 
     # to single tuples.
     #
     module Transform
-      include Operator
+      include Unary
   
       protected 
   
@@ -1001,7 +1009,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # cesure algorithm.
     #
     module Cesure
-      include Operator
+      include Unary
       
       protected
 
@@ -1537,7 +1545,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf --input=suppliers restrict city "'London'"
   #
   class Restrict < Factory::Operator(__FILE__, __LINE__)
-
+    include Unary
+    
     # Restriction predicate
     attr_accessor :predicate
 
@@ -1689,7 +1698,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf --input=supplies group pid qty supplying
   #
   class Group < Factory::Operator(__FILE__, __LINE__)
-
+    include Unary
+    
     # Attributes on which grouping applies
     attr_accessor :attributes
   
@@ -1752,7 +1762,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf --input=group ungroup supplying
   #
   class Ungroup < Factory::Operator(__FILE__, __LINE__)
-
+    include Unary
+    
     # Relation-value attribute to ungroup
     attr_accessor :attribute
   
