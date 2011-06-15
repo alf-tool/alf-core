@@ -12,3 +12,4 @@ alf --render=text --input=group ungroup supplying
 alf --render=text --input=supplies summarize --by=sid total_qty "sum(:qty)"
 alf --render=text --input=supplies quota --by=sid --order=qty position count sum_qty "sum(:qty)"
 alf --render=text --input=suppliers,supplies join
+alf --render=text --input=suppliers,suppliers union

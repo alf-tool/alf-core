@@ -364,7 +364,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       chain(Project.new(attributes, true), child)
     end
 
-    [ :Join ].each do |op_name|
+    [ :Join, 
+      :Union ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |left, right, *args|
         chain(Alf.const_get(op_name).new(*args), [left, right])
@@ -2131,9 +2132,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # SYNOPSIS
   #   #{program_name} #{command_name}
   #
-  # OPTIONS
-  # #{summarized_options}
-  #
   # API & EXAMPLE
   #
   #   (join :suppliers, :parts)
@@ -2205,7 +2203,52 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
   end # class Join
-  
+
+  # 
+  # Relational union
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # API & EXAMPLE
+  #
+  #   (union (project :suppliers, [:city]), 
+  #          (project :parts,     [:city]))
+  #
+  # DESCRIPTION
+  #
+  # This operator computes the union join of two input iterators. Input 
+  # iterators should have the same heading. The result never contain duplicates.
+  #
+  #   alf --input=...,... union
+  #  
+  class Union < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
+    
+    class DisjointBased
+      include Operator::Binary
+    
+      protected
+      
+      def _each
+        left.each(&Proc.new)
+        right.each(&Proc.new)
+      end
+      
+    end
+    
+    protected
+    
+    # @see Shortcut#longexpr
+    def longexpr
+      chain NoDuplicates.new,
+            DisjointBased.new,
+            datasets 
+    end
+    
+  end # class Union
+
+
   ############################################################################# OTHER COMMANDS
   #
   # Below are general purpose commands provided by alf.
