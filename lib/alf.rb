@@ -1495,7 +1495,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf --input=suppliers project --allbut name city
   #
   class Project < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::Shortcut, Operator::Unary
   
     # Builds a Project operator instance
     def initialize(attributes = [], allbut = false)
@@ -1944,7 +1944,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf --input=supplies summarize --by=sid total_qty "sum(:qty)" 
   #
   class Summarize < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::Shortcut, Operator::Unary
     
     # By attributes
     attr_accessor :by
@@ -2039,7 +2039,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf --input=supplies quota --by=sid --order=qty position count sum_qty "sum(:qty)"
   #
   class Quota < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::Shortcut, Operator::Unary
 
     # Quota by
     attr_accessor :by
