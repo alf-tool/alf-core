@@ -307,6 +307,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   module Lispy
     
+    #
+    # Compiles a query expression given by a String or a block and returns
+    # the result (typically a tuple iterator)
+    #
     def compile(expr, &block)
       instance_eval(expr, &block)
     end
