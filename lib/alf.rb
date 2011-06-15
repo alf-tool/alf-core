@@ -967,6 +967,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Operators input datasets
     attr_accessor :datasets
     
+    # Optional environment
+    attr_accessor :environment
+    
     #
     # Sets the operator input. 
     #
@@ -2188,6 +2191,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
     protected
     
+    # @see Shortcut#longexpr
     def longexpr
       chain HashBased.new,
             datasets 

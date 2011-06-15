@@ -13,7 +13,7 @@ class Alf
 
       describe "when factored with commandline args" do
         let(:operator){ Clip.new.set_args(['a']) }
-        before{ operator.input = input }
+        before{ operator.pipe(input) }
         it { should == expected } 
       end
 
@@ -29,7 +29,7 @@ class Alf
 
       describe "when factored with commandline args" do
         let(:operator){ Clip.new([], true).set_args(['a']) }
-        before{ operator.input = input }
+        before{ operator.pipe(input) }
         it { should == expected } 
       end
 
