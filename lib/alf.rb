@@ -21,8 +21,20 @@ alf_required(false)
 # OPTIONS
 # #{summarized_options}
 #
-# COMMANDS
-# #{summarized_subcommands}
+# RELATIONAL COMMANDS
+# #{summarized_subcommands subcommands.select{|cmd| 
+#     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
+# }}
+#
+# NON RELATIONAL COMMANDS
+# #{summarized_subcommands subcommands.select{|cmd| 
+#     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
+# }}
+#
+# OTHER NON-RELATIONAL COMMANDS
+# #{summarized_subcommands subcommands.select{|cmd| 
+#   !cmd.include?(Alf::Operator)
+# }}
 #
 # See '#{program_name} help COMMAND' for more information on a specific command.
 #
@@ -287,15 +299,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see Quickl::Command
     def Command(file, line)
-      res = Quickl::Command(file, line)
-      Quickl.command_builder{|b| yield(b)} if block_given?
-      res
+      if block_given?
+        Quickl::Command(file, line, &Proc.new)
+      else
+        Quickl::Command(file, line)
+      end 
     end
 
     # @see Operator
-    def Operator(file, line)
+    def Operator(file, line, category = :unclassed)
       Command(file, line) do |b|
         b.instance_module Alf::Operator
+        b.callback{|cmd| @category = category}
       end
     end
 
@@ -1034,6 +1049,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _each
     end
 
+    #
+    # Marker module for non relational operators
+    #
+    module NonRelational
+    end
+  
     # 
     # Specialization of Operator for operators that work on a unary input
     #
@@ -1189,8 +1210,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #################################################### non relational operators
   
   # 
-  # Normalize input tuples by forcing default values on missing 
-  # attributes
+  # Force default values on missing/nil attributes
   #
   # SYNOPSIS
   #   #{program_name} #{command_name} ATTR1 VAL1 ...
@@ -1225,7 +1245,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # value ever remains. However, this operator never remove duplicates. 
   #
   class Defaults < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Transform
+    include Operator::NonRelational, Operator::Transform
 
     # Default values as a ATTR -> VAL hash 
     attr_accessor :defaults
@@ -1271,8 +1291,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Defaults
 
   # 
-  # 
-  # Remove tuple duplicates from input tuples
+  # Remove tuple duplicates
   #
   # SYNOPSIS
   #   #{program_name} #{command_name}
@@ -1289,7 +1308,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # tuples, as required by true relations.
   #
   class NoDuplicates < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::NonRelational, Operator::Shortcut
 
     # Removes duplicates according to a complete order
     class SortBased
@@ -1369,7 +1388,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # arguments is a limitation, shortcuts could be provided in the future.
   #
   class Sort < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Unary
+    include Operator::NonRelational, Operator::Unary
   
     def initialize(ordering_key = [])
       @ordering_key = OrderingKey.coerce(ordering_key)
@@ -1429,7 +1448,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf clip --allbut name city
   #
   class Clip < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Transform
+    include Operator::NonRelational, Operator::Transform
 
     # Builds a Clip operator instance
     def initialize(attributes = [], allbut = false)
