@@ -360,11 +360,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
 
-    # @see Project
     def allbut(child, attributes)
       chain(Project.new(attributes, true), child)
     end
 
+    [ :Join ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |left, right, *args|
+        chain(Alf.const_get(op_name).new(*args), [left, right])
+      end
+    end
+    
     private
 
     def _the_env
