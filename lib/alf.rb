@@ -2137,9 +2137,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # DESCRIPTION
   #
-  # This operator computes quota values on input tuples.
+  # This operator computes the (natural) join of two input iterators. Natural
+  # join means that, unlike what is commonly used in SQL, the default behavior 
+  # is to join on common attributes. You can use the rename operator if this
+  # behavior does not fit your needs.
   #
-  #   alf --input=suppliers,parts join
+  #   alf --input=suppliers,supplies join
   #  
   class Join < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut
