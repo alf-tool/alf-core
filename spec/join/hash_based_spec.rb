@@ -24,7 +24,7 @@ class Alf
     subject{ operator.to_a }
 
     describe "when applied on both candidate keys" do
-      before{ operator.input = [suppliers, statuses] }
+      before{ operator.datasets = [suppliers, statuses] }
       let(:expected){[
         {:sid => 'S1', :city => 'London', :status => 20},
         {:sid => 'S2', :city => 'Paris', :status => 10},
@@ -40,11 +40,11 @@ class Alf
         {:sid => 'S3', :city => 'Paris',  :country => 'France'}
       ]}
       describe "on one way" do
-        before{ operator.input = [suppliers, countries] }
+        before{ operator.datasets = [suppliers, countries] }
         it { should == expected }
       end
       describe "on the other way around" do
-        before{ operator.input = [countries, suppliers] }
+        before{ operator.datasets = [countries, suppliers] }
         it { should == expected }
       end
     end

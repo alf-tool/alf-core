@@ -340,16 +340,30 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # Coerces _arg_ as something that can be piped, an iterator of tuples
     def to_iterator(arg)
-      return arg if arg.is_a?(Array)
-      return arg if arg.is_a?(Operator)
-      env = respond_to?(:environment) ? environment : nil 
-      Reader.coerce(arg, env)
+      case arg
+      when Operator, Reader, Array
+        arg
+      else
+        Reader.coerce(arg, respond_to?(:environment) ? environment : nil)
+      end
+    end
+    
+    def to_datasets(arg)
+      if arg.is_a?(Array)
+        if arg.empty? || arg.first.is_a?(Hash)  
+          [ arg ]
+        else
+          arg.collect{|x| to_iterator(x)}
+        end
+      else
+        [ to_iterator(arg) ]
+      end
     end
     
     def pipe(*elements)
       elements = elements.reverse
       elements[1..-1].inject(elements.first) do |chain, elm|
-        elm.input = to_iterator(chain)
+        elm.datasets = to_datasets(chain)
         elm
       end
     end
@@ -900,9 +914,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # 
   module Operator
     include Enumerable, TupleTools
-
-    # Operator input
-    attr_accessor :input
+    
+    # Operators input datasets
+    attr_accessor :datasets
+    
+    #
+    # Sets the operator input. 
+    #
+    def input=(*datasets)
+      @datasets = datasets
+    end
     
     #
     # Yields each tuple in turn 
@@ -968,6 +989,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     #
     module Unary
       include Operator 
+      
+      #
+      # Simply returns the first dataset
+      #
+      def input
+        @datasets.first
+      end
       
       # 
       # Yields the block with each input tuple.
@@ -1162,10 +1190,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # tuples, as required by true relations.
   #
   class NoDuplicates < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
 
     # Removes duplicates according to a complete order
     class SortBased
-      include Alf::Operator::Cesure      
+      include Operator::Cesure      
 
       def cesure_key
         @cesure_key ||= ProjectionKey.new([],true)
@@ -1184,7 +1213,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Removes duplicates by loading all in memory and filtering 
     # them there 
     class BufferBased
-      include Alf::Operator
+      include Operator::Unary
 
       def _prepare
         @tuples = input.to_a.uniq
@@ -1198,10 +1227,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected 
     
-    def _each
-      op = BufferBased.new
-      op.input = input
-      op.each(&Proc.new)
+    def longexpr
+      pipe BufferBased.new,
+           datasets
     end
 
   end # class NoDuplicates
@@ -1242,6 +1270,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # arguments is a limitation, shortcuts could be provided in the future.
   #
   class Sort < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Unary
   
     def initialize(ordering_key = [])
       @ordering_key = OrderingKey.coerce(ordering_key)
@@ -1406,7 +1435,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def longexpr
       pipe NoDuplicates.new,
            Clip.new(@projection_key.attributes, @projection_key.allbut),
-           input
+           datasets
     end
   
   end # class Project
@@ -1888,7 +1917,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       by_key = ProjectionKey.new(@by, false)
       pipe SortBased.new(by_key, @aggregators),
            Sort.new(by_key.to_ordering_key),
-           input
+           datasets
     end
 
   end # class Summarize
@@ -1915,7 +1944,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf --input=supplies quota --by=sid --order=qty position count sum_qty "sum(:qty)"
   #
   class Quota < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Cesure
+    include Operator::Shortcut
 
     # Quota by
     attr_accessor :by
@@ -1947,14 +1976,40 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       self
     end
 
-    # TODO: remove this (find another way)!!
-    def input=(i)
-      sort = Sort.new(cesure_key.to_ordering_key + ordering_key)
-      sort.input = i
-      super(sort)
-    end
+    class SortBased
+      include Operator::Cesure
+      
+      def initialize(by, order, aggregators)
+        @by, @order, @aggregators  = by, order, aggregators
+      end
+      
+      def cesure_key
+        ProjectionKey.coerce @by
+      end
+      
+      def ordering_key
+        OrderingKey.coerce @order
+      end
+  
+      def start_cesure(key, receiver)
+        @aggs = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.least]
+        end
+      end
+  
+      def accumulate_cesure(tuple, receiver)
+        @aggs = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.happens(@aggs[a], tuple)]
+        end
+        thisone = tuple_collect(@aggregators) do |a,agg|
+          [a, agg.finalize(@aggs[a])]
+        end
+        receiver.call tuple.merge(thisone)
+      end
 
-    protected 
+    end # class SortBased
+
+    protected
     
     def cesure_key
       ProjectionKey.coerce @by
@@ -1964,21 +2019,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       OrderingKey.coerce @order
     end
 
-    def start_cesure(key, receiver)
-      @aggs = tuple_collect(@aggregators) do |a,agg|
-        [a, agg.least]
-      end
-    end
-
-    def accumulate_cesure(tuple, receiver)
-      @aggs = tuple_collect(@aggregators) do |a,agg|
-        [a, agg.happens(@aggs[a], tuple)]
-      end
-      thisone = tuple_collect(@aggregators) do |a,agg|
-        [a, agg.finalize(@aggs[a])]
-      end
-      receiver.call tuple.merge(thisone)
-    end
+    def longexpr
+      pipe SortBased.new(@by, @order, @aggregators),
+           Sort.new(cesure_key.to_ordering_key + ordering_key),
+           datasets
+    end 
 
   end # class Quota
 
@@ -2039,11 +2084,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       protected
       
       def left
-        input.first
+        datasets.first
       end
       
       def right
-        input.last
+        datasets.last
       end
       
       def _each
@@ -2062,7 +2107,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
     def longexpr
       pipe HashBased.new,
-           input 
+           datasets 
     end
     
   end # class Join
