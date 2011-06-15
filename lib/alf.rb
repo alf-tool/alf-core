@@ -1851,7 +1851,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # See Operator#_prepare
     def _prepare
-      pkey = ProjectionKey.new(attributes, as)
+      pkey = ProjectionKey.new(attributes, true)
       @index = Hash.new{|h,k| h[k] = []} 
       each_input_tuple do |tuple|
         key, rest = pkey.split(tuple)
