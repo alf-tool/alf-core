@@ -926,7 +926,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         chain = [
           r.renderer,
           self,
-          r.input.first,
+          r.input.first
         ]
         r.send(:pipe, *chain).execute($stdout)
       else
@@ -945,7 +945,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     protected
-
+    
     #
     # Prepares the iterator before subsequent call to _each.
     #
@@ -964,7 +964,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     # 
-    #
     # Yields the block with each input tuple.
     #
     # This method should be preferred to <code>input.each</code> when possible.
@@ -972,7 +971,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def each_input_tuple
       input.each(&Proc.new)
     end
-
+    
     #
     # Specialization of Operator for operators that simply convert single tuples 
     # to single tuples.
@@ -1971,6 +1970,91 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
   end # class Quota
+
+  # 
+  # Relational join
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # API & EXAMPLE
+  #
+  #   (join :suppliers, :parts)
+  #
+  # DESCRIPTION
+  #
+  # This operator computes quota values on input tuples.
+  #
+  #   alf --input=suppliers,parts join
+  #  
+  class Join < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
+    
+    class HashBased
+      include Alf::Operator
+    
+      class JoinBuffer
+        
+        def initialize(enum)
+          @buffer = nil
+          @key = nil
+          @enum = enum
+        end
+        
+        def split(tuple)
+          _init(tuple) unless @key
+          @key.split(tuple)
+        end
+        
+        def each(key)
+          @buffer[key].each(&Proc.new) if @buffer.has_key?(key)
+        end
+        
+        private
+        
+        def _init(right)
+          @buffer = Hash.new{|h,k| h[k] = []}
+          @enum.each do |left|
+            @key = ProjectionKey.coerce(left.keys & right.keys) unless @key
+            @buffer[@key.project(left)] << left
+          end
+        end
+        
+      end
+      
+      protected
+      
+      def left
+        input.first
+      end
+      
+      def right
+        input.last
+      end
+      
+      def _each
+        buffer = JoinBuffer.new(right)
+        left.each do |left_tuple|
+          key, rest = buffer.split(left_tuple)
+          buffer.each(key) do |right|
+            yield(left_tuple.merge(right))
+          end
+        end
+      end
+      
+    end
+    
+    protected
+    
+    def longexpr
+      pipe HashBased.new,
+           input 
+    end
+    
+  end # class Join
   
   ############################################################################# OTHER COMMANDS
   #
