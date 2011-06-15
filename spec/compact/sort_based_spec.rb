@@ -1,6 +1,6 @@
 require File.expand_path('../../spec_helper', __FILE__)
 class Alf
-  describe NoDuplicates::SortBased do
+  describe Compact::SortBased do
       
     let(:input) {[
       {:a => "via_method", :time => 1, :b => "b"},
@@ -19,7 +19,7 @@ class Alf
     subject{ operator.to_a }
 
     describe "when factored with commandline args" do
-      let(:operator){ NoDuplicates::SortBased.new }
+      let(:operator){ Compact::SortBased.new }
       before{ operator.pipe(input) }
       it { should == expected }
     end

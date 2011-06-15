@@ -356,7 +356,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
     [:Defaults,
-     :NoDuplicates,
+     :Compact,
      :Sort,
      :Clip,
      :Project,
@@ -1298,7 +1298,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (no_duplicates enum)
+  #   (compact enum)
   #
   # DESCRIPTION
   #
@@ -1307,7 +1307,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # operators. This one is centric in converting bags of tuples to sets of 
   # tuples, as required by true relations.
   #
-  class NoDuplicates < Factory::Operator(__FILE__, __LINE__)
+  class Compact < Factory::Operator(__FILE__, __LINE__)
     include Operator::NonRelational, Operator::Shortcut
 
     # Removes duplicates according to a complete order
@@ -1350,7 +1350,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
             datasets
     end
 
-  end # class NoDuplicates
+  end # class Compact
 
   # 
   # Sort input tuples according to a sort key
@@ -1551,7 +1551,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
     # @see Operator::Shortcut#longexpr
     def longexpr
-      chain NoDuplicates.new,
+      chain Compact.new,
             Clip.new(@projection_key.attributes, @projection_key.allbut),
             datasets
     end
@@ -1840,7 +1840,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
     # @see Shortcut#longexpr
     def longexpr
-      chain NoDuplicates.new,
+      chain Compact.new,
             DisjointBased.new,
             datasets 
     end
