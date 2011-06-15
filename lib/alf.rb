@@ -1707,6 +1707,128 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Restrict
 
   # 
+  # Relational join
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # API & EXAMPLE
+  #
+  #   (join :suppliers, :parts)
+  #
+  # DESCRIPTION
+  #
+  # This operator computes the (natural) join of two input iterators. Natural
+  # join means that, unlike what is commonly used in SQL, the default behavior 
+  # is to join on common attributes. You can use the rename operator if this
+  # behavior does not fit your needs.
+  #
+  #   alf --input=suppliers,supplies join
+  #  
+  class Join < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
+    
+    class HashBased
+      include Operator::Binary
+    
+      class JoinBuffer
+        
+        def initialize(enum)
+          @buffer = nil
+          @key = nil
+          @enum = enum
+        end
+        
+        def split(tuple)
+          _init(tuple) unless @key
+          @key.split(tuple)
+        end
+        
+        def each(key)
+          @buffer[key].each(&Proc.new) if @buffer.has_key?(key)
+        end
+        
+        private
+        
+        def _init(right)
+          @buffer = Hash.new{|h,k| h[k] = []}
+          @enum.each do |left|
+            @key = ProjectionKey.coerce(left.keys & right.keys) unless @key
+            @buffer[@key.project(left)] << left
+          end
+        end
+        
+      end
+      
+      protected
+      
+      def _each
+        buffer = JoinBuffer.new(right)
+        left.each do |left_tuple|
+          key, rest = buffer.split(left_tuple)
+          buffer.each(key) do |right|
+            yield(left_tuple.merge(right))
+          end
+        end
+      end
+      
+    end
+    
+    protected
+    
+    # @see Shortcut#longexpr
+    def longexpr
+      chain HashBased.new,
+            datasets 
+    end
+    
+  end # class Join
+  
+  # 
+  # Relational union
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # API & EXAMPLE
+  #
+  #   (union (project :suppliers, [:city]), 
+  #          (project :parts,     [:city]))
+  #
+  # DESCRIPTION
+  #
+  # This operator computes the union join of two input iterators. Input 
+  # iterators should have the same heading. The result never contain duplicates.
+  #
+  #   alf --input=...,... union
+  #  
+  class Union < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
+    
+    class DisjointBased
+      include Operator::Binary
+    
+      protected
+      
+      def _each
+        left.each(&Proc.new)
+        right.each(&Proc.new)
+      end
+      
+    end
+    
+    protected
+    
+    # @see Shortcut#longexpr
+    def longexpr
+      chain NoDuplicates.new,
+            DisjointBased.new,
+            datasets 
+    end
+    
+  end # class Union
+  
+  # 
   # Nest some attributes as a new TUPLE-valued attribute
   #
   # SYNOPSIS
@@ -2135,129 +2257,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end 
 
   end # class Quota
-
-  # 
-  # Relational join
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name}
-  #
-  # API & EXAMPLE
-  #
-  #   (join :suppliers, :parts)
-  #
-  # DESCRIPTION
-  #
-  # This operator computes the (natural) join of two input iterators. Natural
-  # join means that, unlike what is commonly used in SQL, the default behavior 
-  # is to join on common attributes. You can use the rename operator if this
-  # behavior does not fit your needs.
-  #
-  #   alf --input=suppliers,supplies join
-  #  
-  class Join < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
-    
-    class HashBased
-      include Operator::Binary
-    
-      class JoinBuffer
-        
-        def initialize(enum)
-          @buffer = nil
-          @key = nil
-          @enum = enum
-        end
-        
-        def split(tuple)
-          _init(tuple) unless @key
-          @key.split(tuple)
-        end
-        
-        def each(key)
-          @buffer[key].each(&Proc.new) if @buffer.has_key?(key)
-        end
-        
-        private
-        
-        def _init(right)
-          @buffer = Hash.new{|h,k| h[k] = []}
-          @enum.each do |left|
-            @key = ProjectionKey.coerce(left.keys & right.keys) unless @key
-            @buffer[@key.project(left)] << left
-          end
-        end
-        
-      end
-      
-      protected
-      
-      def _each
-        buffer = JoinBuffer.new(right)
-        left.each do |left_tuple|
-          key, rest = buffer.split(left_tuple)
-          buffer.each(key) do |right|
-            yield(left_tuple.merge(right))
-          end
-        end
-      end
-      
-    end
-    
-    protected
-    
-    # @see Shortcut#longexpr
-    def longexpr
-      chain HashBased.new,
-            datasets 
-    end
-    
-  end # class Join
-
-  # 
-  # Relational union
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name}
-  #
-  # API & EXAMPLE
-  #
-  #   (union (project :suppliers, [:city]), 
-  #          (project :parts,     [:city]))
-  #
-  # DESCRIPTION
-  #
-  # This operator computes the union join of two input iterators. Input 
-  # iterators should have the same heading. The result never contain duplicates.
-  #
-  #   alf --input=...,... union
-  #  
-  class Union < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
-    
-    class DisjointBased
-      include Operator::Binary
-    
-      protected
-      
-      def _each
-        left.each(&Proc.new)
-        right.each(&Proc.new)
-      end
-      
-    end
-    
-    protected
-    
-    # @see Shortcut#longexpr
-    def longexpr
-      chain NoDuplicates.new,
-            DisjointBased.new,
-            datasets 
-    end
-    
-  end # class Union
-
 
   ############################################################################# OTHER COMMANDS
   #
