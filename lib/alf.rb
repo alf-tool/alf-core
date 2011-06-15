@@ -427,6 +427,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
   end # class Environment
 
+  #
+  # This is a marker module for all elements that implement tuple iterators
+  # 
+  module Iterator
+    include Enumerable
+  end # module Iterator
+
   ############################################################################# AGGREGATORS
   #
   # Aggregators collect computation on tuples.
@@ -676,7 +683,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # IO objects. It can be safely extended, overriden, or mimiced.
   #
   class Reader
-    include Enumerable
+    include Iterator
 
     # Registered readers
     @@readers = []
@@ -913,7 +920,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Marker for all operators on relations.
   # 
   module Operator
-    include Enumerable, TupleTools
+    include Iterator, TupleTools
     
     # Operators input datasets
     attr_accessor :datasets
