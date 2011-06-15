@@ -15,15 +15,34 @@ class Alf
 
     subject{ operator.to_a.sort{|k1,k2| k1[:a] <=> k2[:a]} }
 
-    describe "when factored with commandline args" do
-      let(:operator){ Group.new.set_args([:time, :b, :as]) }
-      before{ operator.pipe(input) }
-      it { should == expected }
+    describe "without --allbut" do
+
+      describe "when factored with commandline args" do
+        let(:operator){ Group.new.set_args(["time", "b", "as"]) }
+        before{ operator.pipe(input) }
+        it { should == expected }
+      end
+  
+      describe "when factored with Lispy" do
+        let(:operator){ Lispy.group(input, [:time, :b], :as) }
+        it { should == expected }
+      end
+      
     end
 
-    describe "when factored with Lispy" do
-      let(:operator){ Lispy.group(input, [:time, :b], :as) }
-      it { should == expected }
+    describe "with --allbut" do
+        
+      describe "when factored with commandline args" do
+        let(:operator){ Group.new.set_args(["a", "as"]) }
+        before{ operator.allbut = true; operator.pipe(input) }
+        it { should == expected }
+      end
+  
+      describe "when factored with Lispy" do
+        let(:operator){ Lispy.group(input, [:a], :as, true) }
+        it { should == expected }
+      end
+      
     end
 
   end 

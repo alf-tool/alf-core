@@ -1815,6 +1815,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # API & EXAMPLE
   #
   #   (group :supplies, [:pid, :qty], :supplying)
+  #   (group :supplies, [:sid], :supplying, true)
   #
   # DESCRIPTION
   #
@@ -1824,6 +1825,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # which defines the new name to use:
   #
   #   alf --input=supplies group pid qty supplying
+  #   alf --input=supplies group --allbut sid supplying
   #
   class Group < Factory::Operator(__FILE__, __LINE__)
     include Unary
@@ -1834,12 +1836,20 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     # Attribute name for grouping tuple 
     attr_accessor :as
 
+    # Group all but attributes? 
+    attr_accessor :allbut
+
     # Creates a Group instance
-    def initialize(attributes = [], as = :group)
+    def initialize(attributes = [], as = :group, allbut = false)
       @attributes = attributes
       @as = as
+      @allbut = allbut
     end
 
+    options do |opt|
+      opt.on('--allbut', "Group all but specified attributes"){ @allbut = true }
+    end
+    
     # @see Operator#set_args
     def set_args(args)
       @as = args.pop.to_sym
@@ -1851,7 +1861,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # See Operator#_prepare
     def _prepare
-      pkey = ProjectionKey.new(attributes, true)
+      pkey = ProjectionKey.new(attributes, !allbut)
       @index = Hash.new{|h,k| h[k] = []} 
       each_input_tuple do |tuple|
         key, rest = pkey.split(tuple)

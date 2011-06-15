@@ -1,2 +1,3 @@
 #!/usr/bin/env alf
 (group :supplies, [:pid, :qty], :supplying)
+(group :supplies, [:sid], :supplying, true)
