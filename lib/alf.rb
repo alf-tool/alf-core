@@ -990,11 +990,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def execute(args)
       set_args(args)
       if r = requester
-        # TODO: remove r.input.first hardcoding here
         chain = [
           r.renderer,
           self,
-          r.input.first
+          _input_from_requester(r)
         ]
         r.chain(*chain).execute($stdout)
       else
@@ -1013,6 +1012,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     protected
+    
+    def _input_from_requester(r)
+      r.input
+    end
     
     #
     # Prepares the iterator before subsequent call to _each.
@@ -1045,6 +1048,12 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         self.datasets = [ Iterator.coerce(input, env) ]
       end
 
+      protected
+      
+      def _input_from_requester(r)
+        r.input.first
+      end
+    
       #
       # Simply returns the first dataset
       #
