@@ -329,6 +329,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       Iterator.coerce(arg, env)
     end
     
+    #
+    # Chains some elements as a new operator
+    #
+    def chain(*elements)
+      elements = elements.reverse
+      elements[1..-1].inject(elements.first) do |c, elm|
+        elm.datasets = to_datasets(c)
+        elm
+      end
+    end
+    
     [:Defaults,
      :NoDuplicates,
      :Sort,
@@ -345,13 +356,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
      :Quota ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |child, *args|
-        pipe(Alf.const_get(op_name).new(*args), child)
+        chain(Alf.const_get(op_name).new(*args), child)
       end
     end
 
     # @see Project
     def allbut(child, attributes)
-      pipe(Project.new(attributes, true), child)
+      chain(Project.new(attributes, true), child)
     end
 
     private
@@ -372,14 +383,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
     
-    def pipe(*elements)
-      elements = elements.reverse
-      elements[1..-1].inject(elements.first) do |chain, elm|
-        elm.datasets = to_datasets(chain)
-        elm
-      end
-    end
-
     extend Lispy
   end # module Lispy
 
@@ -981,7 +984,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           self,
           r.input.first
         ]
-        r.send(:pipe, *chain).execute($stdout)
+        r.chain(*chain).execute($stdout)
       else
         self
       end
@@ -1260,7 +1263,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected 
     
     def longexpr
-      pipe BufferBased.new,
+      chain BufferBased.new,
            datasets
     end
 
@@ -1465,9 +1468,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
     # @see Operator::Shortcut#longexpr
     def longexpr
-      pipe NoDuplicates.new,
-           Clip.new(@projection_key.attributes, @projection_key.allbut),
-           datasets
+      chain NoDuplicates.new,
+            Clip.new(@projection_key.attributes, @projection_key.allbut),
+            datasets
     end
   
   end # class Project
@@ -1947,9 +1950,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
     def longexpr
       by_key = ProjectionKey.new(@by, false)
-      pipe SortBased.new(by_key, @aggregators),
-           Sort.new(by_key.to_ordering_key),
-           datasets
+      chain SortBased.new(by_key, @aggregators),
+            Sort.new(by_key.to_ordering_key),
+            datasets
     end
 
   end # class Summarize
@@ -2052,9 +2055,9 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     def longexpr
-      pipe SortBased.new(@by, @order, @aggregators),
-           Sort.new(cesure_key.to_ordering_key + ordering_key),
-           datasets
+      chain SortBased.new(@by, @order, @aggregators),
+            Sort.new(cesure_key.to_ordering_key + ordering_key),
+            datasets
     end 
 
   end # class Quota
@@ -2138,8 +2141,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     protected
     
     def longexpr
-      pipe HashBased.new,
-           datasets 
+      chain HashBased.new,
+            datasets 
     end
     
   end # class Join
@@ -2186,7 +2189,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
           @renderer.new,
           input
         ]
-        requester.send(:pipe, *chain).execute($stdout)
+        requester.chain(*chain).execute($stdout)
       end
     end
   
@@ -2213,7 +2216,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         requester.renderer, 
         Reader.alf(args.first || $stdin, requester.environment)
       ]
-      requester.send(:pipe, *chain).execute($stdout)
+      requester.chain(*chain).execute($stdout)
     end
     
   end # class Exec
