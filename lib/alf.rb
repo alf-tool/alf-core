@@ -315,6 +315,20 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       instance_eval(expr, &block)
     end
     
+    #
+    # Coerces _arg_ to a reader
+    #
+    def reader(arg, env = _the_env)
+      Reader.coerce(arg, env)
+    end
+    
+    # 
+    # Coerces _arg_ to a tuple iterator
+    #
+    def iterator(arg, env = _the_env)
+      Iterator.coerce(arg, env)
+    end
+    
     [:Defaults,
      :NoDuplicates,
      :Sort,
@@ -351,10 +365,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         if arg.empty? || arg.first.is_a?(Hash)  
           [ arg ]
         else
-          arg.collect{|x| Iterator.coerce(x, _the_env)}
+          arg.collect{|x| iterator(x)}
         end
       else
-        [ Iterator.coerce(arg, _the_env) ]
+        [ iterator(arg) ]
       end
     end
     
