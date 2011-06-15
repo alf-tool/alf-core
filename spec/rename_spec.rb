@@ -19,7 +19,7 @@ class Alf
 
     describe "When factored from commandline args" do
       let(:operator){ Rename.new.set_args(['a', 'z']) }
-      before{ operator.input = input }
+      before{ operator.pipe(input) }
       it{ should == expected }
     end
 

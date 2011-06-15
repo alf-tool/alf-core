@@ -23,7 +23,7 @@ class Alf
 
     describe "When factored from commandline args" do
       let(:operator){ Sort.new.set_args(["first", "asc", "second", "asc"]) }
-      before{ operator.input = input }
+      before{ operator.pipe(input) }
       it{ should == expected }
     end
 

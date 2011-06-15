@@ -14,7 +14,7 @@ class Alf
 
     describe "when factored with commandline args" do
       let(:operator){ Unnest.new.set_args(["nested"]) }
-      before{ operator.input = input }
+      before{ operator.pipe(input) }
       it { should == expected }
     end
 

@@ -14,7 +14,7 @@ class Alf
 
       describe "and factored with commandline args" do
         let(:operator){ Project.new.set_args(['a']) }
-        before{ operator.input = input }
+        before{ operator.pipe(input) }
         it { should == expected } 
       end
 
@@ -30,7 +30,7 @@ class Alf
 
       describe "and factored with commandline args" do
         let(:operator){ Project.new([], true).set_args(['a']) }
-        before{ operator.input = input }
+        before{ operator.pipe(input) }
         it { should == expected } 
       end
 

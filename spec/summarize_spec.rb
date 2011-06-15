@@ -20,7 +20,7 @@ class Alf
     describe "When factored with commandline args" do
       let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)"] }
       let(:operator){ Summarize.new([:a],{}).set_args(aggs) }
-      before{ operator.input = input }
+      before{ operator.pipe(input) }
       it { should == expected }
     end
 

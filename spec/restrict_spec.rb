@@ -15,14 +15,14 @@ class Alf
 
     describe "when used with no argument" do
       let(:operator){ Restrict.new.set_args([]) }
-      before{ operator.input = input }
+      before{ operator.pipe(input) }
       it { should == input }
     end
 
     describe "when used with a string" do
       describe "when factored with commandline args" do
         let(:operator){ Restrict.new.set_args(["tested < 10"]) }
-        before{ operator.input = input }
+        before{ operator.pipe(input) }
         it { should == expected }
       end
       describe "when factored with Lispy" do
@@ -34,7 +34,7 @@ class Alf
     describe "when used with arguments" do
       describe "when factored with commandline args" do
         let(:operator){ Restrict.new.set_args(["tested", "1"]) }
-        before{ operator.input = input }
+        before{ operator.pipe(input) }
         it { should == expected }
       end
       describe "when factored with Lispy and Proc" do

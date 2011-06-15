@@ -21,7 +21,7 @@ class Alf
   
       describe "When factored from commandline args" do
         let(:operator){ Defaults.new.set_args(['a', '1', 'c', "'blue'"]) }
-        before{ operator.input = input }
+        before{ operator.pipe(input) }
         it{ should == expected }
       end
 

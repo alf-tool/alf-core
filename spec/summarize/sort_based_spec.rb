@@ -20,7 +20,7 @@ class Alf
                 :time_max => Aggregator.max(:time)}} 
     let(:operator){ Summarize::SortBased.new(by_key, aggs) }
 
-    before{ operator.input = input }
+    before{ operator.pipe(input) }
     subject{ operator.to_a }
 
     it { should == expected }

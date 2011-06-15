@@ -1171,8 +1171,16 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     module Shortcut
       include Operator, Lispy
 
+      # 
+      # Sets the operator input
+      #
+      def pipe(input, env = environment)
+        self.datasets = input
+      end
+      
       protected 
 
+      # @see Operator#_each
       def _each
         longexpr.each(&Proc.new)
       end
