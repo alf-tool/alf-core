@@ -1085,9 +1085,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       # Sets the operator input
       #
       def pipe(input, env = environment)
-        unless input.is_a?(Array) && (input.size == 2)
-          raise ArgumentError, "Array of two iterators expected, #{input} found"
-        end
         self.environment = env
         self.datasets = input.collect{|a| Iterator.coerce(a, env)}
       end
@@ -1170,7 +1167,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         self.environment = env
         self.datasets = input
       end
-      
+
       protected 
 
       # @see Operator#_each
@@ -1324,7 +1321,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
     def longexpr
       chain BufferBased.new,
-           datasets
+            datasets
     end
 
   end # class NoDuplicates
