@@ -338,14 +338,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     private
 
-    # Coerces _arg_ as something that can be piped, an iterator of tuples
-    def to_iterator(arg)
-      case arg
-      when Operator, Reader, Array
-        arg
-      else
-        Reader.coerce(arg, respond_to?(:environment) ? environment : nil)
-      end
+    def _the_env
+      respond_to?(:environment) ? environment : nil
     end
     
     def to_datasets(arg)
@@ -353,10 +347,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         if arg.empty? || arg.first.is_a?(Hash)  
           [ arg ]
         else
-          arg.collect{|x| to_iterator(x)}
+          arg.collect{|x| Iterator.coerce(x, _the_env)}
         end
       else
-        [ to_iterator(arg) ]
+        [ Iterator.coerce(arg, _the_env) ]
       end
     end
     
@@ -432,6 +426,19 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # 
   module Iterator
     include Enumerable
+
+    # 
+    # Coerces something to an iterator
+    #
+    def self.coerce(arg, env)
+      case arg
+      when Iterator, Array
+        arg
+      else
+        Reader.coerce(arg, env)
+      end
+    end
+    
   end # module Iterator
 
   ############################################################################# AGGREGATORS
