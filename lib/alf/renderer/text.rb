@@ -83,7 +83,7 @@ class Alf::Renderer
             cell_lines[line_i] || " "*size
           }.join(" | ") + " |"
         end
-        grid
+        grid.empty? ? ["|  |"] : grid
       end
 
     end # class Row
@@ -117,17 +117,13 @@ class Alf::Renderer
 
     def execute(buffer = $stdout)
       relation = input.to_a
-      first = relation.first
-      if first.nil?
-        buffer << "+--+ Empty relation +--+\n"
-      else
-        attrs = first.keys
-        records = relation.collect{|t|
-          attrs.collect{|a| t[a]}
-        }
-        Table.new(records, attrs).render(buffer)
-      end
-      buffer
+      attrs = relation.inject([]){|memo,t| 
+        memo | t.keys
+      }
+      records = relation.collect{|t|
+        attrs.collect{|a| t[a]}
+      }
+      Table.new(records, attrs).render(buffer)
     end
     
     def self.render(relation, buffer = "")
