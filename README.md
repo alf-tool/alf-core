@@ -5,10 +5,6 @@ Classy data-manipulation dressed in a DSL (+ commandline)
     sudo gem install alf
     alf --help
 
-## Links
-
-http://github.com/blambeau/alf
-
 # Description
 
 Alf is a commandline tool and Ruby API to manipulate data with all the power of
@@ -40,4 +36,29 @@ a truly relational algebra approach. Objectives behind Alf are manifold:
   project for example). For this reason, specific features and/or operators are 
   mine (quota, for example is not present in TUTORIAL D) and should be considered 
   'work in progress' and used with care...
- 
+
+# Getting started with commandline
+
+    alf --help
+
+The help command will display the list of available operators. Each of them is
+completely described with 'alf help OPERATOR'. They all have a similar invocation
+syntax in shell:
+
+    alf --input=operand1,operand2,... OPERATOR args...
+
+For examples, you can try the following (display suppliers that live in Paris):
+
+    alf --input=suppliers restrict "city == 'Paris'"
+    
+For educational purposes, the 'suppliers' input is magically resolved as denoting
+the file examples/suppliers.rash. You'll find other data files: parts.rash, 
+supplies.rash and cities.rash that are resolved magically as well, and with which
+you can play. For more friendly output, try the following:
+
+    # the show command renders a text table by default
+    alf show suppliers
+    
+    # and reads from standard input without argument!  
+    alf --input=suppliers restrict "city == 'Paris'" | alf show
+    
