@@ -79,3 +79,23 @@ you can play. For more friendly output, try the following:
     | S3   | Blake |      30 | Paris |
     +------+-------+---------+-------+
     
+You'll also find .alf files in the examples folder, that contains more complex
+examples in the Ruby functional syntax (see below). You can simply execute these
+files with alf directly as follows:
+
+    # the following works, as well as the shortcut 'alf show group'
+    alf examples/group.alf | alf show 
+    
+    +------+-----------------+
+    | :sid | :supplying      |
+    +------+-----------------+
+    | S1   | +------+------+ |
+    |      | | :pid | :qty | |
+    |      | +------+------+ |
+    |      | | P1   |  300 | |
+    |      | | P2   |  200 | |
+    ...
+    
+For more information about recognized data files (.rash, .yaml, ...), output
+formats and .alf executable commands, read on!
+
