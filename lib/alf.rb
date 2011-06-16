@@ -2502,6 +2502,11 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
   # Install options
   options do |opt|
+    @execute = false
+    opt.on("-e", "--execute", "Execute one line of script (Lispy API)") do 
+      @execute = true
+    end
+    
     @renderer = Renderer::Rash.new
     names = Renderer.renderer_names
     opt.on('--render=RENDERER', names.collect{|n| n.to_sym},
@@ -2515,14 +2520,38 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       @input = input
     end
     
-    opt.on_tail("--help", "Show help") do
+    opt.on_tail('-h', "--help", "Show help") do
       raise Quickl::Help
     end
     
-    opt.on_tail("--version", "Show version") do
+    opt.on_tail('-v', "--version", "Show version") do
       raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
                           " (c) 2011, Bernard Lambeau"
     end
   end # Alf's options
+  
+  # Overrided because Quickl only keep --options but modifying
+  # it there should probably be considered a broken API.
+  def _run(argv = [])
+    my_argv = []
+    while argv.first =~ /^-/
+      my_argv << argv.shift
+    end
+    parse_options(my_argv)
+    execute(argv)
+  end
+  
+  # Handle -e or give it up
+  def execute(argv)
+    if @execute
+      chain = [ 
+        renderer, 
+        instance_eval(argv.first)
+      ]
+      chain(*chain).execute($stdout)
+    else
+      super
+    end
+  end
   
 end # class Alf
