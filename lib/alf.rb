@@ -1549,8 +1549,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # When used in shell, the clipping/projection key is simply taken from
   # commandline arguments:
   #
-  #   alf --input=suppliers project name city
-  #   alf --input=suppliers project --allbut name city
+  #   alf project suppliers -- name city
+  #   alf project --allbut suppliers -- name city
   #
   class Project < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut, Operator::Unary
@@ -1612,7 +1612,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # in shell, the hash of extensions is built from commandline arguments ala
   # Hash[...]. Tuple expressions must be specified as code literals there:
   #
-  #   alf --input=supplies extend sp 'sid + "/" + pid' big "qty > 100 ? true : false"
+  #   alf extend supplies -- sp 'sid + "/" + pid' big "qty > 100 ? true : false"
   #
   # Attributes ATTRx should not already exist, no behavior is guaranteed if 
   # this precondition is not respected.   
@@ -1672,7 +1672,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # not. When used in shell, renaming attributes are built ala Hash[...] from
   # commandline arguments: 
   #
-  #   alf --input=suppliers rename name supplier_name city supplier_city
+  #   alf rename suppliers -- name supplier_name city supplier_city
   #
   class Rename < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
@@ -1724,8 +1724,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Note that, in that case, values are expected to be ruby code literals,
   # evaluated with Kernel.eval. Therefore, strings must be doubly quoted.  
   #
-  #   alf --input=suppliers restrict "status > 20"
-  #   alf --input=suppliers restrict city "'London'"
+  #   alf restrict suppliers -- "status > 20"
+  #   alf restrict suppliers -- city "'London'"
   #
   class Restrict < Factory::Operator(__FILE__, __LINE__)
     include Unary
@@ -1778,7 +1778,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # is to join on common attributes. You can use the rename operator if this
   # behavior does not fit your needs.
   #
-  #   alf --input=suppliers,supplies join
+  #   alf join suppliers supplies 
   #  
   class Join < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut
@@ -1858,7 +1858,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # intersection is simply the set of common tuples between them. Both operands
   # must have the same heading. 
   #
-  #   alf --input=...,... intersect
+  #   alf intersect ... ...
   #  
   class Intersect < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut
@@ -1909,7 +1909,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # difference is simply the set of tuples in left operands non shared by
   # the right one.
   #
-  #   alf --input=...,... minus
+  #   alf minus ... ...
   #  
   class Minus < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut
@@ -1958,7 +1958,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # This operator computes the union join of two input iterators. Input 
   # iterators should have the same heading. The result never contain duplicates.
   #
-  #   alf --input=...,... union
+  #   alf union ... ...
   #  
   class Union < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut
@@ -2003,7 +2003,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes are taken from commandline arguments, expected the last one
   # which defines the new name to use:
   #
-  #   alf --input=suppliers nest city status loc_and_status
+  #   alf nest suppliers -- city status loc_and_status
   #
   class Nest < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
@@ -2056,7 +2056,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # no name collision occurs. When used in shell, the name of the attribute to
   # unnest is taken as the first commandline argument:
   #
-  #   alf --input=nest unnest loc_and_status
+  #   alf unnest nest -- loc_and_status
   #
   class Unnest < Factory::Operator(__FILE__, __LINE__)
     include Operator::Transform
@@ -2104,8 +2104,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # attributes are taken from commandline arguments, expected the last one
   # which defines the new name to use:
   #
-  #   alf --input=supplies group pid qty supplying
-  #   alf --input=supplies group --allbut sid supplying
+  #   alf group supplies -- pid qty supplying
+  #   alf group supplies --allbut -- sid supplying
   #
   class Group < Factory::Operator(__FILE__, __LINE__)
     include Unary
@@ -2177,7 +2177,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # used in shell, the name of the attribute to ungroup is taken as the first 
   # commandline argument:
   #
-  #   alf --input=group ungroup supplying
+  #   alf ungroup group -- supplying
   #
   class Ungroup < Factory::Operator(__FILE__, __LINE__)
     include Unary
@@ -2235,7 +2235,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
   # aggregation expression evaluated on Aggregator:
   #
-  #   alf --input=supplies summarize --by=sid total_qty "sum(:qty)" 
+  #   alf summarize supplies --by=sid -- total_qty "sum(:qty)" 
   #
   class Summarize < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut, Operator::Unary
@@ -2330,7 +2330,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # This operator computes quota values on input tuples.
   #
-  #   alf --input=supplies quota --by=sid --order=qty position count sum_qty "sum(:qty)"
+  #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
   #
   class Quota < Factory::Operator(__FILE__, __LINE__)
     include Operator::Shortcut, Operator::Unary

@@ -1,0 +1,3 @@
+#!/usr/bin/env alf
+(clip :suppliers, [:name, :city])
+(clip :suppliers, [:name, :city], true)
