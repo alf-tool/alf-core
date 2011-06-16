@@ -1,0 +1,4 @@
+#!/usr/bin/env alf
+(intersect \
+  (restrict :suppliers, lambda{ status >= 20 }),
+  (restrict :suppliers, lambda{ city == 'Paris' }))

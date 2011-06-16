@@ -36,7 +36,7 @@ alf_required(false)
 #   !cmd.include?(Alf::Operator)
 # }}
 #
-# See '#{program_name} help COMMAND' for more information on a specific command.
+# See '#{program_name} help COMMAND' for details about a specific command.
 #
 class Alf < Quickl::Delegator(__FILE__, __LINE__)
   
@@ -380,7 +380,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
 
     [ :Join, 
-      :Union ].each do |op_name|
+      :Union,
+      :Intersect ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |left, right, *args|
         chain(Alf.const_get(op_name).new(*args), [left, right])
@@ -1727,7 +1728,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Restrict
 
   # 
-  # Relational join
+  # Relational join (and cross-join)
   #
   # SYNOPSIS
   #   #{program_name} #{command_name}
@@ -1804,6 +1805,58 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     
   end # class Join
   
+  # 
+  # Relational intersection (aka a logical and)
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # API & EXAMPLE
+  #
+  #   # Give suppliers that live in Paris and have status >= 20
+  #   (intersect \\
+  #     (restrict :suppliers, lambda{ status >= 20 }),
+  #     (restrict :suppliers, lambda{ city == 'Paris' }))
+  #
+  # DESCRIPTION
+  #
+  # This operator computes the intersection between its two operands. The 
+  # intersection is simply the set of common tuples between them. Both operands
+  # must have the same heading. 
+  #
+  #   alf --input=...,... intersect
+  #  
+  class Intersect < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
+    
+    class HashBased
+      include Operator::Binary
+    
+      protected
+      
+      def _prepare
+        @index = Hash.new
+        right.each{|t| @index[t] = true}
+      end
+      
+      def _each
+        left.each do |left_tuple|
+          yield(left_tuple) if @index.has_key?(left_tuple)
+        end
+      end
+      
+    end
+    
+    protected
+    
+    # @see Shortcut#longexpr
+    def longexpr
+      chain HashBased.new,
+            datasets 
+    end
+    
+  end # class Intersect
+
   # 
   # Relational union
   #
