@@ -2540,10 +2540,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
     @renderer = Renderer::Rash.new
-    names = Renderer.renderer_names
-    opt.on('--render=RENDERER', names.collect{|n| n.to_sym},
-           "Specify the renderer to use (#{names.join(', ')})") do |name|
-      @renderer = Renderer.renderer_by_name(name).new
+    Renderer.each_renderer do |name,descr,clazz|
+      opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
     end
     
     opt.on_tail('-h', "--help", "Show help") do
