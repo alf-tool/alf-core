@@ -14,9 +14,10 @@ alf_required(false)
 #
 # SYNOPSIS
 #   #{program_name} [--version] [--help] 
+#   #{program_name} -e '(lispy command)'
 #   #{program_name} [FILE.alf]
-#   #{program_name} help COMMAND
-#   #{program_name} [alf opts] COMMAND [cmd opts] ARGS ...
+#   #{program_name} [alf opts] OPERATOR [operator opts] ARGS ...
+#   #{program_name} help OPERATOR
 #
 # OPTIONS
 # #{summarized_options}
@@ -1252,10 +1253,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # API & EXAMPLE
   #
   #   # Non strict mode
-  #   (defaults enum, :x => 1, :y => 'hello')
+  #   (defaults :suppliers, :country => 'Belgium')
   #
   #   # Strict mode (--strict)
-  #   (defaults enum, {:x => 1, :y => 'hello'}, true)
+  #   (defaults :suppliers, {:country => 'Belgium'}, true)
   #
   # DESCRIPTION
   #
@@ -1268,7 +1269,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # as ruby literals and built with Kernel.eval. This means that strings must 
   # be doubly quoted. For the example of the API section:
   #
-  #   alf defaults x 1 y "'hello'"
+  #   alf defaults suppliers -- country "'Belgium'"
   #
   # When used in --strict mode, the operator simply project resulting tuples on
   # attributes for which a default value has been specified. Using the strict 

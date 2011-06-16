@@ -1,0 +1,3 @@
+#!/usr/bin/env alf
+(defaults :suppliers, :country => 'Belgium')
+(defaults :suppliers, {:country => 'Belgium'}, true)
