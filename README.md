@@ -2,7 +2,7 @@
 
 Classy data-manipulation dressed in a DSL (+ commandline)
 
-    sudo gem install alf
+    [sudo] gem install alf
     alf --help
 
 # Description
@@ -99,3 +99,40 @@ files with alf directly as follows:
 For more information about recognized data files (.rash, .yaml, ...), output
 formats and .alf executable commands, read on!
 
+# Getting started with .alf files and Ruby API
+
+If you tke a look at .alf example files, you'll find functional ruby expressions
+like the following (examples/minus.alf):
+
+    # Give all suppliers, except those living in Paris
+    (minus :suppliers, 
+           (restrict :suppliers, lambda{ city == 'Paris' }))
+    
+    # This is a contrived example for illustrating minus, as the
+    # following is equivalent
+    (restrict :suppliers, lambda{ city != 'Paris' })
+    
+You can simply execute such expressions with alf command line itself:
+ 
+    alf examples/minus.alf | alf show
+    alf -e "(restrict :suppliers, lambda{ city != 'Paris' })" | alf show
+
+For now, the Ruby API is documented in the commandline help itself. For example, 
+you'll find the allowed syntaxes for RESTRICT as follows:
+
+    alf help restrict
+    
+    ...
+    API & EXAMPLE
+    
+      # Restrict to suppliers with status greater than 20
+      (restrict :suppliers, lambda{ status > 20 })
+    
+      # Restrict to suppliers that live in London
+      (restrict :suppliers, lambda{ city == 'London' })
+    ...
+    
+Of course, from the closure property of a relational algebra (that states that
+operators works on relations and return relations), you can use a sub expression 
+*everytime* a relational operand is expected, everytime! Symbols are magically 
+resolved from the environment, which is wired to the examples by default. 
