@@ -1464,10 +1464,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # API & EXAMPLE
   #
   #   # Keep only name and city attributes
-  #   (clip enum, [:name, :city])
+  #   (clip :suppliers, [:name, :city])
   #
   #   # Keep all but name and city attributes
-  #   (clip enum, [:name, :city], true)
+  #   (clip :suppliers, [:name, :city], true)
   #
   # DESCRIPTION
   #
@@ -1479,8 +1479,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # When used in shell, the clipping/projection key is simply taken from
   # commandline arguments:
   #
-  #   alf clip name city
-  #   alf clip --allbut name city
+  #   alf clip suppliers -- name city
+  #   alf clip suppliers --allbut -- name city
   #
   class Clip < Factory::Operator(__FILE__, __LINE__)
     include Operator::NonRelational, Operator::Transform
