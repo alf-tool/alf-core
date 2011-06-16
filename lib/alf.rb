@@ -2439,8 +2439,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # DESCRIPTION
   #
   # When dataset names are specified as commandline args, request the environment 
-  # to provide those datasets and print them. Otherwise, take what alf main command 
-  # would provide from its --input option (defaults to stdin).
+  # to provide those datasets and print them. Otherwise, take what comes on standard
+  # input.
   #
   # Note that this command is not an operator and should not be piped anymore.
   #
@@ -2454,11 +2454,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
       
     def execute(args)
-      args = if args.empty?
-        requester.input
-      else
-        args
-      end
+      args = [ $stdin ] if args.empty?
       args.each do |input|
         chain = [
           @renderer.new,
@@ -2528,9 +2524,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Environment instance to use to get base iterators
   attr_reader :environment
 
-  # Input dataset names
-  attr_reader :input
-  
   # Output renderer
   attr_reader :renderer
   
@@ -2551,12 +2544,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     opt.on('--render=RENDERER', names.collect{|n| n.to_sym},
            "Specify the renderer to use (#{names.join(', ')})") do |name|
       @renderer = Renderer.renderer_by_name(name).new
-    end
-    
-    @input = [ $stdin ]
-    opt.on('--input=x,y,z', 
-           'Specify input dataset names (defaults to stdin)', Array) do |input|
-      @input = input
     end
     
     opt.on_tail('-h', "--help", "Show help") do
