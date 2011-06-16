@@ -1005,6 +1005,17 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     protected
     
+    def split_command_args(args)
+      operands, args = case i = args.index("--")
+      when NilClass
+        [args, []]
+      when 0
+        [[ $stdin ], args[1..-1]]
+      else
+        [args[0...i], args[i+1..-1]]
+      end
+    end
+    
     def _input_from_requester(r)
       r.input
     end
