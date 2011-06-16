@@ -1,18 +1,18 @@
-alf --render=text --input=suppliers defaults x 1 y "'hello'"
-alf --render=text --input=suppliers project name city
-alf --render=text --input=suppliers project --allbut name city
-alf --render=text --input=supplies extend sp 'sid + "/" + pid' big "qty > 100 ? true : false"
-alf --render=text --input=suppliers rename name supplier_name city supplier_city
-alf --render=text --input=suppliers restrict "status > 20"
-alf --render=text --input=suppliers restrict city "'London'"
-alf --render=text --input=suppliers nest city status loc_and_status
-alf --render=text --input=nest unnest loc_and_status
-alf --render=text --input=supplies group pid qty supplying
-alf --render=text --input=supplies group --allbut sid supplying
-alf --render=text --input=group ungroup supplying
-alf --render=text --input=supplies summarize --by=sid total_qty "sum(:qty)"
-alf --render=text --input=supplies quota --by=sid --order=qty position count sum_qty "sum(:qty)"
-alf --render=text --input=suppliers,supplies join
-alf --render=text --input=suppliers,suppliers union
-alf --render=text --input=suppliers,suppliers intersect
-alf --render=text --input=suppliers,suppliers minus
+alf --render=text defaults         suppliers -- x 1 y "'hello'"
+alf --render=text project          suppliers -- name city
+alf --render=text project --allbut suppliers -- name city
+alf --render=text extend           supplies  -- sp 'sid + "/" + pid' big "qty > 100 ? true : false"
+alf --render=text rename           suppliers -- name supplier_name city supplier_city
+alf --render=text restrict         suppliers -- "status > 20"
+alf --render=text restrict         suppliers -- city "'London'"
+alf --render=text nest             suppliers -- city status loc_and_status
+alf --render=text unnest           suppliers -- loc_and_status
+alf --render=text group            supplies  -- pid qty supplying
+alf --render=text group --allbut   supplies  -- sid supplying
+alf --render=text ungroup          group     -- supplying
+alf --render=text summarize        supplies  -- --by=sid total_qty "sum(:qty)"
+alf --render=text quota            supplies  -- --by=sid --order=qty position count sum_qty "sum(:qty)"
+alf --render=text join             suppliers supplies
+alf --render=text union            suppliers suppliers
+alf --render=text intersect        suppliers suppliers
+alf --render=text minus            suppliers suppliers
