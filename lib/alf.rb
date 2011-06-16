@@ -971,35 +971,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   
   #
-  # Marker for all operators on relations.
-  # 
-  module Operator
-    include Iterator, TupleTools
-    
-    # Operators input datasets
-    attr_accessor :datasets
-    
-    # Optional environment
-    attr_accessor :environment
-    
-    # 
-    # Sets the operator input
-    #
-    def pipe(input, env = environment)
-      raise NotImplementedError, "Operator#pipe should be overriden"
-    end
-    
-    #
-    # Yields each tuple in turn 
-    #
-    # This method is implemented in a way that ensures that all operators are 
-    # thread safe. It is not intended to be overriden, use _each instead.
-    # 
-    def each
-      op = self.dup
-      op._prepare
-      op._each(&Proc.new)
-    end
+  # Encapsulates method definitions that convert operators to Quickl
+  # commands
+  #
+  module Command
 
     # 
     # Executes this operator as a commandline
@@ -1033,6 +1008,41 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def _input_from_requester(r)
       r.input
     end
+
+  end # module Command
+  
+  #
+  # Marker for all operators on relations.
+  # 
+  module Operator
+    include Command, Iterator, TupleTools
+    
+    # Operators input datasets
+    attr_accessor :datasets
+    
+    # Optional environment
+    attr_accessor :environment
+    
+    # 
+    # Sets the operator input
+    #
+    def pipe(input, env = environment)
+      raise NotImplementedError, "Operator#pipe should be overriden"
+    end
+    
+    #
+    # Yields each tuple in turn 
+    #
+    # This method is implemented in a way that ensures that all operators are 
+    # thread safe. It is not intended to be overriden, use _each instead.
+    # 
+    def each
+      op = self.dup
+      op._prepare
+      op._each(&Proc.new)
+    end
+    
+    protected
     
     #
     # Prepares the iterator before subsequent call to _each.
