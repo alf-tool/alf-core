@@ -36,10 +36,8 @@ a truly relational algebra approach. Objectives behind Alf are manifold:
 * Alf is also an attempt to help me test some research ideas and communicate 
   about them with people that already know (all or part) of the TTM vision of 
   relational theory. These people include members of the TTM mailing list as
-  well as other people implementing some of the TTM ideas (see Dan Kubb's 
-  Veritas project for example). For this reason, specific features and/or 
-  operators are mine (quota, for example is not present in TUT.D) and should
-  be considered 'work in progress' and used with care...
-  
-# What does a "Truly Relational Approach" (TRAlalalala) mean ?? 
-  
+  well as other people implementing some of the TTM ideas (see Dan Kubb's Veritas 
+  project for example). For this reason, specific features and/or operators are 
+  mine (quota, for example is not present in TUTORIAL D) and should be considered 
+  'work in progress' and used with care...
+ 
