@@ -381,7 +381,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     [ :Join, 
       :Union,
-      :Intersect ].each do |op_name|
+      :Intersect,
+      :Minus ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |left, right, *args|
         chain(Alf.const_get(op_name).new(*args), [left, right])
@@ -1856,6 +1857,57 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end
     
   end # class Intersect
+
+  # 
+  # Relational minus (aka difference)
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name}
+  #
+  # API & EXAMPLE
+  #
+  #   # Give all suppliers but those living in Paris
+  #   (minus :suppliers, 
+  #          (restrict :suppliers, lambda{ city == 'Paris' }))
+  #
+  # DESCRIPTION
+  #
+  # This operator computes the difference between its two operands. The 
+  # difference is simply the set of tuples in left operands non shared by
+  # the right one.
+  #
+  #   alf --input=...,... minus
+  #  
+  class Minus < Factory::Operator(__FILE__, __LINE__)
+    include Operator::Shortcut
+    
+    class HashBased
+      include Operator::Binary
+    
+      protected
+      
+      def _prepare
+        @index = Hash.new
+        right.each{|t| @index[t] = true}
+      end
+      
+      def _each
+        left.each do |left_tuple|
+          yield(left_tuple) unless @index.has_key?(left_tuple)
+        end
+      end
+      
+    end
+    
+    protected
+    
+    # @see Shortcut#longexpr
+    def longexpr
+      chain HashBased.new,
+            datasets 
+    end
+    
+  end # class Minus
 
   # 
   # Relational union

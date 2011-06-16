@@ -1,0 +1,3 @@
+#!/usr/bin/env alf
+(minus :suppliers, 
+       (restrict :suppliers, lambda{ city == 'Paris' }))

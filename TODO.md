@@ -18,7 +18,7 @@
   
 * Add PIVOT and UNPIVOT operators
 
-* Add UNION, MINUS, INTERSECT, MATCHING, NOT_MATCHING
+* Add MATCHING, NOT_MATCHING
 
 * Add a to_ruby abstraction and replace inspect usages in TupleHandle and
   Rash renderer
