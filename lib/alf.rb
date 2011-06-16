@@ -16,7 +16,7 @@ alf_required(false)
 #   #{program_name} [--version] [--help] 
 #   #{program_name} [FILE.alf]
 #   #{program_name} help COMMAND
-#   #{program_name} COMMAND [cmd opts] ARGS ...
+#   #{program_name} [alf opts] COMMAND [cmd opts] ARGS ...
 #
 # OPTIONS
 # #{summarized_options}
