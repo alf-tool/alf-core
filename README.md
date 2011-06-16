@@ -57,8 +57,25 @@ supplies.rash and cities.rash that are resolved magically as well, and with whic
 you can play. For more friendly output, try the following:
 
     # the show command renders a text table by default
-    alf show suppliers
+    alf show [--text] suppliers
     
+        +------+-------+---------+--------+
+        | :sid | :name | :status | :city  |
+        +------+-------+---------+--------+
+        | S1   | Smith |      20 | London |
+        | S2   | Jones |      10 | Paris  |
+        | S3   | Blake |      30 | Paris  |
+        | S4   | Clark |      20 | London |
+        | S5   | Adams |      30 | Athens |
+        +------+-------+---------+--------+
+
     # and reads from standard input without argument!  
     alf --input=suppliers restrict "city == 'Paris'" | alf show
+
+        +------+-------+---------+-------+
+        | :sid | :name | :status | :city |
+        +------+-------+---------+-------+
+        | S2   | Jones |      10 | Paris |
+        | S3   | Blake |      30 | Paris |
+        +------+-------+---------+-------+
     
