@@ -976,23 +976,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   module Command
 
-    # 
-    # Executes this operator as a commandline
-    #
-    def execute(args)
-      set_args(args)
-      if r = requester
-        chain = [
-          r.renderer,
-          self,
-          _input_from_requester(r)
-        ]
-        r.chain(*chain).execute($stdout)
-      else
-        self
-      end
-    end
-
     #
     # Configures the operator from arguments taken from command line. 
     #
@@ -1002,9 +985,34 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def set_args(args)
       self
     end
-
+    
     protected
     
+    #
+    # Overrides Quickl::Command::Single#_run to handles the '--' separator
+    # correctly.
+    #
+    # This is because parse_options tend to eat the '--' separator... This 
+    # could be handled in Quickl itself, but it should be considered a broken 
+    # API and will only be available in quickl >= 0.3.0 (probably)
+    #
+    def _run(argv = [])
+      operands, args = split_command_args(argv).collect do |arr|
+        parse_options(arr)
+      end
+      set_args(args)
+      if r = requester
+        chain = [
+          r.renderer,
+          self,
+          command_line_operands(operands)
+        ]
+        r.chain(*chain).execute($stdout)
+      else
+        self
+      end
+    end
+
     def split_command_args(args)
       operands, args = case i = args.index("--")
       when NilClass
@@ -1016,8 +1024,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       end
     end
     
-    def _input_from_requester(r)
-      r.input
+    def command_line_operands(operands)
+      operands
     end
 
   end # module Command
@@ -1094,8 +1102,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
       protected
       
-      def _input_from_requester(r)
-        r.input.first
+      def command_line_operands(operands)
+        operands.first
       end
     
       #
