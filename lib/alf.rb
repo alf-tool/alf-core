@@ -1245,7 +1245,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Force default values on missing/nil attributes
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 VAL1 ...
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
   #
   # OPTIONS
   # #{summarized_options}
@@ -1326,7 +1326,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Remove tuple duplicates
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} [OPERAND]
   #
   # API & EXAMPLE
   #
@@ -1391,7 +1391,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Sort input tuples according to an order relation
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ORDER1 ATTR2 ORDER2...
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ORDER1 ATTR2 ORDER2...
   #
   # API & EXAMPLE
   #
@@ -1456,7 +1456,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Clip input tuples to a subset of attributes
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ATTR2 ...
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
   #
   # OPTIONS
   # #{summarized_options}
@@ -1527,7 +1527,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational projection (clip + compact)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ATTR2 ...
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
   #
   # OPTIONS
   # #{summarized_options}
@@ -1597,7 +1597,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational extension (additional, computed attributes)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 EXPR1 ATTR2 EXPR2...
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 EXPR1 ATTR2 EXPR2...
   #
   # API & EXAMPLE
   #
@@ -1656,7 +1656,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational renaming (rename some attributes)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} OLD1 NEW1 ...
+  #   #{program_name} #{command_name} [OPERAND] -- OLD1 NEW1 ...
   #
   # OPTIONS
   # #{summarized_options}
@@ -1704,8 +1704,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational restriction (aka where, predicate filtering)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} EXPR
-  #   #{program_name} #{command_name} ATTR1 VAL1 ...
+  #   #{program_name} #{command_name} [OPERAND] -- EXPR
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
   #
   # API & EXAMPLE
   #
@@ -1765,7 +1765,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational join (and cross-join)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} LEFT RIGHT
   #
   # API & EXAMPLE
   #
@@ -1843,7 +1843,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational intersection (aka a logical and)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} LEFT RIGHT
   #
   # API & EXAMPLE
   #
@@ -1895,7 +1895,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational minus (aka difference)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} LEFT RIGHT
   #
   # API & EXAMPLE
   #
@@ -1946,7 +1946,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational union
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name}
+  #   #{program_name} #{command_name} LEFT RIGHT
   #
   # API & EXAMPLE
   #
@@ -1990,7 +1990,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational nesting (tuple-valued attributes)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
   #
   # API & EXAMPLE
   #
@@ -2042,7 +2042,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational un-nesting (inverse of nest)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR
   #
   # API & EXAMPLE
   #
@@ -2090,7 +2090,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational grouping (relation-valued attributes)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR1 ATTR2 ... NEWNAME
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
   #
   # API & EXAMPLE
   #
@@ -2162,7 +2162,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational un-grouping (inverse of group)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} ATTR
+  #   #{program_name} #{command_name} [OPERAND] -- ATTR
   #
   # API & EXAMPLE
   #
@@ -2215,7 +2215,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational summarization (group-by + aggregate ops)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} --by=KEY1,KEY2... AGG1 EXPR1...
+  #   #{program_name} #{command_name} [OPERAND] --by=KEY1,KEY2... -- AGG1 EXPR1...
   #
   # OPTIONS
   # #{summarized_options}
@@ -2315,7 +2315,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational quota-queries (position, sum progression, etc.)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} --by=KEY1,... --order=OR1... AGG1 EXPR1...
+  #   #{program_name} #{command_name} [OPERAND] --by=KEY1,... --order=OR1... AGG1 EXPR1...
   #
   # OPTIONS
   # #{summarized_options}
