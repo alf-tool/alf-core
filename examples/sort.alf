@@ -1,0 +1,4 @@
+#!/usr/bin/env alf
+(sort :suppliers, [:name])
+(sort :suppliers, [:city, :name])
+(sort :suppliers, [[:city, :desc], [:name, :asc]])

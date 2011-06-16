@@ -1,6 +1,8 @@
 alf --render=text defaults          suppliers -- country "'Belgium'"
 alf --render=text defaults --strict suppliers -- country "'Belgium'"
 alf --render=text compact           suppliers
+alf --render=text sort              suppliers -- name asc
+alf --render=text sort              suppliers -- city desc name asc
 alf --render=text project           suppliers -- name city
 alf --render=text project --allbut  suppliers -- name city
 alf --render=text extend            supplies  -- sp 'sid + "/" + pid' big "qty > 100 ? true : false"

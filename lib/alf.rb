@@ -1343,7 +1343,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf compact ... 
   #
   class Compact < Factory::Operator(__FILE__, __LINE__)
-    include Operator::NonRelational, Operator::Shortcut
+    include Operator::NonRelational, Operator::Shortcut, Operator::Unary
 
     # Removes duplicates according to a complete order
     class SortBased
@@ -1396,13 +1396,13 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # API & EXAMPLE
   #
   #   # sort on supplier name in ascending order
-  #   (sort [:name])
+  #   (sort :suppliers, [:name])
   #
   #   # sort on city then on name
-  #   (sort [:city, :name])
+  #   (sort :suppliers, [:city, :name])
   # 
   #   # sort on city DESC then on name ASC
-  #   (sort [[:city, :desc], [:name, :asc]])
+  #   (sort :suppliers, [[:city, :desc], [:name, :asc]])
   #
   #   => See OrderingKey about specifying orderings
   #
@@ -1414,8 +1414,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # need tuples to be sorted to work correctly. When used in shell, the key 
   # ordering must be specified in its longest form:
   #
-  #   alf sort name asc
-  #   alf sort city desc name asc
+  #   alf sort suppliers -- name asc
+  #   alf sort suppliers -- city desc name asc
   #
   # LIMITATIONS
   #

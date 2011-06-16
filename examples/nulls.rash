@@ -1,0 +1,3 @@
+{:sid => 'S1', :age => nil}
+{:sid => 'S2', :age => 32}
+{:sid => 'S3', :age => nil}
