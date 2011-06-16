@@ -45,16 +45,43 @@ The help command will display the list of available operators. Each of them is
 completely described with 'alf help OPERATOR'. They all have a similar invocation
 syntax in shell:
 
-    alf --input=operand1,operand2,... OPERATOR args...
+    alf operator operands... -- args...
 
-For examples, you can try the following (display suppliers that live in Paris):
+For example, try the following:
 
-    alf --input=suppliers restrict "city == 'Paris'"
+    # display suppliers that live in Paris
+    alf restrict suppliers -- "city == 'Paris'"
     
-For educational purposes, the 'suppliers' input is magically resolved as denoting
-the file examples/suppliers.rash. You'll find other data files: parts.rash, 
-supplies.rash and cities.rash that are resolved magically as well, and with which
-you can play. For more friendly output, try the following:
+    # join suppliers and cities (no args here)
+    alf join suppliers cities
+    
+For educational purposes, 'suppliers' and 'cities' inputs are magically resolved 
+as denoting the files examples/suppliers.rash and examples/cities.rash, respectively. 
+You'll find other data files: parts.rash, supplies.rash that are resolved magically 
+as well and with which you can play.
+
+Moreover, unary operators read their operand on standard input when not specified.
+For example, the invocation below is equivalent from the one given above.
+
+    # display suppliers that live in Paris
+    cat examples/suppliers.rash | alf restrict -- "city == 'Paris'"  
+
+When only one operand is present in invocations of binary operators, they read
+their left operand from standard input. Therefore, the join given above can 
+also be written as follows:
+
+    cat examples/suppliers.rash | alf join cities
+
+The relational algebra is _closed_ under its operators, which means that the latter
+take relations as operands, and return a relation. Therefore operator invocations
+can be nested, that is, operands can be other relational expressions. When you use 
+alf in a shell, it simply means that you can pipe operators as you want:
+
+    alf show --rash suppliers | alf join cities | alf restrict -- "status > 10"
+
+## Obtaining a friendly text output, or yaml files, etc.
+
+For more friendly output, try the following:
 
     # the show command renders a text table by default
     alf show [--text] suppliers
@@ -70,7 +97,7 @@ you can play. For more friendly output, try the following:
     +------+-------+---------+--------+
 
     # and reads from standard input without argument!  
-    alf --input=suppliers restrict "city == 'Paris'" | alf show
+    alf restrict suppliers "city == 'Paris'" | alf show
 
     +------+-------+---------+-------+
     | :sid | :name | :status | :city |
