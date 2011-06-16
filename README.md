@@ -60,30 +60,32 @@ as denoting the files examples/suppliers.rash and examples/cities.rash, respecti
 You'll find other data files: parts.rash, supplies.rash that are resolved magically 
 as well and with which you can play.
 
-Moreover, unary operators read their operand on standard input when not specified.
-For example, the invocation below is equivalent from the one given above.
+Unary operators read their operand on standard input when not specified. For example, 
+the invocation below is equivalent to the one given above.
 
     # display suppliers that live in Paris
     cat examples/suppliers.rash | alf restrict -- "city == 'Paris'"  
 
-When only one operand is present in invocations of binary operators, they read
-their left operand from standard input. Therefore, the join given above can 
-also be written as follows:
+Similarly, when only one operand is present in invocations of binary operators, 
+they read their left operand from standard input. Therefore, the join given above 
+can also be written as follows:
 
     cat examples/suppliers.rash | alf join cities
 
-The relational algebra is _closed_ under its operators, which means that the latter
-take relations as operands, and return a relation. Therefore operator invocations
-can be nested, that is, operands can be other relational expressions. When you use 
-alf in a shell, it simply means that you can pipe operators as you want:
+The relational algebra is _closed_ under its operators, which means that these 
+operators take relations as operands and return a relation. Therefore operator 
+invocations can be nested, that is, operands can be other relational expressions. 
+When you use alf in a shell, it simply means that you can pipe operators as you 
+want:
 
     alf show --rash suppliers | alf join cities | alf restrict -- "status > 10"
 
 ## Obtaining a friendly text output, or yaml files, etc.
 
-For more friendly output, try the following:
+The show command (which is **not** a relational operator) can be used to obtain
+a more friendly output:
 
-    # the show command renders a text table by default
+    # it renders a text table by default
     alf show [--text] suppliers
     
     +------+-------+---------+--------+
@@ -105,10 +107,17 @@ For more friendly output, try the following:
     | S2   | Jones |      10 | Paris |
     | S3   | Blake |      30 | Paris |
     +------+-------+---------+-------+
-    
-You'll also find .alf files in the examples folder, that contains more complex
-examples in the Ruby functional syntax (see below). You can simply execute these
-files with alf directly as follows:
+
+Other formats can be obtained (see 'alf help show'). For example, you can generate
+a .yaml file, as follows: 
+
+    alf restrict suppliers "city == 'Paris'" | alf show --yaml
+
+## Executing .alf files and expressions
+
+You'll also find .alf files in the examples folder, that contain more complex
+examples in the Ruby functional syntax (see section below). You can simply 
+execute these files with alf directly as follows:
 
     # the following works, as well as the shortcut 'alf show group'
     alf examples/group.alf | alf show 
@@ -123,10 +132,14 @@ files with alf directly as follows:
     |      | | P2   |  200 | |
     ...
     
-For more information about recognized data files (.rash, .yaml, ...), output
-formats and .alf executable commands, read on!
+Also, mimicing the ruby executable, the following invocation is also possible:
 
-# Getting started with .alf files and Ruby API
+    alf -e "(restrict :suppliers, lambda{ city == 'Paris' })"
+
+where the argument is a relational expression in Alf's Lispy dialect, which
+is detailed in the next section.
+
+# Alf's Lispy expressions and Ruby API
 
 If you tke a look at .alf example files, you'll find functional ruby expressions
 like the following (examples/minus.alf):
@@ -139,13 +152,21 @@ like the following (examples/minus.alf):
     # following is equivalent
     (restrict :suppliers, lambda{ city != 'Paris' })
     
-You can simply execute such expressions with alf command line itself:
+Of course, from the closure property of a relational algebra (that states that
+operators works on relations and return relations), you can use a sub expression 
+*everytime* a relational operand is expected, everytime! Symbols are magically 
+resolved from the environment, which is wired to the examples by default. 
+
+You can simply execute such expressions with alf command line itself (the three
+following invocations will return the same result):
  
     alf examples/minus.alf | alf show
+    alf show minus
     alf -e "(restrict :suppliers, lambda{ city != 'Paris' })" | alf show
 
-For now, the Ruby API is documented in the commandline help itself. For example, 
-you'll find the allowed syntaxes for RESTRICT as follows:
+For now, the Ruby API is documented in the commandline help itself (a cheatsheet
+or something will be provided as soon as possible). For example, you'll find the 
+allowed syntaxes for RESTRICT as follows:
 
     alf help restrict
     
@@ -158,8 +179,3 @@ you'll find the allowed syntaxes for RESTRICT as follows:
       # Restrict to suppliers that live in London
       (restrict :suppliers, lambda{ city == 'London' })
     ...
-    
-Of course, from the closure property of a relational algebra (that states that
-operators works on relations and return relations), you can use a sub expression 
-*everytime* a relational operand is expected, everytime! Symbols are magically 
-resolved from the environment, which is wired to the examples by default. 
