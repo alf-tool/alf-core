@@ -1131,6 +1131,20 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     module Binary
       include Operator 
       
+      # 
+      # Sets the operator input
+      #
+      def pipe(input, env = environment)
+        self.environment = env
+        self.datasets = input.collect{|a| Iterator.coerce(a, env)}
+      end
+
+      protected
+      
+      def command_line_operands(operands)
+        (operands.size < 2) ? ([$stdin] + operands) : operands
+      end
+    
       # Returns the left operand
       def left
         datasets.first
@@ -1141,14 +1155,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         datasets.last
       end
       
-      # 
-      # Sets the operator input
-      #
-      def pipe(input, env = environment)
-        self.environment = env
-        self.datasets = input.collect{|a| Iterator.coerce(a, env)}
-      end
-
     end # module Binary
     
     #
@@ -1765,7 +1771,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational join (and cross-join)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} LEFT RIGHT
+  #   #{program_name} #{command_name} [LEFT] RIGHT
   #
   # API & EXAMPLE
   #
@@ -1781,7 +1787,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf join suppliers supplies 
   #  
   class Join < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::Shortcut, Operator::Binary
     
     class HashBased
       include Operator::Binary
@@ -1843,7 +1849,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational intersection (aka a logical and)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} LEFT RIGHT
+  #   #{program_name} #{command_name} [LEFT] RIGHT
   #
   # API & EXAMPLE
   #
@@ -1861,7 +1867,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf intersect ... ...
   #  
   class Intersect < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::Shortcut, Operator::Binary
     
     class HashBased
       include Operator::Binary
@@ -1895,7 +1901,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational minus (aka difference)
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} LEFT RIGHT
+  #   #{program_name} #{command_name} [LEFT] RIGHT
   #
   # API & EXAMPLE
   #
@@ -1912,7 +1918,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf minus ... ...
   #  
   class Minus < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::Shortcut, Operator::Binary
     
     class HashBased
       include Operator::Binary
@@ -1946,7 +1952,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # Relational union
   #
   # SYNOPSIS
-  #   #{program_name} #{command_name} LEFT RIGHT
+  #   #{program_name} #{command_name} [LEFT] RIGHT
   #
   # API & EXAMPLE
   #
@@ -1961,7 +1967,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #   alf union ... ...
   #  
   class Union < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut
+    include Operator::Shortcut, Operator::Binary
     
     class DisjointBased
       include Operator::Binary
