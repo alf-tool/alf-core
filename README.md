@@ -26,8 +26,8 @@ a truly relational algebra approach. Objectives behind Alf are manifold:
   (TTM). However, in itself, the present little tool is only an overview of the 
   relational algebra described there. I hope that some people will be sufficiently 
   enticed by specific features here to open that book and read it more deeply.
-  Have a look at 'alf help group / summarize / quota' for things that you'll  
-  never ever have in SQL. 
+  Have a look at 'alf help group / summarize / quota' for things that you'll never 
+  ever have in SQL. 
   
 * Alf is also an attempt to help me test some research ideas and communicate 
   about them with people that already know (all or part) of the TTM vision of 
@@ -179,3 +179,19 @@ allowed syntaxes for RESTRICT as follows:
       # Restrict to suppliers that live in London
       (restrict :suppliers, lambda{ city == 'London' })
     ...
+
+## Interfacing in Ruby itself
+
+If you want to use Alf in ruby directly (that is, not in shell or by executing
+.alf files), you can simply compile expressions and use resulting operators as 
+follows:
+
+    # 
+    # Op is an enumerable of ruby hashes (used as physical representation
+    # of tuples). We use the examples environment here, see the section
+    # below about other available environments.
+    #
+    op = Alf.new(Alf::Environment.examples).compile {
+      (restrict :suppliers, lambda{ city == 'London' })
+    }
+
