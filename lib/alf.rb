@@ -1330,7 +1330,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   #
   # API & EXAMPLE
   #
-  #   (compact enum)
+  #   # clip, unlike project, typically leave duplicates
+  #   (compact (clip :suppliers, [ :city ]))
   #
   # DESCRIPTION
   #
@@ -1338,6 +1339,8 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   # relational operator that helps normalizing input for implementing relational
   # operators. This one is centric in converting bags of tuples to sets of 
   # tuples, as required by true relations.
+  #
+  #   alf compact ... 
   #
   class Compact < Factory::Operator(__FILE__, __LINE__)
     include Operator::NonRelational, Operator::Shortcut
