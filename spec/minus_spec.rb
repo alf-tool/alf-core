@@ -18,7 +18,7 @@ module Alf
       {:sid => 'S5', :city => 'Bruxelles'},
     ]}
 
-    let(:operator){ Minus.new }
+    let(:operator){ Minus.run([]) }
     subject{ operator.to_a }
 
     describe "when applied on the same operand twice" do
