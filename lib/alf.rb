@@ -304,8 +304,8 @@ module Alf
     # Compiles a query expression given by a String or a block and returns
     # the result (typically a tuple iterator)
     #
-    def compile(expr, &block)
-      instance_eval(expr, &block)
+    def compile(expr = nil, &block)
+      expr.nil? ? instance_eval(&block) : instance_eval(expr)
     end
     
     #
@@ -320,6 +320,23 @@ module Alf
     #
     def iterator(arg, env = _the_env)
       Iterator.coerce(arg, env)
+    end
+    
+    # Delegated to the environment
+    def dataset(name)
+      raise "Environment not set" unless @environment
+      @environment.dataset(name)
+    end
+    
+    #
+    # Compiles the subexpression given by the block in the context of 
+    # additional temporary expressions given by definitions
+    #
+    def with(definitions)
+      @environment = @environment.branch(definitions)
+      op = compile(&Proc.new)
+      @environment = @environment.unbranch
+      op
     end
     
     #
