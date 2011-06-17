@@ -191,6 +191,29 @@ split complex tasks in more simple ones using _with_:
                  :total => Aggregator.sum{ qty })
     end
 
+And here is the result !
+
+    +----------+----------+--------+
+    | :country | :which   | :total |
+    +----------+----------+--------+
+    | England  | +------+ |   2200 |
+    |          | | :pid | |        |
+    |          | +------+ |        |
+    |          | | P1   | |        |
+    |          | | P2   | |        |
+    |          | | P3   | |        |
+    |          | | P4   | |        |
+    |          | | P5   | |        |
+    |          | | P6   | |        |
+    |          | +------+ |        |
+    | France   | +------+ |    200 |
+    |          | | :pid | |        |
+    |          | +------+ |        |
+    |          | | P2   | |        |
+    |          | +------+ |        |
+    +----------+----------+--------+
+
+
 ### Going further
 
 For now, the Ruby API is documented in the commandline help itself (a cheatsheet
