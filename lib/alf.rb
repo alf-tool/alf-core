@@ -1100,7 +1100,7 @@ module Alf
         
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
-        if requester
+        if operator.is_a?(Iterator) && requester
           chain(renderer, operator).execute($stdout)
         else
           operator
