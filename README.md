@@ -181,8 +181,7 @@ Of course, complex queries quickly become unreadable that way. But you can alway
 split complex tasks in more simple ones using _with_:
 
     with( :big_suppliers  => (restrict :suppliers, lambda{ status > 10 }),
-          :with_countries => (join :big_suppliers, :cities) 
-        ) do
+          :with_countries => (join :big_suppliers, :cities) ) do
       (summarize (join :with_countries, :supplies),
                  [:country],
                  :sumqty => Aggregator.sum{ qty })
