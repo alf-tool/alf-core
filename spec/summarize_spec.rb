@@ -18,8 +18,9 @@ module Alf
     subject{ operator.to_a }
 
     describe "When factored with commandline args" do
+      let(:opts){ ["--by=a"] }
       let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)"] }
-      let(:operator){ Summarize.new([:a],{}).set_args(aggs) }
+      let(:operator){ Summarize.run(opts + ["--"] +aggs) }
       before{ operator.pipe(input) }
       it { should == expected }
     end
