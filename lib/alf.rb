@@ -1089,70 +1089,71 @@ module Alf
   ############################################################################# OPERATORS
 
   #
-  # Encapsulates method definitions that convert operators to Quickl
-  # commands
-  #
-  module Command
-  
-    #
-    # Configures the operator from arguments taken from command line. 
-    #
-    # This method is intended to be overriden by subclasses and must return the 
-    # operator itself.
-    #
-    def set_args(args)
-      self
-    end
-    
-    protected
-    
-    #
-    # Overrides Quickl::Command::Single#_run to handles the '--' separator
-    # correctly.
-    #
-    # This is because parse_options tend to eat the '--' separator... This 
-    # could be handled in Quickl itself, but it should be considered a broken 
-    # API and will only be available in quickl >= 0.3.0 (probably)
-    #
-    def _run(argv = [])
-      operands, args = split_command_args(argv).collect do |arr|
-        parse_options(arr)
-      end
-      set_args(args)
-      if r = requester
-        chain = [
-          r.renderer,
-          self,
-          command_line_operands(operands)
-        ]
-        r.chain(*chain).execute($stdout)
-      else
-        self
-      end
-    end
-  
-    def split_command_args(args)
-      operands, args = case i = args.index("--")
-      when NilClass
-        [args, []]
-      when 0
-        [[ $stdin ], args[1..-1]]
-      else
-        [args[0...i], args[i+1..-1]]
-      end
-    end
-    
-    def command_line_operands(operands)
-      operands
-    end
-  
-  end # module Command
-   
-  #
   # Marker for all operators on relations.
   # 
   module Operator
-    include Command, Iterator, TupleTools
+    include Iterator, TupleTools
+
+    #
+    # Encapsulates method definitions that convert operators to Quickl
+    # commands
+    #
+    module CommandMethods
+    
+      #
+      # Configures the operator from arguments taken from command line. 
+      #
+      # This method is intended to be overriden by subclasses and must return the 
+      # operator itself.
+      #
+      def set_args(args)
+        self
+      end
+      
+      protected
+      
+      #
+      # Overrides Quickl::Command::Single#_run to handles the '--' separator
+      # correctly.
+      #
+      # This is because parse_options tend to eat the '--' separator... This 
+      # could be handled in Quickl itself, but it should be considered a broken 
+      # API and will only be available in quickl >= 0.3.0 (probably)
+      #
+      def _run(argv = [])
+        operands, args = split_command_args(argv).collect do |arr|
+          parse_options(arr)
+        end
+        set_args(args)
+        if r = requester
+          chain = [
+            r.renderer,
+            self,
+            command_line_operands(operands)
+          ]
+          r.chain(*chain).execute($stdout)
+        else
+          self
+        end
+      end
+    
+      def split_command_args(args)
+        operands, args = case i = args.index("--")
+        when NilClass
+          [args, []]
+        when 0
+          [[ $stdin ], args[1..-1]]
+        else
+          [args[0...i], args[i+1..-1]]
+        end
+      end
+      
+      def command_line_operands(operands)
+        operands
+      end
+    
+    end # module CommandMethods
+    include CommandMethods
     
     # Operators input datasets
     attr_accessor :datasets

@@ -1,8 +1,8 @@
-require File.expand_path('../spec_helper', __FILE__)
+require File.expand_path('../../spec_helper', __FILE__)
 module Alf
-  describe Command do
+  describe Operator::CommandMethods do
     
-    let(:cmd){ Object.new.extend(Command) }
+    let(:cmd){ Object.new.extend(Operator::CommandMethods) }
     
     describe "split_command_args" do
     
