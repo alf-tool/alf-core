@@ -310,21 +310,7 @@ module Alf
     def compile(expr = nil, &block)
       expr.nil? ? instance_eval(&block) : instance_eval(expr)
     end
-    
-    #
-    # Coerces _arg_ to a reader
-    #
-    def reader(arg, env = _the_env)
-      Reader.coerce(arg, env)
-    end
-    
-    # 
-    # Coerces _arg_ to a tuple iterator
-    #
-    def iterator(arg, env = _the_env)
-      Iterator.coerce(arg, env)
-    end
-    
+
     # Delegated to the environment
     def dataset(name)
       raise "Environment not set" unless @environment
