@@ -12,34 +12,7 @@ alf_required(false)
 #
 # alf - Classy data-manipulation dressed in a DSL (+ commandline)
 #
-# SYNOPSIS
-#   #{program_name} [--version] [--help] 
-#   #{program_name} -e '(lispy command)'
-#   #{program_name} [FILE.alf]
-#   #{program_name} [alf opts] OPERATOR [operator opts] ARGS ...
-#   #{program_name} help OPERATOR
-#
-# OPTIONS
-# #{summarized_options}
-#
-# RELATIONAL COMMANDS
-# #{summarized_subcommands subcommands.select{|cmd| 
-#     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
-# }}
-#
-# NON-RELATIONAL COMMANDS
-# #{summarized_subcommands subcommands.select{|cmd| 
-#     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
-# }}
-#
-# OTHER NON-RELATIONAL COMMANDS
-# #{summarized_subcommands subcommands.select{|cmd| 
-#   !cmd.include?(Alf::Operator)
-# }}
-#
-# See '#{program_name} help COMMAND' for details about a specific command.
-#
-class Alf < Quickl::Delegator(__FILE__, __LINE__)
+class Alf
   
   # Alf's version 
   VERSION = "0.9.0"
@@ -293,11 +266,10 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
 
     # @see Quickl::Command
     def Command(file, line)
-      if block_given?
-        Quickl::Command(file, line, &Proc.new)
-      else
-        Quickl::Command(file, line)
-      end 
+      Quickl::Command(file, line){|builder|
+        builder.command_parent = Alf::Main
+        yield(builder) if block_given?
+      }
     end
 
     # @see Operator
@@ -846,7 +818,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
       
       # @see Reader#each
       def each
-        op = Alf.new(environment).compile(input_text)
+        op = Alf::Main.new(environment).compile(input_text)
         op.each(&Proc.new)
       end
       
@@ -944,65 +916,97 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   ############################################################################# COMMANDS
 
   #
-  # Encapsulates method definitions that convert operators to Quickl
-  # commands
+  # alf - Classy data-manipulation dressed in a DSL (+ commandline)
   #
-  module Command
+  # SYNOPSIS
+  #   alf [--version] [--help] 
+  #   alf -e '(lispy command)'
+  #   alf [FILE.alf]
+  #   alf [alf opts] OPERATOR [operator opts] ARGS ...
+  #   alf help OPERATOR
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # RELATIONAL COMMANDS
+  # #{summarized_subcommands subcommands.select{|cmd| 
+  #     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
+  # }}
+  #
+  # NON-RELATIONAL COMMANDS
+  # #{summarized_subcommands subcommands.select{|cmd| 
+  #     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
+  # }}
+  #
+  # OTHER NON-RELATIONAL COMMANDS
+  # #{summarized_subcommands subcommands.select{|cmd| 
+  #   !cmd.include?(Alf::Operator)
+  # }}
+  #
+  # See '#{program_name} help COMMAND' for details about a specific command.
+  #
+  class Main < Quickl::Delegator(__FILE__, __LINE__)
+    include Lispy
   
-    #
-    # Configures the operator from arguments taken from command line. 
-    #
-    # This method is intended to be overriden by subclasses and must return the 
-    # operator itself.
-    #
-    def set_args(args)
-      self
+    # Environment instance to use to get base iterators
+    attr_reader :environment
+  
+    # Output renderer
+    attr_reader :renderer
+    
+    # Creates a command instance
+    def initialize(env = Environment.default)
+      @environment = env
     end
     
-    protected
+    # Install options
+    options do |opt|
+      @execute = false
+      opt.on("-e", "--execute", "Execute one line of script (Lispy API)") do 
+        @execute = true
+      end
+      
+      @renderer = Renderer::Rash.new
+      Renderer.each_renderer do |name,descr,clazz|
+        opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
+      end
+      
+      opt.on_tail('-h', "--help", "Show help") do
+        raise Quickl::Help
+      end
+      
+      opt.on_tail('-v', "--version", "Show version") do
+        raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
+                            " (c) 2011, Bernard Lambeau"
+      end
+    end # Alf's options
     
-    #
-    # Overrides Quickl::Command::Single#_run to handles the '--' separator
-    # correctly.
-    #
-    # This is because parse_options tend to eat the '--' separator... This 
-    # could be handled in Quickl itself, but it should be considered a broken 
-    # API and will only be available in quickl >= 0.3.0 (probably)
-    #
+    # Overrided because Quickl only keep --options but modifying
+    # it there should probably be considered a broken API.
     def _run(argv = [])
-      operands, args = split_command_args(argv).collect do |arr|
-        parse_options(arr)
+      my_argv = []
+      while argv.first =~ /^-/
+        my_argv << argv.shift
       end
-      set_args(args)
-      if r = requester
-        chain = [
-          r.renderer,
-          self,
-          command_line_operands(operands)
+      parse_options(my_argv)
+      execute(argv)
+    end
+    
+    # Handle -e or give it up
+    def execute(argv)
+      if @execute
+        chain = [ 
+          renderer, 
+          instance_eval(argv.first)
         ]
-        r.chain(*chain).execute($stdout)
+        chain(*chain).execute($stdout)
       else
-        self
+        super
       end
     end
+
+  end
   
-    def split_command_args(args)
-      operands, args = case i = args.index("--")
-      when NilClass
-        [args, []]
-      when 0
-        [[ $stdin ], args[1..-1]]
-      else
-        [args[0...i], args[i+1..-1]]
-      end
-    end
-    
-    def command_line_operands(operands)
-      operands
-    end
-  
-  end # module Command
-    
   # 
   # Output input tuples through a specific renderer (text, yaml, ...)
   #
@@ -1092,7 +1096,67 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Help
 
   ############################################################################# OPERATORS
+
+  #
+  # Encapsulates method definitions that convert operators to Quickl
+  # commands
+  #
+  module Command
   
+    #
+    # Configures the operator from arguments taken from command line. 
+    #
+    # This method is intended to be overriden by subclasses and must return the 
+    # operator itself.
+    #
+    def set_args(args)
+      self
+    end
+    
+    protected
+    
+    #
+    # Overrides Quickl::Command::Single#_run to handles the '--' separator
+    # correctly.
+    #
+    # This is because parse_options tend to eat the '--' separator... This 
+    # could be handled in Quickl itself, but it should be considered a broken 
+    # API and will only be available in quickl >= 0.3.0 (probably)
+    #
+    def _run(argv = [])
+      operands, args = split_command_args(argv).collect do |arr|
+        parse_options(arr)
+      end
+      set_args(args)
+      if r = requester
+        chain = [
+          r.renderer,
+          self,
+          command_line_operands(operands)
+        ]
+        r.chain(*chain).execute($stdout)
+      else
+        self
+      end
+    end
+  
+    def split_command_args(args)
+      operands, args = case i = args.index("--")
+      when NilClass
+        [args, []]
+      when 0
+        [[ $stdin ], args[1..-1]]
+      else
+        [args[0...i], args[i+1..-1]]
+      end
+    end
+    
+    def command_line_operands(operands)
+      operands
+    end
+  
+  end # module Command
+   
   #
   # Marker for all operators on relations.
   # 
@@ -2483,66 +2547,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end 
 
   end # class Quota
+  
 
-  ############################################################################# MAIN
-
-  include Lispy
-
-  # Environment instance to use to get base iterators
-  attr_reader :environment
-
-  # Output renderer
-  attr_reader :renderer
-  
-  # Creates a command instance
-  def initialize(env = Environment.default)
-    @environment = env
-  end
-  
-  # Install options
-  options do |opt|
-    @execute = false
-    opt.on("-e", "--execute", "Execute one line of script (Lispy API)") do 
-      @execute = true
-    end
-    
-    @renderer = Renderer::Rash.new
-    Renderer.each_renderer do |name,descr,clazz|
-      opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
-    end
-    
-    opt.on_tail('-h', "--help", "Show help") do
-      raise Quickl::Help
-    end
-    
-    opt.on_tail('-v', "--version", "Show version") do
-      raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
-                          " (c) 2011, Bernard Lambeau"
-    end
-  end # Alf's options
-  
-  # Overrided because Quickl only keep --options but modifying
-  # it there should probably be considered a broken API.
-  def _run(argv = [])
-    my_argv = []
-    while argv.first =~ /^-/
-      my_argv << argv.shift
-    end
-    parse_options(my_argv)
-    execute(argv)
-  end
-  
-  # Handle -e or give it up
-  def execute(argv)
-    if @execute
-      chain = [ 
-        renderer, 
-        instance_eval(argv.first)
-      ]
-      chain(*chain).execute($stdout)
-    else
-      super
-    end
-  end
-  
 end # class Alf

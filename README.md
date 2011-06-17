@@ -191,7 +191,7 @@ follows:
     # of tuples). We use the examples environment here, see the section
     # below about other available environments.
     #
-    op = Alf.new(Alf::Environment.examples).compile {
+    op = Alf::Main.new(Alf::Environment.examples).compile {
       (restrict :suppliers, lambda{ city == 'London' })
     }
 

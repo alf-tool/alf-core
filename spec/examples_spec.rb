@@ -14,7 +14,7 @@ class Alf
 
       it "should work when executed with a Alf" do
         lambda{ 
-          Alf.new(env).compile(File.read(subject)).to_a 
+          Alf::Main.new(env).compile(File.read(subject)).to_a 
         }.should_not raise_error
       end
       

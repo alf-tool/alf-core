@@ -12,4 +12,4 @@ def normalize(args)
   end
   opts += args
 end
-Alf.run(normalize(ARGV), __FILE__)
+Alf::Main.run(normalize(ARGV), __FILE__)
