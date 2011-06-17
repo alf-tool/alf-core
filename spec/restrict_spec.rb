@@ -21,7 +21,7 @@ module Alf
 
     describe "when used with a string" do
       describe "when factored with commandline args" do
-        let(:operator){ Restrict.new.set_args(["tested < 10"]) }
+        let(:operator){ Restrict.run(["--", "tested < 10"]) }
         before{ operator.pipe(input) }
         it { should == expected }
       end
@@ -33,7 +33,7 @@ module Alf
 
     describe "when used with arguments" do
       describe "when factored with commandline args" do
-        let(:operator){ Restrict.new.set_args(["tested", "1"]) }
+        let(:operator){ Restrict.run(["--", "tested", "1"]) }
         before{ operator.pipe(input) }
         it { should == expected }
       end
