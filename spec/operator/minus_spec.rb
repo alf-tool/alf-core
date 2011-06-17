@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Minus do
       
+    let(:operator_class){ Minus }
+    it_should_behave_like("An operator class")
+      
     let(:left) {[
       {:sid => 'S1', :city => 'London'},
       {:sid => 'S2', :city => 'Paris'},

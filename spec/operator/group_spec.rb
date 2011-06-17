@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Group do
       
+    let(:operator_class){ Group }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:a => "via_method", :time => 1, :b => "b"},
       {:a => "via_method", :time => 2, :b => "b"},

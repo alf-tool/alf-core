@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Nest do
       
+    let(:operator_class){ Nest }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:a => "a", :b => "b", :c => "c"},
     ]}

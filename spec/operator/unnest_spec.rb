@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Unnest do
       
+    let(:operator_class){ Unnest }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:nested => {:a => "a", :b => "b"}, :c => "c"}
     ]}

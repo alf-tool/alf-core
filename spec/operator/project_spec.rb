@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Project do
       
+    let(:operator_class){ Project }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:a => "a", :b => "b"},
       {:a => "a", :b => "b"},

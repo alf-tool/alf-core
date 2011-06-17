@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Compact do
       
+    let(:operator_class){ Compact }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:a => "via_method", :time => 1, :b => "b"},
       {:a => "via_reader", :time => 3, :b => "b"},

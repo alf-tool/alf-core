@@ -1,6 +1,9 @@
 require 'spec_helper'
 module Alf
-  describe Restrict do
+  describe Extend do
+      
+    let(:operator_class){ Extend }
+    it_should_behave_like("An operator class")
       
     let(:input) {[
       {:tested => 1,  :other => "b"},

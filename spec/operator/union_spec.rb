@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Union do
       
+    let(:operator_class){ Union }
+    it_should_behave_like("An operator class")
+      
     let(:left) {[
       {:city => 'London'},
       {:city => 'Paris'},

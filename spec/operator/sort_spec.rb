@@ -1,6 +1,9 @@
 require 'spec_helper'
 module Alf
-  describe Restrict do
+  describe Sort do
+      
+    let(:operator_class){ Sort }
+    it_should_behave_like("An operator class")
       
     let(:input) {[
       {:first => "a", :second => 20,  :third => true},

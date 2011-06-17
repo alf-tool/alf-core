@@ -1,6 +1,9 @@
 require 'spec_helper'
 module Alf
   describe Clip do
+
+    let(:operator_class){ Clip }
+    it_should_behave_like("An operator class")
       
     let(:input) {[
       {:a => "a", :b => "b"},

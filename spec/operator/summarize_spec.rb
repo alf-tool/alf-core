@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Summarize do
       
+    let(:operator_class){ Summarize }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:a => "via_reader", :time => 2},
       {:a => "via_method", :time => 1},

@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Restrict do
       
+    let(:operator_class){ Restrict }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:tested => 1, :other => "b"},
       {:tested => 30, :other => "a"},

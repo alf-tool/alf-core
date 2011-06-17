@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Defaults do
     
+    let(:operator_class){ Defaults }
+    it_should_behave_like("An operator class")
+      
     subject{ operator.to_a }
 
     describe "when used without --strict" do

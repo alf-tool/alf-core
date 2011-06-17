@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Quota do
       
+    let(:operator_class){ Quota }
+    it_should_behave_like("An operator class")
+      
     let(:input) {[
       {:a => "via_method", :time => 1},
       {:a => "via_method", :time => 2},

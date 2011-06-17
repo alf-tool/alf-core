@@ -2,6 +2,9 @@ require 'spec_helper'
 module Alf
   describe Intersect do
       
+    let(:operator_class){ Intersect }
+    it_should_behave_like("An operator class")
+      
     let(:left) {[
       {:sid => 'S1', :city => 'London'},
       {:sid => 'S2', :city => 'Paris'},
