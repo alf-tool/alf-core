@@ -14,7 +14,7 @@ module Alf
     subject{ operator.to_a }
 
     describe "when used with no argument" do
-      let(:operator){ Restrict.new.set_args([]) }
+      let(:operator){ Restrict.run(%w{}) }
       before{ operator.pipe(input) }
       it { should == input }
     end
