@@ -1000,30 +1000,35 @@ module Alf
         end
       end # Alf's options
       
-      # Overrided because Quickl only keep --options but modifying
-      # it there should probably be considered a broken API.
+      #
+      # Overrided because Quickl only keep --options but modifying it there 
+      # should probably be considered a broken API.
+      #
       def _run(argv = [])
+        
+        # 1) Extract my options and parse them
         my_argv = []
         while argv.first =~ /^-/
           my_argv << argv.shift
         end
         parse_options(my_argv)
-        execute(argv)
-      end
-      
-      # Handle -e or give it up
-      def execute(argv)
-        if @execute
-          chain = [ 
-            renderer, 
-            instance_eval(argv.first)
-          ]
-          chain(*chain).execute($stdout)
+        
+        # 2) build the operator according to -e option
+        operator = if @execute
+          instance_eval(argv.first)
         else
           super
         end
+        
+        # 3) if there is a requester, then we do the job (assuming bin/alf)
+        # with the renderer to use. Otherwise, we simply return built operator
+        if requester
+          chain(renderer, operator).execute($stdout)
+        else
+          operator
+        end
       end
-  
+      
     end
     
     # 
@@ -1154,17 +1159,12 @@ module Alf
         operands, args = split_command_args(argv).collect do |arr|
           parse_options(arr)
         end
-        set_args(args)
-        if r = requester
-          chain = [
-            r.renderer,
-            self,
-            command_line_operands(operands)
-          ]
-          r.chain(*chain).execute($stdout)
-        else
-          self
-        end
+        self.set_args(args)
+        if operands = command_line_operands(operands) 
+          env = environment || (requester ? requester.environment : nil) 
+          self.pipe(operands, env)
+        end 
+        self
       end
     
       def split_command_args(args)
