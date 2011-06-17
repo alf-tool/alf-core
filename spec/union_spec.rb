@@ -13,7 +13,7 @@ module Alf
       {:city => 'Paris'}
     ]}
 
-    let(:operator){ Union.new }
+    let(:operator){ Union.run([]) }
     subject{ operator.to_a }
 
     describe "when applied on non disjoint sets" do
