@@ -13,7 +13,7 @@ module Alf
       let(:expected){[{:a => "a"}]}
 
       describe "and factored with commandline args" do
-        let(:operator){ Project.new.set_args(['a']) }
+        let(:operator){ Project.run(["--", 'a']) }
         before{ operator.pipe(input) }
         it { should == expected } 
       end
@@ -29,7 +29,7 @@ module Alf
       let(:expected){[{:b => "b"}]}
 
       describe "and factored with commandline args" do
-        let(:operator){ Project.new([], true).set_args(['a']) }
+        let(:operator){ Project.run(['--allbut', '--', 'a']) }
         before{ operator.pipe(input) }
         it { should == expected } 
       end
