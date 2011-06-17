@@ -1,3 +1,5 @@
+alf --text autonum           suppliers
+alf --text autonum           suppliers -- unique_id
 alf --text defaults          suppliers -- country "'Belgium'"
 alf --text defaults --strict suppliers -- country "'Belgium'"
 alf --text compact           suppliers

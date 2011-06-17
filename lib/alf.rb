@@ -333,7 +333,8 @@ module Alf
       end
     end
     
-    [:Defaults,
+    [:Autonum,
+     :Defaults,
      :Compact,
      :Sort,
      :Clip,
@@ -1393,6 +1394,59 @@ module Alf
   end # module Operator
 
   #################################################### non relational operators
+
+  # 
+  # Extend with an unique autonumber attribute
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
+  #
+  # API & EXAMPLE
+  #
+  #   # Autonumber suppliers (:autonum attribute name by default)
+  #   (autonum :suppliers)
+  #
+  #   # You can specify the attribute name
+  #   (autonum :suppliers, :unique_id)
+  #
+  # DESCRIPTION
+  #
+  # This operator takes input tuples in any order they come and extends them
+  # with an autonumber attribute ATTRNAME. This allows converting non-relational
+  # tuple enumerators to relational ones by ensuring uniqueness of tuples in an
+  # arbitrary manner.
+  #
+  #   alf autonum suppliers
+  #   alf autonum suppliers -- unique_id
+  #
+  class Autonum < Factory::Operator(__FILE__, __LINE__)
+    include Operator::NonRelational, Operator::Transform
+  
+    # Names of the new attribute to add
+    attr_accessor :attrname
+    
+    def initialize(attrname = :autonum)
+      @attrname = attrname
+    end
+    
+    protected 
+    
+    # @see Operator::CommandMethods#set_args
+    def set_args(args)
+      @attrname = args.last.to_sym unless args.empty? 
+    end
+    
+    # @see Operator#_prepare
+    def _prepare
+      @autonum = -1
+    end
+    
+    # @see Operator::Transform#_tuple2tuple
+    def _tuple2tuple(tuple)
+      tuple.merge(@attrname => (@autonum += 1))
+    end
+  
+  end # class Autonum
   
   # 
   # Force default values on missing/nil attributes

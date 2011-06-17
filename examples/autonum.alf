@@ -1,0 +1,6 @@
+#!/usr/bin/env alf
+# Autonumber suppliers (:autonum attribute name by default)
+(autonum :suppliers)
+
+# You can specify the attribute name
+(autonum :suppliers, :unique_id)
