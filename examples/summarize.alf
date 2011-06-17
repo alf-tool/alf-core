@@ -1,3 +1,16 @@
 #!/usr/bin/env alf
-(summarize :supplies, [:sid],
-                      :total_qty => Aggregator.sum(:qty))
+
+# What is the sum of supplied quantities by supplier?
+(summarize :supplies, 
+           [:sid],
+           :total_qty => Aggregator.sum(:qty))
+
+# Give the maximal supplied quantity by country, taking only into account
+# suppliers that have a status greater than 10
+(summarize \
+  (join \
+    (join (restrict :suppliers, lambda{ status > 10 }), 
+          :supplies), 
+    :cities),
+  [:country], 
+  :maxqty => Aggregator.sum{ qty })

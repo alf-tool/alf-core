@@ -172,19 +172,29 @@ like the following (examples/minus.alf):
     # following is equivalent
     (restrict :suppliers, lambda{ city != 'Paris' })
     
-Symbols are magically resolved from the environment, which is wired to the 
-examples by default. Of course, from the closure property of a relational algebra 
-(that states that operators works on relations and return relations), you can 
-use a sub expression *everytime* a relational operand is expected, everytime:
-
-    # 
-
 You can simply execute such expressions with the alf command line itself (the 
 three following invocations return the same result):
  
     alf examples/minus.alf | alf show
     alf show minus
     alf -e "(restrict :suppliers, lambda{ city != 'Paris' })" | alf show
+
+Symbols are magically resolved from the environment, which is wired to the 
+examples by default. Of course, from the closure property of a relational algebra 
+(that states that operators works on relations and return relations), you can 
+use a sub expression *everytime* a relational operand is expected, everytime:
+
+    # Give the maximal supplied quantity by country, taking only into account
+    # suppliers that have a status greater than 10
+    (summarize \
+      (join \
+        (join (restrict :suppliers, lambda{ status > 10 }), 
+              :supplies), 
+        :cities),
+      [:country], 
+      :maxqty => Aggregator.sum{ qty })
+
+#### Going further
 
 For now, the Ruby API is documented in the commandline help itself (a cheatsheet
 or something will be provided as soon as possible). For example, you'll find the 
