@@ -1,0 +1,7 @@
+#!/usr/bin/env alf
+with( :big_suppliers  => (restrict :suppliers, lambda{ status > 10 }),
+      :with_countries => (join :big_suppliers, :cities) ) do
+  (summarize (join :with_countries, :supplies),
+             [:country],
+             :sumqty => Aggregator.sum{ qty })
+end

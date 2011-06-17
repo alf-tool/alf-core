@@ -322,9 +322,21 @@ module Alf
     # additional temporary expressions given by definitions
     #
     def with(definitions)
+      # We branch with the definitions for compilation
       self.environment = environment.branch(definitions)
+      
+      # this is to ensure that sub definitions can reuse other
+      # ones 
+      definitions.each_value do |defn|
+        defn.environment = self.environment
+      end
+      
+      # compile now
       op = compile(&Proc.new)
+      
+      # We now unbranch for next expression
       self.environment = environment.unbranch
+
       op
     end
     
@@ -446,7 +458,7 @@ module Alf
             raise "No reader associated to extension '#{ext}' (#{file})"
           end
         else
-          raise "No such dataset #{name}"
+          raise "No such dataset #{name} (#{@folder})"
         end
       end
       
@@ -1232,7 +1244,24 @@ module Alf
     attr_accessor :datasets
     
     # Optional environment
-    attr_accessor :environment
+    attr_reader :environment
+    
+    # Sets the environment on this operator and propagate on
+    # datasets
+    def environment=(env)
+      # this is to avoid infinite loop (TODO: why is there infinite loops??)
+      return if @environment == env
+      
+      # set and propagate on children
+      @environment = env
+      datasets.each do |dataset|
+        if dataset.respond_to?(:environment)
+          dataset.environment = env
+        end  
+      end if datasets
+      
+      env
+    end
     
     # 
     # Sets the operator input
@@ -1289,7 +1318,7 @@ module Alf
       #
       def pipe(input, env = environment)
         self.environment = env
-        self.datasets = [ Iterator.coerce(input, env) ]
+        self.datasets = [ input ]
       end
 
       protected
@@ -1302,7 +1331,7 @@ module Alf
       # Simply returns the first dataset
       #
       def input
-        @datasets.first
+        Iterator.coerce(datasets.first, environment)
       end
       
       # 
@@ -1327,7 +1356,7 @@ module Alf
       #
       def pipe(input, env = environment)
         self.environment = env
-        self.datasets = input.collect{|a| Iterator.coerce(a, env)}
+        self.datasets = input
       end
 
       protected
@@ -1338,12 +1367,12 @@ module Alf
     
       # Returns the left operand
       def left
-        datasets.first
+        Iterator.coerce(datasets.first, environment)
       end
       
       # Returns the right operand
       def right
-        datasets.last
+        Iterator.coerce(datasets.last, environment)
       end
       
     end # module Binary

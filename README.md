@@ -78,7 +78,7 @@ want:
 
     alf show --rash suppliers | alf join cities | alf restrict -- "status > 10"
 
-### Obtaining a friendly text output, or yaml files, etc.
+### Obtaining a friendly output
 
 The show command (which is **not** a relational operator) can be used to obtain
 a more friendly output:
@@ -158,9 +158,14 @@ three following invocations return the same result):
     alf -e "(restrict :suppliers, lambda{ city != 'Paris' })" | alf show
 
 Symbols are magically resolved from the environment, which is wired to the 
-examples by default. Of course, from the closure property of a relational algebra 
-(that states that operators works on relations and return relations), you can 
-use a sub expression *everytime* a relational operand is expected, everytime:
+examples by default. See the dedicated sections below to update this behavior
+to your needs.
+
+### Algebra is closed under its operators!
+
+Of course, from the closure property of a relational algebra (that states that 
+operators works on relations and return relations), you can use a sub expression 
+*everytime* a relational operand is expected, everytime:
 
     # Give the maximal supplied quantity by country, taking only into account
     # suppliers that have a status greater than 10
@@ -170,7 +175,18 @@ use a sub expression *everytime* a relational operand is expected, everytime:
               :supplies), 
         :cities),
       [:country], 
-      :maxqty => Aggregator.sum{ qty })
+      :sumqty => Aggregator.sum{ qty })
+
+Of course, complex queries quickly become unreadable that way. But you can always
+split complex tasks in more simple ones using _with_:
+
+    with( :big_suppliers  => (restrict :suppliers, lambda{ status > 10 }),
+          :with_countries => (join :big_suppliers, :cities) 
+        ) do
+      (summarize (join :with_countries, :supplies),
+                 [:country],
+                 :sumqty => Aggregator.sum{ qty })
+    end
 
 ### Going further
 
