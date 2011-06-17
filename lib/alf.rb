@@ -45,10 +45,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   VERSION = "0.9.0"
 
   ############################################################################# TOOLS
-  #
-  # The following modules and classes provide tools for implementing dataflow
-  # elements.
-  #
 
   # Provides tooling 
   module Tools
@@ -288,9 +284,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class OrderingKey
 
   ############################################################################# PUBLIC API
-  #
-  # Alf's public APIs are defined below. 
-  #
 
   #
   # Provides a factory over Alf operators and handles the interface with
@@ -476,9 +469,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module Iterator
 
   ############################################################################# AGGREGATORS
-  #
-  # Aggregators collect computation on tuples.
-  #
 
   #
   # Base class for implementing aggregation operators.
@@ -668,10 +658,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Aggregator
 
   ############################################################################# BUFFERS
-  #
-  # Buffers allow holding tuples in memory or on disk and provided efficient
-  # accesses to them.
-  #
 
   #
   # Base class for implementing buffers.
@@ -708,11 +694,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Buffer
 
   ############################################################################# READERS
-  #
-  # Readers are dataflow elements at the input boundary with the outside world.
-  # They typically convert IO streams as Enumerable tuple streams. All readers
-  # should follow the basis given by Reader.
-  #
   
   #
   # Base class for implementing tuple readers.
@@ -876,11 +857,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module Reader
 
   ############################################################################# RENDERERS
-  #
-  # Renderers are dataflow elements at the output boundary with the outside 
-  # world. They typically output Enumerable tuple streams on IO streams. 
-  # All renderers should follow the basis given by Renderer.
-  #
   
   #
   # Base class for implementing renderers.
@@ -966,10 +942,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # module Renderer
 
   ############################################################################# COMMANDS
-  #
-  # Below are general purpose commands provided by alf.
-  #
-
 
   #
   # Encapsulates method definitions that convert operators to Quickl
@@ -1120,10 +1092,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Help
 
   ############################################################################# OPERATORS
-  #
-  # Operators are dataflow elements that transform input tuples. They are all
-  # Enumerable of tuples.
-  #
   
   #
   # Marker for all operators on relations.
@@ -2517,9 +2485,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
   end # class Quota
 
   ############################################################################# MAIN
-  #
-  # Below is alf main command
-  #
+
   include Lispy
 
   # Environment instance to use to get base iterators
