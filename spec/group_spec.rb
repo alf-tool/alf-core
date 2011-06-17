@@ -18,7 +18,7 @@ module Alf
     describe "without --allbut" do
 
       describe "when factored with commandline args" do
-        let(:operator){ Group.new.set_args(["time", "b", "as"]) }
+        let(:operator){ Group.run(["--", "time", "b", "as"]) }
         before{ operator.pipe(input) }
         it { should == expected }
       end
@@ -33,7 +33,7 @@ module Alf
     describe "with --allbut" do
         
       describe "when factored with commandline args" do
-        let(:operator){ Group.new.set_args(["a", "as"]) }
+        let(:operator){ Group.run(["--","a", "as"]) }
         before{ operator.allbut = true; operator.pipe(input) }
         it { should == expected }
       end
