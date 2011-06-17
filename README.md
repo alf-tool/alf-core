@@ -318,4 +318,24 @@ follows:
     projection = lispy.with(:kept_suppliers => op) do
       (project :kept_suppliers, [:city])
     end
-     
+
+## Going further
+
+### Using/Implementing other environments
+
+An Environment instance if passed as first argument of <code>Alf.lispy</code> 
+and is responsible of resolving named datasets. A base class Environment::Folder
+is provided with the Alf distribution, with a factory method on the Environment
+class itself.
+
+    env = Alf::Environment.folder("path/to/a/folder")
+    
+An environment built that way will look for .rash and .alf files in the 
+specified folder and sub-folders. 
+
+I'll of course strongly consider any contribution implementing the Environment 
+contract on top of SQL or NoSQL databases or anything that can be useful to 
+manipulate with relational algebra. Such contributions can be added to the 
+project directly, in the lib/alf/environment folder, for example.
+
+ 

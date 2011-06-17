@@ -480,15 +480,25 @@ module Alf
       
     end # class Folder
     
+    #
+    # Factors a Folder environment on a specific path
+    #
+    def self.folder(path)
+      Folder.new(path)
+    end
+    
+    #
     # Returns the default environment
+    #
     def self.default
       examples
     end
     
+    #
     # Returns the examples environment
+    #
     def self.examples
-      folder = File.expand_path('../../examples', __FILE__)
-      Folder.new(folder)
+      folder File.expand_path('../../examples', __FILE__)
     end
     
   end # class Environment
