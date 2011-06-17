@@ -1,25 +1,25 @@
-require File.expand_path('../spec_helper', __FILE__)
+require 'spec_helper'
 module Alf
-  describe Unnest do
+  describe Nest do
       
     let(:input) {[
-      {:nested => {:a => "a", :b => "b"}, :c => "c"}
+      {:a => "a", :b => "b", :c => "c"},
     ]}
 
     let(:expected) {[
-      {:a => "a", :b => "b", :c => "c"},
+      {:nested => {:a => "a", :b => "b"}, :c => "c"}
     ]}
 
     subject{ operator.to_a }
 
     describe "when factored with commandline args" do
-      let(:operator){ Unnest.run(%w{-- nested}) }
+      let(:operator){ Nest.run(["--", "a", "b", "nested"]) }
       before{ operator.pipe(input) }
       it { should == expected }
     end
 
     describe "when factored with Lispy" do
-      let(:operator){ Lispy.unnest(input, :nested) }
+      let(:operator){ Lispy.nest(input, [:a, :b], :nested) }
       it { should == expected }
     end
 
