@@ -38,8 +38,8 @@ a truly relational algebra approach. Objectives behind Alf are manifold:
 ## The example database
 
 This README file shows a lot of examples (also contained in Alf's distribution)
-built on top of the following suppliers & parts database (almost identical to  
-the original version in C.J. Date database books).
+built on top of the following suppliers & parts database (almost identical to the 
+original version in C.J. Date database books).
 
     % alf show database
 
