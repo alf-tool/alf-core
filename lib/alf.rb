@@ -1430,7 +1430,7 @@ module Alf
     # shortcuts on longer expressions.
     # 
     module Shortcut
-      include Operator, Lispy
+      include Operator
 
       # 
       # Sets the operator input
@@ -1447,6 +1447,14 @@ module Alf
         longexpr.each(&Proc.new)
       end
 
+      def chain(*elements)
+        elements = elements.reverse
+        elements[1..-1].inject(elements.first) do |c, elm|
+          elm.pipe(c, environment)
+          elm
+        end
+      end
+      
     end # module Shortcut
 
   end # module Operator
