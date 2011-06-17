@@ -1,7 +1,7 @@
 require 'yaml'
 class Alf::Reader
   class YAML < Alf::Reader
-    include Alf::TupleTools
+    include Alf::Tools
     
     def each
       x = with_input_io{|io| ::YAML::load(io)}

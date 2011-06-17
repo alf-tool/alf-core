@@ -17,18 +17,60 @@ module Alf
 
   ############################################################################# TOOLS
 
-  # Provides tooling 
+  #
+  # Provides tooling methods that are used here and there in Alf
+  # 
   module Tools
     
+    #
+    # Returns the unqualified name of a ruby class or module
+    #
+    # Example
+    #
+    #   class_name(Alf::Tools) -> :Tools
+    #
     def class_name(clazz)
       clazz.name.to_s =~ /([A-Za-z0-9_]+)$/
       $1.to_sym
     end
     
+    #
+    # Converts an unqualified class or module name to a ruby case method name.
+    #
+    # Example
+    #
+    #    ruby_case(:Alf)  -> "alf"
+    #    ruby_case(:HelloWorld) -> "hello_world"
+    # 
     def ruby_case(s)
       s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
     end
     
+    #
+    # Returns the first non nil values from arguments
+    #
+    # Example
+    #
+    #   coalesce(nil, 1, "abc") -> 1
+    #
+    def coalesce(*args)
+      args.find{|x| !x.nil?}
+    end
+    
+    #
+    # Iterates over enum and yields the block on each element. 
+    # Collect block results as key/value pairs returns them as 
+    # a Hash.
+    #
+    def tuple_collect(enum)
+      tuple = {}
+      enum.each do |elm| 
+        k, v = yield(elm)
+        tuple[k] = v
+      end
+      tuple
+    end
+
     extend Tools
   end # module Tools
   
@@ -113,39 +155,11 @@ module Alf
 
   end # class TupleHandle
 
-  #
-  # Provides tools for manipulating tuples
-  #
-  module TupleTools
-
-    #
-    # Returns the first non nil values from arguments
-    #
-    def coalesce(*args)
-      args.find{|x| !x.nil?}
-    end
-    
-    #
-    # Iterates over enum and yields the block on each element. 
-    # Collect block results as key/value pairs returns them as 
-    # a Hash.
-    #
-    def tuple_collect(enum)
-      tuple = {}
-      enum.each do |elm| 
-        k, v = yield(elm)
-        tuple[k] = v
-      end
-      tuple
-    end
-
-  end # module TupleTools
-
   # 
   # Defines a projection key
   # 
   class ProjectionKey
-    include TupleTools
+    include Tools
 
     # Projection attributes
     attr_accessor :attributes
@@ -913,6 +927,10 @@ module Alf
 
   ############################################################################# COMMANDS
   
+  #
+  # This is a marker module for Alf main commands, those that are **not** 
+  # operators at all. 
+  #
   module Command
 
     #
@@ -1103,7 +1121,7 @@ module Alf
   # Marker for all operators on relations.
   # 
   module Operator
-    include Iterator, TupleTools
+    include Iterator, Tools
 
     #
     # Encapsulates method definitions that convert operators to Quickl
