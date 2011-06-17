@@ -19,7 +19,7 @@ module Alf
     subject{ operator.to_a }
 
     describe "when factored with commandline args" do
-      let(:operator){ Compact.new }
+      let(:operator){ Compact.run(%w{}) }
       before{ operator.pipe(input) }
       it { should == expected }
     end

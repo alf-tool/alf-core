@@ -11,8 +11,8 @@ module Alf
     describe "When used without --allbut" do
       let(:expected){[{:a => "a"}]}
 
-      describe "when factored with commandline args" do
-        let(:operator){ Clip.new.set_args(['a']) }
+      describe "when factored from commandline" do
+        let(:operator){ Clip.run(%w{-- a}) }
         before{ operator.pipe(input) }
         it { should == expected } 
       end
@@ -28,7 +28,7 @@ module Alf
       let(:expected){[{:b => "b"}]}
 
       describe "when factored with commandline args" do
-        let(:operator){ Clip.new([], true).set_args(['a']) }
+        let(:operator){ Clip.run(%w{--allbut -- a}) }
         before{ operator.pipe(input) }
         it { should == expected } 
       end
