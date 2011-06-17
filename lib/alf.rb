@@ -1,21 +1,12 @@
-def alf_required(retried)
-  ["enumerator", 
-   "stringio", 
-   "quickl"].each{|req| require req}
-rescue LoadError
-  raise if retried
-  require "rubygems"
-  alf_required(true)
-end
-alf_required(false)
+require "enumerator"
+require "stringio"
+require "alf/version"
+require "alf/loader"
 
 #
 # alf - Classy data-manipulation dressed in a DSL (+ commandline)
 #
 module Alf
-  
-  # Alf's version 
-  VERSION = "0.9.0"
 
   ############################################################################# TOOLS
 

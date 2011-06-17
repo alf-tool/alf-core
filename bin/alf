@@ -1,15 +1,35 @@
 #!/usr/bin/env ruby
-$LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require "alf"
+module AlfLauncher
 
-def normalize(args)
-  opts = []
-  while !args.empty? && (args.first =~ /^\-/)
-    opts << args.shift 
+  def self.load
+    begin
+      require "alf"
+    rescue LoadError => ex
+      begin
+        require "rubygems"
+        require "alf"
+      rescue LoadError => ex
+        $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
+        require "alf"
+      end
+    end
   end
-  if args.empty? or (args.size == 1 && File.exists?(args.first))
-    opts << "exec"
+  
+  def self.normalize(args)
+    opts = []
+    while !args.empty? && (args.first =~ /^\-/)
+      opts << args.shift 
+    end
+    if args.empty? or (args.size == 1 && File.exists?(args.first))
+      opts << "exec"
+    end
+    opts += args
   end
-  opts += args
-end
-Alf::Main.run(normalize(ARGV), __FILE__)
+  
+  def self.start(argv)
+    load
+    Alf::Main.run(normalize(argv), __FILE__)
+  end
+
+end # module AlfLaucher
+AlfLauncher.start(ARGV)

@@ -1,8 +1,8 @@
 # We require your library, mainly to have access to the VERSION number. 
 # Feel free to set $version manually.
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-require "alf"
-$version = Alf::VERSION.to_s
+require "alf/version"
+$version = Alf::Version.to_s
 
 #
 # This is your Gem specification. Default values are provided so that your library
