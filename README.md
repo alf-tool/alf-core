@@ -1,11 +1,9 @@
-# Alf
-
-Classy data-manipulation dressed in a DSL (+ commandline)
+# Alf - Classy data-manipulation dressed in a DSL (+ commandline)
 
     [sudo] gem install alf
     alf --help
 
-# Description
+## Description
 
 Alf is a commandline tool and Ruby API to manipulate data with all the power of
 a truly relational algebra approach. Objectives behind Alf are manifold:
@@ -37,7 +35,7 @@ a truly relational algebra approach. Objectives behind Alf are manifold:
   mine (quota, for example is not present in TUTORIAL D) and should be considered 
   'work in progress' and used with care...
 
-# Getting started with commandline
+## Getting started with commandline
 
     alf --help
 
@@ -80,7 +78,7 @@ want:
 
     alf show --rash suppliers | alf join cities | alf restrict -- "status > 10"
 
-## Obtaining a friendly text output, or yaml files, etc.
+### Obtaining a friendly text output, or yaml files, etc.
 
 The show command (which is **not** a relational operator) can be used to obtain
 a more friendly output:
@@ -111,9 +109,9 @@ a more friendly output:
 Other formats can be obtained (see 'alf help show'). For example, you can generate
 a .yaml file, as follows: 
 
-    alf restrict suppliers "city == 'Paris'" | alf show --yaml
+    alf restrict suppliers -- "city == 'Paris'" | alf show --yaml
 
-## Executing .alf files and expressions
+### Executing .alf files and expressions
 
 You'll also find .alf files in the examples folder, that contain more complex
 examples in the Ruby functional syntax (see section below). You can simply 
@@ -139,9 +137,31 @@ Also, mimicing the ruby executable, the following invocation is also possible:
 where the argument is a relational expression in Alf's Lispy dialect, which
 is detailed in the next section.
 
-# Alf's Lispy expressions and Ruby API
+## Getting started with the Ruby API
 
-If you tke a look at .alf example files, you'll find functional ruby expressions
+### Calling commands 'ala' shell
+
+For simple cases, the easiest way of using Alf in ruby is probably to mimic
+what you have in shell:
+
+    # in shell
+    alf restrict suppliers -- "city == 'Paris'"
+    
+    # in ruby 
+    #   - create an engine on an environment (see section about environments later)
+    #   - run a command 
+    #   - op is a thread-safe enumerable of tuples, see the Lispy section below)
+    #
+    lispy = Alf.lispy(Alf::Environment.examples)
+    op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
+
+If this kind of API is not sufficiently expressive for you, you'll have to learn 
+the APIs deeper, for example with the Lispy functional style that Alf provides, 
+and which is covered in next section.
+
+### Lispy expressions
+
+If you take a look at .alf example files, you'll find functional ruby expressions
 like the following (examples/minus.alf):
 
     # Give all suppliers, except those living in Paris
@@ -157,8 +177,8 @@ operators works on relations and return relations), you can use a sub expression
 *everytime* a relational operand is expected, everytime! Symbols are magically 
 resolved from the environment, which is wired to the examples by default. 
 
-You can simply execute such expressions with alf command line itself (the three
-following invocations will return the same result):
+You can simply execute such expressions with the alf command line itself (the 
+three following invocations return the same result):
  
     alf examples/minus.alf | alf show
     alf show minus
@@ -180,18 +200,22 @@ allowed syntaxes for RESTRICT as follows:
       (restrict :suppliers, lambda{ city == 'London' })
     ...
 
-## Interfacing in Ruby itself
+### Interfacing in Ruby
 
 If you want to use Alf in ruby directly (that is, not in shell or by executing
 .alf files), you can simply compile expressions and use resulting operators as 
 follows:
 
     # 
-    # Op is an enumerable of ruby hashes (used as physical representation
-    # of tuples). We use the examples environment here, see the section
-    # below about other available environments.
+    # We use the examples environment below, see the section below about other 
+    # available environments.
     #
-    op = Alf.lispy(Alf::Environment.examples).compile {
+    # Op is an enumerable of ruby hashes (used as physical representation
+    # of tuples). Provided that terminal inputs offered by the environment
+    # (:suppliers here) can be enumerated more than once, the operator may be 
+    # used multiple times and is even thread safe!  
+    #
+    op = Alf.lispy(Alf::Environment.examples).compile do
       (restrict :suppliers, lambda{ city == 'London' })
-    }
+    end
 
