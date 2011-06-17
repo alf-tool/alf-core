@@ -330,27 +330,24 @@ class itself.
 
     env = Alf::Environment.folder("path/to/a/folder")
     
-An environment built that way will look for .rash and .alf files in the 
-specified folder and sub-folders. I'll of course strongly consider any 
-contribution implementing the Environment contract on top of SQL or NoSQL 
-databases or anything that can be useful to manipulate with relational algebra. 
-Such contributions can be added to the project directly, in the lib/alf/environment 
-folder, for example. A base template would look like:
+An environment built that way will look for .rash and .alf files in the specified 
+folder and sub-folders. I'll of course strongly consider any contribution 
+implementing the Environment contract on top of SQL or NoSQL databases or anything 
+that can be useful to manipulate with relational algebra. Such contributions can 
+be added to the project directly, in the lib/alf/environment folder, for example. 
+A base template would look like:
 
-    class Alf::Environment
-      class Foo < Alf::Environment
-      
-        #
-        # You should at least implement the _dataset_ method that resolves a 
-        # name (a Symbol instance) to an Enumerable of tuples (typically a 
-        # Reader). See Alf::Environment for exact contract details.
-        # 
-        def dataset(name)
-        end
-      
+    class Foo < Alf::Environment
+    
+      #
+      # You should at least implement the _dataset_ method that resolves a 
+      # name (a Symbol instance) to an Enumerable of tuples (typically a 
+      # Reader). See Alf::Environment for exact contract details.
+      # 
+      def dataset(name)
       end
-    end 
-
+    
+    end
 
 ### Adding file decoders, aka Readers
 
@@ -365,23 +362,21 @@ the Reader class and implementing an each method. Once again, contributions are
 very welcome in lib/alf/reader (.csv files, .log files, and so on). A basic 
 template for this is as follows:
 
-    class Alf::Reader
-      class Bar < Alf::Reader
-      
-        #
-        # You should at least implement each, see Alf::Reader which provides a 
-        # base implementation and a few tools
-        #
-        def each
-          [...]
-        end
-      
-        # By registering it, the Folder environment will automatically
-        # recognize and decode .bar files correctly!
-        Alf::Reader.register(:bar, [".bar"], self)
-        
+    class Bar < Alf::Reader
+    
+      #
+      # You should at least implement each, see Alf::Reader which provides a 
+      # base implementation and a few tools
+      #
+      def each
+        [...]
       end
-    end 
+    
+      # By registering it, the Folder environment will automatically
+      # recognize and decode .bar files correctly!
+      Alf::Reader.register(:bar, [".bar"], self)
+      
+    end
   
 ### Adding outputters, aka Renderers
 
@@ -389,25 +384,42 @@ Similarly, you can contribute renderers to output relations in html, or whatever
 format you would consider interesting. See the Renderer class, and consider the
 following template for contributions in lib/alf/renderer
 
-    class Alf::Renderer
-      class Glim < Alf::Renderer
-      
-        #
-        # You should at least implement the execute method that renders tuples 
-        # given in _input_ (an Enumerable of tuples) on the output buffer
-        # and returns the latter. See Alf::Renderer for the exact contract 
-        # details.
-        #
-        def execute(output = $stdout)
-          [...]
-          output
-        end
-
-      
-        # By registering it, the output options of 'alf show' will
-        # automatically provide your --glim contribution
-        Renderer.register(:glim, "as a .glim file", self)
-        
+    class Glim < Alf::Renderer
+    
+      #
+      # You should at least implement the execute method that renders tuples 
+      # given in _input_ (an Enumerable of tuples) on the output buffer
+      # and returns the latter. See Alf::Renderer for the exact contract 
+      # details.
+      #
+      def execute(output = $stdout)
+        [...]
+        output
       end
-    end 
+
+    
+      # By registering it, the output options of 'alf show' will
+      # automatically provide your --glim contribution
+      Alf::Renderer.register(:glim, "as a .glim file", self)
+      
+    end
   
+### Going even further
+
+You know the rules: 
+
+* The code is on github https://github.com/blambeau/alf
+* Please report any problem or bug in the issues tracker on github
+* Don't hesitate to fork and send me a pull request for any contribution/idea!
+
+Last, but not least, a small tribute to Sinatra. Alf's code style is very 
+inspired from what I've found in Sinatra when looking at its internals once. 
+Alf, as Sinatra, is mostly implemented in a single file, lib/alf.rb. Everything 
+is there but additional contributions (in lib/alf/...). You'll need an editor or 
+IDE that supports code folding/unfolding. Then, follow the guide:
+
+* Fold everything but the Alf module.
+* Main concepts, first level of abstraction, should fit on one/two screens in height
+* Unfold the concept you're interrested in, and return to the previous bullet  
+
+Enjoy Alf!
