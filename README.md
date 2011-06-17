@@ -137,29 +137,7 @@ Also, mimicing the ruby executable, the following invocation is also possible:
 where the argument is a relational expression in Alf's Lispy dialect, which
 is detailed in the next section.
 
-## Getting started with the Ruby API
-
-### Calling commands 'ala' shell
-
-For simple cases, the easiest way of using Alf in ruby is probably to mimic
-what you have in shell:
-
-    # in shell
-    alf restrict suppliers -- "city == 'Paris'"
-    
-    # in ruby 
-    #   - create an engine on an environment (see section about environments later)
-    #   - run a command 
-    #   - op is a thread-safe enumerable of tuples, see the Lispy section below)
-    #
-    lispy = Alf.lispy(Alf::Environment.examples)
-    op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
-
-If this kind of API is not sufficiently expressive for you, you'll have to learn 
-the APIs deeper, for example with the Lispy functional style that Alf provides, 
-and which is covered in next section.
-
-### Lispy expressions
+## Lispy expressions
 
 If you take a look at .alf example files, you'll find functional ruby expressions
 like the following (examples/minus.alf):
@@ -194,7 +172,7 @@ use a sub expression *everytime* a relational operand is expected, everytime:
       [:country], 
       :maxqty => Aggregator.sum{ qty })
 
-#### Going further
+### Going further
 
 For now, the Ruby API is documented in the commandline help itself (a cheatsheet
 or something will be provided as soon as possible). For example, you'll find the 
@@ -212,7 +190,29 @@ allowed syntaxes for RESTRICT as follows:
       (restrict :suppliers, lambda{ city == 'London' })
     ...
 
-### Interfacing in Ruby
+## Interfacing in Ruby (APIs)
+
+### Calling commands 'ala' shell
+
+For simple cases, the easiest way of using Alf in ruby is probably to mimic
+what you have in shell:
+
+    # in shell
+    alf restrict suppliers -- "city == 'Paris'"
+    
+    # in ruby 
+    #   - create an engine on an environment (see section about environments later)
+    #   - run a command 
+    #   - op is a thread-safe enumerable of tuples, see the Lispy section below)
+    #
+    lispy = Alf.lispy(Alf::Environment.examples)
+    op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
+
+If this kind of API is not sufficiently expressive for you, you'll have to learn 
+the APIs deeper, for example with the Lispy functional style that Alf provides, 
+and which is covered in next section.
+
+### Compiling lispy expressions
 
 If you want to use Alf in ruby directly (that is, not in shell or by executing
 .alf files), you can simply compile expressions and use resulting operators as 
