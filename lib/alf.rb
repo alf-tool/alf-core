@@ -7,6 +7,13 @@ require "alf/loader"
 # alf - Classy data-manipulation dressed in a DSL (+ commandline)
 #
 module Alf
+  
+  #
+  # Builds and returns a lispy engine on a specific environment
+  #
+  def self.lispy(env = Alf::Environment.default)
+    Command::Main.new(env)
+  end
 
   ############################################################################# TOOLS
 
@@ -258,7 +265,7 @@ module Alf
     # @see Quickl::Command
     def Command(file, line)
       Quickl::Command(file, line){|builder|
-        builder.command_parent = Alf::Main
+        builder.command_parent = Alf::Command::Main
         yield(builder) if block_given?
       }
     end
@@ -809,7 +816,7 @@ module Alf
       
       # @see Reader#each
       def each
-        op = Alf::Main.new(environment).compile(input_text)
+        op = Alf.lispy(environment).compile(input_text)
         op.each(&Proc.new)
       end
       
@@ -905,187 +912,191 @@ module Alf
   end # module Renderer
 
   ############################################################################# COMMANDS
+  
+  module Command
 
-  #
-  # alf - Classy data-manipulation dressed in a DSL (+ commandline)
-  #
-  # SYNOPSIS
-  #   alf [--version] [--help] 
-  #   alf -e '(lispy command)'
-  #   alf [FILE.alf]
-  #   alf [alf opts] OPERATOR [operator opts] ARGS ...
-  #   alf help OPERATOR
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # RELATIONAL COMMANDS
-  # #{summarized_subcommands subcommands.select{|cmd| 
-  #     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
-  # }}
-  #
-  # NON-RELATIONAL COMMANDS
-  # #{summarized_subcommands subcommands.select{|cmd| 
-  #     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
-  # }}
-  #
-  # OTHER NON-RELATIONAL COMMANDS
-  # #{summarized_subcommands subcommands.select{|cmd| 
-  #   !cmd.include?(Alf::Operator)
-  # }}
-  #
-  # See '#{program_name} help COMMAND' for details about a specific command.
-  #
-  class Main < Quickl::Delegator(__FILE__, __LINE__)
-    include Lispy
-  
-    # Environment instance to use to get base iterators
-    attr_reader :environment
-  
-    # Output renderer
-    attr_reader :renderer
+    #
+    # alf - Classy data-manipulation dressed in a DSL (+ commandline)
+    #
+    # SYNOPSIS
+    #   alf [--version] [--help] 
+    #   alf -e '(lispy command)'
+    #   alf [FILE.alf]
+    #   alf [alf opts] OPERATOR [operator opts] ARGS ...
+    #   alf help OPERATOR
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # RELATIONAL COMMANDS
+    # #{summarized_subcommands subcommands.select{|cmd| 
+    #     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
+    # }}
+    #
+    # NON-RELATIONAL COMMANDS
+    # #{summarized_subcommands subcommands.select{|cmd| 
+    #     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
+    # }}
+    #
+    # OTHER NON-RELATIONAL COMMANDS
+    # #{summarized_subcommands subcommands.select{|cmd| 
+    #   !cmd.include?(Alf::Operator)
+    # }}
+    #
+    # See '#{program_name} help COMMAND' for details about a specific command.
+    #
+    class Main < Quickl::Delegator(__FILE__, __LINE__)
+      include Lispy
     
-    # Creates a command instance
-    def initialize(env = Environment.default)
-      @environment = env
+      # Environment instance to use to get base iterators
+      attr_reader :environment
+    
+      # Output renderer
+      attr_reader :renderer
+      
+      # Creates a command instance
+      def initialize(env = Environment.default)
+        @environment = env
+      end
+      
+      # Install options
+      options do |opt|
+        @execute = false
+        opt.on("-e", "--execute", "Execute one line of script (Lispy API)") do 
+          @execute = true
+        end
+        
+        @renderer = Renderer::Rash.new
+        Renderer.each_renderer do |name,descr,clazz|
+          opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
+        end
+        
+        opt.on_tail('-h', "--help", "Show help") do
+          raise Quickl::Help
+        end
+        
+        opt.on_tail('-v', "--version", "Show version") do
+          raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
+                              " (c) 2011, Bernard Lambeau"
+        end
+      end # Alf's options
+      
+      # Overrided because Quickl only keep --options but modifying
+      # it there should probably be considered a broken API.
+      def _run(argv = [])
+        my_argv = []
+        while argv.first =~ /^-/
+          my_argv << argv.shift
+        end
+        parse_options(my_argv)
+        execute(argv)
+      end
+      
+      # Handle -e or give it up
+      def execute(argv)
+        if @execute
+          chain = [ 
+            renderer, 
+            instance_eval(argv.first)
+          ]
+          chain(*chain).execute($stdout)
+        else
+          super
+        end
+      end
+  
     end
     
-    # Install options
-    options do |opt|
-      @execute = false
-      opt.on("-e", "--execute", "Execute one line of script (Lispy API)") do 
-        @execute = true
-      end
-      
-      @renderer = Renderer::Rash.new
-      Renderer.each_renderer do |name,descr,clazz|
-        opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
-      end
-      
-      opt.on_tail('-h', "--help", "Show help") do
-        raise Quickl::Help
-      end
-      
-      opt.on_tail('-v', "--version", "Show version") do
-        raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
-                            " (c) 2011, Bernard Lambeau"
-      end
-    end # Alf's options
+    # 
+    # Output input tuples through a specific renderer (text, yaml, ...)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [DATASET...]
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # DESCRIPTION
+    #
+    # When dataset names are specified as commandline args, request the environment 
+    # to provide those datasets and print them. Otherwise, take what comes on standard
+    # input.
+    #
+    # Note that this command is not an operator and should not be piped anymore.
+    #
+    class Show < Factory::Command(__FILE__, __LINE__)
     
-    # Overrided because Quickl only keep --options but modifying
-    # it there should probably be considered a broken API.
-    def _run(argv = [])
-      my_argv = []
-      while argv.first =~ /^-/
-        my_argv << argv.shift
+      options do |opt|
+        @renderer = Renderer::Text
+        Renderer.each_renderer do |name,descr,clazz|
+          opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz }
+        end
       end
-      parse_options(my_argv)
-      execute(argv)
-    end
+        
+      def execute(args)
+        args = [ $stdin ] if args.empty?
+        args.each do |input|
+          chain = [
+            @renderer.new,
+            input
+          ]
+          requester.chain(*chain).execute($stdout)
+        end
+      end
     
-    # Handle -e or give it up
-    def execute(argv)
-      if @execute
+    end # class Show
+    
+    # 
+    # Executes an .alf file on current environment
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [FILE]
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # DESCRIPTION
+    #
+    # This command executes the .alf file passed as first argument (or what comes
+    # on standard input) as a alf query to be executed on the current environment.
+    #
+    class Exec < Factory::Command(__FILE__, __LINE__)
+      
+      def execute(args)
         chain = [ 
-          renderer, 
-          instance_eval(argv.first)
-        ]
-        chain(*chain).execute($stdout)
-      else
-        super
-      end
-    end
-
-  end
-  
-  # 
-  # Output input tuples through a specific renderer (text, yaml, ...)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [DATASET...]
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # When dataset names are specified as commandline args, request the environment 
-  # to provide those datasets and print them. Otherwise, take what comes on standard
-  # input.
-  #
-  # Note that this command is not an operator and should not be piped anymore.
-  #
-  class Show < Factory::Command(__FILE__, __LINE__)
-  
-    options do |opt|
-      @renderer = Renderer::Text
-      Renderer.each_renderer do |name,descr,clazz|
-        opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz }
-      end
-    end
-      
-    def execute(args)
-      args = [ $stdin ] if args.empty?
-      args.each do |input|
-        chain = [
-          @renderer.new,
-          input
+          requester.renderer, 
+          Reader.alf(args.first || $stdin, requester.environment)
         ]
         requester.chain(*chain).execute($stdout)
       end
-    end
-  
-  end # class Show
-  
-  # 
-  # Executes an .alf file on current environment
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [FILE]
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # This command executes the .alf file passed as first argument (or what comes
-  # on standard input) as a alf query to be executed on the current environment.
-  #
-  class Exec < Factory::Command(__FILE__, __LINE__)
+      
+    end # class Exec
     
-    def execute(args)
-      chain = [ 
-        requester.renderer, 
-        Reader.alf(args.first || $stdin, requester.environment)
-      ]
-      requester.chain(*chain).execute($stdout)
-    end
-    
-  end # class Exec
-  
-  # 
-  # Show help about a specific command
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} COMMAND
-  #
-  class Help < Factory::Command(__FILE__, __LINE__)
-    
-    # Let NoSuchCommandError be passed to higher stage
-    no_react_to Quickl::NoSuchCommand
-    
-    # Command execution
-    def execute(args)
-      if args.size != 1
-        puts super_command.help
-      else
-        cmd = has_command!(args.first, super_command)
-        puts cmd.help
+    # 
+    # Show help about a specific command
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} COMMAND
+    #
+    class Help < Factory::Command(__FILE__, __LINE__)
+      
+      # Let NoSuchCommandError be passed to higher stage
+      no_react_to Quickl::NoSuchCommand
+      
+      # Command execution
+      def execute(args)
+        if args.size != 1
+          puts super_command.help
+        else
+          cmd = has_command!(args.first, super_command)
+          puts cmd.help
+        end
       end
-    end
-    
-  end # class Help
+      
+    end # class Help
 
+  end
+  
   ############################################################################# OPERATORS
 
   #

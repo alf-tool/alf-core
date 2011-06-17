@@ -28,7 +28,7 @@ module AlfLauncher
   
   def self.start(argv)
     load
-    Alf::Main.run(normalize(argv), __FILE__)
+    Alf::Command::Main.run(normalize(argv), __FILE__)
   end
 
 end # module AlfLaucher
