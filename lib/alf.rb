@@ -384,26 +384,55 @@ module Alf
   class Environment
     
     #
+    # Branches this environment and puts some additional explicit 
+    # definitions
+    #
+    def branch(defs)
+      Explicit.new(defs, self)
+    end
+    
+    #
+    # Specialization of Environment that works with explicitely defined 
+    # datasources and allow branching and unbranching.
+    #
+    class Explicit < Environment
+      
+      #
+      # Creates a new environment instance with initial definitions
+      # and optional child environment.
+      #
+      def initialize(defs = {}, child = nil)
+        @defs = defs
+        @child = child
+      end
+      
+      # 
+      # Unbranches this environment and returns its child
+      #
+      def unbranch
+        @child
+      end
+      
+      # @see Environment#dataset
+      def dataset(name)
+        if @defs.has_key?(name)
+          @defs[name]
+        elsif @child
+          @child.dataset(name)
+        else
+          raise "No such dataset #{name}"
+        end 
+      end
+      
+    end # class Explicit
+    
+    #
     # Specialization of Environment to work on files of a given folder
     #
     class Folder < Environment
       
       def initialize(folder)
         @folder = folder
-      end
-      
-      def find_file(name)
-        # TODO: refactor this, because it allows getting out of the folder
-        if File.exists?(name.to_s)
-          name.to_s
-        elsif File.exists?(explicit = File.join(@folder, name.to_s)) &&
-              File.file?(explicit)
-          explicit
-        else
-          Dir[File.join(@folder, "**/#{name}.*")].find do |f|
-            File.file?(f)
-          end
-        end
       end
       
       def dataset(name)
@@ -419,16 +448,33 @@ module Alf
         end
       end
       
+      protected
+      
+      def find_file(name)
+        # TODO: refactor this, because it allows getting out of the folder
+        if File.exists?(name.to_s)
+          name.to_s
+        elsif File.exists?(explicit = File.join(@folder, name.to_s)) &&
+              File.file?(explicit)
+          explicit
+        else
+          Dir[File.join(@folder, "**/#{name}.*")].find do |f|
+            File.file?(f)
+          end
+        end
+      end
+      
     end # class Folder
     
     # Returns the default environment
     def self.default
-      Folder.new File.expand_path('../../examples', __FILE__)
+      examples
     end
     
     # Returns the examples environment
     def self.examples
-      Folder.new File.expand_path('../../examples', __FILE__)
+      folder = File.expand_path('../../examples', __FILE__)
+      Folder.new(folder)
     end
     
   end # class Environment
