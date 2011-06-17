@@ -167,24 +167,28 @@ Of course, from the closure property of a relational algebra (that states that
 operators works on relations and return relations), you can use a sub expression 
 *everytime* a relational operand is expected, everytime:
 
-    # Give the maximal supplied quantity by country, taking only into account
-    # suppliers that have a status greater than 10
+    # Compute the total qty supplied in each country together with the subset 
+    # of products shipped there. Only consider suppliers that have a status
+    # greater than 10, however.
     (summarize \
       (join \
         (join (restrict :suppliers, lambda{ status > 10 }), 
               :supplies), 
         :cities),
-      [:country], 
-      :sumqty => Aggregator.sum{ qty })
+      [:country],
+      :which => Aggregator.group(:pid),
+      :total => Aggregator.sum{ qty })
 
 Of course, complex queries quickly become unreadable that way. But you can always
 split complex tasks in more simple ones using _with_:
 
-    with( :big_suppliers  => (restrict :suppliers, lambda{ status > 10 }),
-          :with_countries => (join :big_suppliers, :cities) ) do
-      (summarize (join :with_countries, :supplies),
+    with( :kept_suppliers => (restrict :suppliers, lambda{ status > 10 }),
+          :with_countries => (join :kept_suppliers, :cities),
+          :supplying      => (join :with_countries, :supplies) ) do
+      (summarize :supplying,
                  [:country],
-                 :sumqty => Aggregator.sum{ qty })
+                 :which => Aggregator.group(:pid),
+                 :total => Aggregator.sum{ qty })
     end
 
 ### Going further

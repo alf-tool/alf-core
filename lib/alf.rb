@@ -676,6 +676,24 @@ module Alf
     #
     # Defines a COLLECT aggregation operator
     #
+    class Group < Aggregator
+      def initialize(*attrs)
+        super(nil, {}){
+          Tools.tuple_collect(attrs){|k| [k, self.send(k)] }
+        }
+      end
+      def least(); []; end
+      def _happens(memo, val)
+        memo << val
+      end
+      def finalize(memo)
+        memo.uniq
+      end
+    end
+    
+    #
+    # Defines a COLLECT aggregation operator
+    #
     class Collect < Aggregator
       def least(); []; end
       def _happens(memo, val) 
