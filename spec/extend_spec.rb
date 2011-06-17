@@ -20,7 +20,7 @@ module Alf
     end
 
     describe "When factored from commandline args" do
-      let(:operator){ Extend.new.set_args(["big", "tested > 10"]) }
+      let(:operator){ Extend.run(%w{-- big} + ["tested > 10"]) }
       before{ operator.pipe(input) }
       it{ should == expected }
     end
