@@ -1100,7 +1100,7 @@ module Alf
         
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
-        if operator.is_a?(Iterator) && requester
+        if operator && requester
           chain(renderer, operator).execute($stdout)
         else
           operator
@@ -1160,11 +1160,7 @@ module Alf
     class Exec < Factory::Command(__FILE__, __LINE__)
       
       def execute(args)
-        chain = [ 
-          requester.renderer, 
-          Reader.alf(args.first || $stdin, requester.environment)
-        ]
-        requester.chain(*chain).execute($stdout)
+        Reader.alf(args.first || $stdin, requester.environment)
       end
       
     end # class Exec
@@ -1188,6 +1184,7 @@ module Alf
           cmd = has_command!(args.first, super_command)
           puts cmd.help
         end
+        nil
       end
       
     end # class Help
