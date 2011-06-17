@@ -300,6 +300,9 @@ module Alf
   #
   module Lispy
     
+    # The environment
+    attr_accessor :environment
+    
     #
     # Compiles a query expression given by a String or a block and returns
     # the result (typically a tuple iterator)
@@ -333,9 +336,9 @@ module Alf
     # additional temporary expressions given by definitions
     #
     def with(definitions)
-      @environment = @environment.branch(definitions)
+      self.environment = environment.branch(definitions)
       op = compile(&Proc.new)
-      @environment = @environment.unbranch
+      self.environment = environment.unbranch
       op
     end
     
@@ -345,7 +348,7 @@ module Alf
     def chain(*elements)
       elements = elements.reverse
       elements[1..-1].inject(elements.first) do |c, elm|
-        elm.pipe(c, _the_env)
+        elm.pipe(c, environment)
         elm
       end
     end
@@ -387,10 +390,6 @@ module Alf
     
     private
 
-    def _the_env
-      respond_to?(:environment) ? environment : nil
-    end
-    
     extend Lispy
   end # module Lispy
 
