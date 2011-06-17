@@ -30,5 +30,17 @@ describe Alf do
       end
     }.to_a.should == expected
   end
+  
+  it "should allow reusing temporary expressions" do
+    op = lispy.compile do
+      (restrict :suppliers, lambda{ city == 'London' })
+    end
+    projection = lispy.with(:kept_suppliers => op) do
+      (project :kept_suppliers, [:city])
+    end
+    projection.to_a.should == [
+      {:city => 'London'}
+    ]
+  end
 
 end

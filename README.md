@@ -276,25 +276,40 @@ what you have in shell:
     op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
 
 If this kind of API is not sufficiently expressive for you, you'll have to learn 
-the APIs deeper, for example with the Lispy functional style that Alf provides, 
-and which is covered in next section.
+the APIs deeper, and use the Lispy functional style that Alf provides, which can
+be compiled and used as explained in the next section.
 
-### Compiling lispy expressions
+### Compiling and manipulating lispy expressions
 
 If you want to use Alf in ruby directly (that is, not in shell or by executing
 .alf files), you can simply compile expressions and use resulting operators as 
 follows:
 
     # 
-    # We use the examples environment below, see the section below about other 
-    # available environments.
+    # Expressions can simply be compiled as illustrated below. We use the 
+    # examples environment here, see the dedicated section later about other 
+    # available environments. 
     #
-    # Op is an enumerable of ruby hashes (used as physical representation
-    # of tuples). Provided that terminal inputs offered by the environment
-    # (:suppliers here) can be enumerated more than once, the operator may be 
-    # used multiple times and is even thread safe!  
-    #
-    op = Alf.lispy(Alf::Environment.examples).compile do
+    lispy = Alf.lispy(Alf::Environment.examples)
+    op = lispy.compile do
       (restrict :suppliers, lambda{ city == 'London' })
     end
 
+    #
+    # Returned _op_ is an enumerable of ruby hashes. Provided that datasets
+    # offered by the environment (:suppliers here) can be enumerated more than 
+    # once, the operator may be used multiple times and is even thread safe!
+    #  
+    op.each do |tuple|
+      # tuple is a ruby Hash
+    end
+
+    #
+    # Now, maybe you want to reuse op in a larger query, for example 
+    # by projecting on the city attribute... Here is how with expressions
+    # can be handled in that case
+    #
+    projection = lispy.with(:kept_suppliers => op) do
+      (project :kept_suppliers, [:city])
+    end
+     
