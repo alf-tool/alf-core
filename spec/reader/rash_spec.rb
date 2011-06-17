@@ -1,6 +1,6 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'stringio'
-class Alf
+module Alf
   describe Reader::Rash do
 
     let(:lines){ [{:id => 1},{:id => 2}]                 }

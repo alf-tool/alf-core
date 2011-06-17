@@ -1,5 +1,5 @@
 require File.expand_path('../spec_helper', __FILE__)
-class Alf
+module Alf
   describe "Alf's examples" do
     
     shared_examples_for "An example" do

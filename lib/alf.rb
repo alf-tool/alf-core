@@ -12,7 +12,7 @@ alf_required(false)
 #
 # alf - Classy data-manipulation dressed in a DSL (+ commandline)
 #
-class Alf
+module Alf
   
   # Alf's version 
   VERSION = "0.9.0"
@@ -823,7 +823,7 @@ class Alf
       end
       
       Reader.register(:alf, [".alf"], self)
-    end # class AlfFile
+    end # module AlfFile
 
     require "alf/reader/yaml"
   end # module Reader
@@ -2548,5 +2548,4 @@ class Alf
 
   end # class Quota
   
-
-end # class Alf
+end # module Alf

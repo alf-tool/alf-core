@@ -1,6 +1,6 @@
 require File.expand_path('../../spec_helper', __FILE__)
 require 'stringio'
-class Alf
+module Alf
   describe Reader::AlfFile do
     
     let(:io){ StringIO.new "(restrict :suppliers, lambda{status > 20})" }

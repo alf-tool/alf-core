@@ -1,5 +1,5 @@
 require File.expand_path('../../spec_helper', __FILE__)
-class Alf
+module Alf
   describe Environment::Folder do
     
     let(:path){ File.expand_path('../../../examples', __FILE__) }
