@@ -33,13 +33,14 @@ describe Alf do
   
   it "should allow reusing temporary expressions" do
     op = lispy.compile do
-      (restrict :suppliers, lambda{ city == 'London' })
+      (restrict :suppliers, lambda{ status > 20 })
     end
     projection = lispy.with(:kept_suppliers => op) do
       (project :kept_suppliers, [:city])
     end
     projection.to_a.should == [
-      {:city => 'London'}
+      {:city => 'Paris'},
+      {:city => 'Athens'}
     ]
   end
 
