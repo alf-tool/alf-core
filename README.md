@@ -37,6 +37,10 @@ a truly relational algebra approach. Objectives behind Alf are manifold:
 
 ## The example database
 
+This README file shows a lot of examples (also contained in Alf's distribution)
+built on top of the following suppliers & parts database (almost identical to  
+the original version in C.J. Date database books).
+
     % alf show database
 
     +-------------------------------------+-------------------------------------------------+-------------------------+------------------------+
@@ -59,6 +63,64 @@ a truly relational algebra approach. Objectives behind Alf are manifold:
     |                                     |                                                 |                         | | S4   | P5   |  400 | |
     |                                     |                                                 |                         | +------+------+------+ |
     +-------------------------------------+-------------------------------------------------+-------------------------+------------------------+
+
+### Terminology, concepts & rules
+
+We mostly use the terminology used by Date & Darwen in their books, which is 
+intentionally different than SQL's (they don't use _table_ and _record_ terms, 
+for example). Also, the relational theory comes with a certain number of rules
+that need to be respected to avoid everything to become a nightmare (and that 
+are often violated in SQL, leading to nightmares). We recall the most important 
+notions and rules below. Alf's relational operators all have those common rules
+as implicit pre-conditions. Post-conditions are guaranteed only in this case. 
+Behavior observed without respecting preconditions, even interesting side-effects, 
+are **not** guaranteed and may disappear at any time.
+
+#### Tuple(s)
+
+* We prefer the term _tuple_ instead of _record_. Logically speaking, a tuple is 
+  a set of (attribute name, attribute value) pairs. Being a set, it does never
+  contain two attributes with the same name and is **not particularly ordered**. 
+  Also, **a tuple is a _value_, and is therefore immutable**. Tuples in Alf are 
+  simply represented with ruby hashes. Alf does not freeze them for guaranteeing 
+  immutability, but could do it in the future. No support is or will ever be 
+  provided for ordering tuple attributes. Because hashes are ordered in Ruby 1.9,
+  Alf implements a best effort strategy to keep a friendly ordering when rendering 
+  tuples. 
+  
+      {:sid => "S1", :name => "Smith", :status => 20, :city => "London"} 
+
+#### Relation(s)
+      
+* A _relation_ is a set of tuples (while wrong, a relation is often described
+  as the _content_ of a "table"). Being a set, a relation does **never contain
+  duplicates** (unlike SQL that works on bags, not on sets) and is **not 
+  particularly ordered**. Moreover, all tuples of a relation must have the same
+  "structure", that is, the same set of attributes names and types. Also, **a 
+  relation is a _value_, and is therefore immutable**. 
+  
+  This is not saying that you cannot compute new relation values from other 
+  relation values, but that you don't do it by "modifying" relation contents but 
+  by using algebra expressions. In classical algebra, you can do computations like 
+  <code>(5 + 2) - 3</code>. In relational algebra, you can do similar things on 
+  relations (we use an infix notation, inspired from functional programming to 
+  strengthen immutability):
+  
+      (minus (union :suppliers, ...), ...)
+
+  Alf being an algebra implementation, it does rarely represent relations explicitly 
+  at the logical level but work on "physical" representations of them, through 
+  Enumerables of tuples. That is, an algebra expression as given above should not
+  be seen here as returning a relation _per se_, but instead as returning an operator 
+  allowing to compute the resulting relation. The result is always an Enumerable, 
+  whose <code>each</code> method yields ruby hashes, as tuple representations. 
+  Provided that their operands are valid relation representations (no duplicates, 
+  no nil, no particular order), Alf's relational operators return valid relation 
+  representations (idem). 
+
+#### Value(s) ... all but nil
+
+* A relation is a set of tuples, while a tuple is a set of (name, value) pairs. 
 
 ## Getting started with commandline
 
@@ -418,8 +480,8 @@ Alf, as Sinatra, is mostly implemented in a single file, lib/alf.rb. Everything
 is there but additional contributions (in lib/alf/...). You'll need an editor or 
 IDE that supports code folding/unfolding. Then, follow the guide:
 
-* Fold everything but the Alf module.
-* Main concepts, first level of abstraction, should fit on one/two screens in height
-* Unfold the concept you're interrested in, and return to the previous bullet  
+1. Fold everything but the Alf module.
+2. Main concepts, first level of abstraction, should fit on one/two screens in height
+3. Unfold the concept you're interested in, and return to the previous bullet  
 
 Enjoy Alf!
