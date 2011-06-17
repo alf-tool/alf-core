@@ -965,18 +965,18 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     require "alf/renderer/yaml"
   end # module Renderer
 
-  ############################################################################# OPERATORS
+  ############################################################################# COMMANDS
   #
-  # Operators are dataflow elements that transform input tuples. They are all
-  # Enumerable of tuples.
+  # Below are general purpose commands provided by alf.
   #
-  
+
+
   #
   # Encapsulates method definitions that convert operators to Quickl
   # commands
   #
   module Command
-
+  
     #
     # Configures the operator from arguments taken from command line. 
     #
@@ -1013,7 +1013,7 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
         self
       end
     end
-
+  
     def split_command_args(args)
       operands, args = case i = args.index("--")
       when NilClass
@@ -1028,8 +1028,102 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     def command_line_operands(operands)
       operands
     end
-
+  
   end # module Command
+    
+  # 
+  # Output input tuples through a specific renderer (text, yaml, ...)
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} [DATASET...]
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # When dataset names are specified as commandline args, request the environment 
+  # to provide those datasets and print them. Otherwise, take what comes on standard
+  # input.
+  #
+  # Note that this command is not an operator and should not be piped anymore.
+  #
+  class Show < Factory::Command(__FILE__, __LINE__)
+  
+    options do |opt|
+      @renderer = Renderer::Text
+      Renderer.each_renderer do |name,descr,clazz|
+        opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz }
+      end
+    end
+      
+    def execute(args)
+      args = [ $stdin ] if args.empty?
+      args.each do |input|
+        chain = [
+          @renderer.new,
+          input
+        ]
+        requester.chain(*chain).execute($stdout)
+      end
+    end
+  
+  end # class Show
+  
+  # 
+  # Executes an .alf file on current environment
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} [FILE]
+  #
+  # OPTIONS
+  # #{summarized_options}
+  #
+  # DESCRIPTION
+  #
+  # This command executes the .alf file passed as first argument (or what comes
+  # on standard input) as a alf query to be executed on the current environment.
+  #
+  class Exec < Factory::Command(__FILE__, __LINE__)
+    
+    def execute(args)
+      chain = [ 
+        requester.renderer, 
+        Reader.alf(args.first || $stdin, requester.environment)
+      ]
+      requester.chain(*chain).execute($stdout)
+    end
+    
+  end # class Exec
+  
+  # 
+  # Show help about a specific command
+  #
+  # SYNOPSIS
+  #   #{program_name} #{command_name} COMMAND
+  #
+  class Help < Factory::Command(__FILE__, __LINE__)
+    
+    # Let NoSuchCommandError be passed to higher stage
+    no_react_to Quickl::NoSuchCommand
+    
+    # Command execution
+    def execute(args)
+      if args.size != 1
+        puts super_command.help
+      else
+        cmd = has_command!(args.first, super_command)
+        puts cmd.help
+      end
+    end
+    
+  end # class Help
+
+  ############################################################################# OPERATORS
+  #
+  # Operators are dataflow elements that transform input tuples. They are all
+  # Enumerable of tuples.
+  #
   
   #
   # Marker for all operators on relations.
@@ -2421,99 +2515,6 @@ class Alf < Quickl::Delegator(__FILE__, __LINE__)
     end 
 
   end # class Quota
-
-  ############################################################################# OTHER COMMANDS
-  #
-  # Below are general purpose commands provided by alf.
-  #
-
-  # 
-  # Output input tuples through a specific renderer (text, yaml, ...)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [DATASET...]
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # When dataset names are specified as commandline args, request the environment 
-  # to provide those datasets and print them. Otherwise, take what comes on standard
-  # input.
-  #
-  # Note that this command is not an operator and should not be piped anymore.
-  #
-  class Show < Factory::Command(__FILE__, __LINE__)
-
-    options do |opt|
-      @renderer = Renderer::Text
-      Renderer.each_renderer do |name,descr,clazz|
-        opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz }
-      end
-    end
-      
-    def execute(args)
-      args = [ $stdin ] if args.empty?
-      args.each do |input|
-        chain = [
-          @renderer.new,
-          input
-        ]
-        requester.chain(*chain).execute($stdout)
-      end
-    end
-  
-  end # class Show
-
-  # 
-  # Executes an .alf file on current environment
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [FILE]
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # DESCRIPTION
-  #
-  # This command executes the .alf file passed as first argument (or what comes
-  # on standard input) as a alf query to be executed on the current environment.
-  #
-  class Exec < Factory::Command(__FILE__, __LINE__)
-    
-    def execute(args)
-      chain = [ 
-        requester.renderer, 
-        Reader.alf(args.first || $stdin, requester.environment)
-      ]
-      requester.chain(*chain).execute($stdout)
-    end
-    
-  end # class Exec
-  
-  # 
-  # Show help about a specific command
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} COMMAND
-  #
-  class Help < Factory::Command(__FILE__, __LINE__)
-    
-    # Let NoSuchCommandError be passed to higher stage
-    no_react_to Quickl::NoSuchCommand
-    
-    # Command execution
-    def execute(args)
-      if args.size != 1
-        puts super_command.help
-      else
-        cmd = has_command!(args.first, super_command)
-        puts cmd.help
-      end
-    end
-    
-  end # class Help
 
   ############################################################################# MAIN
   #
