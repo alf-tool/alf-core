@@ -18,7 +18,7 @@ module Alf
     end
 
     describe "When factored from commandline args" do
-      let(:operator){ Rename.new.set_args(['a', 'z']) }
+      let(:operator){ Rename.run(['--', 'a', 'z']) }
       before{ operator.pipe(input) }
       it{ should == expected }
     end
