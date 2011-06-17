@@ -1129,6 +1129,8 @@ module Alf
     #
     module CommandMethods
     
+      protected
+      
       #
       # Configures the operator from arguments taken from command line. 
       #
@@ -1138,8 +1140,6 @@ module Alf
       def set_args(args)
         self
       end
-      
-      protected
       
       #
       # Overrides Quickl::Command::Single#_run to handles the '--' separator
@@ -1450,6 +1450,8 @@ module Alf
       }
     end
 
+    protected 
+
     # @see Operator#set_args
     def set_args(args)
       @defaults = tuple_collect(args.each_slice(2)) do |k,v|
@@ -1457,8 +1459,6 @@ module Alf
       end
       self
     end
-
-    protected 
 
     # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
@@ -1587,12 +1587,12 @@ module Alf
       @ordering_key = OrderingKey.coerce(ordering)
     end
   
+    protected 
+  
     def set_args(args)
       self.ordering = args.collect{|c| c.to_sym}.each_slice(2).to_a
       self
     end
-  
-    protected 
   
     def _prepare
       @buffer = Buffer::Sorted.new(@ordering_key)
@@ -1659,13 +1659,13 @@ module Alf
       end
     end
 
+    protected 
+
     # @see Operator#set_args
     def set_args(args)
       self.attributes = args.collect{|a| a.to_sym}
       self
     end
-
-    protected 
 
     # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
@@ -1729,13 +1729,13 @@ module Alf
       end
     end
   
+    protected 
+  
     # @see Operator#set_args
     def set_args(args)
       self.attributes = args.collect{|a| a.to_sym}
       self
     end
-  
-    protected 
   
     # @see Operator::Shortcut#longexpr
     def longexpr
@@ -1781,6 +1781,8 @@ module Alf
       @extensions = extensions
     end
 
+    protected 
+  
     # @see Operator#set_args
     def set_args(args)
       @extensions = tuple_collect(args.each_slice(2)){|k,v|
@@ -1788,8 +1790,6 @@ module Alf
       }
       self
     end
-
-    protected 
 
     # @see Operator#_prepare
     def _prepare
@@ -1838,13 +1838,13 @@ module Alf
       @renaming = renaming
     end
 
+    protected 
+  
     # @see Operator#set_args
     def set_args(args)
       @renaming = Hash[*args.collect{|c| c.to_sym}]
       self
     end
-
-    protected 
 
     # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
@@ -1892,6 +1892,8 @@ module Alf
       yield self if block_given?
     end
 
+    protected 
+  
     # @see Operator#set_args
     def set_args(args)
       @predicate = if args.size > 1
@@ -1903,8 +1905,6 @@ module Alf
       end
       self
     end
-
-    protected 
 
     # @see Operator#_each
     def _each
@@ -2173,14 +2173,14 @@ module Alf
       @as = as
     end
 
+    protected 
+
     # @see Operator#set_args
     def set_args(args)
       @as = args.pop.to_sym
       @attributes = args.collect{|a| a.to_sym}
       self
     end
-
-    protected 
 
     # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
@@ -2222,13 +2222,13 @@ module Alf
       @attribute = attribute
     end
 
+    protected 
+
     # @see Operator#set_args
     def set_args(args)
       @attribute = args.first.to_sym
       self
     end
-
-    protected 
 
     # @see Operator::Transform#_tuple2tuple
     def _tuple2tuple(tuple)
@@ -2283,14 +2283,14 @@ module Alf
       opt.on('--allbut', "Group all but specified attributes"){ @allbut = true }
     end
     
+    protected 
+
     # @see Operator#set_args
     def set_args(args)
       @as = args.pop.to_sym
       @attributes = args.collect{|a| a.to_sym}
       self
     end
-
-    protected
 
     # See Operator#_prepare
     def _prepare
@@ -2343,13 +2343,13 @@ module Alf
       @attribute = attribute
     end
 
+    protected 
+
     # @see Operator#set_args
     def set_args(args)
       @attribute = args.pop.to_sym
       self
     end
-
-    protected 
 
     # See Operator#_each
     def _each
@@ -2411,14 +2411,6 @@ module Alf
       end
     end
 
-    # @see Operator#set_args
-    def set_args(args)
-      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a.to_sym, Aggregator.compile(expr)]
-      end
-      self
-    end
-
     # Summarizes according to a complete order
     class SortBased
       include Alf::Operator::Cesure      
@@ -2455,6 +2447,14 @@ module Alf
 
     protected 
     
+    # @see Operator#set_args
+    def set_args(args)
+      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
+        [a.to_sym, Aggregator.compile(expr)]
+      end
+      self
+    end
+
     def longexpr
       by_key = ProjectionKey.new(@by, false)
       chain SortBased.new(by_key, @aggregators),
@@ -2510,14 +2510,6 @@ module Alf
       end
     end
 
-    # @see Operator#set_args
-    def set_args(args)
-      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a.to_sym, Aggregator.compile(expr)]
-      end
-      self
-    end
-
     class SortBased
       include Operator::Cesure
       
@@ -2553,6 +2545,14 @@ module Alf
 
     protected
     
+    # @see Operator#set_args
+    def set_args(args)
+      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
+        [a.to_sym, Aggregator.compile(expr)]
+      end
+      self
+    end
+
     def cesure_key
       ProjectionKey.coerce @by
     end
