@@ -1,0 +1,6 @@
+[{
+  :suppliers => (dataset :suppliers).to_a,
+  :parts     => (dataset :parts).to_a,
+  :cities    => (dataset :cities).to_a,
+  :supplies  => (dataset :supplies).to_a
+}]
