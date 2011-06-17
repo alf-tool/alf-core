@@ -968,10 +968,10 @@ module Alf
       include Lispy
     
       # Environment instance to use to get base iterators
-      attr_reader :environment
+      attr_accessor :environment
     
       # Output renderer
-      attr_reader :renderer
+      attr_accessor :renderer
       
       # Creates a command instance
       def initialize(env = Environment.default)
@@ -1051,21 +1051,16 @@ module Alf
     class Show < Factory::Command(__FILE__, __LINE__)
     
       options do |opt|
-        @renderer = Renderer::Text
+        @renderer = Renderer::Text.new
         Renderer.each_renderer do |name,descr,clazz|
-          opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz }
+          opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
         end
       end
         
       def execute(args)
+        requester.renderer = @renderer
         args = [ $stdin ] if args.empty?
-        args.each do |input|
-          chain = [
-            @renderer.new,
-            input
-          ]
-          requester.chain(*chain).execute($stdout)
-        end
+        requester.chain(*args)
       end
     
     end # class Show

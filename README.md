@@ -172,10 +172,12 @@ like the following (examples/minus.alf):
     # following is equivalent
     (restrict :suppliers, lambda{ city != 'Paris' })
     
-Of course, from the closure property of a relational algebra (that states that
-operators works on relations and return relations), you can use a sub expression 
-*everytime* a relational operand is expected, everytime! Symbols are magically 
-resolved from the environment, which is wired to the examples by default. 
+Symbols are magically resolved from the environment, which is wired to the 
+examples by default. Of course, from the closure property of a relational algebra 
+(that states that operators works on relations and return relations), you can 
+use a sub expression *everytime* a relational operand is expected, everytime:
+
+    # 
 
 You can simply execute such expressions with the alf command line itself (the 
 three following invocations return the same result):
