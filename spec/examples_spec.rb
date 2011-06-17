@@ -6,12 +6,6 @@ module Alf
       
       let(:env){ Environment.examples }
 
-      it "should work when executed with a AlfFile" do
-        lambda{ 
-          Alf::Reader.alf(subject, env).to_a 
-        }.should_not raise_error
-      end
-
       it "should work when executed with a Alf" do
         lambda{ 
           Alf.lispy(env).compile(File.read(subject)).to_a 
