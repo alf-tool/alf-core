@@ -321,7 +321,7 @@ follows:
 
 ## Going further
 
-### Using/Implementing other environments
+### Using/Implementing other Environments
 
 An Environment instance if passed as first argument of <code>Alf.lispy</code> 
 and is responsible of resolving named datasets. A base class Environment::Folder
@@ -331,11 +331,83 @@ class itself.
     env = Alf::Environment.folder("path/to/a/folder")
     
 An environment built that way will look for .rash and .alf files in the 
-specified folder and sub-folders. 
+specified folder and sub-folders. I'll of course strongly consider any 
+contribution implementing the Environment contract on top of SQL or NoSQL 
+databases or anything that can be useful to manipulate with relational algebra. 
+Such contributions can be added to the project directly, in the lib/alf/environment 
+folder, for example. A base template would look like:
 
-I'll of course strongly consider any contribution implementing the Environment 
-contract on top of SQL or NoSQL databases or anything that can be useful to 
-manipulate with relational algebra. Such contributions can be added to the 
-project directly, in the lib/alf/environment folder, for example.
+    class Alf::Environment
+      class Foo < Alf::Environment
+      
+        #
+        # You should at least implement the _dataset_ method that resolves a 
+        # name (a Symbol instance) to an Enumerable of tuples (typically a 
+        # Reader). See Alf::Environment for exact contract details.
+        # 
+        def dataset(name)
+        end
+      
+      end
+    end 
 
- 
+
+### Adding file decoders, aka Readers
+
+Environments should not be confused with Readers (see Reader class and its 
+subclasses). While the former resolve named datasets, the latter decode files 
+and/or other resources as tuple enumerables. Environments typically serve Reader
+instances in response to dataset resolving.
+
+Reader implementations decoding .rash and .alf files are provided in the main 
+alf.rb file. It's relatively easy to implement the Reader contract by extending 
+the Reader class and implementing an each method. Once again, contributions are 
+very welcome in lib/alf/reader (.csv files, .log files, and so on). A basic 
+template for this is as follows:
+
+    class Alf::Reader
+      class Bar < Alf::Reader
+      
+        #
+        # You should at least implement each, see Alf::Reader which provides a 
+        # base implementation and a few tools
+        #
+        def each
+          [...]
+        end
+      
+        # By registering it, the Folder environment will automatically
+        # recognize and decode .bar files correctly!
+        Alf::Reader.register(:bar, [".bar"], self)
+        
+      end
+    end 
+  
+### Adding outputters, aka Renderers
+
+Similarly, you can contribute renderers to output relations in html, or whatever
+format you would consider interesting. See the Renderer class, and consider the
+following template for contributions in lib/alf/renderer
+
+    class Alf::Renderer
+      class Glim < Alf::Renderer
+      
+        #
+        # You should at least implement the execute method that renders tuples 
+        # given in _input_ (an Enumerable of tuples) on the output buffer
+        # and returns the latter. See Alf::Renderer for the exact contract 
+        # details.
+        #
+        def execute(output = $stdout)
+          [...]
+          output
+        end
+
+      
+        # By registering it, the output options of 'alf show' will
+        # automatically provide your --glim contribution
+        Renderer.register(:glim, "as a .glim file", self)
+        
+      end
+    end 
+  
