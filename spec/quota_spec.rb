@@ -21,8 +21,9 @@ module Alf
     subject{ operator.to_a }
 
     describe "When factored with commandline args" do
+      let(:opts){ ['--by=a', "--order=time"] }
       let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)"] }
-      let(:operator){ Quota.new([:a],[:time],{}).set_args(aggs) }
+      let(:operator){ Quota.run(opts + ["--"] + aggs) }
       before{ operator.pipe(input) }
       it { should == expected }
     end
