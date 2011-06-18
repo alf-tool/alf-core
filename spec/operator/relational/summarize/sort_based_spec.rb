@@ -16,7 +16,7 @@ module Alf
         {:a => "via_reader", :time_sum => 6, :time_max => 4},
       ]}
   
-      let(:by_key){ ProjectionKey.new([:a],false) }
+      let(:by_key){ Tools::ProjectionKey.new([:a],false) }
       let(:aggs){{:time_sum => Aggregator.sum(:time),
                   :time_max => Aggregator.max(:time)}} 
       let(:operator){ Summarize::SortBased.new(by_key, aggs) }

@@ -63,6 +63,200 @@ module Alf
       tuple
     end
 
+    #
+    # Provides a handle, implementing a flyweight design pattern on tuples.
+    #
+    class TupleHandle
+    
+      # Creates an handle instance
+      def initialize
+        @tuple = nil
+      end
+    
+      #
+      # Sets the next tuple to use.
+      #
+      # This method installs the handle as a side effect 
+      # on first call. 
+      #
+      def set(tuple)
+        build(tuple) if @tuple.nil?
+        @tuple = tuple
+        self
+      end
+    
+      # 
+      # Compiles a tuple expression and returns a lambda
+      # instance that can be passed to evaluate later.
+      # 
+      def self.compile(expr)
+        case expr
+        when Proc
+          expr
+        when NilClass
+          compile('true')
+        when Hash
+          if expr.empty?
+            compile(nil)
+          else
+            # TODO: replace inspect by to_ruby
+            compile expr.each_pair.collect{|k,v| 
+              "(#{k} == #{v.inspect})"
+            }.join(" && ")
+          end
+        when Array
+          compile(Hash[*expr])
+        when String, Symbol
+          eval("lambda{ #{expr} }")
+        else
+          raise ArgumentError, "Unable to compile #{expr} to a TupleHandle"
+        end
+      end
+    
+      #
+      # Evaluates an expression on the current tuple. Expression
+      # can be a lambda or a string (immediately compiled in the
+      # later case).
+      # 
+      def evaluate(expr)
+        if RUBY_VERSION < "1.9"
+          instance_eval(&TupleHandle.compile(expr))
+        else
+          instance_exec(&TupleHandle.compile(expr))
+        end
+      end
+    
+      private
+    
+      #
+      # Builds this handle with a tuple.
+      #
+      # This method should be called only once and installs 
+      # instance methods on the handle with keys of _tuple_.
+      #
+      def build(tuple)
+        tuple.keys.each do |k|
+          (class << self; self; end).send(:define_method, k) do
+            @tuple[k]
+          end
+        end
+      end
+    
+    end # class TupleHandle
+    
+    # 
+    # Defines a projection key
+    # 
+    class ProjectionKey
+      include Tools
+    
+      # Projection attributes
+      attr_accessor :attributes
+    
+      # Allbut projection?
+      attr_accessor :allbut
+    
+      def initialize(attributes, allbut = false)
+        @attributes = attributes
+        @allbut = allbut
+      end
+    
+      def self.coerce(arg)
+        case arg
+          when Array
+            ProjectionKey.new(arg, false)
+          when OrderingKey
+            ProjectionKey.new(arg.attributes, false)
+          when ProjectionKey
+            arg
+          else
+            raise ArgumentError, "Unable to coerce #{arg} to a projection key"
+        end
+      end
+    
+      def to_ordering_key
+        OrderingKey.new attributes.collect{|arg|
+          [arg, :asc]
+        }
+      end
+    
+      def project(tuple)
+        split(tuple).first
+      end
+    
+      def split(tuple)
+        projection, rest = {}, tuple.dup
+        attributes.each do |a|
+          projection[a] = tuple[a]
+          rest.delete(a)
+        end
+        @allbut ? [rest, projection] : [projection, rest]
+      end
+    
+    end # class ProjectionKey
+    
+    #
+    # Encapsulates tools for computing orders on tuples
+    #
+    class OrderingKey
+    
+      attr_reader :ordering
+    
+      def initialize(ordering = [])
+        @ordering = ordering
+        @sorter = nil
+      end
+    
+      def self.coerce(arg)
+        case arg
+          when Array
+            if arg.all?{|a| a.is_a?(Symbol)}
+              arg = arg.collect{|a| [a, :asc]}
+            end
+            OrderingKey.new(arg)
+          when ProjectionKey
+            arg.to_ordering_key
+          when OrderingKey
+            arg
+          else
+            raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
+        end
+      end
+    
+      def attributes
+        @ordering.collect{|arg| arg.first}
+      end
+    
+      def order_by(attr, order = :asc)
+        @ordering << [attr, order]
+        @sorter = nil
+        self
+      end
+    
+      def order_of(attr)
+        @ordering.find{|arg| arg.first == attr}.last
+      end
+    
+      def compare(t1,t2)
+        @ordering.each do |attr,order|
+          comp = (t1[attr] <=> t2[attr])
+          comp *= -1 if order == :desc
+          return comp unless comp == 0
+        end
+        return 0
+      end
+    
+      def sorter
+        @sorter ||= lambda{|t1,t2| compare(t1, t2)}
+      end
+    
+      def +(other)
+        other = OrderingKey.coerce(other)
+        OrderingKey.new(@ordering + other.ordering)
+      end
+    
+    end # class OrderingKey
+
     extend Tools
   end # module Tools
   
@@ -355,202 +549,6 @@ module Alf
     
   end # class Environment
 
-  ############################################################################# TOOLS
-
-  #
-  # Provides a handle, implementing a flyweight design pattern on tuples.
-  #
-  class TupleHandle
-
-    # Creates an handle instance
-    def initialize
-      @tuple = nil
-    end
-
-    #
-    # Sets the next tuple to use.
-    #
-    # This method installs the handle as a side effect 
-    # on first call. 
-    #
-    def set(tuple)
-      build(tuple) if @tuple.nil?
-      @tuple = tuple
-      self
-    end
-
-    # 
-    # Compiles a tuple expression and returns a lambda
-    # instance that can be passed to evaluate later.
-    # 
-    def self.compile(expr)
-      case expr
-      when Proc
-        expr
-      when NilClass
-        compile('true')
-      when Hash
-        if expr.empty?
-          compile(nil)
-        else
-          # TODO: replace inspect by to_ruby
-          compile expr.each_pair.collect{|k,v| 
-            "(#{k} == #{v.inspect})"
-          }.join(" && ")
-        end
-      when Array
-        compile(Hash[*expr])
-      when String, Symbol
-        eval("lambda{ #{expr} }")
-      else
-        raise ArgumentError, "Unable to compile #{expr} to a TupleHandle"
-      end
-    end
-
-    #
-    # Evaluates an expression on the current tuple. Expression
-    # can be a lambda or a string (immediately compiled in the
-    # later case).
-    # 
-    def evaluate(expr)
-      if RUBY_VERSION < "1.9"
-        instance_eval(&TupleHandle.compile(expr))
-      else
-        instance_exec(&TupleHandle.compile(expr))
-      end
-    end
-
-    private
-
-    #
-    # Builds this handle with a tuple.
-    #
-    # This method should be called only once and installs 
-    # instance methods on the handle with keys of _tuple_.
-    #
-    def build(tuple)
-      tuple.keys.each do |k|
-        (class << self; self; end).send(:define_method, k) do
-          @tuple[k]
-        end
-      end
-    end
-
-  end # class TupleHandle
-
-  # 
-  # Defines a projection key
-  # 
-  class ProjectionKey
-    include Tools
-
-    # Projection attributes
-    attr_accessor :attributes
-
-    # Allbut projection?
-    attr_accessor :allbut
-
-    def initialize(attributes, allbut = false)
-      @attributes = attributes
-      @allbut = allbut
-    end
-
-    def self.coerce(arg)
-      case arg
-        when Array
-          ProjectionKey.new(arg, false)
-        when OrderingKey
-          ProjectionKey.new(arg.attributes, false)
-        when ProjectionKey
-          arg
-        else
-          raise ArgumentError, "Unable to coerce #{arg} to a projection key"
-      end
-    end
-
-    def to_ordering_key
-      OrderingKey.new attributes.collect{|arg|
-        [arg, :asc]
-      }
-    end
-
-    def project(tuple)
-      split(tuple).first
-    end
-
-    def split(tuple)
-      projection, rest = {}, tuple.dup
-      attributes.each do |a|
-        projection[a] = tuple[a]
-        rest.delete(a)
-      end
-      @allbut ? [rest, projection] : [projection, rest]
-    end
-
-  end # class ProjectionKey
-
-  #
-  # Encapsulates tools for computing orders on tuples
-  #
-  class OrderingKey
-
-    attr_reader :ordering
-
-    def initialize(ordering = [])
-      @ordering = ordering
-      @sorter = nil
-    end
-
-    def self.coerce(arg)
-      case arg
-        when Array
-          if arg.all?{|a| a.is_a?(Symbol)}
-            arg = arg.collect{|a| [a, :asc]}
-          end
-          OrderingKey.new(arg)
-        when ProjectionKey
-          arg.to_ordering_key
-        when OrderingKey
-          arg
-        else
-          raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
-      end
-    end
-
-    def attributes
-      @ordering.collect{|arg| arg.first}
-    end
-
-    def order_by(attr, order = :asc)
-      @ordering << [attr, order]
-      @sorter = nil
-      self
-    end
-
-    def order_of(attr)
-      @ordering.find{|arg| arg.first == attr}.last
-    end
-
-    def compare(t1,t2)
-      @ordering.each do |attr,order|
-        comp = (t1[attr] <=> t2[attr])
-        comp *= -1 if order == :desc
-        return comp unless comp == 0
-      end
-      return 0
-    end
-
-    def sorter
-      @sorter ||= lambda{|t1,t2| compare(t1, t2)}
-    end
-
-    def +(other)
-      other = OrderingKey.coerce(other)
-      OrderingKey.new(@ordering + other.ordering)
-    end
-
-  end # class OrderingKey
-
   ############################################################################# PUBLIC API
 
   #
@@ -618,9 +616,9 @@ module Alf
     #
     def initialize(attribute = nil, options = {}, &block)
       attribute, options = nil, attribute if attribute.is_a?(Hash)
-      @handle = TupleHandle.new
+      @handle = Tools::TupleHandle.new
       @options = default_options.merge(options)
-      @functor = TupleHandle.compile(attribute || block)
+      @functor = Tools::TupleHandle.compile(attribute || block)
     end
 
     #
@@ -2217,7 +2215,7 @@ module Alf
           def _init(right)
             @buffer = Hash.new{|h,k| h[k] = []}
             @enum.each do |left|
-              @key = ProjectionKey.coerce(left.keys & right.keys) unless @key
+              @key = Tools::ProjectionKey.coerce(left.keys & right.keys) unless @key
               @buffer[@key.project(left)] << left
             end
           end
@@ -2712,7 +2710,7 @@ module Alf
       end
   
       def longexpr
-        by_key = ProjectionKey.new(@by, false)
+        by_key = Tools::ProjectionKey.new(@by, false)
         chain SortBased.new(by_key, @aggregators),
               Operator::NonRelational::Sort.new(by_key.to_ordering_key),
               datasets
