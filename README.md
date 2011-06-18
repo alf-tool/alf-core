@@ -3,43 +3,67 @@
     [sudo] gem install alf
     alf --help
 
+## Links
+    
+* {http://rubydoc.info/github/blambeau/alf/master/frames} (read this file there!)
+* {http://github.com/blambeau/alf} (source code)
+* {http://revision-zero.org} (author)
+
 ## Description
 
-Alf is a commandline tool and Ruby API to manipulate data with all the power of
-a truly relational algebra approach. Objectives behind Alf are manifold:
+Alf is a commandline tool and Ruby library to manipulate data with all the power 
+of a truly relational algebra approach. Objectives behind Alf are manifold:
 
 * Pragmatically, Alf aims at being a useful commandline executable for 
-  manipulating csv files, database records, or whatever looks like a relation
-  (see below). See 'alf --help' for the list of available commands.
+  manipulating csv files, database records, or whatever looks like a relation.
+  See 'alf --help' for the list of available commands and implemented relational 
+  operators.
   
-* Also, a 100% Ruby API provides a simple, functional in style, relational 
-  algebra that manipulates enumerables of tuples (represented by ruby hashes).
-  See 'alf --help' as well as .alf files in the examples directory for syntactic 
-  examples.
+      alf restrict suppliers -- "city == 'London'" | alf join cities 
+  
+* Alf is also a 100% Ruby relational algebra implementation shipped with a simple 
+  to use, powerful, functional DSL for compiling and evaluating relational queries. 
+  Alf does not restrict to simple scalar types or values, but admit values of
+  arbitrary complexity (under a few requirements about their implementation, see 
+  next section). See 'alf --help' as well as .alf files in the examples directory 
+  for syntactic examples.
+  
+      Alf.lispy.compile{ 
+        (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
+      }
 
 * Alf is also an educational tool, that I've written to draw people's attention
   about the ill-known relational theory (and ill-represented by SQL). The tool
-  is largely inspired from TUTORIAL D, the tutorial language of Chris Date 
-  and Hugh Darwen in their books, more specifically in The Third Manifesto 
-  (TTM). However, in itself, the present little tool is only an overview of the 
-  relational algebra described there. I hope that some people will be sufficiently 
-  enticed by specific features here to open that book and read it more deeply.
-  Have a look at 'alf help group / summarize / quota' for things that you'll never 
-  ever have in SQL. 
+  is largely inspired from TUTORIAL D, the tutorial language of Chris Date and 
+  Hugh Darwen in their books, more specifically in The Third Manifesto (TTM). 
+  However, in itself, the present little tool is only an overview of the 
+  relational _algebra_ described there (Alf is neither a relational _database_, 
+  nor a relational _language_). I hope that some people will be sufficiently 
+  enticed by specific features here to open that book and read it more deeply. 
+  Have a look at the result of the following query for things that you'll never 
+  ever have in SQL (see also 'alf help quota', 'alf help nest', 'alf help group', 
+  ...):
   
-* Alf is also an attempt to help me test some research ideas and communicate 
-  about them with people that already know (all or part) of the TTM vision of 
-  relational theory. These people include members of the TTM mailing list as
-  well as other people implementing some of the TTM ideas (see Dan Kubb's Veritas 
-  project for example). For this reason, specific features and/or operators are 
-  mine (quota, for example is not present in TUTORIAL D) and should be considered 
-  'work in progress' and used with care...
+      alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
+  
+* Last, but not least, Alf is an attempt to help me test some research ideas and 
+  communicate about them with people that already know (all or part) of the TTM 
+  vision of relational theory. These people include members of the TTM mailing 
+  list as well as other people implementing some of the TTM ideas (see Dan Kubb's 
+  Veritas project for example). For this reason, specific features and/or operators 
+  are mine, should be considered 'research work in progress', and used with care
+  because not necessarily in conformance with the TTM.
+  
+      alf --text quota supplies --by=sid --order=quantity -- pos "count()"  
 
-## The example database
+## Quick summary of relational theory
 
-This README file shows a lot of examples (also contained in Alf's distribution)
-built on top of the following suppliers & parts database (almost identical to the 
-original version in C.J. Date database books).
+### The example database
+
+This README file shows a lot of examples built on top of the following suppliers 
+& parts database (almost identical to the original version in C.J. Date database 
+books). By default, the alf command line is wired to this embedded example. All
+examples shown here should therefore work immediately. Then, let's start!
 
     % alf show database
 
@@ -64,6 +88,50 @@ original version in C.J. Date database books).
     |                                     |                                                 |                         | +------+------+------+ |
     +-------------------------------------+-------------------------------------------------+-------------------------+------------------------+
 
+Many people think that relational databases are necessary 'flat', that they only
+contain very simple, and restricted scalar values. This is wrong; most SQL 
+databases are indeed 'flat', but _relations_ (in the mathematical sense of the 
+relational theory) are not! Look, **the example above is a relation!**; that 
+'contains' another relations as particular values, which, in turn, could 'contain' 
+relations or any other 'simple' or more 'complex' value... This is not "flat" at 
+all, after all :-)
+
+### Types and Values
+
+To understand what a is relation exactly, one needs to remember elementary 
+notions of set theory and the concepts of _type_ and _value_. 
+
+* A _type_ is a finite set of values; it is non necessarily ordered and, being 
+a set, it does never contains two values which are considered equal.  
+
+* A _value_ is **immutable** (you cannot 'change' a value, in any way), has no 
+localization in time and space, and is always typed (that is, it is always 
+accompanied by some identification of the type it belongs to). 
+ 
+As you can see, _type_ and _value_ are not the same concepts as _class_ and 
+_object_, with which you are probably familiar with. Alf considers that the 
+latter are implementations of the former. Alf assumes _valid_ implementations, 
+(equality and hash methods must be correct) and _valid_ usage (objects used for
+representing values are kept immutable). That being said, if you want to put
+(immutable) **arrays, colors, ranges, or whatever in your relations**, just do 
+it! You can even join on them, restrict on them, summarize on them, and so on.
+
+### Tuples and Relations
+
+Tuples (aka records) and relations are values as well, which explains why you
+can have them inside relations! 
+
+* Logically speaking, a tuple is a set of (attribute name, attribute value) 
+  pairs. Moreover, it does not contain two attributes with the same name and is 
+  **not particularly ordered**. Also, **a tuple is a _value_, and is therefore 
+  immutable**. 
+  
+  Tuples in Alf are simply represented by with ruby hashes, taken as tuples 
+  implementations. Alf does not freeze them for guaranteeing immutability, but 
+  could do it in the future. No support is or will ever be provided for ordering 
+  tuple attributes. Because hashes are ordered in Ruby 1.9, Alf implements a best 
+  effort strategy to keep a friendly ordering when rendering tuples. 
+
 ### Terminology, concepts & rules
 
 We mostly use the terminology used by Date & Darwen in their books, which is 
@@ -78,15 +146,7 @@ are **not** guaranteed and may disappear at any time.
 
 #### Tuple(s)
 
-* We prefer the term _tuple_ instead of _record_. Logically speaking, a tuple is 
-  a set of (attribute name, attribute value) pairs. Being a set, it does never
-  contain two attributes with the same name and is **not particularly ordered**. 
-  Also, **a tuple is a _value_, and is therefore immutable**. Tuples in Alf are 
-  simply represented with ruby hashes. Alf does not freeze them for guaranteeing 
-  immutability, but could do it in the future. No support is or will ever be 
-  provided for ordering tuple attributes. Because hashes are ordered in Ruby 1.9,
-  Alf implements a best effort strategy to keep a friendly ordering when rendering 
-  tuples. 
+* We prefer the term _tuple_ instead of _record_. 
   
       {:sid => "S1", :name => "Smith", :status => 20, :city => "London"} 
 
