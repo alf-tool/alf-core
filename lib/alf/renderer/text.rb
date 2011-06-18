@@ -53,11 +53,24 @@ class Alf::Renderer
           when Alf::Iterator
             Text.render(value, "")
           when Array
-            looks_a_relation?(value) ? 
-              Text.render(value, "") :
-              "[" + value.collect{|x| Cell.new(x).text_rendering}.join(",\n ") + "]"
+            array_rendering(value)
           else
             value.to_s
+        end
+      end
+      
+      def array_rendering(value)
+        if looks_a_relation?(value) 
+          Text.render(value, "")
+        elsif value.empty?
+          "[]"
+        else
+          values = value.collect{|x| Cell.new(x).text_rendering}
+          if values.inject(0){|memo,s| memo + s.size} < 20
+            "[" + values.join(", ") + "]"
+          else
+            "[" + values.join(",\n ") + "]"
+          end 
         end
       end
 

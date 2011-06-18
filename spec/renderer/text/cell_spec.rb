@@ -12,7 +12,7 @@ module Alf
         Cell.new(10.0).text_rendering.should == "10.0000000"
         Cell.new(10/3.0).text_rendering.should == "3.3333333"
         Cell.new([]).text_rendering.should == "[]"
-        Cell.new([10/3.0, true]).text_rendering.should == "[3.3333333,\n true]"
+        Cell.new([10/3.0, true]).text_rendering.should == "[3.3333333, true]"
       end
 
       specify "min_width" do
@@ -24,7 +24,7 @@ module Alf
       specify "rendering_lines" do
         Cell.new("").rendering_lines.should == []
         Cell.new(10/3.0).rendering_lines.should == ["3.3333333"]
-        Cell.new([10/3.0,true]).rendering_lines.should == ["[3.3333333,", " true]"]
+        Cell.new([10/3.0,true]).rendering_lines.should == ["[3.3333333, true]"]
         Cell.new("abc").rendering_lines(5).should == ["abc  "]
         Cell.new(12).rendering_lines(5).should == ["   12"]
       end
