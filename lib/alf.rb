@@ -194,6 +194,167 @@ module Alf
     
   end # module Lispy
 
+  #
+  # Encapsulates the interface with the outside world, providing base iterators
+  # for named datasets, among others.
+  #
+  # An environment is typically obtained through the factory defined by this
+  # class:
+  #
+  #   # Returns the default environment (examples, for now)
+  #   Alf::Environment.default
+  #
+  #   # Returns an environment on Alf's examples
+  #   Alf::Environment.examples
+  #
+  #   # Returns an environement on a specific folder, automatically
+  #   # resolving datasources via Readers' recognized file extensions
+  #   Alf::Environment.folder('path/to/a/folder')
+  #
+  # You can implement your own environment by subclassing this class and 
+  # implementing the {#dataset} method. As additional support is implemented 
+  # in the base class, Environment should never be mimiced.
+  # 
+  class Environment
+    
+    #
+    # Returns a dataset whose name is provided.
+    #
+    # This method resolves named datasets to tuple enumerables. When the 
+    # dataset exists, this method must return an Iterator, typically a 
+    # Reader instance. Otherwise, it must throw a NoSuchDatasetError.
+    #
+    # @param [Symbol] name the name of a dataset
+    # @return [Iterator] an iterator, typically a Reader instance
+    # @raise [NoSuchDatasetError] when the dataset does not exists
+    #
+    def dataset(name)
+    end
+    undef :dataset
+    
+    #
+    # Branches this environment and puts some additional explicit 
+    # definitions.
+    #
+    # This method is provided for (with ...) expressions and should not
+    # be overriden by subclasses.
+    #
+    # @param [Hash] a set of (name, Iterator) pairs.
+    # @return [Environment] an environment instance with new definitions set
+    #
+    def branch(defs)
+      Explicit.new(defs, self)
+    end
+    
+    #
+    # Specialization of Environment that works with explicitely defined 
+    # datasources and allow branching and unbranching.
+    #
+    class Explicit < Environment
+      
+      #
+      # Creates a new environment instance with initial definitions
+      # and optional child environment.
+      #
+      def initialize(defs = {}, child = nil)
+        @defs = defs
+        @child = child
+      end
+      
+      # 
+      # Unbranches this environment and returns its child
+      #
+      def unbranch
+        @child
+      end
+      
+      # @see Environment#dataset
+      def dataset(name)
+        if @defs.has_key?(name)
+          @defs[name]
+        elsif @child
+          @child.dataset(name)
+        else
+          raise "No such dataset #{name}"
+        end 
+      end
+      
+    end # class Explicit
+    
+    #
+    # Specialization of Environment to work on files of a given folder.
+    #
+    # This kind of environment resolves datasets by simply looking at 
+    # recognized files in a specific folder. "Recognized" files are simply
+    # those for which a Reader subclass has been previously registered.
+    # This environment then serves reader instances.
+    #
+    class Folder < Environment
+      
+      #
+      # Creates an environment instance, wired to the specified folder.
+      #
+      # @param [String] folder path to the folder to use as dataset source
+      #
+      def initialize(folder)
+        @folder = folder
+      end
+      
+      # @see Environment#dataset
+      def dataset(name)
+        if file = find_file(name)
+          ext = File.extname(file)
+          if clazz = Reader.reader_class_by_file_extension(ext)
+            clazz.new(file, self)
+          else
+            raise "No reader associated to extension '#{ext}' (#{file})"
+          end
+        else
+          raise "No such dataset #{name} (#{@folder})"
+        end
+      end
+      
+      protected
+      
+      def find_file(name)
+        # TODO: refactor this, because it allows getting out of the folder
+        if File.exists?(name.to_s)
+          name.to_s
+        elsif File.exists?(explicit = File.join(@folder, name.to_s)) &&
+              File.file?(explicit)
+          explicit
+        else
+          Dir[File.join(@folder, "**/#{name}.*")].find do |f|
+            File.file?(f)
+          end
+        end
+      end
+      
+    end # class Folder
+    
+    #
+    # Factors a Folder environment on a specific path
+    #
+    def self.folder(path)
+      Folder.new(path)
+    end
+    
+    #
+    # Returns the default environment
+    #
+    def self.default
+      examples
+    end
+    
+    #
+    # Returns the examples environment
+    #
+    def self.examples
+      folder File.expand_path('../../examples', __FILE__)
+    end
+    
+  end # class Environment
+
   ############################################################################# TOOLS
 
   #
@@ -391,118 +552,6 @@ module Alf
   end # class OrderingKey
 
   ############################################################################# PUBLIC API
-
-  #
-  # Encapsulates the interface with the outside world, providing base iterators
-  # among others.
-  # 
-  class Environment
-    
-    #
-    # Branches this environment and puts some additional explicit 
-    # definitions
-    #
-    def branch(defs)
-      Explicit.new(defs, self)
-    end
-    
-    #
-    # Specialization of Environment that works with explicitely defined 
-    # datasources and allow branching and unbranching.
-    #
-    class Explicit < Environment
-      
-      #
-      # Creates a new environment instance with initial definitions
-      # and optional child environment.
-      #
-      def initialize(defs = {}, child = nil)
-        @defs = defs
-        @child = child
-      end
-      
-      # 
-      # Unbranches this environment and returns its child
-      #
-      def unbranch
-        @child
-      end
-      
-      # @see Environment#dataset
-      def dataset(name)
-        if @defs.has_key?(name)
-          @defs[name]
-        elsif @child
-          @child.dataset(name)
-        else
-          raise "No such dataset #{name}"
-        end 
-      end
-      
-    end # class Explicit
-    
-    #
-    # Specialization of Environment to work on files of a given folder
-    #
-    class Folder < Environment
-      
-      def initialize(folder)
-        @folder = folder
-      end
-      
-      def dataset(name)
-        if file = find_file(name)
-          ext = File.extname(file)
-          if clazz = Reader.reader_class_by_file_extension(ext)
-            clazz.new(file, self)
-          else
-            raise "No reader associated to extension '#{ext}' (#{file})"
-          end
-        else
-          raise "No such dataset #{name} (#{@folder})"
-        end
-      end
-      
-      protected
-      
-      def find_file(name)
-        # TODO: refactor this, because it allows getting out of the folder
-        if File.exists?(name.to_s)
-          name.to_s
-        elsif File.exists?(explicit = File.join(@folder, name.to_s)) &&
-              File.file?(explicit)
-          explicit
-        else
-          Dir[File.join(@folder, "**/#{name}.*")].find do |f|
-            File.file?(f)
-          end
-        end
-      end
-      
-    end # class Folder
-    
-    #
-    # Factors a Folder environment on a specific path
-    #
-    def self.folder(path)
-      Folder.new(path)
-    end
-    
-    #
-    # Returns the default environment
-    #
-    def self.default
-      examples
-    end
-    
-    #
-    # Returns the examples environment
-    #
-    def self.examples
-      folder File.expand_path('../../examples', __FILE__)
-    end
-    
-  end # class Environment
 
   #
   # This is a marker module for all elements that implement tuple iterators
