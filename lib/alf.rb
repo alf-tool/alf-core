@@ -354,7 +354,7 @@ module Alf
     [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |child, *args|
-        chain(Alf::Operator::NonRelational.const_get(op_name).new(*args), child)
+        chain(Operator::NonRelational.const_get(op_name).new(*args), child)
       end
     end
 
@@ -370,12 +370,12 @@ module Alf
      :Quota ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |child, *args|
-        chain(Alf.const_get(op_name).new(*args), child)
+        chain(Operator::Relational.const_get(op_name).new(*args), child)
       end
     end
 
     def allbut(child, attributes)
-      chain(Project.new(attributes, true), child)
+      chain(Operator::Relational::Project.new(attributes, true), child)
     end
 
     [ :Join, 
@@ -384,7 +384,7 @@ module Alf
       :Minus ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |left, right, *args|
-        chain(Alf.const_get(op_name).new(*args), [left, right])
+        chain(Operator::Relational.const_get(op_name).new(*args), [left, right])
       end
     end
     
@@ -1837,849 +1837,886 @@ module Alf
   end # Operator::NonRelational
   
   ################################################################## relational
+  module Operator::Relational
 
-  # 
-  # Relational projection (clip + compact)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # API & EXAMPLE
-  #
-  #   # Project on name and city attributes
-  #   (project :suppliers, [:name, :city])
-  #
-  #   # Project on all but name and city attributes
-  #   (allbut :suppliers, [:name, :city])
-  #
-  # DESCRIPTION
-  #
-  # This operator projects tuples on attributes whose names are specified as 
-  # arguments. This is similar to clip, except that this ones is a truly 
-  # relational one, that is, it also removes duplicates tuples. 
-  # 
-  # When used in shell, the clipping/projection key is simply taken from
-  # commandline arguments:
-  #
-  #   alf project suppliers -- name city
-  #   alf project --allbut suppliers -- name city
-  #
-  class Project < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut, Operator::Unary
-  
-    # Builds a Project operator instance
-    def initialize(attributes = [], allbut = false)
-      @projection_key = ProjectionKey.new(attributes, allbut)
-      yield self if block_given?
-    end
-  
-    def attributes=(attrs)
-      @projection_key.attributes = attrs
-    end
-  
-    def allbut=(allbut)
-      @projection_key.allbut = allbut
-    end
-  
-    # Installs the options
-    options do |opt|
-      opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
-        self.allbut = true
-      end
-    end
-  
-    protected 
-  
-    # @see Operator#set_args
-    def set_args(args)
-      self.attributes = args.collect{|a| a.to_sym}
-      self
-    end
-  
-    # @see Operator::Shortcut#longexpr
-    def longexpr
-      chain Operator::NonRelational::Compact.new,
-            Operator::NonRelational::Clip.new(@projection_key.attributes, 
-                                              @projection_key.allbut),
-            datasets
-    end
-  
-  end # class Project
-  
-  #
-  # Relational extension (additional, computed attributes)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 EXPR1 ATTR2 EXPR2...
-  #
-  # API & EXAMPLE
-  #
-  #   (extend :supplies, :sp  => lambda{ sid + "/" + pid },
-  #                      :big => lambda{ qty > 100 ? true : false }) 
-  #
-  # DESCRIPTION
-  #
-  # This command extend input tuples with new attributes (named ATTR1, ...)  
-  # whose value is the result of evaluating tuple expressions (i.e. EXPR1, ...).
-  # See main documentation about the semantics of tuple expressions. When used
-  # in shell, the hash of extensions is built from commandline arguments ala
-  # Hash[...]. Tuple expressions must be specified as code literals there:
-  #
-  #   alf extend supplies -- sp 'sid + "/" + pid' big "qty > 100 ? true : false"
-  #
-  # Attributes ATTRx should not already exist, no behavior is guaranteed if 
-  # this precondition is not respected.   
-  #
-  class Extend < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Transform
-
-    # Extensions as a Hash attr => lambda{...}
-    attr_accessor :extensions
-
-    # Builds an Extend operator instance
-    def initialize(extensions = {})
-      @extensions = extensions
-    end
-
-    protected 
-  
-    # @see Operator#set_args
-    def set_args(args)
-      @extensions = tuple_collect(args.each_slice(2)){|k,v|
-        [k.to_sym, TupleHandle.compile(v)]
-      }
-      self
-    end
-
-    # @see Operator#_prepare
-    def _prepare
-      @handle = TupleHandle.new
-    end
-
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      tuple.merge tuple_collect(@extensions){|k,v|
-        [k, @handle.set(tuple).evaluate(v)]
-      }
-    end
-
-  end # class Extend
-
-  # 
-  # Relational renaming (rename some attributes)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- OLD1 NEW1 ...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # API & EXAMPLE
-  #
-  #   (rename :suppliers, :name => :supplier_name, :city => :supplier_city)
-  #
-  # DESCRIPTION
-  #
-  # This command renames OLD attributes as NEW as specified by arguments. 
-  # Attributes OLD should exist in source tuples while attributes NEW should 
-  # not. When used in shell, renaming attributes are built ala Hash[...] from
-  # commandline arguments: 
-  #
-  #   alf rename suppliers -- name supplier_name city supplier_city
-  #
-  class Rename < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Transform
-
-    # Hash of source -> target attribute renamings
-    attr_accessor :renaming
-
-    # Builds a Rename operator instance
-    def initialize(renaming = {})
-      @renaming = renaming
-    end
-
-    protected 
-  
-    # @see Operator#set_args
-    def set_args(args)
-      @renaming = Hash[*args.collect{|c| c.to_sym}]
-      self
-    end
-
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
-    end
-
-  end # class Rename
-
-  # 
-  # Relational restriction (aka where, predicate filtering)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- EXPR
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
-  #
-  # API & EXAMPLE
-  #
-  #   # Restrict to suppliers with status greater than 20
-  #   (restrict :suppliers, lambda{ status > 20 })
-  #
-  #   # Restrict to suppliers that live in London
-  #   (restrict :suppliers, lambda{ city == 'London' })
-  #
-  # DESCRIPTION
-  #
-  # This command restricts tuples to those for which EXPR evaluates to true.
-  # EXPR must be a valid tuple expression that should return a truth-value.
-  # When used in shell, the predicate is taken as a string and compiled with
-  # TupleHandle.compile. We also provide a shortcut for equality expressions. 
-  # Note that, in that case, values are expected to be ruby code literals,
-  # evaluated with Kernel.eval. Therefore, strings must be doubly quoted.  
-  #
-  #   alf restrict suppliers -- "status > 20"
-  #   alf restrict suppliers -- city "'London'"
-  #
-  class Restrict < Factory::Operator(__FILE__, __LINE__)
-    include Unary
+    # 
+    # Relational projection (clip + compact)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   # Project on name and city attributes
+    #   (project :suppliers, [:name, :city])
+    #
+    #   # Project on all but name and city attributes
+    #   (allbut :suppliers, [:name, :city])
+    #
+    # DESCRIPTION
+    #
+    # This operator projects tuples on attributes whose names are specified as 
+    # arguments. This is similar to clip, except that this ones is a truly 
+    # relational one, that is, it also removes duplicates tuples. 
+    # 
+    # When used in shell, the clipping/projection key is simply taken from
+    # commandline arguments:
+    #
+    #   alf project suppliers -- name city
+    #   alf project --allbut suppliers -- name city
+    #
+    class Project < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Shortcut, Operator::Unary
     
-    # Restriction predicate
-    attr_accessor :predicate
-
-    # Builds a Restrict operator instance
-    def initialize(predicate = "true")
-      @predicate = TupleHandle.compile(predicate)
-      yield self if block_given?
-    end
-
-    protected 
-  
-    # @see Operator#set_args
-    def set_args(args)
-      @predicate = if args.size > 1
-        TupleHandle.compile  tuple_collect(args.each_slice(2)){|a,expr|
-          [a, Kernel.eval(expr)]
-        }
-      else
-        TupleHandle.compile(args.first)
+      # Builds a Project operator instance
+      def initialize(attributes = [], allbut = false)
+        @projection_key = ProjectionKey.new(attributes, allbut)
+        yield self if block_given?
       end
-      self
-    end
-
-    # @see Operator#_each
-    def _each
-      handle = TupleHandle.new
-      each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@predicate) }
-    end
-
-  end # class Restrict
-
-  # 
-  # Relational join (and cross-join)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [LEFT] RIGHT
-  #
-  # API & EXAMPLE
-  #
-  #   (join :suppliers, :parts)
-  #
-  # DESCRIPTION
-  #
-  # This operator computes the (natural) join of two input iterators. Natural
-  # join means that, unlike what is commonly used in SQL, the default behavior 
-  # is to join on common attributes. You can use the rename operator if this
-  # behavior does not fit your needs.
-  #
-  #   alf join suppliers supplies 
-  #  
-  class Join < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut, Operator::Binary
     
-    class HashBased
-      include Operator::Binary
-    
-      class JoinBuffer
-        
-        def initialize(enum)
-          @buffer = nil
-          @key = nil
-          @enum = enum
-        end
-        
-        def split(tuple)
-          _init(tuple) unless @key
-          @key.split(tuple)
-        end
-        
-        def each(key)
-          @buffer[key].each(&Proc.new) if @buffer.has_key?(key)
-        end
-        
-        private
-        
-        def _init(right)
-          @buffer = Hash.new{|h,k| h[k] = []}
-          @enum.each do |left|
-            @key = ProjectionKey.coerce(left.keys & right.keys) unless @key
-            @buffer[@key.project(left)] << left
-          end
-        end
-        
+      def attributes=(attrs)
+        @projection_key.attributes = attrs
       end
-      
-      protected
-      
-      def _each
-        buffer = JoinBuffer.new(right)
-        left.each do |left_tuple|
-          key, rest = buffer.split(left_tuple)
-          buffer.each(key) do |right|
-            yield(left_tuple.merge(right))
-          end
+    
+      def allbut=(allbut)
+        @projection_key.allbut = allbut
+      end
+    
+      # Installs the options
+      options do |opt|
+        opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
+          self.allbut = true
         end
       end
-      
-    end
     
-    protected
-    
-    # @see Shortcut#longexpr
-    def longexpr
-      chain HashBased.new,
-            datasets 
-    end
-    
-  end # class Join
-  
-  # 
-  # Relational intersection (aka a logical and)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [LEFT] RIGHT
-  #
-  # API & EXAMPLE
-  #
-  #   # Give suppliers that live in Paris and have status >= 20
-  #   (intersect \\
-  #     (restrict :suppliers, lambda{ status >= 20 }),
-  #     (restrict :suppliers, lambda{ city == 'Paris' }))
-  #
-  # DESCRIPTION
-  #
-  # This operator computes the intersection between its two operands. The 
-  # intersection is simply the set of common tuples between them. Both operands
-  # must have the same heading. 
-  #
-  #   alf intersect ... ...
-  #  
-  class Intersect < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut, Operator::Binary
-    
-    class HashBased
-      include Operator::Binary
-    
-      protected
-      
-      def _prepare
-        @index = Hash.new
-        right.each{|t| @index[t] = true}
-      end
-      
-      def _each
-        left.each do |left_tuple|
-          yield(left_tuple) if @index.has_key?(left_tuple)
-        end
-      end
-      
-    end
-    
-    protected
-    
-    # @see Shortcut#longexpr
-    def longexpr
-      chain HashBased.new,
-            datasets 
-    end
-    
-  end # class Intersect
-
-  # 
-  # Relational minus (aka difference)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [LEFT] RIGHT
-  #
-  # API & EXAMPLE
-  #
-  #   # Give all suppliers but those living in Paris
-  #   (minus :suppliers, 
-  #          (restrict :suppliers, lambda{ city == 'Paris' }))
-  #
-  # DESCRIPTION
-  #
-  # This operator computes the difference between its two operands. The 
-  # difference is simply the set of tuples in left operands non shared by
-  # the right one.
-  #
-  #   alf minus ... ...
-  #  
-  class Minus < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut, Operator::Binary
-    
-    class HashBased
-      include Operator::Binary
-    
-      protected
-      
-      def _prepare
-        @index = Hash.new
-        right.each{|t| @index[t] = true}
-      end
-      
-      def _each
-        left.each do |left_tuple|
-          yield(left_tuple) unless @index.has_key?(left_tuple)
-        end
-      end
-      
-    end
-    
-    protected
-    
-    # @see Shortcut#longexpr
-    def longexpr
-      chain HashBased.new,
-            datasets 
-    end
-    
-  end # class Minus
-
-  # 
-  # Relational union
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [LEFT] RIGHT
-  #
-  # API & EXAMPLE
-  #
-  #   (union (project :suppliers, [:city]), 
-  #          (project :parts,     [:city]))
-  #
-  # DESCRIPTION
-  #
-  # This operator computes the union join of two input iterators. Input 
-  # iterators should have the same heading. The result never contain duplicates.
-  #
-  #   alf union ... ...
-  #  
-  class Union < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut, Operator::Binary
-    
-    class DisjointBased
-      include Operator::Binary
-    
-      protected
-      
-      def _each
-        left.each(&Proc.new)
-        right.each(&Proc.new)
-      end
-      
-    end
-    
-    protected
-    
-    # @see Shortcut#longexpr
-    def longexpr
-      chain Operator::NonRelational::Compact.new,
-            DisjointBased.new,
-            datasets 
-    end
-    
-  end # class Union
-  
-  # 
-  # Relational nesting (tuple-valued attributes)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
-  #
-  # API & EXAMPLE
-  #
-  #   (nest :suppliers, [:city, :status], :loc_and_status)
-  #
-  # DESCRIPTION
-  #
-  # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
-  # attribute whose name is NEWNAME. When used in shell, names of nested 
-  # attributes are taken from commandline arguments, expected the last one
-  # which defines the new name to use:
-  #
-  #   alf nest suppliers -- city status loc_and_status
-  #
-  class Nest < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Transform
-
-    # Array of nesting attributes
-    attr_accessor :attributes
-
-    # New name for the nested attribute
-    attr_accessor :as
-
-    # Builds a Nest operator instance
-    def initialize(attributes = [], as = :nested)
-      @attributes = attributes
-      @as = as
-    end
-
-    protected 
-
-    # @see Operator#set_args
-    def set_args(args)
-      @as = args.pop.to_sym
-      @attributes = args.collect{|a| a.to_sym}
-      self
-    end
-
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      others = tuple_collect(tuple.keys - @attributes){|k| [k,tuple[k]] }
-      others[as] = tuple_collect(attributes){|k| [k, tuple[k]] }
-      others
-    end
-
-  end # class Nest
-
-  # 
-  # Relational un-nesting (inverse of nest)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR
-  #
-  # API & EXAMPLE
-  #
-  #   # Assuming nested = (nest :suppliers, [:city, :status], :loc_and_status) 
-  #   (unnest nested, :loc_and_status)
-  #
-  # DESCRIPTION
-  #
-  # This operator unnests the tuple-valued attribute named ATTR so as to 
-  # flatten its pairs with 'upstream' tuple. The latter should be such so that
-  # no name collision occurs. When used in shell, the name of the attribute to
-  # unnest is taken as the first commandline argument:
-  #
-  #   alf unnest nest -- loc_and_status
-  #
-  class Unnest < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Transform
-
-    # Name of the attribute to unnest
-    attr_accessor :attribute
-
-    # Builds a Rename operator instance
-    def initialize(attribute = :nested)
-      @attribute = attribute
-    end
-
-    protected 
-
-    # @see Operator#set_args
-    def set_args(args)
-      @attribute = args.first.to_sym
-      self
-    end
-
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      tuple = tuple.dup
-      nested = tuple.delete(@attribute) || {}
-      tuple.merge(nested)
-    end
-
-  end # class Unnest
-
-  # 
-  # Relational grouping (relation-valued attributes)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
-  #
-  # API & EXAMPLE
-  #
-  #   (group :supplies, [:pid, :qty], :supplying)
-  #   (group :supplies, [:sid], :supplying, true)
-  #
-  # DESCRIPTION
-  #
-  # This operator groups attributes ATTR1 to ATTRN as a new, relation-valued
-  # attribute whose name is NEWNAME. When used in shell, names of grouped
-  # attributes are taken from commandline arguments, expected the last one
-  # which defines the new name to use:
-  #
-  #   alf group supplies -- pid qty supplying
-  #   alf group supplies --allbut -- sid supplying
-  #
-  class Group < Factory::Operator(__FILE__, __LINE__)
-    include Unary
-    
-    # Attributes on which grouping applies
-    attr_accessor :attributes
-  
-    # Attribute name for grouping tuple 
-    attr_accessor :as
-
-    # Group all but attributes? 
-    attr_accessor :allbut
-
-    # Creates a Group instance
-    def initialize(attributes = [], as = :group, allbut = false)
-      @attributes = attributes
-      @as = as
-      @allbut = allbut
-    end
-
-    options do |opt|
-      opt.on('--allbut', "Group all but specified attributes"){ @allbut = true }
-    end
-    
-    protected 
-
-    # @see Operator#set_args
-    def set_args(args)
-      @as = args.pop.to_sym
-      @attributes = args.collect{|a| a.to_sym}
-      self
-    end
-
-    # See Operator#_prepare
-    def _prepare
-      pkey = ProjectionKey.new(attributes, !allbut)
-      @index = Hash.new{|h,k| h[k] = []} 
-      each_input_tuple do |tuple|
-        key, rest = pkey.split(tuple)
-        @index[key] << rest
-      end
-    end
-
-    # See Operator#_each
-    def _each
-      @index.each_pair do |k,v|
-        yield(k.merge(@as => v))
-      end
-    end
-
-  end # class Group
-
-  # 
-  # Relational un-grouping (inverse of group)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR
-  #
-  # API & EXAMPLE
-  #
-  #   # Assuming grouped = (group enum, [:pid, :qty], :supplying)
-  #   (ungroup grouped, :supplying)
-  #
-  # DESCRIPTION
-  #
-  # This operator ungroups the relation-valued attribute named ATTR and outputs
-  # tuples as the flattening of each of of its tuples merged with the upstream
-  # one. Sub relation should be such so that no name collision occurs. When 
-  # used in shell, the name of the attribute to ungroup is taken as the first 
-  # commandline argument:
-  #
-  #   alf ungroup group -- supplying
-  #
-  class Ungroup < Factory::Operator(__FILE__, __LINE__)
-    include Unary
-    
-    # Relation-value attribute to ungroup
-    attr_accessor :attribute
-  
-    # Creates a Group instance
-    def initialize(attribute = :grouped)
-      @attribute = attribute
-    end
-
-    protected 
-
-    # @see Operator#set_args
-    def set_args(args)
-      @attribute = args.pop.to_sym
-      self
-    end
-
-    # See Operator#_each
-    def _each
-      each_input_tuple do |tuple|
-        tuple = tuple.dup
-        subrel = tuple.delete(@attribute)
-        subrel.each do |subtuple|
-          yield(tuple.merge(subtuple))
-        end
-      end
-    end
-
-  end # class Ungroup
-
-  # 
-  # Relational summarization (group-by + aggregate ops)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] --by=KEY1,KEY2... -- AGG1 EXPR1...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # API & EXAMPLE
-  #
-  #   (summarize :supplies, [:sid],
-  #                         :total_qty => Aggregator.sum(:qty))
-  #
-  # DESCRIPTION
-  #
-  # This operator summarizes input tuples on the projection on KEY1,KEY2,...
-  # attributes and applies aggregate operators on sets of matching tuples.
-  # Introduced names AGG should be disjoint from KEY attributes.
-  #
-  # When used in shell, the aggregations are taken from commandline arguments
-  # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
-  # aggregation expression evaluated on Aggregator:
-  #
-  #   alf summarize supplies --by=sid -- total_qty "sum(:qty)" 
-  #
-  class Summarize < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut, Operator::Unary
-    
-    # By attributes
-    attr_accessor :by
-    
-    # Aggregations as a AGG => Aggregator(EXPR) hash 
-    attr_accessor :aggregators
-
-    def initialize(by = [], aggregators = {})
-      @by = by
-      @aggregators = aggregators
-    end
-
-    # Installs the options
-    options do |opt|
-      opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-        @by = args.collect{|a| a.to_sym}
-      end
-    end
-
-    # Summarizes according to a complete order
-    class SortBased
-      include Alf::Operator::Cesure      
-
-      attr_reader :cesure_key
-      attr_reader :aggregators     
-
-      def initialize(by_key, aggregators)
-        @cesure_key, @aggregators = by_key, aggregators
-      end
-
       protected 
-
-      def start_cesure(key, receiver)
-        @aggs = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.least]
-        end
-      end
-
-      def accumulate_cesure(tuple, receiver)
-        @aggs = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.happens(@aggs[a], tuple)]
-        end
-      end
-
-      def flush_cesure(key, receiver)
-        @aggs = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.finalize(@aggs[a])]
-        end
-        receiver.call key.merge(@aggs)
-      end
-
-    end # class SortBased
-
-    protected 
     
-    # @see Operator#set_args
-    def set_args(args)
-      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a.to_sym, Aggregator.compile(expr)]
+      # @see Operator#set_args
+      def set_args(args)
+        self.attributes = args.collect{|a| a.to_sym}
+        self
       end
-      self
-    end
-
-    def longexpr
-      by_key = ProjectionKey.new(@by, false)
-      chain SortBased.new(by_key, @aggregators),
-            Operator::NonRelational::Sort.new(by_key.to_ordering_key),
-            datasets
-    end
-
-  end # class Summarize
-
-  # 
-  # Relational quota-queries (position, sum progression, etc.)
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] --by=KEY1,... --order=OR1... AGG1 EXPR1...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # API & EXAMPLE
-  #
-  #   (quota :supplies, [:sid], [:qty],
-  #                     :position => Aggregator.count,
-  #                     :sum_qty  => Aggregator.sum(:qty))
-  #
-  # DESCRIPTION
-  #
-  # This operator computes quota values on input tuples.
-  #
-  #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
-  #
-  class Quota < Factory::Operator(__FILE__, __LINE__)
-    include Operator::Shortcut, Operator::Unary
-
-    # Quota by
-    attr_accessor :by
-
-    # Quota order
-    attr_accessor :order
     
-    # Quota aggregations
-    attr_accessor :aggregators
-
-    def initialize(by = [], order = [], aggregators = {})
-      @by, @order, @aggregators  = by, order, aggregators
-    end
-
-    options do |opt|
-      opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-        @by = args.collect{|a| a.to_sym}
+      # @see Operator::Shortcut#longexpr
+      def longexpr
+        chain Operator::NonRelational::Compact.new,
+              Operator::NonRelational::Clip.new(@projection_key.attributes, 
+                                                @projection_key.allbut),
+              datasets
       end
-      opt.on('--order=x,y,z', 'Specify order attributes', Array) do |args|
-        @order = args.collect{|a| a.to_sym}
+    
+    end # class Project
+    
+    #
+    # Relational extension (additional, computed attributes)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 EXPR1 ATTR2 EXPR2...
+    #
+    # API & EXAMPLE
+    #
+    #   (extend :supplies, :sp  => lambda{ sid + "/" + pid },
+    #                      :big => lambda{ qty > 100 ? true : false }) 
+    #
+    # DESCRIPTION
+    #
+    # This command extend input tuples with new attributes (named ATTR1, ...)  
+    # whose value is the result of evaluating tuple expressions (i.e. EXPR1, ...).
+    # See main documentation about the semantics of tuple expressions. When used
+    # in shell, the hash of extensions is built from commandline arguments ala
+    # Hash[...]. Tuple expressions must be specified as code literals there:
+    #
+    #   alf extend supplies -- sp 'sid + "/" + pid' big "qty > 100 ? true : false"
+    #
+    # Attributes ATTRx should not already exist, no behavior is guaranteed if 
+    # this precondition is not respected.   
+    #
+    class Extend < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Transform
+  
+      # Extensions as a Hash attr => lambda{...}
+      attr_accessor :extensions
+  
+      # Builds an Extend operator instance
+      def initialize(extensions = {})
+        @extensions = extensions
       end
-    end
-
-    class SortBased
-      include Operator::Cesure
+  
+      protected 
+    
+      # @see Operator#set_args
+      def set_args(args)
+        @extensions = tuple_collect(args.each_slice(2)){|k,v|
+          [k.to_sym, TupleHandle.compile(v)]
+        }
+        self
+      end
+  
+      # @see Operator#_prepare
+      def _prepare
+        @handle = TupleHandle.new
+      end
+  
+      # @see Operator::Transform#_tuple2tuple
+      def _tuple2tuple(tuple)
+        tuple.merge tuple_collect(@extensions){|k,v|
+          [k, @handle.set(tuple).evaluate(v)]
+        }
+      end
+  
+    end # class Extend
+  
+    # 
+    # Relational renaming (rename some attributes)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- OLD1 NEW1 ...
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   (rename :suppliers, :name => :supplier_name, :city => :supplier_city)
+    #
+    # DESCRIPTION
+    #
+    # This command renames OLD attributes as NEW as specified by arguments. 
+    # Attributes OLD should exist in source tuples while attributes NEW should 
+    # not. When used in shell, renaming attributes are built ala Hash[...] from
+    # commandline arguments: 
+    #
+    #   alf rename suppliers -- name supplier_name city supplier_city
+    #
+    class Rename < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Transform
+  
+      # Hash of source -> target attribute renamings
+      attr_accessor :renaming
+  
+      # Builds a Rename operator instance
+      def initialize(renaming = {})
+        @renaming = renaming
+      end
+  
+      protected 
+    
+      # @see Operator#set_args
+      def set_args(args)
+        @renaming = Hash[*args.collect{|c| c.to_sym}]
+        self
+      end
+  
+      # @see Operator::Transform#_tuple2tuple
+      def _tuple2tuple(tuple)
+        tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
+      end
+  
+    end # class Rename
+  
+    # 
+    # Relational restriction (aka where, predicate filtering)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- EXPR
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
+    #
+    # API & EXAMPLE
+    #
+    #   # Restrict to suppliers with status greater than 20
+    #   (restrict :suppliers, lambda{ status > 20 })
+    #
+    #   # Restrict to suppliers that live in London
+    #   (restrict :suppliers, lambda{ city == 'London' })
+    #
+    # DESCRIPTION
+    #
+    # This command restricts tuples to those for which EXPR evaluates to true.
+    # EXPR must be a valid tuple expression that should return a truth-value.
+    # When used in shell, the predicate is taken as a string and compiled with
+    # TupleHandle.compile. We also provide a shortcut for equality expressions. 
+    # Note that, in that case, values are expected to be ruby code literals,
+    # evaluated with Kernel.eval. Therefore, strings must be doubly quoted.  
+    #
+    #   alf restrict suppliers -- "status > 20"
+    #   alf restrict suppliers -- city "'London'"
+    #
+    class Restrict < Factory::Operator(__FILE__, __LINE__)
+      include Unary
       
-      def initialize(by, order, aggregators)
+      # Restriction predicate
+      attr_accessor :predicate
+  
+      # Builds a Restrict operator instance
+      def initialize(predicate = "true")
+        @predicate = TupleHandle.compile(predicate)
+        yield self if block_given?
+      end
+  
+      protected 
+    
+      # @see Operator#set_args
+      def set_args(args)
+        @predicate = if args.size > 1
+          TupleHandle.compile  tuple_collect(args.each_slice(2)){|a,expr|
+            [a, Kernel.eval(expr)]
+          }
+        else
+          TupleHandle.compile(args.first)
+        end
+        self
+      end
+  
+      # @see Operator#_each
+      def _each
+        handle = TupleHandle.new
+        each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@predicate) }
+      end
+  
+    end # class Restrict
+  
+    # 
+    # Relational join (and cross-join)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [LEFT] RIGHT
+    #
+    # API & EXAMPLE
+    #
+    #   (join :suppliers, :parts)
+    #
+    # DESCRIPTION
+    #
+    # This operator computes the (natural) join of two input iterators. Natural
+    # join means that, unlike what is commonly used in SQL, the default behavior 
+    # is to join on common attributes. You can use the rename operator if this
+    # behavior does not fit your needs.
+    #
+    #   alf join suppliers supplies 
+    #  
+    class Join < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Shortcut, Operator::Binary
+      
+      class HashBased
+        include Operator::Binary
+      
+        class JoinBuffer
+          
+          def initialize(enum)
+            @buffer = nil
+            @key = nil
+            @enum = enum
+          end
+          
+          def split(tuple)
+            _init(tuple) unless @key
+            @key.split(tuple)
+          end
+          
+          def each(key)
+            @buffer[key].each(&Proc.new) if @buffer.has_key?(key)
+          end
+          
+          private
+          
+          def _init(right)
+            @buffer = Hash.new{|h,k| h[k] = []}
+            @enum.each do |left|
+              @key = ProjectionKey.coerce(left.keys & right.keys) unless @key
+              @buffer[@key.project(left)] << left
+            end
+          end
+          
+        end
+        
+        protected
+        
+        def _each
+          buffer = JoinBuffer.new(right)
+          left.each do |left_tuple|
+            key, rest = buffer.split(left_tuple)
+            buffer.each(key) do |right|
+              yield(left_tuple.merge(right))
+            end
+          end
+        end
+        
+      end
+      
+      protected
+      
+      # @see Shortcut#longexpr
+      def longexpr
+        chain HashBased.new,
+              datasets 
+      end
+      
+    end # class Join
+    
+    # 
+    # Relational intersection (aka a logical and)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [LEFT] RIGHT
+    #
+    # API & EXAMPLE
+    #
+    #   # Give suppliers that live in Paris and have status >= 20
+    #   (intersect \\
+    #     (restrict :suppliers, lambda{ status >= 20 }),
+    #     (restrict :suppliers, lambda{ city == 'Paris' }))
+    #
+    # DESCRIPTION
+    #
+    # This operator computes the intersection between its two operands. The 
+    # intersection is simply the set of common tuples between them. Both operands
+    # must have the same heading. 
+    #
+    #   alf intersect ... ...
+    #  
+    class Intersect < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Shortcut, Operator::Binary
+      
+      class HashBased
+        include Operator::Binary
+      
+        protected
+        
+        def _prepare
+          @index = Hash.new
+          right.each{|t| @index[t] = true}
+        end
+        
+        def _each
+          left.each do |left_tuple|
+            yield(left_tuple) if @index.has_key?(left_tuple)
+          end
+        end
+        
+      end
+      
+      protected
+      
+      # @see Shortcut#longexpr
+      def longexpr
+        chain HashBased.new,
+              datasets 
+      end
+      
+    end # class Intersect
+  
+    # 
+    # Relational minus (aka difference)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [LEFT] RIGHT
+    #
+    # API & EXAMPLE
+    #
+    #   # Give all suppliers but those living in Paris
+    #   (minus :suppliers, 
+    #          (restrict :suppliers, lambda{ city == 'Paris' }))
+    #
+    # DESCRIPTION
+    #
+    # This operator computes the difference between its two operands. The 
+    # difference is simply the set of tuples in left operands non shared by
+    # the right one.
+    #
+    #   alf minus ... ...
+    #  
+    class Minus < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Shortcut, Operator::Binary
+      
+      class HashBased
+        include Operator::Binary
+      
+        protected
+        
+        def _prepare
+          @index = Hash.new
+          right.each{|t| @index[t] = true}
+        end
+        
+        def _each
+          left.each do |left_tuple|
+            yield(left_tuple) unless @index.has_key?(left_tuple)
+          end
+        end
+        
+      end
+      
+      protected
+      
+      # @see Shortcut#longexpr
+      def longexpr
+        chain HashBased.new,
+              datasets 
+      end
+      
+    end # class Minus
+  
+    # 
+    # Relational union
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [LEFT] RIGHT
+    #
+    # API & EXAMPLE
+    #
+    #   (union (project :suppliers, [:city]), 
+    #          (project :parts,     [:city]))
+    #
+    # DESCRIPTION
+    #
+    # This operator computes the union join of two input iterators. Input 
+    # iterators should have the same heading. The result never contain duplicates.
+    #
+    #   alf union ... ...
+    #  
+    class Union < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Shortcut, Operator::Binary
+      
+      class DisjointBased
+        include Operator::Binary
+      
+        protected
+        
+        def _each
+          left.each(&Proc.new)
+          right.each(&Proc.new)
+        end
+        
+      end
+      
+      protected
+      
+      # @see Shortcut#longexpr
+      def longexpr
+        chain Operator::NonRelational::Compact.new,
+              DisjointBased.new,
+              datasets 
+      end
+      
+    end # class Union
+    
+    # 
+    # Relational nesting (tuple-valued attributes)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
+    #
+    # API & EXAMPLE
+    #
+    #   (nest :suppliers, [:city, :status], :loc_and_status)
+    #
+    # DESCRIPTION
+    #
+    # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
+    # attribute whose name is NEWNAME. When used in shell, names of nested 
+    # attributes are taken from commandline arguments, expected the last one
+    # which defines the new name to use:
+    #
+    #   alf nest suppliers -- city status loc_and_status
+    #
+    class Nest < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Transform
+  
+      # Array of nesting attributes
+      attr_accessor :attributes
+  
+      # New name for the nested attribute
+      attr_accessor :as
+  
+      # Builds a Nest operator instance
+      def initialize(attributes = [], as = :nested)
+        @attributes = attributes
+        @as = as
+      end
+  
+      protected 
+  
+      # @see Operator#set_args
+      def set_args(args)
+        @as = args.pop.to_sym
+        @attributes = args.collect{|a| a.to_sym}
+        self
+      end
+  
+      # @see Operator::Transform#_tuple2tuple
+      def _tuple2tuple(tuple)
+        others = tuple_collect(tuple.keys - @attributes){|k| [k,tuple[k]] }
+        others[as] = tuple_collect(attributes){|k| [k, tuple[k]] }
+        others
+      end
+  
+    end # class Nest
+  
+    # 
+    # Relational un-nesting (inverse of nest)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR
+    #
+    # API & EXAMPLE
+    #
+    #   # Assuming nested = (nest :suppliers, [:city, :status], :loc_and_status) 
+    #   (unnest nested, :loc_and_status)
+    #
+    # DESCRIPTION
+    #
+    # This operator unnests the tuple-valued attribute named ATTR so as to 
+    # flatten its pairs with 'upstream' tuple. The latter should be such so that
+    # no name collision occurs. When used in shell, the name of the attribute to
+    # unnest is taken as the first commandline argument:
+    #
+    #   alf unnest nest -- loc_and_status
+    #
+    class Unnest < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Transform
+  
+      # Name of the attribute to unnest
+      attr_accessor :attribute
+  
+      # Builds a Rename operator instance
+      def initialize(attribute = :nested)
+        @attribute = attribute
+      end
+  
+      protected 
+  
+      # @see Operator#set_args
+      def set_args(args)
+        @attribute = args.first.to_sym
+        self
+      end
+  
+      # @see Operator::Transform#_tuple2tuple
+      def _tuple2tuple(tuple)
+        tuple = tuple.dup
+        nested = tuple.delete(@attribute) || {}
+        tuple.merge(nested)
+      end
+  
+    end # class Unnest
+  
+    # 
+    # Relational grouping (relation-valued attributes)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
+    #
+    # API & EXAMPLE
+    #
+    #   (group :supplies, [:pid, :qty], :supplying)
+    #   (group :supplies, [:sid], :supplying, true)
+    #
+    # DESCRIPTION
+    #
+    # This operator groups attributes ATTR1 to ATTRN as a new, relation-valued
+    # attribute whose name is NEWNAME. When used in shell, names of grouped
+    # attributes are taken from commandline arguments, expected the last one
+    # which defines the new name to use:
+    #
+    #   alf group supplies -- pid qty supplying
+    #   alf group supplies --allbut -- sid supplying
+    #
+    class Group < Factory::Operator(__FILE__, __LINE__)
+      include Unary
+      
+      # Attributes on which grouping applies
+      attr_accessor :attributes
+    
+      # Attribute name for grouping tuple 
+      attr_accessor :as
+  
+      # Group all but attributes? 
+      attr_accessor :allbut
+  
+      # Creates a Group instance
+      def initialize(attributes = [], as = :group, allbut = false)
+        @attributes = attributes
+        @as = as
+        @allbut = allbut
+      end
+  
+      options do |opt|
+        opt.on('--allbut', "Group all but specified attributes"){ @allbut = true }
+      end
+      
+      protected 
+  
+      # @see Operator#set_args
+      def set_args(args)
+        @as = args.pop.to_sym
+        @attributes = args.collect{|a| a.to_sym}
+        self
+      end
+  
+      # See Operator#_prepare
+      def _prepare
+        pkey = ProjectionKey.new(attributes, !allbut)
+        @index = Hash.new{|h,k| h[k] = []} 
+        each_input_tuple do |tuple|
+          key, rest = pkey.split(tuple)
+          @index[key] << rest
+        end
+      end
+  
+      # See Operator#_each
+      def _each
+        @index.each_pair do |k,v|
+          yield(k.merge(@as => v))
+        end
+      end
+  
+    end # class Group
+  
+    # 
+    # Relational un-grouping (inverse of group)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR
+    #
+    # API & EXAMPLE
+    #
+    #   # Assuming grouped = (group enum, [:pid, :qty], :supplying)
+    #   (ungroup grouped, :supplying)
+    #
+    # DESCRIPTION
+    #
+    # This operator ungroups the relation-valued attribute named ATTR and outputs
+    # tuples as the flattening of each of of its tuples merged with the upstream
+    # one. Sub relation should be such so that no name collision occurs. When 
+    # used in shell, the name of the attribute to ungroup is taken as the first 
+    # commandline argument:
+    #
+    #   alf ungroup group -- supplying
+    #
+    class Ungroup < Factory::Operator(__FILE__, __LINE__)
+      include Unary
+      
+      # Relation-value attribute to ungroup
+      attr_accessor :attribute
+    
+      # Creates a Group instance
+      def initialize(attribute = :grouped)
+        @attribute = attribute
+      end
+  
+      protected 
+  
+      # @see Operator#set_args
+      def set_args(args)
+        @attribute = args.pop.to_sym
+        self
+      end
+  
+      # See Operator#_each
+      def _each
+        each_input_tuple do |tuple|
+          tuple = tuple.dup
+          subrel = tuple.delete(@attribute)
+          subrel.each do |subtuple|
+            yield(tuple.merge(subtuple))
+          end
+        end
+      end
+  
+    end # class Ungroup
+  
+    # 
+    # Relational summarization (group-by + aggregate ops)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] --by=KEY1,KEY2... -- AGG1 EXPR1...
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   (summarize :supplies, [:sid],
+    #                         :total_qty => Aggregator.sum(:qty))
+    #
+    # DESCRIPTION
+    #
+    # This operator summarizes input tuples on the projection on KEY1,KEY2,...
+    # attributes and applies aggregate operators on sets of matching tuples.
+    # Introduced names AGG should be disjoint from KEY attributes.
+    #
+    # When used in shell, the aggregations are taken from commandline arguments
+    # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
+    # aggregation expression evaluated on Aggregator:
+    #
+    #   alf summarize supplies --by=sid -- total_qty "sum(:qty)" 
+    #
+    class Summarize < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Shortcut, Operator::Unary
+      
+      # By attributes
+      attr_accessor :by
+      
+      # Aggregations as a AGG => Aggregator(EXPR) hash 
+      attr_accessor :aggregators
+  
+      def initialize(by = [], aggregators = {})
+        @by = by
+        @aggregators = aggregators
+      end
+  
+      # Installs the options
+      options do |opt|
+        opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
+          @by = args.collect{|a| a.to_sym}
+        end
+      end
+  
+      # Summarizes according to a complete order
+      class SortBased
+        include Alf::Operator::Cesure      
+  
+        attr_reader :cesure_key
+        attr_reader :aggregators     
+  
+        def initialize(by_key, aggregators)
+          @cesure_key, @aggregators = by_key, aggregators
+        end
+  
+        protected 
+  
+        def start_cesure(key, receiver)
+          @aggs = tuple_collect(@aggregators) do |a,agg|
+            [a, agg.least]
+          end
+        end
+  
+        def accumulate_cesure(tuple, receiver)
+          @aggs = tuple_collect(@aggregators) do |a,agg|
+            [a, agg.happens(@aggs[a], tuple)]
+          end
+        end
+  
+        def flush_cesure(key, receiver)
+          @aggs = tuple_collect(@aggregators) do |a,agg|
+            [a, agg.finalize(@aggs[a])]
+          end
+          receiver.call key.merge(@aggs)
+        end
+  
+      end # class SortBased
+  
+      protected 
+      
+      # @see Operator#set_args
+      def set_args(args)
+        @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
+          [a.to_sym, Aggregator.compile(expr)]
+        end
+        self
+      end
+  
+      def longexpr
+        by_key = ProjectionKey.new(@by, false)
+        chain SortBased.new(by_key, @aggregators),
+              Operator::NonRelational::Sort.new(by_key.to_ordering_key),
+              datasets
+      end
+  
+    end # class Summarize
+  
+    # 
+    # Relational quota-queries (position, sum progression, etc.)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] --by=KEY1,... --order=OR1... AGG1 EXPR1...
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   (quota :supplies, [:sid], [:qty],
+    #                     :position => Aggregator.count,
+    #                     :sum_qty  => Aggregator.sum(:qty))
+    #
+    # DESCRIPTION
+    #
+    # This operator computes quota values on input tuples.
+    #
+    #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
+    #
+    class Quota < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Shortcut, Operator::Unary
+  
+      # Quota by
+      attr_accessor :by
+  
+      # Quota order
+      attr_accessor :order
+      
+      # Quota aggregations
+      attr_accessor :aggregators
+  
+      def initialize(by = [], order = [], aggregators = {})
         @by, @order, @aggregators  = by, order, aggregators
       end
+  
+      options do |opt|
+        opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
+          @by = args.collect{|a| a.to_sym}
+        end
+        opt.on('--order=x,y,z', 'Specify order attributes', Array) do |args|
+          @order = args.collect{|a| a.to_sym}
+        end
+      end
+  
+      class SortBased
+        include Operator::Cesure
+        
+        def initialize(by, order, aggregators)
+          @by, @order, @aggregators  = by, order, aggregators
+        end
+        
+        def cesure_key
+          ProjectionKey.coerce @by
+        end
+        
+        def ordering_key
+          OrderingKey.coerce @order
+        end
+    
+        def start_cesure(key, receiver)
+          @aggs = tuple_collect(@aggregators) do |a,agg|
+            [a, agg.least]
+          end
+        end
+    
+        def accumulate_cesure(tuple, receiver)
+          @aggs = tuple_collect(@aggregators) do |a,agg|
+            [a, agg.happens(@aggs[a], tuple)]
+          end
+          thisone = tuple_collect(@aggregators) do |a,agg|
+            [a, agg.finalize(@aggs[a])]
+          end
+          receiver.call tuple.merge(thisone)
+        end
+  
+      end # class SortBased
+  
+      protected
       
+      # @see Operator#set_args
+      def set_args(args)
+        @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
+          [a.to_sym, Aggregator.compile(expr)]
+        end
+        self
+      end
+  
       def cesure_key
         ProjectionKey.coerce @by
       end
@@ -2688,49 +2725,15 @@ module Alf
         OrderingKey.coerce @order
       end
   
-      def start_cesure(key, receiver)
-        @aggs = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.least]
-        end
-      end
+      def longexpr
+        sort_key = cesure_key.to_ordering_key + ordering_key
+        chain SortBased.new(@by, @order, @aggregators),
+              Operator::NonRelational::Sort.new(sort_key),
+              datasets
+      end 
   
-      def accumulate_cesure(tuple, receiver)
-        @aggs = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.happens(@aggs[a], tuple)]
-        end
-        thisone = tuple_collect(@aggregators) do |a,agg|
-          [a, agg.finalize(@aggs[a])]
-        end
-        receiver.call tuple.merge(thisone)
-      end
-
-    end # class SortBased
-
-    protected
-    
-    # @see Operator#set_args
-    def set_args(args)
-      @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-        [a.to_sym, Aggregator.compile(expr)]
-      end
-      self
-    end
-
-    def cesure_key
-      ProjectionKey.coerce @by
-    end
-    
-    def ordering_key
-      OrderingKey.coerce @order
-    end
-
-    def longexpr
-      sort_key = cesure_key.to_ordering_key + ordering_key
-      chain SortBased.new(@by, @order, @aggregators),
-            Operator::NonRelational::Sort.new(sort_key),
-            datasets
-    end 
-
-  end # class Quota
+    end # class Quota
   
+  end
+
 end # module Alf
