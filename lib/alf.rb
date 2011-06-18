@@ -581,8 +581,18 @@ module Alf
   # be safely extended, overriden, or even mimiced (provided that you include 
   # and implement the Iterator contract).
   #
-  # This class also provides a registration mechanism to help magically 
-  # building Reader instances for specific file extensions. 
+  # This class also provides a registration mechanism to help getting Reader 
+  # instances for specific file extensions. A typical scenario for using this
+  # registration mechanism is as follows:
+  #
+  #   # Registers a reader kind named :foo, associated with ".foo" file 
+  #   # extensions and the FooFileDecoder class (typically a subclass of 
+  #   # Reader)
+  #   Reader.register(:foo, [".foo"], FooFileDecoder)   
+  #
+  #   # Later on, you can request a reader instance for a .foo file, as 
+  #   # illustrated below.  
+  #   r = Reader.reader('/a/path/to/a/file.foo')
   #
   class Reader
     include Iterator
