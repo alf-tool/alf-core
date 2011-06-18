@@ -577,6 +577,167 @@ module Alf
   end # module Iterator
 
   #
+  # Base class for implementing tuple readers.
+  #
+  # The contrat of a Reader is simply to be an Enumerable of tuple. Unlike 
+  # operators, however, readers are not expected to take tuple enumerators
+  # as input but IO objects, database tables, or something similar instead.
+  # This base class provides a default behavior for readers that works with 
+  # IO objects. It can be safely extended, overriden, or mimiced.
+  #
+  class Reader
+    include Iterator
+  
+    # Registered readers
+    @@readers = []
+    
+    # Registers a reader associated with specific file extensions    
+    def self.register(name, extensions, clazz)
+      @@readers << [name, extensions, clazz]
+      (class << self; self; end).send(:define_method, name) do |*args|
+        clazz.new(*args)
+      end
+    end
+  
+    # Returns a reader instance for a given file extension
+    def self.reader_class_by_file_extension(ext)
+      x = @@readers.find{|r| r[1].include?(ext)}
+      x ? x.last : nil
+    end
+        
+    # Coerces an argument to a reader, using an optional environement
+    # to convert named datasets
+    def self.coerce(arg, environment = nil)
+      case arg
+      when Reader
+        arg
+      when IO
+        rash(arg, environment)
+      when String, Symbol
+        if environment
+          environment.dataset(arg.to_sym)
+        else
+          raise "No environment set"
+        end
+      else
+        raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
+      end
+    end
+    
+    # Environment instance
+    attr_accessor :environment
+  
+    # Input IO, or file name
+    attr_accessor :input
+  
+    # Creates a reader instance, with an optional input
+    #
+    def initialize(input = nil, environment = nil)
+      @input = input
+      @environment = environment 
+    end
+  
+    # 
+    # Sets the reader input
+    #
+    def pipe(input, env = environment)
+      @input = input
+    end
+    
+    #
+    # Yields the block with each tuple (converted from the input stream) in 
+    # turn.
+    #
+    # The default implementation reads lines of the input stream and yields the 
+    # block with <code>_line2tuple(line)</code> on each of them. This method
+    # may be overriden if this behavior does not fit reader's needs.
+    #
+    def each
+      each_input_line do |line| 
+        tuple = _line2tuple(line)
+        yield tuple unless tuple.nil?
+      end
+    end
+  
+    protected
+    
+    def with_input_io
+      case input
+      when IO, StringIO
+        yield input
+      when String
+        File.open(input, 'r'){|io| yield io}
+      else
+        raise "Unable to convert #{input} to an IO object"
+      end
+    end
+    
+    def input_text
+      with_input_io{|io| io.readlines.join}
+    end
+    
+    def each_input_line
+      with_input_io{|io| io.each_line(&Proc.new)}
+    end
+  
+    #
+    # Converts a line previously read from the input stream to a tuple. 
+    #
+    # The line is simply ignored is this method return nil. Errors should be
+    # properly handled by raising exceptions. This method MUST be implemented 
+    # by subclasses unless each is overriden.
+    #
+    def _line2tuple(line)
+    end
+  
+    #
+    # Specialization of the Reader contract for .rash files.
+    #
+    # A .rash file/stream contains one ruby hash literal on each line (taken as 
+    # a tuple physical representation). This reader simply decodes each of them 
+    # in turn with Kernel.eval, providing a state-less reader (in the sense 
+    # that tuples are not all loaded in memory). 
+    #
+    class Rash < Reader
+  
+      # (see Reader#_line2tuple)
+      def _line2tuple(line)
+        begin
+          h = Kernel.eval(line)
+          raise "hash expected, got #{h}" unless h.is_a?(Hash)
+        rescue Exception => ex
+          $stderr << "Skipping #{line.strip}: #{ex.message}\n"
+          nil
+        else
+          return h
+        end
+      end
+  
+      Reader.register(:rash, [".rash"], self)  
+    end # class Rash
+  
+    #
+    # Specialization of the Reader contrat for .alf files.
+    #
+    # A .alf file simply contains a query expression in the Lispy DSL. This
+    # reader decodes and compile the expression and delegates the enumeration
+    # to the obtained operator.
+    #
+    class AlfFile < Reader
+      
+      # (see Reader#each)
+      def each
+        op = Alf.lispy(environment).compile(input_text)
+        op.each(&Proc.new)
+      end
+      
+      Reader.register(:alf, [".alf"], self)
+    end # module AlfFile
+  
+    require "alf/reader/yaml"
+  end # module Reader
+
+  #
   # Base class for implementing aggregation operators.
   #
   class Aggregator
@@ -814,167 +975,6 @@ module Alf
     end # class Buffer::Sorted
     
   end # class Buffer
-
-  #
-  # Base class for implementing tuple readers.
-  #
-  # The contrat of a Reader is simply to be an Enumerable of tuple. Unlike 
-  # operators, however, readers are not expected to take tuple enumerators
-  # as input but IO objects, database tables, or something similar instead.
-  # This base class provides a default behavior for readers that works with 
-  # IO objects. It can be safely extended, overriden, or mimiced.
-  #
-  class Reader
-    include Iterator
-
-    # Registered readers
-    @@readers = []
-    
-    # Registers a reader associated with specific file extensions    
-    def self.register(name, extensions, clazz)
-      @@readers << [name, extensions, clazz]
-      (class << self; self; end).send(:define_method, name) do |*args|
-        clazz.new(*args)
-      end
-    end
-
-    # Returns a reader instance for a given file extension
-    def self.reader_class_by_file_extension(ext)
-      x = @@readers.find{|r| r[1].include?(ext)}
-      x ? x.last : nil
-    end
-        
-    # Coerces an argument to a reader, using an optional environement
-    # to convert named datasets
-    def self.coerce(arg, environment = nil)
-      case arg
-      when Reader
-        arg
-      when IO
-        rash(arg, environment)
-      when String, Symbol
-        if environment
-          environment.dataset(arg.to_sym)
-        else
-          raise "No environment set"
-        end
-      else
-        raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
-      end
-    end
-    
-    # Environment instance
-    attr_accessor :environment
-
-    # Input IO, or file name
-    attr_accessor :input
-
-    # Creates a reader instance, with an optional input
-    #
-    def initialize(input = nil, environment = nil)
-      @input = input
-      @environment = environment 
-    end
-
-    # 
-    # Sets the reader input
-    #
-    def pipe(input, env = environment)
-      @input = input
-    end
-    
-    #
-    # Yields the block with each tuple (converted from the input stream) in 
-    # turn.
-    #
-    # The default implementation reads lines of the input stream and yields the 
-    # block with <code>_line2tuple(line)</code> on each of them. This method
-    # may be overriden if this behavior does not fit reader's needs.
-    #
-    def each
-      each_input_line do |line| 
-        tuple = _line2tuple(line)
-        yield tuple unless tuple.nil?
-      end
-    end
-
-    protected
-    
-    def with_input_io
-      case input
-      when IO, StringIO
-        yield input
-      when String
-        File.open(input, 'r'){|io| yield io}
-      else
-        raise "Unable to convert #{input} to an IO object"
-      end
-    end
-    
-    def input_text
-      with_input_io{|io| io.readlines.join}
-    end
-    
-    def each_input_line
-      with_input_io{|io| io.each_line(&Proc.new)}
-    end
-
-    #
-    # Converts a line previously read from the input stream to a tuple. 
-    #
-    # The line is simply ignored is this method return nil. Errors should be
-    # properly handled by raising exceptions. This method MUST be implemented 
-    # by subclasses unless each is overriden.
-    #
-    def _line2tuple(line)
-    end
-
-    #
-    # Specialization of the Reader contract for .rash files.
-    #
-    # A .rash file/stream contains one ruby hash literal on each line (taken as 
-    # a tuple physical representation). This reader simply decodes each of them 
-    # in turn with Kernel.eval, providing a state-less reader (in the sense 
-    # that tuples are not all loaded in memory). 
-    #
-    class Rash < Reader
-  
-      # (see Reader#_line2tuple)
-      def _line2tuple(line)
-        begin
-          h = Kernel.eval(line)
-          raise "hash expected, got #{h}" unless h.is_a?(Hash)
-        rescue Exception => ex
-          $stderr << "Skipping #{line.strip}: #{ex.message}\n"
-          nil
-        else
-          return h
-        end
-      end
-
-      Reader.register(:rash, [".rash"], self)  
-    end # class Rash
-
-    #
-    # Specialization of the Reader contrat for .alf files.
-    #
-    # A .alf file simply contains a query expression in the Lispy DSL. This
-    # reader decodes and compile the expression and delegates the enumeration
-    # to the obtained operator.
-    #
-    class AlfFile < Reader
-      
-      # (see Reader#each)
-      def each
-        op = Alf.lispy(environment).compile(input_text)
-        op.each(&Proc.new)
-      end
-      
-      Reader.register(:alf, [".alf"], self)
-    end # module AlfFile
-
-    require "alf/reader/yaml"
-  end # module Reader
 
   #
   # Base class for implementing renderers.
