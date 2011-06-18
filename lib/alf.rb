@@ -270,31 +270,6 @@ module Alf
 
   ############################################################################# PUBLIC API
 
-  #
-  # Provides a factory over Alf operators and handles the interface with
-  # Quickl for commandline support.
-  # 
-  module Factory
-
-    # @see Quickl::Command
-    def Command(file, line)
-      Quickl::Command(file, line){|builder|
-        builder.command_parent = Alf::Command::Main
-        yield(builder) if block_given?
-      }
-    end
-
-    # @see Operator
-    def Operator(file, line, category = :unclassed)
-      Command(file, line) do |b|
-        b.instance_module Alf::Operator
-        b.callback{|cmd| @category = category}
-      end
-    end
-
-    extend Factory
-  end # module Factory
-  
   # 
   # Implements a small LISP-like DSL on top of Alf
   #
@@ -1017,6 +992,30 @@ module Alf
   end # module Renderer
 
   ############################################################################# COMMANDS
+  #
+  # Provides a factory over Alf operators and handles the interface with
+  # Quickl for commandline support.
+  # 
+  module Factory
+  
+    # @see Quickl::Command
+    def Command(file, line)
+      Quickl::Command(file, line){|builder|
+        builder.command_parent = Alf::Command::Main
+        yield(builder) if block_given?
+      }
+    end
+  
+    # @see Operator
+    def Operator(file, line, category = :unclassed)
+      Command(file, line) do |b|
+        b.instance_module Alf::Operator
+        b.callback{|cmd| @category = category}
+      end
+    end
+  
+    extend Factory
+  end # module Factory
   
   #
   # This is a marker module for Alf main commands, those that are **not** 
