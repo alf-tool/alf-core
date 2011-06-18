@@ -4,12 +4,12 @@ require "alf/version"
 require "alf/loader"
 
 #
-# alf - Classy data-manipulation dressed in a DSL (+ commandline)
+# Classy data-manipulation dressed in a DSL (+ commandline)
 #
 module Alf
   
   #
-  # Provides tooling methods that are used here and there in Alf
+  # Provides tooling methods that are used here and there in Alf.
   # 
   module Tools
     
@@ -832,7 +832,7 @@ module Alf
   end # module Reader
 
   #
-  # Base class for implementing aggregation operators.
+  # Aggregation operator.
   #
   class Aggregator
 
