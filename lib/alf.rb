@@ -9,14 +9,6 @@ require "alf/loader"
 module Alf
   
   #
-  # Builds and returns a lispy engine on a specific environment
-  #
-  def self.lispy(env = Alf::Environment.default)
-    Command::Main.new(env)
-  end
-
-  ############################################################################# TOOLS
-
   #
   # Provides tooling methods that are used here and there in Alf
   # 
@@ -74,6 +66,112 @@ module Alf
     extend Tools
   end # module Tools
   
+  # Builds and returns a lispy engine on a specific environment
+  #
+  def self.lispy(env = Alf::Environment.default)
+    Command::Main.new(env)
+  end
+
+  # 
+  # Implements a small LISP-like DSL on top of Alf
+  #
+  module Lispy
+    
+    # The environment
+    attr_accessor :environment
+    
+    #
+    # Compiles a query expression given by a String or a block and returns
+    # the result (typically a tuple iterator)
+    #
+    def compile(expr = nil, &block)
+      expr.nil? ? instance_eval(&block) : instance_eval(expr)
+    end
+
+    # Delegated to the environment
+    def dataset(name)
+      raise "Environment not set" unless @environment
+      @environment.dataset(name)
+    end
+    
+    #
+    # Compiles the subexpression given by the block in the context of 
+    # additional temporary expressions given by definitions
+    #
+    def with(definitions)
+      # We branch with the definitions for compilation
+      self.environment = environment.branch(definitions)
+      
+      # this is to ensure that sub definitions can reuse other
+      # ones 
+      definitions.each_value do |defn|
+        defn.environment = self.environment
+      end
+      
+      # compile now
+      op = compile(&Proc.new)
+      
+      # We now unbranch for next expression
+      self.environment = environment.unbranch
+
+      op
+    end
+    
+    #
+    # Chains some elements as a new operator
+    #
+    def chain(*elements)
+      elements = elements.reverse
+      elements[1..-1].inject(elements.first) do |c, elm|
+        elm.pipe(c, environment)
+        elm
+      end
+    end
+    
+    [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |child, *args|
+        chain(Operator::NonRelational.const_get(op_name).new(*args), child)
+      end
+    end
+
+    [:Project,
+     :Extend, 
+     :Rename,
+     :Restrict,
+     :Nest,
+     :Unnest,
+     :Group,
+     :Ungroup,
+     :Summarize,
+     :Quota ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |child, *args|
+        chain(Operator::Relational.const_get(op_name).new(*args), child)
+      end
+    end
+
+    def allbut(child, attributes)
+      chain(Operator::Relational::Project.new(attributes, true), child)
+    end
+
+    [ :Join, 
+      :Union,
+      :Intersect,
+      :Minus ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |left, right, *args|
+        chain(Operator::Relational.const_get(op_name).new(*args), [left, right])
+      end
+    end
+    
+    private
+
+    extend Lispy
+  end # module Lispy
+
+  ############################################################################# TOOLS
+
   #
   # Provides a handle, implementing a flyweight design pattern on tuples.
   #
@@ -269,104 +367,6 @@ module Alf
   end # class OrderingKey
 
   ############################################################################# PUBLIC API
-
-  # 
-  # Implements a small LISP-like DSL on top of Alf
-  #
-  module Lispy
-    
-    # The environment
-    attr_accessor :environment
-    
-    #
-    # Compiles a query expression given by a String or a block and returns
-    # the result (typically a tuple iterator)
-    #
-    def compile(expr = nil, &block)
-      expr.nil? ? instance_eval(&block) : instance_eval(expr)
-    end
-
-    # Delegated to the environment
-    def dataset(name)
-      raise "Environment not set" unless @environment
-      @environment.dataset(name)
-    end
-    
-    #
-    # Compiles the subexpression given by the block in the context of 
-    # additional temporary expressions given by definitions
-    #
-    def with(definitions)
-      # We branch with the definitions for compilation
-      self.environment = environment.branch(definitions)
-      
-      # this is to ensure that sub definitions can reuse other
-      # ones 
-      definitions.each_value do |defn|
-        defn.environment = self.environment
-      end
-      
-      # compile now
-      op = compile(&Proc.new)
-      
-      # We now unbranch for next expression
-      self.environment = environment.unbranch
-
-      op
-    end
-    
-    #
-    # Chains some elements as a new operator
-    #
-    def chain(*elements)
-      elements = elements.reverse
-      elements[1..-1].inject(elements.first) do |c, elm|
-        elm.pipe(c, environment)
-        elm
-      end
-    end
-    
-    [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |child, *args|
-        chain(Operator::NonRelational.const_get(op_name).new(*args), child)
-      end
-    end
-
-    [:Project,
-     :Extend, 
-     :Rename,
-     :Restrict,
-     :Nest,
-     :Unnest,
-     :Group,
-     :Ungroup,
-     :Summarize,
-     :Quota ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |child, *args|
-        chain(Operator::Relational.const_get(op_name).new(*args), child)
-      end
-    end
-
-    def allbut(child, attributes)
-      chain(Operator::Relational::Project.new(attributes, true), child)
-    end
-
-    [ :Join, 
-      :Union,
-      :Intersect,
-      :Minus ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |left, right, *args|
-        chain(Operator::Relational.const_get(op_name).new(*args), [left, right])
-      end
-    end
-    
-    private
-
-    extend Lispy
-  end # module Lispy
 
   #
   # Encapsulates the interface with the outside world, providing base iterators
