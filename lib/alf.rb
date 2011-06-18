@@ -351,12 +351,14 @@ module Alf
       end
     end
     
-    [:Autonum,
-     :Defaults,
-     :Compact,
-     :Sort,
-     :Clip,
-     :Project,
+    [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |child, *args|
+        chain(Alf::Operator::NonRelational.const_get(op_name).new(*args), child)
+      end
+    end
+
+    [:Project,
      :Extend, 
      :Rename,
      :Restrict,
@@ -1326,12 +1328,6 @@ module Alf
     def _each
     end
 
-    #
-    # Marker module for non relational operators
-    #
-    module NonRelational
-    end
-  
     # 
     # Specialization of Operator for operators that work on a unary input
     #
@@ -1500,339 +1496,346 @@ module Alf
 
   #################################################### non relational operators
 
-  # 
-  # Extend with an unique autonumber attribute
   #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
+  # Marker module for non relational operators
   #
-  # API & EXAMPLE
-  #
-  #   # Autonumber suppliers (:autonum attribute name by default)
-  #   (autonum :suppliers)
-  #
-  #   # You can specify the attribute name
-  #   (autonum :suppliers, :unique_id)
-  #
-  # DESCRIPTION
-  #
-  # This operator takes input tuples in any order they come and extends them
-  # with an autonumber attribute ATTRNAME. This allows converting non-relational
-  # tuple enumerators to relational ones by ensuring uniqueness of tuples in an
-  # arbitrary manner.
-  #
-  #   alf autonum suppliers
-  #   alf autonum suppliers -- unique_id
-  #
-  class Autonum < Factory::Operator(__FILE__, __LINE__)
-    include Operator::NonRelational, Operator::Transform
-  
-    # Names of the new attribute to add
-    attr_accessor :attrname
-    
-    def initialize(attrname = :autonum)
-      @attrname = attrname
-    end
-    
-    protected 
-    
-    # @see Operator::CommandMethods#set_args
-    def set_args(args)
-      @attrname = args.last.to_sym unless args.empty? 
-    end
-    
-    # @see Operator#_prepare
-    def _prepare
-      @autonum = -1
-    end
-    
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      tuple.merge(@attrname => (@autonum += 1))
-    end
-  
-  end # class Autonum
-  
-  # 
-  # Force default values on missing/nil attributes
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # API & EXAMPLE
-  #
-  #   # Non strict mode
-  #   (defaults :suppliers, :country => 'Belgium')
-  #
-  #   # Strict mode (--strict)
-  #   (defaults :suppliers, {:country => 'Belgium'}, true)
-  #
-  # DESCRIPTION
-  #
-  # This operator rewrites tuples so as to ensure that all values for specified 
-  # attributes ATTRx are defined and not nil. Missing or nil attributes are 
-  # replaced by the associated default value VALx.
-  #
-  # When used in shell, the hash of default values is built from commandline
-  # arguments ala Hash[...]. However, to keep type safety VALx are interpreted
-  # as ruby literals and built with Kernel.eval. This means that strings must 
-  # be doubly quoted. For the example of the API section:
-  #
-  #   alf defaults suppliers -- country "'Belgium'"
-  #
-  # When used in --strict mode, the operator simply project resulting tuples on
-  # attributes for which a default value has been specified. Using the strict 
-  # mode guarantess that the heading of all tuples is the same, and that no nil
-  # value ever remains. However, this operator never remove duplicates. 
-  #
-  class Defaults < Factory::Operator(__FILE__, __LINE__)
-    include Operator::NonRelational, Operator::Transform
+  module Operator::NonRelational
 
-    # Default values as a ATTR -> VAL hash 
-    attr_accessor :defaults
+    # 
+    # Extend with an unique autonumber attribute
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
+    #
+    # API & EXAMPLE
+    #
+    #   # Autonumber suppliers (:autonum attribute name by default)
+    #   (autonum :suppliers)
+    #
+    #   # You can specify the attribute name
+    #   (autonum :suppliers, :unique_id)
+    #
+    # DESCRIPTION
+    #
+    # This operator takes input tuples in any order they come and extends them
+    # with an autonumber attribute ATTRNAME. This allows converting non-relational
+    # tuple enumerators to relational ones by ensuring uniqueness of tuples in an
+    # arbitrary manner.
+    #
+    #   alf autonum suppliers
+    #   alf autonum suppliers -- unique_id
+    #
+    class Autonum < Factory::Operator(__FILE__, __LINE__)
+      include Operator::NonRelational, Operator::Transform
     
-    # Strict mode?
-    attr_accessor :strict
-    
-    # Builds a Defaults operator instance
-    def initialize(defaults = {}, strict = false)
-      @defaults = defaults
-      @strict = strict
-    end
-    
-    options do |opt|
-      opt.on('-s', '--strict', 'Strictly restrict to default attributes'){ 
-        self.strict = true 
-      }
-    end
-
-    protected 
-
-    # @see Operator#set_args
-    def set_args(args)
-      @defaults = tuple_collect(args.each_slice(2)) do |k,v|
-        [k.to_sym, Kernel.eval(v)]
+      # Names of the new attribute to add
+      attr_accessor :attrname
+      
+      def initialize(attrname = :autonum)
+        @attrname = attrname
       end
-      self
-    end
-
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      if strict
-        tuple_collect(@defaults){|k,v| 
-          [k, coalesce(tuple[v], v)] 
-        }
-      else
-        @defaults.merge tuple_collect(tuple){|k,v| 
-          [k, coalesce(v, @defaults[k])]
-        }
+      
+      protected 
+      
+      # @see Operator::CommandMethods#set_args
+      def set_args(args)
+        @attrname = args.last.to_sym unless args.empty? 
       end
-    end
-
-  end # class Defaults
-
-  # 
-  # Remove tuple duplicates
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND]
-  #
-  # API & EXAMPLE
-  #
-  #   # clip, unlike project, typically leave duplicates
-  #   (compact (clip :suppliers, [ :city ]))
-  #
-  # DESCRIPTION
-  #
-  # This operator remove duplicates from input tuples. As defaults, it is a non
-  # relational operator that helps normalizing input for implementing relational
-  # operators. This one is centric in converting bags of tuples to sets of 
-  # tuples, as required by true relations.
-  #
-  #   alf compact ... 
-  #
-  class Compact < Factory::Operator(__FILE__, __LINE__)
-    include Operator::NonRelational, Operator::Shortcut, Operator::Unary
-
-    # Removes duplicates according to a complete order
-    class SortBased
-      include Operator::Cesure      
-
-      def cesure_key
-        @cesure_key ||= ProjectionKey.new([],true)
-      end
-
-      def accumulate_cesure(tuple, receiver)
-        @tuple = tuple
-      end
-
-      def flush_cesure(key, receiver)
-        receiver.call(@tuple)
-      end
-
-    end # class SortBased
-
-    # Removes duplicates by loading all in memory and filtering 
-    # them there 
-    class BufferBased
-      include Operator::Unary
-
+      
+      # @see Operator#_prepare
       def _prepare
-        @tuples = input.to_a.uniq
+        @autonum = -1
       end
-
-      def _each
-        @tuples.each(&Proc.new)
+      
+      # @see Operator::Transform#_tuple2tuple
+      def _tuple2tuple(tuple)
+        tuple.merge(@attrname => (@autonum += 1))
       end
-
-    end # class BufferBased
-
-    protected 
     
-    def longexpr
-      chain BufferBased.new,
-            datasets
-    end
-
-  end # class Compact
-
-  # 
-  # Sort input tuples according to an order relation
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ORDER1 ATTR2 ORDER2...
-  #
-  # API & EXAMPLE
-  #
-  #   # sort on supplier name in ascending order
-  #   (sort :suppliers, [:name])
-  #
-  #   # sort on city then on name
-  #   (sort :suppliers, [:city, :name])
-  # 
-  #   # sort on city DESC then on name ASC
-  #   (sort :suppliers, [[:city, :desc], [:name, :asc]])
-  #
-  #   => See OrderingKey about specifying orderings
-  #
-  # DESCRIPTION
-  #
-  # This operator sorts input tuples on ATTR1 then ATTR2, etc. and outputs 
-  # them sorted after that. This is, of course, a non relational operator as 
-  # relations are unordered sets. It is provided to implement operators that
-  # need tuples to be sorted to work correctly. When used in shell, the key 
-  # ordering must be specified in its longest form:
-  #
-  #   alf sort suppliers -- name asc
-  #   alf sort suppliers -- city desc name asc
-  #
-  # LIMITATIONS
-  #
-  # The fact that the ordering must be completely specified with commandline
-  # arguments is a limitation, shortcuts could be provided in the future.
-  #
-  class Sort < Factory::Operator(__FILE__, __LINE__)
-    include Operator::NonRelational, Operator::Unary
+    end # class Autonum
+    
+    # 
+    # Force default values on missing/nil attributes
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   # Non strict mode
+    #   (defaults :suppliers, :country => 'Belgium')
+    #
+    #   # Strict mode (--strict)
+    #   (defaults :suppliers, {:country => 'Belgium'}, true)
+    #
+    # DESCRIPTION
+    #
+    # This operator rewrites tuples so as to ensure that all values for specified 
+    # attributes ATTRx are defined and not nil. Missing or nil attributes are 
+    # replaced by the associated default value VALx.
+    #
+    # When used in shell, the hash of default values is built from commandline
+    # arguments ala Hash[...]. However, to keep type safety VALx are interpreted
+    # as ruby literals and built with Kernel.eval. This means that strings must 
+    # be doubly quoted. For the example of the API section:
+    #
+    #   alf defaults suppliers -- country "'Belgium'"
+    #
+    # When used in --strict mode, the operator simply project resulting tuples on
+    # attributes for which a default value has been specified. Using the strict 
+    # mode guarantess that the heading of all tuples is the same, and that no nil
+    # value ever remains. However, this operator never remove duplicates. 
+    #
+    class Defaults < Factory::Operator(__FILE__, __LINE__)
+      include Operator::NonRelational, Operator::Transform
   
-    def initialize(ordering_key = [])
-      @ordering_key = OrderingKey.coerce(ordering_key)
-      yield self if block_given?
-    end
-  
-    def ordering=(ordering)
-      @ordering_key = OrderingKey.coerce(ordering)
-    end
-  
-    protected 
-  
-    def set_args(args)
-      self.ordering = args.collect{|c| c.to_sym}.each_slice(2).to_a
-      self
-    end
-  
-    def _prepare
-      @buffer = Buffer::Sorted.new(@ordering_key)
-      @buffer.add_all(input)
-    end
-  
-    def _each
-      @buffer.each(&Proc.new)
-    end
-  
-  end # class Sort
-
-  # 
-  # Clip input tuples to a subset of attributes
-  #
-  # SYNOPSIS
-  #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
-  #
-  # OPTIONS
-  # #{summarized_options}
-  #
-  # API & EXAMPLE
-  #
-  #   # Keep only name and city attributes
-  #   (clip :suppliers, [:name, :city])
-  #
-  #   # Keep all but name and city attributes
-  #   (clip :suppliers, [:name, :city], true)
-  #
-  # DESCRIPTION
-  #
-  # This operator clips tuples on attributes whose names are specified as 
-  # arguments. This is similar to the relational PROJECT operator, expect
-  # that this one does not removed duplicates that can occur from clipping.
-  # In other words, clipping may lead to bags of tuples instead of sets.
-  # 
-  # When used in shell, the clipping/projection key is simply taken from
-  # commandline arguments:
-  #
-  #   alf clip suppliers -- name city
-  #   alf clip suppliers --allbut -- name city
-  #
-  class Clip < Factory::Operator(__FILE__, __LINE__)
-    include Operator::NonRelational, Operator::Transform
-
-    # Builds a Clip operator instance
-    def initialize(attributes = [], allbut = false)
-      @projection_key = ProjectionKey.new(attributes, allbut)
-      yield self if block_given?
-    end
-
-    def attributes=(attrs)
-      @projection_key.attributes = attrs
-    end
-
-    def allbut=(allbut)
-      @projection_key.allbut = allbut
-    end
-
-    # Installs the options
-    options do |opt|
-      opt.on('-a', '--allbut', 'Apply a ALLBUT clipping') do
-        self.allbut = true
+      # Default values as a ATTR -> VAL hash 
+      attr_accessor :defaults
+      
+      # Strict mode?
+      attr_accessor :strict
+      
+      # Builds a Defaults operator instance
+      def initialize(defaults = {}, strict = false)
+        @defaults = defaults
+        @strict = strict
       end
-    end
+      
+      options do |opt|
+        opt.on('-s', '--strict', 'Strictly restrict to default attributes'){ 
+          self.strict = true 
+        }
+      end
+  
+      protected 
+  
+      # @see Operator#set_args
+      def set_args(args)
+        @defaults = tuple_collect(args.each_slice(2)) do |k,v|
+          [k.to_sym, Kernel.eval(v)]
+        end
+        self
+      end
+  
+      # @see Operator::Transform#_tuple2tuple
+      def _tuple2tuple(tuple)
+        if strict
+          tuple_collect(@defaults){|k,v| 
+            [k, coalesce(tuple[v], v)] 
+          }
+        else
+          @defaults.merge tuple_collect(tuple){|k,v| 
+            [k, coalesce(v, @defaults[k])]
+          }
+        end
+      end
+  
+    end # class Defaults
+  
+    # 
+    # Remove tuple duplicates
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND]
+    #
+    # API & EXAMPLE
+    #
+    #   # clip, unlike project, typically leave duplicates
+    #   (compact (clip :suppliers, [ :city ]))
+    #
+    # DESCRIPTION
+    #
+    # This operator remove duplicates from input tuples. As defaults, it is a non
+    # relational operator that helps normalizing input for implementing relational
+    # operators. This one is centric in converting bags of tuples to sets of 
+    # tuples, as required by true relations.
+    #
+    #   alf compact ... 
+    #
+    class Compact < Factory::Operator(__FILE__, __LINE__)
+      include Operator::NonRelational, Operator::Shortcut, Operator::Unary
+  
+      # Removes duplicates according to a complete order
+      class SortBased
+        include Operator::Cesure      
+  
+        def cesure_key
+          @cesure_key ||= ProjectionKey.new([],true)
+        end
+  
+        def accumulate_cesure(tuple, receiver)
+          @tuple = tuple
+        end
+  
+        def flush_cesure(key, receiver)
+          receiver.call(@tuple)
+        end
+  
+      end # class SortBased
+  
+      # Removes duplicates by loading all in memory and filtering 
+      # them there 
+      class BufferBased
+        include Operator::Unary
+  
+        def _prepare
+          @tuples = input.to_a.uniq
+        end
+  
+        def _each
+          @tuples.each(&Proc.new)
+        end
+  
+      end # class BufferBased
+  
+      protected 
+      
+      def longexpr
+        chain BufferBased.new,
+              datasets
+      end
+  
+    end # class Compact
+  
+    # 
+    # Sort input tuples according to an order relation
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ORDER1 ATTR2 ORDER2...
+    #
+    # API & EXAMPLE
+    #
+    #   # sort on supplier name in ascending order
+    #   (sort :suppliers, [:name])
+    #
+    #   # sort on city then on name
+    #   (sort :suppliers, [:city, :name])
+    # 
+    #   # sort on city DESC then on name ASC
+    #   (sort :suppliers, [[:city, :desc], [:name, :asc]])
+    #
+    #   => See OrderingKey about specifying orderings
+    #
+    # DESCRIPTION
+    #
+    # This operator sorts input tuples on ATTR1 then ATTR2, etc. and outputs 
+    # them sorted after that. This is, of course, a non relational operator as 
+    # relations are unordered sets. It is provided to implement operators that
+    # need tuples to be sorted to work correctly. When used in shell, the key 
+    # ordering must be specified in its longest form:
+    #
+    #   alf sort suppliers -- name asc
+    #   alf sort suppliers -- city desc name asc
+    #
+    # LIMITATIONS
+    #
+    # The fact that the ordering must be completely specified with commandline
+    # arguments is a limitation, shortcuts could be provided in the future.
+    #
+    class Sort < Factory::Operator(__FILE__, __LINE__)
+      include Operator::NonRelational, Operator::Unary
+    
+      def initialize(ordering_key = [])
+        @ordering_key = OrderingKey.coerce(ordering_key)
+        yield self if block_given?
+      end
+    
+      def ordering=(ordering)
+        @ordering_key = OrderingKey.coerce(ordering)
+      end
+    
+      protected 
+    
+      def set_args(args)
+        self.ordering = args.collect{|c| c.to_sym}.each_slice(2).to_a
+        self
+      end
+    
+      def _prepare
+        @buffer = Buffer::Sorted.new(@ordering_key)
+        @buffer.add_all(input)
+      end
+    
+      def _each
+        @buffer.each(&Proc.new)
+      end
+    
+    end # class Sort
+  
+    # 
+    # Clip input tuples to a subset of attributes
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   # Keep only name and city attributes
+    #   (clip :suppliers, [:name, :city])
+    #
+    #   # Keep all but name and city attributes
+    #   (clip :suppliers, [:name, :city], true)
+    #
+    # DESCRIPTION
+    #
+    # This operator clips tuples on attributes whose names are specified as 
+    # arguments. This is similar to the relational PROJECT operator, expect
+    # that this one does not removed duplicates that can occur from clipping.
+    # In other words, clipping may lead to bags of tuples instead of sets.
+    # 
+    # When used in shell, the clipping/projection key is simply taken from
+    # commandline arguments:
+    #
+    #   alf clip suppliers -- name city
+    #   alf clip suppliers --allbut -- name city
+    #
+    class Clip < Factory::Operator(__FILE__, __LINE__)
+      include Operator::NonRelational, Operator::Transform
+  
+      # Builds a Clip operator instance
+      def initialize(attributes = [], allbut = false)
+        @projection_key = ProjectionKey.new(attributes, allbut)
+        yield self if block_given?
+      end
+  
+      def attributes=(attrs)
+        @projection_key.attributes = attrs
+      end
+  
+      def allbut=(allbut)
+        @projection_key.allbut = allbut
+      end
+  
+      # Installs the options
+      options do |opt|
+        opt.on('-a', '--allbut', 'Apply a ALLBUT clipping') do
+          self.allbut = true
+        end
+      end
+  
+      protected 
+  
+      # @see Operator#set_args
+      def set_args(args)
+        self.attributes = args.collect{|a| a.to_sym}
+        self
+      end
+  
+      # @see Operator::Transform#_tuple2tuple
+      def _tuple2tuple(tuple)
+        @projection_key.project(tuple)
+      end
+  
+    end # class Clip
 
-    protected 
-
-    # @see Operator#set_args
-    def set_args(args)
-      self.attributes = args.collect{|a| a.to_sym}
-      self
-    end
-
-    # @see Operator::Transform#_tuple2tuple
-    def _tuple2tuple(tuple)
-      @projection_key.project(tuple)
-    end
-
-  end # class Clip
-
+  end # Operator::NonRelational
+  
   ################################################################## relational
 
   # 
@@ -1898,8 +1901,9 @@ module Alf
   
     # @see Operator::Shortcut#longexpr
     def longexpr
-      chain Compact.new,
-            Clip.new(@projection_key.attributes, @projection_key.allbut),
+      chain Operator::NonRelational::Compact.new,
+            Operator::NonRelational::Clip.new(@projection_key.attributes, 
+                                              @projection_key.allbut),
             datasets
     end
   
@@ -2291,7 +2295,7 @@ module Alf
     
     # @see Shortcut#longexpr
     def longexpr
-      chain Compact.new,
+      chain Operator::NonRelational::Compact.new,
             DisjointBased.new,
             datasets 
     end
@@ -2617,7 +2621,7 @@ module Alf
     def longexpr
       by_key = ProjectionKey.new(@by, false)
       chain SortBased.new(by_key, @aggregators),
-            Sort.new(by_key.to_ordering_key),
+            Operator::NonRelational::Sort.new(by_key.to_ordering_key),
             datasets
     end
 
@@ -2721,8 +2725,9 @@ module Alf
     end
 
     def longexpr
+      sort_key = cesure_key.to_ordering_key + ordering_key
       chain SortBased.new(@by, @order, @aggregators),
-            Sort.new(cesure_key.to_ordering_key + ordering_key),
+            Operator::NonRelational::Sort.new(sort_key),
             datasets
     end 
 
