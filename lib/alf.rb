@@ -753,7 +753,6 @@ module Alf
       Reader.register(:alf, [".alf"], self)
     end # module AlfFile
   
-    require "alf/reader/yaml"
   end # module Reader
 
   #

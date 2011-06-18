@@ -1,7 +1,0 @@
-#!/usr/bin/env alf
-(ungroup \
-  (rename \
-     (project (ungroup :schema, :logical), 
-              [:name, :heading]),
-     :name => :relvar),
-  :heading)
