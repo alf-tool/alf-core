@@ -1,13 +1,22 @@
 require "yaml"
-class Alf::Renderer
-  class YAML < Alf::Renderer
+module Alf
+  module Iterator
+    
+    def to_yaml(*args, &block)
+      to_a.to_yaml(*args, &block)
+    end
+    
+  end
+  class Renderer::YAML < Renderer
     
     protected 
     
-    def render(intput, output)
+    # (see Alf::Renderer#render)
+    def render(input, output)
       output << input.to_a.to_yaml << "\n"
+      output
     end
 
-    Alf::Renderer.register(:yaml, "as a yaml output",  self)
+    Renderer.register(:yaml, "as a yaml output",  self)
   end # class YAML
-end # class Alf::Renderer
+end # module Alf

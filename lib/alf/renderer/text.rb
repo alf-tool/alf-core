@@ -4,7 +4,8 @@ class Alf::Renderer
     module Utils
 
       def looks_a_relation?(value)
-        value.is_a?(Array) && !value.empty? && value.all?{|v| v.is_a?(Hash)}
+        value.is_a?(Alf::Iterator) or
+          (value.is_a?(Array) && !value.empty? && value.all?{|v| v.is_a?(Hash)})
       end
 
       def max(x, y)
@@ -49,6 +50,8 @@ class Alf::Renderer
             "%.7f" % value
           when Hash
             value.inspect
+          when Alf::Iterator
+            Text.render(value, "")
           when Array
             looks_a_relation?(value) ? 
               Text.render(value, "") :
