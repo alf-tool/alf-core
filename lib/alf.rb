@@ -832,15 +832,31 @@ module Alf
   end # module Reader
 
   #
-  # Base class for implementing renderers.
+  # Renders a relation (given by any Iterator) in a specific format.
   #
-  # A renderer takes a tuple iterator as input and renders it on an output
-  # stream. Unlike operators, renderers are not tuple enumerators anymore
-  # and are typically used as chain end elements. 
+  # A renderer takes an Iterator instance as input and renders it on an output
+  # stream. Renderers are **not** iterators themselves, even if they mimic the
+  # {#pipe} method. Their usage is made via the {#execute} method.
+  #
+  # Similarly to the {Reader} class, this one provides a registration mechanism
+  # for specific output formats. The common scenario is as follows:
+  #
+  #   # Register a new renderer for :foo format (automatically provides the 
+  #   # '--foo   Render output as a foo stream' option of 'alf show') and with
+  #   # the FooRenderer class for handling rendering.  
+  #   Renderer.register(:foo, "as a foo stream", FooRenderer)
+  #
+  #   # Later on, you can request a renderer instance for a specific format
+  #   # as follows (wiring input is optional) 
+  #   r = Renderer.renderer(:foo, [an Iterator])
+  #
+  #   # Also, a factory method is automatically installed on the Renderer class
+  #   # itself.
+  #   r = Renderer.foo([an Iterator])
   #
   class Renderer
 
-    # Keeps the renderers
+    # Registered renderers
     @@renderers = []
     
     # Automatically installs rendering methods on the class itself
