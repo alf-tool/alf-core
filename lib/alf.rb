@@ -708,6 +708,12 @@ module Alf
   
     protected
     
+    #
+    # Coerces the input object to an IO and yields the block with it.
+    #
+    # StringIO and IO input are yield directly while file paths are first
+    # opened in read mode and then yield.
+    #
     def with_input_io
       case input
       when IO, StringIO
@@ -719,10 +725,24 @@ module Alf
       end
     end
     
+    #
+    # Returns the whole input text. 
+    #
+    # This feature should only be used by subclasses on inputs that are 
+    # small enough to fit in memory. Consider implementing readers without this
+    # feature on files that could be larger. 
+    #
     def input_text
       with_input_io{|io| io.readlines.join}
     end
     
+    #
+    # Yields the block with each line of the input text in turn.
+    #
+    # This method is an helper for files that capture one tuple on each input 
+    # line. It should be used in those cases, as the resulting reader will not
+    # load all input in memory but serve tuples on demand.  
+    #
     def each_input_line
       with_input_io{|io| io.each_line(&Proc.new)}
     end
@@ -736,14 +756,14 @@ module Alf
     #
     def line2tuple(line)
     end
+    undef :line2tuple
   
     #
     # Specialization of the Reader contract for .rash files.
     #
-    # A .rash file/stream contains one ruby hash literal on each line (taken as 
-    # a tuple physical representation). This reader simply decodes each of them 
-    # in turn with Kernel.eval, providing a state-less reader (in the sense 
-    # that tuples are not all loaded in memory). 
+    # A .rash file/stream contains one ruby hash literal on each line. This 
+    # reader simply decodes each of them in turn with Kernel.eval, providing a 
+    # state-less reader (that is, tuples are not all loaded in memory at once).
     #
     class Rash < Reader
   
@@ -767,8 +787,11 @@ module Alf
     # Specialization of the Reader contrat for .alf files.
     #
     # A .alf file simply contains a query expression in the Lispy DSL. This
-    # reader decodes and compile the expression and delegates the enumeration
+    # reader decodes and compiles the expression and delegates the enumeration
     # to the obtained operator.
+    #
+    # Note that an Environment must be wired at creation or piping time. 
+    # NoSuchDatasetError will certainly occur otherwise.  
     #
     class AlfFile < Reader
       
