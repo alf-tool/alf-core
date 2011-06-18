@@ -643,9 +643,10 @@ module Alf
     #     
     def self.register(name, extensions, clazz)
       @@readers << [name, extensions, clazz]
-      (class << self; self; end).send(:define_method, name) do |*args|
-        clazz.new(*args)
-      end
+      (class << self; self; end).
+        send(:define_method, name) do |*args|
+          clazz.new(*args)
+        end
     end
   
     #
@@ -859,21 +860,45 @@ module Alf
     # Registered renderers
     @@renderers = []
     
-    # Automatically installs rendering methods on the class itself
+    #
+    # Register a renderering class with a given name and description.
+    #
+    # Registered class must at least provide a constructor with an empty 
+    # signature. The name must be a symbol which can safely be used as a ruby 
+    # method name. A factory class method of that name and degelation signature 
+    # is automatically installed on the Renderer class.
+    #
+    # @param [Symbol] name a name for the output format
+    # @param [String] description an output format description (for 'alf show')
+    # @param [Class] clazz Renderer subclass used to render in this format 
+    #     
     def self.register(name, description, clazz)
       @@renderers << [name, description, clazz]
       (class << self; self; end).
-        send(:define_method, name) do |input, *args|
-          clazz.new(input).execute(*args)
+        send(:define_method, name) do |*args|
+          clazz.new(*args)
         end
     end
-
-    # Returns a renderer class by its name
-    def self.renderer_by_name(name)
-      @@renderers.find{|x| x.first.to_s == name.to_s}.last
-    end
     
-    # Yields each (name,clazz) registered renderer pairs in turn
+    #
+    # Returns a Renderer instance for the given output format name.
+    #
+    # @param [Symbol] name name of an output format previously registered
+    # @param [...] args other arguments to pass to the renderer constructor
+    # @return [Renderer] a Renderer instance, already wired if args are 
+    #         provided
+    #
+    def self.renderer(name, *args)
+      if r = @@renderers.find{|triple| triple[0] == name}
+        r[2].new(*args)
+      else
+        raise "No renderer registered for #{name}"
+      end
+    end
+
+    #
+    # Yields each (name,description,clazz) previously registered in turn
+    #
     def self.each_renderer
       @@renderers.each(&Proc.new)
     end
@@ -1012,7 +1037,9 @@ module Alf
         
         @renderer = Renderer::Rash.new
         Renderer.each_renderer do |name,descr,clazz|
-          opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
+          opt.on("--#{name}", "Render output #{descr}"){ 
+            @renderer = clazz.new 
+          }
         end
         
         opt.on_tail('-h', "--help", "Show help") do
@@ -1079,7 +1106,9 @@ module Alf
       options do |opt|
         @renderer = Renderer::Text.new
         Renderer.each_renderer do |name,descr,clazz|
-          opt.on("--#{name}", "Render output #{descr}"){ @renderer = clazz.new }
+          opt.on("--#{name}", "Render output #{descr}"){ 
+            @renderer = clazz.new 
+          }
         end
       end
         

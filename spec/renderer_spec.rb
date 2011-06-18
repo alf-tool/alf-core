@@ -6,21 +6,24 @@ module Alf
     it { should respond_to(:rash) }
     it { should respond_to(:text) }
 
-    describe "renderer_by_name" do
-      subject{ Renderer.renderer_by_name(:text) }
-      it{ should == Renderer::Text } 
+    describe 'renderer' do
+      subject{ Renderer.renderer(:rash) } 
+      it{ should be_a(Renderer) }
     end
-          
+      
     describe 'rash' do
-      subject{ Renderer.rash(input, output) } 
+      subject{ Renderer.rash(input) } 
       let(:input){ [{:a => 1}] }
       let(:output){ "" }
       let(:expected){ "{:a=>1}\n" }
-      it{ should == expected }
+      specify{ 
+        subject.should be_a(Renderer)
+        subject.execute(output).should == expected
+      }
     end
     
     describe 'text' do
-      subject{ Renderer.text(input, output) } 
+      subject{ Renderer.text(input) } 
       let(:input){ [{:a => 1}] }
       let(:output){ "" }
       let(:expected){ "+----+\n"\
@@ -29,7 +32,10 @@ module Alf
                       "|  1 |\n"\
                       "+----+\n"
       }
-      it{ should == expected }
+      specify{ 
+        subject.should be_a(Renderer)
+        subject.execute(output).should == expected
+      }
     end
 
   end
