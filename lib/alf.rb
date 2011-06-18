@@ -192,9 +192,6 @@ module Alf
       end
     end
     
-    private
-
-    extend Lispy
   end # module Lispy
 
   ############################################################################# TOOLS

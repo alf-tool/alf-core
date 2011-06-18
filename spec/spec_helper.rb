@@ -1,6 +1,8 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'alf'
 
+Alf::Lispy.extend(Alf::Lispy)
+
 shared_examples_for "An operator class" do
 
   it "should not have public set_args, _each and _prepare methods" do
