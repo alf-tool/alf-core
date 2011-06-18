@@ -987,10 +987,9 @@ module Alf
     end
   
     # @see Operator
-    def Operator(file, line, category = :unclassed)
+    def Operator(file, line)
       Command(file, line) do |b|
         b.instance_module Alf::Operator
-        b.callback{|cmd| @category = category}
       end
     end
   
