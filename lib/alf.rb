@@ -66,14 +66,41 @@ module Alf
     extend Tools
   end # module Tools
   
-  # Builds and returns a lispy engine on a specific environment
+  #
+  # Builds and returns a lispy engine on a specific environment.
+  #
+  # Example(s):
+  #
+  #   # Returns a lispy instance on the default environment
+  #   lispy = Alf.lispy
+  #
+  #   # Returns a lispy instance on the examples' environment
+  #   lispy = Alf.lispy(Alf::Environment.examples)
+  #
+  #   # Returns a lispy instance on a folder environment of your choice
+  #   lispy = Alf.lispy(Alf::Environment.folder('path/to/a/folder'))
+  #
+  # @see Alf::Environment about available environments and their contract
   #
   def self.lispy(env = Alf::Environment.default)
     Command::Main.new(env)
   end
 
   # 
-  # Implements a small LISP-like DSL on top of Alf
+  # Implements a small LISP-like DSL on top of Alf.
+  #
+  # The lispy dialect is the functional one used in .alf files and in compiled
+  # expressions as below:
+  #
+  #   Alf.lispy.compile do
+  #     (restrict :suppliers, lambda{ city == 'London' })
+  #   end
+  #
+  # The DSL this module provides is part of Alf's public API and won't be broken 
+  # without a major version change. The module itself and its inclusion pre-
+  # conditions are not part of the DSL itself, thus not considered as part of 
+  # the API, and may therefore evolve at any time. In other words, this module 
+  # is not intended to be directly included by third-party classes. 
   #
   module Lispy
     
