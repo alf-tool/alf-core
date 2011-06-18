@@ -400,7 +400,7 @@ module Alf
   #   # Returns an environment on Alf's examples
   #   Alf::Environment.examples
   #
-  #   # Returns an environement on a specific folder, automatically
+  #   # Returns an environment on a specific folder, automatically
   #   # resolving datasources via Readers' recognized file extensions
   #   Alf::Environment.folder('path/to/a/folder')
   #
@@ -546,17 +546,40 @@ module Alf
   #
   # Marker module for all elements implementing tuple iterators.
   #
-  # For now, an iterator is nothing else than an Enumerable that serves tuples
-  # (represented by ruby hashes). However, this module helps Alf's internal
-  # classes to recognize enumerables that may safely be considered as tuple
+  # At first glance, an iterator is nothing else than an Enumerable that serves 
+  # tuples (represented by ruby hashes). However, this module helps Alf's internal
+  # classes to recognize enumerables that may safely be considered as tuple 
   # iterators from other enumerables. For this reason, all elements that would
   # like to participate to an iteration chain (that is, an logical operator 
   # implementation) should be marked with this module. This is the case for 
   # all Readers and Operators defined in Alf.
+  #
+  # Moreover, an Iterator should always define a {#pipe} method, which is the
+  # natural way to define the input and execution environment of operators and 
+  # readers. 
   # 
   module Iterator
     include Enumerable
 
+    #
+    # Wire the iterator input and an optional execution environment.
+    #
+    # Iterators (typically Reader and Operator instances) work from input data 
+    # that come from files, or other operators, and so on. This method wires 
+    # this input data to the iterator. Wiring is required before any attempt
+    # to call each, unless autowiring occurs at construction. The exact kind of
+    # input object is left at discretion of Iterator implementations.
+    #
+    # @param [Object] input the iterator input, at discretion of the Iterator
+    #        implementation.
+    # @param [Environment] environment an optional environment for resolving
+    #        named datasets if needed.
+    #
+    def pipe(input, environment = nil)
+    end
+    undef :pipe
+    
+    
     # 
     # Coerces something to an iterator
     #
@@ -687,7 +710,9 @@ module Alf
       @environment = environment 
     end
   
+    #
     # (see Iterator#pipe)
+    #
     def pipe(input, env = environment)
       @input = input
     end
