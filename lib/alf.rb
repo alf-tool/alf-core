@@ -1039,23 +1039,23 @@ module Alf
     #
     # RELATIONAL COMMANDS
     # #{summarized_subcommands subcommands.select{|cmd| 
-    #     cmd.include?(Alf::Operator) && !cmd.include?(Alf::Operator::NonRelational)
+    #    cmd.include?(Alf::Operator::Relational)
     # }}
     #
     # NON-RELATIONAL COMMANDS
     # #{summarized_subcommands subcommands.select{|cmd| 
-    #     cmd.include?(Alf::Operator) && cmd.include?(Alf::Operator::NonRelational)
+    #    cmd.include?(Alf::Operator::NonRelational)
     # }}
     #
     # OTHER NON-RELATIONAL COMMANDS
     # #{summarized_subcommands subcommands.select{|cmd| 
-    #   !cmd.include?(Alf::Operator)
+    #    cmd.include?(Alf::Command)
     # }}
     #
     # See '#{program_name} help COMMAND' for details about a specific command.
     #
     class Main < Quickl::Delegator(__FILE__, __LINE__)
-      include Lispy
+      include Command, Lispy
     
       # Environment instance to use to get base iterators
       attr_accessor :environment
@@ -1139,6 +1139,7 @@ module Alf
     # Note that this command is not an operator and should not be piped anymore.
     #
     class Show < Factory::Command(__FILE__, __LINE__)
+      include Command
     
       options do |opt|
         @renderer = Renderer::Text.new
@@ -1170,6 +1171,7 @@ module Alf
     # on standard input) as a alf query to be executed on the current environment.
     #
     class Exec < Factory::Command(__FILE__, __LINE__)
+      include Command
       
       def execute(args)
         Reader.alf(args.first || $stdin, requester.environment)
@@ -1184,6 +1186,7 @@ module Alf
     #   #{program_name} #{command_name} COMMAND
     #
     class Help < Factory::Command(__FILE__, __LINE__)
+      include Command
       
       # Let NoSuchCommandError be passed to higher stage
       no_react_to Quickl::NoSuchCommand
@@ -1869,7 +1872,7 @@ module Alf
     #   alf project --allbut suppliers -- name city
     #
     class Project < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Shortcut, Operator::Unary
+      include Operator::Relational, Operator::Shortcut, Operator::Unary
     
       # Builds a Project operator instance
       def initialize(attributes = [], allbut = false)
@@ -1935,7 +1938,7 @@ module Alf
     # this precondition is not respected.   
     #
     class Extend < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Transform
+      include Operator::Relational, Operator::Transform
   
       # Extensions as a Hash attr => lambda{...}
       attr_accessor :extensions
@@ -1992,7 +1995,7 @@ module Alf
     #   alf rename suppliers -- name supplier_name city supplier_city
     #
     class Rename < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Transform
+      include Operator::Relational, Operator::Transform
   
       # Hash of source -> target attribute renamings
       attr_accessor :renaming
@@ -2045,7 +2048,7 @@ module Alf
     #   alf restrict suppliers -- city "'London'"
     #
     class Restrict < Factory::Operator(__FILE__, __LINE__)
-      include Unary
+      include Operator::Relational, Operator::Unary
       
       # Restriction predicate
       attr_accessor :predicate
@@ -2098,7 +2101,7 @@ module Alf
     #   alf join suppliers supplies 
     #  
     class Join < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Shortcut, Operator::Binary
+      include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       class HashBased
         include Operator::Binary
@@ -2178,7 +2181,7 @@ module Alf
     #   alf intersect ... ...
     #  
     class Intersect < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Shortcut, Operator::Binary
+      include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       class HashBased
         include Operator::Binary
@@ -2229,7 +2232,7 @@ module Alf
     #   alf minus ... ...
     #  
     class Minus < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Shortcut, Operator::Binary
+      include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       class HashBased
         include Operator::Binary
@@ -2278,7 +2281,7 @@ module Alf
     #   alf union ... ...
     #  
     class Union < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Shortcut, Operator::Binary
+      include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       class DisjointBased
         include Operator::Binary
@@ -2323,7 +2326,7 @@ module Alf
     #   alf nest suppliers -- city status loc_and_status
     #
     class Nest < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Transform
+      include Operator::Relational, Operator::Transform
   
       # Array of nesting attributes
       attr_accessor :attributes
@@ -2376,7 +2379,7 @@ module Alf
     #   alf unnest nest -- loc_and_status
     #
     class Unnest < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Transform
+      include Operator::Relational, Operator::Transform
   
       # Name of the attribute to unnest
       attr_accessor :attribute
@@ -2425,7 +2428,7 @@ module Alf
     #   alf group supplies --allbut -- sid supplying
     #
     class Group < Factory::Operator(__FILE__, __LINE__)
-      include Unary
+      include Operator::Relational, Operator::Unary
       
       # Attributes on which grouping applies
       attr_accessor :attributes
@@ -2497,7 +2500,7 @@ module Alf
     #   alf ungroup group -- supplying
     #
     class Ungroup < Factory::Operator(__FILE__, __LINE__)
-      include Unary
+      include Operator::Relational, Operator::Unary
       
       # Relation-value attribute to ungroup
       attr_accessor :attribute
@@ -2555,7 +2558,7 @@ module Alf
     #   alf summarize supplies --by=sid -- total_qty "sum(:qty)" 
     #
     class Summarize < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Shortcut, Operator::Unary
+      include Operator::Relational, Operator::Shortcut, Operator::Unary
       
       # By attributes
       attr_accessor :by
@@ -2650,7 +2653,7 @@ module Alf
     #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
     #
     class Quota < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Shortcut, Operator::Unary
+      include Operator::Relational, Operator::Shortcut, Operator::Unary
   
       # Quota by
       attr_accessor :by
