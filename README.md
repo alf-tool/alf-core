@@ -269,8 +269,8 @@ operators works on relations and return relations), you can use a sub expression
               :supplies), 
         :cities),
       [:country],
-      :which => Aggregator.group(:pid),
-      :total => Aggregator.sum{ qty })
+      :which => Agg::group(:pid),
+      :total => Agg::sum{ qty })
 
 Of course, complex queries quickly become unreadable that way. But you can always
 split complex tasks in more simple ones using _with_:
@@ -280,8 +280,8 @@ split complex tasks in more simple ones using _with_:
           :supplying      => (join :with_countries, :supplies) ) do
       (summarize :supplying,
                  [:country],
-                 :which => Aggregator.group(:pid),
-                 :total => Aggregator.sum{ qty })
+                 :which => Agg::group(:pid),
+                 :total => Agg::sum{ qty })
     end
 
 And here is the result !

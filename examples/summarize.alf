@@ -3,7 +3,7 @@
 # What is the sum of supplied quantities by supplier?
 (summarize :supplies, 
            [:sid],
-           :total_qty => Aggregator.sum(:qty))
+           :total_qty => Agg::sum(:qty))
 
 # Give the maximal supplied quantity by country, taking only into account
 # suppliers that have a status greater than 10
@@ -13,4 +13,4 @@
           :supplies), 
     :cities),
   [:country], 
-  :maxqty => Aggregator.sum{ qty })
+  :maxqty => Agg::sum{ qty })

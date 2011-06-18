@@ -1034,6 +1034,7 @@ module Alf
       end
     end
 
+    Lispy::Agg = Aggregator
   end # class Aggregator
 
   #

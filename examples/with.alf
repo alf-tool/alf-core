@@ -9,8 +9,8 @@
           :supplies), 
     :cities),
   [:country],
-  :which => Aggregator.group(:pid),
-  :total => Aggregator.sum{ qty })
+  :which => Agg::group(:pid),
+  :total => Agg::sum{ qty })
 
 # Another equivalent way to write it
 with( :kept_suppliers => (restrict :suppliers, lambda{ status > 10 }),
@@ -18,6 +18,6 @@ with( :kept_suppliers => (restrict :suppliers, lambda{ status > 10 }),
       :supplying      => (join :with_countries, :supplies) ) do
   (summarize :supplying,
              [:country],
-             :which => Aggregator.group(:pid),
-             :total => Aggregator.sum{ qty })
+             :which => Agg::group(:pid),
+             :total => Agg::sum{ qty })
 end
