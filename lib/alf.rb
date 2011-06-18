@@ -268,7 +268,7 @@ module Alf
         @child
       end
       
-      # @see Environment#dataset
+      # (see Environment#dataset)
       def dataset(name)
         if @defs.has_key?(name)
           @defs[name]
@@ -300,7 +300,7 @@ module Alf
         @folder = folder
       end
       
-      # @see Environment#dataset
+      # (see Environment#dataset)
       def dataset(name)
         if file = find_file(name)
           ext = File.extname(file)
@@ -942,7 +942,7 @@ module Alf
     #
     class Rash < Reader
   
-      # @see Reader#_line2tuple
+      # (see Reader#_line2tuple)
       def _line2tuple(line)
         begin
           h = Kernel.eval(line)
@@ -967,7 +967,7 @@ module Alf
     #
     class AlfFile < Reader
       
-      # @see Reader#each
+      # (see Reader#each)
       def each
         op = Alf.lispy(environment).compile(input_text)
         op.each(&Proc.new)
@@ -1049,7 +1049,7 @@ module Alf
     #
     class Rash < Renderer
   
-      # @see Renderer#execute
+      # (see Renderer#execute)
       def execute(output = $stdout)
         input.each do |tuple|
           output << tuple.inspect << "\n"
@@ -1482,7 +1482,7 @@ module Alf
   
       protected 
   
-      # @see Operator#_each
+      # (see Operator#_each)
       def _each
         each_input_tuple do |tuple|
           yield _tuple2tuple(tuple)
@@ -1506,7 +1506,7 @@ module Alf
       
       protected
 
-      # @see Operator#_each
+      # (see Operator#_each)
       def _each
         receiver, proj_key, prev_key = Proc.new, cesure_key, nil
         each_input_tuple do |tuple|
@@ -1536,8 +1536,8 @@ module Alf
     end # module Cesure
 
     #
-    # Specialization of Operator for operators that are 
-    # shortcuts on longer expressions.
+    # Specialization of Operator for operators that are shortcuts for longer 
+    # expressions.
     # 
     module Shortcut
       include Operator
@@ -1552,11 +1552,28 @@ module Alf
 
       protected 
 
-      # @see Operator#_each
+      # (see Operator#_each)
       def _each
         longexpr.each(&Proc.new)
       end
+      
+      #
+      # Compiles the longer expression and returns it.
+      #
+      # @return (Iterator) the compiled longer expression, typically another
+      #         Operator instance
+      #
+      def longexpr
+      end 
+      undef :longexpr
 
+      #
+      # This is an helper ala Lispy#chain for implementing (#longexpr).
+      #
+      # @param [Array] elements a list of Iterator-able 
+      # @return [Operator] the first element of the list, but piped with the 
+      #         next one, and so on.
+      #
       def chain(*elements)
         elements = elements.reverse
         elements[1..-1].inject(elements.first) do |c, elm|
@@ -1612,17 +1629,17 @@ module Alf
       
       protected 
       
-      # @see Operator::CommandMethods#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @attrname = args.last.to_sym unless args.empty? 
       end
       
-      # @see Operator#_prepare
+      # (see Operator#_prepare)
       def _prepare
         @autonum = -1
       end
       
-      # @see Operator::Transform#_tuple2tuple
+      # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple.merge(@attrname => (@autonum += 1))
       end
@@ -1687,7 +1704,7 @@ module Alf
   
       protected 
   
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @defaults = tuple_collect(args.each_slice(2)) do |k,v|
           [k.to_sym, Kernel.eval(v)]
@@ -1695,7 +1712,7 @@ module Alf
         self
       end
   
-      # @see Operator::Transform#_tuple2tuple
+      # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         if strict
           tuple_collect(@defaults){|k,v| 
@@ -1896,13 +1913,13 @@ module Alf
   
       protected 
   
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         self.attributes = args.collect{|a| a.to_sym}
         self
       end
   
-      # @see Operator::Transform#_tuple2tuple
+      # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         @projection_key.project(tuple)
       end
@@ -1969,13 +1986,13 @@ module Alf
     
       protected 
     
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         self.attributes = args.collect{|a| a.to_sym}
         self
       end
     
-      # @see Operator::Shortcut#longexpr
+      # (see Operator::Shortcut#longexpr)
       def longexpr
         chain Operator::NonRelational::Compact.new,
               Operator::NonRelational::Clip.new(@projection_key.attributes, 
@@ -2022,7 +2039,7 @@ module Alf
   
       protected 
     
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @extensions = tuple_collect(args.each_slice(2)){|k,v|
           [k.to_sym, TupleHandle.compile(v)]
@@ -2030,12 +2047,12 @@ module Alf
         self
       end
   
-      # @see Operator#_prepare
+      # (see Operator#_prepare)
       def _prepare
         @handle = TupleHandle.new
       end
   
-      # @see Operator::Transform#_tuple2tuple
+      # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple.merge tuple_collect(@extensions){|k,v|
           [k, @handle.set(tuple).evaluate(v)]
@@ -2079,13 +2096,13 @@ module Alf
   
       protected 
     
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @renaming = Hash[*args.collect{|c| c.to_sym}]
         self
       end
   
-      # @see Operator::Transform#_tuple2tuple
+      # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
       end
@@ -2133,7 +2150,7 @@ module Alf
   
       protected 
     
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @predicate = if args.size > 1
           TupleHandle.compile  tuple_collect(args.each_slice(2)){|a,expr|
@@ -2145,7 +2162,7 @@ module Alf
         self
       end
   
-      # @see Operator#_each
+      # (see Operator#_each)
       def _each
         handle = TupleHandle.new
         each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@predicate) }
@@ -2223,7 +2240,7 @@ module Alf
       
       protected
       
-      # @see Shortcut#longexpr
+      # (see Shortcut#longexpr)
       def longexpr
         chain HashBased.new,
               datasets 
@@ -2275,7 +2292,7 @@ module Alf
       
       protected
       
-      # @see Shortcut#longexpr
+      # (see Shortcut#longexpr)
       def longexpr
         chain HashBased.new,
               datasets 
@@ -2326,7 +2343,7 @@ module Alf
       
       protected
       
-      # @see Shortcut#longexpr
+      # (see Shortcut#longexpr)
       def longexpr
         chain HashBased.new,
               datasets 
@@ -2369,7 +2386,7 @@ module Alf
       
       protected
       
-      # @see Shortcut#longexpr
+      # (see Shortcut#longexpr)
       def longexpr
         chain Operator::NonRelational::Compact.new,
               DisjointBased.new,
@@ -2414,14 +2431,14 @@ module Alf
   
       protected 
   
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @as = args.pop.to_sym
         @attributes = args.collect{|a| a.to_sym}
         self
       end
   
-      # @see Operator::Transform#_tuple2tuple
+      # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         others = tuple_collect(tuple.keys - @attributes){|k| [k,tuple[k]] }
         others[as] = tuple_collect(attributes){|k| [k, tuple[k]] }
@@ -2463,13 +2480,13 @@ module Alf
   
       protected 
   
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @attribute = args.first.to_sym
         self
       end
   
-      # @see Operator::Transform#_tuple2tuple
+      # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple = tuple.dup
         nested = tuple.delete(@attribute) || {}
@@ -2524,7 +2541,7 @@ module Alf
       
       protected 
   
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @as = args.pop.to_sym
         @attributes = args.collect{|a| a.to_sym}
@@ -2584,7 +2601,7 @@ module Alf
   
       protected 
   
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @attribute = args.pop.to_sym
         self
@@ -2686,7 +2703,7 @@ module Alf
   
       protected 
       
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
           [a.to_sym, Aggregator.compile(expr)]
@@ -2784,7 +2801,7 @@ module Alf
   
       protected
       
-      # @see Operator#set_args
+      # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
           [a.to_sym, Aggregator.compile(expr)]
