@@ -549,7 +549,7 @@ module Alf
   end # class Environment
 
   #
-  # This is a marker module for all elements that implement tuple iterators.
+  # Marker module for all elements implementing tuple iterators.
   #
   # For now, an iterator is nothing else than an Enumerable that serves tuples
   # (represented by ruby hashes). However, this module helps Alf's internal
@@ -577,13 +577,17 @@ module Alf
   end # module Iterator
 
   #
-  # Base class for implementing tuple readers.
+  # Implements an Iterator at the interface with the outside world.
   #
-  # The contrat of a Reader is simply to be an Enumerable of tuple. Unlike 
-  # operators, however, readers are not expected to take tuple enumerators
-  # as input but IO objects, database tables, or something similar instead.
-  # This base class provides a default behavior for readers that works with 
-  # IO objects. It can be safely extended, overriden, or mimiced.
+  # The contrat of a Reader is simply to be an Iterator. Unlike operators, 
+  # however, readers are not expected to take other iterators as input, but IO 
+  # objects, database tables, or something similar instead. This base class 
+  # provides a default behavior for readers that works with IO objects. It can 
+  # be safely extended, overriden, or even mimiced (provided that you include 
+  # and implement the Iterator contract).
+  #
+  # This class also provides a registration mechanism to help magically 
+  # building Reader instances for specific file extensions. 
   #
   class Reader
     include Iterator
