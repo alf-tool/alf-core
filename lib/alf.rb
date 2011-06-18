@@ -902,40 +902,60 @@ module Alf
       @@renderers.each(&Proc.new)
     end
     
-    # Writer input
+    # Renderer input (typically an Iterator)
     attr_accessor :input
     
+    # @return [Environment] Optional wired environment
+    attr_accessor :environment
+
     #
-    # Creates a renderer instance with an optional input
+    # Creates a renderer instance, optionally wired to an input
     #
     def initialize(input = nil)
       @input = input
     end
     
     # 
-    # Sets the renderer input
+    # Sets the renderer input.
+    #
+    # This method mimics {Iterator#pipe} and have the same contract.
     #
     def pipe(input, env = environment)
-      @input = Iterator.coerce(input, env)
+      self.environment = env 
+      self.input = input
     end
 
     #
-    # Executes the rendering, outputting the resulting tuples. 
+    # Executes the rendering, outputting the resulting tuples on the provided
+    # output buffer. 
     #
-    # This method must be implemented by subclasses and must return the output
-    # buffer itself. 
+    # The default implementation simply coerces the input as an Iterator and
+    # delegates the call to {#render}.
     #
     def execute(output = $stdout)
-      output
+      render(Iterator.coerce(input, environment), output)
     end
+    
+    protected
+    
+    #
+    # Renders tuples served by the iterator to the output buffer provided and
+    # returns the latter.
+    #
+    # This method must be implemented by subclasses unless {#execute} is 
+    # overriden.
+    #
+    def render(iterator, output)
+    end
+    undef :render
 
     #
     # Implements the Renderer contract through inspect
     #
     class Rash < Renderer
   
-      # (see Renderer#execute)
-      def execute(output = $stdout)
+      # (see Renderer#render)
+      def render(input, output)
         input.each do |tuple|
           output << tuple.inspect << "\n"
         end

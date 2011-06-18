@@ -51,7 +51,7 @@ class Alf::Renderer
             value.inspect
           when Array
             looks_a_relation?(value) ? 
-              Text.render(value) :
+              Text.render(value, "") :
               "[" + value.collect{|x| Cell.new(x).text_rendering}.join(",\n ") + "]"
           else
             value.to_s
@@ -115,7 +115,9 @@ class Alf::Renderer
 
     end # class Table
 
-    def execute(buffer = $stdout)
+    protected
+    
+    def render(input, output)
       relation = input.to_a
       attrs = relation.inject([]){|memo,t| 
         memo | t.keys
@@ -123,11 +125,11 @@ class Alf::Renderer
       records = relation.collect{|t|
         attrs.collect{|a| t[a]}
       }
-      Table.new(records, attrs).render(buffer)
+      Table.new(records, attrs).render(output)
     end
     
-    def self.render(relation, buffer = "")
-      new(relation).execute(buffer)
+    def self.render(input, output)
+      new(input).execute(output)
     end
     
     Alf::Renderer.register(:text, "as a text table",  self)
