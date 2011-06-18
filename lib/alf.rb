@@ -9,7 +9,6 @@ require "alf/loader"
 module Alf
   
   #
-  #
   # Provides tooling methods that are used here and there in Alf
   # 
   module Tools
@@ -549,8 +548,6 @@ module Alf
     
   end # class Environment
 
-  ############################################################################# PUBLIC API
-
   #
   # This is a marker module for all elements that implement tuple iterators
   # 
@@ -570,8 +567,6 @@ module Alf
     end
     
   end # module Iterator
-
-  ############################################################################# AGGREGATORS
 
   #
   # Base class for implementing aggregation operators.
@@ -778,8 +773,6 @@ module Alf
 
   end # class Aggregator
 
-  ############################################################################# BUFFERS
-
   #
   # Base class for implementing buffers.
   # 
@@ -814,8 +807,6 @@ module Alf
     
   end # class Buffer
 
-  ############################################################################# READERS
-  
   #
   # Base class for implementing tuple readers.
   #
@@ -977,8 +968,6 @@ module Alf
     require "alf/reader/yaml"
   end # module Reader
 
-  ############################################################################# RENDERERS
-  
   #
   # Base class for implementing renderers.
   #
@@ -1062,7 +1051,6 @@ module Alf
     require "alf/renderer/yaml"
   end # module Renderer
 
-  ############################################################################# COMMANDS
   #
   # Provides a factory over Alf operators and handles the interface with
   # Quickl for commandline support.
@@ -1276,8 +1264,6 @@ module Alf
 
   end
   
-  ############################################################################# OPERATORS
-
   #
   # Marker for all operators on relations.
   # 
@@ -1584,10 +1570,8 @@ module Alf
 
   end # module Operator
 
-  #################################################### non relational operators
-
   #
-  # Marker module for non relational operators
+  # Marker module and namespace for non relational operators
   #
   module Operator::NonRelational
 
@@ -1926,7 +1910,9 @@ module Alf
 
   end # Operator::NonRelational
   
-  ################################################################## relational
+  #
+  # Marker module and namespace for relational operators
+  #
   module Operator::Relational
 
     # 
