@@ -594,13 +594,30 @@ module Alf
   #   # illustrated below.  
   #   r = Reader.reader('/a/path/to/a/file.foo')
   #
+  #   # Also, a factory method is automatically installed on the Reader class
+  #   # itself. This factory method can be used with a String, or an IO object.
+  #   r = Reader.foo([a path or a IO object])
+  #
   class Reader
     include Iterator
   
     # Registered readers
     @@readers = []
-    
-    # Registers a reader associated with specific file extensions    
+   
+    #      
+    # Registers a reader class associated with specific file extensions
+    #
+    # Registered class must provide a constructor with the following signature 
+    # <code>new(path_or_io, environment = nil)</code>. The name must be a symbol
+    # which can safely be used as a ruby method name. A factory class method of 
+    # that name and same signature is automatically installed on the Reader 
+    # class.
+    #
+    # @param [Symbol] name a name for the kind of data decoded
+    # @param [Array] extensions file extensions mapped to the registered reader 
+    #                class (should include the '.', e.g. '.foo')
+    # @param [Class] class Reader subclass used to decode this kind of files 
+    #     
     def self.register(name, extensions, clazz)
       @@readers << [name, extensions, clazz]
       (class << self; self; end).send(:define_method, name) do |*args|
@@ -613,7 +630,10 @@ module Alf
     # as argument.
     #
     # @param [String] filepath path to a file for which extension is recognized
-    # @return [Reader] a reader instance, already wired to the filepath
+    # @param [Environment] env an optional environment instance by which the 
+    #        reader has been served
+    # @return [Reader] a reader instance, already wired to the filepath and
+    #         environment.
     # 
     def self.reader(filepath, env = nil)
       ext = File.extname(filepath)
@@ -624,8 +644,15 @@ module Alf
       end
     end
     
-    # Coerces an argument to a reader, using an optional environement
-    # to convert named datasets
+    #
+    # Coerces an argument to a reader, using an optional environment to convert 
+    # named datasets.
+    #
+    # This method automatically provides readers for Strings and Symbols through
+    # passed environment (**not** through the reader factory) and for IO objects 
+    # (through Rash reader). It is part if Alf's internals and should be used 
+    # with care.
+    #
     def self.coerce(arg, environment = nil)
       case arg
       when Reader
@@ -643,37 +670,38 @@ module Alf
       end
     end
     
-    # Environment instance
+    # @return [Environment] Wired environment 
     attr_accessor :environment
   
-    # Input IO, or file name
+    # @return [String or IO] Input IO, or file name
     attr_accessor :input
   
-    # Creates a reader instance, with an optional input
+    #
+    # Creates a reader instance, with an optional input and environment wiring.
+    #
+    # @param [String or IO] path to a file or IO object for input
+    # @param [Environment] environment wired environment, serving this reader
     #
     def initialize(input = nil, environment = nil)
       @input = input
       @environment = environment 
     end
   
-    # 
-    # Sets the reader input
-    #
+    # (see Iterator#pipe)
     def pipe(input, env = environment)
       @input = input
     end
     
     #
-    # Yields the block with each tuple (converted from the input stream) in 
-    # turn.
+    # (see Iterator#each)
     #
-    # The default implementation reads lines of the input stream and yields the 
-    # block with <code>_line2tuple(line)</code> on each of them. This method
-    # may be overriden if this behavior does not fit reader's needs.
+    # @private the default implementation reads lines of the input stream and 
+    # yields the block with <code>line2tuple(line)</code> on each of them. This 
+    # method may be overriden if this behavior does not fit reader's needs.
     #
     def each
       each_input_line do |line| 
-        tuple = _line2tuple(line)
+        tuple = line2tuple(line)
         yield tuple unless tuple.nil?
       end
     end
@@ -706,7 +734,7 @@ module Alf
     # properly handled by raising exceptions. This method MUST be implemented 
     # by subclasses unless each is overriden.
     #
-    def _line2tuple(line)
+    def line2tuple(line)
     end
   
     #
@@ -719,8 +747,8 @@ module Alf
     #
     class Rash < Reader
   
-      # (see Reader#_line2tuple)
-      def _line2tuple(line)
+      # (see Reader#line2tuple)
+      def line2tuple(line)
         begin
           h = Kernel.eval(line)
           raise "hash expected, got #{h}" unless h.is_a?(Hash)
