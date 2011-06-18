@@ -654,15 +654,14 @@ module Alf
     # as argument.
     #
     # @param [String] filepath path to a file for which extension is recognized
-    # @param [Environment] env an optional environment instance by which the 
-    #        reader has been served
-    # @return [Reader] a reader instance, already wired to the filepath and
-    #         environment.
+    # @param [Array] args optional additional arguments that must be passed at
+    #        reader's class new method.
+    # @return [Reader] a reader instance
     # 
-    def self.reader(filepath, env = nil)
+    def self.reader(filepath, *args)
       ext = File.extname(filepath)
       if registered = @@readers.find{|r| r[1].include?(ext)}
-        registered[2].new(filepath, env)
+        registered[2].new(filepath, *args)
       else
         raise "No registered reader for #{ext} (#{filepath})"
       end
