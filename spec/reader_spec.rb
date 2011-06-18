@@ -10,16 +10,15 @@ module Alf
       it{ should be_a(Reader::Rash) }
     end
     
-    describe "reader_class_by_file_extension" do
+    describe "reader" do
       
-      describe "when associated" do
-        subject{ Reader.reader_class_by_file_extension('.rash') }
-        it { should == Reader::Rash }
+      specify "when associated" do
+        r = Reader.reader('suppliers.rash')
+        r.should  be_a(Reader::Rash)
       end
       
-      describe "when not associated" do
-        subject{ Reader.reader_class_by_file_extension('.noone') }
-        it { should be_nil }
+      specify "when not associated" do
+        lambda{ Reader.reader('.noone') }.should raise_error
       end
       
     end

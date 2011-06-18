@@ -496,12 +496,7 @@ module Alf
       # (see Environment#dataset)
       def dataset(name)
         if file = find_file(name)
-          ext = File.extname(file)
-          if clazz = Reader.reader_class_by_file_extension(ext)
-            clazz.new(file, self)
-          else
-            raise "No reader associated to extension '#{ext}' (#{file})"
-          end
+          Reader.reader(file, self)
         else
           raise "No such dataset #{name} (#{@folder})"
         end
@@ -603,12 +598,22 @@ module Alf
       end
     end
   
-    # Returns a reader instance for a given file extension
-    def self.reader_class_by_file_extension(ext)
-      x = @@readers.find{|r| r[1].include?(ext)}
-      x ? x.last : nil
+    #
+    # Returns a reader instance for a specific file whose path is given
+    # as argument.
+    #
+    # @param [String] filepath path to a file for which extension is recognized
+    # @return [Reader] a reader instance, already wired to the filepath
+    # 
+    def self.reader(filepath, env = nil)
+      ext = File.extname(filepath)
+      if registered = @@readers.find{|r| r[1].include?(ext)}
+        registered[2].new(filepath, env)
+      else
+        raise "No registered reader for #{ext} (#{filepath})"
+      end
     end
-        
+    
     # Coerces an argument to a reader, using an optional environement
     # to convert named datasets
     def self.coerce(arg, environment = nil)
