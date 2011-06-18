@@ -1,7 +1,7 @@
 # Alf - Classy data-manipulation dressed in a DSL (+ commandline)
 
-    [sudo] gem install alf
-    alf --help
+    % [sudo] gem install alf
+    % alf --help
 
 ## Links
     
@@ -19,7 +19,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   See 'alf --help' for the list of available commands and implemented relational 
   operators.
   
-      alf restrict suppliers -- "city == 'London'" | alf join cities 
+      % alf restrict suppliers -- "city == 'London'" | alf join cities 
   
 * Alf is also a 100% Ruby relational algebra implementation shipped with a simple 
   to use, powerful, functional DSL for compiling and evaluating relational queries. 
@@ -35,7 +35,8 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
 * Alf is also an educational tool, that I've written to draw people's attention
   about the ill-known relational theory (and ill-represented by SQL). The tool
   is largely inspired from TUTORIAL D, the tutorial language of Chris Date and 
-  Hugh Darwen in their books, more specifically in The Third Manifesto (TTM). 
+  Hugh Darwen in their books, more specifically in 
+  {http://www.thethirdmanifesto.com/ The Third Manifesto (TTM)}. 
   However, in itself, the present little tool is only an overview of the 
   relational _algebra_ described there (Alf is neither a relational _database_, 
   nor a relational _language_). I hope that some people will be sufficiently 
@@ -44,7 +45,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   ever have in SQL (see also 'alf help quota', 'alf help nest', 'alf help group', 
   ...):
   
-      alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
+      % alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
   
 * Last, but not least, Alf is an attempt to help me test some research ideas and 
   communicate about them with people that already know (all or part) of the TTM 
@@ -54,9 +55,20 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   are mine, should be considered 'research work in progress', and used with care
   because not necessarily in conformance with the TTM.
   
-      alf --text quota supplies --by=sid --order=quantity -- pos "count()"  
+      % alf --text quota supplies --by=sid --order=quantity -- pos "count()"  
 
-## Quick summary of relational theory
+## Overview of relational theory
+
+We quickly recall relational theory in this section, as described in the TTM 
+book. Readers not familiar with Date and Darwen's vision of relational theory 
+should probably read this section, even if fluent in SQL. Others may probably
+skip this section. A quick test? 
+
+> _A relation is a a value, precisely a set of tuples. Therefore, it is 
+  immutable, not ordered, does not contain duplicates, and does not have 
+  null/nil attributes._ 
+  
+Familiar? Skip. Otherwise, read on.
 
 ### The example database
 
@@ -88,20 +100,20 @@ examples shown here should therefore work immediately. Then, let's start!
     |                                     |                                                 |                         | +------+------+------+ |
     +-------------------------------------+-------------------------------------------------+-------------------------+------------------------+
 
-Many people think that relational databases are necessary 'flat', that they only
-contain very simple, and restricted scalar values. This is wrong; most SQL 
-databases are indeed 'flat', but _relations_ (in the mathematical sense of the 
-relational theory) are not! Look, **the example above is a relation!**; that 
-'contains' another relations as particular values, which, in turn, could 'contain' 
-relations or any other 'simple' or more 'complex' value... This is not "flat" at 
-all, after all :-)
+Many people think that relational databases are necessary 'flat', that they are 
+necessarily limited to simply scalar values in two dimension tables. This is 
+wrong; most SQL databases are indeed 'flat', but _relations_ (in the mathematical 
+sense of the relational theory) are not! Look, **the example above is a relation!**; 
+that 'contains' another relations as particular values, which, in turn, could 
+'contain' relations or any other 'simple' or more 'complex' value... This is not 
+"flat" at all, after all :-)
 
 ### Types and Values
 
-To understand what a is relation exactly, one needs to remember elementary 
+To understand what is a relation exactly, one needs to remember elementary 
 notions of set theory and the concepts of _type_ and _value_. 
 
-* A _type_ is a finite set of values; it is non necessarily ordered and, being 
+* A _type_ is a finite set of values; it is non particularly ordered and, being 
 a set, it does never contains two values which are considered equal.  
 
 * A _value_ is **immutable** (you cannot 'change' a value, in any way), has no 
@@ -112,9 +124,24 @@ As you can see, _type_ and _value_ are not the same concepts as _class_ and
 _object_, with which you are probably familiar with. Alf considers that the 
 latter are implementations of the former. Alf assumes _valid_ implementations, 
 (equality and hash methods must be correct) and _valid_ usage (objects used for
-representing values are kept immutable). That being said, if you want to put
-(immutable) **arrays, colors, ranges, or whatever in your relations**, just do 
-it! You can even join on them, restrict on them, summarize on them, and so on.
+representing values are kept immutable). That being said, if you want **arrays, 
+colors, ranges, or whatever in your relations**, just do it! You can even join 
+on them, restrict on them, summarize on them, and so on:
+
+    % alf extend suppliers -- chars "name.chars.to_a" | alf --text restrict -- "chars.last == 's'"
+
+    +------+-------+---------+--------+-----------------+
+    | :sid | :name | :status | :city  | :chars          |
+    +------+-------+---------+--------+-----------------+
+    | S2   | Jones |      10 | Paris  | [J, o, n, e, s] |
+    | S5   | Adams |      30 | Athens | [A, d, a, m, s] |
+    +------+-------+---------+--------+-----------------+
+
+A last, very important word about values. **Null/nil is not a value**. Strictly
+speaking therefore, you may not use null/nil inside your data files or datasources 
+representing relations. That being said, Alf provides specific support for 
+handling them, as they appear in today's databases. See the section with title 
+"Why is Alf Exactly?" later.
 
 ### Tuples and Relations
 
@@ -124,65 +151,116 @@ can have them inside relations!
 * Logically speaking, a tuple is a set of (attribute name, attribute value) 
   pairs. Moreover, it does not contain two attributes with the same name and is 
   **not particularly ordered**. Also, **a tuple is a _value_, and is therefore 
-  immutable**. 
-  
-  Tuples in Alf are simply represented by with ruby hashes, taken as tuples 
-  implementations. Alf does not freeze them for guaranteeing immutability, but 
-  could do it in the future. No support is or will ever be provided for ordering 
-  tuple attributes. Because hashes are ordered in Ruby 1.9, Alf implements a best 
-  effort strategy to keep a friendly ordering when rendering tuples. 
+  immutable**. Last, but not least, a tuple does not admit nulls/nils. Tuples in 
+  Alf are simply implemented with ruby hashes, taken as tuples implementations. 
+  Alf does not freeze them for guaranteeing immutability, but could do it in the 
+  future. No support is or will ever be provided for ordering tuple attributes. 
+  Because hashes are ordered in Ruby 1.9, Alf implements a best effort strategy 
+  to keep a friendly ordering when rendering tuples. This is a very good practical 
+  reason for migrating to ruby 1.9 if not already done!
 
-### Terminology, concepts & rules
+      {:sid => "S1", :name => "Smith", :status => 20, :city => "London"}
 
-We mostly use the terminology used by Date & Darwen in their books, which is 
-intentionally different than SQL's (they don't use _table_ and _record_ terms, 
-for example). Also, the relational theory comes with a certain number of rules
-that need to be respected to avoid everything to become a nightmare (and that 
-are often violated in SQL, leading to nightmares). We recall the most important 
-notions and rules below. Alf's relational operators all have those common rules
-as implicit pre-conditions. Post-conditions are guaranteed only in this case. 
-Behavior observed without respecting preconditions, even interesting side-effects, 
-are **not** guaranteed and may disappear at any time.
-
-#### Tuple(s)
-
-* We prefer the term _tuple_ instead of _record_. 
-  
-      {:sid => "S1", :name => "Smith", :status => 20, :city => "London"} 
-
-#### Relation(s)
-      
-* A _relation_ is a set of tuples (while wrong, a relation is often described
-  as the _content_ of a "table"). Being a set, a relation does **never contain
+* A _relation_ is a set of tuples. Being a set, a relation does **never contain
   duplicates** (unlike SQL that works on bags, not on sets) and is **not 
   particularly ordered**. Moreover, all tuples of a relation must have the same
-  "structure", that is, the same set of attributes names and types. Also, **a 
-  relation is a _value_, and is therefore immutable**. 
+  _heading_, that is, the same set of attribute (name, type) pairs. Also, **a 
+  relation is a _value_, and is therefore immutable**. Last but not least, 
+  relations do not admit nulls/nils.
   
-  This is not saying that you cannot compute new relation values from other 
-  relation values, but that you don't do it by "modifying" relation contents but 
-  by using algebra expressions. In classical algebra, you can do computations like 
-  <code>(5 + 2) - 3</code>. In relational algebra, you can do similar things on 
-  relations (we use an infix notation, inspired from functional programming to 
-  strengthen immutability):
+Alf provides no way to 'change' a relation in any way, but it provides an algebra 
+to compute relations from other relations.
   
-      (minus (union :suppliers, ...), ...)
+### Relational Algebra
 
-  Alf being an algebra implementation, it does rarely represent relations explicitly 
-  at the logical level but work on "physical" representations of them, through 
-  Enumerables of tuples. That is, an algebra expression as given above should not
-  be seen here as returning a relation _per se_, but instead as returning an operator 
-  allowing to compute the resulting relation. The result is always an Enumerable, 
-  whose <code>each</code> method yields ruby hashes, as tuple representations. 
-  Provided that their operands are valid relation representations (no duplicates, 
-  no nil, no particular order), Alf's relational operators return valid relation 
-  representations (idem). 
+In classical algebra, you can do computations like <code>(5 + 2) - 3</code>. In 
+relational algebra, you can do similar things on relations. Alf uses an an infix, 
+functional programming-oriented syntax: 
+  
+    (minus (union :suppliers, xxx), yyy)
+    
+All relational operators take relation operands in input and return a relation 
+as output. We say that the relational algebra is _closed_ under its operators.
+In practice, it means that operands may always be sub-expressions, **always**.
 
-#### Value(s) ... all but nil
+    (minus (union (restrict :suppliers, lambda{ zzz }), xxx), yyy)
 
-* A relation is a set of tuples, while a tuple is a set of (name, value) pairs. 
+In shell, the closure property means that you can pipe alf invocations the way 
+you want! The same query, in shell:
 
-## Getting started with commandline
+    alf restrict suppliers -- "zzz" | alf union xxx | alf minus yyy
+    
+## What is Alf exactly?   
+
+The Third Manifesto defines a series of prescriptions, proscriptions and very 
+strong suggestions for designing a truly relational _language_, called a _D_, 
+as an alternative to SQL for managing relational databases. This is far behind
+our objective with Alf, as we don't look at database aspects at all (persistence
+transactions, and so on.) and don't actually define a programming language either 
+(only a small functional ruby DSL). 
+
+Alf must simply be interpreted as a ruby library implementing a variant of Date's
+and Darwen relational algebra. This library is designed as a set of operator 
+implementations, that work as tuple iterators taking other tuple iterators as 
+input. Under the pre-condition that you provide them _valid_ tuple iterators as 
+input (no duplicates, no nil, + other preconditions on an operator basis), the 
+result is a valid iterator as well. Unless explicitely stated otherwise, any
+behavior observed when not respecting these precondition rules, even interesting 
+behavior, is not guaranteed and can change with tiny library version changes.
+
+### In ruby
+
+    # 
+    # Provided that :suppliers and :cities are valid relation representations
+    # (under the responsibility shared by you and the Reader and Environment 
+    # subclasses you use -- see later),  then, 
+    # 
+    op = Alf.lispy.compile{ 
+      (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
+    }
+    
+    # op is a thread-safe Enumerable of tuples, that can be taken as a valid
+    # relation representation. It can therefore be used as the input operand 
+    # of any other expression. This is under Alf's responsibility, and any 
+    # failure must be considered a bug!
+
+### In shell
+
+    #
+    # Provided that suppliers and cities are valid relation representations
+    # [something similar] 
+    #
+    % alf restrict suppliers -- "city == 'London'" | alf join cities
+
+    # the resulting stream is a valid relation representation in the output
+    # stream format that you have selected (.rash by default). It can therefore 
+    # be piped to another alf shell invocation, or saved to a file and re-read
+    # later (under the assumption that input and output data formats match, or 
+    # course). [Something similar about responsibility and bug].
+
+### Coping with non-relational data sources (nil, duplicates, etc.)
+
+Before all, Alf aims at being a tool that helps you tackling practical problems
+and non-normalized data is one of them. Missing values occur. Duplicates abound 
+in SQL databases lacking primary keys, and so on. Using Alf's relational operators 
+on such inputs is not a good idea. Not because relational theory is weak, but 
+because many things becomes undefined or extremely difficult to define (try to 
+extend classical algebra to define a version of +, - * and / to handle nil in 
+such a way that the resulting theory is sound and still looks intuitive!). 
+    
+For this reason, Alf comes with a set of non-relational operators in addition
+to relational ones. Those operators must be considered as "pre-relational", in
+the sense that they help obtaining valid relation representations from invalid
+ones. Provided that you use them correctly, their output can safely be used 
+as input of a relational operator. You'll find,
+
+* <code>alf autonum</code>  -- ensure no duplicates by generating a unique attribute
+* <code>alf compact</code>  -- brute-force duplicates removal
+* <code>alf defaults</code> -- replace nulls/nil by valid values, on an attribute basis
+
+The rest is up to you.
+    
+## Getting started in shell
 
     % alf --help
 
@@ -199,21 +277,28 @@ For example, try the following:
     
     # join suppliers and cities (no args here)
     % alf join suppliers cities
+
+### Recognized data streams/files (.rash files)
     
 For educational purposes, 'suppliers' and 'cities' inputs are magically resolved 
-as denoting the files examples/suppliers.rash and examples/cities.rash, respectively. 
-You'll find other data files: parts.rash, supplies.rash that are resolved magically 
-as well and with which you can play.
+as denoting the files examples/suppliers.rash and examples/cities.rash, 
+respectively. You'll find other data files: parts.rash, supplies.rash that are 
+resolved magically as well and with which you can play.
 
-Unary operators read their operand on standard input when not specified. For example, 
-the invocation below is equivalent to the one given above.
+A .rash file is simply a file in which each line is a ruby Hash, intended to 
+represent a tuple. Under theory-driven preconditions, a .rash file can be seen
+as a valid (straightforward but useful) physical representation of a relation!
+When used in shell, alf dumps query results in the .rash format by default, 
+which opens the ability of piping invocations! Indeed, unary operators read their 
+operand on standard input if not specific as command argument. For example, the 
+invocation below is equivalent to the one given above.
 
     # display suppliers that live in Paris
     % cat examples/suppliers.rash | alf restrict -- "city == 'Paris'"  
 
 Similarly, when only one operand is present in invocations of binary operators, 
-they read their left operand from standard input. Therefore, the join given above 
-can also be written as follows:
+they read their left operand from standard input. Therefore, the join given in
+previous section can also be written as follows:
 
     % cat examples/suppliers.rash | alf join cities
 
@@ -261,12 +346,13 @@ a .yaml file, as follows:
 ### Executing .alf files
 
 You'll also find .alf files in the examples folder, that contain more complex
-examples in the Ruby functional syntax (see section below). You can simply 
-execute these files with alf directly as follows:
+examples in the Ruby functional syntax (see section below). 
 
     % cat examples/group.alf
     #!/usr/bin/env alf
     (group :supplies, [:pid, :qty], :supplying)
+
+You can simply execute these files with alf directly as follows:
 
     # the following works, as well as the shortcut 'alf show group'
     % alf examples/group.alf | alf show 
@@ -385,20 +471,21 @@ allowed syntaxes for RESTRICT as follows:
       (restrict :suppliers, lambda{ city == 'London' })
     ...
 
-## Interfacing in Ruby (APIs)
+## Interfacing Alf in Ruby
 
 ### Calling commands 'ala' shell
 
 For simple cases, the easiest way of using Alf in ruby is probably to mimic
 what you have in shell:
 
-    # in shell
     % alf restrict suppliers -- "city == 'Paris'"
+
+Then, in ruby
     
-    # in ruby 
-    #   - create an engine on an environment (see section about environments later)
-    #   - run a command 
-    #   - op is a thread-safe enumerable of tuples, see the Lispy section below)
+    #
+    # 1. create an engine on an environment (see section about environments later)
+    # 2. run a command 
+    # 3. op is a thread-safe enumerable of tuples, see the Lispy section below)
     #
     lispy = Alf.lispy(Alf::Environment.examples)
     op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
@@ -491,7 +578,7 @@ template for this is as follows:
       # base implementation and a few tools
       #
       def each
-        [...]
+        # [...]
       end
     
       # By registering it, the Folder environment will automatically
@@ -515,7 +602,7 @@ following template for contributions in lib/alf/renderer
       # details.
       #
       def execute(output = $stdout)
-        [...]
+        # [...]
         output
       end
 
