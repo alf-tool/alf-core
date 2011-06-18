@@ -21,16 +21,16 @@ Gem::Specification.new do |s|
   # A short summary of this gem
   #
   # This is displayed in `gem list -d`.
-  s.summary = "A commandline tool for relational inspired data manipulation"
+  s.summary = "alf - Classy data-manipulation dressed in a DSL (+ commandline)"
 
   # A long description of this gem (required)
   #
   # The description should be more detailed than the summary.  For example,
   # you might wish to copy the entire README into the description.
-  s.description = "A commandline tool for relational inspired data manipulation"
+  s.description = "alf - Classy data-manipulation dressed in a DSL (+ commandline)"
   
   # The URL of this gem home page (optional)
-  s.homepage = "http://github.com/blambeau/alf"
+  s.homepage = "http://rubydoc.info/github/blambeau/alf/master/frames"
 
   # Gem publication date (required but auto)
   #
@@ -125,8 +125,8 @@ Gem::Specification.new do |s|
   #
   s.add_development_dependency("rake", "~> 0.8.7")
   s.add_development_dependency("bundler", "~> 1.0")
-  s.add_development_dependency("rspec", "~> 2.4.0")
-  s.add_development_dependency("yard", "~> 0.6.4")
+  s.add_development_dependency("rspec", "~> 2.6.0")
+  s.add_development_dependency("yard", "~> 0.7.2")
   s.add_development_dependency("bluecloth", "~> 2.0.9")
   s.add_development_dependency("wlang", "~> 0.10.1")
   s.add_development_dependency("noe", "~> 1.3.0")
