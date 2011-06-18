@@ -1157,6 +1157,9 @@ module Alf
   #
   # Provides a factory over Alf operators and handles the interface with
   # Quickl for commandline support.
+  #
+  # This module is part of Alf's internal architecture and should not be used
+  # at all by third-party projects.
   # 
   module Factory
   
@@ -1180,7 +1183,7 @@ module Alf
   end # module Factory
   
   #
-  # This is a marker module for Alf main commands, those that are **not** 
+  # Marker module and namespace for Alf main commands, those that are **not** 
   # operators at all. 
   #
   module Command
@@ -1368,7 +1371,7 @@ module Alf
   end
   
   #
-  # Marker for all operators on relations.
+  # Marker for all operators, relational and non-relational ones.
   # 
   module Operator
     include Iterator, Tools
