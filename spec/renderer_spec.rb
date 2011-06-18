@@ -6,12 +6,6 @@ module Alf
     it { should respond_to(:rash) }
     it { should respond_to(:text) }
 
-    describe "renderer_names" do
-      subject{ Renderer.renderer_names }
-      it{ should include(:rash) }
-      it{ should include(:text) }
-    end
-    
     describe "renderer_by_name" do
       subject{ Renderer.renderer_by_name(:text) }
       it{ should == Renderer::Text } 

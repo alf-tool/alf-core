@@ -868,11 +868,6 @@ module Alf
         end
     end
 
-    # Returns the names of registered renderers
-    def self.renderer_names
-      @@renderers.collect{|x| x.first}
-    end
-    
     # Returns a renderer class by its name
     def self.renderer_by_name(name)
       @@renderers.find{|x| x.first.to_s == name.to_s}.last
