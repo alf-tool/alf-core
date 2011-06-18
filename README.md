@@ -258,8 +258,19 @@ as input of a relational operator. You'll find,
 * <code>alf compact</code>  -- brute-force duplicates removal
 * <code>alf defaults</code> -- replace nulls/nil by valid values, on an attribute basis
 
-The rest is up to you.
-    
+### Alf is duck-typed
+
+The relational theory is often considered under a strongly/statically typed point
+of view. When considering tuples and relations, for example, the notion of 
+_heading_, a set of (name,type) pairs, is central. For example, a heading for
+a supplier tuple/relation could be:
+
+    {:sid => String, :name => Name, :status => Integer, :city => String}
+
+Given an expression in relational algebra, it is always possible to compute the
+heading of the resulting relation, by applying static-typing propagation rules
+on an expression tree. 
+
 ## Getting started in shell
 
     % alf --help
