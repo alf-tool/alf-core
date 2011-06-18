@@ -549,7 +549,15 @@ module Alf
   end # class Environment
 
   #
-  # This is a marker module for all elements that implement tuple iterators
+  # This is a marker module for all elements that implement tuple iterators.
+  #
+  # For now, an iterator is nothing else than an Enumerable that serves tuples
+  # (represented by ruby hashes). However, this module helps Alf's internal
+  # classes to recognize enumerables that may safely be considered as tuple
+  # iterators from other enumerables. For this reason, all elements that would
+  # like to participate to an iteration chain (that is, an logical operator 
+  # implementation) should be marked with this module. This is the case for 
+  # all Readers and Operators defined in Alf.
   # 
   module Iterator
     include Enumerable
