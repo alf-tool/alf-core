@@ -1060,6 +1060,11 @@ module Alf
           }
         end
         
+        opt.on('--env=FOLDER', 
+               "Set the environment folder to use") do |value|
+          @environment = Environment.folder(value)
+        end
+        
         opt.on_tail('-h', "--help", "Show help") do
           raise Quickl::Help
         end

@@ -3,15 +3,11 @@ module AlfLauncher
 
   def self.load
     begin
+      $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
       require "alf"
     rescue LoadError => ex
-      begin
-        require "rubygems"
-        require "alf"
-      rescue LoadError => ex
-        $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-        require "alf"
-      end
+      require "rubygems"
+      require "alf"
     end
   end
   

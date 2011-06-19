@@ -343,7 +343,13 @@ For example, try the following:
 For educational purposes, 'suppliers' and 'cities' inputs are magically resolved 
 as denoting the files examples/suppliers.rash and examples/cities.rash, 
 respectively. You'll find other data files: parts.rash, supplies.rash that are 
-resolved magically as well and with which you can play.
+resolved magically as well and with which you can play. For non-educational 
+purposes, operands may always be explicit files, or you can force the folder in
+which datasource files have to be found:
+
+    # The following invocations are equivalent
+    % alf restrict /tmp/foo.rash -- "..." 
+    % alf --env=/tmp restrict foo -- "..." 
 
 A .rash file is simply a file in which each line is a ruby Hash, intended to 
 represent a tuple. Under theory-driven preconditions, a .rash file can be seen
