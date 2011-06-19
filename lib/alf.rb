@@ -512,7 +512,7 @@ module Alf
               File.file?(explicit)
           explicit
         else
-          Dir[File.join(@folder, "**/#{name}.*")].find do |f|
+          Dir[File.join(@folder, "#{name}.*")].find do |f|
             File.file?(f)
           end
         end
