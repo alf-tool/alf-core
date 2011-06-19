@@ -377,6 +377,8 @@ module Alf
 
       op
     end
+
+    ### Non-relational operators
     
     [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
@@ -385,6 +387,8 @@ module Alf
       end
     end
 
+    ### Relational operators
+        
     [:Project,
      :Extend, 
      :Rename,
@@ -415,8 +419,16 @@ module Alf
       end
     end
     
+    private
+    
     #
-    # Chains some elements as a new operator
+    # Chains some elements as a new operator.
+    #
+    # This method is part of the DSL private methods and should not be used
+    # in Lispy DSL expressions that capture queries.
+    #
+    # @param  [Array] elements a list of pipeable Iterators
+    # @return [Iterator] the first element, piped to the next one, and so on.
     #
     def chain(*elements)
       elements = elements.reverse
@@ -1546,25 +1558,31 @@ module Alf
   module Operator::NonRelational
 
     # 
-    # Extend with an unique autonumber attribute
+    # Extend its operand with an unique autonumber attribute
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
     #
-    # API & EXAMPLE
-    #
-    #   # Autonumber suppliers (:autonum attribute name by default)
-    #   (autonum :suppliers)
-    #
-    #   # You can specify the attribute name
-    #   (autonum :suppliers, :unique_id)
+    # #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
     #
     # DESCRIPTION
     #
-    # This operator takes input tuples in any order they come and extends them
-    # with an autonumber attribute ATTRNAME. This allows converting non-relational
-    # tuple enumerators to relational ones by ensuring uniqueness of tuples in an
-    # arbitrary manner.
+    # This non-relational operator guarantees uniqueness of output tuples by
+    # adding an attribute called 'ATTRNAME' whose value is an Integer. No 
+    # guarantee is given about ordering of output tuples, nor to the fact
+    # that this autonumber is sequential. Only that all values are different.
+    # If the presence of duplicates was the only "non-relational" aspect of
+    # input tuples, the result may be considered a valid relation representation.
+    #
+    # IN RUBY
+    #
+    #   (autonum OPERAND, ATTRNAME = :autonum)
+    #
+    #   (autonum :suppliers)
+    #   (autonum :suppliers, :unique_id)
+    #
+    # IN SHELL
+    #
+    #   #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
     #
     #   alf autonum suppliers
     #   alf autonum suppliers -- unique_id
