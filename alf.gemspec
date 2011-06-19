@@ -21,13 +21,13 @@ Gem::Specification.new do |s|
   # A short summary of this gem
   #
   # This is displayed in `gem list -d`.
-  s.summary = "alf - Classy data-manipulation dressed in a DSL (+ commandline)"
+  s.summary = "Classy data-manipulation dressed in a DSL (+ commandline)"
 
   # A long description of this gem (required)
   #
   # The description should be more detailed than the summary.  For example,
   # you might wish to copy the entire README into the description.
-  s.description = "alf - Classy data-manipulation dressed in a DSL (+ commandline)"
+  s.description = "Alf is a commandline tool and Ruby library to manipulate data with all the \npower of a truly relational algebra approach. "
   
   # The URL of this gem home page (optional)
   s.homepage = "http://rubydoc.info/github/blambeau/alf/master/frames"

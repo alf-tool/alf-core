@@ -9,9 +9,10 @@ variables:
   version:
     0.9.0
   summary: |-
-    alf - Classy data-manipulation dressed in a DSL (+ commandline)
+    Classy data-manipulation dressed in a DSL (+ commandline)
   description: |-
-    alf - Classy data-manipulation dressed in a DSL (+ commandline)
+    Alf is a commandline tool and Ruby library to manipulate data with all the 
+    power of a truly relational algebra approach. 
   authors: 
     - {name: Bernard Lambeau, email: blambeau@gmail.com}
   links:

@@ -7,7 +7,7 @@
     
 * {http://rubydoc.info/github/blambeau/alf/master/frames} (read this file there!)
 * {http://github.com/blambeau/alf} (source code)
-* {http://revision-zero.org} (author)
+* {http://revision-zero.org} (author's blog)
 
 ## Description
 
