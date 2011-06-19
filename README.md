@@ -56,7 +56,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   'research work in progress', and used with care because not necessarily in 
   conformance with the TTM.
   
-      % alf --text quota supplies --by=sid --order=quantity -- pos "count()"  
+      % alf --text quota supplies --by=sid --order=qty -- pos "count()"  
 
 ## Overview of relational theory
 
@@ -722,12 +722,16 @@ Below is what I've imagined about Alf's future. However, this is to be interpret
 as my own wish list, while I would love hearing yours instead.
 
 - Towards 1.0.0, I would like to stabilize and document Alf public APIs as well 
-  as internals (a few concepts are still unstable there) as well as starting 
-  collecting  Reader, Renderer and Environment contributions for common data 
-  sources (SQL, NoSQL, CSV, LOGS) and output formats (HTML, XML, JSON). 
-  Contributions could be either developped as different gem projects or 
-  distributed with Alf's gem and source code, I still need to decide the exact 
-  policy (suggestions are more than welcome here)
+  as internals (a few concepts are still unstable there). Alf also has a certain
+  number of limitations that are worth overcoming for version 1.0.0. The latter
+  include the semantically wrong way of applying joins on sub-relations, the 
+  impossibility to use Lispy expressions on sub-relations in extend, and the error
+  management which is unspecific and unfriendly so far.
+- I also would like starting collecting  Reader, Renderer and Environment 
+  contributions for common data sources (SQL, NoSQL, CSV, LOGS) and output 
+  formats (HTML, XML, JSON). Contributions could be either developped as different 
+  gem projects or distributed with Alf's gem and source code, I still need to 
+  decide the exact policy (suggestions are more than welcome here)
 - Alf will remain a practical tool before everything else. In the middle term,
   I would like to complete the set of available operators (relational and non-
   relational ones). Some of them will be operators described in D & D books 
