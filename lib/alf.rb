@@ -1622,7 +1622,7 @@ module Alf
       def _tuple2tuple(tuple)
         if strict
           tuple_collect(@defaults){|k,v| 
-            [k, coalesce(tuple[v], v)] 
+            [k, coalesce(tuple[k], v)] 
           }
         else
           @defaults.merge tuple_collect(tuple){|k,v| 

@@ -34,10 +34,12 @@ module Alf
       describe "when used with --strict" do
         
         let(:input) {[
+          {:a => 3,   :b => "b", :c => "blue"},
           {:a => nil, :b => "b", :c => "blue"},
         ]}
     
         let(:expected) {[
+          {:a => 3, :b => "b"},
           {:a => 1, :b => "b"},
         ]}
     
