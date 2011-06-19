@@ -304,11 +304,34 @@ module Alf
     # Compiles a query expression given by a String or a block and returns
     # the result (typically a tuple iterator)
     #
+    # Example
+    #
+    #   # with a string
+    #   op = compile "(restrict :suppliers, lambda{ city == 'London' })"
+    #
+    #   # or with a block
+    #   op = compile {
+    #     (restrict :suppliers, lambda{ city == 'London' })
+    #   }
+    #
+    # @param [String] expr a Lispy expression to compile
+    # @return [Iterator] the iterator resulting from compilation
+    #
     def compile(expr = nil, &block)
       expr.nil? ? instance_eval(&block) : instance_eval(expr)
     end
 
-    # Delegated to the environment
+    #
+    # Delegated to the current environment
+    #
+    # This method returns the dataset associated to a given name. The result
+    # may depend on the current environment, but is generally an Iterator, 
+    # often a Reader instance.
+    #
+    # @param [Symbol] name name of the dataset to retrieve
+    # @return [Iterator] the dataset as an iterator
+    # @see Environment#dataset
+    #
     def dataset(name)
       raise "Environment not set" unless @environment
       @environment.dataset(name)
@@ -316,7 +339,25 @@ module Alf
     
     #
     # Compiles the subexpression given by the block in the context of 
-    # additional temporary expressions given by definitions
+    # additional temporary expressions given by definitions. 
+    #
+    # Example
+    #
+    #   with( :kept_suppliers => (restrict :suppliers, lambda{ status > 10 }),
+    #         :with_countries => (join :kept_suppliers, :cities),
+    #         :supplying      => (join :with_countries, :supplies) ) do
+    #     (summarize :supplying,
+    #                [:country],
+    #                :which => Agg::group(:pid),
+    #                :total => Agg::sum{ qty })
+    #   end
+    #
+    # @param [Hash] definitions a set of (Symbol -> Iterator) pairs capturing
+    #               new logical datasources.
+    # @return [Iterator] the result of block compilation
+    #
+    # This method is still experimental and could be removed in a near 
+    # future. Use it with great care.
     #
     def with(definitions)
       # We branch with the definitions for compilation
@@ -335,17 +376,6 @@ module Alf
       self.environment = environment.unbranch
 
       op
-    end
-    
-    #
-    # Chains some elements as a new operator
-    #
-    def chain(*elements)
-      elements = elements.reverse
-      elements[1..-1].inject(elements.first) do |c, elm|
-        elm.pipe(c, environment)
-        elm
-      end
     end
     
     [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
@@ -385,6 +415,17 @@ module Alf
       end
     end
     
+    #
+    # Chains some elements as a new operator
+    #
+    def chain(*elements)
+      elements = elements.reverse
+      elements[1..-1].inject(elements.first) do |c, elm|
+        elm.pipe(c, environment)
+        elm
+      end
+    end
+
   end # module Lispy
 
   #
