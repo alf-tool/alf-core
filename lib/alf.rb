@@ -238,7 +238,8 @@ module Alf
     
       def compare(t1,t2)
         @ordering.each do |attr,order|
-          comp = (t1[attr] <=> t2[attr])
+          x, y = t1[attr], t2[attr]
+          comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
           comp *= -1 if order == :desc
           return comp unless comp == 0
         end
