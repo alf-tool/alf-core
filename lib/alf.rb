@@ -1191,7 +1191,7 @@ module Alf
       def execute(args)
         requester.renderer = @renderer
         args = [ $stdin ] if args.empty?
-        requester.chain(*args)
+        requester.send(:chain,*args)
       end
     
     end # class Show
