@@ -23,7 +23,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   
 * Alf is also a 100% Ruby relational algebra implementation shipped with a simple 
   to use, powerful, functional DSL for compiling and evaluating relational queries. 
-  Alf is not limited to simple scalar values, but admit values of arbitrary 
+  Alf is not limited to simple scalar values, but admits values of arbitrary 
   complexity (under a few requirements about their implementation, see next 
   section). See 'alf --help' as well as .alf files in the examples directory 
   for syntactic examples.
@@ -32,7 +32,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
         (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
       }
 
-* Alf is also an educational tool, that I've written to draw people's attention
+* Alf is also an educational tool, that I've written to draw people attention
   about the ill-known relational theory (and ill-represented by SQL). The tool
   is largely inspired from TUTORIAL D, the tutorial language of Chris Date and 
   Hugh Darwen in their books, more specifically in 
@@ -41,9 +41,9 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   there (Alf is neither a relational _database_, nor a relational _language_). 
   I hope that people (especially talented developers) will be sufficiently 
   enticed by features shown here to open that book, read it more deeply, and 
-  implement new stuff around Date & Darwen vision. Have a look at the result of 
-  the following query for things that you'll never ever have in SQL (see also 
-  'alf help quota', 'alf help nest', 'alf help group', ...):
+  implement new stuff around Date & Darwen's vision. Have a look at the result of 
+  the following query for the kind of things that you'll never ever have in SQL 
+  (see also 'alf help quota', 'alf help nest', 'alf help group', ...):
   
       % alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
   
@@ -74,7 +74,7 @@ Familiar? Skip. Otherwise, read on.
 ### The example database
 
 This README file shows a lot of examples built on top of the following suppliers 
-& parts database (almost identical to the original version in C.J. Date database 
+& parts database (almost identical to the original version in C. J. Date's database 
 books). By default, the alf command line is wired to this embedded example. All
 examples shown here should therefore work immediately, if you want to reproduce
 them!
@@ -103,7 +103,7 @@ them!
     +-------------------------------------+-------------------------------------------------+-------------------------+------------------------+
 
 Many people think that relational databases are necessary 'flat', that they are 
-necessarily limited to simply scalar values in two dimension tables. This is 
+necessarily limited to simple scalar values put in two dimension tables. This is 
 wrong; most SQL databases are indeed 'flat', but _relations_ (in the mathematical 
 sense of the relational theory) are not! Look, **the example above is a relation!**; 
 that 'contains' other relations as particular values, which, in turn, could 
@@ -115,15 +115,16 @@ that 'contains' other relations as particular values, which, in turn, could
 To understand what is a relation exactly, one needs to remember elementary 
 notions of set theory and the concepts of _type_ and _value_. 
 
-* A _type_ is a finite set of values; it is non particularly ordered and, being 
-a set, it does never contains two values which are considered equal.  
+* A _type_ is a finite set of values; it is not particularly ordered and, being 
+a set, it does never contain two values which are equal (any type is necessarily 
+accompanied with an equality operator, denoted here by '==').  
 
 * A _value_ is **immutable** (you cannot 'change' a value, in any way), has no 
 localization in time and space, and is always typed (that is, it is always 
 accompanied by some identification of the type it belongs to). 
  
 As you can see, _type_ and _value_ are not the same concepts as _class_ and 
-_object_, with which you are probably familiar with. Alf considers that the 
+_object_, which you are probably more familiar with. Alf considers that the 
 latter are _implementations_ of the former. Alf assumes _valid_ implementations
 (equality and hash methods must be correct) and _valid_ usage (objects used for
 representing values are kept immutable in practice). Alf _assumes_ this, but 
@@ -157,11 +158,11 @@ can have them inside relations!
   pairs. Moreover, it does not contain two attributes with the same name and is 
   **not particularly ordered**. Also, **a tuple is a _value_, and is therefore 
   immutable**. Last, but not least, a tuple **does not admit nulls/nils**. Tuples 
-  in Alf are simply implemented with ruby hashes, taken as tuples implementations. 
+  in Alf are simply implemented with ruby hashes, taken as tuple implementations. 
   Not all hashes are valid tuple implementations, of course (those containing nil
   are not, for example). Alf _assumes_ valid tuples, but does not _enforce_ this
   precondition. It's up to you to use Alf the right way! No support is or will 
-  ever be provided for ordering tuple attributes. Howeber, as hashes are ordered 
+  ever be provided for ordering tuple attributes. However, as hashes are ordered 
   in Ruby 1.9, Alf implements a best effort strategy to keep a friendly ordering 
   when rendering tuples and relations. This is a very good practical reason for 
   migrating to ruby 1.9 if not already done!
@@ -179,9 +180,9 @@ can have them inside relations!
 
 ### Relational Algebra
 
-In classical algebra, you can do computations like <code>(5 + 2) - 3</code>. In 
-relational algebra, you can do similar things on relations. Alf uses an infix, 
-functional programming-oriented syntax for algebra expressions: 
+In classical algebra, you can make computations like <code>(5 + 2) - 3</code>. 
+In relational algebra, you can make similar things on relations. Alf uses an 
+infix, functional programming-oriented syntax for algebra expressions: 
   
     (minus (union :suppliers, xxx), yyy)
     
@@ -206,14 +207,14 @@ transactions, and so on.) and don't actually define a programming language eithe
 (only a small functional ruby DSL). 
 
 Alf must simply be interpreted as a ruby library implementing (a variant of) 
-Date's and Darwen relational algebra. This library is designed as a set of operator 
+Date and Darwen's relational algebra. This library is designed as a set of operator 
 implementations, that work as tuple iterators taking other tuple iterators as 
 input. Under the pre-condition that you provide them _valid_ tuple iterators as 
 input (no duplicates, no nil, + other preconditions on an operator basis), the 
 result is a valid iterator as well. Unless explicitely stated otherwise, any
 behavior observed when not respecting these preconditions, even an interesting 
-behavior, is not guaranteed and can change with tiny version changes (see section
-about versioning policy at the end of this file).
+behavior, is not guaranteed and might change with tiny version changes (see 
+section about versioning policy at the end of this file).
 
 ### In ruby
 
@@ -281,13 +282,12 @@ You'll find,
 
 * <code>alf autonum</code>  -- ensure no duplicates by generating a unique attribute
 * <code>alf compact</code>  -- brute-force duplicates removal
-* <code>alf defaults</code> -- replace nulls/nil by valid values, on an attribute 
-                               basis
+* <code>alf defaults</code> -- replace nulls/nil by valid values, on an attribute basis
 
 Play the game, it's easy! 
 
 - _Give id, name and status of suppliers whose status is greater that 10_
-- Hey man, we don't know supplier's status for all of them! What about the others?
+- Hey man, we don't know the status for all suppliers! What about these cases?
 - _Ignore them_
 - No problem dude!
 
@@ -311,13 +311,13 @@ analyzing the whole query expression in the light of a catalog of typed
 operators. This way, a tool can check that a query is statically valid, i.e. 
 that it respects operator preconditions. While this approach has the major 
 advantage of allowing strong optimizations, it also has a few drawbacks (as 
-knowing the heading of used datasources in advance) and is difficult to mary 
-with dynamically-typed languages like Ruby. Therefore, Alf takes another approach, 
-which is similar to duck-typing. In essence, this approach can be summarized as 
-follows:
+the need to know the heading of used datasources in advance) and is difficult to 
+mary with dynamically-typed languages like Ruby. Therefore, Alf takes another 
+approach, which is similar to duck-typing. In essence, this approach can be 
+summarized as follows:
 
-- _You have the responsibility of ensuring that the evaluation of your query 
-  will succeed and will return valid results_
+- _You have the responsibility of not violating operators' preconditions. If you
+  do, Alf has the responsibility of returning correct results._.
 - No problem dude!
 
 ## Getting started in shell
@@ -713,8 +713,8 @@ your needs and I'll see what I can do!
 ### Internals -- Tribute to Sinatra
 
 Alf's code style is very inspired from what I've found in Sinatra when looking 
-at its internals a few month ago. Alf, as Sinatra, is mostly implemented in a 
-single file, lib/alf.rb. Everything is there except additional contributions 
+at its internals a few months ago. Alf, as Sinatra, is mostly implemented in a 
+single file, lib/alf.rb. Everything is there except specific third-party contributions 
 (in lib/alf/...). You'll need an editor or IDE that supports code folding/unfolding. 
 Then, follow the guide:
 
