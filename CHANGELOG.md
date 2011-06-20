@@ -5,6 +5,11 @@
   * Lispy#chain was kept public in 0.9.0 and has been tagged as private as not
     being part of the DSL. 
 
+* Bug fixes
+
+  * Fixed a bug that led to an Nil error when using unary operators on $stdin
+  * Fixed a bug when summarizing or sorting on Symbol attributes with ruby 1.8
+
 # 0.9.0 / 2011.06.19
 
 * Enhancements
