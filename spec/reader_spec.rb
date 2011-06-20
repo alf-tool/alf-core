@@ -21,6 +21,10 @@ module Alf
         lambda{ Reader.reader('.noone') }.should raise_error
       end
       
+      specify "when an IO" do
+        Reader.reader($stdin).should be_a(Reader::Rash)
+      end
+      
     end
 
   end

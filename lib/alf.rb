@@ -704,8 +704,9 @@ module Alf
     end
   
     #
-    # Returns a reader instance for a specific file whose path is given
-    # as argument.
+    # When filepath is a String, returns a reader instance for a specific file 
+    # whose path is given as argument. Otherwise, delegate the call to
+    # <code>coerce(filepath)</code>
     #
     # @param [String] filepath path to a file for which extension is recognized
     # @param [Array] args optional additional arguments that must be passed at
@@ -713,11 +714,15 @@ module Alf
     # @return [Reader] a reader instance
     # 
     def self.reader(filepath, *args)
-      ext = File.extname(filepath)
-      if registered = @@readers.find{|r| r[1].include?(ext)}
-        registered[2].new(filepath, *args)
+      if filepath.is_a?(String)
+        ext = File.extname(filepath)
+        if registered = @@readers.find{|r| r[1].include?(ext)}
+          registered[2].new(filepath, *args)
+        else
+          raise "No registered reader for #{ext} (#{filepath})"
+        end
       else
-        raise "No registered reader for #{ext} (#{filepath})"
+        coerce(filepath)
       end
     end
     
