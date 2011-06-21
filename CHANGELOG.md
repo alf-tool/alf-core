@@ -20,6 +20,7 @@
 
   * Fixed a bug that led to an Nil error when using unary operators on $stdin
   * Fixed a bug when summarizing or sorting on Symbol attributes with ruby 1.8
+  * Fixed a bug that led to numerous crashes under rubinius
 
 # 0.9.0 / 2011.06.19
 
