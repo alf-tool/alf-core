@@ -19,21 +19,44 @@ module Alf
         {:a => "via_reader", :time_sum => 6, :time_max => 4},
       ]}
   
-      subject{ operator.to_a }
+      subject{ operator.to_a.sort{|t1,t2| t1[:a] <=> t2[:a]} }
   
-      describe "When factored with commandline args" do
-        let(:opts){ ["--by=a"] }
-        let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)"] }
-        let(:operator){ Summarize.run(opts + ["--"] +aggs) }
-        before{ operator.pipe(input) }
-        it { should == expected }
+      describe "without allbut" do
+        
+        describe "When factored with commandline args" do
+          let(:opts){ ["--by=a"] }
+          let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)"] }
+          let(:operator){ Summarize.run(opts + ["--"] +aggs) }
+          before{ operator.pipe(input) }
+          it { should == expected }
+        end
+    
+        describe "When factored with Lispy" do
+          let(:aggs){{:time_sum => Aggregator.sum(:time),
+                      :time_max => Aggregator.max(:time)}} 
+          let(:operator){ Lispy.summarize(input, [:a], aggs) }
+          it { should == expected }
+        end
+
       end
   
-      describe "When factored with Lispy" do
-        let(:aggs){{:time_sum => Aggregator.sum(:time),
-                    :time_max => Aggregator.max(:time)}} 
-        let(:operator){ Lispy.summarize(input, [:a], aggs) }
-        it { should == expected }
+      describe "with allbut" do
+        
+        describe "When factored with commandline args" do
+          let(:opts){ ["--by=time", "--allbut"] }
+          let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)"] }
+          let(:operator){ Summarize.run(opts + ["--"] + aggs) }
+          before{ operator.pipe(input) }
+          it { should == expected }
+        end
+    
+        describe "When factored with Lispy" do
+          let(:aggs){{:time_sum => Aggregator.sum(:time),
+                      :time_max => Aggregator.max(:time)}} 
+          let(:operator){ Lispy.summarize(input, [:time], aggs, true) }
+          it { should == expected }
+        end
+
       end
   
     end 

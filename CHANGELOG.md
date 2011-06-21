@@ -1,6 +1,11 @@
 # 0.9.1 / TODO
 
-* Enhancements
+* Enhancements (public APIs)
+
+  * Summarize now accepts a --allbut option, to specify 'by' attributes from an
+    exclusion perspective  
+
+* Enhancements (internals)
 
   * Reader.reader delegates to Reader.coerce when its first argument is not 
     a String. This allows calling Reader.reader(args.first || $stdin) in quickl

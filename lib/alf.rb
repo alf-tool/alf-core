@@ -2602,7 +2602,7 @@ module Alf
     # Relational summarization (group-by + aggregate ops)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] --by=KEY1,KEY2... -- AGG1 EXPR1...
+    #   #{program_name} #{command_name} [OPERAND] [--allbut] --by=KEY1,KEY2... -- AGG1 EXPR1...
     #
     # OPTIONS
     # #{summarized_options}
@@ -2611,6 +2611,10 @@ module Alf
     #
     #   (summarize :supplies, [:sid],
     #                         :total_qty => Aggregator.sum(:qty))
+    #
+    #   # Or, to specify an allbut projection
+    #   (summarize :supplies, [:qty, :pid],
+    #                         :total_qty => Aggregator.sum(:qty), true)
     #
     # DESCRIPTION
     #
@@ -2623,6 +2627,7 @@ module Alf
     # aggregation expression evaluated on Aggregator:
     #
     #   alf summarize supplies --by=sid -- total_qty "sum(:qty)" 
+    #   alf summarize supplies --allbut --by=pid,qty -- total_qty "sum(:qty)" 
     #
     class Summarize < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
@@ -2630,11 +2635,15 @@ module Alf
       # By attributes
       attr_accessor :by
       
+      # Allbut on by?
+      attr_accessor :allbut
+      
       # Aggregations as a AGG => Aggregator(EXPR) hash 
       attr_accessor :aggregators
   
-      def initialize(by = [], aggregators = {})
+      def initialize(by = [], aggregators = {}, allbut = false)
         @by = by
+        @allbut = allbut
         @aggregators = aggregators
       end
   
@@ -2642,6 +2651,9 @@ module Alf
       options do |opt|
         opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
           @by = args.collect{|a| a.to_sym}
+        end
+        opt.on('--allbut', 'Make an allbut projection/summarization') do
+          @allbut = true
         end
       end
   
@@ -2678,7 +2690,39 @@ module Alf
         end
   
       end # class SortBased
+
+      # Summarizes in-memory with a hash
+      class HashBased
+        include Operator::Relational, Operator::Unary
+        
+        attr_reader :by_key
+        attr_reader :aggregators     
   
+        def initialize(by_key, aggregators)
+          @by_key, @aggregators = by_key, aggregators
+        end
+
+        protected
+        
+        def _each
+          index = Hash.new do |h,k|
+            h[k] = tuple_collect(@aggregators) do |a,agg|
+              [a, agg.least]
+            end
+          end
+          each_input_tuple do |tuple|
+            key, rest = by_key.split(tuple)
+            index[key] = tuple_collect(@aggregators) do |a,agg|
+              [a, agg.happens(index[key][a], tuple)]
+            end
+          end
+          index.each_pair do |key,aggs|
+            yield(key.merge(aggs))
+          end
+        end
+      
+      end
+        
       protected 
       
       # (see Operator::CommandMethods#set_args)
@@ -2690,10 +2734,16 @@ module Alf
       end
   
       def longexpr
-        by_key = Tools::ProjectionKey.new(@by, false)
-        chain SortBased.new(by_key, @aggregators),
-              Operator::NonRelational::Sort.new(by_key.to_ordering_key),
-              datasets
+        if @allbut
+          by_key = Tools::ProjectionKey.new(@by, @allbut)
+          chain HashBased.new(by_key, @aggregators),
+                datasets
+        else
+          by_key = Tools::ProjectionKey.new(@by, @allbut)
+          chain SortBased.new(by_key, @aggregators),
+                Operator::NonRelational::Sort.new(by_key.to_ordering_key),
+                datasets
+        end
       end
   
     end # class Summarize
