@@ -2717,7 +2717,10 @@ module Alf
             end
           end
           index.each_pair do |key,aggs|
-            yield(key.merge(aggs))
+            aggs = tuple_collect(@aggregators) do |a,agg|
+              [a, agg.finalize(aggs[a])]
+            end
+            yield key.merge(aggs)
           end
         end
       
