@@ -7,3 +7,4 @@ doc/api
 .project
 .buildpath
 examples/bench.txt
+*.rbc

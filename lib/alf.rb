@@ -1297,7 +1297,7 @@ module Alf
       end
     
       def split_command_args(args)
-        operands, args = case i = args.index("--")
+        case (i = args.index("--"))
         when NilClass
           [args, []]
         when 0
