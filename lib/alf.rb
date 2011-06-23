@@ -1563,6 +1563,14 @@ module Alf
   #
   module Operator::NonRelational
 
+    # Yields the block with each operator module in turn
+    def self.each
+      constants.each do |c|
+        val = const_get(c)
+        yield(val) if val.ancestors.include?(Operator::NonRelational)
+      end
+    end
+    
     # 
     # Extend its operand with an unique autonumber attribute
     #
