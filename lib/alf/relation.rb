@@ -4,6 +4,7 @@ module Alf
   # Defines an in-memory relation 
   #
   class Relation
+    include Iterator
     
     protected
     
@@ -38,6 +39,11 @@ module Alf
       else
         raise ArgumentError, "Unable to coerce #{val} to a Relation"
       end
+    end
+    
+    # (see Iterator#each)
+    def each(&block)
+      tuples.each(&block)
     end
     
     # (see Object#hash)

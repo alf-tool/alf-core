@@ -28,6 +28,10 @@ module Alf
       h.size.should == 2
       h[rel1].should == 2
     end
-      
+    
+    it "should be enumerable" do
+      rel1.to_a.sort{|t1,t2| t1[:sid] <=> t2[:sid]}.should == tuples
+    end
+    
   end
 end
