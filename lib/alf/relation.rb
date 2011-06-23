@@ -18,6 +18,7 @@ module Alf
     # @param [Set] tuples a set of tuples
     #
     def initialize(tuples)
+      raise ArgumentError unless tuples.is_a?(Set)
       @tuples = tuples
     end
     
@@ -34,6 +35,8 @@ module Alf
         Relation.new val.to_set
       when Iterator
         Relation.new val.to_set
+      else
+        raise ArgumentError, "Unable to coerce #{val} to a Relation"
       end
     end
     
