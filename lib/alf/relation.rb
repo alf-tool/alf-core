@@ -45,25 +45,41 @@ module Alf
       coerce(tuples)
     end
     
+    #
     # (see Iterator#each)
+    #
     def each(&block)
       tuples.each(&block)
     end
     
+    #
     # (see Object#hash)
+    #
     def hash
       @tuples.hash
     end
     
+    #
     # (see Object#==)
+    #
     def ==(other)
       return nil unless other.is_a?(Relation)
       other.tuples == self.tuples
     end
     alias :eql? :==
     
+    #
+    # Returns a textual representation of this relation
+    #
     def to_s
       Alf::Renderer.text(self).execute("")
+    end
+    
+    #
+    # Returns a  literal representation of this relation
+    #
+    def inspect
+      "Alf::Relation[" << @tuples.collect{|t| t.inspect}.join(',') << "]"
     end
 
   end # class Relation
