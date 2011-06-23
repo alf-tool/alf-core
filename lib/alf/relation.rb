@@ -73,6 +73,10 @@ module Alf
        Relation.new(tuples + other.tuples)
     end
     
+    # Relational difference
+    def -(other)
+       Relation.new(tuples - other.tuples)
+    end
     
     #
     # Returns a textual representation of this relation

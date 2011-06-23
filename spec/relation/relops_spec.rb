@@ -23,5 +23,16 @@ module Alf
       )
     end # coerce
       
+    specify "difference" do
+      (rel1 - rel1).should == rel()
+      (rel1 - rel2).should == rel(
+        {:sid => 'S1'},
+        {:sid => 'S3'}
+      )
+      (rel2 - rel1).should == rel(
+        {:sid => 'S5'}
+      )
+    end # coerce
+    
   end
 end
