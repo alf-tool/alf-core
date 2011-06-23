@@ -68,6 +68,12 @@ module Alf
     end
     alias :eql? :==
     
+    # Relational union
+    def +(other)
+       Relation.new(tuples + other.tuples)
+    end
+    
+    
     #
     # Returns a textual representation of this relation
     #
