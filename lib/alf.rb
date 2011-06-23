@@ -1563,7 +1563,9 @@ module Alf
   #
   module Operator::NonRelational
 
+    #
     # Yields the block with each operator module in turn
+    #
     def self.each
       constants.each do |c|
         val = const_get(c)
@@ -1918,6 +1920,15 @@ module Alf
   module Operator::Relational
 
     # 
+    # Yields the block with each operator module in turn
+    #
+    def self.each
+      constants.each do |c|
+        val = const_get(c)
+        yield(val) if val.ancestors.include?(Operator::Relational)
+      end
+    end
+    
     # Relational projection (clip + compact)
     #
     # SYNOPSIS
