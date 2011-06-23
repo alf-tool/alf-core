@@ -15,9 +15,9 @@ Alf is a commandline tool and Ruby library to manipulate data with all the power
 of a truly relational algebra approach. Objectives behind Alf are manifold:
 
 * Pragmatically, Alf aims at being a useful commandline executable for manipulating 
-  database tables, csv files, or **whatever looks like a (physical representation 
-  of a) relation**. See 'alf --help' for the list of available commands and 
-  implemented relational operators.
+  relational-like data: database records, csv files, or **whatever can be interpreted 
+  as (the physical encoding of) a relation**. See 'alf --help' for the list of 
+  available commands and implemented relational operators.
   
       % alf restrict suppliers -- "city == 'London'" | alf join cities 
   
