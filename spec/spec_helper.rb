@@ -3,6 +3,10 @@ require 'alf'
 
 Alf::Lispy.extend(Alf::Lispy)
 
+def rel(*args)
+  Alf::Relation.coerce(args)
+end
+
 shared_examples_for "An operator class" do
 
   it "should not have public set_args, _each and _prepare methods" do

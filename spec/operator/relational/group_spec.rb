@@ -13,8 +13,9 @@ module Alf
       ]}
   
       let(:expected) {[
-        {:a => "via_method", :as => [{:time => 1, :b => "b"}, {:time => 2, :b => "b"}]},
-        {:a => "via_reader", :as => [{:time => 3, :b => "b"}]},
+        {:a => "via_method", :as => rel({:time => 1, :b => "b"}, 
+                                        {:time => 2, :b => "b"})},
+        {:a => "via_reader", :as => rel({:time => 3, :b => "b"})},
       ]}
   
       subject{ operator.to_a.sort{|k1,k2| k1[:a] <=> k2[:a]} }
