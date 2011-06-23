@@ -1,4 +1,3 @@
-require 'set'
 module Alf
   #
   # Defines an in-memory relation 

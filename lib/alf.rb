@@ -1,5 +1,6 @@
 require "enumerator"
 require "stringio"
+require "set"
 require "alf/version"
 require "alf/loader"
 
@@ -2438,7 +2439,7 @@ module Alf
       # See Operator#_prepare
       def _prepare
         pkey = ProjectionKey.new(attributes, !allbut)
-        @index = Hash.new{|h,k| h[k] = []} 
+        @index = Hash.new{|h,k| h[k] = Set.new} 
         each_input_tuple do |tuple|
           key, rest = pkey.split(tuple)
           @index[key] << rest
@@ -2448,7 +2449,7 @@ module Alf
       # See Operator#_each
       def _each
         @index.each_pair do |k,v|
-          yield(k.merge(@as => v))
+          yield(k.merge(@as => Relation.coerce(v)))
         end
       end
   
@@ -3097,3 +3098,4 @@ module Alf
   end # module Lispy
 
 end # module Alf
+require "alf/relation"
