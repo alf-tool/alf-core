@@ -58,5 +58,10 @@ module Alf
     end
     alias :eql? :==
     
+    def to_s
+      Alf::Renderer.text(self).execute("")
+    end
+    alias :inspect :to_s
+    
   end # class Relation
 end # module Alf
