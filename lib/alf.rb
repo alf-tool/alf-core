@@ -2936,12 +2936,12 @@ module Alf
           Tools.tuple_collect(attrs){|k| [k, self.send(k)] }
         }
       end
-      def least(); []; end
+      def least(); Set.new; end
       def _happens(memo, val)
         memo << val
       end
       def finalize(memo)
-        memo.uniq
+        Relation.coerce memo
       end
     end
     
