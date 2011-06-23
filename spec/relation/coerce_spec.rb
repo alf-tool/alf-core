@@ -42,6 +42,10 @@ module Alf
         let(:arg){ nil }
         specify{ lambda{ subject }.should raise_error(ArgumentError) } 
       end
+      
+      it "should be semi-aliased as []" do
+        Alf::Relation[*tuples_by_name].should == rel
+      end
 
     end # coerce
       

@@ -40,6 +40,11 @@ module Alf
       end
     end
     
+    # (see Relation.coerce)
+    def self.[](*tuples)
+      coerce(tuples)
+    end
+    
     # (see Iterator#each)
     def each(&block)
       tuples.each(&block)
@@ -60,7 +65,6 @@ module Alf
     def to_s
       Alf::Renderer.text(self).execute("")
     end
-    alias :inspect :to_s
-    
+
   end # class Relation
 end # module Alf
