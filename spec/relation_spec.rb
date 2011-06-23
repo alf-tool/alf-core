@@ -13,6 +13,10 @@ module Alf
     let(:rel2){ Relation.new(tuples2.to_set) }
     let(:rel3){ Relation.new(tuples[0..1].to_set) }
     
+    it "should have a cardinality method" do
+      rel1.cardinality.should == 3
+    end
+      
     it "should define == correctly" do
       rel1.should == rel2
       rel2.should == rel1

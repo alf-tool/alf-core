@@ -52,6 +52,15 @@ module Alf
       tuples.each(&block)
     end
     
+    #
+    # Returns relation's cardinality (number of tuples)
+    # 
+    def cardinality
+      tuples.size
+    end
+    alias :size :cardinality
+    alias :count :cardinality
+    
     # Relational union
     def +(other)
        Relation.new(tuples + other.tuples)
