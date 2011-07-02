@@ -395,7 +395,7 @@ module Alf
      :Rename,
      :Restrict,
      :Nest,
-     :Unnest,
+     :Unwrap,
      :Group,
      :Ungroup,
      :Summarize,
@@ -2453,21 +2453,21 @@ module Alf
     # API & EXAMPLE
     #
     #   # Assuming nested = (nest :suppliers, [:city, :status], :loc_and_status) 
-    #   (unnest nested, :loc_and_status)
+    #   (unwrap nested, :loc_and_status)
     #
     # DESCRIPTION
     #
-    # This operator unnests the tuple-valued attribute named ATTR so as to 
+    # This operator unwraps the tuple-valued attribute named ATTR so as to 
     # flatten its pairs with 'upstream' tuple. The latter should be such so that
     # no name collision occurs. When used in shell, the name of the attribute to
-    # unnest is taken as the first commandline argument:
+    # unwrap is taken as the first commandline argument:
     #
-    #   alf unnest nest -- loc_and_status
+    #   alf unwrap nest -- loc_and_status
     #
-    class Unnest < Factory::Operator(__FILE__, __LINE__)
+    class Unwrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Name of the attribute to unnest
+      # Name of the attribute to unwrap
       attr_accessor :attribute
   
       # Builds a Rename operator instance
@@ -2490,7 +2490,7 @@ module Alf
         tuple.merge(nested)
       end
   
-    end # class Unnest
+    end # class Unwrap
   
     # 
     # Relational grouping (relation-valued attributes)

@@ -19,7 +19,7 @@ module Alf
         Alf::Operator::Relational::Summarize,
         Alf::Operator::Relational::Ungroup,
         Alf::Operator::Relational::Union,
-        Alf::Operator::Relational::Unnest
+        Alf::Operator::Relational::Unwrap
       ]
     end
     

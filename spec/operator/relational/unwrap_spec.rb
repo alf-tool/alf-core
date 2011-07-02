@@ -1,9 +1,9 @@
 require 'spec_helper'
 module Alf
   module Operator::Relational
-    describe Unnest do
+    describe Unwrap do
         
-      let(:operator_class){ Unnest }
+      let(:operator_class){ Unwrap }
       it_should_behave_like("An operator class")
         
       let(:input) {[
@@ -17,13 +17,13 @@ module Alf
       subject{ operator.to_a }
   
       describe "when factored with commandline args" do
-        let(:operator){ Unnest.run(%w{-- nested}) }
+        let(:operator){ Unwrap.run(%w{-- nested}) }
         before{ operator.pipe(input) }
         it { should == expected }
       end
   
       describe "when factored with Lispy" do
-        let(:operator){ Lispy.unnest(input, :nested) }
+        let(:operator){ Lispy.unwrap(input, :nested) }
         it { should == expected }
       end
   
