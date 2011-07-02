@@ -9,6 +9,8 @@
 
   * Lispy#chain was kept public in 0.9.0 and has been tagged as private as not
     being part of the DSL. 
+  * Nest and Unnest have been renamed to Wrap and Unwrap respectively. This is
+    to better conform to TUTORIAL D's terminology.  
 
 * Enhancements (internals)
 
