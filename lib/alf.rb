@@ -394,7 +394,7 @@ module Alf
      :Extend, 
      :Rename,
      :Restrict,
-     :Nest,
+     :Wrap,
      :Unwrap,
      :Group,
      :Ungroup,
@@ -2393,35 +2393,35 @@ module Alf
     end # class Union
     
     # 
-    # Relational nesting (tuple-valued attributes)
+    # Relational wraping (tuple-valued attributes)
     #
     # SYNOPSIS
     #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
     #
     # API & EXAMPLE
     #
-    #   (nest :suppliers, [:city, :status], :loc_and_status)
+    #   (wrap :suppliers, [:city, :status], :loc_and_status)
     #
     # DESCRIPTION
     #
-    # This operator nests attributes ATTR1 to ATTRN as a new, tuple-based
-    # attribute whose name is NEWNAME. When used in shell, names of nested 
+    # This operator wraps attributes ATTR1 to ATTRN as a new, tuple-based
+    # attribute whose name is NEWNAME. When used in shell, names of wrapped 
     # attributes are taken from commandline arguments, expected the last one
     # which defines the new name to use:
     #
-    #   alf nest suppliers -- city status loc_and_status
+    #   alf wrap suppliers -- city status loc_and_status
     #
-    class Nest < Factory::Operator(__FILE__, __LINE__)
+    class Wrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Array of nesting attributes
+      # Array of wraping attributes
       attr_accessor :attributes
   
-      # New name for the nested attribute
+      # New name for the wrapped attribute
       attr_accessor :as
   
-      # Builds a Nest operator instance
-      def initialize(attributes = [], as = :nested)
+      # Builds a Wrap operator instance
+      def initialize(attributes = [], as = :wrapped)
         @attributes = attributes
         @as = as
       end
@@ -2442,18 +2442,18 @@ module Alf
         others
       end
   
-    end # class Nest
+    end # class Wrap
   
     # 
-    # Relational un-nesting (inverse of nest)
+    # Relational un-wraping (inverse of wrap)
     #
     # SYNOPSIS
     #   #{program_name} #{command_name} [OPERAND] -- ATTR
     #
     # API & EXAMPLE
     #
-    #   # Assuming nested = (nest :suppliers, [:city, :status], :loc_and_status) 
-    #   (unwrap nested, :loc_and_status)
+    #   # Assuming wrapped = (wrap :suppliers, [:city, :status], :loc_and_status) 
+    #   (unwrap wrapped, :loc_and_status)
     #
     # DESCRIPTION
     #
@@ -2462,7 +2462,7 @@ module Alf
     # no name collision occurs. When used in shell, the name of the attribute to
     # unwrap is taken as the first commandline argument:
     #
-    #   alf unwrap nest -- loc_and_status
+    #   alf unwrap wrap -- loc_and_status
     #
     class Unwrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
@@ -2471,7 +2471,7 @@ module Alf
       attr_accessor :attribute
   
       # Builds a Rename operator instance
-      def initialize(attribute = :nested)
+      def initialize(attribute = :wrapped)
         @attribute = attribute
       end
   
@@ -2486,8 +2486,8 @@ module Alf
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple = tuple.dup
-        nested = tuple.delete(@attribute) || {}
-        tuple.merge(nested)
+        wrapped = tuple.delete(@attribute) || {}
+        tuple.merge(wrapped)
       end
   
     end # class Unwrap

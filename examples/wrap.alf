@@ -1,0 +1,2 @@
+#!/usr/bin/env alf
+(wrap :suppliers, [:city, :status], :loc_and_status)

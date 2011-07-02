@@ -11,7 +11,6 @@ module Alf
         Alf::Operator::Relational::Intersect,
         Alf::Operator::Relational::Join,
         Alf::Operator::Relational::Minus,
-        Alf::Operator::Relational::Nest,
         Alf::Operator::Relational::Project,
         Alf::Operator::Relational::Quota,
         Alf::Operator::Relational::Rename,
@@ -19,7 +18,8 @@ module Alf
         Alf::Operator::Relational::Summarize,
         Alf::Operator::Relational::Ungroup,
         Alf::Operator::Relational::Union,
-        Alf::Operator::Relational::Unwrap
+        Alf::Operator::Relational::Unwrap,
+        Alf::Operator::Relational::Wrap,
       ]
     end
     

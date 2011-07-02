@@ -43,7 +43,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   enticed by features shown here to open that book, read it more deeply, and 
   implement new stuff around Date & Darwen's vision. Have a look at the result of 
   the following query for the kind of things that you'll never ever have in SQL 
-  (see also 'alf help quota', 'alf help nest', 'alf help group', ...):
+  (see also 'alf help quota', 'alf help wrap', 'alf help group', ...):
   
       % alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
   

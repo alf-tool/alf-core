@@ -13,7 +13,7 @@ alf --text extend            supplies  -- sp 'sid + "/" + pid' big "qty > 100 ? 
 alf --text rename            suppliers -- name supplier_name city supplier_city
 alf --text restrict          suppliers -- "status > 20"
 alf --text restrict          suppliers -- city "'London'"
-alf --text nest              suppliers -- city status loc_and_status
+alf --text wrap              suppliers -- city status loc_and_status
 alf --text unwrap            suppliers -- loc_and_status
 alf --text group             supplies  -- pid qty supplying
 alf --text group --allbut    supplies  -- sid supplying

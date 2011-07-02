@@ -4,17 +4,17 @@
         (rename :suppliers, [:name, :city], :suffix => "_sup")
         (rename :suppliers, [:name, :city], lambda{|name| name.upcase}) 
 
-* NEST: provide a multi-nesting ability?
+* WRAP: provide a multi-wraping ability?
 
-        (nest (nest :supplies, [:a, :b], :x), [:x, :c], :y)
-         => (nest :supplies, :x => [:a, :b], :y => [:x, :c])
+        (wrap (wrap :supplies, [:a, :b], :x), [:x, :c], :y)
+         => (wrap :supplies, :x => [:a, :b], :y => [:x, :c])
 
     But this would only work with Ruby 1.9 as the hash order would be important
     as such
 
 * GROUP: provide a multi-grouping ability?
 
-    Similar to nest, with same limitation.
+    Similar to wrap, with same limitation.
   
 * Add PIVOT and UNPIVOT operators
 
