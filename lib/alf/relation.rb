@@ -61,6 +61,24 @@ module Alf
     alias :size :cardinality
     alias :count :cardinality
     
+    # 
+    # Install the DSL through iteration over defined operators
+    #
+    Operator::each do |op_class|
+      meth_name = Tools.ruby_case(Tools.class_name(op_class)).to_sym
+      if op_class.unary?
+        define_method(meth_name) do |*args|
+          op_class.new(*args).pipe(self)
+        end
+      elsif op_class.binary?
+        define_method(meth_name) do |right, *args|
+          op_class.new(*args).pipe([self, Iterator.coerce(right)])
+        end
+      else
+        raise "Unexpected operator #{op_class}"
+      end
+    end # Operators::each
+      
     # Relational union
     def +(other)
        Relation.new(tuples + other.tuples)
