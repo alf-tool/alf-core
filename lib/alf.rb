@@ -280,134 +280,6 @@ module Alf
     Command::Main.new(env)
   end
 
-  # 
-  # Implements a small LISP-like DSL on top of Alf.
-  #
-  # The lispy dialect is the functional one used in .alf files and in compiled
-  # expressions as below:
-  #
-  #   Alf.lispy.compile do
-  #     (restrict :suppliers, lambda{ city == 'London' })
-  #   end
-  #
-  # The DSL this module provides is part of Alf's public API and won't be broken 
-  # without a major version change. The module itself and its inclusion pre-
-  # conditions are not part of the DSL itself, thus not considered as part of 
-  # the API, and may therefore evolve at any time. In other words, this module 
-  # is not intended to be directly included by third-party classes. 
-  #
-  module Lispy
-    
-    # The environment
-    attr_accessor :environment
-    
-    #
-    # Compiles a query expression given by a String or a block and returns
-    # the result (typically a tuple iterator)
-    #
-    # Example
-    #
-    #   # with a string
-    #   op = compile "(restrict :suppliers, lambda{ city == 'London' })"
-    #
-    #   # or with a block
-    #   op = compile {
-    #     (restrict :suppliers, lambda{ city == 'London' })
-    #   }
-    #
-    # @param [String] expr a Lispy expression to compile
-    # @return [Iterator] the iterator resulting from compilation
-    #
-    def compile(expr = nil, path = nil, &block)
-      if expr.nil? 
-        instance_eval(&block)
-      else 
-        (path ? Kernel.eval(expr, binding, path) : Kernel.eval(expr, binding))
-      end
-    end
-
-    #
-    # Delegated to the current environment
-    #
-    # This method returns the dataset associated to a given name. The result
-    # may depend on the current environment, but is generally an Iterator, 
-    # often a Reader instance.
-    #
-    # @param [Symbol] name name of the dataset to retrieve
-    # @return [Iterator] the dataset as an iterator
-    # @see Environment#dataset
-    #
-    def dataset(name)
-      raise "Environment not set" unless @environment
-      @environment.dataset(name)
-    end
-    
-    ### Non-relational operators
-    
-    [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |child, *args|
-        child = Iterator.coerce(child, environment)
-        chain(Operator::NonRelational.const_get(op_name).new(*args), child)
-      end
-    end
-
-    ### Relational operators
-        
-    [:Project,
-     :Extend, 
-     :Rename,
-     :Restrict,
-     :Wrap,
-     :Unwrap,
-     :Group,
-     :Ungroup,
-     :Summarize,
-     :Quota ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |child, *args|
-        child = Iterator.coerce(child, environment)
-        chain(Operator::Relational.const_get(op_name).new(*args), child)
-      end
-    end
-
-    def allbut(child, attributes)
-      child = Iterator.coerce(child, environment)
-      chain(Operator::Relational::Project.new(attributes, true), child)
-    end
-
-    [ :Join, 
-      :Union,
-      :Intersect,
-      :Minus ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |left, right, *args|
-        operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
-        chain(Operator::Relational.const_get(op_name).new(*args), operands)
-      end
-    end
-    
-    private
-    
-    #
-    # Chains some elements as a new operator.
-    #
-    # This method is part of the DSL private methods and should not be used
-    # in Lispy DSL expressions that capture queries.
-    #
-    # @param  [Array] elements a list of pipeable Iterators
-    # @return [Iterator] the first element, piped to the next one, and so on.
-    #
-    def chain(*elements)
-      elements = elements.reverse
-      elements[1..-1].inject(elements.first) do |c, elm|
-        elm.pipe(c, environment)
-        elm
-      end
-    end
-
-  end # module Lispy
-
   #
   # Encapsulates the interface with the outside world, providing base iterators
   # for named datasets, among others.
@@ -3092,7 +2964,6 @@ module Alf
       end
     end
   
-    Lispy::Agg = Aggregator
   end # class Aggregator
   
   #
@@ -3128,5 +2999,134 @@ module Alf
     end # class Buffer::Sorted
     
   end # class Buffer
+
+  # 
+  # Implements a small LISP-like DSL on top of Alf.
+  #
+  # The lispy dialect is the functional one used in .alf files and in compiled
+  # expressions as below:
+  #
+  #   Alf.lispy.compile do
+  #     (restrict :suppliers, lambda{ city == 'London' })
+  #   end
+  #
+  # The DSL this module provides is part of Alf's public API and won't be broken 
+  # without a major version change. The module itself and its inclusion pre-
+  # conditions are not part of the DSL itself, thus not considered as part of 
+  # the API, and may therefore evolve at any time. In other words, this module 
+  # is not intended to be directly included by third-party classes. 
+  #
+  module Lispy
+    
+    # The environment
+    attr_accessor :environment
+    
+    #
+    # Compiles a query expression given by a String or a block and returns
+    # the result (typically a tuple iterator)
+    #
+    # Example
+    #
+    #   # with a string
+    #   op = compile "(restrict :suppliers, lambda{ city == 'London' })"
+    #
+    #   # or with a block
+    #   op = compile {
+    #     (restrict :suppliers, lambda{ city == 'London' })
+    #   }
+    #
+    # @param [String] expr a Lispy expression to compile
+    # @return [Iterator] the iterator resulting from compilation
+    #
+    def compile(expr = nil, path = nil, &block)
+      if expr.nil? 
+        instance_eval(&block)
+      else 
+        (path ? Kernel.eval(expr, binding, path) : Kernel.eval(expr, binding))
+      end
+    end
+  
+    #
+    # Delegated to the current environment
+    #
+    # This method returns the dataset associated to a given name. The result
+    # may depend on the current environment, but is generally an Iterator, 
+    # often a Reader instance.
+    #
+    # @param [Symbol] name name of the dataset to retrieve
+    # @return [Iterator] the dataset as an iterator
+    # @see Environment#dataset
+    #
+    def dataset(name)
+      raise "Environment not set" unless @environment
+      @environment.dataset(name)
+    end
+    
+    ### Non-relational operators
+    
+    [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |child, *args|
+        child = Iterator.coerce(child, environment)
+        chain(Operator::NonRelational.const_get(op_name).new(*args), child)
+      end
+    end
+  
+    ### Relational operators
+        
+    [:Project,
+     :Extend, 
+     :Rename,
+     :Restrict,
+     :Wrap,
+     :Unwrap,
+     :Group,
+     :Ungroup,
+     :Summarize,
+     :Quota ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |child, *args|
+        child = Iterator.coerce(child, environment)
+        chain(Operator::Relational.const_get(op_name).new(*args), child)
+      end
+    end
+  
+    def allbut(child, attributes)
+      child = Iterator.coerce(child, environment)
+      chain(Operator::Relational::Project.new(attributes, true), child)
+    end
+  
+    [ :Join, 
+      :Union,
+      :Intersect,
+      :Minus ].each do |op_name|
+      meth_name = Tools.ruby_case(op_name).to_sym
+      define_method(meth_name) do |left, right, *args|
+        operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
+        chain(Operator::Relational.const_get(op_name).new(*args), operands)
+      end
+    end
+    
+    private
+    
+    #
+    # Chains some elements as a new operator.
+    #
+    # This method is part of the DSL private methods and should not be used
+    # in Lispy DSL expressions that capture queries.
+    #
+    # @param  [Array] elements a list of pipeable Iterators
+    # @return [Iterator] the first element, piped to the next one, and so on.
+    #
+    def chain(*elements)
+      elements = elements.reverse
+      elements[1..-1].inject(elements.first) do |c, elm|
+        elm.pipe(c, environment)
+        elm
+      end
+    end
+  
+    Agg = Alf::Aggregator
+  end # module Lispy
 
 end # module Alf
