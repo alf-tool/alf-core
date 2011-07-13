@@ -18,8 +18,14 @@ module Alf
       h2.to_hash.should eq(:name => String, :price => Float)
     end
     
+    describe "EMPTY" do
+      subject{ Heading::EMPTY }
+      it_should_behave_like "A value" 
+    end
+    
     describe "h0" do
       subject{ h0 }
+      it { should == Heading::EMPTY }
       it_should_behave_like "A value" 
     end
     
