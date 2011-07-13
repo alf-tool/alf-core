@@ -1,3 +1,9 @@
+# 0.9.3 / FIX ME
+
+* Bug fixes
+
+  * Added Relation#allbut, forgotten in two previous releases 
+
 # 0.9.2 / 2011.07.13
 
 * Bug fixes
