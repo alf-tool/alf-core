@@ -2,17 +2,6 @@ module Alf
   class Heading
     
     #
-    # Parses a Heading literal
-    #
-    def self.parse(str)
-      if str.strip =~ /^Alf::Heading(\[.*\]|::EMPTY)$/
-        Kernel.eval(str)
-      else
-        raise ArgumentError, "Invalid heading literal #{str}"
-      end
-    end
-    
-    #
     # Creates a Heading instance
     #
     # @param [Hash] a hash of attribute (name, type) pairs where name is
