@@ -18,13 +18,13 @@ describe Alf do
   end
   
   it "should allow compiling lispy expressions" do
-    lispy.compile{
+    lispy.compile {
       (restrict :suppliers, lambda{ city == 'London'})
     }.to_a.should == expected
   end
   
   it "should allow evaluating lispy expressions" do
-    rel = lispy.evaluate{
+    rel = lispy.evaluate {
       (restrict :suppliers, lambda{ city == 'London'})
     }
     rel.should be_a(Alf::Relation)

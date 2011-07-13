@@ -28,9 +28,23 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   section). See 'alf --help' as well as .alf files in the examples directory 
   for syntactic examples.
   
-      Alf.lispy.compile{ 
+      Alf.lispy.evaluate { 
         (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
       }
+      
+  In addition to this functional syntax, Alf comes bundled with an in-memory 
+  Relation data structure that provides an object-oriented way of manipulating
+  relations in simplest cases:
+  
+      suppliers = Alf::Relation[
+        {:sid => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
+        {:sid => 'S2', :name => 'Jones', :status => 10, :city => 'Paris'},
+        {:sid => 'S3', :name => 'Blake', :status => 30, :city => 'Paris'},
+        {:sid => 'S4', :name => 'Clark', :status => 20, :city => 'London'},
+        {:sid => 'S5', :name => 'Adams', :status => 30, :city => 'Athens'},     
+      ]
+      cities = ...
+      puts suppliers.restrict(lambda{ city == 'London' }).join(cities)    
 
 * Alf is also an educational tool, that I've written to draw people attention
   about the ill-known relational theory (and ill-represented by SQL). The tool
@@ -174,9 +188,12 @@ can have them inside relations!
   particularly ordered**. Moreover, all tuples of a relation must have the same
   _heading_, that is, the same set of attribute (name, type) pairs. Also, **a 
   relation is a _value_, is therefore immutable** and **does not admit null/nil**.
-  Alf being mainly an implementation of relational algebra (see section below) 
-  it loosely considers any Iterator of tuples as a potentially valid relation
-  implementation (see later). 
+  
+Alf is mainly an implementation of relational algebra (see section below). The
+implemented operators consider any Iterator of tuples as potentially valid 
+operand. In addition Alf provides a Relation ruby class, that acts as an 
+in-memory data structure that provides an Object-Oriented API to call operators
+(see "Interfacing Alf in Ruby" below).
 
 ### Relational Algebra
 
@@ -202,9 +219,9 @@ you want! The same query, in shell:
 The Third Manifesto defines a series of prescriptions, proscriptions and very 
 strong suggestions for designing a truly relational _language_, called a _D_, 
 as an alternative to SQL for managing relational databases. This is far behind
-our objective with Alf, as we don't look at database aspects at all (persistence,
-transactions, and so on.) and don't actually define a programming language either 
-(only a small functional ruby DSL). 
+my objective with Alf, as it does not touch at database issues at all (persistence,
+transactions, and so on.) and don't actually define a programming language (only 
+a small functional ruby DSL). 
 
 Alf must simply be interpreted as a ruby library implementing (a variant of) 
 Date and Darwen's relational algebra. This library is designed as a set of operator 
@@ -216,23 +233,7 @@ behavior observed when not respecting these preconditions, even an interesting
 behavior, is not guaranteed and might change with tiny version changes (see 
 section about versioning policy at the end of this file).
 
-### In ruby
-
-    # 
-    # Provided that :suppliers and :cities are valid relation representations
-    # (under the responsibility shared by you and the Reader and Environment 
-    # subclasses you use -- see later),  then, 
-    # 
-    op = Alf.lispy.compile{ 
-      (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
-    }
-    
-    # op is a thread-safe Enumerable of tuples, that can be taken as a valid
-    # relation representation. It can therefore be used as the input operand 
-    # of any other expression. This is under Alf's responsibility, and any 
-    # failure must be considered a bug!
-
-### In shell
+### The command line utility
 
     #
     # Provided that suppliers and cities are valid relation representations
@@ -245,6 +246,169 @@ section about versioning policy at the end of this file).
     # be piped to another alf shell invocation, or saved to a file and re-read
     # later (under the assumption that input and output data formats match, or 
     # course). [Something similar about responsibility and bug].
+
+If you take a look at .alf example files, you'll find functional ruby expressions 
+like the following (called Lispy expressions):
+
+    % cat examples/minus.alf
+
+    # Give all suppliers, except those living in Paris
+    (minus :suppliers, 
+           (restrict :suppliers, lambda{ city == 'Paris' }))
+    
+    # This is a contrived example for illustrating minus, as the
+    # following is equivalent
+    (restrict :suppliers, lambda{ city != 'Paris' })
+    
+You can simply execute such expressions with the alf command line itself (the 
+three following invocations return the same result):
+ 
+    % alf examples/minus.alf | alf show
+    % alf show minus
+    % alf -e "(restrict :suppliers, lambda{ city != 'Paris' })" | alf show
+
+Symbols are magically resolved from the environment, which is wired to the 
+examples by default. See the dedicated sections below to update this behavior
+to your needs.
+
+### The algebra compiler
+
+    # 
+    # Provided that :suppliers and :cities are valid relation representations
+    # (under the responsibility shared by you and the Reader and Environment 
+    # subclasses you use -- see later),  then, 
+    # 
+    op = Alf.lispy.compile { 
+      (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
+    }
+    
+    # op is a thread-safe Enumerable of tuples, that can be taken as a valid
+    # relation representation. It can therefore be used as the input operand 
+    # of any other expression. This is under Alf's responsibility, and any 
+    # failure must be considered a bug!
+
+### The Relation data structure
+
+In addition, Alf is bundled with an in-memory Relation data structure that 
+provided a more abstract API for manipulating relations in simple cases (the 
+rules are the same about pre and post-conditions):
+
+    # The query above can be done as follows. Note that relations are always
+    # loaded in memory here!
+    suppliers = Alf::Relation[ ... ]
+    cities    = Alf::Relation[ ... ]
+    suppliers.restrict(lambda{ city == 'London' }).
+              join(cities)
+    # => Alf::Relation[ ... ]
+
+All relational operators have an instance method equivalent on the Alf::Relation 
+class. Semantically, the receiver object is simply the first operand of the 
+functional call, as illustrated above.
+
+### Where do relations come from?
+
+Relation literals can simply be written as follows:
+
+    suppliers = Alf::Relation[
+      {:sid => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
+      {:sid => 'S2', :name => 'Jones', :status => 10, :city => 'Paris'},
+      {:sid => 'S3', :name => 'Blake', :status => 30, :city => 'Paris'},
+      {:sid => 'S4', :name => 'Clark', :status => 20, :city => 'London'},
+      {:sid => 'S5', :name => 'Adams', :status => 30, :city => 'Athens'},     
+    ]
+    
+Environment classes serve datasets (see later) that always have a to_rel method
+for obtaining in-memory relations:
+
+    env = Alf::Environment.examples
+    env.dataset(:suppliers).to_rel
+    # => Alf::Relation[ ... ]
+
+Compiled expressions always have a to_rel method that allows obtaining an 
+in-memory relation:
+
+    op = Alf.lispy.compile { 
+      (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
+    }
+    op.to_rel 
+    # => Alf::Relation[...]
+    
+Lispy provides an 'evaluate' method which is precisely equivalent to the chain
+above. Therefore:
+
+    rel = Alf.lispy.evaluate { 
+      (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
+    }
+    # => Alf::Relation[...]
+
+### Algebra is closed under its operators!
+
+Of course, from the closure property of a relational algebra (that states that 
+operators works on relations and return relations), you can use a sub expression 
+*everytime* a relational operand is expected, everytime:
+
+    # Compute the total qty supplied in each country together with the subset 
+    # of products shipped there. Only consider suppliers that have a status
+    # greater than 10, however.
+    (summarize \
+      (join \
+        (join (restrict :suppliers, lambda{ status > 10 }), 
+              :supplies), 
+        :cities),
+      [:country],
+      :which => Agg::group(:pid),
+      :total => Agg::sum{ qty })
+
+Of course, complex queries quickly become unreadable that way. But you can always
+split complex tasks in more simple ones:
+
+    kept_suppliers = (restrict :suppliers, lambda{ status > 10 })
+    with_countries = (join kept_suppliers, :cities),
+    supplying      = (join with_countries, :supplies)
+    (summarize supplying,
+               [:country],
+               :which => Agg::group(:pid),
+               :total => Agg::sum{ qty })
+
+And here is the result !
+
+    +----------+----------+--------+
+    | :country | :which   | :total |
+    +----------+----------+--------+
+    | England  | +------+ |   2200 |
+    |          | | :pid | |        |
+    |          | +------+ |        |
+    |          | | P1   | |        |
+    |          | | P2   | |        |
+    |          | | P3   | |        |
+    |          | | P4   | |        |
+    |          | | P5   | |        |
+    |          | | P6   | |        |
+    |          | +------+ |        |
+    | France   | +------+ |    200 |
+    |          | | :pid | |        |
+    |          | +------+ |        |
+    |          | | P2   | |        |
+    |          | +------+ |        |
+    +----------+----------+--------+
+
+### Reference API
+
+For now, the Ruby API is documented in the commandline help itself (a cheatsheet
+or something will be provided as soon as possible). For example, you'll find the 
+allowed syntaxes for RESTRICT as follows:
+
+    % alf help restrict
+    
+    ...
+    API & EXAMPLE
+    
+      # Restrict to suppliers with status greater than 20
+      (restrict :suppliers, lambda{ status > 20 })
+    
+      # Restrict to suppliers that live in London
+      (restrict :suppliers, lambda{ city == 'London' })
+    ...
 
 ### Coping with non-relational data sources (nil, duplicates, etc.)
 
@@ -272,7 +436,7 @@ is null/nil, but it won't probably fail if any other attribute is nil.
 
 This best-effort strategy is not enough, and striclty speaking, must be considered 
 unsound (for example, it strongly hurts optimization possibilities). Therefore,
-we strongly encourage you to go a step further: **if relational operators want
+I strongly encourage you to go a step further: **if relational operators want
 true relations as input, please, give them!**. For this, Alf also provides a few
 non-relational operators in addition to relational ones. Those operators must be 
 interpreted as "pre-relational" operators, in the sense that they help obtaining 
@@ -320,7 +484,7 @@ summarized as follows:
   do, Alf has the responsibility of returning correct results._.
 - No problem dude!
 
-## Getting started in shell
+## More about the shell command line
 
     % alf --help
 
@@ -440,103 +604,7 @@ Also, mimicing the ruby executable, the following invocation is also possible:
 where the argument is a relational expression in Alf's Lispy dialect, which
 is detailed in the next section.
 
-## Lispy expressions
-
-If you take a look at .alf example files, you'll find functional ruby expressions
-like the following:
-
-    % cat examples/minus.alf
-
-    # Give all suppliers, except those living in Paris
-    (minus :suppliers, 
-           (restrict :suppliers, lambda{ city == 'Paris' }))
-    
-    # This is a contrived example for illustrating minus, as the
-    # following is equivalent
-    (restrict :suppliers, lambda{ city != 'Paris' })
-    
-You can simply execute such expressions with the alf command line itself (the 
-three following invocations return the same result):
- 
-    % alf examples/minus.alf | alf show
-    % alf show minus
-    % alf -e "(restrict :suppliers, lambda{ city != 'Paris' })" | alf show
-
-Symbols are magically resolved from the environment, which is wired to the 
-examples by default. See the dedicated sections below to update this behavior
-to your needs.
-
-### Algebra is closed under its operators!
-
-Of course, from the closure property of a relational algebra (that states that 
-operators works on relations and return relations), you can use a sub expression 
-*everytime* a relational operand is expected, everytime:
-
-    # Compute the total qty supplied in each country together with the subset 
-    # of products shipped there. Only consider suppliers that have a status
-    # greater than 10, however.
-    (summarize \
-      (join \
-        (join (restrict :suppliers, lambda{ status > 10 }), 
-              :supplies), 
-        :cities),
-      [:country],
-      :which => Agg::group(:pid),
-      :total => Agg::sum{ qty })
-
-Of course, complex queries quickly become unreadable that way. But you can always
-split complex tasks in more simple ones:
-
-    kept_suppliers = (restrict :suppliers, lambda{ status > 10 })
-    with_countries = (join kept_suppliers, :cities),
-    supplying      = (join with_countries, :supplies)
-    (summarize supplying,
-               [:country],
-               :which => Agg::group(:pid),
-               :total => Agg::sum{ qty })
-
-And here is the result !
-
-    +----------+----------+--------+
-    | :country | :which   | :total |
-    +----------+----------+--------+
-    | England  | +------+ |   2200 |
-    |          | | :pid | |        |
-    |          | +------+ |        |
-    |          | | P1   | |        |
-    |          | | P2   | |        |
-    |          | | P3   | |        |
-    |          | | P4   | |        |
-    |          | | P5   | |        |
-    |          | | P6   | |        |
-    |          | +------+ |        |
-    | France   | +------+ |    200 |
-    |          | | :pid | |        |
-    |          | +------+ |        |
-    |          | | P2   | |        |
-    |          | +------+ |        |
-    +----------+----------+--------+
-
-
-### Going further
-
-For now, the Ruby API is documented in the commandline help itself (a cheatsheet
-or something will be provided as soon as possible). For example, you'll find the 
-allowed syntaxes for RESTRICT as follows:
-
-    % alf help restrict
-    
-    ...
-    API & EXAMPLE
-    
-      # Restrict to suppliers with status greater than 20
-      (restrict :suppliers, lambda{ status > 20 })
-    
-      # Restrict to suppliers that live in London
-      (restrict :suppliers, lambda{ city == 'London' })
-    ...
-
-## Interfacing Alf in Ruby
+## More about Alf in Ruby
 
 ### Calling commands 'ala' shell
 
@@ -559,11 +627,10 @@ If this kind of API is not sufficiently expressive for you, you'll have to learn
 the APIs deeper, and use the Lispy functional style that Alf provides, which can
 be compiled and used as explained in the next section.
 
-### Compiling lispy expressions
+### Compiler vs. Relation data structure
 
-If you want to use Alf in ruby directly (that is, not in shell or by executing
-.alf files), you can simply compile expressions and use resulting operators as 
-follows:
+The compilers allow you to manipulate algebra expressions. Just obtain a Lispy
+instance on an environment and you're ready:
 
     # 
     # Expressions can simply be compiled as illustrated below. We use the 
@@ -591,7 +658,17 @@ follows:
     #
     projection = (project london_suppliers, [:city])
 
-## Going further
+Note that the examples above manipulate algebra operators, not relations per se.
+This means that equality and other such operators, that operate on relation 
+_values_, do not operate correctly here:
+
+    projection == Alf::Relation[{:city => 'London'}] 
+    # => nil
+    
+In contrast, you can use such operators when operating on true relation values:
+
+    projection.to_rel == Alf::Relation[{:city => 'London'}] 
+    # => true
 
 ### Using/Implementing other Environments
 
@@ -678,7 +755,7 @@ following template for contributions in lib/alf/renderer
 
 ## Related Work & Tools
 
-- You should certainly have a look at the Third Manifesto website: http://www.thethirdmanifesto.com/
+- You should certainly have a look at the Third Manifesto website: {http://www.thethirdmanifesto.com/}
 - Why not reading the {http://www.dcs.warwick.ac.uk/~hugh/TTM/DBE-Chapter01.pdf 
   third manifesto paper} itself? 
 - Also have a look at {http://www.dcs.warwick.ac.uk/~hugh/TTM/Projects.html other 
