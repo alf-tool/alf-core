@@ -3035,6 +3035,8 @@ module Alf
   #
   module Lispy
     
+    alias :ruby_extend :extend
+    
     # The environment
     attr_accessor :environment
     
@@ -3095,6 +3097,11 @@ module Alf
     def dataset(name)
       raise "Environment not set" unless @environment
       @environment.dataset(name)
+    end
+
+    # Functional equivalent to Alf::Relation[...]
+    def relation(*tuples)
+      Relation.coerce(tuples)
     end
    
     # 
