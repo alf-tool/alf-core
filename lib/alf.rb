@@ -467,8 +467,10 @@ module Alf
     #        implementation.
     # @param [Environment] environment an optional environment for resolving
     #        named datasets if needed.
+    # @return [Object] self
     #
     def pipe(input, environment = nil)
+      self
     end
     undef :pipe
     
@@ -613,6 +615,7 @@ module Alf
     #
     def pipe(input, env = environment)
       @input = input
+      self
     end
     
     #
@@ -829,6 +832,7 @@ module Alf
     def pipe(input, env = environment)
       self.environment = env 
       self.input = input
+      self
     end
 
     #
@@ -1270,6 +1274,7 @@ module Alf
       def pipe(input, env = environment)
         self.environment = env
         self.datasets = [ input ]
+        self
       end
 
       protected
@@ -1308,6 +1313,7 @@ module Alf
       def pipe(input, env = environment)
         self.environment = env
         self.datasets = input
+        self
       end
 
       protected
@@ -1403,6 +1409,7 @@ module Alf
       def pipe(input, env = environment)
         self.environment = env
         self.datasets = input
+        self
       end
 
       protected 
