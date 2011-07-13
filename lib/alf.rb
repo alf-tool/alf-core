@@ -1009,7 +1009,7 @@ module Alf
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
-          chain(renderer, operator).execute($stdout)
+          renderer.pipe(operator, environment).execute($stdout)
         else
           operator
         end
@@ -3077,12 +3077,12 @@ module Alf
       if op_class.unary?
         define_method(meth_name) do |child, *args|
           child = Iterator.coerce(child, environment)
-          chain(op_class.new(*args), child)
+          op_class.new(*args).pipe(child, environment)
         end
       elsif op_class.binary?
         define_method(meth_name) do |left, right, *args|
           operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
-          chain(op_class.new(*args), operands)
+          op_class.new(*args).pipe(operands, environment)
         end
       else
         raise "Unexpected operator #{op_class}"
@@ -3090,27 +3090,7 @@ module Alf
     end # Operators::each
       
     def allbut(child, attributes)
-      child = Iterator.coerce(child, environment)
-      chain(Operator::Relational::Project.new(attributes, true), child)
-    end
-    
-    private
-    
-    #
-    # Chains some elements as a new operator.
-    #
-    # This method is part of the DSL private methods and should not be used
-    # in Lispy DSL expressions that capture queries.
-    #
-    # @param  [Array] elements a list of pipeable Iterators
-    # @return [Iterator] the first element, piped to the next one, and so on.
-    #
-    def chain(*elements)
-      elements = elements.reverse
-      elements[1..-1].inject(elements.first) do |c, elm|
-        elm.pipe(c, environment)
-        elm
-      end
+      (project child, attributes, true)
     end
   
     Agg = Alf::Aggregator
