@@ -3291,3 +3291,4 @@ module Alf
   end # class Relation
 
 end # module Alf
+require 'alf/heading'
