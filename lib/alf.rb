@@ -15,6 +15,21 @@ module Alf
   module Tools
     
     #
+    # Attempt to require(who) the most friendly way as possible.
+    #
+    def friendly_require(who, dep = nil, retried = false)
+      gem(who, dep) if dep && defined?(Gem)
+      require who
+    rescue LoadError => ex
+      if retried
+        raise "Unable to require #{who}, which is now needed\n"\
+              "Try 'gem install #{who}'"
+      else
+        require 'rubygems' unless defined?(Gem)
+        friendly_require(who, dep, true)
+      end
+    end
+
     # Returns the unqualified name of a ruby class or module
     #
     # Example
