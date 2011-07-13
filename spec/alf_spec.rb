@@ -23,4 +23,12 @@ describe Alf do
     }.to_a.should == expected
   end
   
+  it "should allow evaluating lispy expressions" do
+    rel = lispy.evaluate{
+      (restrict :suppliers, lambda{ city == 'London'})
+    }
+    rel.should be_a(Alf::Relation)
+    rel.should eq(Alf::Relation.coerce(expected))
+  end
+  
 end

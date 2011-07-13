@@ -475,7 +475,6 @@ module Alf
     end
     undef :pipe
     
-    
     # 
     # Coerces something to an iterator
     #
@@ -486,6 +485,16 @@ module Alf
       else
         Reader.coerce(arg, environment)
       end
+    end
+    
+    #
+    # Converts this iterator to an in-memory Relation.
+    #
+    # @return [Relation] a relation instance, as the set of tuples
+    #         that would be yield by this iterator.
+    #
+    def to_rel
+      Relation::coerce(self)
     end
     
   end # module Iterator
@@ -3054,6 +3063,24 @@ module Alf
       end
     end
   
+    #
+    # Evaluates a query expression given by a String or a block and returns
+    # the result as an in-memory relation (Alf::Relation)
+    #
+    # Example:
+    #
+    #   # with a string
+    #   rel = evaluate "(restrict :suppliers, lambda{ city == 'London' })"
+    #
+    #   # or with a block
+    #   rel = evaluate {
+    #     (restrict :suppliers, lambda{ city == 'London' })
+    #   }
+    #
+    def evaluate(expr = nil, path = nil, &block)
+      compile(expr, path, &block).to_rel
+    end
+    
     #
     # Delegated to the current environment
     #
