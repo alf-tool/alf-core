@@ -12,6 +12,10 @@ module Alf
       {:sid => 'S5'},
       {:sid => 'S2'}
     )}
+
+    specify "allbut" do
+      rel1.allbut([:sid]).should == rel({})
+    end
     
     specify "extend" do
       rel1.extend(:x => lambda{ sid.downcase }).should == rel(
