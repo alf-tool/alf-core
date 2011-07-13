@@ -3288,6 +3288,8 @@ module Alf
       "Alf::Relation[" << @tuples.collect{|t| t.inspect}.join(',') << "]"
     end
   
+    DEE = Relation.new(Set.new({}))
+    DUM = Relation.new(Set.new())
   end # class Relation
 
 end # module Alf

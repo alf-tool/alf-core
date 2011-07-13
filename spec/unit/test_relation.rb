@@ -35,6 +35,21 @@ module Alf
     it "should be enumerable" do
       rel1.to_a.sort{|t1,t2| t1[:sid] <=> t2[:sid]}.should == tuples
     end
+
+    describe "rel1" do
+      subject{ rel1 }
+      it_should_behave_like "A value"  
+    end
+    
+    describe "DUM" do
+      subject{ Relation::DUM }
+      it_should_behave_like "A value"  
+    end
+    
+    describe "DEE" do
+      subject{ Relation::DEE }
+      it_should_behave_like "A value"  
+    end
     
   end
 end
