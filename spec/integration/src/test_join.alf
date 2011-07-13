@@ -1,0 +1,4 @@
+(specify "(join xxx, DUM) is DUM",
+  (rel_equal DUM, (join :suppliers, DUM)))
+(specify "(join DUM, xxx) is DUM",
+  (rel_equal DUM, (join DUM, :suppliers)))

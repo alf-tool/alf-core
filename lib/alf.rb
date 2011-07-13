@@ -2132,6 +2132,7 @@ module Alf
               @key = Tools::ProjectionKey.coerce(left.keys & right.keys) unless @key
               @buffer[@key.project(left)] << left
             end
+            @key = Tools::ProjectionKey.coerce([]) unless @key
           end
           
         end
@@ -3290,6 +3291,8 @@ module Alf
     end
   
     Agg = Alf::Aggregator
+    DUM = Relation::DUM
+    DEE = Relation::DEE
   end # module Lispy
 
 end # module Alf
