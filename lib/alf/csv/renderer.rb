@@ -3,6 +3,8 @@ module Alf
     class Renderer < Alf::Renderer
       include CSV::Commons
       
+      protected
+      
       # (see Renderer#render)
       def render(input, output)
         csv = get_csv(output)
@@ -14,6 +16,7 @@ module Alf
           end
           csv << extract_row(tuple, header)
         end
+        output
       end
       
       private
@@ -26,7 +29,7 @@ module Alf
         header.collect{|k| tuple[k]}
       end
   
-      Renderer.register(:csv, "as a csv file", self)
+      ::Alf::Renderer.register(:csv, "as a csv file", self)
     end # class Renderer
   end # module CSV
 end # module Alf
