@@ -571,27 +571,25 @@ follows:
     # available environments. 
     #
     lispy = Alf.lispy(Alf::Environment.examples)
-    op = lispy.compile do
+    london_suppliers = lispy.compile do
       (restrict :suppliers, lambda{ city == 'London' })
     end
 
     #
-    # Returned _op_ is an enumerable of ruby hashes. Provided that datasets
+    # Returned operator is an enumerable of ruby hashes. Provided that datasets
     # offered by the environment (:suppliers here) can be enumerated more than 
     # once, the operator may be used multiple times and is even thread safe!
     #  
-    op.each do |tuple|
+    london_suppliers.each do |tuple|
       # tuple is a ruby Hash
     end
 
     #
     # Now, maybe you want to reuse op in a larger query, for example 
-    # by projecting on the city attribute... Here is how with expressions
-    # can be handled in that case
+    # by projecting on the city attribute... Here is how this can be
+    # done:
     #
-    projection = lispy.with(:kept_suppliers => op) do
-      (project :kept_suppliers, [:city])
-    end
+    projection = (project london_suppliers, [:city])
 
 ## Going further
 
