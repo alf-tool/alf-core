@@ -68,27 +68,22 @@ module Alf
       meth_name = Tools.ruby_case(Tools.class_name(op_class)).to_sym
       if op_class.unary?
         define_method(meth_name) do |*args|
-          op_class.new(*args).pipe(self)
+          op = op_class.new(*args).pipe(self)
+          Relation.coerce(op)
         end
       elsif op_class.binary?
         define_method(meth_name) do |right, *args|
-          op_class.new(*args).pipe([self, Iterator.coerce(right)])
+          op = op_class.new(*args).pipe([self, Iterator.coerce(right)])
+          Relation.coerce(op)
         end
       else
         raise "Unexpected operator #{op_class}"
       end
     end # Operators::each
       
-    # Relational union
-    def +(other)
-       Relation.new(tuples + other.tuples)
-    end
-    
-    # Relational difference
-    def -(other)
-       Relation.new(tuples - other.tuples)
-    end
-    
+    alias :+ :union
+    alias :- :minus
+        
     #
     # (see Object#hash)
     #
