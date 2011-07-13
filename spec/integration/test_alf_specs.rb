@@ -4,6 +4,8 @@ describe "Alf's integration tests" do
   module Helpers
     
     def rel_equal(x, y)
+      x = Alf::Environment.examples.dataset(x) if x.is_a?(Symbol)
+      y = Alf::Environment.examples.dataset(y) if y.is_a?(Symbol)
       x.to_rel == y.to_rel
     end
     

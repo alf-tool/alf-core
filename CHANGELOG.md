@@ -10,6 +10,7 @@
 * Bug fixes
 
   * Added Relation#allbut, forgotten in two previous releases 
+  * Fixed (join xxx, DEE) and (join xxx, DUM)
 
 # 0.9.2 / 2011.07.13
 

@@ -43,12 +43,20 @@ module Alf
     
     describe "DUM" do
       subject{ Relation::DUM }
-      it_should_behave_like "A value"  
+      it_should_behave_like "A value"
+      specify{
+        subject.cardinality.should == 0
+        subject.to_a.should == []
+      }
     end
     
     describe "DEE" do
       subject{ Relation::DEE }
       it_should_behave_like "A value"  
+      specify{
+        subject.cardinality.should == 1
+        subject.to_a.should == [{}]
+      }
     end
     
   end

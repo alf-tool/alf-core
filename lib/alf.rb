@@ -3176,8 +3176,8 @@ module Alf
       "Alf::Relation[" << @tuples.collect{|t| t.inspect}.join(',') << "]"
     end
   
-    DEE = Relation.new(Set.new({}))
-    DUM = Relation.new(Set.new())
+    DEE = Relation.coerce([{}])
+    DUM = Relation.coerce([])
   end # class Relation
 
   # Implements a small LISP-like DSL on top of Alf.
