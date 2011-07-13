@@ -36,8 +36,8 @@
     a String. This allows calling Reader.reader(args.first || $stdin) in quickl
     commands for example.
     
-  * Operator::Relational and Operator::NonRelational have a .each class method
-    that yields operator classes
+  * Operator, Operator::Relational and Operator::NonRelational have a .each 
+    class method that yields operator classes
     
 * Bug fixes
 

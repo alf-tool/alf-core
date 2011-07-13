@@ -1232,6 +1232,14 @@ module Alf
   # 
   module Operator
     include Iterator, Tools
+    
+    #
+    # Yields non-relational then relational operators, in turn.
+    #
+    def self.each
+      Operator::NonRelational.each{|x| yield(x)}
+      Operator::Relational.each{|x| yield(x)}
+    end
 
     #
     # Encapsulates method definitions that convert operators to Quickl
