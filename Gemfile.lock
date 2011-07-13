@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    alf (0.9.2)
+    alf (0.9.3)
       quickl (~> 0.2.2)
 
 GEM
