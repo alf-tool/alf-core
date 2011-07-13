@@ -15,6 +15,11 @@ _relations_... Let's stop the segregation ;-)
     % [sudo] gem install alf
     % alf --help
 
+### Bundler & Require 
+
+    # API is not considered stable enough for now, please use
+    gem "alf", "= 0.9.2"
+
 ### Links
     
 * {http://rubydoc.info/github/blambeau/alf/master/frames} (read this file there!)
@@ -837,18 +842,25 @@ as my own wish list, while I would love hearing yours instead.
 ### Versioning policy
 
 Alf respects {http://semver.org/ semantic versioning}, which means that it has
-a X.Y.Z version number and follows a few rules:
+a X.Y.Z version number and follows a few rules.
 
-- The public API is made of both the commandline tool as well as the Lispy 
-  dialect and will become stable with version 1.0.0 in a near future.
-- Backward compatible bug fixes will increase Z.  
-- New features and enhancements that do not break backward compatibility of the 
-  public API will increase the Y number.
-- Non backward compatible changes of the public API will increase the X number.
+- The public API is made of the commandline tool, the Lispy dialect and the 
+  Relation datastructure. This API will become stable with version 1.0.0 in a 
+  near future.
+- Currently, version 1.0.0 **has not been reached**. It means that **anything 
+  may change at any time**. Best effort will be done to upgrade Y when backward 
+  incompatible changes occur.
+- Once 1.0.0 will be reached, the following rules will be followed:
+  - Backward compatible bug fixes will increase Z.  
+  - New features and enhancements that do not break backward compatibility of 
+    the public API will increase the Y number.
+  - Non backward compatible changes of the public API will increase the X 
+    number.
 
-All classes and modules but the Alf module itself and the Lispy DSL are part of
-the private API and may change at any time. A best-effort strategy is followed
-to avoid breaking internals on tiny (Z) version increases. 
+All classes and modules but Alf module, the Lispy DSL and Alf::Relation are part 
+of the private API and may change at any time. A best-effort strategy is followed
+to avoid breaking internals on tiny (Z) version increases, especially extension
+points like Reader and Renderer. 
 
 ## Enjoy Alf!
 
