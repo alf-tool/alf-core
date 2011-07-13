@@ -1,5 +1,12 @@
 # 0.9.3 / FIX ME
 
+* Enhancements
+
+  * Added Relation::DUM and Relation::DEE constants (relations of empty heading
+    with no and one tuple, respectively) 
+  
+  * Added a Heading abstraction, as a set of attribute (name, type) pairs
+
 * Bug fixes
 
   * Added Relation#allbut, forgotten in two previous releases 
