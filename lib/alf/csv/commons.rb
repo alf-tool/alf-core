@@ -4,6 +4,20 @@ module Alf
 
       private
       
+      # Attempt to require(who) the most friendly as possible
+      def friendly_require(who, dep = nil, retried = false)
+        gem(who, dep) if dep && defined?(Gem)
+        require who
+      rescue LoadError => ex
+        if retried
+          raise "Unable to require #{who}, which is now needed\n"\
+                "Try 'gem install #{who}'"
+        else
+          require 'rubygems' unless defined?(Gem)
+          friendly_require(who, dep, true)
+        end
+      end
+    
       def get_csv_options
         {:headers => true}
       end
@@ -13,7 +27,7 @@ module Alf
           require 'csv'
           ::CSV
         else
-          require 'faster_csv'
+          friendly_require('fastercsv')
           ::FasterCSV
         end
       end

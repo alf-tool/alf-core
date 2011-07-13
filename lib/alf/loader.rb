@@ -1,2 +1,1 @@
 require "quickl"
-require "fastercsv"

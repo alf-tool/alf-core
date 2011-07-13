@@ -12,7 +12,7 @@ _relations_... Let's stop the segregation ;-)
 
 ### Install
 
-    % [sudo] gem install alf
+    % [sudo] gem install alf [fastercsv, ...]
     % alf --help
 
 ### Bundler & Require 
