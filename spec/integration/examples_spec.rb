@@ -15,7 +15,7 @@ module Alf
     end # An example
     
     
-    Dir["#{File.expand_path('../../examples', __FILE__)}/**/*.alf"].each do |file|
+    Dir["#{File.expand_path('../../../examples', __FILE__)}/**/*.alf"].each do |file|
       describe file do
         subject{ file }
         it_should_behave_like "An example"

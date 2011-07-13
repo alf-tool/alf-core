@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Environment::Folder do
     
-    let(:path){ File.expand_path('../../../examples', __FILE__) }
+    let(:path){ File.expand_path('../examples', __FILE__) }
     let(:env){ Environment::Folder.new(path) }
       
     describe "dataset" do
