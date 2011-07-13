@@ -3061,50 +3061,30 @@ module Alf
       raise "Environment not set" unless @environment
       @environment.dataset(name)
     end
-    
-    ### Non-relational operators
-    
-    [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |child, *args|
-        child = Iterator.coerce(child, environment)
-        chain(Operator::NonRelational.const_get(op_name).new(*args), child)
+   
+    # 
+    # Install the DSL through iteration over defined operators
+    #
+    Operator::each do |op_class|
+      meth_name = Tools.ruby_case(Tools.class_name(op_class)).to_sym
+      if op_class.unary?
+        define_method(meth_name) do |child, *args|
+          child = Iterator.coerce(child, environment)
+          chain(op_class.new(*args), child)
+        end
+      elsif op_class.binary?
+        define_method(meth_name) do |left, right, *args|
+          operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
+          chain(op_class.new(*args), operands)
+        end
+      else
+        raise "Unexpected operator #{op_class}"
       end
-    end
-  
-    ### Relational operators
-        
-    [:Project,
-     :Extend, 
-     :Rename,
-     :Restrict,
-     :Wrap,
-     :Unwrap,
-     :Group,
-     :Ungroup,
-     :Summarize,
-     :Quota ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |child, *args|
-        child = Iterator.coerce(child, environment)
-        chain(Operator::Relational.const_get(op_name).new(*args), child)
-      end
-    end
-  
+    end # Operators::each
+      
     def allbut(child, attributes)
       child = Iterator.coerce(child, environment)
       chain(Operator::Relational::Project.new(attributes, true), child)
-    end
-  
-    [ :Join, 
-      :Union,
-      :Intersect,
-      :Minus ].each do |op_name|
-      meth_name = Tools.ruby_case(op_name).to_sym
-      define_method(meth_name) do |left, right, *args|
-        operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
-        chain(Operator::Relational.const_get(op_name).new(*args), operands)
-      end
     end
     
     private
