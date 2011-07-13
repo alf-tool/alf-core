@@ -1,6 +1,6 @@
 # Alf - Relational Algebra at your fingertips (version 0.9.2)
 
-## In short
+## Description
 
 ### What & Why
 
@@ -21,7 +21,7 @@ segregation ;-)
 * {http://github.com/blambeau/alf} (source code)
 * {http://revision-zero.org} (author's blog)
 
-## Description
+### Quick overview
 
 Alf is a commandline tool and Ruby library to manipulate data with all the power 
 of a truly relational algebra approach. Objectives behind Alf are manifold:
