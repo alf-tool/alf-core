@@ -1,6 +1,7 @@
 module Alf
   module CSV
     class Renderer < Alf::Renderer
+      include CSV::Commons
       
       # (see Renderer#render)
       def render(input, output)
@@ -16,16 +17,6 @@ module Alf
       end
       
       private
-      
-      def get_csv(io, options = {})
-        if RUBY_VERSION >= "1.9"
-          require 'csv'
-          ::CSV.new(io, options)
-        else
-          require 'faster_csv'
-          ::FasterCSV.new(io, options)
-        end
-      end
       
       def extract_header(tuple)
         tuple.keys
