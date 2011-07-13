@@ -1,0 +1,7 @@
+kept_suppliers = (restrict :suppliers, lambda{ status > 10 })
+with_countries = (join kept_suppliers, :cities)
+supplying      = (join with_countries, :supplies)
+(summarize supplying,
+           [:country],
+           :which => Agg::group(:pid),
+           :total => Agg::sum{ qty })
