@@ -1,6 +1,20 @@
 module Alf
   #
-  # Defines an in-memory relation 
+  # Defines an in-memory relation data structure.
+  #
+  # A relation is a set of tuples; a tuple is a set of attribute (name, value)
+  # pairs. The class implements such a data structure with full relational
+  # algebra installed as instance methods.
+  #
+  # Relation values can be obtained in various ways, for example by invoking
+  # a relational operator on an existing relation. Relation literals are simply
+  # constructed as follows:
+  #
+  #     Alf::Relation[
+  #       # ... a comma list of ruby hashes ...
+  #     ]
+  #
+  # See main Alf documentation about relational operators.
   #
   class Relation
     include Iterator
@@ -23,7 +37,13 @@ module Alf
     end
     
     #
-    # Coerces `val` to a relation
+    # Coerces `val` to a relation.
+    #
+    # Recognized arguments are: Relation (identity coercion), Set of ruby hashes, 
+    # Array of ruby hashes, Alf::Iterator.
+    #
+    # @return [Relation] a relation instance for the given set of tuples
+    # @raise [ArgumentError] when `val` is not recognized
     #
     def self.coerce(val)
       case val
@@ -53,7 +73,9 @@ module Alf
     end
     
     #
-    # Returns relation's cardinality (number of tuples)
+    # Returns relation's cardinality (number of tuples).
+    #
+    # @return [Integer] relation's cardinality 
     # 
     def cardinality
       tuples.size
