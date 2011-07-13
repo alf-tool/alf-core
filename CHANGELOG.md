@@ -1,3 +1,9 @@
+# 0.9.2 / 2011.07.13
+
+* Bug fixes
+
+  * Fixed the "alf show" command (undefined method `chain') 
+
 # 0.9.1 / 2011.07.13
 
 * Enhancements (public APIs)

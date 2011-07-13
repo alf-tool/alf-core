@@ -1031,16 +1031,16 @@ module Alf
     # Output input tuples through a specific renderer (text, yaml, ...)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [DATASET...]
+    #   #{program_name} #{command_name} DATASET
     #
     # OPTIONS
     # #{summarized_options}
     #
     # DESCRIPTION
     #
-    # When dataset names are specified as commandline args, request the environment 
-    # to provide those datasets and print them. Otherwise, take what comes on standard
-    # input.
+    # When a dataset name is specified as commandline arg, request the 
+    # environment to provide this dataset and prints it. Otherwise, take what 
+    # comes on standard input.
     #
     # Note that this command is not an operator and should not be piped anymore.
     #
@@ -1059,7 +1059,7 @@ module Alf
       def execute(args)
         requester.renderer = @renderer
         args = [ $stdin ] if args.empty?
-        requester.send(:chain,*args)
+        args.first
       end
     
     end # class Show
