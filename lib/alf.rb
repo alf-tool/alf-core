@@ -478,12 +478,12 @@ module Alf
     # 
     # Coerces something to an iterator
     #
-    def self.coerce(arg, env)
+    def self.coerce(arg, environment = nil)
       case arg
       when Iterator, Array
         arg
       else
-        Reader.coerce(arg, env)
+        Reader.coerce(arg, environment)
       end
     end
     
