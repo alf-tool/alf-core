@@ -318,8 +318,12 @@ module Alf
     # @param [String] expr a Lispy expression to compile
     # @return [Iterator] the iterator resulting from compilation
     #
-    def compile(expr = nil, &block)
-      expr.nil? ? instance_eval(&block) : instance_eval(expr)
+    def compile(expr = nil, path = nil, &block)
+      if expr.nil? 
+        instance_eval(&block)
+      else 
+        (path ? Kernel.eval(expr, binding, path) : Kernel.eval(expr, binding))
+      end
     end
 
     #
@@ -756,6 +760,14 @@ module Alf
     protected
     
     #
+    # Returns the input file path, or nil if this Reader is bound to an IO
+    # directly.
+    #
+    def input_path
+      input.is_a?(String) ? input : nil
+    end
+
+    #
     # Coerces the input object to an IO and yields the block with it.
     #
     # StringIO and IO input are yield directly while file paths are first
@@ -844,7 +856,7 @@ module Alf
       
       # (see Reader#each)
       def each
-        op = Alf.lispy(environment).compile(input_text)
+        op = Alf.lispy(environment).compile(input_text, input_path)
         op.each(&Proc.new)
       end
       
