@@ -1067,7 +1067,7 @@ module Alf
     # See '#{program_name} help COMMAND' for details about a specific command.
     #
     class Main < Quickl::Delegator(__FILE__, __LINE__)
-      include Command, Lispy
+      include Command
     
       # Environment instance to use to get base iterators
       attr_accessor :environment
@@ -1078,6 +1078,7 @@ module Alf
       # Creates a command instance
       def initialize(env = Environment.default)
         @environment = env
+        extend(Lispy)
       end
       
       # Install options
