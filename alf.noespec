@@ -19,7 +19,7 @@ variables:
     - http://rubydoc.info/github/blambeau/alf/master/frames
     - http://github.com/blambeau/alf
   dependencies: 
-    - {name: rake,         version: "~> 0.8.7",  groups: [development]}
+    - {name: rake,         version: "~> 0.9.2",  groups: [development]}
     - {name: bundler,      version: "~> 1.0",    groups: [development]}
     - {name: rspec,        version: "~> 2.6.0",  groups: [development]}
     - {name: yard,         version: "~> 0.7.2",  groups: [development]}

@@ -123,7 +123,7 @@ Gem::Specification.new do |s|
   # One call to add_development_dependency('gem_name', 'gem version requirement')
   # for each development dependency. These gems are required for developers
   #
-  s.add_development_dependency("rake", "~> 0.8.7")
+  s.add_development_dependency("rake", "~> 0.9.2")
   s.add_development_dependency("bundler", "~> 1.0")
   s.add_development_dependency("rspec", "~> 2.6.0")
   s.add_development_dependency("yard", "~> 0.7.2")
