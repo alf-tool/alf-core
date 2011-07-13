@@ -2,14 +2,24 @@ module Alf
   module CSV
     module Commons
 
-      def get_csv(io, options = {:headers => true})
+      private
+      
+      def get_csv_options
+        {:headers => true}
+      end
+      
+      def get_csv_class
         if RUBY_VERSION >= "1.9"
           require 'csv'
-          ::CSV.new(io, options)
+          ::CSV
         else
           require 'faster_csv'
-          ::FasterCSV.new(io, options)
+          ::FasterCSV
         end
+      end
+      
+      def get_csv(io, options = get_csv_options)
+        get_csv_class.new(io, options)
       end
       
     end
