@@ -338,47 +338,6 @@ module Alf
       @environment.dataset(name)
     end
     
-    #
-    # Compiles the subexpression given by the block in the context of 
-    # additional temporary expressions given by definitions. 
-    #
-    # Example
-    #
-    #   with( :kept_suppliers => (restrict :suppliers, lambda{ status > 10 }),
-    #         :with_countries => (join :kept_suppliers, :cities),
-    #         :supplying      => (join :with_countries, :supplies) ) do
-    #     (summarize :supplying,
-    #                [:country],
-    #                :which => Agg::group(:pid),
-    #                :total => Agg::sum{ qty })
-    #   end
-    #
-    # @param [Hash] definitions a set of (Symbol -> Iterator) pairs capturing
-    #               new logical datasources.
-    # @return [Iterator] the result of block compilation
-    #
-    # This method is still experimental and could be removed in a near 
-    # future. Use it with great care.
-    #
-    def with(definitions)
-      # We branch with the definitions for compilation
-      self.environment = environment.branch(definitions)
-      
-      # this is to ensure that sub definitions can reuse other
-      # ones 
-      definitions.each_value do |defn|
-        defn.environment = self.environment
-      end
-      
-      # compile now
-      op = compile(&Proc.new)
-      
-      # We now unbranch for next expression
-      self.environment = environment.unbranch
-
-      op
-    end
-
     ### Non-relational operators
     
     [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|

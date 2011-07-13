@@ -485,16 +485,15 @@ operators works on relations and return relations), you can use a sub expression
       :total => Agg::sum{ qty })
 
 Of course, complex queries quickly become unreadable that way. But you can always
-split complex tasks in more simple ones using _with_:
+split complex tasks in more simple ones:
 
-    with( :kept_suppliers => (restrict :suppliers, lambda{ status > 10 }),
-          :with_countries => (join :kept_suppliers, :cities),
-          :supplying      => (join :with_countries, :supplies) ) do
-      (summarize :supplying,
-                 [:country],
-                 :which => Agg::group(:pid),
-                 :total => Agg::sum{ qty })
-    end
+    kept_suppliers = (restrict :suppliers, lambda{ status > 10 })
+    with_countries = (join kept_suppliers, :cities),
+    supplying      = (join with_countries, :supplies)
+    (summarize supplying,
+               [:country],
+               :which => Agg::group(:pid),
+               :total => Agg::sum{ qty })
 
 And here is the result !
 
