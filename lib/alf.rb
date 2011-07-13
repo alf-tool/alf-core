@@ -1241,6 +1241,33 @@ module Alf
       Operator::Relational.each{|x| yield(x)}
     end
 
+    # 
+    # Encapsulates method that allows making operator introspection, that is,
+    # knowing operator cardinality and similar stuff.
+    # 
+    module Introspection
+      
+      #
+      # Returns true if this operator is an unary operator, false otherwise
+      #
+      def unary?
+        ancestors.include?(Operator::Unary)
+      end
+
+      #
+      # Returns true if this operator is a binary operator, false otherwise
+      #
+      def binary?
+        ancestors.include?(Operator::Binary)
+      end
+      
+    end # module Introspection
+    
+    # Ensures that the Introspection module is set on real operators
+    def self.included(mod)
+      mod.extend(Introspection) if mod.is_a?(Class)
+    end
+    
     #
     # Encapsulates method definitions that convert operators to Quickl
     # commands

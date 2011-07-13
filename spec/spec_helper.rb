@@ -22,5 +22,19 @@ shared_examples_for "An operator class" do
   it "should have a public each method" do
     operator_class.public_method_defined?(:each).should be_true
   end
+  
+  it "should have a unary? class method" do
+    operator_class.should respond_to(:unary?)
+  end
+
+  it "should have a binary? class method" do
+    operator_class.should respond_to(:binary?)
+  end
+  
+  it "should implement unary? and binary? accurately" do
+    operator_class.unary?.should_not eq(operator_class.binary?)
+    operator_class.unary?.should eq(operator_class.ancestors.include?(Alf::Operator::Unary))
+    operator_class.binary?.should eq(operator_class.ancestors.include?(Alf::Operator::Binary))
+  end
 
 end
