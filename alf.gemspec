@@ -21,13 +21,13 @@ Gem::Specification.new do |s|
   # A short summary of this gem
   #
   # This is displayed in `gem list -d`.
-  s.summary = "Classy data-manipulation dressed in a DSL (+ commandline)"
+  s.summary = "Relational Algebra at your fingertips"
 
   # A long description of this gem (required)
   #
   # The description should be more detailed than the summary.  For example,
   # you might wish to copy the entire README into the description.
-  s.description = "Alf is a commandline tool and Ruby library to manipulate data with all the \npower of a truly relational algebra approach. "
+  s.description = "Alf brings the relational algebra both in Shell and in Ruby. In Shell, because \nmanipulating any relation-like data source should be as straightforward as a \none-liner. In Ruby, because I see no good reason of having data structures like \narrays, hashes, sets, trees and graphs but not _relations_... Let's stop the \nsegregation ;-)"
   
   # The URL of this gem home page (optional)
   s.homepage = "http://rubydoc.info/github/blambeau/alf/master/frames"

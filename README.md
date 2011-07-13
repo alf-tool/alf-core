@@ -1,9 +1,21 @@
-# Alf - Classy data-manipulation dressed in a DSL (+ commandline)
+# Alf - Relational Algebra at your fingertips (version 0.9.2)
+
+## In short
+
+### What & Why
+
+Alf brings the relational algebra both in Shell and in Ruby. In Shell, because 
+manipulating any relation-like data source should be as straightforward as a 
+one-liner. In Ruby, because I see no good reason of having data structures like 
+arrays, hashes, sets, trees and graphs but not _relations_... Let's stop the 
+segregation ;-)
+
+### Install
 
     % [sudo] gem install alf
     % alf --help
 
-## Links
+### Links
     
 * {http://rubydoc.info/github/blambeau/alf/master/frames} (read this file there!)
 * {http://github.com/blambeau/alf} (source code)

@@ -9,10 +9,13 @@ variables:
   version:
     0.9.1
   summary: |-
-    Classy data-manipulation dressed in a DSL (+ commandline)
+    Relational Algebra at your fingertips
   description: |-
-    Alf is a commandline tool and Ruby library to manipulate data with all the 
-    power of a truly relational algebra approach. 
+    Alf brings the relational algebra both in Shell and in Ruby. In Shell, because 
+    manipulating any relation-like data source should be as straightforward as a 
+    one-liner. In Ruby, because I see no good reason of having data structures like 
+    arrays, hashes, sets, trees and graphs but not _relations_... Let's stop the 
+    segregation ;-)
   authors: 
     - {name: Bernard Lambeau, email: blambeau@gmail.com}
   links:
