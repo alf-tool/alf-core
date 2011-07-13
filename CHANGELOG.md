@@ -3,7 +3,8 @@
 * Enhancements
 
   * Added Relation::DUM and Relation::DEE constants (relations of empty heading
-    with no and one tuple, respectively) 
+    with no and one tuple, respectively). They are also available as DUM and DEE 
+    in Lispy functional expressions.
   
   * Added a Heading abstraction, as a set of attribute (name, type) pairs
 
