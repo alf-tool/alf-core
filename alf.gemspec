@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   #
   # The description should be more detailed than the summary.  For example,
   # you might wish to copy the entire README into the description.
-  s.description = "Alf brings the relational algebra both in Shell and in Ruby. In Shell, because \nmanipulating any relation-like data source should be as straightforward as a \none-liner. In Ruby, because I see no good reason of having data structures like \narrays, hashes, sets, trees and graphs but not _relations_... Let's stop the \nsegregation ;-)"
+  s.description = "Alf brings the relational algebra both in Shell and in Ruby. In Shell, because \nmanipulating any relation-like data source should be as straightforward as a \none-liner. In Ruby, because I've never understood why programming languages \nprovide data structures like arrays, hashes, sets, trees and graphs but not \n_relations_... Let's stop the segregation ;-)"
   
   # The URL of this gem home page (optional)
   s.homepage = "http://rubydoc.info/github/blambeau/alf/master/frames"

@@ -6,9 +6,9 @@
 
 Alf brings the relational algebra both in Shell and in Ruby. In Shell, because 
 manipulating any relation-like data source should be as straightforward as a 
-one-liner. In Ruby, because I see no good reason of having data structures like 
-arrays, hashes, sets, trees and graphs but not _relations_... Let's stop the 
-segregation ;-)
+one-liner. In Ruby, because I've never understood why programming languages 
+provide data structures like arrays, hashes, sets, trees and graphs but not 
+_relations_... Let's stop the segregation ;-)
 
 ### Install
 
