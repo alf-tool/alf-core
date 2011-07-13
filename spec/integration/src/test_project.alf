@@ -1,0 +1,9 @@
+cities = relation(
+  {:city => 'London'}, 
+  {:city => 'Paris'}, 
+  {:city => 'Athens'}
+)
+(specify \
+  "(project ..., [...]) should remove duplicates",
+  (rel_equal \
+    (project :suppliers, [:city]), cities))
