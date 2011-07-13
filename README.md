@@ -1,4 +1,4 @@
-# Alf - Relational Algebra at your fingertips (version 0.9.1)
+# Alf - Relational Algebra at your fingertips (version 0.9.3)
 
 ## Description
 
