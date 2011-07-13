@@ -12,6 +12,14 @@ module Alf
       {:sid => 'S5'},
       {:sid => 'S2'}
     )}
+    
+    specify "extend" do
+      rel1.extend(:x => lambda{ sid.downcase }).should == rel(
+        {:sid => 'S1', :x => 's1'},
+        {:sid => 'S2', :x => 's2'},
+        {:sid => 'S3', :x => 's3'}
+      )
+    end
       
     specify "union" do
       (rel1 + rel1).should == rel1
