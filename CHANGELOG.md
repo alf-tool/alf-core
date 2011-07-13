@@ -1,9 +1,26 @@
-# 0.9.1 / TODO
+# 0.9.1 / 2011.07.13
 
 * Enhancements (public APIs)
 
+  * Added the in-memory Alf::Relation data structure and associated tooling.
+    This allows using Alf in a object-oriented usual way, in addition to the
+    functional DSL:
+    
+        Alf.lispy.evaluate {
+          (join (restrict :suppliers, lambda{ status > 10 }), :cities)
+        }
+    
+    is equivalent to
+    
+        suppliers, cities = [...], [...] 
+        suppliers.restrict(lambda{ status > 10 }).join(cities)
+        
+    see README about how to obtain suppliers and cities relations in the first 
+    place.
+  
   * Summarize now accepts a --allbut option, to specify 'by' attributes from an
     exclusion perspective
+
   * .alf files are now evaluated in such a way that backtraces are "traceability
     friendly"
 
@@ -43,7 +60,7 @@
 
   * Fixed a bug that led to an Nil error when using unary operators on $stdin
   * Fixed a bug when summarizing or sorting on Symbol attributes with ruby 1.8
-  * Fixed a bug that led to numerous crashes under rubinius
+  * Fixed numerous crashes under rubinius
 
 # 0.9.0 / 2011.06.19
 
