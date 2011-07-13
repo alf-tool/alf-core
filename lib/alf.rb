@@ -343,6 +343,7 @@ module Alf
     [ :Autonum, :Clip, :Compact, :Defaults, :Sort ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |child, *args|
+        child = Iterator.coerce(child, environment)
         chain(Operator::NonRelational.const_get(op_name).new(*args), child)
       end
     end
@@ -361,11 +362,13 @@ module Alf
      :Quota ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |child, *args|
+        child = Iterator.coerce(child, environment)
         chain(Operator::Relational.const_get(op_name).new(*args), child)
       end
     end
 
     def allbut(child, attributes)
+      child = Iterator.coerce(child, environment)
       chain(Operator::Relational::Project.new(attributes, true), child)
     end
 
@@ -375,7 +378,8 @@ module Alf
       :Minus ].each do |op_name|
       meth_name = Tools.ruby_case(op_name).to_sym
       define_method(meth_name) do |left, right, *args|
-        chain(Operator::Relational.const_get(op_name).new(*args), [left, right])
+        operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
+        chain(Operator::Relational.const_get(op_name).new(*args), operands)
       end
     end
     
