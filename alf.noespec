@@ -30,4 +30,6 @@ variables:
     - {name: wlang,        version: "~> 0.10.1", groups: [development]}
     - {name: noe,          version: "~> 1.3.0",  groups: [development]}
     - {name: quickl,       version: "~> 0.2.1",  groups: [runtime]}
-
+  rake_tasks:
+    spec_test:
+      pattern: "spec/**/test_*.rb"
