@@ -1,36 +1,9 @@
-# Installs a rake task for for running examples written using rspec.
-#
-# This file installs the 'rake spec_test' (aliased as 'rake spec') as well as
-# extends 'rake test' to run spec tests, if any. It is automatically generated 
-# by Noe from your .noespec file, and should therefore be configured there, 
-# under the variables/rake_tasks/spec_test entry, as illustrated below:
-#
-# variables:
-#   rake_tasks:
-#     spec_test:
-#       pattern: spec/**/*_spec.rb
-#       verbose: true
-#       rspec_opts: [--color, --backtrace]
-#       ...
-#
-# If you have specific needs requiring manual intervention on this file, 
-# don't forget to set safe-override to false in your noe specification:
-# 
-# template-info:
-#   manifest:
-#     tasks/spec_test.rake:
-#       safe-override: false
-#
-# This file has been written to conform to RSpec v2.4.0. More information about 
-# rspec and options of the rake task defined below can be found on 
-# http://relishapp.com/rspec
-#
 begin
   require "rspec/core/rake_task"
   desc "Run RSpec code examples"
-  RSpec::Core::RakeTask.new(:spec_test) do |t|
+  RSpec::Core::RakeTask.new(:integration_test) do |t|
     # Glob pattern to match files.
-    t.pattern = "spec/**/test_*.rb"
+    t.pattern = "spec/integration/**/test_*.rb"
 
     # By default, if there is a Gemfile, the generated command will include
     # 'bundle exec'. Set this to true to ignore the presence of a Gemfile, 
@@ -70,10 +43,9 @@ begin
     t.rspec_opts = ["--color", "--backtrace"]
   end
 rescue LoadError => ex
-  task :spec_test do
+  task :integration_test do
     abort 'rspec is not available. In order to run spec, you must: gem install rspec'
   end
 ensure
-  task :spec => [:spec_test]
-  task :test => [:spec_test]
+  task :test => [:integration_test]
 end
