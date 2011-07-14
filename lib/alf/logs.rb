@@ -81,7 +81,7 @@ module Alf
         LOG_TYPES[log_type] || String
       end
       
-      ::Alf::Reader.register(:log, [".log"], self)
+      ::Alf::Reader.register(:logs, [".log"], self)
     end # class Reader
     
   end # module Logs
