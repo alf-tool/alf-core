@@ -1006,7 +1006,7 @@ module Alf
         end
         
         opt.on_tail('-v', "--version", "Show version") do
-          raise Quickl::Exit, "#{program_name} #{Alf::VERSION}"\
+          raise Quickl::Exit, "alf #{Alf::VERSION}"\
                               " (c) 2011, Bernard Lambeau"
         end
       end # Alf's options
