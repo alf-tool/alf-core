@@ -447,7 +447,7 @@ module Alf
     # Returns the examples environment
     #
     def self.examples
-      folder File.expand_path('../../examples', __FILE__)
+      folder File.expand_path('../../examples/operators', __FILE__)
     end
     
   end # class Environment
