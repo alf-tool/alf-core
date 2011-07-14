@@ -900,7 +900,6 @@ module Alf
       Renderer.register(:rash, "as ruby hashes", self)
     end # class Rash
 
-    require "alf/renderer/text"
   end # module Renderer
 
   #
@@ -1075,7 +1074,7 @@ module Alf
       include Command
     
       options do |opt|
-        @renderer = Renderer::Text.new
+        @renderer = Text::Renderer.new
         Renderer.each_renderer do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){ 
             @renderer = clazz.new 
@@ -3308,5 +3307,6 @@ module Alf
   end # module Lispy
 
 end # module Alf
+require "alf/text"
 require "alf/yaml"
 require 'alf/heading'

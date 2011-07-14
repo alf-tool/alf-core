@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  class Renderer::Text
+  class Text::Renderer
     describe Table do
      
       let(:columns){ [ :method, :total ] }

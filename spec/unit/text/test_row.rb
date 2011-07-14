@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  class Renderer::Text
+  class Text::Renderer
     describe Row do
      
       let(:row){ Row.new(values) }
