@@ -1,4 +1,3 @@
-require "yaml"
 module Alf
   module YAML
 
@@ -11,6 +10,7 @@ module Alf
       
       # (see Alf::Renderer#render)
       def render(input, output)
+         require "yaml"
         # TODO: refactor this to avoid loading all tuples
         # in memory
         output << input.to_a.to_yaml << "\n"

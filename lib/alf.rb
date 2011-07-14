@@ -901,7 +901,6 @@ module Alf
     end # class Rash
 
     require "alf/renderer/text"
-    require "alf/renderer/yaml"
   end # module Renderer
 
   #
@@ -3309,4 +3308,5 @@ module Alf
   end # module Lispy
 
 end # module Alf
+require "alf/yaml"
 require 'alf/heading'
