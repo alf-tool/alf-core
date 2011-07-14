@@ -2,9 +2,6 @@ require 'spec_helper'
 describe "Alf's alf command" do
 
   let(:path){ _('../../bin/alf', __FILE__) }
-  subject{ 
-    `#{path} #{args}`
-  }
   
   Dir[_('command/**/*.cmd', __FILE__)].each do |input|
     cmd = File.readlines(input).first
@@ -15,7 +12,11 @@ describe "Alf's alf command" do
       let(:args)     { cmd =~ /^alf (.*)/; $1; }
       let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
       let(:expected) { File.read(stdout) }
-      it{ should eq(expected) }
+      specify{ 
+        result = `#{path} #{args}`
+        $?.exitstatus.should == 0 
+        result.should(eq(expected)) unless RUBY_VERSION < "1.9"
+      }
     end
   end
     
