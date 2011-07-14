@@ -6,9 +6,9 @@ describe "Alf's alf command / " do
     specify{ cmd.should =~ /^alf / }
   
     describe "#{File.basename(input)}: #{cmd}" do
-      let(:argv)     { cmd =~ /^alf (.*)/; parse_commandline_args($1) }
+      let(:argv)     { parse_commandline_args(wlang(cmd,binding))[1..-1] }
       let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
-      let(:expected) { File.read(stdout).gsub(/\$\(([\S]+)\)/){ Kernel.eval($1) } }
+      let(:expected) { wlang(File.read(stdout), binding) }
 
       before{ 
         $oldstdout = $stdout 

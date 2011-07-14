@@ -33,5 +33,9 @@ def parse_commandline_args(args)
   result
 end
 
+def wlang(str, binding)
+  str.gsub(/\$\(([\S]+)\)/){ Kernel.eval($1, binding) }
+end
+
 require 'shared/an_operator_class'
 require 'shared/a_value'

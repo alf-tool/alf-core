@@ -1,0 +1,1 @@
+(restrict :suppliers, lambda{ status > 10 })
