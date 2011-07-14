@@ -1,0 +1,9 @@
++-------+--------+
+| :name | :city  |
++-------+--------+
+| Smith | London |
+| Jones | Paris  |
+| Blake | Paris  |
+| Clark | London |
+| Adams | Athens |
++-------+--------+

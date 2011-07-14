@@ -1,0 +1,1 @@
+alf --text compact           suppliers

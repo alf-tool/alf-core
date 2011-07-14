@@ -7,5 +7,9 @@ def rel(*args)
   Alf::Relation.coerce(args)
 end
 
+def _(path, file)
+  File.expand_path("../#{path}", file)
+end
+
 require 'shared/an_operator_class'
 require 'shared/a_value'
