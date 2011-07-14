@@ -1012,10 +1012,23 @@ module Alf
       end # Alf's options
       
       #
+      def _normalize(args)
+        opts = []
+        while !args.empty? && (args.first =~ /^\-/)
+          opts << args.shift 
+        end
+        if args.empty? or (args.size == 1 && File.exists?(args.first))
+          opts << "exec"
+        end
+        opts += args
+      end
+      
+      #
       # Overrided because Quickl only keep --options but modifying it there 
       # should probably be considered a broken API.
       #
       def _run(argv = [])
+        argv = _normalize(argv)
         
         # 1) Extract my options and parse them
         my_argv = []
