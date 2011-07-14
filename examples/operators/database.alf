@@ -1,4 +1,4 @@
-[{
+Alf::Relation[{
   :suppliers => (dataset :suppliers),
   :parts     => (dataset :parts),
   :cities    => (dataset :cities),

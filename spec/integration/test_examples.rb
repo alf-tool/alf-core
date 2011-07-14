@@ -8,7 +8,7 @@ module Alf
 
       it "should work when executed with a Alf" do
         lambda{ 
-          Alf.lispy(env).compile(File.read(subject)).to_a 
+          Alf.lispy(env).compile(File.read(subject)).to_rel
         }.should_not raise_error
       end
       
