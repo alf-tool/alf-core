@@ -1,15 +1,24 @@
 require "yaml"
 module Alf
-  class Renderer::YAML < Renderer
-    
-    protected 
-    
-    # (see Alf::Renderer#render)
-    def render(input, output)
-      output << input.to_a.to_yaml << "\n"
-      output
-    end
+  module YAML
 
-    Renderer.register(:yaml, "as a yaml output",  self)
-  end # class YAML
+    #
+    # Implements Alf::Renderer contract for outputing YAML files.
+    #
+    class Renderer < ::Alf::Renderer
+      
+      protected 
+      
+      # (see Alf::Renderer#render)
+      def render(input, output)
+        # TODO: refactor this to avoid loading all tuples
+        # in memory
+        output << input.to_a.to_yaml << "\n"
+        output
+      end
+  
+      ::Alf::Renderer.register(:yaml, "as a yaml output",  self)
+    end # class Renderer
+    
+  end # module YAML
 end # module Alf
