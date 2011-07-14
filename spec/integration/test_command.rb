@@ -11,7 +11,7 @@ describe "Alf's alf command" do
     describe cmd do
       let(:args)     { cmd =~ /^alf (.*)/; $1; }
       let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
-      let(:expected) { File.read(stdout) }
+      let(:expected) { File.read(stdout).gsub(/\$\(([\S]+)\)/){ Kernel.eval($1) } }
       specify{ 
         result = `#{path} #{args}`
         $?.exitstatus.should == 0 
