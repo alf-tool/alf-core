@@ -1,0 +1,9 @@
+# - those whose name matches /[Bb]ot/ 
+# - those who request robots.txt 
+(union \
+  (project \
+    (restrict :access, lambda{ user_agent =~ /[Bb]ot/   }), 
+    [:user_agent]),
+  (project \
+    (restrict :access, lambda{ req_path =~ /robots.txt/ }),
+    [:user_agent]))
