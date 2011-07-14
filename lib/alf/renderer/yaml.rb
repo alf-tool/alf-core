@@ -1,12 +1,5 @@
 require "yaml"
 module Alf
-  module Iterator
-    
-    def to_yaml(*args, &block)
-      to_a.to_yaml(*args, &block)
-    end
-    
-  end
   class Renderer::YAML < Renderer
     
     protected 
