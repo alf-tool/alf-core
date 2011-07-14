@@ -1,5 +1,5 @@
 require 'spec_helper'
-describe "Alf's integration tests" do
+describe "Alf's semantics tests" do
   
   module Helpers
     
@@ -15,7 +15,7 @@ describe "Alf's integration tests" do
     
   end
   
-  shared_examples_for "An integration file" do
+  shared_examples_for "A semantics spec file" do
     
     let(:lispy){
       lispy = Alf.lispy(Alf::Environment.examples)
@@ -29,10 +29,10 @@ describe "Alf's integration tests" do
   end # An example
   
   
-  Dir["#{File.expand_path('../src', __FILE__)}/**/*.alf"].each do |file|
+  Dir["#{File.expand_path('../semantics', __FILE__)}/**/*.alf"].each do |file|
     describe file do
       subject{ file }
-      it_should_behave_like "An integration file"
+      it_should_behave_like "A semantics spec file"
     end
   end
   
