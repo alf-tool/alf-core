@@ -3309,4 +3309,5 @@ module Alf
 end # module Alf
 require "alf/text"
 require "alf/yaml"
+require 'alf/logs'
 require 'alf/heading'

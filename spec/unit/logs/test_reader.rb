@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'alf/logs'
 module Alf
   describe Logs::Reader do
     
