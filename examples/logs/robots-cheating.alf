@@ -1,0 +1,11 @@
+#
+# Given that robots include (see robots.alf): 
+#   - those whose name matches /[Bb]ot/ 
+#   - those who request robots.txt
+#
+# Who are cheaters, that is, those who request robots.txt but are not
+# named /[Bb]ot/ ?
+# 
+(minus \
+  (project (restrict :access, lambda{ path       =~ /robots.txt/ }), [:user_agent]),
+  (project (restrict :access, lambda{ user_agent =~ /[Bb]ot/     }), [:user_agent]))

@@ -1,0 +1,14 @@
+#
+# Give, for each page (path), the number of successfully (http status = 200) 
+# served requests. Take only non robot requests into account.
+#
+# Use the following invocation to have them sorted by hit number:
+# 
+#   alf --text --env=examples/logs sort hits -- hits asc
+#
+(summarize \
+  (restrict :access, 
+            lambda{ (http_status == 200) and 
+                    not(user_agent =~ /[Bb]ot/ or path =~ /robots.txt/) }),
+  [:path],
+  :hits   => Agg::count())
