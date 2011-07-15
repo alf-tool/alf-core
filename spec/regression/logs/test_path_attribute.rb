@@ -11,7 +11,8 @@ describe "path attributes in log" do
   
   specify {
     subject.should be_a(Alf::Relation)
-    projected = subject.project([:path]).should == Alf::Relation[
+    projected = subject.project([:path])
+    projected.should == Alf::Relation[
       {:path => "/cart/install.txt" }, 
       {:path => "/store/install.txt"}
     ]
