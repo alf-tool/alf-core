@@ -11,7 +11,7 @@ module Alf
         handle.should respond_to(:world)
       end
   
-      it "installed methods should behave correctly" do
+      it "should behave correctly" do
         handle.set(:hello => "a", :world => "b")
         handle.hello.should == "a"
         handle.world.should == "b"
@@ -20,9 +20,14 @@ module Alf
         handle.world.should == "d"
       end
   
-      it "should allow instance evaluatin on exprs" do
+      it "should allow instance evaluating on exprs" do
         handle.set(:tested => 1)
         handle.instance_eval{ tested < 1 }.should be_false
+      end
+  
+      it "should support an attribute called :path" do
+        handle.set(:path => 1)
+        handle.instance_eval{ path < 1 }.should be_false
       end
   
       describe "compile" do
