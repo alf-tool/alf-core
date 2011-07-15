@@ -14,6 +14,20 @@ module Alf
     class Reader < Alf::Reader
       include Logs::Commons
       
+      DEFAULT_OPTIONS = {
+        :file_format => [:apache, :combined],
+        :line_def    => :access
+      }
+      
+      attr_reader :options
+      
+      def initialize(input = nil, env = nil, opts = {})
+        Alf::Tools::friendly_require('request_log_analyzer')
+        super(input, env)
+        @options = DEFAULT_OPTIONS.merge(opts)
+        @options[:file_format] = coerce_file_format(@options[:file_format])
+      end
+      
       def each
         parser = infer_parser(input_path)
         with_input_io do |io|
@@ -25,12 +39,28 @@ module Alf
       
       private
       
-      def infer_parser(path)
-        unless path
-          raise NotImplementedError, "Logs::Reader does not work on IO for now"
+      def coerce_file_format(file_format)
+        case file_format
+        when NilClass
+          nil
+        when RequestLogAnalyzer::FileFormat
+          file_format
+        when Symbol
+          RequestLogAnalyzer::FileFormat.load(file_format)
+        when Array
+          RequestLogAnalyzer::FileFormat.load(*file_format)
+        else 
+          raise ArgumentError, "Invalid file format: #{file_format}"
         end
-        Alf::Tools::friendly_require('request_log_analyzer')
-        file_format = RequestLogAnalyzer::FileFormat.autodetect(path)
+      end
+      
+      def infer_parser(path)
+        file_format = @options[:file_format] || begin
+          unless path
+            raise NotImplementedError, "Logs::Reader does not work on IO for now"
+          end
+          RequestLogAnalyzer::FileFormat.autodetect(path)
+        end
         RequestLogAnalyzer::Source::LogParser.new(file_format)
       end
       
