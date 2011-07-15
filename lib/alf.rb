@@ -3129,6 +3129,11 @@ module Alf
     alias :size :cardinality
     alias :count :cardinality
     
+    # Returns true if this relation is empty
+    def empty?
+      cardinality == 0
+    end
+    
     # 
     # Install the DSL through iteration over defined operators
     #
