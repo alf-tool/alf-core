@@ -11,9 +11,13 @@ describe "path attributes in log" do
   
   specify {
     subject.should be_a(Alf::Relation)
-    subject.project([:path]).should == Alf::Relation[
+    projected = subject.project([:path]).should == Alf::Relation[
       {:path => "/cart/install.txt" }, 
       {:path => "/store/install.txt"}
+    ]
+    projected.extend(:short_path => lambda{ path[0..1] }).should == Alf::Relation[
+      {:path => "/cart/install.txt",  :short_path => "/c" }, 
+      {:path => "/store/install.txt", :short_path => "/s"}
     ]
   }
   
