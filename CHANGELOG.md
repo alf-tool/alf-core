@@ -12,6 +12,8 @@
 
   * Added Relation#allbut, forgotten in two previous releases 
   * Fixed (join xxx, DEE) and (join xxx, DUM)
+  * Fixed scoping bug when using attributes named :path, :expr or :block in
+    Lispy compiled expressions (coming from .alf files)
 
 # 0.9.2 / 2011.07.13
 
