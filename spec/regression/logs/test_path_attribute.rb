@@ -4,9 +4,9 @@ describe "path attributes in log" do
   let(:env){ Alf::Environment.folder(File.dirname(__FILE__)) }
     
   subject{ 
-    Alf.lispy(env).evaluate {
+    Alf.lispy(env).evaluate <<-EOF
       (restrict :apache_combined, lambda{ path =~ /install.txt/ })
-    }
+    EOF
   }
   
   specify {
