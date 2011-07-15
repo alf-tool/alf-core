@@ -44,10 +44,7 @@ module Alf
       private
       
       def request_to_tuple(req)
-        tuple = req.attributes
-        tuple[:req_path] = tuple[:path]
-        tuple.delete(:path)
-        tuple
+        req.attributes
       end
       
       LOG_TYPES = {
