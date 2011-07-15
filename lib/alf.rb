@@ -3234,7 +3234,8 @@ module Alf
       if expr.nil? 
         instance_eval(&block)
       else 
-        (path ? Kernel.eval(expr, binding, path) : Kernel.eval(expr, binding))
+        b = _clean_binding
+        (path ? Kernel.eval(expr, b, path) : Kernel.eval(expr, b))
       end
     end
   
@@ -3304,6 +3305,13 @@ module Alf
     Agg = Alf::Aggregator
     DUM = Relation::DUM
     DEE = Relation::DEE
+    
+    private 
+    
+    def _clean_binding
+      binding
+    end
+    
   end # module Lispy
 
 end # module Alf
