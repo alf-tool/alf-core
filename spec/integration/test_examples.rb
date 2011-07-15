@@ -1,26 +1,15 @@
 require 'spec_helper'
-module Alf
-  describe "Alf's examples" do
-    
-    shared_examples_for "An example" do
-      
-      let(:env){ Environment.examples }
+Dir["#{File.expand_path('../../../examples', __FILE__)}/**/*.alf"].each do |file|
 
-      it "should work when executed with a Alf" do
-        lambda{ 
-          Alf.lispy(env).compile(File.read(subject)).to_rel
-        }.should_not raise_error
-      end
-      
-    end # An example
-    
-    
-    Dir["#{File.expand_path('../../../examples', __FILE__)}/**/*.alf"].each do |file|
-      describe file do
-        subject{ file }
-        it_should_behave_like "An example"
-      end
+  describe "Alf example: #{file}" do
+    let(:example_path){ file }
+    let(:example_dir) { File.dirname(file) }
+    let(:example_env) { Alf::Environment.folder(example_dir) }
+
+    it "should run without error" do
+      Alf.lispy(example_env).compile(File.read(example_path)).to_rel
     end
-    
+
   end
-end 
+
+end
