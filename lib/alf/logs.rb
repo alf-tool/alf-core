@@ -14,27 +14,9 @@ module Alf
     class Reader < Alf::Reader
       include Logs::Commons
       
-      attr_reader :file_format
-      
-      def initialize(input = nil, env = nil, file_format = [:apache, :combined], line_def = :access)
-        super(input, env)
-        Alf::Tools::friendly_require('request_log_analyzer')
-        @file_format = case file_format
-        when RequestLogAnalyzer::FileFormat
-        when Symbol
-          file_format = RequestLogAnalyzer::FileFormat.load(file_format)
-        when Array
-          file_format = RequestLogAnalyzer::FileFormat.load(*file_format)
-        else 
-          raise ArgumentError, "Invalid file format: #{file_format}"
-        end
-        @line_def = line_def
-        @heading = infer_heading(@file_format, @line_def)
-      end
-      
       def each
+        parser = infer_parser(input_path)
         with_input_io do |io|
-          parser = RequestLogAnalyzer::Source::LogParser.new(file_format)
           parser.parse_stream(io) do |req|
             yield request_to_tuple(req)
           end
@@ -42,6 +24,15 @@ module Alf
       end
       
       private
+      
+      def infer_parser(path)
+        unless path
+          raise NotImplementedError, "Logs::Reader does not work on IO for now"
+        end
+        Alf::Tools::friendly_require('request_log_analyzer')
+        file_format = RequestLogAnalyzer::FileFormat.autodetect(path)
+        RequestLogAnalyzer::Source::LogParser.new(file_format)
+      end
       
       def request_to_tuple(req)
         req.attributes

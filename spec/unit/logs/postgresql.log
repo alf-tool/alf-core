@@ -1,0 +1,29 @@
+2010-10-10 13:50:24 GMT [38626]: [1-1] LOG:  00000: database system was shut down at 2010-10-10 13:49:33 GMT
+2010-10-10 13:50:24 GMT [38626]: [2-1] LOCATION:  StartupXLOG, xlog.c:4816
+2010-10-10 13:50:24 GMT [38624]: [1-1] LOG:  00000: database system is ready to accept connections
+2010-10-10 13:50:24 GMT [38624]: [2-1] LOCATION:  reaper, postmaster.c:2156
+2010-10-10 13:50:24 GMT [38629]: [1-1] LOG:  00000: autovacuum launcher started
+2010-10-10 13:50:24 GMT [38629]: [2-1] LOCATION:  AutoVacLauncherMain, autovacuum.c:520
+2010-10-10 13:52:04 GMT [38747]: [1-1] LOG:  00000: connection received: host=127.0.0.1 port=60020
+2010-10-10 13:52:04 GMT [38747]: [2-1] LOCATION:  BackendInitialize, postmaster.c:3027
+2010-10-10 13:52:04 GMT [38747]: [3-1] LOG:  00000: connection authorized: user=root database=demonstration
+2010-10-10 13:52:04 GMT [38747]: [4-1] LOCATION:  BackendInitialize, postmaster.c:3097
+2010-10-10 13:52:04 GMT [38747]: [5-1] LOG:  00000: duration: 0.329 ms  statement: SHOW clients
+2010-10-10 13:52:05 GMT [38747]: [21-1] LOG:  00000: duration: 0.973 ms  statement:           SELECT tablename
+	            FROM pg_tables
+	           WHERE schemaname IN (E'"$user"',E'public')
+2010-10-10 13:52:07 GMT [38747]: [33-1] LOG:  00000: duration: 0.710 ms  statement: SELECT * FROM "delayed_jobs" 
+2010-10-10 13:52:08 GMT [38747]: [33-1] LOG:  00000: duration: 0.710 ms  statement: SELECT * FROM "delayed_jobs" 
+2010-10-10 15:00:02 GMT [38747]: [1667-1] LOG:  00000: duration: 0.024 ms  statement: BEGIN
+2010-10-10 15:00:02 GMT [38747]: [1668-1] LOCATION:  exec_simple_query, postgres.c:1081
+2010-10-10 15:00:02 GMT [38747]: [1669-1] LOG:  00000: duration: 0.195 ms  statement: INSERT INTO "delayed_jobs" ("failed_at", "locked_by", "created_at", "handler", "updated_at", "priority", "run_at", "attempts", "locked_at", "last_error") VALUES(NULL, NULL, '2010-10-10 15:00:02.159884', E'--- !ruby/object:RuntheChooChootrain {}
+	
+	', '2010-10-10 15:00:02.159884', 0, '2010-10-10 16:00:00.000000', 0, NULL, NULL) RETURNING "id"
+2010-10-10 15:00:02 GMT [38747]: [1670-1] LOCATION:  exec_simple_query, postgres.c:1081
+2010-10-10 15:00:02 GMT [38747]: [1671-1] LOG:  00000: duration: 0.065 ms  statement: COMMIT
+2010-10-10 15:00:02 GMT [38747]: [1672-1] LOCATION:  exec_simple_query, postgres.c:1081
+2010-10-10 15:00:02 GMT [38747]: [1673-1] LOG:  00000: duration: 0.020 ms  statement: BEGIN
+2010-10-10 15:00:02 GMT [38747]: [1674-1] LOCATION:  exec_simple_query, postgres.c:1081
+2010-10-10 15:00:02 GMT [38747]: [1675-1] LOG:  00000: duration: 0.157 ms  statement: DELETE FROM "delayed_jobs" WHERE "id" = 123456
+2010-10-10 15:00:02 GMT [38747]: [1676-1] LOCATION:  exec_simple_query, postgres.c:1081
+2010-10-10 15:00:02 GMT [38747]: [1677-1] LOG:  00000: duration: 0.050 ms  statement: COMMIT
