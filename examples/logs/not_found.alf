@@ -1,5 +1,3 @@
-(allbut \
-  (extend \
-    (restrict :access, lambda{ http_status == 404 }),
-    :short_path => lambda{ path[0..25] }),
-  [:referer, :user_agent, :user, :remote_logname, :source, :path])
+(project \
+  (restrict :access, lambda{ http_status == 404 }),
+  [:path, :http_method, :http_version])
