@@ -1,5 +1,5 @@
 (allbut \
   (extend \
     (restrict :access, lambda{ http_status == 404 }),
-    :short_path => lambda{ req_path[0..25] }),
-  [:referer, :user_agent, :user, :remote_logname, :source, :req_path])
+    :short_path => lambda{ path[0..25] }),
+  [:referer, :user_agent, :user, :remote_logname, :source, :path])

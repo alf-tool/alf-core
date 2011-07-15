@@ -9,6 +9,12 @@ describe "path attributes in log" do
     }
   }
   
-  it { should be_a(Alf::Relation) }
+  specify {
+    subject.should be_a(Alf::Relation)
+    subject.project([:path]).should == Alf::Relation[
+      {:path => "/cart/install.txt" }, 
+      {:path => "/store/install.txt"}
+    ]
+  }
   
 end
