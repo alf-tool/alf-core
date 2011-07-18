@@ -36,7 +36,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   as (the physical encoding of) a relation**. See 'alf --help' for the list of 
   available commands and implemented relational operators.
   
-      % alf restrict suppliers -- "city == 'London'" | alf join cities 
+        % alf restrict suppliers -- "city == 'London'" | alf join cities 
   
 * Alf is also a 100% Ruby relational algebra implementation shipped with a simple 
   to use, powerful, functional DSL for compiling and evaluating relational queries. 
@@ -45,9 +45,9 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   section). See 'alf --help' as well as .alf files in the examples directory 
   for syntactic examples.
   
-      Alf.lispy.evaluate { 
-        (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
-      }
+        Alf.lispy.evaluate { 
+          (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
+        }
       
   In addition to this functional syntax, Alf comes bundled with an in-memory 
   Relation data structure that provides an object-oriented way of manipulating
@@ -76,7 +76,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   the following query for the kind of things that you'll never ever have in SQL 
   (see also 'alf help quota', 'alf help wrap', 'alf help group', ...):
   
-      % alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
+        % alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
   
 * Last, but not least, Alf is an attempt to help me test some research ideas and 
   communicate about them with people that already know (all or part) of the TTM 
@@ -87,7 +87,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   'research work in progress', and used with care because not necessarily in 
   conformance with the TTM.
   
-      % alf --text quota supplies --by=sid --order=qty -- pos "count()"  
+        % alf --text quota supplies --by=sid --order=qty -- pos "count()"  
 
 ## Overview of relational theory
 
@@ -700,8 +700,7 @@ An environment built that way will look for .rash and .alf files in the specifie
 folder and sub-folders. I'll of course strongly consider any contribution 
 implementing the Environment contract on top of SQL or NoSQL databases or anything 
 that can be useful to manipulate with relational algebra. Such contributions can 
-be added to the project directly, in the lib/alf/environment folder, for example. 
-A base template would look like:
+be added to the project directly. A base template would look like:
 
     class Foo < Alf::Environment
     
@@ -714,6 +713,9 @@ A base template would look like:
       end
     
     end
+
+Read more about Environment's API so as to let your environment be recognized
+in shell (--env=...) on rubydoc.info
 
 ### Adding file decoders, aka Readers
 
