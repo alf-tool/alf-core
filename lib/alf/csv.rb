@@ -43,10 +43,6 @@ module Alf
       
       protected
       
-      def options
-        DEFAULT_OPTIONS
-      end
-      
       # (see Renderer#render)
       def render(input, output)
         csv = get_csv(output)
