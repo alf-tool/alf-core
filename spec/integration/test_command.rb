@@ -6,7 +6,7 @@ describe "Alf's alf command / " do
     specify{ cmd.should =~ /^alf / }
   
     describe "#{File.basename(input)}: #{cmd}" do
-      let(:argv)     { parse_commandline_args(cmd)[1..-1] }
+      let(:argv)     { Alf::Tools::parse_commandline_args(cmd)[1..-1] }
       let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
       let(:expected) { wlang(File.read(stdout), binding) }
 

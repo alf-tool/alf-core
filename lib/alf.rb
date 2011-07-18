@@ -15,6 +15,45 @@ module Alf
   module Tools
     
     #
+    # Parse a string with commandline arguments and returns an array.
+    #
+    # Example:
+    # 
+    #   parse_commandline_args("--text --size=10") # => ['--text', '--size=10']
+    #
+    def parse_commandline_args(args)
+      args = args.split(/\s+/)
+      result = []
+      until args.empty?
+        if args.first[0,1] == '"'
+          if args.first[-1,1] == '"'
+            result << args.shift[1...-1]
+          else
+            block = [ args.shift[1..-1] ]
+            while args.first[-1,1] != '"'
+              block << args.shift
+            end 
+            block << args.shift[0...-1]
+            result << block.join(" ")
+          end
+        elsif args.first[0,1] == "'"
+          if args.first[-1,1] == "'"
+            result << args.shift[1...-1]
+          else
+            block = [ args.shift[1..-1] ]
+            while args.first[-1,1] != "'"
+              block << args.shift
+            end 
+            block << args.shift[0...-1]
+            result << block.join(" ")
+          end
+        else
+          result << args.shift
+        end  
+      end
+      result
+    end
+
     # Helper to define methods with multiple signatures. 
     #
     # Example:
