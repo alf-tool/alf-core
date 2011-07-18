@@ -36,7 +36,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   as (the physical encoding of) a relation**. See 'alf --help' for the list of 
   available commands and implemented relational operators.
   
-      % alf restrict suppliers -- "city == 'London'" | alf join cities 
+        % alf restrict suppliers -- "city == 'London'" | alf join cities 
   
 * Alf is also a 100% Ruby relational algebra implementation shipped with a simple 
   to use, powerful, functional DSL for compiling and evaluating relational queries. 
@@ -45,9 +45,9 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   section). See 'alf --help' as well as .alf files in the examples directory 
   for syntactic examples.
   
-      Alf.lispy.evaluate { 
-        (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
-      }
+        Alf.lispy.evaluate { 
+          (join (restrict :suppliers, lambda{ city == 'London' }), :cities)
+        }
       
   In addition to this functional syntax, Alf comes bundled with an in-memory 
   Relation data structure that provides an object-oriented way of manipulating
