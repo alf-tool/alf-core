@@ -25,6 +25,11 @@ module Alf
         Reader.reader($stdin).should be_a(Reader::Rash)
       end
       
+      specify "with options" do
+        r = Reader.reader('suppliers.rash', {:hello => "world"})
+        r.options.should == {:hello => "world"}
+      end
+      
     end
 
   end
