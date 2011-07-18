@@ -3365,3 +3365,4 @@ end # module Alf
 require "alf/text"
 require "alf/yaml"
 require 'alf/heading'
+require 'alf/sequel'

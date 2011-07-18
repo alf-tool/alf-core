@@ -34,4 +34,5 @@ variables:
     - {name: wlang,        version: "~> 0.10.1", groups: [development]}
     - {name: noe,          version: "~> 1.3.0",  groups: [development]}
     - {name: sequel,       version: "~> 3.25.0", groups: [development]}
+    - {name: sqlite3,      version: "~> 1.3.0",  groups: [development]}
     - {name: quickl,       version: "~> 0.2.2",  groups: [runtime]}
