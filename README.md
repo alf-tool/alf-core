@@ -700,8 +700,7 @@ An environment built that way will look for .rash and .alf files in the specifie
 folder and sub-folders. I'll of course strongly consider any contribution 
 implementing the Environment contract on top of SQL or NoSQL databases or anything 
 that can be useful to manipulate with relational algebra. Such contributions can 
-be added to the project directly, in the lib/alf/environment folder, for example. 
-A base template would look like:
+be added to the project directly. A base template would look like:
 
     class Foo < Alf::Environment
     
@@ -714,6 +713,9 @@ A base template would look like:
       end
     
     end
+
+Read more about Environment's API so as to let your environment be recognized
+in shell (--env=...) on rubydoc.info
 
 ### Adding file decoders, aka Readers
 
