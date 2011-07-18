@@ -4,7 +4,12 @@ module Alf
     
     let(:path){ File.expand_path('../examples', __FILE__) }
     let(:env){ Environment::Folder.new(path) }
-      
+    
+    specify ".recognizes?" do
+      Environment::Folder.recognizes?([path]).should be_true
+      Environment::Folder.recognizes?(["not/an/existing/one"]).should be_false
+    end
+        
     describe "dataset" do
       
       subject{ env.dataset(name) }
