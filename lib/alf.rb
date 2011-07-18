@@ -1147,6 +1147,10 @@ module Alf
           @environment = Environment.autodetect(value)
         end
         
+        opt.on('-rlibrary', "require the library, before executing alf") do |value|
+          require(value)
+        end
+        
         opt.on_tail('-h', "--help", "Show help") do
           raise Quickl::Help
         end

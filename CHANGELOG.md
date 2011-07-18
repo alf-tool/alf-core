@@ -2,6 +2,8 @@
 
 * Enhancements of the public API
 
+  * added alf's -r option, that mimics ruby's one (require library before run)
+
   * When alf is invoked in shell using bin/alf (and only in this case), 
     ENV['ALF_OPTS'] is used a global options to apply as they were specified
     inline: 
