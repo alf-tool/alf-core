@@ -12,6 +12,7 @@ module Alf
         Alf::Operator::Relational::Join,
         Alf::Operator::Relational::Matching,
         Alf::Operator::Relational::Minus,
+        Alf::Operator::Relational::NotMatching,
         Alf::Operator::Relational::Project,
         Alf::Operator::Relational::Quota,
         Alf::Operator::Relational::Rename,
