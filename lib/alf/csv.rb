@@ -82,7 +82,6 @@ module Alf
       
       def each
         with_input_io do |io|
-          header = nil
           block = Proc.new{|row|
             next if row.header_row?
             yield(symbolize_keys(row.to_hash))
