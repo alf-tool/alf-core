@@ -10,6 +10,7 @@ module Alf
         Alf::Operator::Relational::Group,
         Alf::Operator::Relational::Intersect,
         Alf::Operator::Relational::Join,
+        Alf::Operator::Relational::Matching,
         Alf::Operator::Relational::Minus,
         Alf::Operator::Relational::Project,
         Alf::Operator::Relational::Quota,
