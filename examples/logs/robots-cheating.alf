@@ -7,5 +7,5 @@
 # named /[Bb]ot/ ?
 # 
 (minus \
-  (project (restrict :access, lambda{ path       =~ /robots.txt/ }), [:user_agent]),
-  (project (restrict :access, lambda{ user_agent =~ /[Bb]ot/     }), [:user_agent]))
+  (project (restrict :combined, lambda{ path       =~ /robots.txt/ }), [:user_agent]),
+  (project (restrict :combined, lambda{ user_agent =~ /[Bb]ot/     }), [:user_agent]))

@@ -7,7 +7,7 @@ Dir["#{File.expand_path('../../../examples', __FILE__)}/**/*.alf"].each do |file
     let(:example_env) { Alf::Environment.folder(example_dir) }
 
     it "should run without error" do
-      Alf.lispy(example_env).compile(File.read(example_path)).to_rel
+      Alf.lispy(example_env).compile(File.read(example_path), example_path).to_rel
     end
 
   end

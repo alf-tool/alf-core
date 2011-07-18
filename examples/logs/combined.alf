@@ -1,0 +1,2 @@
+path = File.join(File.dirname(__FILE__), "access.log")
+Alf::Reader.reader(path, :file_format => [:apache, :combined])

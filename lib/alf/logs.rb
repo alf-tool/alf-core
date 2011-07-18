@@ -1,30 +1,21 @@
 module Alf
   module Logs
-    
-    #
-    # Provides common tooling to Logs renderer and readers
-    #
-    module Commons
-
-    end # module Commons
         
     #
     # Implements Alf::Reader contract for reading log files.
     #
     class Reader < Alf::Reader
-      include Logs::Commons
       
       DEFAULT_OPTIONS = {
-        :file_format => [:apache, :combined],
+        :file_format => nil,
         :line_def    => :access
       }
       
       attr_reader :options
       
-      def initialize(input = nil, env = nil, opts = {})
+      def initialize(*args)
         Alf::Tools::friendly_require('request_log_analyzer')
-        super(input, env)
-        @options = DEFAULT_OPTIONS.merge(opts)
+        super(*args)
         @options[:file_format] = coerce_file_format(@options[:file_format])
       end
       

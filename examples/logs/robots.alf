@@ -4,5 +4,5 @@
 #   - those who request robots.txt
 # 
 (project \
-  (restrict :access, lambda{ user_agent =~ /[Bb]ot/ or path =~ /robots.txt/ }), 
+  (restrict :combined, lambda{ user_agent =~ /[Bb]ot/ or path =~ /robots.txt/ }), 
   [:user_agent])
