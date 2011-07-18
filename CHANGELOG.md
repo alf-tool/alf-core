@@ -2,6 +2,17 @@
 
 * Enhancements
 
+  * When alf is invoked in shell using bin/alf (and only in this case), 
+    ENV['ALF_OPTS'] is used a global options to apply as they were specified
+    inline: 
+    
+        % export ALF_OPTS="--env=. --yaml" 
+        % alf show suppliers
+        
+    is the same as 
+    
+        % alf --env=. --yaml show suppliers
+
   * Added MATCHING and NOT MATCHING operators. These operators are useful 
     shortcuts for the following expressions.
     
