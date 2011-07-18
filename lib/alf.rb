@@ -2436,7 +2436,7 @@ module Alf
     end # class Union
 
     # 
-    # Relational matching (and cross-join)
+    # Relational matching
     #
     # SYNOPSIS
     #   #{program_name} #{command_name} [LEFT] RIGHT
