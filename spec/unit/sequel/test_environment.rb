@@ -42,6 +42,13 @@ module Alf
     it "should be the correct relation" do
       env.dataset(:suppliers).to_rel.should eq(rel)
     end
+    
+    specify ".recognizes?" do
+      Sequel::Environment.recognizes?([_("alf.db", __FILE__)]).should be_true
+      Sequel::Environment.recognizes?(["postgres://localhost/database"]).should be_true
+      Sequel::Environment.recognizes?(["nosuchone.db"]).should be_false
+      Sequel::Environment.recognizes?([nil]).should be_false
+    end
       
   end
 end

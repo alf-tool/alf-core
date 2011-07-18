@@ -1,0 +1,1 @@
+alf --env=$(_("command/alf/alf.db",__FILE__)) show suppliers
