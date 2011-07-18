@@ -15,6 +15,18 @@ module Alf
   module Tools
     
     #
+    # Helper to define methods with multiple signatures. 
+    #
+    # Example:
+    #
+    #   varargs([1, "hello"], [Integer, String]) # => [1, "hello"]
+    #   varargs(["hello"],    [Integer, String]) # => [nil, "hello"]
+    # 
+    def varargs(args, types)
+      types.collect{|t| t===args.first ? args.shift : nil}
+    end
+    
+    #
     # Attempt to require(who) the most friendly way as possible.
     #
     def friendly_require(who, dep = nil, retried = false)
