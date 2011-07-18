@@ -1,6 +1,27 @@
 # 0.9.3 / FIX ME
 
-* Enhancements
+* Enhancements of the public API
+
+  * When alf is invoked in shell using bin/alf (and only in this case), 
+    ENV['ALF_OPTS'] is used a global options to apply as they were specified
+    inline: 
+    
+        % export ALF_OPTS="--env=. --yaml" 
+        % alf show suppliers
+        
+    is the same as 
+    
+        % alf --env=. --yaml show suppliers
+
+  * Added MATCHING and NOT MATCHING operators. These operators are useful 
+    shortcuts for the following expressions.
+    
+        (matching     l, r) := (project (join l, r), [l's attributes])
+        (not_matching l, r) := (minus l, (matching l, r))
+      
+    For example "Give suppliers that supply at least one part": 
+    
+        (matching suppliers, supplies)
 
   * Added Relation::DUM and Relation::DEE constants (relations of empty heading
     with no and one tuple, respectively). They are also available as DUM and DEE 
@@ -8,12 +29,25 @@
   
   * Added a Heading abstraction, as a set of attribute (name, type) pairs
 
+* Internal enhancements
+
+  * The Reader and Renderer classes now accept a Hash of options as third 
+    argument of the constructor (friendly varargs applies there). These options
+    can be used by extension points. 
+    
+  * The Environment class now provides a class-based registering mechanism 'ala'
+    Reader and Renderer. This allows auto-detecting the target environment when
+    --env=... is used in shell. See Environment.autodetect and Environment#recognizes? 
+    for contributing to this extension point. 
+
 * Bug fixes
 
   * Added Relation#allbut, forgotten in two previous releases 
   * Fixed (join xxx, DEE) and (join xxx, DUM)
   * Fixed scoping bug when using attributes named :path, :expr or :block in
     Lispy compiled expressions (coming from .alf files)
+  * Fixed 'alf --yaml show suppliers' that renderer a --text table instead of
+    a yaml output
 
 # 0.9.2 / 2011.07.13
 

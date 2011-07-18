@@ -15,6 +15,45 @@ module Alf
   module Tools
     
     #
+    # Parse a string with commandline arguments and returns an array.
+    #
+    # Example:
+    # 
+    #   parse_commandline_args("--text --size=10") # => ['--text', '--size=10']
+    #
+    def parse_commandline_args(args)
+      args = args.split(/\s+/)
+      result = []
+      until args.empty?
+        if args.first[0,1] == '"'
+          if args.first[-1,1] == '"'
+            result << args.shift[1...-1]
+          else
+            block = [ args.shift[1..-1] ]
+            while args.first[-1,1] != '"'
+              block << args.shift
+            end 
+            block << args.shift[0...-1]
+            result << block.join(" ")
+          end
+        elsif args.first[0,1] == "'"
+          if args.first[-1,1] == "'"
+            result << args.shift[1...-1]
+          else
+            block = [ args.shift[1..-1] ]
+            while args.first[-1,1] != "'"
+              block << args.shift
+            end 
+            block << args.shift[0...-1]
+            result << block.join(" ")
+          end
+        else
+          result << args.shift
+        end  
+      end
+      result
+    end
+
     # Helper to define methods with multiple signatures. 
     #
     # Example:
@@ -328,8 +367,69 @@ module Alf
   # You can implement your own environment by subclassing this class and 
   # implementing the {#dataset} method. As additional support is implemented 
   # in the base class, Environment should never be mimiced.
+  #
+  # This class provides an extension point allowing to participate to auto 
+  # detection and resolving of the --env=... option when alf is used in shell.
+  # See Environment.register, Environment.autodetect and Environment.recognizes?
+  # for details. 
   # 
   class Environment
+    
+    # Registered environments
+    @@environments = []
+    
+    #
+    # Register an environment class under a specific name. 
+    #
+    # Registered class must implement a recognizes? method that takes an array
+    # of arguments; it must returns true if an environment instance can be built
+    # using those arguments, false otherwise. Please be very specific in the 
+    # implementation for returning true. See also autodetect and recognizes?
+    #
+    # @param [Symbol] name name of the environment kind
+    # @param [Class] clazz class that implemented the environment
+    #
+    def self.register(name, clazz)
+      @@environments << [name, clazz]
+      (class << self; self; end).
+        send(:define_method, name) do |*args|
+          clazz.new(*args)
+        end
+    end
+    
+    #
+    # Auto-detect the environment to use for specific arguments.
+    #
+    # This method returns an instance of the first registered Environment class 
+    # that returns true to an invocation of recognizes?(args). It raises an 
+    # ArgumentError if no such class can be found.    
+    #
+    # @return [Environment] an environment instance
+    # @raise [ArgumentError] when no registered class recognizes the arguments
+    #
+    def self.autodetect(*args)
+      @@environments.each do |name,clazz|
+        return clazz.new(*args) if clazz.recognizes?(args)
+      end
+      raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect}"
+    end
+    
+    #
+    # Returns true _args_ can be used for building an environment instance,
+    # false otherwise.
+    #
+    # When returning true, an immediate invocation of new(*args) should 
+    # succeed. While runtime exception are admitted (no such database, for 
+    # example), argument errors should not occur (missing argument, wrong 
+    # typing, etc.).
+    #
+    # Please be specific in the implementation of this extension point, as 
+    # registered environments for a chain and each of them should have a 
+    # chance of being selected.
+    #
+    def self.recognizes?(args)
+      false
+    end
     
     #
     # Returns a dataset whose name is provided.
@@ -405,6 +505,18 @@ module Alf
     #
     class Folder < Environment
       
+      # 
+      # (see Environment.recognizes?)
+      #
+      # Returns true if args contains onely a String which is an existing
+      # folder.
+      #
+      def self.recognizes?(args)
+        (args.size == 1) && 
+        args.first.is_a?(String) && 
+        File.directory?(args.first.to_s)
+      end
+      
       #
       # Creates an environment instance, wired to the specified folder.
       #
@@ -439,14 +551,8 @@ module Alf
         end
       end
       
+      Environment.register(:folder, self)
     end # class Folder
-    
-    #
-    # Factors a Folder environment on a specific path
-    #
-    def self.folder(path)
-      Folder.new(path)
-    end
     
     #
     # Returns the default environment
@@ -645,10 +751,11 @@ module Alf
     attr_accessor :options
   
     #
-    # Creates a reader instance, with an optional input and environment wiring.
+    # Creates a reader instance. 
     #
     # @param [String or IO] path to a file or IO object for input
     # @param [Environment] environment wired environment, serving this reader
+    # @param [Hash] options Reader's options (see doc of subclasses) 
     #
     def initialize(*args)
       @input, @environment, @options = case args.first
@@ -861,17 +968,33 @@ module Alf
       @@renderers.each(&Proc.new)
     end
     
+    # Default renderer options
+    DEFAULT_OPTIONS = {}
+
     # Renderer input (typically an Iterator)
     attr_accessor :input
     
     # @return [Environment] Optional wired environment
     attr_accessor :environment
 
+    # @return [Hash] Renderer's options
+    attr_accessor :options
+    
     #
-    # Creates a renderer instance, optionally wired to an input
+    # Creates a reader instance. 
     #
-    def initialize(input = nil)
-      @input = input
+    # @param [Iterator] iterator an Iterator of tuples to render
+    # @param [Environment] environment wired environment, serving this reader
+    # @param [Hash] options Reader's options (see doc of subclasses) 
+    #
+    def initialize(*args)
+      @input, @environment, @options = case args.first
+      when Array
+        Tools.varargs(args, [Array, Environment, Hash])
+      else
+        Tools.varargs(args, [Iterator, Environment, Hash])
+      end
+      @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {}) 
     end
     
     # 
@@ -1012,16 +1135,16 @@ module Alf
           @execute = true
         end
         
-        @renderer = Renderer::Rash.new
+        @renderer = nil
         Renderer.each_renderer do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){ 
             @renderer = clazz.new 
           }
         end
         
-        opt.on('--env=FOLDER', 
-               "Set the environment folder to use") do |value|
-          @environment = Environment.folder(value)
+        opt.on('--env=ENV', 
+               "Set the environment to use") do |value|
+          @environment = Environment.autodetect(value)
         end
         
         opt.on_tail('-h', "--help", "Show help") do
@@ -1070,6 +1193,7 @@ module Alf
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
+          renderer = self.renderer ||= Renderer::Rash.new
           renderer.pipe(operator, environment).execute($stdout)
         else
           operator
@@ -1099,7 +1223,7 @@ module Alf
       include Command
     
       options do |opt|
-        @renderer = Text::Renderer.new
+        @renderer = nil
         Renderer.each_renderer do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){ 
             @renderer = clazz.new 
@@ -1108,7 +1232,7 @@ module Alf
       end
         
       def execute(args)
-        requester.renderer = @renderer
+        requester.renderer = (@renderer || requester.renderer || Text::Renderer.new)
         args = [ $stdin ] if args.empty?
         args.first
       end
@@ -2140,28 +2264,66 @@ module Alf
     class Join < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      #
+      # Performs a Join of two relations through a Hash buffer on the right
+      # one.
+      #
       class HashBased
         include Operator::Binary
       
+        #
+        # Implements a special Buffer for join-based relational operators.
+        #
+        # Example:
+        #
+        #   buffer = Buffer::Join.new(...) # pass the right part of the join
+        #   left.each do |left_tuple|
+        #     key, rest = buffer.split(tuple)
+        #     buffer.each(key) do |right_tuple|
+        #       #
+        #       # do whatever you want with left and right tuples
+        #       #
+        #     end
+        #   end 
+        #
         class JoinBuffer
           
+          #
+          # Creates a buffer instance with the right part of the join.
+          #
+          # @param [Iterator] enum a tuple iterator, right part of the join. 
+          #
           def initialize(enum)
             @buffer = nil
             @key = nil
             @enum = enum
           end
           
+          #
+          # Splits a left tuple according to the common key.
+          #
+          # @param [Hash] tuple a left tuple of the join
+          # @return [Array] an array of two elements, the key and the rest
+          # @see ProjectionKey#split
+          #
           def split(tuple)
             _init(tuple) unless @key
             @key.split(tuple)
           end
           
+          #
+          # Yields each right tuple that matches a given key value.
+          #
+          # @param [Hash] key a tuple that matches elements of the common key
+          #        (typically the first element returned by #split) 
+          #
           def each(key)
             @buffer[key].each(&Proc.new) if @buffer.has_key?(key)
           end
           
           private
           
+          # Initialize the buffer with a right tuple
           def _init(right)
             @buffer = Hash.new{|h,k| h[k] = []}
             @enum.each do |left|
@@ -2171,10 +2333,11 @@ module Alf
             @key = Tools::ProjectionKey.coerce([]) unless @key
           end
           
-        end
+        end # class JoinBuffer
         
         protected
         
+        # (see Operator#_each)
         def _each
           buffer = JoinBuffer.new(right)
           left.each do |left_tuple|
@@ -2343,6 +2506,128 @@ module Alf
       end
       
     end # class Union
+
+    # 
+    # Relational matching
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [LEFT] RIGHT
+    #
+    # API & EXAMPLE
+    #
+    #   (matching :suppliers, :supplies)
+    #
+    # DESCRIPTION
+    #
+    # This operator restricts left tuples to those for which there exists at 
+    # least one right tuple that joins. This is a shortcut operator for the
+    # longer expression:
+    #
+    #   (project (join xxx, yyy), [xxx's attributes])
+    #
+    # In shell:
+    #
+    #   alf matching suppliers supplies 
+    #  
+    class Matching < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Relational, Operator::Shortcut, Operator::Binary
+      
+      #
+      # Performs a Matching of two relations through a Hash buffer on the right
+      # one.
+      #
+      class HashBased
+        include Operator::Binary
+      
+        # (see Operator#_each)
+        def _each
+          seen, key = nil, nil
+          left.each do |left_tuple|
+            seen ||= begin
+              h = Hash.new
+              right.each do |right_tuple|
+                key ||= Tools::ProjectionKey.coerce(left_tuple.keys & right_tuple.keys)
+                h[key.project(right_tuple)] = true
+              end
+              key ||= Tools::ProjectionKey.coerce([])
+              h
+            end
+            yield(left_tuple) if seen.has_key?(key.project(left_tuple))
+          end
+        end
+        
+      end # class HashBased
+      
+      protected
+      
+      # (see Shortcut#longexpr)
+      def longexpr
+        chain HashBased.new,
+              datasets 
+      end
+      
+    end # class Matching
+        
+    # 
+    # Relational not matching
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [LEFT] RIGHT
+    #
+    # API & EXAMPLE
+    #
+    #   (not_matching :suppliers, :supplies)
+    #
+    # DESCRIPTION
+    #
+    # This operator restricts left tuples to those for which there does not 
+    # exist any right tuple that joins. This is a shortcut operator for the
+    # longer expression: 
+    #
+    #         (minus xxx, (matching xxx, yyy))
+    # 
+    # In shell:
+    #
+    #   alf not-matching suppliers supplies 
+    #  
+    class NotMatching < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Relational, Operator::Shortcut, Operator::Binary
+      
+      #
+      # Performs a NotMatching of two relations through a Hash buffer on the 
+      # right one.
+      #
+      class HashBased
+        include Operator::Binary
+      
+        # (see Operator#_each)
+        def _each
+          seen, key = nil, nil
+          left.each do |left_tuple|
+            seen ||= begin
+              h = Hash.new
+              right.each do |right_tuple|
+                key ||= Tools::ProjectionKey.coerce(left_tuple.keys & right_tuple.keys)
+                h[key.project(right_tuple)] = true
+              end
+              key ||= Tools::ProjectionKey.coerce([])
+              h
+            end
+            yield(left_tuple) unless seen.has_key?(key.project(left_tuple))
+          end
+        end
+        
+      end # class HashBased
+      
+      protected
+      
+      # (see Shortcut#longexpr)
+      def longexpr
+        chain HashBased.new,
+              datasets 
+      end
+      
+    end # class NotMatching
     
     # 
     # Relational wraping (tuple-valued attributes)
@@ -3043,24 +3328,42 @@ module Alf
     # 
     # Keeps tuples ordered on a specific key
     #
+    # Example:
+    #
+    #   sorted = Buffer::Sorted.new OrderingKey.new(...)
+    #   sorted.add_all(...)
+    #   sorted.each do |tuple|
+    #     # tuples are ordered here 
+    #   end
+    #
     class Sorted < Buffer
   
+      #
+      # Creates a buffer instance with an ordering key
+      #
       def initialize(ordering_key)
         @ordering_key = ordering_key
         @buffer = []
       end
   
+      #
+      # Adds all elements of an iterator to the buffer
+      #
       def add_all(enum)
         sorter = @ordering_key.sorter
         @buffer = merge_sort(@buffer, enum.to_a.sort(&sorter), sorter)
       end
   
+      #
+      # (see Buffer#each)
+      #
       def each
         @buffer.each(&Proc.new)
       end
   
       private
     
+      # Implements a merge sort between two iterators s1 and s2
       def merge_sort(s1, s2, sorter)
         (s1 + s2).sort(&sorter)
       end

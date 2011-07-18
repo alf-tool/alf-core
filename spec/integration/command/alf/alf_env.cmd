@@ -1,0 +1,1 @@
+alf --env=$(_("command/alf",__FILE__)) show rel
