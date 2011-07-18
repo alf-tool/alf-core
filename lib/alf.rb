@@ -15,6 +15,18 @@ module Alf
   module Tools
     
     #
+    # Helper to define methods with multiple signatures. 
+    #
+    # Example:
+    #
+    #   varargs([1, "hello"], [Integer, String]) # => [1, "hello"]
+    #   varargs(["hello"],    [Integer, String]) # => [nil, "hello"]
+    # 
+    def varargs(args, types)
+      types.collect{|t| t===args.first ? args.shift : nil}
+    end
+    
+    #
     # Attempt to require(who) the most friendly way as possible.
     #
     def friendly_require(who, dep = nil, retried = false)
@@ -587,8 +599,10 @@ module Alf
         else
           raise "No registered reader for #{ext} (#{filepath})"
         end
-      else
+      elsif args.empty? 
         coerce(filepath)
+      else
+        raise ArgumentError, "Unable to return a reader for #{filepath} and #{args}" 
       end
     end
     
@@ -618,11 +632,17 @@ module Alf
       end
     end
     
+    # Default reader options
+    DEFAULT_OPTIONS = {}
+    
     # @return [Environment] Wired environment 
     attr_accessor :environment
   
     # @return [String or IO] Input IO, or file name
     attr_accessor :input
+    
+    # @return [Hash] Reader's options
+    attr_accessor :options
   
     #
     # Creates a reader instance, with an optional input and environment wiring.
@@ -630,9 +650,14 @@ module Alf
     # @param [String or IO] path to a file or IO object for input
     # @param [Environment] environment wired environment, serving this reader
     #
-    def initialize(input = nil, environment = nil)
-      @input = input
-      @environment = environment 
+    def initialize(*args)
+      @input, @environment, @options = case args.first
+      when String, IO, StringIO
+        Tools.varargs(args, [args.first.class, Environment, Hash])
+      else
+        Tools.varargs(args, [String, Environment, Hash])
+      end
+      @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {}) 
     end
   
     #
@@ -3129,6 +3154,11 @@ module Alf
     alias :size :cardinality
     alias :count :cardinality
     
+    # Returns true if this relation is empty
+    def empty?
+      cardinality == 0
+    end
+    
     # 
     # Install the DSL through iteration over defined operators
     #
@@ -3234,7 +3264,8 @@ module Alf
       if expr.nil? 
         instance_eval(&block)
       else 
-        (path ? Kernel.eval(expr, binding, path) : Kernel.eval(expr, binding))
+        b = _clean_binding
+        (path ? Kernel.eval(expr, b, path) : Kernel.eval(expr, b))
       end
     end
   
@@ -3304,6 +3335,13 @@ module Alf
     Agg = Alf::Aggregator
     DUM = Relation::DUM
     DEE = Relation::DEE
+    
+    private 
+    
+    def _clean_binding
+      binding
+    end
+    
   end # module Lispy
 
 end # module Alf

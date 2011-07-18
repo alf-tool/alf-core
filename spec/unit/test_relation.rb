@@ -12,9 +12,14 @@ module Alf
     let(:rel1){ Relation.new(tuples.to_set) }
     let(:rel2){ Relation.new(tuples2.to_set) }
     let(:rel3){ Relation.new(tuples[0..1].to_set) }
-    
+  
     it "should have a cardinality method" do
       rel1.cardinality.should == 3
+    end
+    
+    it "should have an empty? method" do
+      Alf::Relation[].should be_empty
+      rel1.should_not be_empty
     end
       
     it "should define == correctly" do
@@ -47,6 +52,7 @@ module Alf
       specify{
         subject.cardinality.should == 0
         subject.to_a.should == []
+        subject.should be_empty
       }
     end
     
@@ -56,6 +62,7 @@ module Alf
       specify{
         subject.cardinality.should == 1
         subject.to_a.should == [{}]
+        subject.should_not be_empty
       }
     end
     
