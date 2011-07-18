@@ -2,11 +2,11 @@ require 'spec_helper'
 describe "Alf's alf command / " do
 
   Dir[_('command/**/*.cmd', __FILE__)].each do |input|
-    cmd = File.readlines(input).first
+    cmd = wlang(File.readlines(input).first, binding)
     specify{ cmd.should =~ /^alf / }
   
     describe "#{File.basename(input)}: #{cmd}" do
-      let(:argv)     { parse_commandline_args(wlang(cmd,binding))[1..-1] }
+      let(:argv)     { parse_commandline_args(cmd)[1..-1] }
       let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
       let(:expected) { wlang(File.read(stdout), binding) }
 

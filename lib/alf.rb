@@ -331,6 +331,35 @@ module Alf
   # 
   class Environment
     
+    # Registered environments
+    @@environments = []
+    
+    #
+    # Register an environment class
+    #
+    # @param [Symbol] name name of the environment kind
+    # @param [Class] clazz class that implemented the environment
+    #
+    def self.register(name, clazz)
+      @@environments << [name, clazz]
+      (class << self; self; end).
+        send(:define_method, name) do |*args|
+          clazz.new(*args)
+        end
+    end
+    
+    #
+    # Auto-detect the environment to use for specific arguments.
+    #
+    # @return [Environment] an environment instance
+    #
+    def self.autodetect(*args)
+      @@environments.each do |name,clazz|
+        return clazz.new(*args) if clazz.recognizes?(args)
+      end
+      raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect}"
+    end
+    
     #
     # Returns a dataset whose name is provided.
     #
@@ -405,6 +434,18 @@ module Alf
     #
     class Folder < Environment
       
+      # 
+      # (see Environment.recognizes?)
+      #
+      # Returns true if args contains onely a String which is an existing
+      # folder.
+      #
+      def self.recognizes?(args)
+        (args.size == 1) && 
+        args.first.is_a?(String) && 
+        File.directory?(args.first.to_s)
+      end
+      
       #
       # Creates an environment instance, wired to the specified folder.
       #
@@ -439,14 +480,8 @@ module Alf
         end
       end
       
+      Environment.register(:folder, self)
     end # class Folder
-    
-    #
-    # Factors a Folder environment on a specific path
-    #
-    def self.folder(path)
-      Folder.new(path)
-    end
     
     #
     # Returns the default environment
@@ -1036,9 +1071,9 @@ module Alf
           }
         end
         
-        opt.on('--env=FOLDER', 
-               "Set the environment folder to use") do |value|
-          @environment = Environment.folder(value)
+        opt.on('--env=ENV', 
+               "Set the environment to use") do |value|
+          @environment = Environment.autodetect(value)
         end
         
         opt.on_tail('-h', "--help", "Show help") do
