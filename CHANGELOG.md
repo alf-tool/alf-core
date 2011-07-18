@@ -2,6 +2,16 @@
 
 * Enhancements
 
+  * Added MATCHING and NOT MATCHING operators. These operators are useful 
+    shortcuts for the following expressions.
+    
+        (matching     l, r) := (project (join l, r), [l's attributes])
+        (not_matching l, r) := (minus l, (matching l, r))
+      
+    For example "Give suppliers that supply at least one part": 
+    
+        (matching suppliers, supplies)
+
   * Added Relation::DUM and Relation::DEE constants (relations of empty heading
     with no and one tuple, respectively). They are also available as DUM and DEE 
     in Lispy functional expressions.
