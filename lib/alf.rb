@@ -645,10 +645,11 @@ module Alf
     attr_accessor :options
   
     #
-    # Creates a reader instance, with an optional input and environment wiring.
+    # Creates a reader instance. 
     #
     # @param [String or IO] path to a file or IO object for input
     # @param [Environment] environment wired environment, serving this reader
+    # @param [Hash] options Reader's options (see doc of subclasses) 
     #
     def initialize(*args)
       @input, @environment, @options = case args.first
@@ -861,17 +862,33 @@ module Alf
       @@renderers.each(&Proc.new)
     end
     
+    # Default renderer options
+    DEFAULT_OPTIONS = {}
+
     # Renderer input (typically an Iterator)
     attr_accessor :input
     
     # @return [Environment] Optional wired environment
     attr_accessor :environment
 
+    # @return [Hash] Renderer's options
+    attr_accessor :options
+    
     #
-    # Creates a renderer instance, optionally wired to an input
+    # Creates a reader instance. 
     #
-    def initialize(input = nil)
-      @input = input
+    # @param [Iterator] iterator an Iterator of tuples to render
+    # @param [Environment] environment wired environment, serving this reader
+    # @param [Hash] options Reader's options (see doc of subclasses) 
+    #
+    def initialize(*args)
+      @input, @environment, @options = case args.first
+      when Array
+        Tools.varargs(args, [Array, Environment, Hash])
+      else
+        Tools.varargs(args, [Iterator, Environment, Hash])
+      end
+      @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {}) 
     end
     
     # 
