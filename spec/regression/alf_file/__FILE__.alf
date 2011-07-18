@@ -1,0 +1,2 @@
+suppliers = Reader.reader File.join(File.dirname(__FILE__), "suppliers.rash")
+(project suppliers, [:city])
