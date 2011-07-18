@@ -1103,7 +1103,7 @@ module Alf
           @execute = true
         end
         
-        @renderer = Renderer::Rash.new
+        @renderer = nil
         Renderer.each_renderer do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){ 
             @renderer = clazz.new 
@@ -1161,6 +1161,7 @@ module Alf
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
+          renderer = self.renderer ||= Renderer::Rash.new
           renderer.pipe(operator, environment).execute($stdout)
         else
           operator
@@ -1190,7 +1191,7 @@ module Alf
       include Command
     
       options do |opt|
-        @renderer = Text::Renderer.new
+        @renderer = nil
         Renderer.each_renderer do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){ 
             @renderer = clazz.new 
@@ -1199,7 +1200,7 @@ module Alf
       end
         
       def execute(args)
-        requester.renderer = @renderer
+        requester.renderer = (@renderer || requester.renderer || Text::Renderer.new)
         args = [ $stdin ] if args.empty?
         args.first
       end

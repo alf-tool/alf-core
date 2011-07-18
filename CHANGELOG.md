@@ -24,6 +24,8 @@
   * Fixed (join xxx, DEE) and (join xxx, DUM)
   * Fixed scoping bug when using attributes named :path, :expr or :block in
     Lispy compiled expressions (coming from .alf files)
+  * Fixed 'alf --yaml show suppliers' that renderer a --text table instead of
+    a yaml output
 
 # 0.9.2 / 2011.07.13
 
