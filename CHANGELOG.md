@@ -1,6 +1,6 @@
 # 0.9.3 / FIX ME
 
-* Enhancements
+* Enhancements of the public API
 
   * When alf is invoked in shell using bin/alf (and only in this case), 
     ENV['ALF_OPTS'] is used a global options to apply as they were specified
@@ -28,6 +28,17 @@
     in Lispy functional expressions.
   
   * Added a Heading abstraction, as a set of attribute (name, type) pairs
+
+* Internal enhancements
+
+  * The Reader and Renderer classes now accept a Hash of options as third 
+    argument of the constructor (friendly varargs applies there). These options
+    can be used by extension points. 
+    
+  * The Environment class now provides a class-based registering mechanism 'ala'
+    Reader and Renderer. This allows auto-detecting the target environment when
+    --env=... is used in shell. See Environment.autodetect and Environment#recognizes? 
+    for contributing to this extension point. 
 
 * Bug fixes
 

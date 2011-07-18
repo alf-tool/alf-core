@@ -367,6 +367,11 @@ module Alf
   # You can implement your own environment by subclassing this class and 
   # implementing the {#dataset} method. As additional support is implemented 
   # in the base class, Environment should never be mimiced.
+  #
+  # This class provides an extension point allowing to participate to auto 
+  # detection and resolving of the --env=... option when alf is used in shell.
+  # See Environment.register, Environment.autodetect and Environment.recognizes?
+  # for details. 
   # 
   class Environment
     
@@ -374,7 +379,12 @@ module Alf
     @@environments = []
     
     #
-    # Register an environment class
+    # Register an environment class under a specific name. 
+    #
+    # Registered class must implement a recognizes? method that takes an array
+    # of arguments; it must returns true if an environment instance can be built
+    # using those arguments, false otherwise. Please be very specific in the 
+    # implementation for returning true. See also autodetect and recognizes?
     #
     # @param [Symbol] name name of the environment kind
     # @param [Class] clazz class that implemented the environment
@@ -390,13 +400,35 @@ module Alf
     #
     # Auto-detect the environment to use for specific arguments.
     #
+    # This method returns an instance of the first registered Environment class 
+    # that returns true to an invocation of recognizes?(args). It raises an 
+    # ArgumentError if no such class can be found.    
+    #
     # @return [Environment] an environment instance
+    # @raise [ArgumentError] when no registered class recognizes the arguments
     #
     def self.autodetect(*args)
       @@environments.each do |name,clazz|
         return clazz.new(*args) if clazz.recognizes?(args)
       end
       raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect}"
+    end
+    
+    #
+    # Returns true _args_ can be used for building an environment instance,
+    # false otherwise.
+    #
+    # When returning true, an immediate invocation of new(*args) should 
+    # succeed. While runtime exception are admitted (no such database, for 
+    # example), argument errors should not occur (missing argument, wrong 
+    # typing, etc.).
+    #
+    # Please be specific in the implementation of this extension point, as 
+    # registered environments for a chain and each of them should have a 
+    # chance of being selected.
+    #
+    def self.recognizes?(args)
+      false
     end
     
     #
