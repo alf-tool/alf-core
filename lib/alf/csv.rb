@@ -6,14 +6,11 @@ module Alf
     #
     module Commons
 
-      private
+      DEFAULT_OPTIONS = {
+        :headers => true
+      }
       
-      #
-      # Returns the default CSV options
-      #
-      def get_csv_options
-        {:headers => true}
-      end
+      private
       
       #
       # Returns CSV in ruby 1.9 and FasterCSV for ruby < 1.9.
@@ -32,7 +29,7 @@ module Alf
       #
       # Returns a CSV instance bound to a given io and options
       #
-      def get_csv(io, options = get_csv_options)
+      def get_csv(io)
         get_csv_class.new(io, options)
       end
       
@@ -45,6 +42,10 @@ module Alf
       include CSV::Commons
       
       protected
+      
+      def options
+        DEFAULT_OPTIONS
+      end
       
       # (see Renderer#render)
       def render(input, output)
@@ -88,7 +89,7 @@ module Alf
           }
           case io
           when StringIO
-            get_csv_class.parse(io.string, get_csv_options, &block) 
+            get_csv_class.parse(io.string, options, &block) 
           else
             get_csv(io).each(&block)
           end
