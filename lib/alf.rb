@@ -1128,7 +1128,6 @@ module Alf
       # Creates a command instance
       def initialize(env = Environment.default)
         @environment = env
-        extend(Lispy)
       end
       
       # Install options
@@ -1192,7 +1191,7 @@ module Alf
         
         # 2) build the operator according to -e option
         operator = if @execute
-          instance_eval(argv.first)
+          Alf.lispy(environment).compile(argv.first)
         else
           super
         end
@@ -3656,6 +3655,18 @@ module Alf
       (project child, attributes, true)
     end
   
+    # 
+    # Runs a command as in shell.
+    #
+    # Example:
+    #
+    #     lispy = Alf.lispy(Alf::Environment.examples)
+    #     op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
+    #
+    def run(argv, requester = nil)
+      Alf::Command::Main.new(environment).run(argv, requester)
+    end
+    
     Agg = Alf::Aggregator
     DUM = Relation::DUM
     DEE = Relation::DEE
@@ -3684,8 +3695,10 @@ module Alf
   #
   # @see Alf::Environment about available environments and their contract
   #
-  def self.lispy(env = Alf::Environment.default)
-    Command::Main.new(env)
+  def self.lispy(env = Environment.default)
+    lispy = Object.new.extend(Lispy)
+    lispy.environment = Environment.coerce(env)
+    lispy
   end
   
 end # module Alf

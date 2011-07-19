@@ -2,6 +2,15 @@
 
 * Enhancements of the public API
 
+  * Alf.lispy now accepts any argument recognized by Environment.autodetect; it
+    obtains its working Environment this way. Among others:
+    
+        Alf.lispy(Alf::Environment.folder("path/to/an/existing/folder"))
+        
+    is the same as: 
+    
+        Alf.lispy("path/to/an/existing/folder")
+
   * added alf's -r option, that mimics ruby's one (require library before run)
 
   * When alf is invoked in shell using bin/alf (and only in this case), 
@@ -31,7 +40,7 @@
   
   * Added a Heading abstraction, as a set of attribute (name, type) pairs
 
-* Internal enhancements
+* Internal enhancements (extension points)
 
   * The Reader and Renderer classes now accept a Hash of options as third 
     argument of the constructor (friendly varargs applies there). These options
@@ -39,8 +48,8 @@
     
   * The Environment class now provides a class-based registering mechanism 'ala'
     Reader and Renderer. This allows auto-detecting the target environment when
-    --env=... is used in shell. See Environment.autodetect and Environment#recognizes? 
-    for contributing to this extension point. 
+    --env=... is used in shell. See Environment.autodetect and 
+    Environment#recognizes? for contributing to this extension point. 
 
 * Bug fixes
 
