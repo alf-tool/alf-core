@@ -340,26 +340,6 @@ module Alf
   end # module Tools
   
   #
-  # Builds and returns a lispy engine on a specific environment.
-  #
-  # Example(s):
-  #
-  #   # Returns a lispy instance on the default environment
-  #   lispy = Alf.lispy
-  #
-  #   # Returns a lispy instance on the examples' environment
-  #   lispy = Alf.lispy(Alf::Environment.examples)
-  #
-  #   # Returns a lispy instance on a folder environment of your choice
-  #   lispy = Alf.lispy(Alf::Environment.folder('path/to/a/folder'))
-  #
-  # @see Alf::Environment about available environments and their contract
-  #
-  def self.lispy(env = Alf::Environment.default)
-    Command::Main.new(env)
-  end
-
-  #
   # Encapsulates the interface with the outside world, providing base iterators
   # for named datasets, among others.
   #
@@ -3677,6 +3657,26 @@ module Alf
     
   end # module Lispy
 
+  #
+  # Builds and returns a lispy engine on a specific environment.
+  #
+  # Example(s):
+  #
+  #   # Returns a lispy instance on the default environment
+  #   lispy = Alf.lispy
+  #
+  #   # Returns a lispy instance on the examples' environment
+  #   lispy = Alf.lispy(Alf::Environment.examples)
+  #
+  #   # Returns a lispy instance on a folder environment of your choice
+  #   lispy = Alf.lispy(Alf::Environment.folder('path/to/a/folder'))
+  #
+  # @see Alf::Environment about available environments and their contract
+  #
+  def self.lispy(env = Alf::Environment.default)
+    Command::Main.new(env)
+  end
+  
 end # module Alf
 require "alf/text"
 require "alf/yaml"
