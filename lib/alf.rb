@@ -400,10 +400,21 @@ module Alf
     # @raise [ArgumentError] when no registered class recognizes the arguments
     #
     def self.autodetect(*args)
-      @@environments.each do |name,clazz|
-        return clazz.new(*args) if clazz.recognizes?(args)
+      if (args.size == 1) && args.first.is_a?(Environment)
+        return args.first
+      else
+        @@environments.each do |name,clazz|
+          return clazz.new(*args) if clazz.recognizes?(args)
+        end
       end
       raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect}"
+    end
+    
+    #
+    # (see Environment.autodetect)
+    #
+    def self.coerce(*args)
+      autodetect(*args)
     end
     
     #
