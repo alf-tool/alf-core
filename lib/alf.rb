@@ -273,6 +273,18 @@ module Alf
         @sorter = nil
       end
     
+      # 
+      # Coerces `arg` to an ordering key. 
+      #
+      # Implemented coercions are:
+      # * Array of symbols (all attributes in ascending order)
+      # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
+      # * ProjectionKey (all its attributes in ascending order)
+      # * OrderingKey (self)
+      #
+      # @return [OrderingKey]
+      # @raises [ArgumentError] when `arg` is not recognized
+      #
       def self.coerce(arg)
         case arg
           when Array
@@ -3515,6 +3527,20 @@ module Alf
     #
     def to_s
       Alf::Renderer.text(self).execute("")
+    end
+    
+    #
+    # Returns an array with all tuples in this relation.
+    #
+    # @param [Tools::OrderingKey] an optional ordering key (any argument 
+    #        recognized by OrderingKey.coerce is supported here). 
+    # @return [Array] an array of hashes, in requested order (if specified)
+    #
+    def to_a(okey = nil)
+      okey = Tools::OrderingKey.coerce(okey) if okey
+      ary = tuples.to_a
+      ary.sort!(&okey.sorter) if okey
+      ary
     end
     
     #
