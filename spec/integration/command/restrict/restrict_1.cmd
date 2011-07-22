@@ -1,1 +1,1 @@
-alf --text restrict          suppliers -- city "'London'"
+alf --text restrict suppliers -- city "'London'"
