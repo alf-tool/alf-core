@@ -3390,7 +3390,78 @@ module Alf
     
   end # class Buffer
 
-  # 
+  #
+  # Defines a Heading, that is, a set of attribute (name,domain) pairs.
+  #
+  class Heading
+    
+    #
+    # Creates a Heading instance
+    #
+    # @param [Hash] a hash of attribute (name, type) pairs where name is
+    #        a Symbol and type is a Class
+    #
+    def self.[](attributes)
+      Heading.new(attributes) 
+    end
+
+    # @return [Hash] a (freezed) hash of (name, type) pairs  
+    attr_reader :attributes
+    
+    #
+    # Creates a Heading instance
+    #
+    # @param [Hash] a hash of attribute (name, type) pairs where name is
+    #        a Symbol and type is a Class
+    #
+    def initialize(attributes)
+      @attributes = attributes.dup.freeze
+    end
+    
+    #
+    # Returns heading's cardinality
+    #
+    def cardinality
+      attributes.size
+    end
+    alias :size  :cardinality
+    alias :count :cardinality
+    
+    #
+    # Returns heading's hash code
+    # 
+    def hash
+      @hash ||= attributes.hash
+    end
+    
+    #
+    # Checks equality with other heading
+    #
+    def ==(other)
+      other.is_a?(Heading) && (other.attributes == attributes) 
+    end
+    alias :eql? :==
+    
+    #
+    # Converts this heading to a Hash of (name,type) pairs
+    # 
+    def to_hash
+      attributes.dup
+    end
+    
+    # 
+    # Returns a Heading literal
+    #
+    def to_ruby_literal
+      attributes.empty? ?
+        "Alf::Heading::EMPTY" :
+        "Alf::Heading[#{Myrrha.to_ruby_literal(attributes)[1...-1]}]"
+    end
+    alias :inspect :to_ruby_literal
+    
+    EMPTY = Alf::Heading.new({})
+  end # class Heading
+  
   #
   # Defines an in-memory relation data structure.
   #
@@ -3718,4 +3789,3 @@ module Alf
 end # module Alf
 require "alf/text"
 require "alf/yaml"
-require 'alf/heading'
