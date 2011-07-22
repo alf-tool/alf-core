@@ -9,9 +9,9 @@ module Alf
     ]}
     
     specify "without an ordering key" do
-      rel.to_a.should eq([
-        {:sid => 'S2'},
+      rel.to_a.sort{|k1,k2| k1[:sid] <=> k2[:sid]}.should eq([
         {:sid => 'S1'},
+        {:sid => 'S2'},
         {:sid => 'S3'}
       ])
     end
