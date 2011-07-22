@@ -3100,7 +3100,9 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        self.ranking_name = args.first.to_sym
+        unless args.empty?
+          self.ranking_name = args.first.to_sym
+        end
         self
       end
   

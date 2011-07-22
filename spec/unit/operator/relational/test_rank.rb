@@ -28,9 +28,21 @@ module Alf
         ]}
         let(:operator){ Rank.new([:weight]) }
         before{ operator.pipe(input) }
-        it{ 
-          should eq(expected) 
-        }
+        it{ should eq(expected) }
+      end
+    
+      describe "when a total ordering is used" do
+        let(:expected) {Alf::Relation[
+          {:pid => 'P1', :weight => 12.0, :rank => 0},
+          {:pid => 'P5', :weight => 12.0, :rank => 1},
+          {:pid => 'P4', :weight => 14.0, :rank => 2},
+          {:pid => 'P2', :weight => 17.0, :rank => 3},
+          {:pid => 'P3', :weight => 17.0, :rank => 4},
+          {:pid => 'P6', :weight => 19.0, :rank => 5}
+        ]}
+        let(:operator){ Rank.new([:weight, :pid]) }
+        before{ operator.pipe(input) }
+        it{ should eq(expected) }
       end
           
     end

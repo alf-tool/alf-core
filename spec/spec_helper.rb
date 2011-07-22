@@ -7,7 +7,9 @@ Alf::Lispy.extend(Alf::Lispy)
 def rel(*args)
   Alf::Relation.coerce(args)
 end
-
+def tuple(h)
+  h
+end
 def _(path, file)
   File.expand_path("../#{path}", file)
 end
