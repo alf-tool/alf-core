@@ -1102,7 +1102,14 @@ module Alf
     #
     # RELATIONAL COMMANDS
     # #{summarized_subcommands subcommands.select{|cmd| 
-    #    cmd.include?(Alf::Operator::Relational)
+    #    cmd.include?(Alf::Operator::Relational) &&
+    #    !cmd.include?(Alf::Operator::Experimental)
+    # }}
+    #
+    # EXPERIMENTAL OPERATORS
+    # #{summarized_subcommands subcommands.select{|cmd| 
+    #    cmd.include?(Alf::Operator::Relational) &&
+    #    cmd.include?(Alf::Operator::Experimental)
     # }}
     #
     # NON-RELATIONAL COMMANDS
@@ -1638,6 +1645,9 @@ module Alf
       
     end # module Shortcut
 
+    # Marker for experimental operators
+    module Experimental; end
+    
   end # module Operator
 
   #
@@ -3036,7 +3046,8 @@ module Alf
     #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
     #
     class Quota < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Relational, Operator::Shortcut, Operator::Unary
+      include Operator::Relational, Operator::Experimental,
+              Operator::Shortcut, Operator::Unary
   
       # Quota by
       attr_accessor :by

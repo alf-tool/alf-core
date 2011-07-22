@@ -30,6 +30,10 @@
     is the same as 
     
         % alf --env=. --yaml show suppliers
+        
+  * 'alf --help' now distinguish experimental operators from those coming from
+    the (much more stable) TUTORIAL D specification. The former should be used
+    with care as they specification may change at any time.  
 
 * Enhancements when using Alf in Ruby 
 
