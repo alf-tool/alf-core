@@ -291,10 +291,16 @@ module Alf
       def self.coerce(arg)
         case arg
           when Array
-            if arg.all?{|a| a.is_a?(Symbol)}
-              arg = arg.collect{|a| [a, :asc]}
+            if arg.all?{|a| a.is_a?(Array)}
+              OrderingKey.new(arg)
+            elsif arg.all?{|a| a.is_a?(Symbol)}
+              sliced = arg.each_slice(2) 
+              if sliced.all?{|a,o| [:asc,:desc].include?(o)}
+                OrderingKey.new sliced.to_a
+              else
+                OrderingKey.new arg.collect{|a| [a, :asc]}
+              end
             end
-            OrderingKey.new(arg)
           when ProjectionKey
             arg.to_ordering_key
           when OrderingKey
