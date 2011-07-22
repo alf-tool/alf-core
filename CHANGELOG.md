@@ -1,15 +1,22 @@
 # 0.9.3 / FIX ME
 
-* Enhancements of the public API
+* New operators (available both in shell and in Lispy DSL)
 
-  * Alf.lispy now accepts any argument recognized by Environment.autodetect; it
-    obtains its working Environment this way. Among others:
+  * Added MATCHING and NOT MATCHING operators. These operators are useful 
+    shortcuts for the following expressions.
     
-        Alf.lispy(Alf::Environment.folder("path/to/an/existing/folder"))
-        
-    is the same as: 
+        (matching     l, r) := (project (join l, r), [l's attributes])
+        (not_matching l, r) := (minus l, (matching l, r))
+      
+    For example: 
     
-        Alf.lispy("path/to/an/existing/folder")
+        # Give suppliers that supply at least one part
+        (matching suppliers, supplies)
+
+        # Give suppliers that don't supply any part
+        (not_matching suppliers, supplies)
+
+* Enhancements when using Alf in shell
 
   * added alf's -r option, that mimics ruby's one (require library before run)
 
@@ -24,15 +31,16 @@
     
         % alf --env=. --yaml show suppliers
 
-  * Added MATCHING and NOT MATCHING operators. These operators are useful 
-    shortcuts for the following expressions.
+* Enhancements when using Alf in Ruby 
+
+  * Alf.lispy now accepts any argument recognized by Environment.autodetect; it
+    obtains its working Environment this way. Among others:
     
-        (matching     l, r) := (project (join l, r), [l's attributes])
-        (not_matching l, r) := (minus l, (matching l, r))
-      
-    For example "Give suppliers that supply at least one part": 
+        Alf.lispy(Alf::Environment.folder("path/to/an/existing/folder"))
+        
+    is the same as: 
     
-        (matching suppliers, supplies)
+        Alf.lispy("path/to/an/existing/folder")
 
   * Added Relation::DUM and Relation::DEE constants (relations of empty heading
     with no and one tuple, respectively). They are also available as DUM and DEE 
