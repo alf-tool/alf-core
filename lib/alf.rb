@@ -2012,6 +2012,7 @@ module Alf
   
     end # class Clip
 
+    require "alf/coerce"
   end # Operator::NonRelational
   
   #
@@ -3535,6 +3536,19 @@ module Alf
     #
     def initialize(attributes)
       @attributes = attributes.dup.freeze
+    end
+    
+    #
+    # Coerces `attributes` to a Heading instance
+    #
+    def self.coerce(attributes)
+      # TODO: add coercion from an Array here
+      case attributes
+      when Hash
+        Heading.new(attributes)
+      else
+        raise ArgumentError, "Unable to coerce #{attributes.inspect} to a Heading"
+      end
     end
     
     #
