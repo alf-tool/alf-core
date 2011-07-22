@@ -21,7 +21,9 @@ describe "Alf's alf command / " do
       
       specify{
         begin 
-          Alf::Command::Main.run(argv, __FILE__)
+          main = Alf::Command::Main.new
+          main.environment = Alf::Environment.folder(File.expand_path("../__database__", __FILE__))
+          main.run(argv, __FILE__)
         rescue SystemExit
           $stdout << SystemExit << "\n"
         end
