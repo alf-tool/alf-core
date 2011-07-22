@@ -1,0 +1,5 @@
+{:sid => "S1", :name => "Smith", :status => 20, :city => "London", :uri => "Smith"}
+{:sid => "S2", :name => "Jones", :status => 10, :city => "Paris", :uri => "Jones"}
+{:sid => "S3", :name => "Blake", :status => 30, :city => "Paris", :uri => "Blake"}
+{:sid => "S4", :name => "Clark", :status => 20, :city => "London", :uri => "Clark"}
+{:sid => "S5", :name => "Adams", :status => 30, :city => "Athens", :uri => "Adams"}

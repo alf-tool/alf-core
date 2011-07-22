@@ -8,3 +8,4 @@ doc/api
 .buildpath
 examples/bench.txt
 *.rbc
+coverage

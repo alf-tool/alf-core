@@ -12,6 +12,11 @@ module Alf
     
     describe "autodetect" do
       
+      it "should support an Environment instance" do
+        env = Environment.examples
+        Environment.autodetect(env).should eq(env)
+      end
+      
       it "should recognize an existing folder" do
         env = Environment.autodetect(File.dirname(__FILE__))
         env.should be_a(Environment::Folder)
@@ -19,6 +24,12 @@ module Alf
       
       it "should raise an Argument when no match" do
         lambda{ Environment.autodetect(12) }.should raise_error(ArgumentError)
+      end
+      
+      it "should be aliased as coerce" do
+        env = Environment.examples
+        Environment.coerce(env).should eq(env)
+        Environment.coerce(File.dirname(__FILE__)).should be_a(Environment::Folder)
       end
       
     end

@@ -1,1 +1,1 @@
-alf --text restrict          suppliers -- "status > 20"
+alf --text restrict suppliers -- "status > 20"

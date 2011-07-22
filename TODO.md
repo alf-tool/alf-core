@@ -18,7 +18,4 @@
   
 * Add PIVOT and UNPIVOT operators
 
-* Add a to_ruby abstraction and replace inspect usages in TupleHandle and
-  Rash renderer
-
 * Find a way to complete the description of Quota...  

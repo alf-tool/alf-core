@@ -1,8 +1,12 @@
+require "alf/version"
+require "alf/loader"
+
 require "enumerator"
 require "stringio"
 require "set"
-require "alf/version"
-require "alf/loader"
+
+require 'myrrha/to_ruby_literal'
+require 'myrrha/coerce'
 
 #
 # Classy data-manipulation dressed in a DSL (+ commandline)
@@ -165,9 +169,8 @@ module Alf
           if expr.empty?
             compile(nil)
           else
-            # TODO: replace inspect by to_ruby
-            compile expr.each_pair.collect{|k,v| 
-              "(#{k} == #{v.inspect})"
+            compile expr.each_pair.collect{|k,v|
+              "(self.#{k} == #{Myrrha.to_ruby_literal(v)})"
             }.join(" && ")
           end
         when Array
@@ -273,13 +276,31 @@ module Alf
         @sorter = nil
       end
     
+      # 
+      # Coerces `arg` to an ordering key. 
+      #
+      # Implemented coercions are:
+      # * Array of symbols (all attributes in ascending order)
+      # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
+      # * ProjectionKey (all its attributes in ascending order)
+      # * OrderingKey (self)
+      #
+      # @return [OrderingKey]
+      # @raises [ArgumentError] when `arg` is not recognized
+      #
       def self.coerce(arg)
         case arg
           when Array
-            if arg.all?{|a| a.is_a?(Symbol)}
-              arg = arg.collect{|a| [a, :asc]}
+            if arg.all?{|a| a.is_a?(Array)}
+              OrderingKey.new(arg)
+            elsif arg.all?{|a| a.is_a?(Symbol)}
+              sliced = arg.each_slice(2) 
+              if sliced.all?{|a,o| [:asc,:desc].include?(o)}
+                OrderingKey.new sliced.to_a
+              else
+                OrderingKey.new arg.collect{|a| [a, :asc]}
+              end
             end
-            OrderingKey.new(arg)
           when ProjectionKey
             arg.to_ordering_key
           when OrderingKey
@@ -327,26 +348,6 @@ module Alf
     extend Tools
   end # module Tools
   
-  #
-  # Builds and returns a lispy engine on a specific environment.
-  #
-  # Example(s):
-  #
-  #   # Returns a lispy instance on the default environment
-  #   lispy = Alf.lispy
-  #
-  #   # Returns a lispy instance on the examples' environment
-  #   lispy = Alf.lispy(Alf::Environment.examples)
-  #
-  #   # Returns a lispy instance on a folder environment of your choice
-  #   lispy = Alf.lispy(Alf::Environment.folder('path/to/a/folder'))
-  #
-  # @see Alf::Environment about available environments and their contract
-  #
-  def self.lispy(env = Alf::Environment.default)
-    Command::Main.new(env)
-  end
-
   #
   # Encapsulates the interface with the outside world, providing base iterators
   # for named datasets, among others.
@@ -408,10 +409,21 @@ module Alf
     # @raise [ArgumentError] when no registered class recognizes the arguments
     #
     def self.autodetect(*args)
-      @@environments.each do |name,clazz|
-        return clazz.new(*args) if clazz.recognizes?(args)
+      if (args.size == 1) && args.first.is_a?(Environment)
+        return args.first
+      else
+        @@environments.each do |name,clazz|
+          return clazz.new(*args) if clazz.recognizes?(args)
+        end
       end
       raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect}"
+    end
+    
+    #
+    # (see Environment.autodetect)
+    #
+    def self.coerce(*args)
+      autodetect(*args)
     end
     
     #
@@ -1040,7 +1052,7 @@ module Alf
       # (see Renderer#render)
       def render(input, output)
         input.each do |tuple|
-          output << tuple.inspect << "\n"
+          output << Myrrha.to_ruby_literal(tuple) << "\n"
         end
         output
       end
@@ -1098,7 +1110,14 @@ module Alf
     #
     # RELATIONAL COMMANDS
     # #{summarized_subcommands subcommands.select{|cmd| 
-    #    cmd.include?(Alf::Operator::Relational)
+    #    cmd.include?(Alf::Operator::Relational) &&
+    #    !cmd.include?(Alf::Operator::Experimental)
+    # }}
+    #
+    # EXPERIMENTAL OPERATORS
+    # #{summarized_subcommands subcommands.select{|cmd| 
+    #    cmd.include?(Alf::Operator::Relational) &&
+    #    cmd.include?(Alf::Operator::Experimental)
     # }}
     #
     # NON-RELATIONAL COMMANDS
@@ -1125,7 +1144,6 @@ module Alf
       # Creates a command instance
       def initialize(env = Environment.default)
         @environment = env
-        extend(Lispy)
       end
       
       # Install options
@@ -1145,6 +1163,10 @@ module Alf
         opt.on('--env=ENV', 
                "Set the environment to use") do |value|
           @environment = Environment.autodetect(value)
+        end
+        
+        opt.on('-rlibrary', "require the library, before executing alf") do |value|
+          require(value)
         end
         
         opt.on_tail('-h', "--help", "Show help") do
@@ -1185,7 +1207,7 @@ module Alf
         
         # 2) build the operator according to -e option
         operator = if @execute
-          instance_eval(argv.first)
+          Alf.lispy(environment).compile(argv.first)
         else
           super
         end
@@ -1631,6 +1653,9 @@ module Alf
       
     end # module Shortcut
 
+    # Marker for experimental operators
+    module Experimental; end
+    
   end # module Operator
 
   #
@@ -3008,6 +3033,117 @@ module Alf
     end # class Summarize
   
     # 
+    # Relational ranking (explicit tuple positions)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] --order=OR1... -- [RANKNAME]
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   # Position attribute => # of tuples with smaller weight 
+    #   (rank :parts, [:weight], :position)
+    #    
+    #   # Position attribute => # of tuples with greater weight 
+    #   (rank :parts, [[:weight, :desc]], :position)
+    #
+    # DESCRIPTION
+    #
+    # This operator computes the ranking of input tuples, according to an order
+    # relation. Precisely, it extends the input tuples with a RANKNAME attribute
+    # whose value is the number of tuples which are considered strictly less
+    # according to the specified order. For the two examples above:
+    #
+    #   alf rank parts --order=weight -- position
+    #   alf rank parts --order=weight,desc -- position
+    #
+    # Note that, unless the ordering key includes a candidate key for the input
+    # relation, the newly RANKNAME attribute is not necessarily a candidate key
+    # for the output one. In the example above, adding the :pid attribute 
+    # ensured that position will contain all different values: 
+    #
+    #   alf rank parts --order=weight,pid -- position
+    # 
+    # Or even:
+    #
+    #   alf rank parts --order=weight,desc,pid,asc -- position
+    #
+    class Rank < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Relational, Operator::Shortcut, Operator::Unary
+  
+      # Ranking order
+      attr_accessor :order
+      
+      # Ranking attribute name
+      attr_accessor :ranking_name
+  
+      def initialize(order = [], ranking_name = :rank)
+        @order, @ranking_name = order, ranking_name
+      end
+  
+      options do |opt|
+        opt.on('--order=x,y,z', 'Specify ranking order', Array) do |args|
+          @order = args.collect{|a| a.to_sym}
+        end
+      end
+  
+      class SortBased
+        include Operator::Cesure
+        
+        def initialize(order, ranking_name)
+          @order, @ranking_name = order, ranking_name
+        end
+        
+        def ordering_key
+          OrderingKey.coerce @order
+        end
+        
+        def cesure_key
+          ProjectionKey.coerce(ordering_key)
+        end
+    
+        def start_cesure(key, receiver)
+          @rank ||= 0
+          @last_block = 0
+        end
+  
+        def accumulate_cesure(tuple, receiver)
+          receiver.call tuple.merge(@ranking_name => @rank)
+          @last_block += 1
+        end
+        
+        def flush_cesure(key, receiver)
+          @rank += @last_block
+        end
+  
+      end # class SortBased
+  
+      protected
+      
+      # (see Operator::CommandMethods#set_args)
+      def set_args(args)
+        unless args.empty?
+          self.ranking_name = args.first.to_sym
+        end
+        self
+      end
+  
+      def ordering_key
+        OrderingKey.coerce @order
+      end
+  
+      def longexpr
+        sort_key = ordering_key
+        chain SortBased.new(sort_key, @ranking_name),
+              Operator::NonRelational::Sort.new(sort_key),
+              datasets
+      end 
+  
+    end # class Rank
+    
+    # 
     # Relational quota-queries (position, sum progression, etc.)
     #
     # SYNOPSIS
@@ -3029,7 +3165,8 @@ module Alf
     #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
     #
     class Quota < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Relational, Operator::Shortcut, Operator::Unary
+      include Operator::Relational, Operator::Experimental,
+              Operator::Shortcut, Operator::Unary
   
       # Quota by
       attr_accessor :by
@@ -3372,7 +3509,78 @@ module Alf
     
   end # class Buffer
 
-  # 
+  #
+  # Defines a Heading, that is, a set of attribute (name,domain) pairs.
+  #
+  class Heading
+    
+    #
+    # Creates a Heading instance
+    #
+    # @param [Hash] a hash of attribute (name, type) pairs where name is
+    #        a Symbol and type is a Class
+    #
+    def self.[](attributes)
+      Heading.new(attributes) 
+    end
+
+    # @return [Hash] a (freezed) hash of (name, type) pairs  
+    attr_reader :attributes
+    
+    #
+    # Creates a Heading instance
+    #
+    # @param [Hash] a hash of attribute (name, type) pairs where name is
+    #        a Symbol and type is a Class
+    #
+    def initialize(attributes)
+      @attributes = attributes.dup.freeze
+    end
+    
+    #
+    # Returns heading's cardinality
+    #
+    def cardinality
+      attributes.size
+    end
+    alias :size  :cardinality
+    alias :count :cardinality
+    
+    #
+    # Returns heading's hash code
+    # 
+    def hash
+      @hash ||= attributes.hash
+    end
+    
+    #
+    # Checks equality with other heading
+    #
+    def ==(other)
+      other.is_a?(Heading) && (other.attributes == attributes) 
+    end
+    alias :eql? :==
+    
+    #
+    # Converts this heading to a Hash of (name,type) pairs
+    # 
+    def to_hash
+      attributes.dup
+    end
+    
+    # 
+    # Returns a Heading literal
+    #
+    def to_ruby_literal
+      attributes.empty? ?
+        "Alf::Heading::EMPTY" :
+        "Alf::Heading[#{Myrrha.to_ruby_literal(attributes)[1...-1]}]"
+    end
+    alias :inspect :to_ruby_literal
+    
+    EMPTY = Alf::Heading.new({})
+  end # class Heading
+  
   #
   # Defines an in-memory relation data structure.
   #
@@ -3514,11 +3722,27 @@ module Alf
     end
     
     #
+    # Returns an array with all tuples in this relation.
+    #
+    # @param [Tools::OrderingKey] an optional ordering key (any argument 
+    #        recognized by OrderingKey.coerce is supported here). 
+    # @return [Array] an array of hashes, in requested order (if specified)
+    #
+    def to_a(okey = nil)
+      okey = Tools::OrderingKey.coerce(okey) if okey
+      ary = tuples.to_a
+      ary.sort!(&okey.sorter) if okey
+      ary
+    end
+    
+    #
     # Returns a  literal representation of this relation
     #
-    def inspect
-      "Alf::Relation[" << @tuples.collect{|t| t.inspect}.join(',') << "]"
+    def to_ruby_literal
+      "Alf::Relation[" +
+        tuples.collect{|t| Myrrha.to_ruby_literal(t)}.join(', ') + "]"
     end
+    alias :inspect :to_ruby_literal
   
     DEE = Relation.coerce([{}])
     DUM = Relation.coerce([])
@@ -3635,6 +3859,18 @@ module Alf
       (project child, attributes, true)
     end
   
+    # 
+    # Runs a command as in shell.
+    #
+    # Example:
+    #
+    #     lispy = Alf.lispy(Alf::Environment.examples)
+    #     op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
+    #
+    def run(argv, requester = nil)
+      Alf::Command::Main.new(environment).run(argv, requester)
+    end
+    
     Agg = Alf::Aggregator
     DUM = Relation::DUM
     DEE = Relation::DEE
@@ -3647,8 +3883,29 @@ module Alf
     
   end # module Lispy
 
+  #
+  # Builds and returns a lispy engine on a specific environment.
+  #
+  # Example(s):
+  #
+  #   # Returns a lispy instance on the default environment
+  #   lispy = Alf.lispy
+  #
+  #   # Returns a lispy instance on the examples' environment
+  #   lispy = Alf.lispy(Alf::Environment.examples)
+  #
+  #   # Returns a lispy instance on a folder environment of your choice
+  #   lispy = Alf.lispy(Alf::Environment.folder('path/to/a/folder'))
+  #
+  # @see Alf::Environment about available environments and their contract
+  #
+  def self.lispy(env = Environment.default)
+    lispy = Object.new.extend(Lispy)
+    lispy.environment = Environment.coerce(env)
+    lispy
+  end
+  
 end # module Alf
 require "alf/text"
 require "alf/yaml"
-require 'alf/heading'
 require "alf/csv"
