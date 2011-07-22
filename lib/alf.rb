@@ -167,9 +167,8 @@ module Alf
           if expr.empty?
             compile(nil)
           else
-            # TODO: replace inspect by to_ruby
-            compile expr.each_pair.collect{|k,v| 
-              "(#{k} == #{v.inspect})"
+            compile expr.each_pair.collect{|k,v|
+              "(self.#{k} == #{Myrrha.to_ruby_literal(v)})"
             }.join(" && ")
           end
         when Array

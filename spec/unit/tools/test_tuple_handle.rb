@@ -40,6 +40,33 @@ module Alf
           x = lambda{ true }
           TupleHandle.compile(x).should == x
         end
+        
+        it "should support an empty Hash" do
+          pred = TupleHandle.compile({})
+          pred.call.should be_true
+        end
+        
+        it "should support a Hash" do
+          pred = TupleHandle.compile({:status => 10})
+          handle = TupleHandle.new
+          handle.set({:status => 20}).evaluate(pred).should be_false
+          handle.set({:status => 10}).evaluate(pred).should be_true
+        end
+        
+        it "should support a Hash using keywords as attribute names" do
+          pred = TupleHandle.compile({:when => 10})
+          handle = TupleHandle.new
+          handle.set({:when => 20}).evaluate(pred).should be_false
+          handle.set({:when => 10}).evaluate(pred).should be_true
+        end
+  
+        it "should support a Hash containing a Date" do
+          today = Date.today
+          pred = TupleHandle.compile({:at => today})
+          handle = TupleHandle.new
+          handle.set({:at => today}).evaluate(pred).should be_true
+          handle.set({:at => today+1}).evaluate(pred).should be_false
+        end
   
       end
   
