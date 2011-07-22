@@ -1,8 +1,10 @@
+require "alf/version"
+require "alf/loader"
+
 require "enumerator"
 require "stringio"
 require "set"
-require "alf/version"
-require "alf/loader"
+
 require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'
 
