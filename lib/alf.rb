@@ -3027,6 +3027,97 @@ module Alf
     end # class Summarize
   
     # 
+    # Relational ranking (explicit tuple positions)
+    #
+    # SYNOPSIS
+    #   #{program_name} #{command_name} [OPERAND] --order=OR1... AGG1 -- [RANKNAME]
+    #
+    # OPTIONS
+    # #{summarized_options}
+    #
+    # API & EXAMPLE
+    #
+    #   (rank :parts, [:weight], :rank)
+    #
+    # DESCRIPTION
+    #
+    # This operator computes the ranking of input tuples, according to an order
+    # relation.
+    #
+    #   alf rank parts --order=weight -- rank
+    #
+    class Rank < Factory::Operator(__FILE__, __LINE__)
+      include Operator::Relational, Operator::Shortcut, Operator::Unary
+  
+      # Ranking order
+      attr_accessor :order
+      
+      # Ranking attribute name
+      attr_accessor :ranking_name
+  
+      def initialize(order = [], ranking_name = :rank)
+        @order, @ranking_name = order, ranking_name
+      end
+  
+      options do |opt|
+        opt.on('--order=x,y,z', 'Specify ranking order', Array) do |args|
+          @order = args.collect{|a| a.to_sym}
+        end
+      end
+  
+      class SortBased
+        include Operator::Cesure
+        
+        def initialize(order, ranking_name)
+          @order, @ranking_name = order, ranking_name
+        end
+        
+        def ordering_key
+          OrderingKey.coerce @order
+        end
+        
+        def cesure_key
+          ProjectionKey.coerce(ordering_key)
+        end
+    
+        def start_cesure(key, receiver)
+          @rank ||= 0
+          @last_block = 0
+        end
+  
+        def accumulate_cesure(tuple, receiver)
+          receiver.call tuple.merge(@ranking_name => @rank)
+          @last_block += 1
+        end
+        
+        def flush_cesure(key, receiver)
+          @rank += @last_block
+        end
+  
+      end # class SortBased
+  
+      protected
+      
+      # (see Operator::CommandMethods#set_args)
+      def set_args(args)
+        self.ranking_name = args.first.to_sym
+        self
+      end
+  
+      def ordering_key
+        OrderingKey.coerce @order
+      end
+  
+      def longexpr
+        sort_key = ordering_key
+        chain SortBased.new(sort_key, @ranking_name),
+              Operator::NonRelational::Sort.new(sort_key),
+              datasets
+      end 
+  
+    end # class Rank
+    
+    # 
     # Relational quota-queries (position, sum progression, etc.)
     #
     # SYNOPSIS

@@ -15,6 +15,7 @@ module Alf
         Alf::Operator::Relational::NotMatching,
         Alf::Operator::Relational::Project,
         Alf::Operator::Relational::Quota,
+        Alf::Operator::Relational::Rank,
         Alf::Operator::Relational::Rename,
         Alf::Operator::Relational::Restrict,
         Alf::Operator::Relational::Summarize,
