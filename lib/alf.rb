@@ -3,6 +3,8 @@ require "stringio"
 require "set"
 require "alf/version"
 require "alf/loader"
+require 'myrrha/to_ruby_literal'
+require 'myrrha/coerce'
 
 #
 # Classy data-manipulation dressed in a DSL (+ commandline)
@@ -1043,7 +1045,7 @@ module Alf
       # (see Renderer#render)
       def render(input, output)
         input.each do |tuple|
-          output << tuple.inspect << "\n"
+          output << Myrrha.to_ruby_literal(tuple) << "\n"
         end
         output
       end

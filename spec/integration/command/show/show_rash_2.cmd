@@ -1,1 +1,1 @@
-alf -rdate --rash extend suppliers -- date "Date.parse('2011-07-22')" | alf show --rash
+alf -rdate extend suppliers -- date "Date.parse('2011-07-22')"
