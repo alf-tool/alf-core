@@ -50,6 +50,10 @@
     Reader and Renderer. This allows auto-detecting the target environment when
     --env=... is used in shell. See Environment.autodetect and 
     Environment#recognizes? for contributing to this extension point. 
+    
+  * Internals now rely on Myrrha for code generation. This means that all 
+    datatypes can now be safely used in relations and dumped to .rash files in
+    particular.  
 
 * Bug fixes
 
@@ -59,6 +63,11 @@
     Lispy compiled expressions (coming from .alf files)
   * Fixed 'alf --yaml show suppliers' that renderer a --text table instead of
     a yaml output
+  * Fixed bugs when using Date and Time attributes with .rash files
+  * Fixed bugs when using Date and Time attributes in restrict expressions 
+    compiled from the commandline
+  * Fixed a few bugs when using attribute names that are ruby keywords 
+    (restrict & extend)  
 
 # 0.9.2 / 2011.07.13
 
