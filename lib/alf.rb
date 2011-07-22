@@ -3030,21 +3030,35 @@ module Alf
     # Relational ranking (explicit tuple positions)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] --order=OR1... AGG1 -- [RANKNAME]
+    #   #{program_name} #{command_name} [OPERAND] --order=OR1... -- [RANKNAME]
     #
     # OPTIONS
     # #{summarized_options}
     #
     # API & EXAMPLE
     #
-    #   (rank :parts, [:weight], :rank)
+    #   # Position attribute => # of tuples with smaller weight 
+    #   (rank :parts, [:weight], :position)
+    #    
+    #   # Position attribute => # of tuples with greater weight 
+    #   (rank :parts, [[:weight, :desc]], :position)
     #
     # DESCRIPTION
     #
     # This operator computes the ranking of input tuples, according to an order
-    # relation.
+    # relation. Precisely, it extends the input tuples with a RANKNAME attribute
+    # whose value is the number of tuples which are considered strictly less
+    # according to the specified order. For the two examples above:
     #
-    #   alf rank parts --order=weight -- rank
+    #   alf rank parts --order=weight -- position
+    #   alf rank parts --order=weight,desc -- position
+    #
+    # Note that, unless the ordering key includes a candidate key for the input
+    # relation, the newly RANKNAME attribute is not necessarily a candidate key
+    # for the output one. In the example above, adding the :pid attribute 
+    # ensured that position will contain all different values: 
+    #
+    #   alf rank parts --order=weight,pid -- position
     #
     class Rank < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary

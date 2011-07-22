@@ -16,6 +16,12 @@
         # Give suppliers that don't supply any part
         (not_matching suppliers, supplies)
 
+  * Added RANK operator. The RANK operator is useful for for computing quota 
+    queries, as shown below. See 'alf help rank' for details.
+    
+        # Give the three heaviest parts
+        (allbut (restrict (rank :parts, [[:weight, :desc]], :pos), lambda{ pos < 3 }), [:pos])
+
 * Enhancements when using Alf in shell
 
   * added alf's -r option, that mimics ruby's one (require library before run)
