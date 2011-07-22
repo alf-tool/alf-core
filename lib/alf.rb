@@ -3065,6 +3065,10 @@ module Alf
     # ensured that position will contain all different values: 
     #
     #   alf rank parts --order=weight,pid -- position
+    # 
+    # Or even:
+    #
+    #   alf rank parts --order=weight,desc,pid,asc -- position
     #
     class Rank < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
