@@ -15,7 +15,7 @@ module Alf
       subject{ Renderer.rash(input) } 
       let(:input){ [{:a => 1}] }
       let(:output){ "" }
-      let(:expected){ "{:a=>1}\n" }
+      let(:expected){ "{:a => 1}\n" }
       specify{ 
         subject.should be_a(Renderer)
         subject.execute(output).should == expected

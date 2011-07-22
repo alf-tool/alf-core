@@ -3,6 +3,8 @@ require "stringio"
 require "set"
 require "alf/version"
 require "alf/loader"
+require 'myrrha/to_ruby_literal'
+require 'myrrha/coerce'
 
 #
 # Classy data-manipulation dressed in a DSL (+ commandline)
@@ -165,9 +167,8 @@ module Alf
           if expr.empty?
             compile(nil)
           else
-            # TODO: replace inspect by to_ruby
-            compile expr.each_pair.collect{|k,v| 
-              "(#{k} == #{v.inspect})"
+            compile expr.each_pair.collect{|k,v|
+              "(self.#{k} == #{Myrrha.to_ruby_literal(v)})"
             }.join(" && ")
           end
         when Array
@@ -1043,7 +1044,7 @@ module Alf
       # (see Renderer#render)
       def render(input, output)
         input.each do |tuple|
-          output << tuple.inspect << "\n"
+          output << Myrrha.to_ruby_literal(tuple) << "\n"
         end
         output
       end
@@ -3536,9 +3537,11 @@ module Alf
     #
     # Returns a  literal representation of this relation
     #
-    def inspect
-      "Alf::Relation[" << @tuples.collect{|t| t.inspect}.join(',') << "]"
+    def to_ruby_literal
+      "Alf::Relation[" +
+        tuples.collect{|t| Myrrha.to_ruby_literal(t)}.join(', ') + "]"
     end
+    alias :inspect :to_ruby_literal
   
     DEE = Relation.coerce([{}])
     DUM = Relation.coerce([])

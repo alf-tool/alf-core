@@ -131,6 +131,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("wlang", "~> 0.10.1")
   s.add_development_dependency("noe", "~> 1.3.0")
   s.add_dependency("quickl", "~> 0.2.2")
+  s.add_dependency("myrrha", "~> 1.0.0")
 
   # The version of ruby required by this gem
   #

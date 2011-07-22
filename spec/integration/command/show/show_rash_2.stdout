@@ -1,0 +1,5 @@
+{:sid => "S1", :name => "Smith", :status => 20, :city => "London", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
+{:sid => "S2", :name => "Jones", :status => 10, :city => "Paris", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
+{:sid => "S3", :name => "Blake", :status => 30, :city => "Paris", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
+{:sid => "S4", :name => "Clark", :status => 20, :city => "London", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
+{:sid => "S5", :name => "Adams", :status => 30, :city => "Athens", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}

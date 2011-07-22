@@ -58,11 +58,12 @@ module Alf
     # 
     # Returns a Heading literal
     #
-    def inspect
+    def to_ruby_literal
       attributes.empty? ?
         "Alf::Heading::EMPTY" :
-        "Alf::Heading[#{attributes.inspect[1...-1]}]"
+        "Alf::Heading[#{Myrrha.to_ruby_literal(attributes)[1...-1]}]"
     end
+    alias :inspect :to_ruby_literal
     
     EMPTY = Alf::Heading.new({})
   end # class Heading
