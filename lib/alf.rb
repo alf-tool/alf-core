@@ -3538,9 +3538,11 @@ module Alf
     #
     # Returns a  literal representation of this relation
     #
-    def inspect
-      "Alf::Relation[" << @tuples.collect{|t| t.inspect}.join(',') << "]"
+    def to_ruby_literal
+      "Alf::Relation[" +
+        tuples.collect{|t| Myrrha.to_ruby_literal(t)}.join(', ') + "]"
     end
+    alias :inspect :to_ruby_literal
   
     DEE = Relation.coerce([{}])
     DUM = Relation.coerce([])
