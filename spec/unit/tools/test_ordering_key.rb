@@ -19,6 +19,13 @@ module Alf
           key.order_of(:b).should == :asc
         end
   
+        specify "when passed a single array of strings" do
+          key = OrderingKey.coerce ["a", "b"]
+          key.attributes.should == [:a, :b]
+          key.order_of(:a).should == :asc
+          key.order_of(:b).should == :asc
+        end
+  
         specify "when passed a single array with asc and desc (1)" do
           key = OrderingKey.coerce [:a, :asc]
           key.attributes.should == [:a]
@@ -27,6 +34,13 @@ module Alf
   
         specify "when passed a single array with asc and desc (1)" do
           key = OrderingKey.coerce [:a, :asc, :b, :desc]
+          key.attributes.should == [:a, :b]
+          key.order_of(:a).should == :asc
+          key.order_of(:b).should == :desc
+        end
+  
+        specify "when passed a string array with asc and desc" do
+          key = OrderingKey.coerce ["a", "asc", "b", "desc"]
           key.attributes.should == [:a, :b]
           key.order_of(:a).should == :asc
           key.order_of(:b).should == :desc

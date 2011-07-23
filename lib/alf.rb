@@ -310,12 +310,13 @@ module Alf
           when Array
             if arg.all?{|a| a.is_a?(Array)}
               OrderingKey.new(arg)
-            elsif arg.all?{|a| a.is_a?(Symbol)}
-              sliced = arg.each_slice(2) 
+            else
+              symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
+              sliced = symbolized.each_slice(2) 
               if sliced.all?{|a,o| [:asc,:desc].include?(o)}
                 OrderingKey.new sliced.to_a
               else
-                OrderingKey.new arg.collect{|a| [a, :asc]}
+                OrderingKey.new symbolized.collect{|a| [a, :asc]}
               end
             end
           when ProjectionKey
@@ -1735,6 +1736,7 @@ module Alf
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @attrname = Tools.coerce(args.last || :autonum, Symbol) 
+        self
       end
       
       # (see Operator#_prepare)
@@ -1938,14 +1940,10 @@ module Alf
         yield self if block_given?
       end
     
-      def ordering=(ordering)
-        @ordering_key = OrderingKey.coerce(ordering)
-      end
-    
       protected 
     
       def set_args(args)
-        self.ordering = args.collect{|c| c.to_sym}.each_slice(2).to_a
+        @ordering_key = OrderingKey.coerce(args)
         self
       end
     
