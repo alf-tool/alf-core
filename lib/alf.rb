@@ -5,13 +5,32 @@ require "enumerator"
 require "stringio"
 require "set"
 
-require 'myrrha/to_ruby_literal'
-require 'myrrha/coerce'
-
 #
 # Classy data-manipulation dressed in a DSL (+ commandline)
 #
 module Alf
+  
+  #
+  # Encapulates coercion rules from Myrrha.
+  #
+  module Coerce
+    require 'myrrha/to_ruby_literal'
+    require 'myrrha/coerce'
+    
+    Rules = Myrrha::Coerce.dup.append do
+    end
+    
+    # Delegated to Rules
+    def self.coerce(value, domain)
+      Rules.coerce(value, domain)
+    end
+    
+    # Delegated to Myrrha
+    def self.to_ruby_literal(value)
+      Myrrha.to_ruby_literal(value)
+    end
+    
+  end # module Coerce
   
   #
   # Provides tooling methods that are used here and there in Alf.
@@ -170,7 +189,7 @@ module Alf
             compile(nil)
           else
             compile expr.each_pair.collect{|k,v|
-              "(self.#{k} == #{Myrrha.to_ruby_literal(v)})"
+              "(self.#{k} == #{Coerce.to_ruby_literal(v)})"
             }.join(" && ")
           end
         when Array
@@ -1052,7 +1071,7 @@ module Alf
       # (see Renderer#render)
       def render(input, output)
         input.each do |tuple|
-          output << Myrrha.to_ruby_literal(tuple) << "\n"
+          output << Coerce.to_ruby_literal(tuple) << "\n"
         end
         output
       end
@@ -2052,7 +2071,7 @@ module Alf
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
         h = tuple_collect(args.each_slice(2)) do |k,v|
-          [k.to_sym, Kernel.eval(v)]
+          [k.to_sym, Alf::Coerce.coerce(v, Module)]
         end
         @heading = Heading.new(h)
       end
@@ -2060,7 +2079,7 @@ module Alf
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple.merge tuple_collect(@heading.attributes){|k,d|
-          [k, Myrrha.coerce(tuple[k], d)]
+          [k, Alf::Coerce.coerce(tuple[k], d)]
         }
       end
     
@@ -3641,7 +3660,7 @@ module Alf
     def to_ruby_literal
       attributes.empty? ?
         "Alf::Heading::EMPTY" :
-        "Alf::Heading[#{Myrrha.to_ruby_literal(attributes)[1...-1]}]"
+        "Alf::Heading[#{Coerce.to_ruby_literal(attributes)[1...-1]}]"
     end
     alias :inspect :to_ruby_literal
     
@@ -3807,7 +3826,7 @@ module Alf
     #
     def to_ruby_literal
       "Alf::Relation[" +
-        tuples.collect{|t| Myrrha.to_ruby_literal(t)}.join(', ') + "]"
+        tuples.collect{|t| Coerce.to_ruby_literal(t)}.join(', ') + "]"
     end
     alias :inspect :to_ruby_literal
   
