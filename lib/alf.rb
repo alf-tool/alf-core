@@ -2012,6 +2012,7 @@ module Alf
   
     end # class Clip
 
+    require "alf/coerce"
   end # Operator::NonRelational
   
   #
@@ -3538,6 +3539,19 @@ module Alf
     end
     
     #
+    # Coerces `attributes` to a Heading instance
+    #
+    def self.coerce(attributes)
+      # TODO: add coercion from an Array here
+      case attributes
+      when Hash
+        Heading.new(attributes)
+      else
+        raise ArgumentError, "Unable to coerce #{attributes.inspect} to a Heading"
+      end
+    end
+    
+    #
     # Returns heading's cardinality
     #
     def cardinality
@@ -3908,3 +3922,4 @@ module Alf
 end # module Alf
 require "alf/text"
 require "alf/yaml"
+require "alf/csv"
