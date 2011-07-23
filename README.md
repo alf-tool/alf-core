@@ -18,7 +18,11 @@ _relations_... Let's stop the segregation ;-)
 ### Bundler & Require 
 
     # API is not considered stable enough for now, please use
-    gem "alf", "= 0.9.2"
+    gem "alf", "= 0.9.3"
+    
+    # The following should not break your code, but is a bit less safe, 
+    # until 1.0.0 has been reached
+    gem "alf", "~> 0.9.3"
 
 ### Links
     
