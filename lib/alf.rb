@@ -2016,6 +2016,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: how to coerce here? AttrNames.coerce?
         self.attributes = args.collect{|a| a.to_sym}
         self
       end
@@ -2151,6 +2152,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: AttrNames.coerce ??
         self.attributes = args.collect{|a| a.to_sym}
         self
       end
@@ -2204,6 +2206,8 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: Refactor this to use coercion, after TupleExpression has been
+        # introduced
         @extensions = tuple_collect(args.each_slice(2)){|k,v|
           [k.to_sym, TupleHandle.compile(v)]
         }
@@ -2261,6 +2265,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: Refactor this after Renaming has been introduced
         @renaming = Hash[*args.collect{|c| c.to_sym}]
         self
       end
@@ -2315,6 +2320,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: refactor this to use TupleExpression
         @predicate = if args.size > 1
           TupleHandle.compile  tuple_collect(args.each_slice(2)){|a,expr|
             [a, Kernel.eval(expr)]
@@ -2758,6 +2764,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: refactor this to use AttrNames when introduced
         @as = args.pop.to_sym
         @attributes = args.collect{|a| a.to_sym}
         self
@@ -2807,6 +2814,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: refactor this to use AttrName when introduced
         @attribute = args.first.to_sym
         self
       end
@@ -2868,6 +2876,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # Refactor this to use AttrNames and AttrName
         @as = args.pop.to_sym
         @attributes = args.collect{|a| a.to_sym}
         self
@@ -2928,6 +2937,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: refactor this to use AttrName
         @attribute = args.pop.to_sym
         self
       end
@@ -3077,6 +3087,7 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: refactor by introducing Summarization
         @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
           [a.to_sym, Aggregator.compile(expr)]
         end
@@ -3190,9 +3201,7 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        unless args.empty?
-          self.ranking_name = args.first.to_sym
-        end
+        @ranking_name = Tools.coerce(args.last || :rank, Symbol)
         self
       end
   
@@ -3293,6 +3302,7 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: refactor this to use Summarization
         @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
           [a.to_sym, Aggregator.compile(expr)]
         end
