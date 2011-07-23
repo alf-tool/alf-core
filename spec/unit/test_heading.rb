@@ -6,6 +6,12 @@ module Alf
     let(:h1){ Heading.new(:name => String) }
     let(:h2){ Heading.new(:name => String, :price => Float) }
     
+    specify "coerce" do
+      Heading.coerce(:name => String).should eq(h1)
+      Heading.coerce([]).should eq(h0)
+      Heading.coerce(["name", "String"]).should eq(h1)
+    end
+     
     specify "cardinality" do
       h0.cardinality.should eq(0)
       h1.cardinality.should eq(1)

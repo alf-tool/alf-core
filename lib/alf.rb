@@ -3612,8 +3612,12 @@ module Alf
     # Coerces `attributes` to a Heading instance
     #
     def self.coerce(attributes)
-      # TODO: add coercion from an Array here
       case attributes
+      when Array
+        h = Tools.tuple_collect(attributes.each_slice(2)) do |k,v|
+          [ Tools.coerce(k, Symbol), Tools.coerce(v, Module) ]
+        end
+        Heading.new(h)
       when Hash
         Heading.new(attributes)
       else
