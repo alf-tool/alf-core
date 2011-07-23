@@ -1734,7 +1734,7 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @attrname = args.last.to_sym unless args.empty? 
+        @attrname = Tools.coerce(args.last || :autonum, Symbol) 
       end
       
       # (see Operator#_prepare)
