@@ -2068,10 +2068,7 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        h = tuple_collect(args.each_slice(2)) do |k,v|
-          [k.to_sym, Tools.coerce(v, Module)]
-        end
-        @heading = Heading.new(h)
+        @heading = Heading.coerce(args)
       end
       
       # (see Operator::Transform#_tuple2tuple)
