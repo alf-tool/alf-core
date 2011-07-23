@@ -1,4 +1,4 @@
-# 0.9.3 / FIX ME
+# 0.9.3 / 2011-07-23
 
 * New operators (available both in shell and in Lispy DSL)
 
@@ -10,25 +10,24 @@
       
     For example: 
     
-        # Give suppliers that supply at least one part
+        # Give suppliers who supply at least one part
         (matching suppliers, supplies)
 
-        # Give suppliers that don't supply any part
+        # Give suppliers who don't supply any part
         (not_matching suppliers, supplies)
 
-  * Added RANK operator. The RANK operator is useful for for computing quota 
-    queries, as shown below. See 'alf help rank' for details.
+  * Added RANK operator, which is useful for for computing quota queries as 
+    illustrated below. See 'alf help rank' for details.
     
         # Give the three heaviest parts
-        (allbut (restrict (rank :parts, [[:weight, :desc]], :pos), lambda{ pos < 3 }), [:pos])
+        (restrict (rank :parts, [[:weight, :desc]], :pos), lambda{ pos < 3 })
 
 * Enhancements when using Alf in shell
 
-  * added alf's -r option, that mimics ruby's one (require library before run)
+  * added 'alf -r', that mimics 'ruby -r' (require library before run)
 
-  * When alf is invoked in shell using bin/alf (and only in this case), 
-    ENV['ALF_OPTS'] is used a global options to apply as they were specified
-    inline: 
+  * When alf is invoked in shell (and only in this case), ALF_OPTS is used as 
+    global options to apply as if they were specified inline: 
     
         % export ALF_OPTS="--env=. --yaml" 
         % alf show suppliers
@@ -37,14 +36,15 @@
     
         % alf --env=. --yaml show suppliers
         
-  * 'alf --help' now distinguish experimental operators from those coming from
-    the (much more stable) TUTORIAL D specification. The former should be used
-    with care as they specification may change at any time.  
+  * 'alf --help' now distinguishes experimental operators (quota in particular) 
+    from those coming from the (much more stable) TUTORIAL D specification. The 
+    former should be used with care as their specification may change at any 
+    time.  
 
 * Enhancements when using Alf in Ruby 
 
   * Alf.lispy now accepts any argument recognized by Environment.autodetect; it
-    obtains its working Environment this way. Among others:
+    obtains its working Environment that way. Among others:
     
         Alf.lispy(Alf::Environment.folder("path/to/an/existing/folder"))
         
@@ -56,13 +56,12 @@
     with no and one tuple, respectively). They are also available as DUM and DEE 
     in Lispy functional expressions.
   
-  * Added a Heading abstraction, as a set of attribute (name, type) pairs
+  * Added a Heading abstraction, as a set of attribute (name, type) pairs.
 
 * Internal enhancements (extension points)
 
-  * The Reader and Renderer classes now accept a Hash of options as third 
-    argument of the constructor (friendly varargs applies there). These options
-    can be used by extension points. 
+  * The Reader and Renderer classes accept a Hash of options as third 
+    constructor argument. These options can be used by extension points. 
     
   * The Environment class now provides a class-based registering mechanism 'ala'
     Reader and Renderer. This allows auto-detecting the target environment when
