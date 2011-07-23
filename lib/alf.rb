@@ -11,31 +11,29 @@ require "set"
 module Alf
   
   #
-  # Encapulates coercion rules from Myrrha.
-  #
-  module Coerce
-    require 'myrrha/to_ruby_literal'
-    require 'myrrha/coerce'
-    
-    Rules = Myrrha::Coerce.dup.append do
-    end
-    
-    # Delegated to Rules
-    def self.coerce(value, domain)
-      Rules.coerce(value, domain)
-    end
-    
-    # Delegated to Myrrha
-    def self.to_ruby_literal(value)
-      Myrrha.to_ruby_literal(value)
-    end
-    
-  end # module Coerce
-  
-  #
   # Provides tooling methods that are used here and there in Alf.
   # 
   module Tools
+    require 'myrrha/to_ruby_literal'
+    require 'myrrha/coerce'
+    
+    # Coercion rules
+    Coercions = Myrrha::Coerce.dup.append do
+    end
+    
+    # Myrrha rules for converting to ruby literals
+    ToRubyLiteral = Myrrha::ToRubyLiteral.dup.append do
+    end
+    
+    # Delegated to Coercions
+    def coerce(value, domain)
+      Coercions.apply(value, domain)
+    end
+    
+    # Delegated to ToRubyLiteral
+    def to_ruby_literal(value)
+      ToRubyLiteral.apply(value)
+    end
     
     #
     # Parse a string with commandline arguments and returns an array.
@@ -189,7 +187,7 @@ module Alf
             compile(nil)
           else
             compile expr.each_pair.collect{|k,v|
-              "(self.#{k} == #{Coerce.to_ruby_literal(v)})"
+              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
             }.join(" && ")
           end
         when Array
@@ -1071,7 +1069,7 @@ module Alf
       # (see Renderer#render)
       def render(input, output)
         input.each do |tuple|
-          output << Coerce.to_ruby_literal(tuple) << "\n"
+          output << Tools.to_ruby_literal(tuple) << "\n"
         end
         output
       end
@@ -2071,7 +2069,7 @@ module Alf
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
         h = tuple_collect(args.each_slice(2)) do |k,v|
-          [k.to_sym, Alf::Coerce.coerce(v, Module)]
+          [k.to_sym, Tools.coerce(v, Module)]
         end
         @heading = Heading.new(h)
       end
@@ -2079,7 +2077,7 @@ module Alf
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple.merge tuple_collect(@heading.attributes){|k,d|
-          [k, Alf::Coerce.coerce(tuple[k], d)]
+          [k, Tools.coerce(tuple[k], d)]
         }
       end
     
@@ -3660,7 +3658,7 @@ module Alf
     def to_ruby_literal
       attributes.empty? ?
         "Alf::Heading::EMPTY" :
-        "Alf::Heading[#{Coerce.to_ruby_literal(attributes)[1...-1]}]"
+        "Alf::Heading[#{Tools.to_ruby_literal(attributes)[1...-1]}]"
     end
     alias :inspect :to_ruby_literal
     
@@ -3826,7 +3824,7 @@ module Alf
     #
     def to_ruby_literal
       "Alf::Relation[" +
-        tuples.collect{|t| Coerce.to_ruby_literal(t)}.join(', ') + "]"
+        tuples.collect{|t| Tools.to_ruby_literal(t)}.join(', ') + "]"
     end
     alias :inspect :to_ruby_literal
   
