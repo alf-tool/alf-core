@@ -1,0 +1,1 @@
+alf coerce suppliers_csv -- sid Symbol status Integer
