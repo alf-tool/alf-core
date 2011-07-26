@@ -1951,7 +1951,6 @@ module Alf
     
       def initialize(ordering_key = [])
         @ordering_key = OrderingKey.coerce(ordering_key)
-        yield self if block_given?
       end
     
       protected 
@@ -2136,7 +2135,6 @@ module Alf
       def initialize(attributes = [], allbut = false)
         @projection_key = ProjectionKey.coerce(attributes)
         @allbut = allbut
-        yield self if block_given?
       end
     
       # Installs the options
@@ -2309,7 +2307,6 @@ module Alf
       # Builds a Restrict operator instance
       def initialize(predicate = "true")
         @predicate = TupleHandle.compile(predicate)
-        yield self if block_given?
       end
   
       protected 
