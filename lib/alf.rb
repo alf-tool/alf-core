@@ -2839,13 +2839,15 @@ module Alf
   
       # Creates a Group instance
       def initialize(attributes = [], as = :group, allbut = false)
-        @attributes = attributes
+        @attributes = ProjectionKey.coerce(attributes)
         @as = as
         @allbut = allbut
       end
   
       options do |opt|
-        opt.on('--allbut', "Group all but specified attributes"){ @allbut = true }
+        opt.on('--allbut', "Group all but specified attributes"){ 
+          @allbut = true 
+        }
       end
       
       protected 
@@ -2854,16 +2856,15 @@ module Alf
       def set_args(args)
         # Refactor this to use AttrNames and AttrName
         @as = args.pop.to_sym
-        @attributes = args.collect{|a| a.to_sym}
+        @attributes = ProjectionKey.coerce(args)
         self
       end
   
       # See Operator#_prepare
       def _prepare
-        pkey = ProjectionKey.new(attributes, !allbut)
         @index = Hash.new{|h,k| h[k] = Set.new} 
         each_input_tuple do |tuple|
-          key, rest = pkey.split(tuple)
+          key, rest = @attributes.split(tuple, !@allbut)
           @index[key] << rest
         end
       end
