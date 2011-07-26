@@ -18,18 +18,20 @@ module Alf
   
       let(:aggs){{:time_sum => Aggregator.sum(:time),
                   :time_max => Aggregator.max(:time)}} 
-      let(:operator){ Summarize::HashBased.new(by_key, aggs) }
+      let(:operator){ Summarize::HashBased.new(by_key, allbut, aggs) }
 
       before{ operator.pipe(input) }
       subject{ operator.to_a.sort{|t1,t2| t1[:a] <=> t2[:a]} }
   
       describe "when allbut is not set" do
-        let(:by_key){ Tools::ProjectionKey.new([:a], false) }
+        let(:by_key){ Tools::ProjectionKey.new([:a]) }
+        let(:allbut){ false }
         it { should == expected }
       end
   
       describe "when allbut is set" do
-        let(:by_key){ Tools::ProjectionKey.new([:time], true) }
+        let(:by_key){ Tools::ProjectionKey.new([:time]) }
+        let(:allbut){ true }
         it { should == expected }
       end
   

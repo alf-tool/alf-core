@@ -2978,17 +2978,8 @@ module Alf
     class Summarize < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
-      # By attributes
-      attr_accessor :by
-      
-      # Allbut on by?
-      attr_accessor :allbut
-      
-      # Aggregations as a AGG => Aggregator(EXPR) hash 
-      attr_accessor :aggregators
-  
       def initialize(by = [], aggregators = {}, allbut = false)
-        @by = by
+        @by = ProjectionKey.coerce(by)
         @allbut = allbut
         @aggregators = aggregators
       end
@@ -2996,7 +2987,7 @@ module Alf
       # Installs the options
       options do |opt|
         opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-          @by = args.collect{|a| a.to_sym}
+          @by = ProjectionKey.coerce(args)
         end
         opt.on('--allbut', 'Make an allbut projection/summarization') do
           @allbut = true
@@ -3007,27 +2998,32 @@ module Alf
       class SortBased
         include Alf::Operator::Cesure      
   
-        attr_reader :cesure_key
-        attr_reader :aggregators     
-  
-        def initialize(by_key, aggregators)
-          @cesure_key, @aggregators = by_key, aggregators
+        def initialize(by_key, allbut, aggregators)
+          @by_key, @allbut, @aggregators = by_key, allbut, aggregators
         end
   
         protected 
   
+        # (see Operator::Cesure#project)
+        def project(tuple)
+          @by_key.project(tuple, @allbut)
+        end
+        
+        # (see Operator::Cesure#start_cesure)
         def start_cesure(key, receiver)
           @aggs = tuple_collect(@aggregators) do |a,agg|
             [a, agg.least]
           end
         end
   
+        # (see Operator::Cesure#accumulate_cesure)
         def accumulate_cesure(tuple, receiver)
           @aggs = tuple_collect(@aggregators) do |a,agg|
             [a, agg.happens(@aggs[a], tuple)]
           end
         end
   
+        # (see Operator::Cesure#flush_cesure)
         def flush_cesure(key, receiver)
           @aggs = tuple_collect(@aggregators) do |a,agg|
             [a, agg.finalize(@aggs[a])]
@@ -3040,12 +3036,9 @@ module Alf
       # Summarizes in-memory with a hash
       class HashBased
         include Operator::Relational, Operator::Unary
-        
-        attr_reader :by_key
-        attr_reader :aggregators     
   
-        def initialize(by_key, aggregators)
-          @by_key, @aggregators = by_key, aggregators
+        def initialize(by_key, allbut, aggregators)
+          @by_key, @allbut, @aggregators = by_key, allbut, aggregators
         end
 
         protected
@@ -3057,7 +3050,7 @@ module Alf
             end
           end
           each_input_tuple do |tuple|
-            key, rest = by_key.split(tuple)
+            key, rest = @by_key.split(tuple, @allbut)
             index[key] = tuple_collect(@aggregators) do |a,agg|
               [a, agg.happens(index[key][a], tuple)]
             end
@@ -3084,13 +3077,12 @@ module Alf
       end
   
       def longexpr
+        by_key = Tools::ProjectionKey.coerce(@by)
         if @allbut
-          by_key = Tools::ProjectionKey.new(@by, @allbut)
-          chain HashBased.new(by_key, @aggregators),
+          chain HashBased.new(by_key, @allbut, @aggregators),
                 datasets
         else
-          by_key = Tools::ProjectionKey.new(@by, @allbut)
-          chain SortBased.new(by_key, @aggregators),
+          chain SortBased.new(by_key, @allbut, @aggregators),
                 Operator::NonRelational::Sort.new(by_key.to_ordering_key),
                 datasets
         end

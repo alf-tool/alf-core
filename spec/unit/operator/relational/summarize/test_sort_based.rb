@@ -16,15 +16,24 @@ module Alf
         {:a => "via_reader", :time_sum => 6, :time_max => 4},
       ]}
   
-      let(:by_key){ Tools::ProjectionKey.new([:a],false) }
       let(:aggs){{:time_sum => Aggregator.sum(:time),
                   :time_max => Aggregator.max(:time)}} 
-      let(:operator){ Summarize::SortBased.new(by_key, aggs) }
+      let(:operator){ Summarize::SortBased.new(by_key, allbut, aggs) }
   
       before{ operator.pipe(input) }
-      subject{ operator.to_a }
+      subject{ operator.to_a.sort{|t1,t2| t1[:a] <=> t2[:a]} }
   
-      it { should == expected }
+      describe "when allbut is not set" do
+        let(:by_key){ Tools::ProjectionKey.new([:a]) }
+        let(:allbut){ false }
+        it { should == expected }
+      end
+  
+      describe "when allbut is set" do
+        let(:by_key){ Tools::ProjectionKey.new([:time]) }
+        let(:allbut){ true }
+        it { should == expected }
+      end
   
     end 
   end
