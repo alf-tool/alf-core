@@ -2882,20 +2882,16 @@ module Alf
     class Ungroup < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      # Relation-value attribute to ungroup
-      attr_accessor :attribute
-    
       # Creates a Group instance
       def initialize(attribute = :grouped)
-        @attribute = attribute
+        @attribute = coerce(attribute, AttrName)
       end
   
       protected 
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: refactor this to use AttrName
-        @attribute = args.pop.to_sym
+        @attribute = coerce(args.pop, AttrName)
         self
       end
   
