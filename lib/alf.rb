@@ -2743,16 +2743,16 @@ module Alf
   
       # Builds a Wrap operator instance
       def initialize(attributes = [], as = :wrapped)
-        @attributes = Tools.coerce(attributes, ProjectionKey)
-        @as = Tools.coerce(as, AttrName)
+        @attributes = coerce(attributes, ProjectionKey)
+        @as = coerce(as, AttrName)
       end
   
       protected 
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @as = Tools.coerce(args.pop, AttrName)
-        @attributes = Tools.coerce(args, ProjectionKey)
+        @as = coerce(args.pop, AttrName)
+        @attributes = coerce(args, ProjectionKey)
         self
       end
   
