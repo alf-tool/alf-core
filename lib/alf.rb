@@ -2176,9 +2176,6 @@ module Alf
     class Extend < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Extensions as a Hash attr => lambda{...}
-      attr_accessor :extensions
-  
       # Builds an Extend operator instance
       def initialize(extensions = {})
         @extensions = extensions
