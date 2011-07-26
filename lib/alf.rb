@@ -2741,32 +2741,25 @@ module Alf
     class Wrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Array of wraping attributes
-      attr_accessor :attributes
-  
-      # New name for the wrapped attribute
-      attr_accessor :as
-  
       # Builds a Wrap operator instance
       def initialize(attributes = [], as = :wrapped)
-        @attributes = ProjectionKey.coerce(attributes)
-        @as = as
+        @attributes = Tools.coerce(attributes, ProjectionKey)
+        @as = Tools.coerce(as, AttrName)
       end
   
       protected 
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: refactor this to use AttrNames when introduced
-        @as = args.pop.to_sym
-        @attributes = ProjectionKey.coerce(args)
+        @as = Tools.coerce(args.pop, AttrName)
+        @attributes = Tools.coerce(args, ProjectionKey)
         self
       end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         wrapped, others = @attributes.split(tuple)
-        others[as] = wrapped
+        others[@as] = wrapped
         others
       end
   
