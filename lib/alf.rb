@@ -3096,13 +3096,13 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
       def initialize(order = [], ranking_name = :rank)
-        @order = OrderingKey.coerce(order)
-        @ranking_name = ranking_name
+        @order = coerce(order, OrderingKey)
+        @ranking_name = coerce(ranking_name, AttrName)
       end
   
       options do |opt|
         opt.on('--order=x,y,z', 'Specify ranking order', Array) do |args|
-          @order = OrderingKey.coerce(args)
+          @order = coerce(args, OrderingKey)
         end
       end
   
@@ -3144,12 +3144,8 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @ranking_name = Tools.coerce(args.last || :rank, Symbol)
+        @ranking_name = Tools.coerce(args.last || :rank, AttrName)
         self
-      end
-  
-      def ordering_key
-        OrderingKey.coerce @order
       end
   
       def longexpr
