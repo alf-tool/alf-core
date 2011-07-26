@@ -246,7 +246,7 @@ module Alf
       def self.coerce(arg)
         case arg
           when Array
-            ProjectionKey.new(arg)
+            ProjectionKey.new(arg.collect{|s| s.to_sym})
           when OrderingKey
             ProjectionKey.new(arg.attributes)
           when ProjectionKey
@@ -1987,22 +1987,14 @@ module Alf
   
       # Builds a Clip operator instance
       def initialize(attributes = [], allbut = false)
-        @projection_key = ProjectionKey.new(attributes, allbut)
-        yield self if block_given?
-      end
-  
-      def attributes=(attrs)
-        @projection_key.attributes = attrs
-      end
-  
-      def allbut=(allbut)
-        @projection_key.allbut = allbut
+        @projection_key = ProjectionKey.coerce(attributes)
+        @allbut = allbut
       end
   
       # Installs the options
       options do |opt|
         opt.on('-a', '--allbut', 'Apply a ALLBUT clipping') do
-          self.allbut = true
+          @allbut = true
         end
       end
   
@@ -2010,14 +2002,13 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to coerce here? AttrNames.coerce?
-        self.attributes = args.collect{|a| a.to_sym}
+        @projection_key = ProjectionKey.coerce(args)
         self
       end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        @projection_key.project(tuple)
+        @projection_key.project(tuple, @allbut)
       end
   
     end # class Clip
