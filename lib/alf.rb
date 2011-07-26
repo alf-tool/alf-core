@@ -1726,18 +1726,15 @@ module Alf
     class Autonum < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
-      # Names of the new attribute to add
-      attr_accessor :attrname
-      
       def initialize(attrname = :autonum)
-        @attrname = attrname
+        @attrname = coerce(attrname, AttrName)
       end
       
       protected 
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @attrname = Tools.coerce(args.last || :autonum, AttrName) 
+        @attrname = coerce(args.last || :autonum, AttrName) 
         self
       end
       
