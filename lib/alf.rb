@@ -2051,24 +2051,21 @@ module Alf
     class Coerce < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
-      # Coerce heading
-      attr_accessor :heading
-      
       def initialize(heading = {})
-        @heading = Heading.coerce(heading)
+        @heading = coerce(heading, Heading)
       end
       
       protected 
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @heading = Heading.coerce(args)
+        @heading = coerce(args, Heading)
       end
       
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple.merge tuple_collect(@heading.attributes){|k,d|
-          [k, Tools.coerce(tuple[k], d)]
+          [k, coerce(tuple[k], d)]
         }
       end
     
