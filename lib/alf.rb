@@ -1588,9 +1588,9 @@ module Alf
 
       # (see Operator#_each)
       def _each
-        receiver, proj_key, prev_key = Proc.new, cesure_key, nil
+        receiver, prev_key = Proc.new, nil
         each_input_tuple do |tuple|
-          cur_key = proj_key.project(tuple)
+          cur_key = project(tuple)
           if cur_key != prev_key
             flush_cesure(prev_key, receiver) unless prev_key.nil?
             start_cesure(cur_key, receiver)
@@ -1601,15 +1601,19 @@ module Alf
         flush_cesure(prev_key, receiver) unless prev_key.nil?
       end
 
-      def cesure_key
+      # Projects a given tuple and returns it's cesure projection
+      def project(tuple)
       end
-
+      
+      # Callback fired every time a new block starts
       def start_cesure(key, receiver)
       end
 
+      # Callback fired on each tuple of the current block 
       def accumulate_cesure(tuple, receiver)
       end
 
+      # Callback fired at end of a block
       def flush_cesure(key, receiver)
       end
 
@@ -1853,18 +1857,24 @@ module Alf
       class SortBased
         include Operator::Cesure      
   
-        def cesure_key
-          @cesure_key ||= ProjectionKey.new([],true)
+        protected
+        
+        # (see Operator::Cesure#project)
+        def project(tuple)
+          @cesure_key ||= ProjectionKey.new([])
+          @cesure_key.project(tuple, true)
         end
   
+        # (see Operator::Cesure#accumulate_cesure)
         def accumulate_cesure(tuple, receiver)
           @tuple = tuple
         end
   
+        # (see Operator::Cesure#flush_cesure)
         def flush_cesure(key, receiver)
           receiver.call(@tuple)
         end
-  
+ 
       end # class SortBased
   
       # Removes duplicates by loading all in memory and filtering 
@@ -1872,6 +1882,8 @@ module Alf
       class BufferBased
         include Operator::Unary
   
+        protected
+        
         def _prepare
           @tuples = input.to_a.uniq
         end
