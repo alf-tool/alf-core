@@ -3182,17 +3182,17 @@ module Alf
               Operator::Shortcut, Operator::Unary
   
       def initialize(by = [], order = [], aggregators = {})
-        @by = ProjectionKey.coerce(by)
-        @order = OrderingKey.coerce(order)
+        @by = coerce(by, ProjectionKey)
+        @order = coerce(order, OrderingKey)
         @aggregators = aggregators
       end
   
       options do |opt|
         opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-          @by = ProjectionKey.coerce(args)
+          @by = coerce(args, ProjectionKey)
         end
         opt.on('--order=x,y,z', 'Specify order attributes', Array) do |args|
-          @order = OrderingKey.coerce(args)
+          @order = coerce(args, OrderingKey)
         end
       end
   
