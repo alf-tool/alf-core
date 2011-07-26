@@ -1997,7 +1997,7 @@ module Alf
   
       # Builds a Clip operator instance
       def initialize(attributes = [], allbut = false)
-        @projection_key = ProjectionKey.coerce(attributes)
+        @projection_key = coerce(attributes, ProjectionKey)
         @allbut = allbut
       end
   
@@ -2012,7 +2012,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @projection_key = ProjectionKey.coerce(args)
+        @projection_key = coerce(args, ProjectionKey)
         self
       end
   
