@@ -239,20 +239,16 @@ module Alf
       # Projection attributes
       attr_accessor :attributes
     
-      # Allbut projection?
-      attr_accessor :allbut
-    
-      def initialize(attributes, allbut = false)
+      def initialize(attributes)
         @attributes = attributes
-        @allbut = allbut
       end
     
       def self.coerce(arg)
         case arg
           when Array
-            ProjectionKey.new(arg, false)
+            ProjectionKey.new(arg)
           when OrderingKey
-            ProjectionKey.new(arg.attributes, false)
+            ProjectionKey.new(arg.attributes)
           when ProjectionKey
             arg
           else
@@ -261,22 +257,20 @@ module Alf
       end
     
       def to_ordering_key
-        OrderingKey.new attributes.collect{|arg|
-          [arg, :asc]
-        }
+        OrderingKey.new attributes.collect{|arg| [arg, :asc]}
       end
     
-      def project(tuple)
-        split(tuple).first
+      def project(tuple, allbut = false)
+        split(tuple, allbut).first
       end
     
-      def split(tuple)
+      def split(tuple, allbut = false)
         projection, rest = {}, tuple.dup
         attributes.each do |a|
           projection[a] = tuple[a]
           rest.delete(a)
         end
-        @allbut ? [rest, projection] : [projection, rest]
+        allbut ? [rest, projection] : [projection, rest]
       end
     
     end # class ProjectionKey
