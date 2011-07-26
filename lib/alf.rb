@@ -1941,13 +1941,13 @@ module Alf
       include Operator::NonRelational, Operator::Unary
     
       def initialize(ordering_key = [])
-        @ordering_key = OrderingKey.coerce(ordering_key)
+        @ordering_key = coerce(ordering_key, OrderingKey)
       end
     
       protected 
     
       def set_args(args)
-        @ordering_key = OrderingKey.coerce(args)
+        @ordering_key = coerce(args, OrderingKey)
         self
       end
     
