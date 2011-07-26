@@ -1737,7 +1737,7 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @attrname = Tools.coerce(args.last || :autonum, Symbol) 
+        @attrname = Tools.coerce(args.last || :autonum, AttrName) 
         self
       end
       
@@ -1813,6 +1813,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: how to put a signature for this??
         @defaults = tuple_collect(args.each_slice(2)) do |k,v|
           [k.to_sym, Kernel.eval(v)]
         end
