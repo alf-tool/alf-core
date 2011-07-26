@@ -2943,15 +2943,15 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
       def initialize(by = [], aggregators = {}, allbut = false)
-        @by = ProjectionKey.coerce(by)
-        @allbut = allbut
+        @by = coerce(by, ProjectionKey)
         @aggregators = aggregators
+        @allbut = allbut
       end
   
       # Installs the options
       options do |opt|
         opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-          @by = ProjectionKey.coerce(args)
+          @by = coerce(args, ProjectionKey)
         end
         opt.on('--allbut', 'Make an allbut projection/summarization') do
           @allbut = true
