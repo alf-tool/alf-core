@@ -2359,6 +2359,7 @@ module Alf
         #   end 
         #
         class JoinBuffer
+          include Tools
           
           #
           # Creates a buffer instance with the right part of the join.
@@ -2399,10 +2400,10 @@ module Alf
           def _init(right)
             @buffer = Hash.new{|h,k| h[k] = []}
             @enum.each do |left|
-              @key = Tools::ProjectionKey.coerce(left.keys & right.keys) unless @key
+              @key ||= coerce(left.keys & right.keys, ProjectionKey)
               @buffer[@key.project(left)] << left
             end
-            @key = Tools::ProjectionKey.coerce([]) unless @key
+            @key ||= coerce([], ProjectionKey)
           end
           
         end # class JoinBuffer
@@ -2618,10 +2619,10 @@ module Alf
             seen ||= begin
               h = Hash.new
               right.each do |right_tuple|
-                key ||= Tools::ProjectionKey.coerce(left_tuple.keys & right_tuple.keys)
+                key ||= coerce(left_tuple.keys & right_tuple.keys, ProjectionKey)
                 h[key.project(right_tuple)] = true
               end
-              key ||= Tools::ProjectionKey.coerce([])
+              key ||= coerce([], ProjectionKey)
               h
             end
             yield(left_tuple) if seen.has_key?(key.project(left_tuple))
@@ -2679,10 +2680,10 @@ module Alf
             seen ||= begin
               h = Hash.new
               right.each do |right_tuple|
-                key ||= Tools::ProjectionKey.coerce(left_tuple.keys & right_tuple.keys)
+                key ||= coerce(left_tuple.keys & right_tuple.keys, ProjectionKey)
                 h[key.project(right_tuple)] = true
               end
-              key ||= Tools::ProjectionKey.coerce([])
+              key ||= coerce([], ProjectionKey)
               h
             end
             yield(left_tuple) unless seen.has_key?(key.project(left_tuple))
@@ -3041,13 +3042,12 @@ module Alf
       end
   
       def longexpr
-        by_key = Tools::ProjectionKey.coerce(@by)
         if @allbut
-          chain HashBased.new(by_key, @allbut, @aggregators),
+          chain HashBased.new(@by, @allbut, @aggregators),
                 datasets
         else
-          chain SortBased.new(by_key, @allbut, @aggregators),
-                Operator::NonRelational::Sort.new(by_key.to_ordering_key),
+          chain SortBased.new(@by, @allbut, @aggregators),
+                Operator::NonRelational::Sort.new(@by.to_ordering_key),
                 datasets
         end
       end
@@ -3144,7 +3144,7 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        @ranking_name = Tools.coerce(args.last || :rank, AttrName)
+        @ranking_name = coerce(args.last || :rank, AttrName)
         self
       end
   
@@ -3746,7 +3746,7 @@ module Alf
     # @return [Array] an array of hashes, in requested order (if specified)
     #
     def to_a(okey = nil)
-      okey = Tools::OrderingKey.coerce(okey) if okey
+      okey = Tools.coerce(okey, Tools::OrderingKey) if okey
       ary = tuples.to_a
       ary.sort!(&okey.sorter) if okey
       ary
