@@ -2232,9 +2232,6 @@ module Alf
     class Rename < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Hash of source -> target attribute renamings
-      attr_accessor :renaming
-  
       # Builds a Rename operator instance
       def initialize(renaming = {})
         @renaming = renaming
