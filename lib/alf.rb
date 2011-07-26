@@ -2114,22 +2114,15 @@ module Alf
     
       # Builds a Project operator instance
       def initialize(attributes = [], allbut = false)
-        @projection_key = ProjectionKey.new(attributes, allbut)
+        @projection_key = ProjectionKey.coerce(attributes)
+        @allbut = allbut
         yield self if block_given?
-      end
-    
-      def attributes=(attrs)
-        @projection_key.attributes = attrs
-      end
-    
-      def allbut=(allbut)
-        @projection_key.allbut = allbut
       end
     
       # Installs the options
       options do |opt|
         opt.on('-a', '--allbut', 'Apply a ALLBUT projection') do
-          self.allbut = true
+          @allbut = true
         end
       end
     
@@ -2137,16 +2130,14 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: AttrNames.coerce ??
-        self.attributes = args.collect{|a| a.to_sym}
+        @projection_key = ProjectionKey.coerce(args)
         self
       end
     
       # (see Operator::Shortcut#longexpr)
       def longexpr
         chain Operator::NonRelational::Compact.new,
-              Operator::NonRelational::Clip.new(@projection_key.attributes, 
-                                                @projection_key.allbut),
+              Operator::NonRelational::Clip.new(@projection_key, @allbut),
               datasets
       end
     
