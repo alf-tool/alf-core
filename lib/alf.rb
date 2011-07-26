@@ -2817,19 +2817,10 @@ module Alf
     class Group < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      # Attributes on which grouping applies
-      attr_accessor :attributes
-    
-      # Attribute name for grouping tuple 
-      attr_accessor :as
-  
-      # Group all but attributes? 
-      attr_accessor :allbut
-  
       # Creates a Group instance
       def initialize(attributes = [], as = :group, allbut = false)
-        @attributes = ProjectionKey.coerce(attributes)
-        @as = as
+        @attributes = coerce(attributes, ProjectionKey)
+        @as = coerce(as, AttrName)
         @allbut = allbut
       end
   
@@ -2844,8 +2835,8 @@ module Alf
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
         # Refactor this to use AttrNames and AttrName
-        @as = args.pop.to_sym
-        @attributes = ProjectionKey.coerce(args)
+        @as = coerce(args.pop, AttrName)
+        @attributes = coerce(args, ProjectionKey)
         self
       end
   

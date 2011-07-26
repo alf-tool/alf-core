@@ -38,8 +38,8 @@ module Alf
       describe "with --allbut" do
           
         describe "when factored with commandline args" do
-          let(:operator){ Group.run(["--","a", "as"]) }
-          before{ operator.allbut = true; operator.pipe(input) }
+          let(:operator){ Group.run(["--allbut", "--","a", "as"]) }
+          before{ operator.pipe(input) }
           it { should == expected }
         end
     
