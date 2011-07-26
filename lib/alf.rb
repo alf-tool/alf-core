@@ -3224,25 +3224,18 @@ module Alf
       include Operator::Relational, Operator::Experimental,
               Operator::Shortcut, Operator::Unary
   
-      # Quota by
-      attr_accessor :by
-  
-      # Quota order
-      attr_accessor :order
-      
-      # Quota aggregations
-      attr_accessor :aggregators
-  
       def initialize(by = [], order = [], aggregators = {})
-        @by, @order, @aggregators  = by, order, aggregators
+        @by = ProjectionKey.coerce(by)
+        @order = OrderingKey.coerce(order)
+        @aggregators = aggregators
       end
   
       options do |opt|
         opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-          @by = args.collect{|a| a.to_sym}
+          @by = ProjectionKey.coerce(args)
         end
         opt.on('--order=x,y,z', 'Specify order attributes', Array) do |args|
-          @order = args.collect{|a| a.to_sym}
+          @order = OrderingKey.coerce(args)
         end
       end
   
@@ -3253,20 +3246,21 @@ module Alf
           @by, @order, @aggregators  = by, order, aggregators
         end
         
-        def cesure_key
-          ProjectionKey.coerce @by
+        protected
+        
+        # (see Operator::Cesure#project)
+        def project(tuple)
+          @by.project(tuple, false)
         end
         
-        def ordering_key
-          OrderingKey.coerce @order
-        end
-    
+        # (see Operator::Cesure#start_cesure)
         def start_cesure(key, receiver)
           @aggs = tuple_collect(@aggregators) do |a,agg|
             [a, agg.least]
           end
         end
     
+        # (see Operator::Cesure#accumulate_cesure)
         def accumulate_cesure(tuple, receiver)
           @aggs = tuple_collect(@aggregators) do |a,agg|
             [a, agg.happens(@aggs[a], tuple)]
@@ -3290,16 +3284,8 @@ module Alf
         self
       end
   
-      def cesure_key
-        ProjectionKey.coerce @by
-      end
-      
-      def ordering_key
-        OrderingKey.coerce @order
-      end
-  
       def longexpr
-        sort_key = cesure_key.to_ordering_key + ordering_key
+        sort_key = @by.to_ordering_key + @order
         chain SortBased.new(@by, @order, @aggregators),
               Operator::NonRelational::Sort.new(sort_key),
               datasets
