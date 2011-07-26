@@ -2749,7 +2749,7 @@ module Alf
   
       # Builds a Wrap operator instance
       def initialize(attributes = [], as = :wrapped)
-        @attributes = attributes
+        @attributes = ProjectionKey.coerce(attributes)
         @as = as
       end
   
@@ -2759,14 +2759,14 @@ module Alf
       def set_args(args)
         # TODO: refactor this to use AttrNames when introduced
         @as = args.pop.to_sym
-        @attributes = args.collect{|a| a.to_sym}
+        @attributes = ProjectionKey.coerce(args)
         self
       end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        others = tuple_collect(tuple.keys - @attributes){|k| [k,tuple[k]] }
-        others[as] = tuple_collect(attributes){|k| [k, tuple[k]] }
+        wrapped, others = @attributes.split(tuple)
+        others[as] = wrapped
         others
       end
   
