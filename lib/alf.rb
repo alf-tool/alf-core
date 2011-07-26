@@ -2770,12 +2770,9 @@ module Alf
     class Unwrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Name of the attribute to unwrap
-      attr_accessor :attribute
-  
       # Builds a Rename operator instance
       def initialize(attribute = :wrapped)
-        @attribute = attribute
+        @attribute = coerce(attribute, AttrName)
       end
   
       protected 
@@ -2783,7 +2780,7 @@ module Alf
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
         # TODO: refactor this to use AttrName when introduced
-        @attribute = args.first.to_sym
+        @attribute = coerce(args.first, AttrName)
         self
       end
   
