@@ -5,17 +5,21 @@ require "enumerator"
 require "stringio"
 require "set"
 
+require 'myrrha/to_ruby_literal'
+require 'myrrha/coerce'
+
 #
 # Classy data-manipulation dressed in a DSL (+ commandline)
 #
 module Alf
+
+  # Data type for being a valid attribute name  
+  AttrName = Myrrha.domain(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
   
   #
   # Provides tooling methods that are used here and there in Alf.
   # 
   module Tools
-    require 'myrrha/to_ruby_literal'
-    require 'myrrha/coerce'
     
     # Coercion rules
     Coercions = Myrrha::Coerce.dup.append do
