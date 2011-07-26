@@ -1856,12 +1856,15 @@ module Alf
       # Removes duplicates according to a complete order
       class SortBased
         include Operator::Cesure      
-  
+
+        def initialize
+          @cesure_key ||= ProjectionKey.new([])
+        end
+          
         protected
         
         # (see Operator::Cesure#project)
         def project(tuple)
-          @cesure_key ||= ProjectionKey.new([])
           @cesure_key.project(tuple, true)
         end
   
