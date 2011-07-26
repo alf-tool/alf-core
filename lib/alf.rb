@@ -1788,12 +1788,6 @@ module Alf
     class Defaults < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
-      # Default values as a ATTR -> VAL hash 
-      attr_accessor :defaults
-      
-      # Strict mode?
-      attr_accessor :strict
-      
       # Builds a Defaults operator instance
       def initialize(defaults = {}, strict = false)
         @defaults = defaults
@@ -1802,7 +1796,7 @@ module Alf
       
       options do |opt|
         opt.on('-s', '--strict', 'Strictly restrict to default attributes'){ 
-          self.strict = true 
+          @strict = true 
         }
       end
   
@@ -1819,7 +1813,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        if strict
+        if @strict
           tuple_collect(@defaults){|k,v| 
             [k, coalesce(tuple[k], v)] 
           }
