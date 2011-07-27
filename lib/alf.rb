@@ -1888,7 +1888,7 @@ module Alf
     # Force default values on missing/nil attributes
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 EXPR1 ...
     #
     # OPTIONS
     # #{summarized_options}
@@ -1905,12 +1905,12 @@ module Alf
     #
     # This operator rewrites tuples so as to ensure that all values for specified 
     # attributes ATTRx are defined and not nil. Missing or nil attributes are 
-    # replaced by the associated default value VALx.
+    # replaced by the associated default value VALx. The latter can be either 
+    # true values, or tuple expressions.
     #
-    # When used in shell, the hash of default values is built from commandline
-    # arguments ala Hash[...]. However, to keep type safety VALx are interpreted
-    # as ruby literals and built with Kernel.eval. This means that strings must 
-    # be doubly quoted. For the example of the API section:
+    # When used in shell, all defaults values are interpreted as being tuple 
+    # expressions. Consequently, strings should be quoted, as in the following
+    # example:
     #
     #   alf defaults suppliers -- country "'Belgium'"
     #
@@ -1940,7 +1940,7 @@ module Alf
       def set_args(args)
         # TODO: how to put a signature for Defaults?
         @defaults = tuple_collect(args.each_slice(2)) do |k,v|
-          [coerce(k, AttrName), Kernel.eval(v)]
+          [coerce(k, AttrName), coerce(v, TupleExpression)]
         end
         self
       end
