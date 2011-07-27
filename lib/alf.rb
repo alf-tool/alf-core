@@ -420,6 +420,33 @@ module Alf
         end
       end
       
+      #
+      # Computes the least tuple
+      #
+      def least
+        Tools.tuple_collect(@aggregations){|k,v| 
+          [k, v.least]
+        }
+      end
+      
+      #
+      # Computes the resulting aggregation from aggs if tuple happens. 
+      #
+      def happens(aggs, tuple)
+        Tools.tuple_collect(@aggregations){|k,v|
+          [k, v.happens(aggs[k], tuple)]
+        }
+      end
+      
+      #
+      # Finalizes the summarization `aggs` 
+      #
+      def finalize(aggs)
+        Tools.tuple_collect(@aggregations){|k,v|
+          [k, v.finalize(aggs[k])]
+        }
+      end
+      
     end # class Summarization
 
     extend Tools

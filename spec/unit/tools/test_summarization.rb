@@ -35,6 +35,14 @@ module Alf
           
       end
       
+      specify "least -> happens -> finalize" do
+        summ = Summarization.coerce(["s", "sum(:qty)", "m", "max(:size)"])
+        (x = summ.least).should eql(:s => 0, :m => nil)
+        (x = summ.happens(x, :qty => 10, :size => 12)).should eq(:s => 10, :m => 12)
+        (x = summ.happens(x, :qty => 5, :size => 5)).should eq(:s => 15, :m => 12)
+        summ.finalize(x).should eq(:s => 15, :m => 12)
+      end
+      
     end
   end
 end
