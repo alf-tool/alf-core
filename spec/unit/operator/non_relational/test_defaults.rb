@@ -49,6 +49,19 @@ module Alf
         end
     
       end
+      
+      describe "when used with tuple expressions" do
+        let(:input) {[
+          {:a => nil, :b => "b"},
+        ]}
+        let(:expected) {[
+          {:a => "b", :b => "b"},
+        ]}
+        let(:operator){ 
+          Lispy.defaults(input, {:a => Tools::TupleExpression.coerce("b")}) 
+        }
+        it{ should == expected }
+      end
         
     end 
   end

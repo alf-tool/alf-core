@@ -1947,17 +1947,21 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        if @strict
-          tuple_collect(@defaults){|k,v| 
-            [k, coalesce(tuple[k], v)] 
+        handle = TupleHandle.new
+        keys = @strict ? @defaults.keys : (tuple.keys | @defaults.keys)
+        tuple_collect(keys){|k|
+          val = coalesce(tuple[k]){
+            case defa = @defaults[k]
+            when TupleExpression
+              defa.evaluate(handle.set(tuple))
+            else
+              defa
+            end 
           }
-        else
-          @defaults.merge tuple_collect(tuple){|k,v| 
-            [k, coalesce(v, @defaults[k])]
-          }
-        end
+          [k, val]
+        }
       end
-  
+      
     end # class Defaults
   
     # 
