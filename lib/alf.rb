@@ -3248,10 +3248,10 @@ module Alf
       include Operator::Relational, Operator::Experimental,
               Operator::Shortcut, Operator::Unary
   
-      def initialize(by = [], order = [], aggregators = {})
+      def initialize(by = [], order = [], summarization = {})
         @by = coerce(by, ProjectionKey)
         @order = coerce(order, OrderingKey)
-        @aggregators = aggregators
+        @summarization = coerce(summarization, Summarization)
       end
   
       options do |opt|
@@ -3266,8 +3266,8 @@ module Alf
       class SortBased
         include Operator::Cesure
         
-        def initialize(by, order, aggregators)
-          @by, @order, @aggregators  = by, order, aggregators
+        def initialize(by, order, summarization)
+          @by, @order, @summarization  = by, order, summarization
         end
         
         protected
@@ -3279,20 +3279,13 @@ module Alf
         
         # (see Operator::Cesure#start_cesure)
         def start_cesure(key, receiver)
-          @aggs = tuple_collect(@aggregators) do |a,agg|
-            [a, agg.least]
-          end
+          @aggs = @summarization.least
         end
     
         # (see Operator::Cesure#accumulate_cesure)
         def accumulate_cesure(tuple, receiver)
-          @aggs = tuple_collect(@aggregators) do |a,agg|
-            [a, agg.happens(@aggs[a], tuple)]
-          end
-          thisone = tuple_collect(@aggregators) do |a,agg|
-            [a, agg.finalize(@aggs[a])]
-          end
-          receiver.call tuple.merge(thisone)
+          @aggs = @summarization.happens(@aggs, tuple)
+          receiver.call tuple.merge(@summarization.finalize(@aggs))
         end
   
       end # class SortBased
@@ -3301,16 +3294,13 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: refactor this to use Summarization
-        @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-          [coerce(a, AttrName), coerce(expr, Aggregator)]
-        end
+        @summarization = coerce(args, Summarization)
         self
       end
   
       def longexpr
         sort_key = @by.to_ordering_key + @order
-        chain SortBased.new(@by, @order, @aggregators),
+        chain SortBased.new(@by, @order, @summarization),
               Operator::NonRelational::Sort.new(sort_key),
               datasets
       end 
