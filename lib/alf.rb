@@ -3056,7 +3056,7 @@ module Alf
       def set_args(args)
         # TODO: refactor by introducing Summarization
         @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-          [a.to_sym, Aggregator.compile(expr)]
+          [coerce(a, AttrName), coerce(expr, Aggregator)]
         end
         self
       end
@@ -3256,7 +3256,7 @@ module Alf
       def set_args(args)
         # TODO: refactor this to use Summarization
         @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-          [a.to_sym, Aggregator.compile(expr)]
+          [coerce(a, AttrName), coerce(expr, Aggregator)]
         end
         self
       end
@@ -3298,11 +3298,21 @@ module Alf
         end
       EOF
     end
-  
-    def self.compile(expr, &block)
-      instance_eval(expr, &block)
+
+    #
+    # Coerces `arg` as an Aggregator
+    #
+    def self.coerce(arg)
+      case arg
+      when Aggregator
+        arg
+      when String
+        instance_eval(arg)
+      else
+        raise ArgumentError, "Invalid arg `arg` for Aggregator()"
+      end
     end
-    
+      
     #
     # Creates an Aggregator instance.
     #
