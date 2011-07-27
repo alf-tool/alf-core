@@ -1892,7 +1892,7 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for this??
+        # TODO: how to put a signature for Defaults?
         @defaults = tuple_collect(args.each_slice(2)) do |k,v|
           [coerce(k, AttrName), Kernel.eval(v)]
         end
@@ -2276,7 +2276,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for this?
+        # TODO: how to put a signature for Extend?
         @extensions = tuple_collect(args.each_slice(2)){|k,v|
           [coerce(k, AttrName), coerce(v, TupleExpression)]
         }
@@ -2331,7 +2331,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: Refactor this after Renaming has been introduced
+        # TODO: how to put a signature for Rename?
         @renaming = Hash[*args.collect{|c| c.to_sym}]
         self
       end
@@ -2382,7 +2382,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for this?
+        # TODO: how to put a signature for Restrict?
         @predicate = if args.size > 1
           h = tuple_collect(args.each_slice(2)){|a,expr|
             [coerce(a, AttrName), Kernel.eval(expr)]
