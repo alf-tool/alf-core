@@ -137,7 +137,8 @@ module Alf
     #   coalesce(nil, 1, "abc") -> 1
     #
     def coalesce(*args)
-      args.find{|x| !x.nil?}
+      found = args.find{|x| !x.nil?}
+      found.nil? ? (block_given? ? yield : nil) : found
     end
     
     #
