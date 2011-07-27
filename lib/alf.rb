@@ -2202,7 +2202,7 @@ module Alf
       # Builds an Extend operator instance
       def initialize(extensions = {})
         @extensions = tuple_collect(extensions){|k,v|
-          [k, coerce(v, TupleExpression)]
+          [coerce(k, AttrName), coerce(v, TupleExpression)]
         }
       end
   
