@@ -1,3 +1,12 @@
+# 0.9.4 / FIX ME
+
+## Enhancements to existing operators
+
+* The DEFAULTS (non-relational) operator now accepts default values as tuple
+  expressions. When used in shell, provided default values are now evaluated
+  that way. In particular, this allows specifying default values as being 
+  computed on the current tuple.
+
 # 0.9.3 / 2011-07-23
 
 ## New operators (available both in shell and in Lispy DSL)
