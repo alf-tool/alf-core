@@ -2148,6 +2148,7 @@ module Alf
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
         @heading = coerce(args, Heading)
+        self
       end
       
       # (see Operator::Transform#_tuple2tuple)
@@ -2275,6 +2276,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: how to put a signature for this?
         @extensions = tuple_collect(args.each_slice(2)){|k,v|
           [coerce(k, AttrName), coerce(v, TupleExpression)]
         }
@@ -2380,6 +2382,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
+        # TODO: how to put a signature for this?
         @predicate = if args.size > 1
           h = tuple_collect(args.each_slice(2)){|a,expr|
             [coerce(a, AttrName), Kernel.eval(expr)]
@@ -2865,7 +2868,6 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: refactor this to use AttrName when introduced
         @attribute = coerce(args.first, AttrName)
         self
       end
