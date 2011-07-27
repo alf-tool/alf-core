@@ -384,6 +384,44 @@ module Alf
     
     end # class OrderingKey
 
+    #
+    # Encapsulates a Summarization information
+    #
+    class Summarization
+      
+      # @return [Hash] the hash of aggregations, AttrName -> Aggregators
+      attr_reader :aggregations
+      
+      #
+      # Creates a Summarization instance
+      #
+      # @param [Hash] aggs, aggregations as a mapping AttrName -> Aggregators
+      #
+      def initialize(aggs)
+        @aggregations = aggs
+      end
+      
+      #
+      # Coerces `arg` to an Aggregator
+      #
+      def self.coerce(arg)
+        case arg
+        when Summarization
+          arg
+        when Array
+          coerce(Hash[*arg])
+        when Hash
+          h = Tools.tuple_collect(arg) do |k,v|
+            [Tools.coerce(k, AttrName), Tools.coerce(v, Aggregator)]
+          end
+          Summarization.new(h)
+        else
+          raise ArgumentError, "Invalid arg `#{arg}` for Summarization()"
+        end
+      end
+      
+    end # class Summarization
+
     extend Tools
   end # module Tools
   
