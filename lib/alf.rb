@@ -1811,16 +1811,16 @@ module Alf
     class Defaults < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
-      # Builds a Defaults operator instance
       def initialize(defaults = {}, strict = false)
         @defaults = defaults
         @strict = strict
       end
       
       options do |opt|
-        opt.on('-s', '--strict', 'Strictly restrict to default attributes'){ 
+        opt.on('-s', '--strict', 
+               'Strictly restrict to default attributes') do
           @strict = true 
-        }
+        end
       end
   
       protected 
@@ -1829,7 +1829,7 @@ module Alf
       def set_args(args)
         # TODO: how to put a signature for this??
         @defaults = tuple_collect(args.each_slice(2)) do |k,v|
-          [k.to_sym, Kernel.eval(v)]
+          [coerce(k, AttrName), Kernel.eval(v)]
         end
         self
       end
