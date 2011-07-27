@@ -2369,21 +2369,20 @@ module Alf
   
       # Builds a Rename operator instance
       def initialize(renaming = {})
-        @renaming = renaming
+        @renaming = coerce(renaming, Renaming)
       end
   
       protected 
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for Rename?
-        @renaming = Hash[*args.collect{|c| c.to_sym}]
+        @renaming = coerce(args, Renaming)
         self
       end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
+        @renaming.apply(tuple)
       end
   
     end # class Rename
