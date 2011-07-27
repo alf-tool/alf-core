@@ -155,6 +155,62 @@ module Alf
     end
 
     #
+    # Encapsulates the notion of tuple expression, which is a Ruby expression
+    # whose evaluates in the context and scope of a specific tuple.
+    #
+    class TupleExpression
+      
+      #
+      # Creates a tuple expression from a Proc object
+      #
+      # @param [Proc] expr a Proc for the expression 
+      #
+      def initialize(expr)
+        @expr_lambda = expr
+      end
+      
+      # 
+      # Coerces `arg` to a tuple expression
+      # 
+      def self.coerce(arg)
+        case arg
+        when TupleExpression
+          arg
+        when Proc
+          TupleExpression.new(arg)
+        when NilClass
+          coerce("true")
+        when Hash
+          if arg.empty?
+            coerce("true")
+          else
+            coerce arg.each_pair.collect{|k,v|
+              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
+            }.join(" && ")
+          end
+        when Array
+          coerce(Hash[*arg])
+        when String, Symbol
+          coerce(eval("lambda{ #{arg} }"))
+        else
+          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
+        end
+      end
+      
+      #
+      # Evaluates in the context of obj
+      #
+      def evaluate(obj = nil)
+        if RUBY_VERSION < "1.9"
+          obj.instance_eval(&@expr_lambda)
+        else
+          obj.instance_exec(&@expr_lambda)
+        end
+      end
+      
+    end # class TupleExpression
+    
+    #
     # Provides a handle, implementing a flyweight design pattern on tuples.
     #
     class TupleHandle
