@@ -3028,9 +3028,9 @@ module Alf
     class Summarize < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
-      def initialize(by = [], aggregators = {}, allbut = false)
+      def initialize(by = [], summarization = {}, allbut = false)
         @by = coerce(by, ProjectionKey)
-        @aggregators = aggregators
+        @summarization = coerce(summarization, Summarization)
         @allbut = allbut
       end
   
@@ -3048,8 +3048,8 @@ module Alf
       class SortBased
         include Alf::Operator::Cesure      
   
-        def initialize(by_key, allbut, aggregators)
-          @by_key, @allbut, @aggregators = by_key, allbut, aggregators
+        def initialize(by_key, allbut, summarization)
+          @by_key, @allbut, @summarization = by_key, allbut, summarization
         end
   
         protected 
@@ -3061,23 +3061,17 @@ module Alf
         
         # (see Operator::Cesure#start_cesure)
         def start_cesure(key, receiver)
-          @aggs = tuple_collect(@aggregators) do |a,agg|
-            [a, agg.least]
-          end
+          @aggs = @summarization.least
         end
   
         # (see Operator::Cesure#accumulate_cesure)
         def accumulate_cesure(tuple, receiver)
-          @aggs = tuple_collect(@aggregators) do |a,agg|
-            [a, agg.happens(@aggs[a], tuple)]
-          end
+          @aggs = @summarization.happens(@aggs, tuple)
         end
   
         # (see Operator::Cesure#flush_cesure)
         def flush_cesure(key, receiver)
-          @aggs = tuple_collect(@aggregators) do |a,agg|
-            [a, agg.finalize(@aggs[a])]
-          end
+          @aggs = @summarization.finalize(@aggs)
           receiver.call key.merge(@aggs)
         end
   
@@ -3087,29 +3081,20 @@ module Alf
       class HashBased
         include Operator::Relational, Operator::Unary
   
-        def initialize(by_key, allbut, aggregators)
-          @by_key, @allbut, @aggregators = by_key, allbut, aggregators
+        def initialize(by_key, allbut, summarization)
+          @by_key, @allbut, @summarization = by_key, allbut, summarization
         end
 
         protected
         
         def _each
-          index = Hash.new do |h,k|
-            h[k] = tuple_collect(@aggregators) do |a,agg|
-              [a, agg.least]
-            end
-          end
+          index = Hash.new{|h,k| @summarization.least}
           each_input_tuple do |tuple|
             key, rest = @by_key.split(tuple, @allbut)
-            index[key] = tuple_collect(@aggregators) do |a,agg|
-              [a, agg.happens(index[key][a], tuple)]
-            end
+            index[key] = @summarization.happens(index[key], tuple)
           end
           index.each_pair do |key,aggs|
-            aggs = tuple_collect(@aggregators) do |a,agg|
-              [a, agg.finalize(aggs[a])]
-            end
-            yield key.merge(aggs)
+            yield key.merge(@summarization.finalize(aggs))
           end
         end
       
@@ -3119,19 +3104,16 @@ module Alf
       
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: refactor by introducing Summarization
-        @aggregators = tuple_collect(args.each_slice(2)) do |a,expr|
-          [coerce(a, AttrName), coerce(expr, Aggregator)]
-        end
+        @summarization = coerce(args, Summarization)
         self
       end
   
       def longexpr
         if @allbut
-          chain HashBased.new(@by, @allbut, @aggregators),
+          chain HashBased.new(@by, @allbut, @summarization),
                 datasets
         else
-          chain SortBased.new(@by, @allbut, @aggregators),
+          chain SortBased.new(@by, @allbut, @summarization),
                 Operator::NonRelational::Sort.new(@by.to_ordering_key),
                 datasets
         end

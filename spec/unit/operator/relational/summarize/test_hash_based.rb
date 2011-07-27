@@ -16,8 +16,10 @@ module Alf
         {:a => "via_reader", :time_sum => 6, :time_max => 4},
       ]}
   
-      let(:aggs){{:time_sum => Aggregator.sum(:time),
-                  :time_max => Aggregator.max(:time)}} 
+      let(:aggs){Tools::Summarization.new(
+        :time_sum => Aggregator.sum(:time),
+        :time_max => Aggregator.max(:time)
+      )} 
       let(:operator){ Summarize::HashBased.new(by_key, allbut, aggs) }
 
       before{ operator.pipe(input) }
