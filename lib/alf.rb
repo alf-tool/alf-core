@@ -232,44 +232,11 @@ module Alf
         self
       end
     
-      # 
-      # Compiles a tuple expression and returns a lambda
-      # instance that can be passed to evaluate later.
-      # 
-      def self.compile(expr)
-        case expr
-        when Proc
-          expr
-        when NilClass
-          compile('true')
-        when Hash
-          if expr.empty?
-            compile(nil)
-          else
-            compile expr.each_pair.collect{|k,v|
-              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
-            }.join(" && ")
-          end
-        when Array
-          compile(Hash[*expr])
-        when String, Symbol
-          eval("lambda{ #{expr} }")
-        else
-          raise ArgumentError, "Unable to compile #{expr} to a TupleHandle"
-        end
-      end
-    
       #
-      # Evaluates an expression on the current tuple. Expression
-      # can be a lambda or a string (immediately compiled in the
-      # later case).
+      # Evaluates a tuple expression on the current tuple.
       # 
       def evaluate(expr)
-        if RUBY_VERSION < "1.9"
-          instance_eval(&TupleHandle.compile(expr))
-        else
-          instance_exec(&TupleHandle.compile(expr))
-        end
+        TupleExpression.coerce(expr).evaluate(self)
       end
     
       private
@@ -2234,17 +2201,17 @@ module Alf
   
       # Builds an Extend operator instance
       def initialize(extensions = {})
-        @extensions = extensions
+        @extensions = tuple_collect(extensions){|k,v|
+          [k, coerce(v, TupleExpression)]
+        }
       end
   
       protected 
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: Refactor this to use coercion, after TupleExpression has been
-        # introduced
         @extensions = tuple_collect(args.each_slice(2)){|k,v|
-          [k.to_sym, TupleHandle.compile(v)]
+          [coerce(k, AttrName), coerce(v, TupleExpression)]
         }
         self
       end
@@ -2257,7 +2224,7 @@ module Alf
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         tuple.merge tuple_collect(@extensions){|k,v|
-          [k, @handle.set(tuple).evaluate(v)]
+          [k, v.evaluate(@handle.set(tuple))]
         }
       end
   
@@ -2328,8 +2295,8 @@ module Alf
     #
     # This command restricts tuples to those for which EXPR evaluates to true.
     # EXPR must be a valid tuple expression that should return a truth-value.
-    # When used in shell, the predicate is taken as a string and compiled with
-    # TupleHandle.compile. We also provide a shortcut for equality expressions. 
+    # When used in shell, the predicate is taken as a string and coerced to a
+    # TupleExpression. We also provide a shortcut for equality expressions. 
     # Note that, in that case, values are expected to be ruby code literals,
     # evaluated with Kernel.eval. Therefore, strings must be doubly quoted.  
     #
@@ -2339,25 +2306,22 @@ module Alf
     class Restrict < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      # Restriction predicate
-      attr_accessor :predicate
-  
       # Builds a Restrict operator instance
       def initialize(predicate = "true")
-        @predicate = TupleHandle.compile(predicate)
+        @predicate = coerce(predicate, TupleExpression)
       end
   
       protected 
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: refactor this to use TupleExpression
         @predicate = if args.size > 1
-          TupleHandle.compile  tuple_collect(args.each_slice(2)){|a,expr|
-            [a, Kernel.eval(expr)]
+          h = tuple_collect(args.each_slice(2)){|a,expr|
+            [coerce(a, AttrName), Kernel.eval(expr)]
           }
+          coerce(h, TupleExpression)  
         else
-          TupleHandle.compile(args.first)
+          coerce(args.first || "true", TupleExpression)
         end
         self
       end
@@ -2365,7 +2329,7 @@ module Alf
       # (see Operator#_each)
       def _each
         handle = TupleHandle.new
-        each_input_tuple{|t| yield(t) if handle.set(t).evaluate(@predicate) }
+        each_input_tuple{|t| yield(t) if @predicate.evaluate(handle.set(t)) }
       end
   
     end # class Restrict
@@ -3353,7 +3317,7 @@ module Alf
       attribute, options = nil, attribute if attribute.is_a?(Hash)
       @handle = Tools::TupleHandle.new
       @options = default_options.merge(options)
-      @functor = Tools::TupleHandle.compile(attribute || block)
+      @functor = Tools.coerce(attribute || block, Tools::TupleExpression)
     end
   
     #
@@ -3383,7 +3347,7 @@ module Alf
     # and delegates to _happens.
     #
     def happens(memo, tuple)
-      _happens(memo, @handle.set(tuple).evaluate(@functor))
+      _happens(memo, @functor.evaluate(@handle.set(tuple)))
     end
   
     #
