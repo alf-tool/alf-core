@@ -455,7 +455,8 @@ module Alf
             coerce(arg.first)
           else
             h = Tools.tuple_collect(arg.each_slice(2)){|k,v|
-              [k, Kernel.eval(v)]
+              (AttrName === k) ? [k,v] : 
+                [Tools.coerce(k, AttrName), Kernel.eval(v)]
             }
             coerce(h)
           end
@@ -2505,15 +2506,7 @@ module Alf
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for Restrict?
-        @predicate = if args.size > 1
-          h = tuple_collect(args.each_slice(2)){|a,expr|
-            [coerce(a, AttrName), Kernel.eval(expr)]
-          }
-          coerce(h, Restriction)  
-        else
-          coerce(args.first || "true", Restriction)
-        end
+        @predicate = coerce(args, Restriction)
         self
       end
   
