@@ -259,6 +259,55 @@ module Alf
     end # class TupleHandle
     
     # 
+    # Encapsulates a tuple computation from other tuples expressions
+    #
+    class TupleComputation
+      
+      # @return [Hash] a computation hash, mapping AttrName -> TupleExpression
+      attr_reader :computation
+      
+      #
+      # Creates a TupleComputation instance
+      #
+      # @param [Hash] computation, a mappping AttrName -> TupleExpression
+      #
+      def initialize(computation)
+        @computation = computation
+      end
+      
+      # 
+      # Coerces `arg` to a tuple computation
+      #
+      def self.coerce(arg)
+        case arg
+        when TupleComputation
+          arg
+        when Hash
+          h = Tools.tuple_collect(arg){|k,v|
+            [Tools.coerce(k, AttrName), Tools.coerce(v, TupleExpression)]
+          }
+          TupleComputation.new(h)
+        when Array
+          coerce(Hash[*arg])
+        else
+          raise ArgumentError, "Invalid argument `arg` for TupleComputation()"
+        end
+      end
+      
+      #
+      # Computes the result, given `tuple` as context and `handle` to
+      # evaluate expressions. 
+      #
+      def compute(tuple, handle = TupleHandle.new)
+        handle.set(tuple)
+        Tools.tuple_collect(@computation){|k,v| 
+          [k, v.evaluate(handle)]
+        }
+      end
+      
+    end # class TupleComputation
+    
+    #
     # Defines a projection key
     # 
     class ProjectionKey
