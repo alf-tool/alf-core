@@ -2007,7 +2007,7 @@ module Alf
       include Operator::NonRelational, Operator::Transform
   
       def initialize(defaults = {}, strict = false)
-        @defaults = defaults
+        @defaults = coerce(defaults, TupleComputation)
         @strict = strict
       end
       
@@ -2022,27 +2022,17 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for Defaults?
-        @defaults = tuple_collect(args.each_slice(2)) do |k,v|
-          [coerce(k, AttrName), coerce(v, TupleExpression)]
-        end
+        @defaults = coerce(args, TupleComputation)
         self
       end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        handle = TupleHandle.new
-        keys = @strict ? @defaults.keys : (tuple.keys | @defaults.keys)
+        handle = TupleHandle.new.set(tuple)
+        defs = @defaults.evaluate(handle)
+        keys = @strict ? defs.keys : (tuple.keys | defs.keys)
         tuple_collect(keys){|k|
-          val = coalesce(tuple[k]){
-            case defa = @defaults[k]
-            when TupleExpression
-              defa.evaluate(handle.set(tuple))
-            else
-              defa
-            end 
-          }
-          [k, val]
+          [k, coalesce(tuple[k], defs[k])]
         }
       end
       
