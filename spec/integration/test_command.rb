@@ -25,7 +25,7 @@ describe "Alf's alf command / " do
           main = Alf::Command::Main.new
           main.environment = Alf::Environment.folder(dir)
           main.run(argv, __FILE__)
-        rescue SystemExit
+        rescue Quickl::Exit
           $stdout << SystemExit << "\n"
         end
         $stdout.string.should(eq(expected)) unless RUBY_VERSION < "1.9"

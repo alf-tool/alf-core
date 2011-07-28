@@ -1424,7 +1424,7 @@ module Alf
       # Overrided because Quickl only keep --options but modifying it there 
       # should probably be considered a broken API.
       #
-      def _run(argv = [])
+      def run(argv = [], requester = nil)
         argv = _normalize(argv)
         
         # 1) Extract my options and parse them
@@ -1528,9 +1528,9 @@ module Alf
       # Command execution
       def execute(args)
         if args.size != 1
-          puts super_command.help
+          puts self.class.super_command.help
         else
-          cmd = has_command!(args.first, super_command)
+          cmd = Quickl.has_subcommand!(self, args.first)
           puts cmd.help
         end
         nil
@@ -1587,6 +1587,26 @@ module Alf
     #
     module CommandMethods
     
+      #
+      # Overrides Quickl::Command::Single#_run to handles the '--' separator
+      # correctly.
+      #
+      # This is because parse_options tend to eat the '--' separator... This 
+      # could be handled in Quickl itself, but it should be considered a broken 
+      # API and will only be available in quickl >= 0.3.0 (probably)
+      #
+      def run(argv = [], requester = nil)
+        operands, args = split_command_args(argv).collect do |arr|
+          parse_options(arr)
+        end
+        self.set_args(args)
+        if operands = command_line_operands(operands) 
+          env = environment || (requester ? requester.environment : nil) 
+          self.pipe(operands, env)
+        end 
+        self
+      end
+    
       protected
       
       #
@@ -1599,26 +1619,6 @@ module Alf
         self
       end
       
-      #
-      # Overrides Quickl::Command::Single#_run to handles the '--' separator
-      # correctly.
-      #
-      # This is because parse_options tend to eat the '--' separator... This 
-      # could be handled in Quickl itself, but it should be considered a broken 
-      # API and will only be available in quickl >= 0.3.0 (probably)
-      #
-      def _run(argv = [])
-        operands, args = split_command_args(argv).collect do |arr|
-          parse_options(arr)
-        end
-        self.set_args(args)
-        if operands = command_line_operands(operands) 
-          env = environment || (requester ? requester.environment : nil) 
-          self.pipe(operands, env)
-        end 
-        self
-      end
-    
       def split_command_args(args)
         case (i = args.index("--"))
         when NilClass
