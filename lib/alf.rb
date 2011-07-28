@@ -275,7 +275,12 @@ module Alf
           arg
         when Hash
           h = Tools.tuple_collect(arg){|k,v|
-            [Tools.coerce(k, AttrName), Tools.coerce(v, TupleExpression)]
+            if AttrName === k
+              v = TupleExpression.coerce(v) if v.is_a?(Proc)
+              [k, v] 
+            else
+              [Tools.coerce(k, AttrName), Tools.coerce(v, TupleExpression)]
+            end
           }
           TupleComputation.new(h)
         when Array
@@ -291,7 +296,7 @@ module Alf
       #
       def evaluate(obj = nil)
         Tools.tuple_collect(@computation){|k,v| 
-          [k, v.evaluate(obj)]
+          [k, v.is_a?(TupleExpression) ? v.evaluate(obj) : v]
         }
       end
       
