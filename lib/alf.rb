@@ -437,29 +437,26 @@ module Alf
         case arg
         when Restriction
           arg
+        when TrueClass, FalseClass
+          Restriction.new lambda{ arg }
         when TupleExpression, Proc, String, Symbol
           Restriction.new TupleExpression.coerce(arg).expr_lambda
         when Hash
           if arg.empty?
-            coerce("true")
+            coerce(true)
           else
-            coerce arg.each_pair.collect{|k,v|
+            h = Tools.tuple_collect(arg){|k,v|
+              (AttrName === k) ? 
+                [k,v] : [Tools.coerce(k, AttrName), Kernel.eval(v)]
+            }
+            coerce h.each_pair.collect{|k,v|
               "(self.#{k} == #{Tools.to_ruby_literal(v)})"
             }.join(" && ")
           end
         when Array
-          case arg.size
-          when 0
-            coerce("true")
-          when 1
-            coerce(arg.first)
-          else
-            h = Tools.tuple_collect(arg.each_slice(2)){|k,v|
-              (AttrName === k) ? [k,v] : 
-                [Tools.coerce(k, AttrName), Kernel.eval(v)]
-            }
-            coerce(h)
-          end
+          (arg.size <= 1) ?
+            coerce(arg.first || true) :
+            coerce(Hash[*arg])
         else
           raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
         end
