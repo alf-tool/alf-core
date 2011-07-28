@@ -6,11 +6,12 @@ module Alf
       describe "coerce" do
       
         subject{ TupleComputation.coerce(arg) }
-        
+        let(:handle){ TupleHandle.new.set(:who => "alf") }
+          
         describe "from a TupleComputation" do
           let(:arg){ TupleComputation.new :hello => TupleExpression.coerce(:who) } 
           it{ should be_a(TupleComputation) }
-          specify{ subject.compute(:who => "alf").should eql(:hello => "alf") } 
+          specify{ subject.compute(handle).should eql(:hello => "alf") } 
         end
         
         describe "from a Hash" do
@@ -23,7 +24,7 @@ module Alf
             {:hello => "alf", :hello2 => "alf", :hello3 => "alf"}
           }
           it{ should be_a(TupleComputation) }
-          specify{ subject.compute(:who => "alf").should eql(expected) }
+          specify{ subject.compute(handle).should eql(expected) }
         end
         
         describe "from an Array" do
@@ -32,7 +33,7 @@ module Alf
             {:hello => "alf"}
           }
           it{ should be_a(TupleComputation) }
-          specify{ subject.compute(:who => "alf").should eql(expected) }
+          specify{ subject.compute(handle).should eql(expected) }
         end
           
       end
