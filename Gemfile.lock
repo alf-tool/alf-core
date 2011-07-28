@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    alf (0.9.3)
+    alf (0.9.4)
       myrrha (~> 1.1.0)
       quickl (~> 0.2.2)
 
