@@ -2366,19 +2366,14 @@ module Alf
   
       # Builds an Extend operator instance
       def initialize(extensions = {})
-        @extensions = tuple_collect(extensions){|k,v|
-          [coerce(k, AttrName), coerce(v, TupleExpression)]
-        }
+        @extensions = coerce(extensions, TupleComputation)
       end
   
       protected 
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for Extend?
-        @extensions = tuple_collect(args.each_slice(2)){|k,v|
-          [coerce(k, AttrName), coerce(v, TupleExpression)]
-        }
+        @extensions = coerce(args, TupleComputation)
         self
       end
   
@@ -2389,9 +2384,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        tuple.merge tuple_collect(@extensions){|k,v|
-          [k, v.evaluate(@handle.set(tuple))]
-        }
+        tuple.merge @extensions.compute(tuple, @handle)
       end
   
     end # class Extend
