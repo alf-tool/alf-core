@@ -448,7 +448,17 @@ module Alf
             }.join(" && ")
           end
         when Array
-          coerce(Hash[*arg])
+          case arg.size
+          when 0
+            coerce("true")
+          when 1
+            coerce(arg.first)
+          else
+            h = Tools.tuple_collect(arg.each_slice(2)){|k,v|
+              [k, Kernel.eval(v)]
+            }
+            coerce(h)
+          end
         else
           raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
         end

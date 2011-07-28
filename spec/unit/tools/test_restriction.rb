@@ -31,9 +31,14 @@ module Alf
         it{ should eql(false) }
       end
       
-      describe "from Array" do
-        let(:arg){ ["old", "false"] }
-        it{ should eql(false) }
+      describe "from a singleton Array" do
+        let(:arg){ ["old == true"] }
+        it{ should eql(true) }
+      end
+      
+      describe "from an Array" do
+        let(:arg){ ["old", "true"] }
+        it{ should eql(true) }
       end
       
     end
