@@ -147,12 +147,7 @@ module Alf
     # a Hash.
     #
     def tuple_collect(enum)
-      tuple = {}
-      enum.each do |elm| 
-        k, v = yield(elm)
-        tuple[k] = v
-      end
-      tuple
+      Hash[enum.collect{|elm| yield(elm)}]
     end
 
     #
