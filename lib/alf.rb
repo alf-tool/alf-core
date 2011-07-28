@@ -1421,27 +1421,26 @@ module Alf
       end
       
       #
-      # Overrided because Quickl only keep --options but modifying it there 
-      # should probably be considered a broken API.
+      # Overrided from Quickl because of the special case where the first arg
+      # is a .alf file (to avoid NoSuchCommand).
       #
       def run(argv = [], requester = nil)
         argv = _normalize(argv)
-        
-        # 1) Extract my options and parse them
-        my_argv = []
-        while argv.first =~ /^-/
-          my_argv << argv.shift
-        end
-        parse_options(my_argv)
-        
-        # 2) build the operator according to -e option
+        super(argv, requester)
+      end
+
+      #
+      # Executes the command on an array of arguments.
+      #
+      def execute(argv)
+        # 1) build the operator according to -e option
         operator = if @execute
           Alf.lispy(environment).compile(argv.first)
         else
           super
         end
         
-        # 3) if there is a requester, then we do the job (assuming bin/alf)
+        # 2) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
           renderer = self.renderer ||= Renderer::Rash.new
