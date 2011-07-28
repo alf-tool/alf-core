@@ -161,6 +161,9 @@ module Alf
     #
     class TupleExpression
       
+      # @return [Proc] the lambda expression
+      attr_reader :expr_lambda
+      
       #
       # Creates a tuple expression from a Proc object
       #
@@ -179,18 +182,6 @@ module Alf
           arg
         when Proc
           TupleExpression.new(arg)
-        when NilClass
-          coerce("true")
-        when Hash
-          if arg.empty?
-            coerce("true")
-          else
-            coerce arg.each_pair.collect{|k,v|
-              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
-            }.join(" && ")
-          end
-        when Array
-          coerce(Hash[*arg])
         when String, Symbol
           coerce(eval("lambda{ #{arg} }"))
         else
@@ -259,6 +250,59 @@ module Alf
     end # class TupleHandle
     
     # 
+    # Encapsulates a tuple computation from other tuples expressions
+    #
+    class TupleComputation
+      
+      # @return [Hash] a computation hash, mapping AttrName -> TupleExpression
+      attr_reader :computation
+      
+      #
+      # Creates a TupleComputation instance
+      #
+      # @param [Hash] computation, a mappping AttrName -> TupleExpression
+      #
+      def initialize(computation)
+        @computation = computation
+      end
+      
+      # 
+      # Coerces `arg` to a tuple computation
+      #
+      def self.coerce(arg)
+        case arg
+        when TupleComputation
+          arg
+        when Hash
+          h = Tools.tuple_collect(arg){|k,v|
+            if AttrName === k
+              v = TupleExpression.coerce(v) if v.is_a?(Proc)
+              [k, v] 
+            else
+              [Tools.coerce(k, AttrName), Tools.coerce(v, TupleExpression)]
+            end
+          }
+          TupleComputation.new(h)
+        when Array
+          coerce(Hash[*arg])
+        else
+          raise ArgumentError, "Invalid argument `arg` for TupleComputation()"
+        end
+      end
+      
+      #
+      # Computes the result, given `tuple` as context and `handle` to
+      # evaluate expressions. 
+      #
+      def evaluate(obj = nil)
+        Tools.tuple_collect(@computation){|k,v| 
+          [k, v.is_a?(TupleExpression) ? v.evaluate(obj) : v]
+        }
+      end
+      
+    end # class TupleComputation
+    
+    #
     # Defines a projection key
     # 
     class ProjectionKey
@@ -385,6 +429,46 @@ module Alf
     
     end # class OrderingKey
 
+    # 
+    # Specialization of TupleExpression to boolean expressions 
+    # specifically
+    #
+    class Restriction < TupleExpression
+      
+      # 
+      # Coerces `arg` to a Restriction
+      #
+      def self.coerce(arg)
+        case arg
+        when Restriction
+          arg
+        when TrueClass, FalseClass
+          Restriction.new lambda{ arg }
+        when TupleExpression, Proc, String, Symbol
+          Restriction.new TupleExpression.coerce(arg).expr_lambda
+        when Hash
+          if arg.empty?
+            coerce(true)
+          else
+            h = Tools.tuple_collect(arg){|k,v|
+              (AttrName === k) ? 
+                [k,v] : [Tools.coerce(k, AttrName), Kernel.eval(v)]
+            }
+            coerce h.each_pair.collect{|k,v|
+              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
+            }.join(" && ")
+          end
+        when Array
+          (arg.size <= 1) ?
+            coerce(arg.first || true) :
+            coerce(Hash[*arg])
+        else
+          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
+        end
+      end
+      
+    end # class Restriction
+    
     #
     # Encapsulates a Renaming information 
     #
@@ -1923,7 +2007,7 @@ module Alf
       include Operator::NonRelational, Operator::Transform
   
       def initialize(defaults = {}, strict = false)
-        @defaults = defaults
+        @defaults = coerce(defaults, TupleComputation)
         @strict = strict
       end
       
@@ -1938,27 +2022,17 @@ module Alf
   
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for Defaults?
-        @defaults = tuple_collect(args.each_slice(2)) do |k,v|
-          [coerce(k, AttrName), coerce(v, TupleExpression)]
-        end
+        @defaults = coerce(args, TupleComputation)
         self
       end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        handle = TupleHandle.new
-        keys = @strict ? @defaults.keys : (tuple.keys | @defaults.keys)
+        handle = TupleHandle.new.set(tuple)
+        defs = @defaults.evaluate(handle)
+        keys = @strict ? defs.keys : (tuple.keys | defs.keys)
         tuple_collect(keys){|k|
-          val = coalesce(tuple[k]){
-            case defa = @defaults[k]
-            when TupleExpression
-              defa.evaluate(handle.set(tuple))
-            else
-              defa
-            end 
-          }
-          [k, val]
+          [k, coalesce(tuple[k], defs[k])]
         }
       end
       
@@ -2317,19 +2391,14 @@ module Alf
   
       # Builds an Extend operator instance
       def initialize(extensions = {})
-        @extensions = tuple_collect(extensions){|k,v|
-          [coerce(k, AttrName), coerce(v, TupleExpression)]
-        }
+        @extensions = coerce(extensions, TupleComputation)
       end
   
       protected 
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for Extend?
-        @extensions = tuple_collect(args.each_slice(2)){|k,v|
-          [coerce(k, AttrName), coerce(v, TupleExpression)]
-        }
+        @extensions = coerce(args, TupleComputation)
         self
       end
   
@@ -2340,9 +2409,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        tuple.merge tuple_collect(@extensions){|k,v|
-          [k, v.evaluate(@handle.set(tuple))]
-        }
+        tuple.merge @extensions.evaluate(@handle.set(tuple))
       end
   
     end # class Extend
@@ -2424,22 +2491,14 @@ module Alf
       
       # Builds a Restrict operator instance
       def initialize(predicate = "true")
-        @predicate = coerce(predicate, TupleExpression)
+        @predicate = coerce(predicate, Restriction)
       end
   
       protected 
     
       # (see Operator::CommandMethods#set_args)
       def set_args(args)
-        # TODO: how to put a signature for Restrict?
-        @predicate = if args.size > 1
-          h = tuple_collect(args.each_slice(2)){|a,expr|
-            [coerce(a, AttrName), Kernel.eval(expr)]
-          }
-          coerce(h, TupleExpression)  
-        else
-          coerce(args.first || "true", TupleExpression)
-        end
+        @predicate = coerce(args, Restriction)
         self
       end
   

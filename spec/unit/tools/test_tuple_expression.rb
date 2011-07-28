@@ -16,8 +16,7 @@ module Alf
           
         describe "with nil" do
           let(:arg){ nil }
-          it { should be_a(TupleExpression) }
-          specify{ subject.evaluate(plug).should eql(true) }
+          specify{ lambda{subject}.should raise_error(ArgumentError) }
         end
         
         describe "with a String" do
@@ -40,20 +39,17 @@ module Alf
         
         describe "with an empty Hash" do
           let(:arg){ {} }
-          it { should be_a(TupleExpression) }
-          specify{ subject.evaluate(plug).should eql(true) }
+          specify{ lambda{subject}.should raise_error(ArgumentError) }
         end
         
         describe "with an non empty hash" do
           let(:arg){ {:status => 20} } 
-          it { should be_a(TupleExpression) }
-          specify{ subject.evaluate(plug).should eql(false) }
+          specify{ lambda{subject}.should raise_error(ArgumentError) }
         end
         
         describe "with an array" do
           let(:arg){ [:status, 10] }
-          it { should be_a(TupleExpression) }
-          specify{ subject.evaluate(plug).should eql(true) }
+          specify{ lambda{subject}.should raise_error(ArgumentError) }
         end
         
       end
