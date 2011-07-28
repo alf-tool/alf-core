@@ -289,7 +289,7 @@ module Alf
       # Computes the result, given `tuple` as context and `handle` to
       # evaluate expressions. 
       #
-      def compute(obj = nil)
+      def evaluate(obj = nil)
         Tools.tuple_collect(@computation){|k,v| 
           [k, v.evaluate(obj)]
         }
@@ -2414,7 +2414,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        tuple.merge @extensions.compute(@handle.set(tuple))
+        tuple.merge @extensions.evaluate(@handle.set(tuple))
       end
   
     end # class Extend

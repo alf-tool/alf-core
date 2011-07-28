@@ -4,7 +4,7 @@ module Alf
     describe TupleComputation do
   
       let(:handle){ TupleHandle.new.set(:who => "alf") }
-      subject{ TupleComputation.coerce(arg).compute(handle) }
+      subject{ TupleComputation.coerce(arg).evaluate(handle) }
       
       describe "from a TupleComputation" do
         let(:arg){ TupleComputation.new :hello => TupleExpression.coerce(:who) } 
