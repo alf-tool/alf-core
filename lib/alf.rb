@@ -1407,40 +1407,24 @@ module Alf
                               " (c) 2011, Bernard Lambeau"
         end
       end # Alf's options
-      
-      #
-      def _normalize(args)
-        opts = []
-        while !args.empty? && (args.first =~ /^\-/)
-          opts << args.shift 
-        end
-        if args.empty? or (args.size == 1 && File.exists?(args.first))
-          opts << "exec"
-        end
-        opts += args
-      end
-      
-      #
-      # Overrided from Quickl because of the special case where the first arg
-      # is a .alf file (to avoid NoSuchCommand).
-      #
-      def run(argv = [], requester = nil)
-        argv = _normalize(argv)
-        super(argv, requester)
-      end
 
       #
       # Executes the command on an array of arguments.
       #
       def execute(argv)
-        # 1) build the operator according to -e option
+        # 1) special case where a .alf file is provided
+        if argv.empty? or (argv.size == 1 && File.exists?(argv.first))
+          argv.unshift("exec")
+        end
+
+        # 2) build the operator according to -e option
         operator = if @execute
           Alf.lispy(environment).compile(argv.first)
         else
           super
         end
         
-        # 2) if there is a requester, then we do the job (assuming bin/alf)
+        # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
           renderer = self.renderer ||= Renderer::Rash.new
