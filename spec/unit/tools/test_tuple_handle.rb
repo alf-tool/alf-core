@@ -45,20 +45,6 @@ module Alf
           handle.evaluate(lambda{ a }).should == 1
         end
         
-        it "should allow a Hash" do
-          handle.evaluate(:a => 1).should == true
-          handle.evaluate(:a => 2).should == false
-          handle.evaluate(:a => 1, :b => 1).should == false
-          handle.evaluate(:a => 1, :b => 2).should == true
-        end
-        
-        it "should allow an Array" do
-          handle.evaluate([:a, 1]).should == true
-          handle.evaluate([:a, 2]).should == false
-          handle.evaluate([:a, 1, :b, 1]).should == false
-          handle.evaluate([:a, 1, :b, 2]).should == true
-        end
-        
       end
   
     end   

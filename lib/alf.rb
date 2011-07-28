@@ -161,6 +161,9 @@ module Alf
     #
     class TupleExpression
       
+      # @return [Proc] the lambda expression
+      attr_reader :expr_lambda
+      
       #
       # Creates a tuple expression from a Proc object
       #
@@ -179,18 +182,6 @@ module Alf
           arg
         when Proc
           TupleExpression.new(arg)
-        when NilClass
-          coerce("true")
-        when Hash
-          if arg.empty?
-            coerce("true")
-          else
-            coerce arg.each_pair.collect{|k,v|
-              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
-            }.join(" && ")
-          end
-        when Array
-          coerce(Hash[*arg])
         when String, Symbol
           coerce(eval("lambda{ #{arg} }"))
         else
@@ -433,6 +424,38 @@ module Alf
     
     end # class OrderingKey
 
+    # 
+    # Specialization of TupleExpression to boolean expressions 
+    # specifically
+    #
+    class Restriction < TupleExpression
+      
+      # 
+      # Coerces `arg` to a Restriction
+      #
+      def self.coerce(arg)
+        case arg
+        when Restriction
+          arg
+        when TupleExpression, Proc, String, Symbol
+          Restriction.new TupleExpression.coerce(arg).expr_lambda
+        when Hash
+          if arg.empty?
+            coerce("true")
+          else
+            coerce arg.each_pair.collect{|k,v|
+              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
+            }.join(" && ")
+          end
+        when Array
+          coerce(Hash[*arg])
+        else
+          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
+        end
+      end
+      
+    end # class Restriction
+    
     #
     # Encapsulates a Renaming information 
     #
@@ -2465,7 +2488,7 @@ module Alf
       
       # Builds a Restrict operator instance
       def initialize(predicate = "true")
-        @predicate = coerce(predicate, TupleExpression)
+        @predicate = coerce(predicate, Restriction)
       end
   
       protected 
@@ -2477,9 +2500,9 @@ module Alf
           h = tuple_collect(args.each_slice(2)){|a,expr|
             [coerce(a, AttrName), Kernel.eval(expr)]
           }
-          coerce(h, TupleExpression)  
+          coerce(h, Restriction)  
         else
-          coerce(args.first || "true", TupleExpression)
+          coerce(args.first || "true", Restriction)
         end
         self
       end
