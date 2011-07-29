@@ -60,6 +60,27 @@ module Alf
       end
 
     end # coerce
+    
+    describe "from_argv" do
+      
+      subject{ OrderingKey.from_argv(argv) }
+      
+      describe "on an empty array" do
+        let(:argv){ [] }
+        it{ should eq(OrderingKey.new([])) }
+      end
+      
+      describe "on a singleton" do
+        let(:argv){ ["hello"] }
+        it{ should eq(OrderingKey.new([[:hello, :asc]])) }
+      end
+      
+      describe "on multiple strings" do
+        let(:argv){ ["hello", "asc", "world", "desc"] }
+        it{ should eq(OrderingKey.new([[:hello, :asc], [:world, :desc]])) }
+      end
+        
+    end
 
     describe "compare" do
       

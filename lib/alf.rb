@@ -240,7 +240,11 @@ module Alf
           raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
         end
       end
-    
+
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+          
       def attributes
         @ordering.collect{|arg| arg.first}
       end
@@ -274,6 +278,10 @@ module Alf
         OrderingKey.new(@ordering + other.ordering)
       end
     
+      def ==(other)
+        other.is_a?(OrderingKey) && (other.ordering == ordering)
+      end
+      
     end # class OrderingKey
 
     # 
