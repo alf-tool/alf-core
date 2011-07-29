@@ -17,9 +17,19 @@ module Alf
   # Encapsulates all types
   #
   module T
-
+    
+    def coerce(val, target_domain)
+      raise Myrrha::Error, "Unable to coerce nil to #{target_domain}" if val.nil?
+      Tools.coerce(val, target_domain)
+    end
+    
     # Data type for being a valid attribute name  
     AttrName = Myrrha.domain(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
+    AttrName.extend(T)
+    def AttrName.from_argv(argv, opts = {})
+      signature_error! AttrName, argv if argv.size > 1
+      coerce(argv.first || opts[:default], AttrName) 
+    end
 
     #
     # Encapsulates the notion of tuple expression, which is a Ruby expression

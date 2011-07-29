@@ -18,5 +18,13 @@ module Alf
       (AttrName === "$$$".to_sym).should be_false
     end
     
+    specify "from_argv" do
+      AttrName.from_argv(%w{hello}).should eq(:hello)
+      AttrName.from_argv(%w{}, :default => :hello).should eq(:hello)
+      lambda{
+        AttrName.from_argv(%w{})
+      }.should raise_error(Myrrha::Error)
+    end
+    
   end
 end
