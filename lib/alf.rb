@@ -156,17 +156,21 @@ module Alf
     
       def self.coerce(arg)
         case arg
-          when Array
-            ProjectionKey.new(arg.collect{|s| s.to_sym})
-          when OrderingKey
-            ProjectionKey.new(arg.attributes)
-          when ProjectionKey
-            arg
-          else
-            raise ArgumentError, "Unable to coerce #{arg} to a projection key"
+        when ProjectionKey
+          arg
+        when OrderingKey
+          ProjectionKey.new(arg.attributes)
+        when Array
+          ProjectionKey.new(arg.collect{|s| Tools.coerce(s, AttrName)})
+        else
+          raise ArgumentError, "Unable to coerce #{arg} to a projection key"
         end
       end
-    
+
+      def self.from_argv(argv, opts)
+        coerce(argv)
+      end
+          
       def to_ordering_key
         OrderingKey.new attributes.collect{|arg| [arg, :asc]}
       end

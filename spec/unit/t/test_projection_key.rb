@@ -4,21 +4,23 @@ module Alf
 
     describe "coerce" do
       
-      specify "when passed an array" do
-        key = ProjectionKey.coerce [:a, :b]
-        key.attributes.should == [:a, :b]
+      subject{ ProjectionKey.coerce(arg) }
+      
+      describe "when passed a ProjectionKey" do
+        let(:arg){ [:a, :b] } 
+        it{ should eq(ProjectionKey.new(arg)) }
+      end
+      
+      describe "when passed an array" do
+        let(:arg){ [:a, :b] }
+        specify{
+          subject.attributes.should eq([:a, :b])
+        }
       end
 
-      specify "when passed a ProjectionKey" do
-        key = ProjectionKey.coerce [:a, :b]
-        key2 = ProjectionKey.coerce key
-        key2.should == key
-      end
-
-      specify "when passed an OrderingKey" do
-        okey = OrderingKey.new [[:a, :asc], [:b, :asc]]
-        key = ProjectionKey.coerce(okey)
-        key.attributes.should == [:a, :b]
+      describe "when passed an OrderingKey" do
+        let(:arg){ OrderingKey.new [[:a, :asc], [:b, :asc]] }
+        it{ should eq(ProjectionKey.new([:a, :b])) }
       end
 
     end
