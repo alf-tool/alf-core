@@ -418,6 +418,10 @@ module Alf
         end
       end
       
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+      
       #
       # Computes the least tuple
       #
