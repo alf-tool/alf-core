@@ -18,15 +18,34 @@ module Alf
       (AttrName === "$$$".to_sym).should be_false
     end
     
-    specify "from_argv" do
-      AttrName.from_argv(%w{hello}).should eq(:hello)
-      AttrName.from_argv(%w{}, :default => :hello).should eq(:hello)
-      lambda{
-        AttrName.from_argv(%w{hello world})
-      }.should raise_error(ArgumentError)
-      lambda{
-        AttrName.from_argv(%w{})
-      }.should raise_error(Myrrha::Error)
+    describe "from_argv" do
+      
+      subject{ AttrName.from_argv(argv, opts) }
+      
+      describe "with a String" do
+        let(:argv){ %w{hello} }
+        let(:opts) {{}}
+        it{ should eq(:hello) }
+      end
+
+      describe "with nothing but a default" do
+        let(:argv){ %w{} }
+        let(:opts){ {:default => :hello} }
+        it{ should eq(:hello) }
+      end
+
+      describe "with nothing and no default" do
+        let(:argv){ %w{} }
+        let(:opts){ {} }
+        specify{ lambda{subject}.should raise_error(Myrrha::Error) }
+      end
+
+      describe "with more than one string" do
+        let(:argv){ %w{hello world} }
+        let(:opts){ {} }
+        specify{ lambda{subject}.should raise_error(ArgumentError) }
+      end
+      
     end
     
   end

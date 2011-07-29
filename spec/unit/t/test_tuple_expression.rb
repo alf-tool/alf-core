@@ -43,6 +43,11 @@ module Alf
         let(:argv){ %w{true} }
         it{ should eql(true) }
       end
+        
+      describe "with two String" do
+        let(:argv){ %w{hello world} }
+        specify{ lambda{subject}.should raise_error(ArgumentError) }
+      end
       
     end
       
