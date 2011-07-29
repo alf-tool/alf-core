@@ -1550,18 +1550,7 @@ module Alf
       def set_args(args)
         self
       end
-      
-#      def split_command_args(args)
-#        case (i = args.index("--"))
-#        when NilClass
-#          [args, []]
-#        when 0
-#          [[ $stdin ], args[1..-1]]
-#        else
-#          [args[0...i], args[i+1..-1]]
-#        end
-#      end
-    
+
     end # module CommandMethods
     include CommandMethods
     
