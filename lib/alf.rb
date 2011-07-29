@@ -1531,9 +1531,9 @@ module Alf
       #
       def run(argv = [], req = nil)
         @requester = req
-        argv = parse_options(argv, :split)
-        operands = command_line_operands(Array(argv[0]))
-        args     = Array(argv[1..-1]).flatten
+        argv       = parse_options(argv, :split)
+        operands   = command_line_operands(Array(argv[0]))
+        args       = Array(argv[1..-1]).flatten
         self.set_args(args)
         self.pipe(operands, environment || (req && req.environment))
         self
