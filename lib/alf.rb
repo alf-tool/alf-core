@@ -452,7 +452,7 @@ module Alf
     end # class Summarization
 
     # Install all types on Alf now
-    constants(false).each do |s|
+    constants.each do |s|
       Alf.const_set(s, const_get(s))
     end
   end
