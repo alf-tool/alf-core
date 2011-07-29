@@ -168,6 +168,132 @@ module Alf
       
     end # class TupleComputation
     
+    #
+    # Defines a projection key
+    # 
+    class ProjectionKey
+    
+      # Projection attributes
+      attr_accessor :attributes
+    
+      def initialize(attributes)
+        @attributes = attributes
+      end
+    
+      def self.coerce(arg)
+        case arg
+          when Array
+            ProjectionKey.new(arg.collect{|s| s.to_sym})
+          when OrderingKey
+            ProjectionKey.new(arg.attributes)
+          when ProjectionKey
+            arg
+          else
+            raise ArgumentError, "Unable to coerce #{arg} to a projection key"
+        end
+      end
+    
+      def to_ordering_key
+        OrderingKey.new attributes.collect{|arg| [arg, :asc]}
+      end
+    
+      def project(tuple, allbut = false)
+        split(tuple, allbut).first
+      end
+    
+      def split(tuple, allbut = false)
+        projection, rest = {}, tuple.dup
+        attributes.each do |a|
+          projection[a] = tuple[a]
+          rest.delete(a)
+        end
+        allbut ? [rest, projection] : [projection, rest]
+      end
+    
+    end # class ProjectionKey
+
+    #
+    # Encapsulates tools for computing orders on tuples
+    #
+    class OrderingKey
+    
+      attr_reader :ordering
+    
+      def initialize(ordering = [])
+        @ordering = ordering
+        @sorter = nil
+      end
+    
+      # 
+      # Coerces `arg` to an ordering key. 
+      #
+      # Implemented coercions are:
+      # * Array of symbols (all attributes in ascending order)
+      # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
+      # * ProjectionKey (all its attributes in ascending order)
+      # * OrderingKey (self)
+      #
+      # @return [OrderingKey]
+      # @raises [ArgumentError] when `arg` is not recognized
+      #
+      def self.coerce(arg)
+        case arg
+        when OrderingKey
+          arg
+        when ProjectionKey
+          arg.to_ordering_key
+        when Array
+          if arg.all?{|a| a.is_a?(Array)}
+            OrderingKey.new(arg)
+          else
+            symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
+            sliced = symbolized.each_slice(2) 
+            if sliced.all?{|a,o| [:asc,:desc].include?(o)}
+              OrderingKey.new sliced.to_a
+            else
+              OrderingKey.new symbolized.collect{|a| [a, :asc]}
+            end
+          end
+        else
+          raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
+        end
+      end
+    
+      def attributes
+        @ordering.collect{|arg| arg.first}
+      end
+    
+      def order_by(attr, order = :asc)
+        @ordering << [attr, order]
+        @sorter = nil
+        self
+      end
+    
+      def order_of(attr)
+        @ordering.find{|arg| arg.first == attr}.last
+      end
+    
+      def compare(t1,t2)
+        @ordering.each do |attr,order|
+          x, y = t1[attr], t2[attr]
+          comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
+          comp *= -1 if order == :desc
+          return comp unless comp == 0
+        end
+        return 0
+      end
+    
+      def sorter
+        @sorter ||= lambda{|t1,t2| compare(t1, t2)}
+      end
+    
+      def +(other)
+        other = OrderingKey.coerce(other)
+        OrderingKey.new(@ordering + other.ordering)
+      end
+    
+    end # class OrderingKey
+
     # Install all types on Alf now
     constants(false).each do |s|
       Alf.const_set(s, const_get(s))
@@ -267,133 +393,6 @@ module Alf
     def tuple_collect(enum)
       Hash[enum.collect{|elm| yield(elm)}]
     end
-
-    #
-    # Defines a projection key
-    # 
-    class ProjectionKey
-      include Tools
-    
-      # Projection attributes
-      attr_accessor :attributes
-    
-      def initialize(attributes)
-        @attributes = attributes
-      end
-    
-      def self.coerce(arg)
-        case arg
-          when Array
-            ProjectionKey.new(arg.collect{|s| s.to_sym})
-          when OrderingKey
-            ProjectionKey.new(arg.attributes)
-          when ProjectionKey
-            arg
-          else
-            raise ArgumentError, "Unable to coerce #{arg} to a projection key"
-        end
-      end
-    
-      def to_ordering_key
-        OrderingKey.new attributes.collect{|arg| [arg, :asc]}
-      end
-    
-      def project(tuple, allbut = false)
-        split(tuple, allbut).first
-      end
-    
-      def split(tuple, allbut = false)
-        projection, rest = {}, tuple.dup
-        attributes.each do |a|
-          projection[a] = tuple[a]
-          rest.delete(a)
-        end
-        allbut ? [rest, projection] : [projection, rest]
-      end
-    
-    end # class ProjectionKey
-    
-    #
-    # Encapsulates tools for computing orders on tuples
-    #
-    class OrderingKey
-    
-      attr_reader :ordering
-    
-      def initialize(ordering = [])
-        @ordering = ordering
-        @sorter = nil
-      end
-    
-      # 
-      # Coerces `arg` to an ordering key. 
-      #
-      # Implemented coercions are:
-      # * Array of symbols (all attributes in ascending order)
-      # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
-      # * ProjectionKey (all its attributes in ascending order)
-      # * OrderingKey (self)
-      #
-      # @return [OrderingKey]
-      # @raises [ArgumentError] when `arg` is not recognized
-      #
-      def self.coerce(arg)
-        case arg
-        when OrderingKey
-          arg
-        when ProjectionKey
-          arg.to_ordering_key
-        when Array
-          if arg.all?{|a| a.is_a?(Array)}
-            OrderingKey.new(arg)
-          else
-            symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
-            sliced = symbolized.each_slice(2) 
-            if sliced.all?{|a,o| [:asc,:desc].include?(o)}
-              OrderingKey.new sliced.to_a
-            else
-              OrderingKey.new symbolized.collect{|a| [a, :asc]}
-            end
-          end
-        else
-          raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
-        end
-      end
-    
-      def attributes
-        @ordering.collect{|arg| arg.first}
-      end
-    
-      def order_by(attr, order = :asc)
-        @ordering << [attr, order]
-        @sorter = nil
-        self
-      end
-    
-      def order_of(attr)
-        @ordering.find{|arg| arg.first == attr}.last
-      end
-    
-      def compare(t1,t2)
-        @ordering.each do |attr,order|
-          x, y = t1[attr], t2[attr]
-          comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
-          comp *= -1 if order == :desc
-          return comp unless comp == 0
-        end
-        return 0
-      end
-    
-      def sorter
-        @sorter ||= lambda{|t1,t2| compare(t1, t2)}
-      end
-    
-      def +(other)
-        other = OrderingKey.coerce(other)
-        OrderingKey.new(@ordering + other.ordering)
-      end
-    
-    end # class OrderingKey
 
     # 
     # Specialization of TupleExpression to boolean expressions 
@@ -3849,7 +3848,7 @@ module Alf
     # @return [Array] an array of hashes, in requested order (if specified)
     #
     def to_a(okey = nil)
-      okey = Tools.coerce(okey, Tools::OrderingKey) if okey
+      okey = Tools.coerce(okey, OrderingKey) if okey
       ary = tuples.to_a
       ary.sort!(&okey.sorter) if okey
       ary
