@@ -7,6 +7,12 @@
   that way. In particular, this allows specifying default values as being 
   computed on the current tuple.
 
+## Bug fixes 
+
+* [In shell] Options are now correctly parsed in presence of option separators. 
+  That is, every argument after a '--' separator is considered a non-option 
+  argument. 
+
 # 0.9.3 / 2011-07-23
 
 ## New operators (available both in shell and in Lispy DSL)

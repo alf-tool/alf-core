@@ -1470,13 +1470,9 @@ module Alf
       
       # Command execution
       def execute(args)
-        if args.size != 1
-          puts self.class.super_command.help
-        else
-          cmd = Quickl.has_subcommand!(self, args.first)
-          puts cmd.help
-        end
-        nil
+        sup = Quickl.super_command(self)
+        sub = (args.size != 1) ? sup : Quickl.subcommand!(sup, args.first)
+        puts Quickl.help(sub)
       end
       
     end # class Help
