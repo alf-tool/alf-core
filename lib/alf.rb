@@ -328,24 +328,24 @@ module Alf
       #
       def self.coerce(arg)
         case arg
-          when Array
-            if arg.all?{|a| a.is_a?(Array)}
-              OrderingKey.new(arg)
-            else
-              symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
-              sliced = symbolized.each_slice(2) 
-              if sliced.all?{|a,o| [:asc,:desc].include?(o)}
-                OrderingKey.new sliced.to_a
-              else
-                OrderingKey.new symbolized.collect{|a| [a, :asc]}
-              end
-            end
-          when ProjectionKey
-            arg.to_ordering_key
-          when OrderingKey
-            arg
+        when OrderingKey
+          arg
+        when ProjectionKey
+          arg.to_ordering_key
+        when Array
+          if arg.all?{|a| a.is_a?(Array)}
+            OrderingKey.new(arg)
           else
-            raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
+            symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
+            sliced = symbolized.each_slice(2) 
+            if sliced.all?{|a,o| [:asc,:desc].include?(o)}
+              OrderingKey.new sliced.to_a
+            else
+              OrderingKey.new symbolized.collect{|a| [a, :asc]}
+            end
+          end
+        else
+          raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
         end
       end
     
@@ -2070,7 +2070,7 @@ module Alf
       def initialize(ordering_key = [])
         @ordering_key = coerce(ordering_key, OrderingKey)
       end
-    
+
       protected 
     
       def set_args(args)
