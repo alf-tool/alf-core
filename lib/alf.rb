@@ -3264,7 +3264,7 @@ module Alf
     # Relational quota-queries (position, sum progression, etc.)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] --by=KEY1,... --order=OR1... AGG1 EXPR1...
+    #   #{program_name} #{command_name} [OPERAND] --by=KEY1,... --order=OR1... -- AGG1 EXPR1...
     #
     # OPTIONS
     # #{summarized_options}
