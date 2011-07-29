@@ -21,6 +21,53 @@ module Alf
     # Data type for being a valid attribute name  
     AttrName = Myrrha.domain(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
 
+    #
+    # Encapsulates the notion of tuple expression, which is a Ruby expression
+    # whose evaluates in the context and scope of a specific tuple.
+    #
+    class TupleExpression
+      
+      # @return [Proc] the lambda expression
+      attr_reader :expr_lambda
+      
+      #
+      # Creates a tuple expression from a Proc object
+      #
+      # @param [Proc] expr a Proc for the expression 
+      #
+      def initialize(expr)
+        @expr_lambda = expr
+      end
+      
+      # 
+      # Coerces `arg` to a tuple expression
+      # 
+      def self.coerce(arg)
+        case arg
+        when TupleExpression
+          arg
+        when Proc
+          TupleExpression.new(arg)
+        when String, Symbol
+          coerce(eval("lambda{ #{arg} }"))
+        else
+          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
+        end
+      end
+      
+      #
+      # Evaluates in the context of obj
+      #
+      def evaluate(obj = nil)
+        if RUBY_VERSION < "1.9"
+          obj.instance_eval(&@expr_lambda)
+        else
+          obj.instance_exec(&@expr_lambda)
+        end
+      end
+      
+    end # class TupleExpression
+    
     # Install all types on Alf now
     constants(false).each do |s|
       Alf.const_set(s, const_get(s))
@@ -121,53 +168,6 @@ module Alf
       Hash[enum.collect{|elm| yield(elm)}]
     end
 
-    #
-    # Encapsulates the notion of tuple expression, which is a Ruby expression
-    # whose evaluates in the context and scope of a specific tuple.
-    #
-    class TupleExpression
-      
-      # @return [Proc] the lambda expression
-      attr_reader :expr_lambda
-      
-      #
-      # Creates a tuple expression from a Proc object
-      #
-      # @param [Proc] expr a Proc for the expression 
-      #
-      def initialize(expr)
-        @expr_lambda = expr
-      end
-      
-      # 
-      # Coerces `arg` to a tuple expression
-      # 
-      def self.coerce(arg)
-        case arg
-        when TupleExpression
-          arg
-        when Proc
-          TupleExpression.new(arg)
-        when String, Symbol
-          coerce(eval("lambda{ #{arg} }"))
-        else
-          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
-        end
-      end
-      
-      #
-      # Evaluates in the context of obj
-      #
-      def evaluate(obj = nil)
-        if RUBY_VERSION < "1.9"
-          obj.instance_eval(&@expr_lambda)
-        else
-          obj.instance_exec(&@expr_lambda)
-        end
-      end
-      
-    end # class TupleExpression
-    
     #
     # Provides a handle, implementing a flyweight design pattern on tuples.
     #
@@ -3400,7 +3400,7 @@ module Alf
       attribute, options = nil, attribute if attribute.is_a?(Hash)
       @handle = Tools::TupleHandle.new
       @options = default_options.merge(options)
-      @functor = Tools.coerce(attribute || block, Tools::TupleExpression)
+      @functor = Tools.coerce(attribute || block, TupleExpression)
     end
   
     #
