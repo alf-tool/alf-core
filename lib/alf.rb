@@ -13,9 +13,20 @@ require 'myrrha/coerce'
 #
 module Alf
 
-  # Data type for being a valid attribute name  
-  AttrName = Myrrha.domain(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
-  
+  #
+  # Encapsulates all types
+  #
+  module T
+
+    # Data type for being a valid attribute name  
+    AttrName = Myrrha.domain(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
+
+    # Install all types on Alf now
+    constants(false).each do |s|
+      Alf.const_set(s, const_get(s))
+    end
+  end
+
   #
   # Provides tooling methods that are used here and there in Alf.
   # 
