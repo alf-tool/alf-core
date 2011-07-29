@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe TupleComputation do
 
-    let(:handle){ TupleHandle.new.set(:who => "alf") }
+    let(:handle){ Tools::TupleHandle.new.set(:who => "alf") }
     subject{ TupleComputation.coerce(arg).evaluate(handle) }
     
     describe "from a TupleComputation" do

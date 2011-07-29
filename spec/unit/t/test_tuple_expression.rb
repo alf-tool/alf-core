@@ -3,7 +3,7 @@ module Alf
   describe TupleExpression do
 
     let(:handle) {
-      TupleHandle.new.set(:status => 10)
+      Tools::TupleHandle.new.set(:status => 10)
     }
     
     describe "coerce" do

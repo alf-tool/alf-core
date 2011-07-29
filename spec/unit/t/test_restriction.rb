@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Restriction do
 
-    let(:handle){ TupleHandle.new.set(:status => 10) }
+    let(:handle){ Tools::TupleHandle.new.set(:status => 10) }
     subject{ Restriction.coerce(arg).evaluate(handle) }
     
     describe "from Restriction" do
