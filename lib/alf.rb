@@ -1512,7 +1512,7 @@ module Alf
       def binary?
         ancestors.include?(Operator::Binary)
       end
-      
+
     end # module Introspection
     
     # Ensures that the Introspection module is set on real operators
@@ -1560,6 +1560,13 @@ module Alf
     # Optional environment
     attr_reader :environment
     
+    #
+    # Creates an operator instance and automatically installs arguments
+    #
+    def initialize(*args)
+      set_args(args)
+    end
+
     # Sets the environment on this operator and propagate on
     # datasets
     def environment=(env)
@@ -1856,10 +1863,6 @@ module Alf
     class Autonum < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
-      def initialize(attrname = :autonum)
-        @attrname = coerce(attrname, AttrName)
-      end
-      
       protected 
       
       # (see Operator::CommandMethods#set_args)
