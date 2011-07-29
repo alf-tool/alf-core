@@ -1578,15 +1578,13 @@ module Alf
       # could be handled in Quickl itself, but it should be considered a broken 
       # API and will only be available in quickl >= 0.3.0 (probably)
       #
-      def run(argv = [], requester = nil)
-        operands, args = split_command_args(argv).collect do |arr|
-          parse_options(arr)
-        end
+      def run(argv = [], req = nil)
+        @requester = req
+        argv = parse_options(argv, :split)
+        operands = command_line_operands(Array(argv[0]))
+        args     = Array(argv[1..-1]).flatten
         self.set_args(args)
-        if operands = command_line_operands(operands) 
-          env = environment || (requester ? requester.environment : nil) 
-          self.pipe(operands, env)
-        end 
+        self.pipe(operands, environment || (req && req.environment))
         self
       end
     
@@ -1602,20 +1600,16 @@ module Alf
         self
       end
       
-      def split_command_args(args)
-        case (i = args.index("--"))
-        when NilClass
-          [args, []]
-        when 0
-          [[ $stdin ], args[1..-1]]
-        else
-          [args[0...i], args[i+1..-1]]
-        end
-      end
-      
-      def command_line_operands(operands)
-        operands
-      end
+#      def split_command_args(args)
+#        case (i = args.index("--"))
+#        when NilClass
+#          [args, []]
+#        when 0
+#          [[ $stdin ], args[1..-1]]
+#        else
+#          [args[0...i], args[i+1..-1]]
+#        end
+#      end
     
     end # module CommandMethods
     include CommandMethods
