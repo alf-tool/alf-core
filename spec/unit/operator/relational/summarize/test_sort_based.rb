@@ -16,7 +16,7 @@ module Alf
         {:a => "via_reader", :time_sum => 6, :time_max => 4},
       ]}
   
-      let(:aggs){Tools::Summarization.new(
+      let(:aggs){Summarization.new(
         :time_sum => Aggregator.sum(:time),
         :time_max => Aggregator.max(:time)
       )} 
