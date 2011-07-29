@@ -1531,12 +1531,7 @@ module Alf
     module CommandMethods
     
       #
-      # Overrides Quickl::Command::Single#_run to handles the '--' separator
-      # correctly.
-      #
-      # This is because parse_options tend to eat the '--' separator... This 
-      # could be handled in Quickl itself, but it should be considered a broken 
-      # API and will only be available in quickl >= 0.3.0 (probably)
+      # Run the operator command.
       #
       def run(argv = [], req = nil)
         @requester = req
