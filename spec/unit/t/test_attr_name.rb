@@ -22,6 +22,9 @@ module Alf
       AttrName.from_argv(%w{hello}).should eq(:hello)
       AttrName.from_argv(%w{}, :default => :hello).should eq(:hello)
       lambda{
+        AttrName.from_argv(%w{hello world})
+      }.should raise_error(ArgumentError)
+      lambda{
         AttrName.from_argv(%w{})
       }.should raise_error(Myrrha::Error)
     end
