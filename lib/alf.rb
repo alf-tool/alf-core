@@ -187,7 +187,11 @@ module Alf
         end
         allbut ? [rest, projection] : [projection, rest]
       end
-    
+
+      def ==(other)
+        other.is_a?(ProjectionKey) && (other.attributes == attributes)          
+      end
+      
     end # class ProjectionKey
 
     #
