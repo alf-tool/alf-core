@@ -167,7 +167,7 @@ module Alf
         end
       end
 
-      def self.from_argv(argv, opts)
+      def self.from_argv(argv, opts = {})
         coerce(argv)
       end
           

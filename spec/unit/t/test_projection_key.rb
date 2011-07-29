@@ -24,6 +24,27 @@ module Alf
       end
 
     end
+    
+    describe "from_argv" do
+      
+      subject{ ProjectionKey.from_argv(argv) }
+      
+      describe "on an empty array" do
+        let(:argv){ [] }
+        it{ should eq(ProjectionKey.new([])) }
+      end
+      
+      describe "on a singleton" do
+        let(:argv){ ["hello"] }
+        it{ should eq(ProjectionKey.new([:hello])) }
+      end
+      
+      describe "on multiple strings" do
+        let(:argv){ ["hello", "world"] }
+        it{ should eq(ProjectionKey.new([:hello, :world])) }
+      end
+        
+    end
 
     describe "to_ordering_key" do
 
