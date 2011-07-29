@@ -1471,7 +1471,7 @@ module Alf
       # Command execution
       def execute(args)
         sup = Quickl.super_command(self)
-        sub = (args.size != 1) ? sup : Quickl.subcommand!(sup, args.first)
+        sub = (args.size != 1) ? sup : Quickl.sub_command!(sup, args.first)
         puts Quickl.help(sub)
       end
       
