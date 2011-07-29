@@ -64,7 +64,13 @@ module Alf
           raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
         end
       end
-      
+
+      # Coerces from ARGV 
+      def self.from_argv(argv, options = {})
+        raise ArgumentError if argv.size > 1
+        coerce(argv.first || options[:default])
+      end
+            
       #
       # Evaluates in the context of obj
       #
