@@ -322,6 +322,10 @@ module Alf
         end
       end
       
+      def self.from_argv(argv)
+        coerce(argv)
+      end
+      
     end # class Restriction
     
     #
