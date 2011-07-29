@@ -13,12 +13,33 @@ module Alf
       
       describe "from a Hash" do
         let(:arg){ {"old" => "new"} }
-        specify{ subject.renaming.should eq(:old => :new) }
+        it{ should eq(Renaming.new(:old => :new)) }
       end
       
       describe "from an Array" do
         let(:arg){ ["old", "new"] }
-        specify{ subject.renaming.should eq(:old => :new) }
+        it{ should eq(Renaming.new(:old => :new)) }
+      end
+        
+    end
+    
+    describe "from_argv" do
+      
+      subject{ Renaming.from_argv(argv) }
+      
+      describe "from an empty Array" do
+        let(:argv){ [] }
+        it{ should eq(Renaming.new({})) }
+      end
+        
+      describe "from an Array of two elements" do
+        let(:argv){ ["old", "new"] }
+        it{ should eq(Renaming.new(:old => :new)) }
+      end
+        
+      describe "from an Array of four elements" do
+        let(:argv){ ["old", "new", "hello", "world"] }
+        it{ should eq(Renaming.new(:old => :new, :hello => :world)) }
       end
         
     end

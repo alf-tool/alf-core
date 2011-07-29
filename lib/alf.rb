@@ -363,12 +363,21 @@ module Alf
           raise ArgumentError, "Invalid argument `#{arg}` for Renaming()"
         end
       end
-      
+
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+            
       #
       # Applies renaming to a a given tuple
       #
       def apply(tuple)
         Tools.tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
+      end
+      
+      # Checks if this renaming is equal to `other`
+      def ==(other)
+        other.is_a?(Renaming) && (other.renaming == renaming)
       end
       
     end # class Renaming
