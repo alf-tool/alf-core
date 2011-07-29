@@ -125,6 +125,11 @@ module Alf
         end
       end
       
+      # Coerce from ARGV
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+      
       #
       # Computes the result, given `tuple` as context and `handle` to
       # evaluate expressions. 
