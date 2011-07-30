@@ -1,11 +1,21 @@
+GIT
+  remote: git://github.com/blambeau/myrrha.git
+  revision: 245959aee8999b8dab0757f830b234e66edaaa70
+  specs:
+    myrrha (1.2.0)
+
+GIT
+  remote: git://github.com/blambeau/quickl.git
+  revision: fdadf5ddf1e3153933fd71312976662f4694fcce
+  specs:
+    quickl (0.3.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
     bluecloth (2.1.0)
     diff-lcs (1.1.2)
     fastercsv (1.5.4)
-    myrrha (1.2.0)
-    quickl (0.3.0)
     rake (0.9.2)
     rcov (0.9.9)
     rspec (2.6.0)
@@ -26,8 +36,8 @@ PLATFORMS
 DEPENDENCIES
   bluecloth (~> 2.1.0)
   fastercsv (~> 1.5.4)
-  myrrha (~> 1.2.0)
-  quickl (~> 0.3.0)
+  myrrha!
+  quickl!
   rake (~> 0.9.2)
   rcov (~> 0.9.9)
   rspec (~> 2.6.0)
