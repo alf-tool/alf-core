@@ -1718,6 +1718,18 @@ module Alf
         ancestors.include?(Operator::Binary)
       end
 
+      #
+      # Installs or set the operator signature
+      #
+      def signature(sig = nil)
+        if sig.nil?
+          @signature
+        else
+          @signature = Tools::Signature.new(sig)
+          @signature.install(self)
+        end
+      end
+      
     end # module Introspection
     
     # Ensures that the Introspection module is set on real operators
@@ -1794,6 +1806,10 @@ module Alf
     #
     def pipe(input, env = environment)
       raise NotImplementedError, "Operator#pipe should be overriden"
+    end
+    
+    def signature
+      self.class.signature
     end
     
     #
@@ -2383,6 +2399,10 @@ module Alf
     class Coerce < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
+      signature [
+        [:heading, Heading]
+      ]
+      
       def initialize(heading = {})
         @heading = coerce(heading, Heading)
       end
@@ -2390,8 +2410,8 @@ module Alf
       protected 
       
       # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @heading = coerce(args, Heading)
+      def set_args(argv)
+        signature.parse_argv(argv, self)
         self
       end
       
