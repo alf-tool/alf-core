@@ -37,7 +37,7 @@ module Alf
       describe "with nothing and no default" do
         let(:argv){ %w{} }
         let(:opts){ {} }
-        specify{ lambda{subject}.should raise_error(Myrrha::Error) }
+        specify{ lambda{subject}.should raise_error(ArgumentError) }
       end
 
       describe "with more than one string" do

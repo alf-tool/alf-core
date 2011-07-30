@@ -18,18 +18,28 @@ module Alf
   #
   module T
     
-    def coerce(val, target_domain)
-      raise Myrrha::Error, "Unable to coerce nil to #{target_domain}" if val.nil?
-      Tools.coerce(val, target_domain)
-    end
-    
     # Data type for being a valid attribute name  
-    AttrName = Myrrha.domain(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
-    AttrName.extend(T)
-    def AttrName.from_argv(argv, opts = {})
-      raise ArgumentError if argv.size > 1
-      coerce(argv.first || opts[:default], AttrName) 
-    end
+    class AttrName < Symbol
+      extend Myrrha::Domain
+      
+      def self.predicate
+        @predicate ||= lambda{|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
+      end
+            
+      def self.coerce(arg)
+        if arg.respond_to?(:to_sym)
+          sym = arg.to_sym
+          return sym if self.===(sym) 
+        end
+        raise ArgumentError, "Unable to coerce `#{arg.inspect}` to AttrName"
+      end
+      
+      def self.from_argv(argv, opts = {})
+        raise ArgumentError if argv.size > 1
+        coerce(argv.first || opts[:default]) 
+      end
+      
+    end # class AttrName
 
     #
     # Encapsulates the notion of tuple expression, which is a Ruby expression
