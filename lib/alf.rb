@@ -552,6 +552,10 @@ module Alf
         }
       end
       
+      def ==(other)
+        other.is_a?(Summarization) && (other.aggregations == aggregations)
+      end
+      
     end # class Summarization
 
     # Install all types on Alf now
@@ -619,6 +623,40 @@ module Alf
       end
     
     end # class TupleHandle
+    
+    # Provides an operator signature
+    class Signature
+      
+      def initialize(args)
+        @args = args
+      end
+      
+      def install(clazz)
+        @args.each do |siginfo|
+          name, dom, = siginfo
+          clazz.instance_eval <<-EOF
+            attr_accessor :#{name}
+            private :#{name}=
+          EOF
+        end
+      end
+      
+      def from_argv(argv)
+        argv = Quickl.split_commandline_args(argv)
+        @args.zip(argv).collect do |sigpart,val|
+          name, dom, = sigpart
+          val = dom.from_argv(val)
+          block_given? ? yield(name, val) : val
+        end
+      end
+      
+      def parse_argv(argv, receiver)
+        from_argv(argv) do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+      end
+      
+    end # class Signature
     
     # Delegated to Coercions
     def coerce(value, domain)
