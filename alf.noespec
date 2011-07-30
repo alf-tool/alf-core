@@ -38,6 +38,6 @@ variables:
     - {name: bluecloth,    version: "~> 2.1.0",  groups: [development]}
     - {name: wlang,        version: "~> 0.10.2", groups: [development]}
     - {name: quickl,       version: "~> 0.3.0",  groups: [runtime]}
-    - {name: myrrha,       version: "~> 1.1.0",  groups: [runtime]}
+    - {name: myrrha,       version: "~> 1.2.0",  groups: [runtime]}
     - {name: fastercsv,    version: "~> 1.5.4",  groups: [development]}
 
