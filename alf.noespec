@@ -1,6 +1,6 @@
 template-info:
   name: "ruby"
-  version: 1.4.0
+  version: 1.5.0
   manifest:
     tasks/spec_test.rake:
       ignore: true
@@ -30,14 +30,12 @@ variables:
     - http://github.com/blambeau/alf
     - http://rubygems.org/gems/alf
   dependencies: 
-    - {name: rake,         version: "~> 0.9.2",  groups: [development]}
-    - {name: bundler,      version: "~> 1.0",    groups: [development]}
-    - {name: rspec,        version: "~> 2.6.0",  groups: [development]}
-    - {name: rcov,         version: "~> 0.9.9",  groups: [development]}
-    - {name: yard,         version: "~> 0.7.2",  groups: [development]}
-    - {name: bluecloth,    version: "~> 2.1.0",  groups: [development]}
-    - {name: wlang,        version: "~> 0.10.2", groups: [development]}
-    - {name: quickl,       version: "~> 0.3.0",  groups: [runtime]}
-    - {name: myrrha,       version: "~> 1.2.0",  groups: [runtime]}
-    - {name: fastercsv,    version: "~> 1.5.4",  groups: [development]}
-
+    - {name: quickl,       version: "~> 0.3.0",  groups: [runtime      ]}
+    - {name: myrrha,       version: "~> 1.2.0",  groups: [runtime      ]}
+    - {name: fastercsv,    version: "~> 1.5.4",  groups: [extra        ]}
+    - {name: rake,         version: "~> 0.9.2",  groups: [test, release]}
+    - {name: rspec,        version: "~> 2.6.0",  groups: [test, release]}
+    - {name: wlang,        version: "~> 0.10.2", groups: [release      ]}
+    - {name: rcov,         version: "~> 0.9.9",  groups: [doc          ]}
+    - {name: yard,         version: "~> 0.7.2",  groups: [doc          ]}
+    - {name: bluecloth,    version: "~> 2.1.0",  groups: [doc          ]}
