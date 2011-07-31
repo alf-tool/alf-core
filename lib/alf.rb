@@ -1799,7 +1799,8 @@ module Alf
       # This method is intended to be overriden by subclasses and must return the 
       # operator itself.
       #
-      def set_args(args)
+      def set_args(argv)
+        signature.parse_argv(argv, self) 
         self
       end
 
@@ -1857,12 +1858,6 @@ module Alf
     end
     
     protected
-
-    # (see Operator::CommandMethods#set_args)
-    def set_args(argv)
-      signature.parse_argv(argv, self) 
-      self
-    end
 
     #
     # Prepares the iterator before subsequent call to _each.
