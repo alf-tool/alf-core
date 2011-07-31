@@ -653,7 +653,7 @@ module Alf
           
           # coercion
           val = if Array(subargs).empty?
-            default
+            Tools.coerce(default, dom)
           else
             dom.send(coercer, subargs)
           end
@@ -1783,7 +1783,9 @@ module Alf
         @requester = req
         argv       = parse_options(argv, :split)
         operands   = command_line_operands(Array(argv[0]))
-        args       = Array(argv[1..-1]).flatten
+        args       = Array(argv[1..-1]).inject([]){|arr,part|
+          arr + (arr.empty? ? part : (["--"] + part))
+        }
         self.set_args(args)
         self.pipe(operands, environment || (req && req.environment))
         self
@@ -2237,8 +2239,6 @@ module Alf
       class SortBased
         include Operator, Operator::Cesure
 
-        signature []
-        
         def initialize
           @cesure_key ||= ProjectionKey.new([])
         end
@@ -2334,16 +2334,7 @@ module Alf
         [:ordering, OrderingKey, []]
       ]
           
-      def initialize(ordering = [])
-        @ordering = coerce(ordering, OrderingKey)
-      end
-
       protected 
-    
-      def set_args(argv)
-        signature.parse_argv(argv, self)
-        self
-      end
     
       def _prepare
         @buffer = Buffer::Sorted.new(ordering)
@@ -2446,20 +2437,10 @@ module Alf
       include Operator::NonRelational, Operator::Transform
     
       signature [
-        [:heading, Heading]
+        [:heading, Heading, {}]
       ]
       
-      def initialize(heading = {})
-        @heading = coerce(heading, Heading)
-      end
-      
       protected 
-      
-      # (see Operator::CommandMethods#set_args)
-      def set_args(argv)
-        signature.parse_argv(argv, self)
-        self
-      end
       
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -2575,19 +2556,12 @@ module Alf
     class Extend < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds an Extend operator instance
-      def initialize(extensions = {})
-        @extensions = coerce(extensions, TupleComputation)
-      end
-  
+      signature [
+        [:extensions, TupleComputation, {}]
+      ]
+      
       protected 
     
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @extensions = coerce(args, TupleComputation)
-        self
-      end
-  
       # (see Operator#_prepare)
       def _prepare
         @handle = TupleHandle.new
@@ -2625,19 +2599,12 @@ module Alf
     class Rename < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds a Rename operator instance
-      def initialize(renaming = {})
-        @renaming = coerce(renaming, Renaming)
-      end
-  
+      signature [
+        [:renaming, Renaming, {}]
+      ]
+      
       protected 
     
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @renaming = coerce(args, Renaming)
-        self
-      end
-  
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         @renaming.apply(tuple)
@@ -2675,19 +2642,12 @@ module Alf
     class Restrict < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      # Builds a Restrict operator instance
-      def initialize(predicate = "true")
-        @predicate = coerce(predicate, Restriction)
-      end
-  
+      signature [
+        [:predicate, Restriction, "true"]
+      ]
+      
       protected 
     
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @predicate = coerce(args, Restriction)
-        self
-      end
-  
       # (see Operator#_each)
       def _each
         handle = TupleHandle.new
@@ -2717,6 +2677,8 @@ module Alf
     #  
     class Join < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
+      
+      signature []
       
       #
       # Performs a Join of two relations through a Hash buffer on the right
@@ -2839,6 +2801,8 @@ module Alf
     class Intersect < Factory::Operator(__FILE__, __LINE__)
       include Operator, Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       class HashBased
         include Operator, Operator::Binary
       
@@ -2890,6 +2854,8 @@ module Alf
     class Minus < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       class HashBased
         include Operator, Operator::Binary
       
@@ -2939,6 +2905,8 @@ module Alf
     class Union < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       class DisjointBased
         include Operator, Operator::Binary
       
@@ -2986,6 +2954,8 @@ module Alf
     #  
     class Matching < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
+      
+      signature []
       
       #
       # Performs a Matching of two relations through a Hash buffer on the right
@@ -3048,6 +3018,8 @@ module Alf
     class NotMatching < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       #
       # Performs a NotMatching of two relations through a Hash buffer on the 
       # right one.
@@ -3088,7 +3060,7 @@ module Alf
     # Relational wraping (tuple-valued attributes)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... -- NEWNAME
     #
     # API & EXAMPLE
     #
@@ -3101,25 +3073,17 @@ module Alf
     # attributes are taken from commandline arguments, expected the last one
     # which defines the new name to use:
     #
-    #   alf wrap suppliers -- city status loc_and_status
+    #   alf wrap suppliers -- city status -- loc_and_status
     #
     class Wrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds a Wrap operator instance
-      def initialize(attributes = [], as = :wrapped)
-        @attributes = coerce(attributes, ProjectionKey)
-        @as = coerce(as, AttrName)
-      end
-  
+      signature [
+        [:attributes, ProjectionKey, []],
+        [:as, AttrName, :wrapped]
+      ]
+      
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @as = coerce(args.pop, AttrName)
-        @attributes = coerce(args, ProjectionKey)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -3153,18 +3117,11 @@ module Alf
     class Unwrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds a Rename operator instance
-      def initialize(attribute = :wrapped)
-        @attribute = coerce(attribute, AttrName)
-      end
-  
+      signature [
+        [:attribute, AttrName, :wrapped]
+      ]
+      
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @attribute = coerce(args.first, AttrName)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -3264,18 +3221,11 @@ module Alf
     class Ungroup < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      # Creates a Group instance
-      def initialize(attribute = :grouped)
-        @attribute = coerce(attribute, AttrName)
-      end
-  
+      signature [
+        [:attribute, AttrName, :wrapped]
+      ]
+      
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @attribute = coerce(args.pop, AttrName)
-        self
-      end
   
       # See Operator#_each
       def _each
