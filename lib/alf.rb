@@ -1769,48 +1769,15 @@ module Alf
       mod.extend(Introspection) if mod.is_a?(Class)
     end
     
-    #
-    # Encapsulates method definitions that convert operators to Quickl
-    # commands
-    #
-    module CommandMethods
-    
-      #
-      # Run the operator command.
-      #
-      def run(argv = [], req = nil)
-        @requester = req
-        argv       = parse_options(argv, :split)
-        operands   = command_line_operands(Array(argv[0]))
-        args       = Array(argv[1..-1])
-        signature.parse_argv(args, self)
-        pipe(operands, environment || (req && req.environment))
-        self
-      end
-    
-      protected
-      
-      #
-      # Configures the operator from arguments taken from command line. 
-      #
-      # This method is intended to be overriden by subclasses and must return the 
-      # operator itself.
-      #
-      def set_args(argv)
-        argv = Quickl.split_commandline_args(argv)
-        signature.parse_argv(argv, self) 
-        self
-      end
-
-    end # module CommandMethods
-    include CommandMethods
-    
     # Operators input datasets
     attr_accessor :datasets
     
     # Optional environment
     attr_reader :environment
     
+    #
+    # Create an operator instance
+    #
     def initialize(*args)
       signature.parse_args(args, self)
     end
@@ -1839,10 +1806,26 @@ module Alf
       raise NotImplementedError, "Operator#pipe should be overriden"
     end
     
+    #
+    # Returns operator signature.
+    #
     def signature
       self.class.signature
     end
     
+    #
+    # Run the operator command.
+    #
+    def run(argv = [], req = nil)
+      @requester = req
+      argv       = parse_options(argv, :split)
+      operands   = command_line_operands(Array(argv[0]))
+      args       = Array(argv[1..-1])
+      signature.parse_argv(args, self)
+      pipe(operands, environment || (req && req.environment))
+      self
+    end
+
     #
     # Yields each tuple in turn 
     #
