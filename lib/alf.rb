@@ -688,6 +688,7 @@ module Alf
         end
       end
       
+      EMPTY = Signature.new []
     end # class Signature
     
     # Delegated to Coercions
@@ -1755,7 +1756,7 @@ module Alf
       #
       def signature(sig = nil)
         if sig.nil?
-          @signature
+          @signature || Tools::Signature::EMPTY
         else
           @signature = Tools::Signature.new(sig)
           @signature.install(self)
@@ -1809,11 +1810,8 @@ module Alf
     # Optional environment
     attr_reader :environment
     
-    #
-    # Creates an operator instance and automatically installs arguments
-    #
     def initialize(*args)
-      set_args(args)
+      signature.parse_args(args, self)
     end
 
     # Sets the environment on this operator and propagate on
@@ -1857,7 +1855,13 @@ module Alf
     end
     
     protected
-    
+
+    # (see Operator::CommandMethods#set_args)
+    def set_args(argv)
+      signature.parse_argv(argv, self) 
+      self
+    end
+
     #
     # Prepares the iterator before subsequent call to _each.
     #
@@ -2119,15 +2123,9 @@ module Alf
       signature [
         [:attrname, AttrName, :autonum]
       ]
-      
-      protected 
-      
-      # (see Operator::CommandMethods#set_args)
-      def set_args(argv)
-        signature.parse_argv(argv, self) 
-        self
-      end
-      
+          
+      protected
+        
       # (see Operator#_prepare)
       def _prepare
         @autonum = -1
@@ -2237,8 +2235,10 @@ module Alf
       
       # Removes duplicates according to a complete order
       class SortBased
-        include Operator::Cesure      
+        include Operator, Operator::Cesure
 
+        signature []
+        
         def initialize
           @cesure_key ||= ProjectionKey.new([])
         end
@@ -2265,7 +2265,7 @@ module Alf
       # Removes duplicates by loading all in memory and filtering 
       # them there 
       class BufferBased
-        include Operator::Unary
+        include Operator, Operator::Unary
   
         protected
         
@@ -2279,6 +2279,10 @@ module Alf
   
       end # class BufferBased
   
+      def initialize(*args)
+        signature.parse_args(args, self)
+      end
+
       protected 
       
       def longexpr
@@ -2719,7 +2723,7 @@ module Alf
       # one.
       #
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         #
         # Implements a special Buffer for join-based relational operators.
@@ -2833,10 +2837,10 @@ module Alf
     #   alf intersect ... ...
     #  
     class Intersect < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Relational, Operator::Shortcut, Operator::Binary
+      include Operator, Operator::Relational, Operator::Shortcut, Operator::Binary
       
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         protected
         
@@ -2887,7 +2891,7 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         protected
         
@@ -2936,7 +2940,7 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       class DisjointBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         protected
         
@@ -2988,7 +2992,7 @@ module Alf
       # one.
       #
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         # (see Operator#_each)
         def _each
@@ -3049,7 +3053,7 @@ module Alf
       # right one.
       #
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         # (see Operator#_each)
         def _each
@@ -3338,7 +3342,7 @@ module Alf
   
       # Summarizes according to a complete order
       class SortBased
-        include Alf::Operator::Cesure      
+        include Operator, Operator::Cesure      
   
         def initialize(by_key, allbut, summarization)
           @by_key, @allbut, @summarization = by_key, allbut, summarization
@@ -3371,7 +3375,7 @@ module Alf
 
       # Summarizes in-memory with a hash
       class HashBased
-        include Operator::Relational, Operator::Unary
+        include Operator, Operator::Relational, Operator::Unary
   
         def initialize(by_key, allbut, summarization)
           @by_key, @allbut, @summarization = by_key, allbut, summarization
@@ -3466,7 +3470,7 @@ module Alf
       end
   
       class SortBased
-        include Operator::Cesure
+        include Operator, Operator::Cesure
         
         def initialize(order, ranking_name)
           @by_key = ProjectionKey.coerce(order)
@@ -3556,7 +3560,7 @@ module Alf
       end
   
       class SortBased
-        include Operator::Cesure
+        include Operator, Operator::Cesure
         
         def initialize(by, order, summarization)
           @by, @order, @summarization  = by, order, summarization
