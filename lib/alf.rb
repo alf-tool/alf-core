@@ -647,17 +647,39 @@ module Alf
         end
       end
       
-      def from_argv(argv)
-        argv = Quickl.split_commandline_args(argv)
-        @args.zip(argv).collect do |sigpart,subargv|
+      def from_xxx(args, coercer)
+        @args.zip(args).collect do |sigpart,subargs|
           name, dom, default = sigpart
-          val = Array(subargv).empty? ? default : dom.from_argv(subargv)
+          
+          # coercion
+          val = if Array(subargs).empty?
+            default
+          else
+            dom.send(coercer, subargs)
+          end
+          
+          # check and yield
           if val.nil?
-            raise ArgumentError, "Invalid `#{subargv.inspect}` for #{sigpart.inspect}"
+            raise ArgumentError, "Invalid `#{subargs.inspect}` for #{sigpart.inspect}"
           else
             block_given? ? yield(name, val) : val
           end
         end
+      end
+      
+      def from_args(args, &block)
+        from_xxx(args, :coerce, &block)
+      end
+      
+      def parse_args(args, receiver)
+        from_args(args) do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+      end
+      
+      def from_argv(argv, &block)
+        argv = Quickl.split_commandline_args(argv)
+        from_xxx(argv, :from_argv, &block)
       end
       
       def parse_argv(argv, receiver)
@@ -2211,6 +2233,8 @@ module Alf
     class Compact < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Shortcut, Operator::Unary
   
+      signature []
+      
       # Removes duplicates according to a complete order
       class SortBased
         include Operator::Cesure      
@@ -2301,20 +2325,24 @@ module Alf
     #
     class Sort < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Unary
-    
-      def initialize(ordering_key = [])
-        @ordering_key = coerce(ordering_key, OrderingKey)
+
+      signature [
+        [:ordering, OrderingKey, []]
+      ]
+          
+      def initialize(ordering = [])
+        @ordering = coerce(ordering, OrderingKey)
       end
 
       protected 
     
-      def set_args(args)
-        @ordering_key = coerce(args, OrderingKey)
+      def set_args(argv)
+        signature.parse_argv(argv, self)
         self
       end
     
       def _prepare
-        @buffer = Buffer::Sorted.new(@ordering_key)
+        @buffer = Buffer::Sorted.new(ordering)
         @buffer.add_all(input)
       end
     
