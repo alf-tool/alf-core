@@ -7,7 +7,7 @@ module Alf
         
       describe "on a singleton signature with a ProjectionKey" do
         let(:signature){ Signature.new [[:proj, ProjectionKey]] }
-        let(:argv){ %w{hello world} }
+        let(:argv){ [%w{hello world}] }
         specify{
           signature.install(class << receiver; self; end)
           signature.parse_argv(argv, receiver)
@@ -17,7 +17,7 @@ module Alf
       
       describe "on a singleton signature with a default" do
         let(:signature){ Signature.new [[:attrname, AttrName, :autonum]] }
-        let(:argv){ %w{} }
+        let(:argv){ [%w{}] }
         specify{
           signature.install(class << receiver; self; end)
           signature.parse_argv(argv, receiver)

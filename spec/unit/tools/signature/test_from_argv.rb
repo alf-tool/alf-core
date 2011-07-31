@@ -3,7 +3,7 @@ module Alf
   module Tools
     describe Signature, "#from_argv" do
       
-      subject{ signature.from_argv(argv) }
+      subject{ signature.from_argv(Quickl.split_commandline_args(argv)) }
         
       describe "on an empty signature" do
         let(:signature){ Signature.new [] }

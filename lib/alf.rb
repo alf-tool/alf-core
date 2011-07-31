@@ -678,7 +678,6 @@ module Alf
       end
       
       def from_argv(argv, &block)
-        argv = Quickl.split_commandline_args(argv)
         from_xxx(argv, :from_argv, &block)
       end
       
@@ -1783,11 +1782,9 @@ module Alf
         @requester = req
         argv       = parse_options(argv, :split)
         operands   = command_line_operands(Array(argv[0]))
-        args       = Array(argv[1..-1]).inject([]){|arr,part|
-          arr + (arr.empty? ? part : (["--"] + part))
-        }
-        self.set_args(args)
-        self.pipe(operands, environment || (req && req.environment))
+        args       = Array(argv[1..-1])
+        signature.parse_argv(args, self)
+        pipe(operands, environment || (req && req.environment))
         self
       end
     
@@ -1800,6 +1797,7 @@ module Alf
       # operator itself.
       #
       def set_args(argv)
+        argv = Quickl.split_commandline_args(argv)
         signature.parse_argv(argv, self) 
         self
       end
