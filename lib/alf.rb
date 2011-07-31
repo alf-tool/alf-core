@@ -2373,6 +2373,10 @@ module Alf
     class Clip < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
+      signature [
+        [:projection_key, ProjectionKey, []]
+      ]
+      
       # Builds a Clip operator instance
       def initialize(attributes = [], allbut = false)
         @projection_key = coerce(attributes, ProjectionKey)
@@ -2387,12 +2391,6 @@ module Alf
       end
   
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @projection_key = coerce(args, ProjectionKey)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -2492,6 +2490,10 @@ module Alf
     class Project < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
     
+      signature [
+        [:projection_key, ProjectionKey, []]
+      ]
+      
       # Builds a Project operator instance
       def initialize(attributes = [], allbut = false)
         @projection_key = coerce(attributes, ProjectionKey)
@@ -2506,12 +2508,6 @@ module Alf
       end
     
       protected 
-    
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @projection_key = coerce(args, ProjectionKey)
-        self
-      end
     
       # (see Operator::Shortcut#longexpr)
       def longexpr
@@ -3264,6 +3260,10 @@ module Alf
     class Summarize < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
+      signature [
+        [:summarization, Summarization, {}]
+      ]
+      
       def initialize(by = [], summarization = {}, allbut = false)
         @by = coerce(by, ProjectionKey)
         @summarization = coerce(summarization, Summarization)
@@ -3338,12 +3338,6 @@ module Alf
         
       protected 
       
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @summarization = coerce(args, Summarization)
-        self
-      end
-  
       def longexpr
         if @allbut
           chain HashBased.new(@by, @allbut, @summarization),
@@ -3398,6 +3392,10 @@ module Alf
     class Rank < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
+      signature [
+        [:ranking_name, AttrName, :rank]
+      ]
+      
       def initialize(order = [], ranking_name = :rank)
         @order = coerce(order, OrderingKey)
         @ranking_name = coerce(ranking_name, AttrName)
@@ -3445,12 +3443,6 @@ module Alf
   
       protected
       
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @ranking_name = coerce(args.last || :rank, AttrName)
-        self
-      end
-  
       def longexpr
         chain SortBased.new(@order, @ranking_name),
               Operator::NonRelational::Sort.new(@order),
@@ -3484,6 +3476,10 @@ module Alf
       include Operator::Relational, Operator::Experimental,
               Operator::Shortcut, Operator::Unary
   
+      signature [
+        [:summarization, Summarization, {}]
+      ]
+      
       def initialize(by = [], order = [], summarization = {})
         @by = coerce(by, ProjectionKey)
         @order = coerce(order, OrderingKey)
@@ -3528,12 +3524,6 @@ module Alf
   
       protected
       
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @summarization = coerce(args, Summarization)
-        self
-      end
-  
       def longexpr
         sort_key = @by.to_ordering_key + @order
         chain SortBased.new(@by, @order, @summarization),
