@@ -1,11 +1,35 @@
-# 0.9.4 / FIX ME
+# 0.10.0 / FIX ME
 
-## Enhancements to existing operators
+## New features
 
+* Alf now recognizes and allows manipulating .csv files as first-class data
+  sources in addition to .rash files. CSV output is also supported, of course:
+  
+      % alf show suppliers --csv
+  
+* A COERCE operator is introduced. It provides a quick way to obtain type-safe
+  relations from unsafe sources like .csv files. For example:
+  
+      % alf coerce mydirtyfile.csv -- name String  price Float  at Time
+      
+  The coerce operator is of course available in Ruby as well:
+  
+      (coerce "mydirtyfile.csv", :name => String, :price => Float, :at => Time)
+      
 * The DEFAULTS (non-relational) operator now accepts default values as tuple
   expressions. When used in shell, provided default values are now evaluated
   that way. In particular, this allows specifying default values as being 
   computed on the current tuple.
+
+## Hurting changes to the public API
+
+* GROUP and WRAP now require an option separator when invoked in shell:
+
+      % alf --text group supplies  -- pid qty supplying             (before)
+      % alf --text group supplies  -- pid qty -- supplying          (after)
+
+      % alf --text wrap suppliers -- city status loc_and_status     (before) 
+      % alf --text wrap suppliers -- city status -- loc_and_status  (after) 
 
 ## Bug fixes 
 
