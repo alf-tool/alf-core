@@ -15,6 +15,16 @@ module Alf
         }
       end
       
+      describe "on a singleton signature with a default" do
+        let(:signature){ Signature.new [[:attrname, AttrName, :autonum]] }
+        let(:argv){ %w{} }
+        specify{
+          signature.install(class << receiver; self; end)
+          signature.parse_argv(argv, receiver)
+          receiver.attrname.should eq(:autonum) 
+        }
+      end
+      
     end
   end
 end

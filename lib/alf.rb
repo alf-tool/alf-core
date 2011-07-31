@@ -649,11 +649,11 @@ module Alf
       
       def from_argv(argv)
         argv = Quickl.split_commandline_args(argv)
-        @args.zip(argv).collect do |sigpart,val|
+        @args.zip(argv).collect do |sigpart,subargv|
           name, dom, default = sigpart
-          val = val.nil? ? default : dom.from_argv(val)
+          val = Array(subargv).empty? ? default : dom.from_argv(subargv)
           if val.nil?
-            raise ArgumentError, "Invalid `#{argv.inspect}` for signature #{@args.inspect}"
+            raise ArgumentError, "Invalid `#{subargv.inspect}` for #{sigpart.inspect}"
           else
             block_given? ? yield(name, val) : val
           end
@@ -2094,11 +2094,15 @@ module Alf
     class Autonum < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
+      signature [
+        [:attrname, AttrName, :autonum]
+      ]
+      
       protected 
       
       # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @attrname = coerce(args.last || :autonum, AttrName) 
+      def set_args(argv)
+        signature.parse_argv(argv, self) 
         self
       end
       
