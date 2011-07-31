@@ -131,7 +131,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("yard", "~> 0.7.2")
   s.add_development_dependency("bluecloth", "~> 2.1.0")
   s.add_dependency("quickl", "~> 0.3.0")
-  s.add_dependency("myrrha", "~> 1.1.0")
+  s.add_dependency("myrrha", "~> 1.2.0")
 
   # The version of ruby required by this gem
   #

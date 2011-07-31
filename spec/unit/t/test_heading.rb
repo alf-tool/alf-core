@@ -11,6 +11,10 @@ module Alf
       Heading.coerce([]).should eq(h0)
       Heading.coerce(["name", "String"]).should eq(h1)
     end
+    
+    specify "from_argv" do
+      Heading.from_argv(["name", "String"]).should eq(h1)
+    end
      
     specify "cardinality" do
       h0.cardinality.should eq(0)

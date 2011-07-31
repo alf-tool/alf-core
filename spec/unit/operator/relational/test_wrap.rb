@@ -17,7 +17,7 @@ module Alf
       subject{ operator.to_a }
   
       describe "when factored with commandline args" do
-        let(:operator){ Wrap.run(["--", "a", "b", "wraped"]) }
+        let(:operator){ Wrap.run(["--", "a", "b", "--", "wraped"]) }
         before{ operator.pipe(input) }
         it { should == expected }
       end

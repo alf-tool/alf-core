@@ -1,1 +1,1 @@
-alf --text group             supplies  -- pid qty supplying
+alf --text group supplies  -- pid qty -- supplying

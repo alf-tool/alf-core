@@ -1,9 +1,10 @@
 require 'spec_helper'
 module Alf
-  module Tools
-    describe TupleComputation do
-  
-      let(:handle){ TupleHandle.new.set(:who => "alf") }
+  describe TupleComputation do
+
+    let(:handle){ Tools::TupleHandle.new.set(:who => "alf") }
+      
+    describe "coerce" do
       subject{ TupleComputation.coerce(arg).evaluate(handle) }
       
       describe "from a TupleComputation" do
@@ -40,7 +41,20 @@ module Alf
         }
         it{ should eql(expected) }
       end
-          
     end
+    
+    describe "from_argv" do
+      subject{ TupleComputation.from_argv(argv).evaluate(handle) }
+
+      describe "from an Array with coercions" do
+        let(:argv){ ["hello", "who", "hello2", "2"] }
+        let(:expected){
+          {:hello => "alf", :hello2 => 2}
+        }
+        it{ should eql(expected) }
+      end
+      
+    end
+        
   end
 end

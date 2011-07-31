@@ -1,9 +1,10 @@
 require 'spec_helper'
 module Alf
-  module Tools
-    describe Restriction do
+  describe Restriction do
 
-      let(:handle){ TupleHandle.new.set(:status => 10) }
+    let(:handle){ Tools::TupleHandle.new.set(:status => 10) }
+      
+    describe "coerce" do
       subject{ Restriction.coerce(arg).evaluate(handle) }
       
       describe "from Restriction" do
@@ -51,11 +52,28 @@ module Alf
         it{ should eql(true) }
       end
       
-      describe "from an Array without coercion" do
+      describe "from an Array with coercion" do
         let(:arg){ ["status", "10"] }
         it{ should eql(true) }
       end
       
     end
+    
+    describe "from_argv" do
+      subject{ Restriction.from_argv(argv).evaluate(handle) }
+      
+      
+      describe "from a singleton Array" do
+        let(:argv){ ["status == 10"] }
+        it{ should eql(true) }
+      end
+      
+      describe "from an Array with coercion" do
+        let(:argv){ ["status", "10"] }
+        it{ should eql(true) }
+      end
+      
+    end
+     
   end
 end

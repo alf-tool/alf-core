@@ -13,9 +13,563 @@ require 'myrrha/coerce'
 #
 module Alf
 
-  # Data type for being a valid attribute name  
-  AttrName = Myrrha.domain(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
+  #
+  # Encapsulates all types
+  #
+  module T
+    
+    Boolean = Myrrha::Boolean
+    def Boolean.from_argv(argv, opts={})
+      raise ArgumentError if argv.size > 1
+      Tools.coerce(argv.first, Boolean)
+    end
+        
+    # Data type for being a valid attribute name  
+    class AttrName < Symbol
+      extend Myrrha::Domain
+      
+      def self.predicate
+        @predicate ||= lambda{|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
+      end
+            
+      def self.coerce(arg)
+        if arg.respond_to?(:to_sym)
+          sym = arg.to_sym
+          return sym if self.===(sym) 
+        end
+        raise ArgumentError, "Unable to coerce `#{arg.inspect}` to AttrName"
+      end
+      
+      def self.from_argv(argv, opts = {})
+        raise ArgumentError if argv.size > 1
+        coerce(argv.first || opts[:default]) 
+      end
+      
+    end # class AttrName
+
+    #
+    # Defines a Heading, that is, a set of attribute (name,domain) pairs.
+    #
+    class Heading
+      
+      #
+      # Creates a Heading instance
+      #
+      # @param [Hash] a hash of attribute (name, type) pairs where name is
+      #        a Symbol and type is a Class
+      #
+      def self.[](attributes)
+        Heading.new(attributes) 
+      end
   
+      # @return [Hash] a (freezed) hash of (name, type) pairs  
+      attr_reader :attributes
+      
+      #
+      # Creates a Heading instance
+      #
+      # @param [Hash] a hash of attribute (name, type) pairs where name is
+      #        a Symbol and type is a Class
+      #
+      def initialize(attributes)
+        @attributes = attributes.dup.freeze
+      end
+      
+      #
+      # Coerces `attributes` to a Heading instance
+      #
+      def self.coerce(attributes)
+        case attributes
+        when Array
+          h = Tools.tuple_collect(attributes.each_slice(2)) do |k,v|
+            [ Tools.coerce(k, Symbol), Tools.coerce(v, Module) ]
+          end
+          Heading.new(h)
+        when Hash
+          Heading.new(attributes)
+        else
+          raise ArgumentError, "Unable to coerce #{attributes.inspect} to a Heading"
+        end
+      end
+      
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+      
+      #
+      # Returns heading's cardinality
+      #
+      def cardinality
+        attributes.size
+      end
+      alias :size  :cardinality
+      alias :count :cardinality
+      
+      #
+      # Returns heading's hash code
+      # 
+      def hash
+        @hash ||= attributes.hash
+      end
+      
+      #
+      # Checks equality with other heading
+      #
+      def ==(other)
+        other.is_a?(Heading) && (other.attributes == attributes) 
+      end
+      alias :eql? :==
+      
+      #
+      # Converts this heading to a Hash of (name,type) pairs
+      # 
+      def to_hash
+        attributes.dup
+      end
+      
+      # 
+      # Returns a Heading literal
+      #
+      def to_ruby_literal
+        attributes.empty? ?
+          "Alf::Heading::EMPTY" :
+          "Alf::Heading[#{Tools.to_ruby_literal(attributes)[1...-1]}]"
+      end
+      alias :inspect :to_ruby_literal
+      
+      EMPTY = Heading.new({})
+    end # class Heading
+    
+    #
+    # Encapsulates the notion of tuple expression, which is a Ruby expression
+    # whose evaluates in the context and scope of a specific tuple.
+    #
+    class TupleExpression
+      
+      # @return [Proc] the lambda expression
+      attr_reader :expr_lambda
+      
+      #
+      # Creates a tuple expression from a Proc object
+      #
+      # @param [Proc] expr a Proc for the expression 
+      #
+      def initialize(expr)
+        @expr_lambda = expr
+      end
+      
+      # 
+      # Coerces `arg` to a tuple expression
+      # 
+      def self.coerce(arg)
+        case arg
+        when TupleExpression
+          arg
+        when Proc
+          TupleExpression.new(arg)
+        when String, Symbol
+          coerce(eval("lambda{ #{arg} }"))
+        else
+          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
+        end
+      end
+
+      # Coerces from ARGV 
+      def self.from_argv(argv, options = {})
+        raise ArgumentError if argv.size > 1
+        coerce(argv.first || options[:default])
+      end
+            
+      #
+      # Evaluates in the context of obj
+      #
+      def evaluate(obj = nil)
+        if RUBY_VERSION < "1.9"
+          obj.instance_eval(&@expr_lambda)
+        else
+          obj.instance_exec(&@expr_lambda)
+        end
+      end
+      
+    end # class TupleExpression
+    
+    # 
+    # Encapsulates a tuple computation from other tuples expressions
+    #
+    class TupleComputation
+      
+      # @return [Hash] a computation hash, mapping AttrName -> TupleExpression
+      attr_reader :computation
+      
+      #
+      # Creates a TupleComputation instance
+      #
+      # @param [Hash] computation, a mappping AttrName -> TupleExpression
+      #
+      def initialize(computation)
+        @computation = computation
+      end
+      
+      # 
+      # Coerces `arg` to a tuple computation
+      #
+      def self.coerce(arg)
+        case arg
+        when TupleComputation
+          arg
+        when Hash
+          h = Tools.tuple_collect(arg){|k,v|
+            if AttrName === k
+              v = TupleExpression.coerce(v) if v.is_a?(Proc)
+              [k, v] 
+            else
+              [Tools.coerce(k, AttrName), Tools.coerce(v, TupleExpression)]
+            end
+          }
+          TupleComputation.new(h)
+        when Array
+          coerce(Hash[*arg])
+        else
+          raise ArgumentError, "Invalid argument `arg` for TupleComputation()"
+        end
+      end
+      
+      # Coerce from ARGV
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+      
+      #
+      # Computes the result, given `tuple` as context and `handle` to
+      # evaluate expressions. 
+      #
+      def evaluate(obj = nil)
+        Tools.tuple_collect(@computation){|k,v| 
+          [k, v.is_a?(TupleExpression) ? v.evaluate(obj) : v]
+        }
+      end
+      
+    end # class TupleComputation
+    
+    #
+    # Defines a projection key
+    # 
+    class ProjectionKey
+    
+      # Projection attributes
+      attr_accessor :attributes
+    
+      def initialize(attributes)
+        @attributes = attributes
+      end
+    
+      def self.coerce(arg)
+        case arg
+        when ProjectionKey
+          arg
+        when OrderingKey
+          ProjectionKey.new(arg.attributes)
+        when Array
+          ProjectionKey.new(arg.collect{|s| Tools.coerce(s, AttrName)})
+        else
+          raise ArgumentError, "Unable to coerce #{arg} to a projection key"
+        end
+      end
+
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+          
+      def to_ordering_key
+        OrderingKey.new attributes.collect{|arg| [arg, :asc]}
+      end
+    
+      def project(tuple, allbut = false)
+        split(tuple, allbut).first
+      end
+    
+      def split(tuple, allbut = false)
+        projection, rest = {}, tuple.dup
+        attributes.each do |a|
+          projection[a] = tuple[a]
+          rest.delete(a)
+        end
+        allbut ? [rest, projection] : [projection, rest]
+      end
+
+      def ==(other)
+        other.is_a?(ProjectionKey) && (other.attributes == attributes)          
+      end
+      
+    end # class ProjectionKey
+
+    #
+    # Encapsulates tools for computing orders on tuples
+    #
+    class OrderingKey
+    
+      attr_reader :ordering
+    
+      def initialize(ordering = [])
+        @ordering = ordering
+        @sorter = nil
+      end
+    
+      # 
+      # Coerces `arg` to an ordering key. 
+      #
+      # Implemented coercions are:
+      # * Array of symbols (all attributes in ascending order)
+      # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
+      # * ProjectionKey (all its attributes in ascending order)
+      # * OrderingKey (self)
+      #
+      # @return [OrderingKey]
+      # @raises [ArgumentError] when `arg` is not recognized
+      #
+      def self.coerce(arg)
+        case arg
+        when OrderingKey
+          arg
+        when ProjectionKey
+          arg.to_ordering_key
+        when Array
+          if arg.all?{|a| a.is_a?(Array)}
+            OrderingKey.new(arg)
+          else
+            symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
+            sliced = symbolized.each_slice(2) 
+            if sliced.all?{|a,o| [:asc,:desc].include?(o)}
+              OrderingKey.new sliced.to_a
+            else
+              OrderingKey.new symbolized.collect{|a| [a, :asc]}
+            end
+          end
+        else
+          raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
+        end
+      end
+
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+          
+      def attributes
+        @ordering.collect{|arg| arg.first}
+      end
+    
+      def order_by(attr, order = :asc)
+        @ordering << [attr, order]
+        @sorter = nil
+        self
+      end
+    
+      def order_of(attr)
+        @ordering.find{|arg| arg.first == attr}.last
+      end
+    
+      def compare(t1,t2)
+        @ordering.each do |attr,order|
+          x, y = t1[attr], t2[attr]
+          comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
+          comp *= -1 if order == :desc
+          return comp unless comp == 0
+        end
+        return 0
+      end
+    
+      def sorter
+        @sorter ||= lambda{|t1,t2| compare(t1, t2)}
+      end
+    
+      def +(other)
+        other = OrderingKey.coerce(other)
+        OrderingKey.new(@ordering + other.ordering)
+      end
+    
+      def ==(other)
+        other.is_a?(OrderingKey) && (other.ordering == ordering)
+      end
+      
+    end # class OrderingKey
+
+    # 
+    # Specialization of TupleExpression to boolean expressions 
+    # specifically
+    #
+    class Restriction < TupleExpression
+      
+      # 
+      # Coerces `arg` to a Restriction
+      #
+      def self.coerce(arg)
+        case arg
+        when Restriction
+          arg
+        when TrueClass, FalseClass
+          Restriction.new lambda{ arg }
+        when TupleExpression, Proc, String, Symbol
+          Restriction.new TupleExpression.coerce(arg).expr_lambda
+        when Hash
+          if arg.empty?
+            coerce(true)
+          else
+            h = Tools.tuple_collect(arg){|k,v|
+              (AttrName === k) ? 
+                [k,v] : [Tools.coerce(k, AttrName), Kernel.eval(v)]
+            }
+            coerce h.each_pair.collect{|k,v|
+              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
+            }.join(" && ")
+          end
+        when Array
+          (arg.size <= 1) ?
+            coerce(arg.first || true) :
+            coerce(Hash[*arg])
+        else
+          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
+        end
+      end
+      
+      def self.from_argv(argv)
+        coerce(argv)
+      end
+      
+    end # class Restriction
+    
+    #
+    # Encapsulates a Renaming information 
+    #
+    class Renaming
+      
+      # @return [Hash] a renaming mapping as AttrName -> AttrName
+      attr_reader :renaming     
+      
+      # 
+      # Creates a renaming instance
+      #
+      # @param [Hash] a renaming mapping as AttrName -> AttrName 
+      #
+      def initialize(renaming)
+        @renaming = renaming
+      end 
+      
+      # 
+      # Coerces `arg` to a renaming
+      # 
+      def self.coerce(arg)
+        case arg
+        when Renaming
+          arg
+        when Hash
+          h = Tools.tuple_collect(arg){|k,v|
+            [Tools.coerce(k, AttrName), Tools.coerce(v, AttrName)]
+          }
+          Renaming.new(h)
+        when Array
+          coerce(Hash[*arg])
+        else
+          raise ArgumentError, "Invalid argument `#{arg}` for Renaming()"
+        end
+      end
+
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+            
+      #
+      # Applies renaming to a a given tuple
+      #
+      def apply(tuple)
+        Tools.tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
+      end
+      
+      # Checks if this renaming is equal to `other`
+      def ==(other)
+        other.is_a?(Renaming) && (other.renaming == renaming)
+      end
+      
+    end # class Renaming
+    
+    #
+    # Encapsulates a Summarization information
+    #
+    class Summarization
+      
+      # @return [Hash] the hash of aggregations, AttrName -> Aggregators
+      attr_reader :aggregations
+      
+      #
+      # Creates a Summarization instance
+      #
+      # @param [Hash] aggs, aggregations as a mapping AttrName -> Aggregators
+      #
+      def initialize(aggs)
+        @aggregations = aggs
+      end
+      
+      #
+      # Coerces `arg` to an Aggregator
+      #
+      def self.coerce(arg)
+        case arg
+        when Summarization
+          arg
+        when Array
+          coerce(Hash[*arg])
+        when Hash
+          h = Tools.tuple_collect(arg) do |k,v|
+            [Tools.coerce(k, AttrName), Tools.coerce(v, Aggregator)]
+          end
+          Summarization.new(h)
+        else
+          raise ArgumentError, "Invalid arg `#{arg}` for Summarization()"
+        end
+      end
+      
+      def self.from_argv(argv, opts = {})
+        coerce(argv)
+      end
+      
+      #
+      # Computes the least tuple
+      #
+      def least
+        Tools.tuple_collect(@aggregations){|k,v| 
+          [k, v.least]
+        }
+      end
+      
+      #
+      # Computes the resulting aggregation from aggs if tuple happens. 
+      #
+      def happens(aggs, tuple)
+        Tools.tuple_collect(@aggregations){|k,v|
+          [k, v.happens(aggs[k], tuple)]
+        }
+      end
+      
+      #
+      # Finalizes the summarization `aggs` 
+      #
+      def finalize(aggs)
+        Tools.tuple_collect(@aggregations){|k,v|
+          [k, v.finalize(aggs[k])]
+        }
+      end
+      
+      def ==(other)
+        other.is_a?(Summarization) && (other.aggregations == aggregations)
+      end
+      
+    end # class Summarization
+
+    # Install all types on Alf now
+    constants.each do |s|
+      Alf.const_set(s, const_get(s))
+    end
+  end
+
   #
   # Provides tooling methods that are used here and there in Alf.
   # 
@@ -28,6 +582,113 @@ module Alf
     # Myrrha rules for converting to ruby literals
     ToRubyLiteral = Myrrha::ToRubyLiteral.dup.append do
     end
+    
+    #
+    # Provides a handle, implementing a flyweight design pattern on tuples.
+    #
+    class TupleHandle
+    
+      # Creates an handle instance
+      def initialize
+        @tuple = nil
+      end
+    
+      #
+      # Sets the next tuple to use.
+      #
+      # This method installs the handle as a side effect 
+      # on first call. 
+      #
+      def set(tuple)
+        build(tuple) if @tuple.nil?
+        @tuple = tuple
+        self
+      end
+    
+      #
+      # Evaluates a tuple expression on the current tuple.
+      # 
+      def evaluate(expr)
+        TupleExpression.coerce(expr).evaluate(self)
+      end
+    
+      private
+    
+      #
+      # Builds this handle with a tuple.
+      #
+      # This method should be called only once and installs 
+      # instance methods on the handle with keys of _tuple_.
+      #
+      def build(tuple)
+        tuple.keys.each do |k|
+          (class << self; self; end).send(:define_method, k) do
+            @tuple[k]
+          end
+        end
+      end
+    
+    end # class TupleHandle
+    
+    # Provides an operator signature
+    class Signature
+      
+      def initialize(args)
+        @args = args
+      end
+      
+      def install(clazz)
+        @args.each do |siginfo|
+          name, dom, = siginfo
+          clazz.instance_eval <<-EOF
+            attr_accessor :#{name}
+            private :#{name}=
+          EOF
+        end
+      end
+      
+      def from_xxx(args, coercer)
+        @args.zip(args).collect do |sigpart,subargs|
+          name, dom, default = sigpart
+          
+          # coercion
+          val = if Array(subargs).empty?
+            Tools.coerce(default, dom)
+          else
+            dom.send(coercer, subargs)
+          end
+          
+          # check and yield
+          if val.nil?
+            raise ArgumentError, "Invalid `#{subargs.inspect}` for #{sigpart.inspect}"
+          else
+            block_given? ? yield(name, val) : val
+          end
+        end
+      end
+      
+      def from_args(args, &block)
+        from_xxx(args, :coerce, &block)
+      end
+      
+      def parse_args(args, receiver)
+        from_args(args) do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+      end
+      
+      def from_argv(argv, &block)
+        from_xxx(argv, :from_argv, &block)
+      end
+      
+      def parse_argv(argv, receiver)
+        from_argv(argv) do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+      end
+      
+      EMPTY = Signature.new []
+    end # class Signature
     
     # Delegated to Coercions
     def coerce(value, domain)
@@ -109,430 +770,6 @@ module Alf
     def tuple_collect(enum)
       Hash[enum.collect{|elm| yield(elm)}]
     end
-
-    #
-    # Encapsulates the notion of tuple expression, which is a Ruby expression
-    # whose evaluates in the context and scope of a specific tuple.
-    #
-    class TupleExpression
-      
-      # @return [Proc] the lambda expression
-      attr_reader :expr_lambda
-      
-      #
-      # Creates a tuple expression from a Proc object
-      #
-      # @param [Proc] expr a Proc for the expression 
-      #
-      def initialize(expr)
-        @expr_lambda = expr
-      end
-      
-      # 
-      # Coerces `arg` to a tuple expression
-      # 
-      def self.coerce(arg)
-        case arg
-        when TupleExpression
-          arg
-        when Proc
-          TupleExpression.new(arg)
-        when String, Symbol
-          coerce(eval("lambda{ #{arg} }"))
-        else
-          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
-        end
-      end
-      
-      #
-      # Evaluates in the context of obj
-      #
-      def evaluate(obj = nil)
-        if RUBY_VERSION < "1.9"
-          obj.instance_eval(&@expr_lambda)
-        else
-          obj.instance_exec(&@expr_lambda)
-        end
-      end
-      
-    end # class TupleExpression
-    
-    #
-    # Provides a handle, implementing a flyweight design pattern on tuples.
-    #
-    class TupleHandle
-    
-      # Creates an handle instance
-      def initialize
-        @tuple = nil
-      end
-    
-      #
-      # Sets the next tuple to use.
-      #
-      # This method installs the handle as a side effect 
-      # on first call. 
-      #
-      def set(tuple)
-        build(tuple) if @tuple.nil?
-        @tuple = tuple
-        self
-      end
-    
-      #
-      # Evaluates a tuple expression on the current tuple.
-      # 
-      def evaluate(expr)
-        TupleExpression.coerce(expr).evaluate(self)
-      end
-    
-      private
-    
-      #
-      # Builds this handle with a tuple.
-      #
-      # This method should be called only once and installs 
-      # instance methods on the handle with keys of _tuple_.
-      #
-      def build(tuple)
-        tuple.keys.each do |k|
-          (class << self; self; end).send(:define_method, k) do
-            @tuple[k]
-          end
-        end
-      end
-    
-    end # class TupleHandle
-    
-    # 
-    # Encapsulates a tuple computation from other tuples expressions
-    #
-    class TupleComputation
-      
-      # @return [Hash] a computation hash, mapping AttrName -> TupleExpression
-      attr_reader :computation
-      
-      #
-      # Creates a TupleComputation instance
-      #
-      # @param [Hash] computation, a mappping AttrName -> TupleExpression
-      #
-      def initialize(computation)
-        @computation = computation
-      end
-      
-      # 
-      # Coerces `arg` to a tuple computation
-      #
-      def self.coerce(arg)
-        case arg
-        when TupleComputation
-          arg
-        when Hash
-          h = Tools.tuple_collect(arg){|k,v|
-            if AttrName === k
-              v = TupleExpression.coerce(v) if v.is_a?(Proc)
-              [k, v] 
-            else
-              [Tools.coerce(k, AttrName), Tools.coerce(v, TupleExpression)]
-            end
-          }
-          TupleComputation.new(h)
-        when Array
-          coerce(Hash[*arg])
-        else
-          raise ArgumentError, "Invalid argument `arg` for TupleComputation()"
-        end
-      end
-      
-      #
-      # Computes the result, given `tuple` as context and `handle` to
-      # evaluate expressions. 
-      #
-      def evaluate(obj = nil)
-        Tools.tuple_collect(@computation){|k,v| 
-          [k, v.is_a?(TupleExpression) ? v.evaluate(obj) : v]
-        }
-      end
-      
-    end # class TupleComputation
-    
-    #
-    # Defines a projection key
-    # 
-    class ProjectionKey
-      include Tools
-    
-      # Projection attributes
-      attr_accessor :attributes
-    
-      def initialize(attributes)
-        @attributes = attributes
-      end
-    
-      def self.coerce(arg)
-        case arg
-          when Array
-            ProjectionKey.new(arg.collect{|s| s.to_sym})
-          when OrderingKey
-            ProjectionKey.new(arg.attributes)
-          when ProjectionKey
-            arg
-          else
-            raise ArgumentError, "Unable to coerce #{arg} to a projection key"
-        end
-      end
-    
-      def to_ordering_key
-        OrderingKey.new attributes.collect{|arg| [arg, :asc]}
-      end
-    
-      def project(tuple, allbut = false)
-        split(tuple, allbut).first
-      end
-    
-      def split(tuple, allbut = false)
-        projection, rest = {}, tuple.dup
-        attributes.each do |a|
-          projection[a] = tuple[a]
-          rest.delete(a)
-        end
-        allbut ? [rest, projection] : [projection, rest]
-      end
-    
-    end # class ProjectionKey
-    
-    #
-    # Encapsulates tools for computing orders on tuples
-    #
-    class OrderingKey
-    
-      attr_reader :ordering
-    
-      def initialize(ordering = [])
-        @ordering = ordering
-        @sorter = nil
-      end
-    
-      # 
-      # Coerces `arg` to an ordering key. 
-      #
-      # Implemented coercions are:
-      # * Array of symbols (all attributes in ascending order)
-      # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
-      # * ProjectionKey (all its attributes in ascending order)
-      # * OrderingKey (self)
-      #
-      # @return [OrderingKey]
-      # @raises [ArgumentError] when `arg` is not recognized
-      #
-      def self.coerce(arg)
-        case arg
-        when OrderingKey
-          arg
-        when ProjectionKey
-          arg.to_ordering_key
-        when Array
-          if arg.all?{|a| a.is_a?(Array)}
-            OrderingKey.new(arg)
-          else
-            symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
-            sliced = symbolized.each_slice(2) 
-            if sliced.all?{|a,o| [:asc,:desc].include?(o)}
-              OrderingKey.new sliced.to_a
-            else
-              OrderingKey.new symbolized.collect{|a| [a, :asc]}
-            end
-          end
-        else
-          raise ArgumentError, "Unable to coerce #{arg} to an ordering key"
-        end
-      end
-    
-      def attributes
-        @ordering.collect{|arg| arg.first}
-      end
-    
-      def order_by(attr, order = :asc)
-        @ordering << [attr, order]
-        @sorter = nil
-        self
-      end
-    
-      def order_of(attr)
-        @ordering.find{|arg| arg.first == attr}.last
-      end
-    
-      def compare(t1,t2)
-        @ordering.each do |attr,order|
-          x, y = t1[attr], t2[attr]
-          comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
-          comp *= -1 if order == :desc
-          return comp unless comp == 0
-        end
-        return 0
-      end
-    
-      def sorter
-        @sorter ||= lambda{|t1,t2| compare(t1, t2)}
-      end
-    
-      def +(other)
-        other = OrderingKey.coerce(other)
-        OrderingKey.new(@ordering + other.ordering)
-      end
-    
-    end # class OrderingKey
-
-    # 
-    # Specialization of TupleExpression to boolean expressions 
-    # specifically
-    #
-    class Restriction < TupleExpression
-      
-      # 
-      # Coerces `arg` to a Restriction
-      #
-      def self.coerce(arg)
-        case arg
-        when Restriction
-          arg
-        when TrueClass, FalseClass
-          Restriction.new lambda{ arg }
-        when TupleExpression, Proc, String, Symbol
-          Restriction.new TupleExpression.coerce(arg).expr_lambda
-        when Hash
-          if arg.empty?
-            coerce(true)
-          else
-            h = Tools.tuple_collect(arg){|k,v|
-              (AttrName === k) ? 
-                [k,v] : [Tools.coerce(k, AttrName), Kernel.eval(v)]
-            }
-            coerce h.each_pair.collect{|k,v|
-              "(self.#{k} == #{Tools.to_ruby_literal(v)})"
-            }.join(" && ")
-          end
-        when Array
-          (arg.size <= 1) ?
-            coerce(arg.first || true) :
-            coerce(Hash[*arg])
-        else
-          raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
-        end
-      end
-      
-    end # class Restriction
-    
-    #
-    # Encapsulates a Renaming information 
-    #
-    class Renaming
-      
-      # @return [Hash] a renaming mapping as AttrName -> AttrName
-      attr_reader :renaming     
-      
-      # 
-      # Creates a renaming instance
-      #
-      # @param [Hash] a renaming mapping as AttrName -> AttrName 
-      #
-      def initialize(renaming)
-        @renaming = renaming
-      end 
-      
-      # 
-      # Coerces `arg` to a renaming
-      # 
-      def self.coerce(arg)
-        case arg
-        when Renaming
-          arg
-        when Hash
-          h = Tools.tuple_collect(arg){|k,v|
-            [Tools.coerce(k, AttrName), Tools.coerce(v, AttrName)]
-          }
-          Renaming.new(h)
-        when Array
-          coerce(Hash[*arg])
-        else
-          raise ArgumentError, "Invalid argument `#{arg}` for Renaming()"
-        end
-      end
-      
-      #
-      # Applies renaming to a a given tuple
-      #
-      def apply(tuple)
-        Tools.tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
-      end
-      
-    end # class Renaming
-    
-    #
-    # Encapsulates a Summarization information
-    #
-    class Summarization
-      
-      # @return [Hash] the hash of aggregations, AttrName -> Aggregators
-      attr_reader :aggregations
-      
-      #
-      # Creates a Summarization instance
-      #
-      # @param [Hash] aggs, aggregations as a mapping AttrName -> Aggregators
-      #
-      def initialize(aggs)
-        @aggregations = aggs
-      end
-      
-      #
-      # Coerces `arg` to an Aggregator
-      #
-      def self.coerce(arg)
-        case arg
-        when Summarization
-          arg
-        when Array
-          coerce(Hash[*arg])
-        when Hash
-          h = Tools.tuple_collect(arg) do |k,v|
-            [Tools.coerce(k, AttrName), Tools.coerce(v, Aggregator)]
-          end
-          Summarization.new(h)
-        else
-          raise ArgumentError, "Invalid arg `#{arg}` for Summarization()"
-        end
-      end
-      
-      #
-      # Computes the least tuple
-      #
-      def least
-        Tools.tuple_collect(@aggregations){|k,v| 
-          [k, v.least]
-        }
-      end
-      
-      #
-      # Computes the resulting aggregation from aggs if tuple happens. 
-      #
-      def happens(aggs, tuple)
-        Tools.tuple_collect(@aggregations){|k,v|
-          [k, v.happens(aggs[k], tuple)]
-        }
-      end
-      
-      #
-      # Finalizes the summarization `aggs` 
-      #
-      def finalize(aggs)
-        Tools.tuple_collect(@aggregations){|k,v|
-          [k, v.finalize(aggs[k])]
-        }
-      end
-      
-    end # class Summarization
 
     extend Tools
   end # module Tools
@@ -1513,46 +1750,24 @@ module Alf
         ancestors.include?(Operator::Binary)
       end
 
+      #
+      # Installs or set the operator signature
+      #
+      def signature(sig = nil)
+        if sig.nil?
+          @signature || Tools::Signature::EMPTY
+        else
+          @signature = Tools::Signature.new(sig)
+          @signature.install(self)
+        end
+      end
+      
     end # module Introspection
     
     # Ensures that the Introspection module is set on real operators
     def self.included(mod)
       mod.extend(Introspection) if mod.is_a?(Class)
     end
-    
-    #
-    # Encapsulates method definitions that convert operators to Quickl
-    # commands
-    #
-    module CommandMethods
-    
-      #
-      # Run the operator command.
-      #
-      def run(argv = [], req = nil)
-        @requester = req
-        argv       = parse_options(argv, :split)
-        operands   = command_line_operands(Array(argv[0]))
-        args       = Array(argv[1..-1]).flatten
-        self.set_args(args)
-        self.pipe(operands, environment || (req && req.environment))
-        self
-      end
-    
-      protected
-      
-      #
-      # Configures the operator from arguments taken from command line. 
-      #
-      # This method is intended to be overriden by subclasses and must return the 
-      # operator itself.
-      #
-      def set_args(args)
-        self
-      end
-
-    end # module CommandMethods
-    include CommandMethods
     
     # Operators input datasets
     attr_accessor :datasets
@@ -1561,10 +1776,10 @@ module Alf
     attr_reader :environment
     
     #
-    # Creates an operator instance and automatically installs arguments
+    # Create an operator instance
     #
     def initialize(*args)
-      set_args(args)
+      signature.parse_args(args, self)
     end
 
     # Sets the environment on this operator and propagate on
@@ -1592,6 +1807,26 @@ module Alf
     end
     
     #
+    # Returns operator signature.
+    #
+    def signature
+      self.class.signature
+    end
+    
+    #
+    # Run the operator command.
+    #
+    def run(argv = [], req = nil)
+      @requester = req
+      argv       = parse_options(argv, :split)
+      operands   = command_line_operands(Array(argv[0]))
+      args       = Array(argv[1..-1])
+      signature.parse_argv(args, self)
+      pipe(operands, environment || (req && req.environment))
+      self
+    end
+
+    #
     # Yields each tuple in turn 
     #
     # This method is implemented in a way that ensures that all operators are 
@@ -1604,7 +1839,7 @@ module Alf
     end
     
     protected
-    
+
     #
     # Prepares the iterator before subsequent call to _each.
     #
@@ -1863,14 +2098,12 @@ module Alf
     class Autonum < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
-      protected 
-      
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @attrname = coerce(args.last || :autonum, AttrName) 
-        self
-      end
-      
+      signature [
+        [:attrname, AttrName, :autonum]
+      ]
+          
+      protected
+        
       # (see Operator#_prepare)
       def _prepare
         @autonum = -1
@@ -1921,6 +2154,10 @@ module Alf
     class Defaults < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
+      signature [
+        [:defaults, TupleComputation, {}]
+      ]
+      
       def initialize(defaults = {}, strict = false)
         @defaults = coerce(defaults, TupleComputation)
         @strict = strict
@@ -1934,12 +2171,6 @@ module Alf
       end
   
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @defaults = coerce(args, TupleComputation)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -1976,9 +2207,11 @@ module Alf
     class Compact < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Shortcut, Operator::Unary
   
+      signature []
+      
       # Removes duplicates according to a complete order
       class SortBased
-        include Operator::Cesure      
+        include Operator, Operator::Cesure
 
         def initialize
           @cesure_key ||= ProjectionKey.new([])
@@ -2006,7 +2239,7 @@ module Alf
       # Removes duplicates by loading all in memory and filtering 
       # them there 
       class BufferBased
-        include Operator::Unary
+        include Operator, Operator::Unary
   
         protected
         
@@ -2020,6 +2253,10 @@ module Alf
   
       end # class BufferBased
   
+      def initialize(*args)
+        signature.parse_args(args, self)
+      end
+
       protected 
       
       def longexpr
@@ -2066,20 +2303,15 @@ module Alf
     #
     class Sort < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Unary
-    
-      def initialize(ordering_key = [])
-        @ordering_key = coerce(ordering_key, OrderingKey)
-      end
 
+      signature [
+        [:ordering, OrderingKey, []]
+      ]
+          
       protected 
     
-      def set_args(args)
-        @ordering_key = coerce(args, OrderingKey)
-        self
-      end
-    
       def _prepare
-        @buffer = Buffer::Sorted.new(@ordering_key)
+        @buffer = Buffer::Sorted.new(ordering)
         @buffer.add_all(input)
       end
     
@@ -2122,6 +2354,10 @@ module Alf
     class Clip < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
+      signature [
+        [:projection_key, ProjectionKey, []]
+      ]
+      
       # Builds a Clip operator instance
       def initialize(attributes = [], allbut = false)
         @projection_key = coerce(attributes, ProjectionKey)
@@ -2136,12 +2372,6 @@ module Alf
       end
   
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @projection_key = coerce(args, ProjectionKey)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -2178,17 +2408,11 @@ module Alf
     class Coerce < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
-      def initialize(heading = {})
-        @heading = coerce(heading, Heading)
-      end
+      signature [
+        [:heading, Heading, {}]
+      ]
       
       protected 
-      
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @heading = coerce(args, Heading)
-        self
-      end
       
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -2247,6 +2471,10 @@ module Alf
     class Project < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
     
+      signature [
+        [:projection_key, ProjectionKey, []]
+      ]
+      
       # Builds a Project operator instance
       def initialize(attributes = [], allbut = false)
         @projection_key = coerce(attributes, ProjectionKey)
@@ -2261,12 +2489,6 @@ module Alf
       end
     
       protected 
-    
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @projection_key = coerce(args, ProjectionKey)
-        self
-      end
     
       # (see Operator::Shortcut#longexpr)
       def longexpr
@@ -2304,19 +2526,12 @@ module Alf
     class Extend < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds an Extend operator instance
-      def initialize(extensions = {})
-        @extensions = coerce(extensions, TupleComputation)
-      end
-  
+      signature [
+        [:extensions, TupleComputation, {}]
+      ]
+      
       protected 
     
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @extensions = coerce(args, TupleComputation)
-        self
-      end
-  
       # (see Operator#_prepare)
       def _prepare
         @handle = TupleHandle.new
@@ -2354,19 +2569,12 @@ module Alf
     class Rename < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds a Rename operator instance
-      def initialize(renaming = {})
-        @renaming = coerce(renaming, Renaming)
-      end
-  
+      signature [
+        [:renaming, Renaming, {}]
+      ]
+      
       protected 
     
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @renaming = coerce(args, Renaming)
-        self
-      end
-  
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
         @renaming.apply(tuple)
@@ -2404,19 +2612,12 @@ module Alf
     class Restrict < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      # Builds a Restrict operator instance
-      def initialize(predicate = "true")
-        @predicate = coerce(predicate, Restriction)
-      end
-  
+      signature [
+        [:predicate, Restriction, "true"]
+      ]
+      
       protected 
     
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @predicate = coerce(args, Restriction)
-        self
-      end
-  
       # (see Operator#_each)
       def _each
         handle = TupleHandle.new
@@ -2447,12 +2648,14 @@ module Alf
     class Join < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       #
       # Performs a Join of two relations through a Hash buffer on the right
       # one.
       #
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         #
         # Implements a special Buffer for join-based relational operators.
@@ -2566,10 +2769,12 @@ module Alf
     #   alf intersect ... ...
     #  
     class Intersect < Factory::Operator(__FILE__, __LINE__)
-      include Operator::Relational, Operator::Shortcut, Operator::Binary
+      include Operator, Operator::Relational, Operator::Shortcut, Operator::Binary
+      
+      signature []
       
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         protected
         
@@ -2619,8 +2824,10 @@ module Alf
     class Minus < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         protected
         
@@ -2668,8 +2875,10 @@ module Alf
     class Union < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       class DisjointBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         protected
         
@@ -2716,12 +2925,14 @@ module Alf
     class Matching < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       #
       # Performs a Matching of two relations through a Hash buffer on the right
       # one.
       #
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         # (see Operator#_each)
         def _each
@@ -2777,12 +2988,14 @@ module Alf
     class NotMatching < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
+      signature []
+      
       #
       # Performs a NotMatching of two relations through a Hash buffer on the 
       # right one.
       #
       class HashBased
-        include Operator::Binary
+        include Operator, Operator::Binary
       
         # (see Operator#_each)
         def _each
@@ -2817,7 +3030,7 @@ module Alf
     # Relational wraping (tuple-valued attributes)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... -- NEWNAME
     #
     # API & EXAMPLE
     #
@@ -2830,25 +3043,17 @@ module Alf
     # attributes are taken from commandline arguments, expected the last one
     # which defines the new name to use:
     #
-    #   alf wrap suppliers -- city status loc_and_status
+    #   alf wrap suppliers -- city status -- loc_and_status
     #
     class Wrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds a Wrap operator instance
-      def initialize(attributes = [], as = :wrapped)
-        @attributes = coerce(attributes, ProjectionKey)
-        @as = coerce(as, AttrName)
-      end
-  
+      signature [
+        [:attributes, ProjectionKey, []],
+        [:as, AttrName, :wrapped]
+      ]
+      
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @as = coerce(args.pop, AttrName)
-        @attributes = coerce(args, ProjectionKey)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -2882,18 +3087,11 @@ module Alf
     class Unwrap < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      # Builds a Rename operator instance
-      def initialize(attribute = :wrapped)
-        @attribute = coerce(attribute, AttrName)
-      end
-  
+      signature [
+        [:attribute, AttrName, :wrapped]
+      ]
+      
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @attribute = coerce(args.first, AttrName)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -2908,7 +3106,7 @@ module Alf
     # Relational grouping (relation-valued attributes)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... -- NEWNAME
     #
     # API & EXAMPLE
     #
@@ -2922,11 +3120,16 @@ module Alf
     # attributes are taken from commandline arguments, expected the last one
     # which defines the new name to use:
     #
-    #   alf group supplies -- pid qty supplying
-    #   alf group supplies --allbut -- sid supplying
+    #   alf group supplies -- pid qty -- supplying
+    #   alf group supplies --allbut -- sid -- supplying
     #
     class Group < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
+      
+      signature [
+        [:attributes, ProjectionKey, []],
+        [:as, AttrName, :group]
+      ]
       
       # Creates a Group instance
       def initialize(attributes = [], as = :group, allbut = false)
@@ -2942,14 +3145,6 @@ module Alf
       end
       
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        # Refactor this to use AttrNames and AttrName
-        @as = coerce(args.pop, AttrName)
-        @attributes = coerce(args, ProjectionKey)
-        self
-      end
   
       # See Operator#_prepare
       def _prepare
@@ -2993,18 +3188,11 @@ module Alf
     class Ungroup < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      # Creates a Group instance
-      def initialize(attribute = :grouped)
-        @attribute = coerce(attribute, AttrName)
-      end
-  
+      signature [
+        [:attribute, AttrName, :wrapped]
+      ]
+      
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @attribute = coerce(args.pop, AttrName)
-        self
-      end
   
       # See Operator#_each
       def _each
@@ -3053,6 +3241,10 @@ module Alf
     class Summarize < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
+      signature [
+        [:summarization, Summarization, {}]
+      ]
+      
       def initialize(by = [], summarization = {}, allbut = false)
         @by = coerce(by, ProjectionKey)
         @summarization = coerce(summarization, Summarization)
@@ -3071,7 +3263,7 @@ module Alf
   
       # Summarizes according to a complete order
       class SortBased
-        include Alf::Operator::Cesure      
+        include Operator, Operator::Cesure      
   
         def initialize(by_key, allbut, summarization)
           @by_key, @allbut, @summarization = by_key, allbut, summarization
@@ -3104,7 +3296,7 @@ module Alf
 
       # Summarizes in-memory with a hash
       class HashBased
-        include Operator::Relational, Operator::Unary
+        include Operator, Operator::Relational, Operator::Unary
   
         def initialize(by_key, allbut, summarization)
           @by_key, @allbut, @summarization = by_key, allbut, summarization
@@ -3127,12 +3319,6 @@ module Alf
         
       protected 
       
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @summarization = coerce(args, Summarization)
-        self
-      end
-  
       def longexpr
         if @allbut
           chain HashBased.new(@by, @allbut, @summarization),
@@ -3187,6 +3373,10 @@ module Alf
     class Rank < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
+      signature [
+        [:ranking_name, AttrName, :rank]
+      ]
+      
       def initialize(order = [], ranking_name = :rank)
         @order = coerce(order, OrderingKey)
         @ranking_name = coerce(ranking_name, AttrName)
@@ -3199,7 +3389,7 @@ module Alf
       end
   
       class SortBased
-        include Operator::Cesure
+        include Operator, Operator::Cesure
         
         def initialize(order, ranking_name)
           @by_key = ProjectionKey.coerce(order)
@@ -3234,12 +3424,6 @@ module Alf
   
       protected
       
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @ranking_name = coerce(args.last || :rank, AttrName)
-        self
-      end
-  
       def longexpr
         chain SortBased.new(@order, @ranking_name),
               Operator::NonRelational::Sort.new(@order),
@@ -3273,6 +3457,10 @@ module Alf
       include Operator::Relational, Operator::Experimental,
               Operator::Shortcut, Operator::Unary
   
+      signature [
+        [:summarization, Summarization, {}]
+      ]
+      
       def initialize(by = [], order = [], summarization = {})
         @by = coerce(by, ProjectionKey)
         @order = coerce(order, OrderingKey)
@@ -3289,7 +3477,7 @@ module Alf
       end
   
       class SortBased
-        include Operator::Cesure
+        include Operator, Operator::Cesure
         
         def initialize(by, order, summarization)
           @by, @order, @summarization  = by, order, summarization
@@ -3317,12 +3505,6 @@ module Alf
   
       protected
       
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @summarization = coerce(args, Summarization)
-        self
-      end
-  
       def longexpr
         sort_key = @by.to_ordering_key + @order
         chain SortBased.new(@by, @order, @summarization),
@@ -3389,7 +3571,7 @@ module Alf
       attribute, options = nil, attribute if attribute.is_a?(Hash)
       @handle = Tools::TupleHandle.new
       @options = default_options.merge(options)
-      @functor = Tools.coerce(attribute || block, Tools::TupleExpression)
+      @functor = Tools.coerce(attribute || block, TupleExpression)
     end
   
     #
@@ -3602,95 +3784,6 @@ module Alf
   end # class Buffer
 
   #
-  # Defines a Heading, that is, a set of attribute (name,domain) pairs.
-  #
-  class Heading
-    
-    #
-    # Creates a Heading instance
-    #
-    # @param [Hash] a hash of attribute (name, type) pairs where name is
-    #        a Symbol and type is a Class
-    #
-    def self.[](attributes)
-      Heading.new(attributes) 
-    end
-
-    # @return [Hash] a (freezed) hash of (name, type) pairs  
-    attr_reader :attributes
-    
-    #
-    # Creates a Heading instance
-    #
-    # @param [Hash] a hash of attribute (name, type) pairs where name is
-    #        a Symbol and type is a Class
-    #
-    def initialize(attributes)
-      @attributes = attributes.dup.freeze
-    end
-    
-    #
-    # Coerces `attributes` to a Heading instance
-    #
-    def self.coerce(attributes)
-      case attributes
-      when Array
-        h = Tools.tuple_collect(attributes.each_slice(2)) do |k,v|
-          [ Tools.coerce(k, Symbol), Tools.coerce(v, Module) ]
-        end
-        Heading.new(h)
-      when Hash
-        Heading.new(attributes)
-      else
-        raise ArgumentError, "Unable to coerce #{attributes.inspect} to a Heading"
-      end
-    end
-    
-    #
-    # Returns heading's cardinality
-    #
-    def cardinality
-      attributes.size
-    end
-    alias :size  :cardinality
-    alias :count :cardinality
-    
-    #
-    # Returns heading's hash code
-    # 
-    def hash
-      @hash ||= attributes.hash
-    end
-    
-    #
-    # Checks equality with other heading
-    #
-    def ==(other)
-      other.is_a?(Heading) && (other.attributes == attributes) 
-    end
-    alias :eql? :==
-    
-    #
-    # Converts this heading to a Hash of (name,type) pairs
-    # 
-    def to_hash
-      attributes.dup
-    end
-    
-    # 
-    # Returns a Heading literal
-    #
-    def to_ruby_literal
-      attributes.empty? ?
-        "Alf::Heading::EMPTY" :
-        "Alf::Heading[#{Tools.to_ruby_literal(attributes)[1...-1]}]"
-    end
-    alias :inspect :to_ruby_literal
-    
-    EMPTY = Alf::Heading.new({})
-  end # class Heading
-  
-  #
   # Defines an in-memory relation data structure.
   #
   # A relation is a set of tuples; a tuple is a set of attribute (name, value)
@@ -3838,7 +3931,7 @@ module Alf
     # @return [Array] an array of hashes, in requested order (if specified)
     #
     def to_a(okey = nil)
-      okey = Tools.coerce(okey, Tools::OrderingKey) if okey
+      okey = Tools.coerce(okey, OrderingKey) if okey
       ary = tuples.to_a
       ary.sort!(&okey.sorter) if okey
       ary
