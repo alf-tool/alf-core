@@ -40,6 +40,14 @@ module Alf
         }
       end
       
+      describe "on missing args for which a default value exists" do
+        let(:signature){ Signature.new [
+          [:name, AttrName], [:allbut, Boolean, false]
+        ]}
+        let(:argv){ %w{hello} }
+        it{ should eq([:hello, false])}
+      end
+      
     end
   end
 end

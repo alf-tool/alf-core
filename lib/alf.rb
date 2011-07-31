@@ -18,6 +18,12 @@ module Alf
   #
   module T
     
+    Boolean = Myrrha::Boolean
+    def Boolean.from_argv(argv, opts={})
+      raise ArgumentError if argv.size > 1
+      Tools.coerce(argv.first, Boolean)
+    end
+        
     # Data type for being a valid attribute name  
     class AttrName < Symbol
       extend Myrrha::Domain
@@ -644,9 +650,13 @@ module Alf
       def from_argv(argv)
         argv = Quickl.split_commandline_args(argv)
         @args.zip(argv).collect do |sigpart,val|
-          name, dom, = sigpart
-          val = dom.from_argv(val)
-          block_given? ? yield(name, val) : val
+          name, dom, default = sigpart
+          val = val.nil? ? default : dom.from_argv(val)
+          if val.nil?
+            raise ArgumentError, "Invalid `#{argv.inspect}` for signature #{@args.inspect}"
+          else
+            block_given? ? yield(name, val) : val
+          end
         end
       end
       
