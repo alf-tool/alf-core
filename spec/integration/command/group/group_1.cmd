@@ -1,1 +1,1 @@
-alf --text group --allbut    supplies  -- sid supplying
+alf --text group --allbut supplies -- sid -- supplying

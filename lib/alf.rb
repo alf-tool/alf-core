@@ -2173,6 +2173,10 @@ module Alf
     class Defaults < Factory::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
+      signature [
+        [:defaults, TupleComputation, {}]
+      ]
+      
       def initialize(defaults = {}, strict = false)
         @defaults = coerce(defaults, TupleComputation)
         @strict = strict
@@ -2186,12 +2190,6 @@ module Alf
       end
   
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        @defaults = coerce(args, TupleComputation)
-        self
-      end
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
@@ -3131,7 +3129,7 @@ module Alf
     # Relational grouping (relation-valued attributes)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... NEWNAME
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... -- NEWNAME
     #
     # API & EXAMPLE
     #
@@ -3145,11 +3143,16 @@ module Alf
     # attributes are taken from commandline arguments, expected the last one
     # which defines the new name to use:
     #
-    #   alf group supplies -- pid qty supplying
-    #   alf group supplies --allbut -- sid supplying
+    #   alf group supplies -- pid qty -- supplying
+    #   alf group supplies --allbut -- sid -- supplying
     #
     class Group < Factory::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
+      
+      signature [
+        [:attributes, ProjectionKey, []],
+        [:as, AttrName, :group]
+      ]
       
       # Creates a Group instance
       def initialize(attributes = [], as = :group, allbut = false)
@@ -3165,14 +3168,6 @@ module Alf
       end
       
       protected 
-  
-      # (see Operator::CommandMethods#set_args)
-      def set_args(args)
-        # Refactor this to use AttrNames and AttrName
-        @as = coerce(args.pop, AttrName)
-        @attributes = coerce(args, ProjectionKey)
-        self
-      end
   
       # See Operator#_prepare
       def _prepare
