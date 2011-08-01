@@ -16,7 +16,7 @@ module Alf
   #
   # Encapsulates all types
   #
-  module T
+  module Types
     
     Boolean = Myrrha::Boolean
     def Boolean.from_argv(argv, opts={})
