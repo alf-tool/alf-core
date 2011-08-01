@@ -17,7 +17,7 @@ module Alf
     #
     # Note that this command is not an operator and should not be piped anymore.
     #
-    class Show < Factory::Command(__FILE__, __LINE__)
+    class Show < Alf::Command(__FILE__, __LINE__)
       include Command
     
       options do |opt|

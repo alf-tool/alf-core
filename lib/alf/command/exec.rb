@@ -14,7 +14,7 @@ module Alf
     # This command executes the .alf file passed as first argument (or what comes
     # on standard input) as a alf query to be executed on the current environment.
     #
-    class Exec < Factory::Command(__FILE__, __LINE__)
+    class Exec < Alf::Command(__FILE__, __LINE__)
       include Command
       
       def execute(args)

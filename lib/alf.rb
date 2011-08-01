@@ -243,17 +243,9 @@ module Alf
   # 
   module Factory
   
-    # @see Quickl::Command
-    def Command(file, line)
-      Quickl::Command(file, line){|builder|
-        builder.command_parent = Alf::Command::Main
-        yield(builder) if block_given?
-      }
-    end
-  
     # @see Operator
     def Operator(file, line)
-      Command(file, line) do |b|
+      Alf.Command(file, line) do |b|
         b.instance_module Alf::Operator
       end
     end
@@ -266,6 +258,12 @@ module Alf
   # operators at all. 
   #
   module Command
+    def Alf.Command(file, line) 
+      Quickl::Command(file, line){|builder|
+        builder.command_parent = Alf::Command::Main
+        yield(builder) if block_given?
+      }
+    end
     require 'alf/command/main'
     require 'alf/command/exec'
     require 'alf/command/help'

@@ -6,7 +6,7 @@ module Alf
     # SYNOPSIS
     #   #{program_name} #{command_name} COMMAND
     #
-    class Help < Factory::Command(__FILE__, __LINE__)
+    class Help < Alf::Command(__FILE__, __LINE__)
       include Command
       
       # Let NoSuchCommandError be passed to higher stage
