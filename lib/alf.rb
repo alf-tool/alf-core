@@ -166,6 +166,7 @@ module Alf
     require 'alf/renderer/class_methods'
     require 'alf/renderer/base'
     require 'alf/renderer/rash'
+    require 'alf/renderer/text'
 
   end # class Renderer
 
@@ -366,6 +367,5 @@ module Alf
   end
   
 end # module Alf
-require "alf/text"
-require "alf/yaml"
-require "alf/csv"
+require "alf/extra"
+
