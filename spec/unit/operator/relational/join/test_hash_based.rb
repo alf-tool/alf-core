@@ -25,7 +25,7 @@ module Alf
       subject{ operator.to_a }
   
       describe "when applied on both candidate keys" do
-        before{ operator.datasets = [suppliers, statuses] }
+        before{ operator.pipe [suppliers, statuses] }
         let(:expected){[
           {:sid => 'S1', :city => 'London', :status => 20},
           {:sid => 'S2', :city => 'Paris', :status => 10},
@@ -41,17 +41,17 @@ module Alf
           {:sid => 'S3', :city => 'Paris',  :country => 'France'}
         ]}
         describe "on one way" do
-          before{ operator.datasets = [suppliers, countries] }
+          before{ operator.pipe [suppliers, countries] }
           it { should == expected }
         end
         describe "on the other way around" do
-          before{ operator.datasets = [countries, suppliers] }
+          before{ operator.pipe [countries, suppliers] }
           it { should == expected }
         end
       end
       
       describe "when no attributes are in common" do
-        before{ operator.datasets = [statuses, countries] }
+        before{ operator.pipe [statuses, countries] }
         let(:expected){
           statuses.collect{|s| countries.collect{|c| c.merge(s)}}.flatten
         }

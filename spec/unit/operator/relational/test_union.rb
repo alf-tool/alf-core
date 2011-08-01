@@ -21,7 +21,7 @@ module Alf
       subject{ operator.to_a }
   
       describe "when applied on non disjoint sets" do
-        before{ operator.datasets = [left, right] }
+        before{ operator.pipe [left, right] }
         let(:expected){[
           {:city => 'London'},
           {:city => 'Paris'},

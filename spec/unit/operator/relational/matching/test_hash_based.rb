@@ -25,33 +25,33 @@ module Alf
       subject{ operator.to_rel }
   
       describe "when applied on both candidate keys" do
-        before{ operator.datasets = [suppliers, statuses] }
+        before{ operator.pipe  [suppliers, statuses] }
         it { should eq(suppliers) }
       end
       
       describe "when applied on a typical foreign key" do
         describe "on one way" do
-          before{ operator.datasets = [suppliers, countries] }
+          before{ operator.pipe  [suppliers, countries] }
           it { should eq(suppliers) }
         end
         describe "on the other way around" do
-          before{ operator.datasets = [countries, suppliers] }
+          before{ operator.pipe  [countries, suppliers] }
           it { should eq(countries.restrict(lambda{ city != 'Bruxelles' })) }
         end
       end
       
       describe "when no attributes are in common" do
-        before{ operator.datasets = [statuses, countries] }
+        before{ operator.pipe  [statuses, countries] }
         it { should eq(statuses) }
       end
       
       describe "against DEE" do
-        before{ operator.datasets = [suppliers, Relation::DEE] }
+        before{ operator.pipe  [suppliers, Relation::DEE] }
         it { should eq(suppliers) }
       end
       
       describe "against DUM" do
-        before{ operator.datasets = [suppliers, Relation::DUM] }
+        before{ operator.pipe  [suppliers, Relation::DUM] }
         it { should eq(Relation::DUM) }
       end
 

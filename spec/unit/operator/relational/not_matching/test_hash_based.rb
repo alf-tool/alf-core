@@ -13,22 +13,22 @@ module Alf
       subject{ operator.to_rel }
 
       describe "when applied on itself" do
-        before{ operator.datasets = [suppliers, suppliers] }
+        before{ operator.pipe [suppliers, suppliers] }
         it { should eq(suppliers.minus(suppliers)) }
       end
   
       describe "when applied against a subset" do
-        before{ operator.datasets = [suppliers, Alf::Relation[{:sid => 'S1'}]] }
+        before{ operator.pipe [suppliers, Alf::Relation[{:sid => 'S1'}]] }
         it { should eq(suppliers.restrict(lambda{ sid != 'S1' })) }
       end
       
       describe "against DEE" do
-        before{ operator.datasets = [suppliers, Relation::DEE] }
+        before{ operator.pipe [suppliers, Relation::DEE] }
         it { should eq(Relation::DUM) }
       end
       
       describe "against DUM" do
-        before{ operator.datasets = [suppliers, Relation::DUM] }
+        before{ operator.pipe [suppliers, Relation::DUM] }
         it { should eq(suppliers) }
       end
 

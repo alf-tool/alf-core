@@ -26,12 +26,12 @@ module Alf
       subject{ operator.to_a }
   
       describe "when applied on the same operand twice" do
-        before{ operator.datasets = [left, left] }
+        before{ operator.pipe [left, left] }
         it { should == left }
       end
       
       describe "when applied on operands sharing tuples" do
-        before{ operator.datasets = [left, right] }
+        before{ operator.pipe [left, right] }
         let(:expected) {[
           {:sid => 'S1', :city => 'London'},
           {:sid => 'S2', :city => 'Paris'},
@@ -40,7 +40,7 @@ module Alf
       end
     
       describe "when applied on disjoint operands" do
-        before{ operator.datasets = [left, disjoint] }
+        before{ operator.pipe [left, disjoint] }
         it { should be_empty }
       end
       
