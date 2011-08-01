@@ -42,7 +42,7 @@ module Alf
       def run(argv = [], req = nil)
         @requester = req
         argv       = parse_options(argv, :split)
-        operands   = command_line_operands(Array(argv[0]))
+        operands   = command_line_operands([ $stdin ] + Array(argv[0]))
         args       = Array(argv[1..-1])
         signature.parse_argv(args, self)
         pipe(operands, environment || (req && req.environment))

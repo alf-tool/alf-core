@@ -18,7 +18,7 @@ module Alf
       protected
       
       def command_line_operands(operands)
-        operands.first || $stdin
+        operands.last
       end
     
       #

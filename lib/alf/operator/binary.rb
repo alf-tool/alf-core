@@ -18,7 +18,7 @@ module Alf
       protected
       
       def command_line_operands(operands)
-        (operands.size < 2) ? ([$stdin] + operands) : operands
+        operands[-2..-1]
       end
     
       # Returns the left operand
