@@ -17,6 +17,8 @@ GEM
     rspec-expectations (2.6.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.6.0)
+    sequel (3.25.0)
+    sqlite3 (1.3.3)
     wlang (0.10.2)
     yard (0.7.2)
 
@@ -32,5 +34,7 @@ DEPENDENCIES
   rcov (~> 0.9.9)
   request-log-analyzer (= 1.11.0)
   rspec (~> 2.6.0)
+  sequel (~> 3.25.0)
+  sqlite3 (~> 1.3.0)
   wlang (~> 0.10.2)
   yard (~> 0.7.2)

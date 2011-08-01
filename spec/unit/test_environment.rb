@@ -22,6 +22,11 @@ module Alf
         env.should be_a(Environment::Folder)
       end
       
+      it "should recognize a sqlite file" do
+        env = Environment.autodetect(_("sequel/alf.db", __FILE__))
+        env.should be_a(Sequel::Environment)
+      end
+      
       it "should raise an Argument when no match" do
         lambda{ Environment.autodetect(12) }.should raise_error(ArgumentError)
       end
