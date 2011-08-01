@@ -22,10 +22,10 @@ module Alf
     class Wrap < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      signature [
-        [:attributes, ProjectionKey, []],
-        [:as, AttrName, :wrapped]
-      ]
+      signature do |s|
+        s.argument :attributes, ProjectionKey, []
+        s.argument :as, AttrName, :wrapped
+      end
       
       protected 
   

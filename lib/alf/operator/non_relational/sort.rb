@@ -38,9 +38,9 @@ module Alf
     class Sort < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Unary
 
-      signature [
-        [:ordering, OrderingKey, []]
-      ]
+      signature do |s|
+        s.argument :ordering, OrderingKey, []
+      end
           
       protected 
     

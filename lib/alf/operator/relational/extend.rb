@@ -27,9 +27,9 @@ module Alf
     class Extend < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      signature [
-        [:extensions, TupleComputation, {}]
-      ]
+      signature do |s|
+        s.argument :extensions, TupleComputation, {}
+      end
       
       protected 
     

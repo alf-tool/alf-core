@@ -30,9 +30,9 @@ module Alf
     class Restrict < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      signature [
-        [:predicate, Restriction, "true"]
-      ]
+      signature do |s|
+        s.argument :predicate, Restriction, "true"
+      end
       
       protected 
     

@@ -36,12 +36,12 @@ module Alf
       #
       # Installs or set the operator signature
       #
-      def signature(sig = nil)
-        if sig.nil?
-          @signature || Tools::Signature::EMPTY
-        else
-          @signature = Tools::Signature.new(sig)
+      def signature
+        if block_given?
+          @signature = Tools::Signature.new &Proc.new
           @signature.install(self)
+        else
+          @signature || Tools::Signature::EMPTY
         end
       end
       

@@ -21,7 +21,8 @@ module Alf
     class Union < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
-      signature []
+      signature do |s|
+      end
       
       class DisjointBased
         include Operator, Operator::Binary

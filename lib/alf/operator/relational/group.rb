@@ -24,10 +24,10 @@ module Alf
     class Group < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      signature [
-        [:attributes, ProjectionKey, []],
-        [:as, AttrName, :group]
-      ]
+      signature do |s|
+        s.argument :attributes, ProjectionKey, []
+        s.argument :as, AttrName, :group
+      end
       
       # Creates a Group instance
       def initialize(attributes = [], as = :group, allbut = false)

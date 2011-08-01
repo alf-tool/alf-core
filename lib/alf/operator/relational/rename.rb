@@ -25,9 +25,9 @@ module Alf
     class Rename < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      signature [
-        [:renaming, Renaming, {}]
-      ]
+      signature do |s|
+        s.argument :renaming, Renaming, {}
+      end
       
       protected 
     

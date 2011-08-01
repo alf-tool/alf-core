@@ -33,9 +33,9 @@ module Alf
     class Autonum < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
-      signature [
-        [:attrname, AttrName, :autonum]
-      ]
+      signature do |s|
+        s.argument :attrname, AttrName, :autonum
+      end
           
       protected
         

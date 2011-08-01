@@ -31,9 +31,9 @@ module Alf
     class Project < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
     
-      signature [
-        [:projection_key, ProjectionKey, []]
-      ]
+      signature do |s|
+        s.argument :projection_key, ProjectionKey, []
+      end
       
       # Builds a Project operator instance
       def initialize(attributes = [], allbut = false)

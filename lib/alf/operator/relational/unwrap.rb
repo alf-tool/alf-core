@@ -23,9 +23,9 @@ module Alf
     class Unwrap < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
-      signature [
-        [:attribute, AttrName, :wrapped]
-      ]
+      signature do |s|
+        s.argument :attribute, AttrName, :wrapped
+      end
       
       protected 
   

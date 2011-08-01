@@ -25,9 +25,9 @@ module Alf
       include Operator::Relational, Operator::Experimental,
               Operator::Shortcut, Operator::Unary
   
-      signature [
-        [:summarization, Summarization, {}]
-      ]
+      signature do |s|
+        s.argument :summarization, Summarization, {}
+      end
       
       def initialize(by = [], order = [], summarization = {})
         @by = coerce(by, ProjectionKey)

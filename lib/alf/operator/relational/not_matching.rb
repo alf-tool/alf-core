@@ -25,7 +25,8 @@ module Alf
     class NotMatching < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
-      signature []
+      signature do |s|
+      end
       
       #
       # Performs a NotMatching of two relations through a Hash buffer on the 

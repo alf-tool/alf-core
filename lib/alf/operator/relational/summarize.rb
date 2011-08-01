@@ -34,9 +34,9 @@ module Alf
     class Summarize < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
-      signature [
-        [:summarization, Summarization, {}]
-      ]
+      signature do |s|
+        s.argument :summarization, Summarization, {}
+      end
       
       def initialize(by = [], summarization = {}, allbut = false)
         @by = coerce(by, ProjectionKey)

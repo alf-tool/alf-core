@@ -24,7 +24,8 @@ module Alf
     class Intersect < Alf::Operator(__FILE__, __LINE__)
       include Operator, Operator::Relational, Operator::Shortcut, Operator::Binary
       
-      signature []
+      signature do |s|
+      end
       
       class HashBased
         include Operator, Operator::Binary

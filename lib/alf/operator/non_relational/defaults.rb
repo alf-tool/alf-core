@@ -38,9 +38,9 @@ module Alf
     class Defaults < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
-      signature [
-        [:defaults, TupleComputation, {}]
-      ]
+      signature do |s|
+        s.argument :defaults, TupleComputation, {}
+      end
       
       def initialize(defaults = {}, strict = false)
         @defaults = coerce(defaults, TupleComputation)

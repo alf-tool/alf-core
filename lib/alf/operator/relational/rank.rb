@@ -41,9 +41,9 @@ module Alf
     class Rank < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
-      signature [
-        [:ranking_name, AttrName, :rank]
-      ]
+      signature do |s|
+        s.argument :ranking_name, AttrName, :rank
+      end
       
       def initialize(order = [], ranking_name = :rank)
         @order = coerce(order, OrderingKey)

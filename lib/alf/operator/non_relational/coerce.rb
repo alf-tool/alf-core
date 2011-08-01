@@ -29,9 +29,9 @@ module Alf
     class Coerce < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
-      signature [
-        [:heading, Heading, {}]
-      ]
+      signature do |s|
+        s.argument :heading, Heading, {}
+      end
       
       protected 
       

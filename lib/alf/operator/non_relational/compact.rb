@@ -23,7 +23,8 @@ module Alf
     class Compact < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Shortcut, Operator::Unary
   
-      signature []
+      signature do |s|
+      end
       
       # Removes duplicates according to a complete order
       class SortBased

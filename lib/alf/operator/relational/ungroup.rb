@@ -24,9 +24,9 @@ module Alf
     class Ungroup < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
-      signature [
-        [:attribute, AttrName, :wrapped]
-      ]
+      signature do |s|
+        s.argument :attribute, AttrName, :wrapped
+      end
       
       protected 
   

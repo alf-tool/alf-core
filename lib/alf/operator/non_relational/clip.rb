@@ -33,9 +33,9 @@ module Alf
     class Clip < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
-      signature [
-        [:projection_key, ProjectionKey, []]
-      ]
+      signature do |s|
+        s.argument :projection_key, ProjectionKey, []
+      end
       
       # Builds a Clip operator instance
       def initialize(attributes = [], allbut = false)
