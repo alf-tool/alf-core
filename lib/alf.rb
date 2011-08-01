@@ -1730,6 +1730,11 @@ module Alf
       Operator::Relational.each{|x| yield(x)}
     end
     
+    # Ensures that the Introspection module is set on real operators
+    def self.included(mod)
+      mod.extend(ClassMethods) if mod.is_a?(Class)
+    end
+    
     #
     # Contains all methods for operator instances
     #
@@ -1812,7 +1817,6 @@ module Alf
       
       private :datasets=, :environment=
     end
-    include InstanceMethods
     
     # 
     # Encapsulates method that allows making operator introspection, that is,
@@ -1847,11 +1851,6 @@ module Alf
       end
       
     end # module Introspection
-    
-    # Ensures that the Introspection module is set on real operators
-    def self.included(mod)
-      mod.extend(ClassMethods) if mod.is_a?(Class)
-    end
 
     # 
     # Specialization of Operator for operators that work on a unary input
@@ -2044,6 +2043,7 @@ module Alf
     # Marker for experimental operators
     module Experimental; end
     
+    include InstanceMethods
   end # module Operator
 
   #
