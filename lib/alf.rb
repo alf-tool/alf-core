@@ -97,10 +97,10 @@ module Alf
   # readers. 
   # 
   module Iterator
+    include Enumerable
+
     require 'alf/iterator/class_methods'
     require 'alf/iterator/base'
-
-    include Enumerable
   end # module Iterator
 
   #
@@ -131,13 +131,13 @@ module Alf
   #   r = Reader.foo([a path or a IO object])
   #
   class Reader
+    include Iterator
+
     require 'alf/reader/class_methods'
     require 'alf/reader/base'
     require 'alf/reader/rash'
     require 'alf/reader/alf_file'
-
-    include Iterator
-  end # module Reader
+  end # class Reader
 
   #
   # Renders a relation (given by any Iterator) in a specific format.
@@ -166,31 +166,40 @@ module Alf
     require 'alf/renderer/class_methods'
     require 'alf/renderer/base'
     require 'alf/renderer/rash'
-  end # module Renderer
+
+  end # class Renderer
 
   #
   # Marker module and namespace for Alf main commands, those that are **not** 
   # operators at all. 
   #
   module Command
+
+    #
+    # Command factory
+    #
     def Alf.Command(file, line) 
       Quickl::Command(file, line){|builder|
         builder.command_parent = Alf::Command::Main
         yield(builder) if block_given?
       }
     end
+
     require 'alf/command/main'
     require 'alf/command/exec'
     require 'alf/command/help'
     require 'alf/command/show'
-  end
+  end # module Command
   
   #
   # Marker for all operators, relational and non-relational ones.
   # 
   module Operator
     include Iterator, Tools
-    
+
+    #
+    # Operator factory
+    #
     def Alf.Operator(file, line)
       Alf.Command(file, line) do |b|
         b.instance_module Alf::Operator
@@ -206,6 +215,7 @@ module Alf
     require 'alf/operator/shortcut'
     require 'alf/operator/experimental'
 
+    
     #
     # Marker module and namespace for non relational operators
     #
@@ -272,6 +282,7 @@ module Alf
     require 'alf/aggregator/class_methods'
     require 'alf/aggregator/base'
     require 'alf/aggregator/aggregators'
+
   end # class Aggregator
   
   #
@@ -279,6 +290,7 @@ module Alf
   # 
   class Buffer
     require 'alf/buffer/sorted'
+
   end # class Buffer
 
   #
@@ -300,10 +312,10 @@ module Alf
   #
   class Relation
     include Iterator
-    
+
     require "alf/relation/class_methods"
     require "alf/relation/instance_methods"
-    
+
     DEE = Relation.coerce([{}])
     DUM = Relation.coerce([])
   end # class Relation
