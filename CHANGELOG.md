@@ -1,12 +1,28 @@
 # 0.10.0 / FIX ME
 
-## New features
+## New recognized data sources
+
+* Alf now provides an Environment implementation on top of a SQL database. 
+  This means that SQL tables can now be used as data-sources. This feature 
+  relies on the sequel gem ('gem install sequel' is required), that drives 
+  which dbms are recognized. Then:
+
+      % alf --env=postgres://user:password@host/database show table
 
 * Alf now recognizes and allows manipulating .csv files as first-class data
-  sources in addition to .rash files. CSV output is also supported, of course:
+  sources. CSV output is also supported of course. Under ruby <= 1.9, the
+  fastercsv gem is required ('gem install fastercsv' is required). Then:
+
+      % alf restrict suppliers.csv -- "city == 'Paris'"    (input)
+      % alf show suppliers --csv                           (output)
   
-      % alf show suppliers --csv
+* Alf now recognizes and allows manipulating .log files as first-class data
+  sources. This feature relies on request-log-analyzer gem that provides the
+  parsers that Alf uses, and the log formats it recognizes 
+  ('gem install request-log-analyzer' is required). See examples/logs.
   
+## New operators and enhancements
+
 * A COERCE operator is introduced. It provides a quick way to obtain type-safe
   relations from unsafe sources like .csv files. For example:
   
