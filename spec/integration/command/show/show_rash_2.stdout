@@ -1,5 +1,5 @@
-{:sid => "S1", :name => "Smith", :status => 20, :city => "London", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
-{:sid => "S2", :name => "Jones", :status => 10, :city => "Paris", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
-{:sid => "S3", :name => "Blake", :status => 30, :city => "Paris", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
-{:sid => "S4", :name => "Clark", :status => 20, :city => "London", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
-{:sid => "S5", :name => "Adams", :status => 30, :city => "Athens", :date => Marshal.load("\x04\bU:\tDate[\bU:\rRational[\ai\x03\xA9\xF1Ji\ai\x00i\x03\x19\x15#")}
+{:sid => "S1", :name => "Smith", :status => 20, :city => "London", :uri => Marshal.load("\x04\bo:\x11URI::Generic\x10:\f@scheme0:\n@user0:\x0E@password0:\n@host0:\n@port0:\n@pathI\"\nSmith\x06:\x06ET:\v@query0:\f@opaque0:\x0E@registry0:\x0E@fragment0:\f@parser0")}
+{:sid => "S2", :name => "Jones", :status => 10, :city => "Paris", :uri => Marshal.load("\x04\bo:\x11URI::Generic\x10:\f@scheme0:\n@user0:\x0E@password0:\n@host0:\n@port0:\n@pathI\"\nJones\x06:\x06ET:\v@query0:\f@opaque0:\x0E@registry0:\x0E@fragment0:\f@parser0")}
+{:sid => "S3", :name => "Blake", :status => 30, :city => "Paris", :uri => Marshal.load("\x04\bo:\x11URI::Generic\x10:\f@scheme0:\n@user0:\x0E@password0:\n@host0:\n@port0:\n@pathI\"\nBlake\x06:\x06ET:\v@query0:\f@opaque0:\x0E@registry0:\x0E@fragment0:\f@parser0")}
+{:sid => "S4", :name => "Clark", :status => 20, :city => "London", :uri => Marshal.load("\x04\bo:\x11URI::Generic\x10:\f@scheme0:\n@user0:\x0E@password0:\n@host0:\n@port0:\n@pathI\"\nClark\x06:\x06ET:\v@query0:\f@opaque0:\x0E@registry0:\x0E@fragment0:\f@parser0")}
+{:sid => "S5", :name => "Adams", :status => 30, :city => "Athens", :uri => Marshal.load("\x04\bo:\x11URI::Generic\x10:\f@scheme0:\n@user0:\x0E@password0:\n@host0:\n@port0:\n@pathI\"\nAdams\x06:\x06ET:\v@query0:\f@opaque0:\x0E@registry0:\x0E@fragment0:\f@parser0")}
