@@ -6,26 +6,56 @@ module Alf
       # @return [Array] signature arguments
       attr_reader :arguments
 
+      # @return [Array] signature options
+      attr_reader :options
+
       #
       # Creates a signature instance
       #
       def initialize(args = [])
         @arguments = args
+        @options = []
         yield(self) if block_given?
       end
 
+      #
+      # Adds an argument to the signature
+      #
+      # @param [Symbol] name argument name
+      # @param [Class] domain argument domain
+      # @param [Object] default (optional) default value
+      #
       def argument(name, domain, default = nil)
         arguments << [name, domain, default]
       end
+
+      #
+      # Adds an option to the signature
+      # 
+      # @param [Symbol] name argument name
+      # @param [Class] domain argument domain
+      # @param [Object] default (optional) default value
+      #
+      def option(name, domain, default = nil)
+        options << [name, domain, default]
+      end
       
+      #
+      # Installs the signature on `clazz` class 
+      #
+      # This method installs an attr reader and an attr writer for each
+      # signature argument and each signature option.
+      #
+      # @param [Class] clazz a class on which the signature must be installed
+      #
       def install(clazz)
-        arguments.each do |siginfo|
-          name, dom, = siginfo
-          clazz.instance_eval <<-EOF
-            attr_accessor :#{name}
-            private :#{name}=
-          EOF
-        end
+        code = (arguments + options).each{|siginfo|
+          name, domain, = siginfo
+          clazz.send(:attr_reader, name)
+          clazz.send(:define_method, :"#{name}=") do |val|
+            instance_variable_set(:"@#{name}", Tools.coerce(val, domain))
+          end
+        }
       end
       
       def from_xxx(args, coercer)
@@ -68,7 +98,7 @@ module Alf
         end
       end
       
-      EMPTY = Signature.new []
+      EMPTY = Signature.new
     end # class Signature
   end # module Tools
 end # module Alf
