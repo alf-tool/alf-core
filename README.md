@@ -1,4 +1,4 @@
-# Alf - Relational Algebra at your fingertips (version 0.9.4)
+# Alf - Relational Algebra at your fingertips (version 0.10.0)
 
 ## Description
 
@@ -18,11 +18,11 @@ _relations_... Let's stop the segregation ;-)
 ### Bundler & Require 
 
     # API is not considered stable enough for now, please use
-    gem "alf", "= 0.9.3"
+    gem "alf", "= 0.10.0"
     
     # The following should not break your code, but is a bit less safe, 
     # until 1.0.0 has been reached
-    gem "alf", "~> 0.9.3"
+    gem "alf", "~> 0.10.0"
 
 ### Links
     
