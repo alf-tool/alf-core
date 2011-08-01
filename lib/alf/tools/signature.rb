@@ -55,6 +55,7 @@ module Alf
           clazz.send(:define_method, :"#{name}=") do |val|
             instance_variable_set(:"@#{name}", Tools.coerce(val, domain))
           end
+          clazz.send(:private, :"#{name}=")
         }
       end
       
