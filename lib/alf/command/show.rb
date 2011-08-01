@@ -31,10 +31,20 @@ module Alf
         
       def execute(args)
         requester.renderer = (@renderer || requester.renderer || Text::Renderer.new)
-        args = [ $stdin ] if args.empty?
+        args = [ stdin_reader ] if args.empty?
         args.first
       end
     
+      private 
+
+      def stdin_reader
+        if requester && requester.respond_to?(:stdin_reader)
+          requester.stdin_reader
+        else 
+          Reader.coerce($stdin)
+        end
+      end
+
     end # class Show
   end # module Command
 end # module Alf

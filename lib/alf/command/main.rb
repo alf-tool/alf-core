@@ -69,6 +69,14 @@ module Alf
                "Set the environment to use") do |value|
           @environment = Environment.autodetect(value)
         end
+
+        @input_reader = :rash
+        readers = Reader.readers.collect{|r| r.first}
+        opt.on('--input-reader=READER', readers,
+               "Specify the kind of reader when reading on $stdin "\
+               "(#{readers.join(',')})") do |value|
+          @input_reader = value.to_sym
+        end
         
         opt.on('-rlibrary', "require the library, before executing alf") do |value|
           require(value)
@@ -83,6 +91,14 @@ module Alf
                               " (c) 2011, Bernard Lambeau"
         end
       end # Alf's options
+
+      # 
+      # Returns the $stdin Reader to use, according to the 
+      # --input-reader= option
+      #
+      def stdin_reader
+        Reader.send(@input_reader, $stdin)
+      end
 
       #
       # Executes the command on an array of arguments.
