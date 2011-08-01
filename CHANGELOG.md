@@ -37,6 +37,11 @@
   that way. In particular, this allows specifying default values as being 
   computed on the current tuple.
 
+## Miscellaneous enhancements
+
+* Added 'alf --input-reader' to specify $stdin format (csv, rash, etc.)
+* Added 'alf -Ipath' that mimics ruby's -I (add path to $LOAD_PATH before run)
+
 ## Hurting changes to the public API
 
 * GROUP and WRAP now require an option separator when invoked in shell:

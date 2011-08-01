@@ -78,7 +78,13 @@ module Alf
           @input_reader = value.to_sym
         end
         
-        opt.on('-rlibrary', "require the library, before executing alf") do |value|
+        opt.on("-Idirectory", 
+               "Specify $LOAD_PATH directory (may be used more than once)") do |val|
+          $LOAD_PATH.unshift val
+        end
+
+        opt.on('-rlibrary', 
+               "Require the library, before executing alf") do |value|
           require(value)
         end
         
