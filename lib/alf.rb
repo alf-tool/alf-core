@@ -1818,7 +1818,7 @@ module Alf
     # Encapsulates method that allows making operator introspection, that is,
     # knowing operator cardinality and similar stuff.
     # 
-    module Introspection
+    module ClassMethods
       
       #
       # Returns true if this operator is an unary operator, false otherwise
@@ -1850,7 +1850,7 @@ module Alf
     
     # Ensures that the Introspection module is set on real operators
     def self.included(mod)
-      mod.extend(Introspection) if mod.is_a?(Class)
+      mod.extend(ClassMethods) if mod.is_a?(Class)
     end
 
     # 
