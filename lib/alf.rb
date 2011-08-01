@@ -1723,6 +1723,17 @@ module Alf
     include Iterator, Tools
     
     #
+    # Operators input datasets
+    #
+    attr_accessor :datasets
+    private :datasets=
+    
+    #
+    # Optional environment
+    #
+    attr_accessor :environment
+    private :environment=
+    
     # Yields non-relational then relational operators, in turn.
     #
     def self.each
@@ -1769,12 +1780,6 @@ module Alf
       mod.extend(Introspection) if mod.is_a?(Class)
     end
     
-    # Operators input datasets
-    attr_accessor :datasets
-    
-    # Optional environment
-    attr_reader :environment
-    
     #
     # Create an operator instance
     #
@@ -1782,23 +1787,6 @@ module Alf
       signature.parse_args(args, self)
     end
 
-    # Sets the environment on this operator and propagate on
-    # datasets
-    def environment=(env)
-      # this is to avoid infinite loop (TODO: why is there infinite loops??)
-      return if @environment == env
-      
-      # set and propagate on children
-      @environment = env
-      datasets.each do |dataset|
-        if dataset.respond_to?(:environment)
-          dataset.environment = env
-        end  
-      end if datasets
-      
-      env
-    end
-    
     # 
     # Sets the operator input
     #
