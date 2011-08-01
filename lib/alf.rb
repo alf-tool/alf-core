@@ -235,25 +235,6 @@ module Alf
   end # module Renderer
 
   #
-  # Provides a factory over Alf operators and handles the interface with
-  # Quickl for commandline support.
-  #
-  # This module is part of Alf's internal architecture and should not be used
-  # at all by third-party projects.
-  # 
-  module Factory
-  
-    # @see Operator
-    def Operator(file, line)
-      Alf.Command(file, line) do |b|
-        b.instance_module Alf::Operator
-      end
-    end
-  
-    extend Factory
-  end # module Factory
-  
-  #
   # Marker module and namespace for Alf main commands, those that are **not** 
   # operators at all. 
   #
@@ -274,6 +255,11 @@ module Alf
   # Marker for all operators, relational and non-relational ones.
   # 
   module Operator
+    def Alf.Operator(file, line)
+      Alf.Command(file, line) do |b|
+        b.instance_module Alf::Operator
+      end
+    end
     include Iterator, Tools
     require 'alf/operator/class_methods'
     require 'alf/operator/base'
@@ -330,7 +316,7 @@ module Alf
     #   alf autonum suppliers
     #   alf autonum suppliers -- unique_id
     #
-    class Autonum < Factory::Operator(__FILE__, __LINE__)
+    class Autonum < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
       signature [
@@ -386,7 +372,7 @@ module Alf
     # mode guarantess that the heading of all tuples is the same, and that no nil
     # value ever remains. However, this operator never remove duplicates. 
     #
-    class Defaults < Factory::Operator(__FILE__, __LINE__)
+    class Defaults < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
       signature [
@@ -439,7 +425,7 @@ module Alf
     #
     #   alf compact ... 
     #
-    class Compact < Factory::Operator(__FILE__, __LINE__)
+    class Compact < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Shortcut, Operator::Unary
   
       signature []
@@ -536,7 +522,7 @@ module Alf
     # The fact that the ordering must be completely specified with commandline
     # arguments is a limitation, shortcuts could be provided in the future.
     #
-    class Sort < Factory::Operator(__FILE__, __LINE__)
+    class Sort < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Unary
 
       signature [
@@ -586,7 +572,7 @@ module Alf
     #   alf clip suppliers -- name city
     #   alf clip suppliers --allbut -- name city
     #
-    class Clip < Factory::Operator(__FILE__, __LINE__)
+    class Clip < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
   
       signature [
@@ -640,7 +626,7 @@ module Alf
     #
     #   alf coerce parts -- weight Float color Color
     #
-    class Coerce < Factory::Operator(__FILE__, __LINE__)
+    class Coerce < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
     
       signature [
@@ -703,7 +689,7 @@ module Alf
     #   alf project suppliers -- name city
     #   alf project --allbut suppliers -- name city
     #
-    class Project < Factory::Operator(__FILE__, __LINE__)
+    class Project < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
     
       signature [
@@ -758,7 +744,7 @@ module Alf
     # Attributes ATTRx should not already exist, no behavior is guaranteed if 
     # this precondition is not respected.   
     #
-    class Extend < Factory::Operator(__FILE__, __LINE__)
+    class Extend < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
       signature [
@@ -801,7 +787,7 @@ module Alf
     #
     #   alf rename suppliers -- name supplier_name city supplier_city
     #
-    class Rename < Factory::Operator(__FILE__, __LINE__)
+    class Rename < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
       signature [
@@ -844,7 +830,7 @@ module Alf
     #   alf restrict suppliers -- "status > 20"
     #   alf restrict suppliers -- city "'London'"
     #
-    class Restrict < Factory::Operator(__FILE__, __LINE__)
+    class Restrict < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
       signature [
@@ -880,7 +866,7 @@ module Alf
     #
     #   alf join suppliers supplies 
     #  
-    class Join < Factory::Operator(__FILE__, __LINE__)
+    class Join < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature []
@@ -1003,7 +989,7 @@ module Alf
     #
     #   alf intersect ... ...
     #  
-    class Intersect < Factory::Operator(__FILE__, __LINE__)
+    class Intersect < Alf::Operator(__FILE__, __LINE__)
       include Operator, Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature []
@@ -1056,7 +1042,7 @@ module Alf
     #
     #   alf minus ... ...
     #  
-    class Minus < Factory::Operator(__FILE__, __LINE__)
+    class Minus < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature []
@@ -1107,7 +1093,7 @@ module Alf
     #
     #   alf union ... ...
     #  
-    class Union < Factory::Operator(__FILE__, __LINE__)
+    class Union < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature []
@@ -1157,7 +1143,7 @@ module Alf
     #
     #   alf matching suppliers supplies 
     #  
-    class Matching < Factory::Operator(__FILE__, __LINE__)
+    class Matching < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature []
@@ -1220,7 +1206,7 @@ module Alf
     #
     #   alf not-matching suppliers supplies 
     #  
-    class NotMatching < Factory::Operator(__FILE__, __LINE__)
+    class NotMatching < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature []
@@ -1280,7 +1266,7 @@ module Alf
     #
     #   alf wrap suppliers -- city status -- loc_and_status
     #
-    class Wrap < Factory::Operator(__FILE__, __LINE__)
+    class Wrap < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
       signature [
@@ -1319,7 +1305,7 @@ module Alf
     #
     #   alf unwrap wrap -- loc_and_status
     #
-    class Unwrap < Factory::Operator(__FILE__, __LINE__)
+    class Unwrap < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
   
       signature [
@@ -1358,7 +1344,7 @@ module Alf
     #   alf group supplies -- pid qty -- supplying
     #   alf group supplies --allbut -- sid -- supplying
     #
-    class Group < Factory::Operator(__FILE__, __LINE__)
+    class Group < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
       signature [
@@ -1420,7 +1406,7 @@ module Alf
     #
     #   alf ungroup group -- supplying
     #
-    class Ungroup < Factory::Operator(__FILE__, __LINE__)
+    class Ungroup < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Unary
       
       signature [
@@ -1473,7 +1459,7 @@ module Alf
     #   alf summarize supplies --by=sid -- total_qty "sum(:qty)" 
     #   alf summarize supplies --allbut --by=pid,qty -- total_qty "sum(:qty)" 
     #
-    class Summarize < Factory::Operator(__FILE__, __LINE__)
+    class Summarize < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
       signature [
@@ -1605,7 +1591,7 @@ module Alf
     #
     #   alf rank parts --order=weight,desc,pid,asc -- position
     #
-    class Rank < Factory::Operator(__FILE__, __LINE__)
+    class Rank < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
       signature [
@@ -1688,7 +1674,7 @@ module Alf
     #
     #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
     #
-    class Quota < Factory::Operator(__FILE__, __LINE__)
+    class Quota < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Experimental,
               Operator::Shortcut, Operator::Unary
   
