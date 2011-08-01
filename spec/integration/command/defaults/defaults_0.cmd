@@ -1,1 +1,1 @@
-alf --text defaults          suppliers -- country "'Belgium'"
+alf --text defaults suppliers -- country "'Belgium'"

@@ -1,1 +1,1 @@
-alf --text sort              suppliers -- name asc
+alf --text sort suppliers -- name

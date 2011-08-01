@@ -1,1 +1,1 @@
-alf --text sort              suppliers -- city desc name asc
+alf --text sort suppliers -- name desc
