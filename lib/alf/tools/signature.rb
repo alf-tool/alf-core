@@ -3,12 +3,23 @@ module Alf
     # Provides an operator signature
     class Signature
       
-      def initialize(args)
-        @args = args
+      # @return [Array] signature arguments
+      attr_reader :arguments
+
+      #
+      # Creates a signature instance
+      #
+      def initialize(args = [])
+        @arguments = args
+        yield(self) if block_given?
+      end
+
+      def argument(name, domain, default = nil)
+        arguments << [name, domain, default]
       end
       
       def install(clazz)
-        @args.each do |siginfo|
+        arguments.each do |siginfo|
           name, dom, = siginfo
           clazz.instance_eval <<-EOF
             attr_accessor :#{name}
@@ -18,7 +29,7 @@ module Alf
       end
       
       def from_xxx(args, coercer)
-        @args.zip(args).collect do |sigpart,subargs|
+        arguments.zip(args).collect do |sigpart,subargs|
           name, dom, default = sigpart
           
           # coercion
