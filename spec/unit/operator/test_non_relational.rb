@@ -8,6 +8,7 @@ module Alf
       x.sort{|m1,m2| m1.name.to_s <=> m2.name.to_s}.should == [
         Alf::Operator::NonRelational::Autonum,
         Alf::Operator::NonRelational::Clip,
+        Alf::Operator::NonRelational::Coerce,
         Alf::Operator::NonRelational::Compact,
         Alf::Operator::NonRelational::Defaults,
         Alf::Operator::NonRelational::Sort,

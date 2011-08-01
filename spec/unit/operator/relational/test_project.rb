@@ -58,6 +58,11 @@ module Alf
           it { should == [] } 
         end
         
+        describe "when allbut is used" do
+          let(:operator){ Lispy.project(input, [:a, :b], true) }
+          it { should == expected } 
+        end
+        
       end # all attributes projected
   
     end 

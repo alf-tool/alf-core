@@ -1,0 +1,34 @@
+input = rel(
+  {:id => 1, :weight => 10.0},
+  {:id => 2, :weight => 12.0},
+  {:id => 3, :weight => 12.0}
+)
+
+(specify "rank should respect < by default",
+  (rel_equal \
+    (rel (tuple :id => 1, :weight => 10.0, :rank => 0),
+         (tuple :id => 2, :weight => 12.0, :rank => 1),
+         (tuple :id => 3, :weight => 12.0, :rank => 1)),
+    (rank input, [:weight])))
+
+(specify "rank should support a strict order",
+  (rel_equal \
+    (rel (tuple :id => 1, :weight => 10.0, :rank => 0),
+         (tuple :id => 2, :weight => 12.0, :rank => 1),
+         (tuple :id => 3, :weight => 12.0, :rank => 2)),
+    (rank input, [:weight, :id])))
+      
+(specify "rank should support a reverse order",
+  (rel_equal \
+    (rel (tuple :id => 1, :weight => 10.0, :rank => 2),
+         (tuple :id => 2, :weight => 12.0, :rank => 0),
+         (tuple :id => 3, :weight => 12.0, :rank => 0)),
+    (rank input, [[:weight, :desc]])))
+
+(specify "rank should allow specifying a name",
+  (rel_equal \
+    (rel (tuple :id => 1, :weight => 10.0, :pos => 0),
+         (tuple :id => 2, :weight => 12.0, :pos => 1),
+         (tuple :id => 3, :weight => 12.0, :pos => 1)),
+    (rank input, [:weight], :pos)))
+      

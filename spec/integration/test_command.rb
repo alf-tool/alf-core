@@ -6,7 +6,7 @@ describe "Alf's alf command / " do
     specify{ cmd.should =~ /^alf / }
   
     describe "#{File.basename(input)}: #{cmd}" do
-      let(:argv)     { Alf::Tools::parse_commandline_args(cmd)[1..-1] }
+      let(:argv)     { Quickl.parse_commandline_args(cmd)[1..-1] }
       let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
       let(:expected) { wlang(File.read(stdout), binding) }
 
@@ -21,9 +21,16 @@ describe "Alf's alf command / " do
       
       specify{
         begin 
-          Alf::Command::Main.run(argv, __FILE__)
-        rescue SystemExit
-          $stdout << SystemExit << "\n"
+          dir = File.expand_path('../__database__', __FILE__)
+          main = Alf::Command::Main.new
+          main.environment = Alf::Environment.folder(dir)
+          main.run(argv, __FILE__)
+        rescue Quickl::Exit => ex
+          begin
+            ex.react!
+          rescue SystemExit
+            $stdout << SystemExit << "\n"
+          end
         end
         $stdout.string.should(eq(expected)) unless RUBY_VERSION < "1.9"
       }

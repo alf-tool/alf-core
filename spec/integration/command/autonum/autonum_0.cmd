@@ -1,1 +1,1 @@
-alf --text autonum           suppliers
+alf --text autonum suppliers

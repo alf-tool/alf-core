@@ -1,4 +1,4 @@
-# Alf - Relational Algebra at your fingertips (version 0.9.3)
+# Alf - Relational Algebra at your fingertips (version 0.9.4)
 
 ## Description
 
@@ -12,13 +12,17 @@ _relations_... Let's stop the segregation ;-)
 
 ### Install
 
-    % [sudo] gem install alf
+    % [sudo] gem install alf [fastercsv, ...]
     % alf --help
 
 ### Bundler & Require 
 
     # API is not considered stable enough for now, please use
-    gem "alf", "= 0.9.2"
+    gem "alf", "= 0.9.3"
+    
+    # The following should not break your code, but is a bit less safe, 
+    # until 1.0.0 has been reached
+    gem "alf", "~> 0.9.3"
 
 ### Links
     
@@ -76,7 +80,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   the following query for the kind of things that you'll never ever have in SQL 
   (see also 'alf help quota', 'alf help wrap', 'alf help group', ...):
   
-        % alf --text summarize supplies --by=sid -- total "sum(:qty)" -- which "group(:pid)"
+        % alf --text summarize supplies --by=sid -- total "sum(:qty)" which "group(:pid)"
   
 * Last, but not least, Alf is an attempt to help me test some research ideas and 
   communicate about them with people that already know (all or part) of the TTM 
@@ -267,7 +271,7 @@ section about versioning policy at the end of this file).
 If you take a look at .alf example files, you'll find functional ruby expressions 
 like the following (called Lispy expressions):
 
-    % cat examples/minus.alf
+    % cat examples/operators/minus.alf
 
     # Give all suppliers, except those living in Paris
     (minus :suppliers, 
@@ -280,7 +284,7 @@ like the following (called Lispy expressions):
 You can simply execute such expressions with the alf command line itself (the 
 three following invocations return the same result):
  
-    % alf examples/minus.alf | alf show
+    % alf examples/operators/minus.alf | alf show
     % alf show minus
     % alf -e "(restrict :suppliers, lambda{ city != 'Paris' })" | alf show
 
@@ -522,11 +526,11 @@ For example, try the following:
 ### Recognized data streams/files (.rash files)
     
 For educational purposes, 'suppliers' and 'cities' inputs are magically resolved 
-as denoting the files examples/suppliers.rash and examples/cities.rash, 
-respectively. You'll find other data files: parts.rash, supplies.rash that are 
-resolved magically as well and with which you can play. For non-educational 
-purposes, operands may always be explicit files, or you can force the folder in
-which datasource files have to be found:
+as denoting the files examples/operators/suppliers.rash and 
+examples/operators/cities.rash, respectively. You'll find other data files: 
+parts.rash, supplies.rash that are resolved magically as well and with which you 
+can play. For non-educational purposes, operands may always be explicit files, 
+or you can force the folder in which datasource files have to be found:
 
     # The following invocations are equivalent
     % alf restrict /tmp/foo.rash -- "..." 
@@ -541,13 +545,13 @@ operand on standard input if not specific as command argument. For example, the
 invocation below is equivalent to the one given above.
 
     # display suppliers that live in Paris
-    % cat examples/suppliers.rash | alf restrict -- "city == 'Paris'"  
+    % cat examples/operators/suppliers.rash | alf restrict -- "city == 'Paris'"  
 
 Similarly, when only one operand is present in invocations of binary operators, 
 they read their left operand from standard input. Therefore, the join given in
 previous section can also be written as follows:
 
-    % cat examples/suppliers.rash | alf join cities
+    % cat examples/operators/suppliers.rash | alf join cities
 
 The relational algebra is _closed_ under its operators, which means that these 
 operators take relations as operands and return a relation. Therefore operator 
@@ -595,7 +599,7 @@ a .yaml file, as follows:
 You'll also find .alf files in the examples folder, that contain more complex
 examples in the Ruby functional syntax (see section below). 
 
-    % cat examples/group.alf
+    % cat examples/operators/group.alf
     #!/usr/bin/env alf
     (group :supplies, [:pid, :qty], :supplying)
 

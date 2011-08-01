@@ -57,6 +57,23 @@ module Alf
     it "should allow specific tuple computations" do
       Aggregator.sum{ 1.0 * a * sign }.aggregate(input).should == -3.0
     end
+    
+    describe "coerce" do
+     
+      subject{ Aggregator.coerce(arg) }
+      
+      describe "from an Aggregator" do
+        let(:arg){ Aggregator.sum(:a) }
+        it{ should eq(arg) }
+      end
+      
+      describe "from a String" do
+        let(:arg){ "sum(:a)" }
+        it{ should be_a(Aggregator::Sum) }
+        specify{ subject.aggregate(input).should eql(7) }
+      end
+      
+    end
 
   end
 end
