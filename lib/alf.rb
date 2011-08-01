@@ -131,11 +131,12 @@ module Alf
   #   r = Reader.foo([a path or a IO object])
   #
   class Reader
-    include Iterator
     require 'alf/reader/class_methods'
     require 'alf/reader/base'
     require 'alf/reader/rash'
     require 'alf/reader/alf_file'
+
+    include Iterator
   end # module Reader
 
   #
