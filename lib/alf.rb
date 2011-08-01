@@ -17,13 +17,8 @@ module Alf
   # Encapsulates all types
   #
   module Types
+    require 'alf/types/boolean'
     
-    Boolean = Myrrha::Boolean
-    def Boolean.from_argv(argv, opts={})
-      raise ArgumentError if argv.size > 1
-      Tools.coerce(argv.first, Boolean)
-    end
-        
     # Data type for being a valid attribute name  
     class AttrName < Symbol
       extend Myrrha::Domain
