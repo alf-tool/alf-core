@@ -12,7 +12,8 @@ module Alf
     # This non-relational operator sorts input tuples according to ORDERING. 
     #
     # This is, of course, a non relational operator as relations are unordered 
-    # sets. It is provided for displaying and pre-relational purposes.
+    # sets. It is provided for displaying purposes and normalization of 
+    # non-relational inputs.
     #
     # EXAMPLE
     #
