@@ -4,20 +4,15 @@ module Alf
     # Relational un-grouping (inverse of group)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR
     #
-    # API & EXAMPLE
-    #
-    #   # Assuming grouped = (group enum, [:pid, :qty], :supplying)
-    #   (ungroup grouped, :supplying)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator ungroups the relation-valued attribute named ATTR and outputs
-    # tuples as the flattening of each of of its tuples merged with the upstream
-    # one. Sub relation should be such so that no name collision occurs. When 
-    # used in shell, the name of the attribute to ungroup is taken as the first 
-    # commandline argument:
+    # This operator flattens its operand by ungrouping the relation-valued 
+    # attribute ATTR. 
+    #
+    # EXAMPLE
     #
     #   alf ungroup group -- supplying
     #
@@ -25,7 +20,7 @@ module Alf
       include Operator::Relational, Operator::Unary
       
       signature do |s|
-        s.argument :attribute, AttrName, :wrapped
+        s.argument :attr, AttrName, :grouped
       end
       
       protected 
@@ -34,7 +29,7 @@ module Alf
       def _each
         each_input_tuple do |tuple|
           tuple = tuple.dup
-          subrel = tuple.delete(@attribute)
+          subrel = tuple.delete(@attr)
           subrel.each do |subtuple|
             yield(tuple.merge(subtuple))
           end
