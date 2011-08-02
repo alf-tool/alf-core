@@ -12,8 +12,8 @@ module Alf
       #
       # Creates a signature instance
       #
-      def initialize(args = [])
-        @arguments = args
+      def initialize
+        @arguments = []
         @options = []
         yield(self) if block_given?
       end

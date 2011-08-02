@@ -14,7 +14,11 @@ module Alf
       }
         
       describe "on a singleton signature with a ProjectionKey" do
-        let(:signature){ Signature.new [[:proj, ProjectionKey]] }
+        let(:signature){ 
+          Signature.new do |s|
+            s.argument :proj, ProjectionKey
+          end
+        }
         let(:args){ [%w{hello world}] }
         specify{
           subject.proj.should eq(ProjectionKey.new([:hello, :world])) 
@@ -22,7 +26,11 @@ module Alf
       end
       
       describe "on a singleton signature with a default" do
-        let(:signature){ Signature.new [[:attrname, AttrName, :autonum]] }
+        let(:signature){ 
+          Signature.new do |s|
+            s.argument :attrname, AttrName, :autonum
+          end
+        }
         let(:args){ [] }
         specify{
           subject.attrname.should eq(:autonum) 

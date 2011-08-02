@@ -7,7 +7,7 @@ module Alf
       subject{ signature.install(clazz) }
       
       describe "on an empty signature" do
-        let(:signature){ Signature.new [] }
+        let(:signature){ Signature.new }
         it{ should eq({}) }
         specify{
           lambda{ subject }.should_not raise_error
