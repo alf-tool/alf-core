@@ -4,23 +4,15 @@ module Alf
     # Relational intersection (aka a logical and)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [LEFT] RIGHT
     #
-    # API & EXAMPLE
-    #
-    #   # Give suppliers that live in Paris and have status >= 20
-    #   (intersect \\
-    #     (restrict :suppliers, lambda{ status >= 20 }),
-    #     (restrict :suppliers, lambda{ city == 'Paris' }))
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator computes the intersection between its two operands. The 
-    # intersection is simply the set of common tuples between them. Both operands
-    # must have the same heading. 
+    # This operator computes the relational intersection between its two 
+    # operands. The intersection is simply the set of tuples that appear both
+    # in LEFT and RIGHT operands.
     #
-    #   alf intersect ... ...
-    #  
     class Intersect < Alf::Operator(__FILE__, __LINE__)
       include Operator, Operator::Relational, Operator::Shortcut, Operator::Binary
       
