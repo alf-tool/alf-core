@@ -4,36 +4,33 @@ module Alf
     # Force default values on missing/nil attributes
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 EXPR1 ...
+    #
+    #   #{shell_signature}
     #
     # OPTIONS
     # #{summarized_options}
     #
-    # API & EXAMPLE
-    #
-    #   # Non strict mode
-    #   (defaults :suppliers, :country => 'Belgium')
-    #
-    #   # Strict mode (--strict)
-    #   (defaults :suppliers, {:country => 'Belgium'}, :strict => true)
-    #
     # DESCRIPTION
     #
-    # This operator rewrites tuples so as to ensure that all values for specified 
-    # attributes ATTRx are defined and not nil. Missing or nil attributes are 
-    # replaced by the associated default value VALx. The latter can be either 
-    # true values, or tuple expressions.
+    # This non-relational operator rewrites input tuples to ensure that all 
+    # values for attribute names specified in DEFAULTS are present and not nil. 
+    # Missing or nil attributes are replaced by the specified default value.
     #
-    # When used in shell, all defaults values are interpreted as being tuple 
-    # expressions. Consequently, strings should be quoted, as in the following
-    # example:
+    # A value specified in DEFAULTS may be any tuple expression. This allows to 
+    # compute the default value as an expression on the current tuple.
+    #
+    # With --strict mode, the operator projects resulting tuples on attributes 
+    # for which a default value has been specified. Using the strict mode 
+    # guarantees that the heading of all tuples is the same, and that no nil 
+    # value ever remains. 
+    #
+    # Note that this operator never removes duplicates. Even in --strict mode 
+    # the result might be an invalid relation. 
+    #
+    # EXAMPLE
     #
     #   alf defaults suppliers -- country "'Belgium'"
-    #
-    # When used in --strict mode, the operator simply project resulting tuples on
-    # attributes for which a default value has been specified. Using the strict 
-    # mode guarantess that the heading of all tuples is the same, and that no nil
-    # value ever remains. However, this operator never remove duplicates. 
+    #   alf defaults --strict suppliers -- country "'Belgium'"
     #
     class Defaults < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Transform
