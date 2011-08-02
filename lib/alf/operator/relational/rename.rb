@@ -4,23 +4,17 @@ module Alf
     # Relational renaming (rename some attributes)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- OLD1 NEW1 ...
     #
-    # OPTIONS
-    # #{summarized_options}
-    #
-    # API & EXAMPLE
-    #
-    #   (rename :suppliers, :name => :supplier_name, :city => :supplier_city)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This command renames OLD attributes as NEW as specified by arguments. 
-    # Attributes OLD should exist in source tuples while attributes NEW should 
-    # not. When used in shell, renaming attributes are built ala Hash[...] from
-    # commandline arguments: 
+    # This command renames attributes as specified in RENAMING, taken as 
+    # successive (old name, new name) pairs
     #
-    #   alf rename suppliers -- name supplier_name city supplier_city
+    # EXAMPLE
+    #
+    #   alf rename suppliers -- name supplier_name  city supplier_city
     #
     class Rename < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Transform
