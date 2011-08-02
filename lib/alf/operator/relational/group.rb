@@ -4,19 +4,17 @@ module Alf
     # Relational grouping (relation-valued attributes)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... -- NEWNAME
     #
-    # API & EXAMPLE
-    #
-    #   (group :supplies, [:pid, :qty], :supplying)
-    #   (group :supplies, [:sid], :supplying, :allbut => true)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator groups attributes ATTR1 to ATTRN as a new, relation-valued
-    # attribute whose name is NEWNAME. When used in shell, names of grouped
-    # attributes are taken from commandline arguments, expected the last one
-    # which defines the new name to use:
+    # This operator groups attributes in ATTR_LIST as a new, relation-valued
+    # attribute named AS.
+    #
+    # With --allbut, it groups all attributes not specified in ATTR_LIST instead.
+    #
+    # EXAMPLE
     #
     #   alf group supplies -- pid qty -- supplying
     #   alf group supplies --allbut -- sid -- supplying
@@ -25,7 +23,7 @@ module Alf
       include Operator::Relational, Operator::Unary
       
       signature do |s|
-        s.argument :attributes, AttrList, []
+        s.argument :attr_list, AttrList, []
         s.argument :as, AttrName, :group
         s.option :allbut, Boolean, false, 'Group all but specified attributes?'
       end
@@ -36,7 +34,7 @@ module Alf
       def _prepare
         @index = Hash.new{|h,k| h[k] = Set.new} 
         each_input_tuple do |tuple|
-          key, rest = @attributes.split(tuple, !@allbut)
+          key, rest = @attr_list.split(tuple, !@allbut)
           @index[key] << rest
         end
       end
