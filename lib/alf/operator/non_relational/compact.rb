@@ -4,21 +4,21 @@ module Alf
     # Remove tuple duplicates
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND]
     #
-    # API & EXAMPLE
-    #
-    #   # clip, unlike project, typically leave duplicates
-    #   (compact (clip :suppliers, [ :city ]))
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator remove duplicates from input tuples. As defaults, it is a non
-    # relational operator that helps normalizing input for implementing relational
-    # operators. This one is centric in converting bags of tuples to sets of 
-    # tuples, as required by true relations.
+    # This non-relational operator removes duplicates from its input operand.
+    # In other words, it converts a bag of tuples to a set of tuples in a 
+    # brute-force manner.
     #
-    #   alf compact ... 
+    # If the presence of duplicates was the only "non-relational" aspect of 
+    # the operand, the result is a valid relation.
+    #
+    # EXAMPLE
+    #
+    #   alf compact suppliers
     #
     class Compact < Alf::Operator(__FILE__, __LINE__)
       include Operator::NonRelational, Operator::Shortcut, Operator::Unary
