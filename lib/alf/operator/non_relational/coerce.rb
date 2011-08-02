@@ -5,23 +5,14 @@ module Alf
     # Force attribute coercion according to a heading
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 DOM1 ...
     #
-    # OPTIONS
-    # #{summarized_options}
-    #
-    # API & EXAMPLE
-    #
-    #   (coerce :parts, :weight => Float, :color => Color)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator coerce attributes of the input tuples according to the 
-    # domain information provided by a heading, thats is a set of attribute 
-    # (name,type) pairs.   
+    # This operator coerces attributes of the input tuples according to HEADING.
     #
-    # When used in shell, the heading is built from commandline arguments ala 
-    # Hash[...]. Foe example:
+    # EXAMPLE
     #
     #   alf coerce parts -- weight Float color Color
     #
