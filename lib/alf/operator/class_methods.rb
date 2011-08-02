@@ -36,6 +36,13 @@ module Alf
       end
 
       #
+      # Returns the shell signature as a String
+      #
+      def shell_signature
+        signature.to_shell_doc(self)
+      end
+
+      #
       # Returns true if this operator is an unary operator, false otherwise
       #
       def unary?

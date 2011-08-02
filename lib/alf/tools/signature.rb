@@ -141,6 +141,11 @@ module Alf
       end
 
       def to_shell_doc(operator = nil)
+        ope = if operator
+          operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT"
+        else
+          "OPERANDS"
+        end
         opts = options.collect{|option| 
           "[#{option_name(option)}]"
         }.join(" ")
@@ -148,8 +153,8 @@ module Alf
           name.to_s.upcase
         }.join(" -- ")
         (args.empty? ? 
-          "#{opts} OPERANDS" : 
-          "#{opts} OPERANDS -- #{args}").strip
+          "#{opts} #{ope}" : 
+          "#{opts} #{ope} -- #{args}").strip
       end
 
       private
