@@ -5,7 +5,36 @@ module Alf
     # knowing operator cardinality and similar stuff.
     # 
     module ClassMethods
-      
+
+      #
+      # Runs the command on commandline arguments
+      #
+      # @param [Array] argv an array of commandline arguments, typically ARGV
+      # @param [Object] req an optional requester, typically a super command
+      # @return [Iterator] an Iterator with query result
+      #
+      def run(argv, req = nil)
+        inst, operands = from_argv(argv)
+
+        # find standard input reader
+        stdin_reader = if req && req.respond_to?(:stdin_reader)
+          req.stdin_reader
+        else 
+          Reader.coerce($stdin)
+        end
+
+        # normalize operands
+        operands = [ stdin_reader ] + Array(operands)
+        operands = if unary?
+          operands.last
+        else
+          operands[-2..-1]
+        end
+
+        inst.pipe(operands, req && req.environment)
+        inst
+      end
+
       #
       # Returns true if this operator is an unary operator, false otherwise
       #
@@ -35,6 +64,15 @@ module Alf
         end
       end
       
+      private 
+
+      # Factors an operator instance from commandline arguments
+      def from_argv(argv)
+        inst = new
+        operands = inst.signature.parse_argv(argv, inst)
+        [inst, operands]
+      end
+
     end # module ClassMethods
 
     #

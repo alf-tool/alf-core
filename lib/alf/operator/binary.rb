@@ -17,10 +17,6 @@ module Alf
 
       protected
       
-      def command_line_operands(operands)
-        operands[-2..-1]
-      end
-    
       # Returns the left operand
       def left
         Iterator.coerce(datasets.first, environment)

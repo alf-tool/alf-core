@@ -16,10 +16,6 @@ module Alf
       end
 
       protected
-      
-      def command_line_operands(operands)
-        operands.last
-      end
     
       #
       # Simply returns the first dataset

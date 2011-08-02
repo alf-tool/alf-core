@@ -43,7 +43,7 @@ module Alf
       
       # Summarizes according to a complete order
       class SortBased
-        include Operator, Operator::Cesure      
+        include Operator, Operator::Cesure
   
         def initialize(by_key, allbut, summarization)
           @by_key, @allbut, @summarization = by_key, allbut, summarization

@@ -125,9 +125,24 @@ module Alf
       end
       
       def parse_argv(argv, receiver)
+        # First split over --
+        argv = Quickl.split_commandline_args(argv)
+
+        # Set default options then parse those in first group
+        default_options.each_pair do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+        argv[0] = option_parser(receiver).parse!(argv[0])
+
+        # Remove operands
+        operands = argv.shift
+
+        # Parse the rest
         parse_xxx(argv, :from_argv) do |name,val|
           receiver.send(:"#{name}=", val)
         end
+
+        operands
       end
 
       private
