@@ -49,6 +49,7 @@ module Alf
       def ==(other)
         other.is_a?(ProjectionKey) && (other.attributes == attributes)          
       end
+      alias :eql? :==
       
     end # class ProjectionKey
   end # module Types

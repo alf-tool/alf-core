@@ -8,20 +8,23 @@ module Alf
       
       describe "on an empty signature" do
         let(:signature){ Signature.new [] }
+        it{ should eq({}) }
         specify{
           lambda{ subject }.should_not raise_error
         }
       end
       
-      describe "on a  non empty signature" do
+      describe "on a non empty signature" do
 
         let(:signature){ 
           Signature.new do |s|
             s.argument :attrname, AttrName
             s.argument :ordering, OrderingKey
-            s.option   :allbut,   Boolean
+            s.option   :allbut,   Boolean, true
           end 
         }
+
+        it{ should eq(:allbut => true) }
 
         it "should have arguments installed as attr accessors" do
           subject

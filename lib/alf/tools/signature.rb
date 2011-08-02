@@ -41,6 +41,17 @@ module Alf
       end
 
       #
+      # Returns default options as a Hash
+      #
+      # @return [Hash] the default options
+      #
+      def default_options
+        @default_options ||=
+          Hash[options.select{|opt| !opt[2].nil? }.
+                       collect{|opt| [opt[0], opt[2]]}]
+      end
+
+      #
       # Fills an OptionParser instance according to signature options.
       #
       # @param [OptionParser] opt an parser instance, to fill with parse options
@@ -78,6 +89,7 @@ module Alf
       # signature argument and each signature option.
       #
       # @param [Class] clazz a class on which the signature must be installed
+      # @return [Hash] the default options to use
       #
       def install(clazz)
         code = (arguments + options).each{|siginfo|
@@ -88,9 +100,39 @@ module Alf
           end
           clazz.send(:private, :"#{name}=")
         }
+        default_options
       end
       
-      def from_xxx(args, coercer)
+      def parse_args(args, receiver)
+        invalid_args!(args) if args.size > (1+arguments.size)
+
+        # Merge default and provided options
+        optargs = default_options
+        if args.size == (1+arguments.size)
+          invalid_args!(args) unless args.last.is_a?(Hash)
+          optargs = optargs.merge(args.pop)
+        end
+
+        # Set options
+        optargs.each_pair do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+        
+        # Parse other arguments now
+        parse_xxx(args, :coerce) do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+      end
+      
+      def parse_argv(argv, receiver)
+        parse_xxx(argv, :from_argv) do |name,val|
+          receiver.send(:"#{name}=", val)
+        end
+      end
+
+      private
+
+      def parse_xxx(args, coercer)
         arguments.zip(args).collect do |sigpart,subargs|
           name, dom, default = sigpart
           
@@ -105,29 +147,13 @@ module Alf
           if val.nil?
             raise ArgumentError, "Invalid `#{subargs.inspect}` for #{sigpart.inspect}"
           else
-            block_given? ? yield(name, val) : val
+            yield(name, val)
           end
         end
       end
       
-      def from_args(args, &block)
-        from_xxx(args, :coerce, &block)
-      end
-      
-      def parse_args(args, receiver)
-        from_args(args) do |name,val|
-          receiver.send(:"#{name}=", val)
-        end
-      end
-      
-      def from_argv(argv, &block)
-        from_xxx(argv, :from_argv, &block)
-      end
-      
-      def parse_argv(argv, receiver)
-        from_argv(argv) do |name,val|
-          receiver.send(:"#{name}=", val)
-        end
+      def invalid_args!(args)
+        raise ArgumentError, "Invalid `#{args.inspect}` for #{self}"
       end
       
       EMPTY = Signature.new
