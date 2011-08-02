@@ -11,6 +11,7 @@ task :"gh-pages" do
   FileUtils.rm_rf File.join(outdir, "*")
 
   # copy assets
+  FileUtils.cp_r File.join(indir, "no-analytics.html"), outdir
   FileUtils.cp_r File.join(indir, "css"), outdir
   FileUtils.cp_r File.join(indir, "images"), outdir
 
