@@ -15,7 +15,7 @@ module Alf
     #   (defaults :suppliers, :country => 'Belgium')
     #
     #   # Strict mode (--strict)
-    #   (defaults :suppliers, {:country => 'Belgium'}, true)
+    #   (defaults :suppliers, {:country => 'Belgium'}, :strict => true)
     #
     # DESCRIPTION
     #
@@ -41,11 +41,6 @@ module Alf
       signature do |s|
         s.argument :defaults, TupleComputation, {}
         s.option :strict, Boolean, false, "Restrict to default attributes only?"
-      end
-      
-      def initialize(defaults = {}, strict = false)
-        @defaults = coerce(defaults, TupleComputation)
-        @strict = strict
       end
       
       protected 

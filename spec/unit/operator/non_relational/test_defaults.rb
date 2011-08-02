@@ -44,7 +44,7 @@ module Alf
         ]}
     
         describe "When factored with Lispy" do 
-          let(:operator){ Lispy.defaults(input, {:a => 1, :b => "b"}, true) }
+          let(:operator){ Lispy.defaults(input, {:a => 1, :b => "b"}, :strict => true) }
           it{ should == expected }
         end
     
