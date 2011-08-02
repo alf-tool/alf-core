@@ -6,6 +6,9 @@ task :"gh-pages" do
   indir  = File.expand_path('../gh-pages', __FILE__)
   outdir = File.expand_path('../../doc/gh-pages', __FILE__)
 
+  # Remove everything
+  FileUtils.rm_rf File.join(outdir, "*")
+
   # copy assets
   FileUtils.cp_r File.join(indir, "css"), outdir
 
