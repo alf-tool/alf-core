@@ -5,7 +5,7 @@
 * Alf now provides an Environment implementation on top of a SQL database. 
   This means that SQL tables can now be used as data-sources. This feature 
   relies on the sequel gem ('gem install sequel' is required), that drives 
-  which dbms are recognized. Then:
+  recognized SQL servers. Then (don't forget that ALF_OPTS also exists):
 
       % alf --env=postgres://user:password@host/database show table
 
@@ -24,7 +24,7 @@
 ## New operators and enhancements
 
 * A COERCE operator is introduced. It provides a quick way to obtain type-safe
-  relations from unsafe sources like .csv files. For example:
+  relations from type-unsafe sources like .csv files. For example:
   
       % alf coerce mydirtyfile.csv -- name String  price Float  at Time
       
@@ -34,23 +34,67 @@
       
 * The DEFAULTS (non-relational) operator now accepts default values as tuple
   expressions. When used in shell, provided default values are now evaluated
-  that way. In particular, this allows specifying default values as being 
-  computed on the current tuple.
+  that way. This allows specifying default values as being computed on the 
+  current tuple.
 
 ## Miscellaneous enhancements
 
 * Added 'alf --input-reader' to specify $stdin format (csv, rash, etc.)
 * Added 'alf -Ipath' that mimics ruby's -I (add path to $LOAD_PATH before run)
 
-## Hurting changes to the public API
+## Hurting changes to Lispy DSL (and therefore to Relation)
 
-* GROUP and WRAP now require an option separator when invoked in shell:
+* Lispy syntax of CLIP has changed (when used with --allbut option)
 
-      % alf --text group supplies  -- pid qty supplying             (before)
-      % alf --text group supplies  -- pid qty -- supplying          (after)
+      (clip :suppliers, [:name, :city], true)                           (before)
+      (clip :suppliers, [:name, :city], :allbut => true)                (after)
 
-      % alf --text wrap suppliers -- city status loc_and_status     (before) 
-      % alf --text wrap suppliers -- city status -- loc_and_status  (after) 
+* Lispy syntax of DEFAULTS has changed (when used with --strict option)
+
+      (defaults :suppliers, {:country => 'Belgium'}, true)              (before)
+      (defaults :suppliers, {:country => 'Belgium'}, :strict => true)   (after)
+
+* Lispy syntax of GROUP has changed (when used with --allbut option)
+
+      (group :supplies, [:sid], :supplying, true)                       (before)
+      (group :supplies, [:sid], :supplying, :allbut => true)            (after)
+
+* Lispy syntax of PROJECT has changed (when used with --allbut option)
+
+      (project :suppliers, [:name, :city], true)                        (before)
+      (project :suppliers, [:name, :city], :allbut => true)             (after)
+
+* Lispy syntax of SUMMARIZE has changed (when used with --allbut option)
+
+      (summarize :supplies, [:qty, :pid], {...}, true)                  (before)
+      (summarize :supplies, [:qty, :pid], {...}, :allbut => true)       (after)
+
+## Hurting changes in shell
+
+* Shell syntax of GROUP has changed (option separator before introduced name)
+
+      % alf --text group supplies  -- pid qty supplying                 (before)
+      % alf --text group supplies  -- pid qty -- supplying              (after)
+
+* Shell syntax of WRAP has changed (option separator before introduced name)
+
+      % alf --text wrap suppliers -- city status loc_and_status         (before) 
+      % alf --text wrap suppliers -- city status -- loc_and_status      (after) 
+
+* Shell syntax of QUOTA has changed (--by and --order become pure arguments)
+
+      % alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)" (before)
+      % alf quota supplies -- sid -- qty -- position count sum_qty "sum(:qty)"        (after)
+
+* Shell syntax of RANK has changed (--order becomes a pure argument)
+
+      % alf rank parts --order=weight,desc,pid,asc -- position          (before)
+      % alf rank parts -- weight desc pid asc -- position               (after)
+
+* Shell syntax of SUMMARIZE has changed (--by becomes a pure argument)
+
+      % alf summarize supplies --by=sid -- total_qty "sum(:qty)"        (before)
+      % alf summarize supplies -- sid -- total_qty "sum(:qty)"          (after)
 
 ## Bug fixes 
 
