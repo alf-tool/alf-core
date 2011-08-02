@@ -10,5 +10,6 @@
 <body>
 <<+{menu.wtpl share all}
 ?{knows?(:operator)}{<<+{operator.wtpl share all}}
+<<{analytics.html}
 </body>
 
