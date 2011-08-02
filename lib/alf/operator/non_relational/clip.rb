@@ -38,12 +38,6 @@ module Alf
         s.option :allbut, Boolean, false, "Apply an allbut clipping?"
       end
       
-      # Builds a Clip operator instance
-      def initialize(attributes = [], allbut = false)
-        @projection_key = coerce(attributes, ProjectionKey)
-        @allbut = allbut
-      end
-  
       protected 
   
       # (see Operator::Transform#_tuple2tuple)

@@ -38,7 +38,7 @@ module Alf
         end
   
         describe "when factored with Lispy" do
-          let(:operator){ Lispy.clip(input, [:a], true) }
+          let(:operator){ Lispy.clip(input, [:a], :allbut => true) }
           it { should == expected } 
         end
   

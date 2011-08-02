@@ -47,7 +47,7 @@ module Alf
       # (see Operator::Shortcut#longexpr)
       def longexpr
         chain Operator::NonRelational::Compact.new,
-              Operator::NonRelational::Clip.new(@projection_key, @allbut),
+              Operator::NonRelational::Clip.new(@projection_key, {:allbut => @allbut}),
               datasets
       end
     
