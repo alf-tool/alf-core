@@ -36,10 +36,17 @@ module Alf
       end
 
       #
+      # Returns the Lispy signature as a String
+      #
+      def lispy_signature
+        "(#{command_name} #{signature.to_lispy_doc(self)})"
+      end
+
+      #
       # Returns the shell signature as a String
       #
       def shell_signature
-        signature.to_shell_doc(self)
+        "alf #{command_name} #{signature.to_shell_doc(self)}"
       end
 
       #

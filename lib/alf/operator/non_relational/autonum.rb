@@ -5,7 +5,7 @@ module Alf
     #
     # SYNOPSIS
     #
-    # #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
@@ -16,16 +16,7 @@ module Alf
     # If the presence of duplicates was the only "non-relational" aspect of
     # input tuples, the result may be considered a valid relation representation.
     #
-    # IN RUBY
-    #
-    #   (autonum OPERAND, ATTRNAME = :autonum)
-    #
-    #   (autonum :suppliers)
-    #   (autonum :suppliers, :unique_id)
-    #
-    # IN SHELL
-    #
-    #   #{program_name} #{command_name} [OPERAND] -- [ATTRNAME]
+    # EXAMPLE
     #
     #   alf autonum suppliers
     #   alf autonum suppliers -- unique_id

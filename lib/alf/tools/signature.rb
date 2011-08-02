@@ -140,6 +140,16 @@ module Alf
         operands
       end
 
+      def to_lispy_doc(operator = nil)
+        ope = operator.unary? ? "operand" : "left, right"
+        args = arguments.collect{|name,_| 
+          name.to_s.upcase
+        }.join(", ")
+        (args.empty? ? 
+          "#{ope}" : 
+          "#{ope}, #{args}").strip
+      end
+
       def to_shell_doc(operator = nil)
         ope = if operator
           operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT"
