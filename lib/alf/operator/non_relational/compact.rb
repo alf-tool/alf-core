@@ -70,10 +70,6 @@ module Alf
   
       end # class BufferBased
   
-      def initialize(*args)
-        signature.parse_args(args, self)
-      end
-
       protected 
       
       def longexpr
