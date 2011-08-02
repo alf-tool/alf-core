@@ -4,7 +4,7 @@ module Alf
     # Clip input tuples to a subset of attributes
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
+    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2...
     #
     # OPTIONS
     # #{summarized_options}
@@ -15,7 +15,7 @@ module Alf
     #   (clip :suppliers, [:name, :city])
     #
     #   # Keep all but name and city attributes
-    #   (clip :suppliers, [:name, :city], true)
+    #   (clip :suppliers, [:name, :city], :allbut => true)
     #
     # DESCRIPTION
     #
