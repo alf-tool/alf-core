@@ -65,7 +65,7 @@ module Alf
       alias :+ :union
       alias :- :minus
   
-      # Shortcut for project(attributes, true)
+      # Shortcut for project(attributes, :allbut => true)
       def allbut(attributes)
         project(attributes, :allbut => true)
       end
