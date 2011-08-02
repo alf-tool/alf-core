@@ -15,7 +15,17 @@ module Alf
       def initialize(args = [])
         @arguments = args
         @options = []
+        @descr = nil
         yield(self) if block_given?
+      end
+
+      #
+      # Sets the description of the next argument or option.
+      #
+      # @param [String] descr the description to install on next element
+      #
+      def descr(descr)
+        @descr = descr
       end
 
       #
@@ -26,7 +36,9 @@ module Alf
       # @param [Object] default (optional) default value
       #
       def argument(name, domain, default = nil)
-        arguments << [name, domain, default]
+        arguments << [name, domain, default, @descr]
+        @descr = nil
+        self
       end
 
       #
@@ -37,7 +49,40 @@ module Alf
       # @param [Object] default (optional) default value
       #
       def option(name, domain, default = nil)
-        options << [name, domain, default]
+        options << [name, domain, default, @descr]
+        @descr = nil
+        self
+      end
+
+      #
+      # Fills an OptionParser instance according to signature options.
+      #
+      # @param [OptionParser] opt an parser instance, to fill with parse options
+      # @return [OptionParser] `opt`
+      #
+      def fill_option_parser(opt, receiver)
+        options.each do |name,domain,default,desc|
+          if domain == Boolean
+            opt.on("--#{name}", desc || "") do
+              receiver.send(:"#{name}=", true)
+            end
+          else
+            opt.on("--#{name}=#{name.to_s.upcase}", desc || "") do |val|
+              receiver.send(:"#{name}=", val)
+            end
+          end
+        end
+        opt
+      end
+
+      #
+      # Returns an option parser instance bound to a given `receiver` object
+      #
+      # @return [OptionParser] an parser instance, ready to parse options and
+      #         install them on `receiver` 
+      #
+      def option_parser(receiver)
+        fill_option_parser(OptionParser.new, receiver)
       end
       
       #
