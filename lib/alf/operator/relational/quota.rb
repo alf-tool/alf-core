@@ -31,12 +31,6 @@ module Alf
         s.argument :summarization, Summarization, {}
       end
       
-      def initialize(by = [], order = [], summarization = {})
-        @by = coerce(by, ProjectionKey)
-        @order = coerce(order, OrderingKey)
-        @summarization = coerce(summarization, Summarization)
-      end
-  
       class SortBased
         include Operator, Operator::Cesure
         
