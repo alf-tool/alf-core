@@ -1,1 +1,1 @@
-alf --text ungroup           group     -- supplying
+alf --text ungroup group -- supplying

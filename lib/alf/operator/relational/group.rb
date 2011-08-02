@@ -9,7 +9,7 @@ module Alf
     # API & EXAMPLE
     #
     #   (group :supplies, [:pid, :qty], :supplying)
-    #   (group :supplies, [:sid], :supplying, true)
+    #   (group :supplies, [:sid], :supplying, :allbut => true)
     #
     # DESCRIPTION
     #
@@ -30,13 +30,6 @@ module Alf
         s.option :allbut, Boolean, false, 'Group all but specified attributes?'
       end
       
-      # Creates a Group instance
-      def initialize(attributes = [], as = :group, allbut = false)
-        @attributes = coerce(attributes, ProjectionKey)
-        @as = coerce(as, AttrName)
-        @allbut = allbut
-      end
-  
       protected 
   
       # See Operator#_prepare

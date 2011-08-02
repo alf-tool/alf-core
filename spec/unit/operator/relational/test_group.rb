@@ -44,7 +44,7 @@ module Alf
         end
     
         describe "when factored with Lispy" do
-          let(:operator){ Lispy.group(input, [:a], :as, true) }
+          let(:operator){ Lispy.group(input, [:a], :as, :allbut => true) }
           it { should == expected }
         end
         
