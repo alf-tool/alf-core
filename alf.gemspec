@@ -30,7 +30,7 @@ Gem::Specification.new do |s|
   s.description = "Alf brings the relational algebra both in Shell and in Ruby. In Shell, because \nmanipulating any relation-like data source should be as straightforward as a \none-liner. In Ruby, because I've never understood why programming languages \nprovide data structures like arrays, hashes, sets, trees and graphs but not \n_relations_... Let's stop the segregation ;-)"
   
   # The URL of this gem home page (optional)
-  s.homepage = "http://rubydoc.info/github/blambeau/alf/master/frames"
+  s.homepage = "http://blambeau.github.com/alf"
 
   # Gem publication date (required but auto)
   #
@@ -129,6 +129,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("rcov", "~> 0.9.9")
   s.add_development_dependency("yard", "~> 0.7.2")
   s.add_development_dependency("bluecloth", "~> 2.1.0")
+  s.add_development_dependency("redcarpet", "~> 1.17.2")
   s.add_development_dependency("fastercsv", "~> 1.5.4")
   s.add_development_dependency("request-log-analyzer", "= 1.11.0")
   s.add_development_dependency("sequel", "~> 3.25.0")

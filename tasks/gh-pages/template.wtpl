@@ -6,6 +6,9 @@
 <script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script>
 <![endif]--> 
 <link href='css/style.css' rel='stylesheet'>
+<link rel="stylesheet" href="http://yandex.st/highlightjs/6.0/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
 </head>
 <body>
 <a href="http://github.com/blambeau/alf"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>

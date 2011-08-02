@@ -2,7 +2,7 @@ task :"gh-pages" do
   require 'fileutils'
   require 'wlang'
   require 'alf'
-  require 'bluecloth'
+  require 'redcarpet'
 
   indir  = File.expand_path('../gh-pages', __FILE__)
   outdir = File.expand_path('../../doc/gh-pages', __FILE__)

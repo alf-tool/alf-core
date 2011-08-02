@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
 group :runtime do
-  gem "quickl", :git => "git://github.com/blambeau/quickl.git" #"~> 0.3.0"
-  gem "myrrha", :git => "git://github.com/blambeau/myrrha.git" #"~> 1.2.0"
+  gem "quickl", "~> 0.3.0"
+  gem "myrrha", "~> 1.2.0"
 end
 
 group :test do
@@ -20,6 +20,7 @@ group :doc do
   gem "rcov", "~> 0.9.9"
   gem "yard", "~> 0.7.2"
   gem "bluecloth", "~> 2.1.0"
+  gem "redcarpet", "~> 1.17.2"
 end
 
 group :extra do

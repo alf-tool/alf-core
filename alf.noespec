@@ -39,6 +39,7 @@ variables:
     - {name: rcov,         version: "~> 0.9.9",  groups: [doc          ]}
     - {name: yard,         version: "~> 0.7.2",  groups: [doc          ]}
     - {name: bluecloth,    version: "~> 2.1.0",  groups: [doc          ]}
+    - {name: redcarpet,    version: "~> 1.17.2", groups: [doc          ]}
     - {name: fastercsv,    version: "~> 1.5.4",  groups: [extra        ]}
     - {name: request-log-analyzer, version: "= 1.11.0", groups: [extra]}
     - {name: sequel,       version: "~> 3.25.0", groups: [extra        ]}

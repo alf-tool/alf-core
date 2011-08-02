@@ -42,3 +42,9 @@ a:hover {
   padding-right: 30px;
   text-align: justify;
 }
+
+pre {
+  font-size: 12px;
+  width: 100%;
+  overflow: hidden;
+}
