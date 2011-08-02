@@ -58,15 +58,10 @@ module Alf
       # @return [OptionParser] `opt`
       #
       def fill_option_parser(opt, receiver)
-        options.each do |name,domain,default,desc|
-          if domain == Boolean
-            opt.on("--#{name}", desc || "") do
-              receiver.send(:"#{name}=", true)
-            end
-          else
-            opt.on("--#{name}=#{name.to_s.upcase}", desc || "") do |val|
-              receiver.send(:"#{name}=", val)
-            end
+        options.each do |option|
+          name, dom, defa, descr = option
+          opt.on(option_name(option), descr || "") do |val|
+            receiver.send(:"#{name}=", val)
           end
         end
         opt
@@ -145,7 +140,18 @@ module Alf
         operands
       end
 
+      def to_shell_doc(operator = nil)
+        options.collect{|opt| 
+          opts.first.to_s
+        }
+      end
+
       private
+
+      def option_name(option)
+        name, domain, defa, = option
+        domain == Boolean ? "--#{name}" : "--#{name}=#{name.to_s.upcase}"
+      end
 
       def parse_xxx(args, coercer)
         arguments.zip(args).collect do |sigpart,subargs|
