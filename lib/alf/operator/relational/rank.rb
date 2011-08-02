@@ -46,11 +46,6 @@ module Alf
         s.argument :ranking_name, AttrName, :rank
       end
       
-      def initialize(order = [], ranking_name = :rank)
-        @order = coerce(order, OrderingKey)
-        @ranking_name = coerce(ranking_name, AttrName)
-      end
-  
       class SortBased
         include Operator, Operator::Cesure
         
