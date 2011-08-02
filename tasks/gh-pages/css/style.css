@@ -1,6 +1,6 @@
 body {
-  padding: 20px 130px;
-  font-family: corbel, 'lucida grande', helvetica, sans-serif;
+  padding: 10px 130px;
+  font-family: Palatino, serif;
   font-size: 18px;  
 }
 
@@ -12,14 +12,10 @@ a:hover {
   text-decoration: underline;
 }
 
-h2 {
-  line-height: 50px;
-}
-
 #menu {
   width: 280px;
   position: absolute;
-  top: 105px;
+  top: 35px;
 }
 #menu ul {
   text-align: right;
