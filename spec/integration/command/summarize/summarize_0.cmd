@@ -1,1 +1,1 @@
-alf --text summarize --by=sid supplies -- total_qty "sum(:qty)"
+alf --text summarize supplies -- sid -- total_qty "sum(:qty)"

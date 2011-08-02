@@ -15,17 +15,7 @@ module Alf
       def initialize(args = [])
         @arguments = args
         @options = []
-        @descr = nil
         yield(self) if block_given?
-      end
-
-      #
-      # Sets the description of the next argument or option.
-      #
-      # @param [String] descr the description to install on next element
-      #
-      def descr(descr)
-        @descr = descr
       end
 
       #
@@ -35,10 +25,8 @@ module Alf
       # @param [Class] domain argument domain
       # @param [Object] default (optional) default value
       #
-      def argument(name, domain, default = nil)
-        arguments << [name, domain, default, @descr]
-        @descr = nil
-        self
+      def argument(name, domain, default = nil, descr = nil)
+        arguments << [name, domain, default, descr]
       end
 
       #
@@ -48,10 +36,8 @@ module Alf
       # @param [Class] domain argument domain
       # @param [Object] default (optional) default value
       #
-      def option(name, domain, default = nil)
-        options << [name, domain, default, @descr]
-        @descr = nil
-        self
+      def option(name, domain, default = nil, descr = nil)
+        options << [name, domain, default, descr]
       end
 
       #

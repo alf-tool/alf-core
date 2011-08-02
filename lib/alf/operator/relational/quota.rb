@@ -4,7 +4,7 @@ module Alf
     # Relational quota-queries (position, sum progression, etc.)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] --by=KEY1,... --order=OR1... -- AGG1 EXPR1...
+    #   #{program_name} #{command_name} [OPERAND] -- BY -- ORDER -- SUMMARIZATION
     #
     # OPTIONS
     # #{summarized_options}
@@ -19,13 +19,15 @@ module Alf
     #
     # This operator computes quota values on input tuples.
     #
-    #   alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)"
+    #   alf quota supplies -- sid -- qty -- position count sum_qty "sum(:qty)"
     #
     class Quota < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Experimental,
               Operator::Shortcut, Operator::Unary
   
       signature do |s|
+        s.argument :by, ProjectionKey, []
+        s.argument :order, OrderingKey, []
         s.argument :summarization, Summarization, {}
       end
       
@@ -33,15 +35,6 @@ module Alf
         @by = coerce(by, ProjectionKey)
         @order = coerce(order, OrderingKey)
         @summarization = coerce(summarization, Summarization)
-      end
-  
-      options do |opt|
-        opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-          @by = coerce(args, ProjectionKey)
-        end
-        opt.on('--order=x,y,z', 'Specify order attributes', Array) do |args|
-          @order = coerce(args, OrderingKey)
-        end
       end
   
       class SortBased

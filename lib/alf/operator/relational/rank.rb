@@ -4,7 +4,7 @@ module Alf
     # Relational ranking (explicit tuple positions)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] --order=OR1... -- [RANKNAME]
+    #   #{program_name} #{command_name} [OPERAND] -- ORDERING -- [RANKNAME]
     #
     # OPTIONS
     # #{summarized_options}
@@ -24,36 +24,31 @@ module Alf
     # whose value is the number of tuples which are considered strictly less
     # according to the specified order. For the two examples above:
     #
-    #   alf rank parts --order=weight -- position
-    #   alf rank parts --order=weight,desc -- position
+    #   alf rank parts -- weight -- position
+    #   alf rank parts -- weight desc -- position
     #
     # Note that, unless the ordering key includes a candidate key for the input
     # relation, the newly RANKNAME attribute is not necessarily a candidate key
     # for the output one. In the example above, adding the :pid attribute 
     # ensured that position will contain all different values: 
     #
-    #   alf rank parts --order=weight,pid -- position
+    #   alf rank parts -- weight pid -- position
     # 
     # Or even:
     #
-    #   alf rank parts --order=weight,desc,pid,asc -- position
+    #   alf rank parts -- weight desc pid asc -- position
     #
     class Rank < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
       signature do |s|
+        s.argument :order, OrderingKey, []
         s.argument :ranking_name, AttrName, :rank
       end
       
       def initialize(order = [], ranking_name = :rank)
         @order = coerce(order, OrderingKey)
         @ranking_name = coerce(ranking_name, AttrName)
-      end
-  
-      options do |opt|
-        opt.on('--order=x,y,z', 'Specify ranking order', Array) do |args|
-          @order = coerce(args, OrderingKey)
-        end
       end
   
       class SortBased

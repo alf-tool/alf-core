@@ -80,7 +80,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   the following query for the kind of things that you'll never ever have in SQL 
   (see also 'alf help quota', 'alf help wrap', 'alf help group', ...):
   
-        % alf --text summarize supplies --by=sid -- total "sum(:qty)" which "group(:pid)"
+        % alf --text summarize supplies -- sid -- total "sum(:qty)" which "group(:pid)"
   
 * Last, but not least, Alf is an attempt to help me test some research ideas and 
   communicate about them with people that already know (all or part) of the TTM 
@@ -91,7 +91,7 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
   'research work in progress', and used with care because not necessarily in 
   conformance with the TTM.
   
-        % alf --text quota supplies --by=sid --order=qty -- pos "count()"  
+        % alf --text quota supplies -- sid -- qty -- pos "count()"  
 
 ## Overview of relational theory
 

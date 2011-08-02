@@ -1,1 +1,1 @@
-alf --text rank parts --order=weight,pid
+alf --text rank parts -- weight pid

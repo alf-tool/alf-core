@@ -40,6 +40,9 @@ module Alf
         if block_given?
           @signature = Tools::Signature.new &Proc.new
           @signature.install(self)
+          options do |opt|
+            signature.fill_option_parser(opt, self)
+          end
         else
           @signature || Tools::Signature::EMPTY
         end

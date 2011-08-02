@@ -28,9 +28,8 @@ module Alf
       describe "without allbut" do
         
         describe "When factored with commandline args" do
-          let(:opts){ ["--by=a"] }
-          let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)", "time_avg", "avg(:time)"] }
-          let(:operator){ Summarize.run(opts + ["--"] +aggs) }
+          let(:aggs){ ["--", "a", "--", "time_sum", "sum(:time)", "time_max", "max(:time)", "time_avg", "avg(:time)"] }
+          let(:operator){ Summarize.run(aggs) }
           before{ operator.pipe(input) }
           it { should == expected }
         end
@@ -45,9 +44,8 @@ module Alf
       describe "with allbut" do
         
         describe "When factored with commandline args" do
-          let(:opts){ ["--by=time", "--allbut"] }
-          let(:aggs){ ["time_sum", "sum(:time)", "time_max", "max(:time)", "time_avg", "avg(:time)"] }
-          let(:operator){ Summarize.run(opts + ["--"] + aggs) }
+          let(:aggs){ ["--allbut", "--", "time", "--", "time_sum", "sum(:time)", "time_max", "max(:time)", "time_avg", "avg(:time)"] }
+          let(:operator){ Summarize.run(aggs) }
           before{ operator.pipe(input) }
           it { should == expected }
         end

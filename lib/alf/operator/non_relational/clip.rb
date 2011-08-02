@@ -35,19 +35,13 @@ module Alf
   
       signature do |s|
         s.argument :projection_key, ProjectionKey, []
+        s.option :allbut, Boolean, false, "Apply an allbut clipping?"
       end
       
       # Builds a Clip operator instance
       def initialize(attributes = [], allbut = false)
         @projection_key = coerce(attributes, ProjectionKey)
         @allbut = allbut
-      end
-  
-      # Installs the options
-      options do |opt|
-        opt.on('-a', '--allbut', 'Apply a ALLBUT clipping') do
-          @allbut = true
-        end
       end
   
       protected 

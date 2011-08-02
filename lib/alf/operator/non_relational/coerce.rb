@@ -12,7 +12,6 @@ module Alf
     #
     # API & EXAMPLE
     #
-    #   # Non strict mode
     #   (coerce :parts, :weight => Float, :color => Color)
     #
     # DESCRIPTION

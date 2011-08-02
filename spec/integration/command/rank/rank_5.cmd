@@ -1,1 +1,1 @@
-alf rank parts --order=weight,desc,pid,asc -- position
+alf rank parts -- weight desc pid asc -- position

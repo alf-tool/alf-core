@@ -40,6 +40,7 @@ module Alf
   
       signature do |s|
         s.argument :defaults, TupleComputation, {}
+        s.option :strict, Boolean, false, "Restrict to default attributes only?"
       end
       
       def initialize(defaults = {}, strict = false)
@@ -47,13 +48,6 @@ module Alf
         @strict = strict
       end
       
-      options do |opt|
-        opt.on('-s', '--strict', 
-               'Strictly restrict to default attributes') do
-          @strict = true 
-        end
-      end
-  
       protected 
   
       # (see Operator::Transform#_tuple2tuple)

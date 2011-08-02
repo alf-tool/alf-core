@@ -4,7 +4,7 @@ module Alf
     # Relational summarization (group-by + aggregate ops)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] [--allbut] --by=KEY1,KEY2... -- AGG1 EXPR1...
+    #   #{program_name} #{command_name} [OPERAND] [--allbut] -- BY -- SUMMARIZATION
     #
     # OPTIONS
     # #{summarized_options}
@@ -28,30 +28,22 @@ module Alf
     # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
     # aggregation expression evaluated on Aggregator:
     #
-    #   alf summarize supplies --by=sid -- total_qty "sum(:qty)" 
-    #   alf summarize supplies --allbut --by=pid,qty -- total_qty "sum(:qty)" 
+    #   alf summarize supplies -- sid -- total_qty "sum(:qty)" 
+    #   alf summarize supplies --allbut -- pid qty -- total_qty "sum(:qty)" 
     #
     class Summarize < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
       signature do |s|
+        s.argument :by, ProjectionKey, []
         s.argument :summarization, Summarization, {}
+        s.option :allbut, Boolean, false, "Summarize on all but specified attributes?"
       end
       
       def initialize(by = [], summarization = {}, allbut = false)
         @by = coerce(by, ProjectionKey)
         @summarization = coerce(summarization, Summarization)
         @allbut = allbut
-      end
-  
-      # Installs the options
-      options do |opt|
-        opt.on('--by=x,y,z', 'Specify by attributes', Array) do |args|
-          @by = coerce(args, ProjectionKey)
-        end
-        opt.on('--allbut', 'Make an allbut projection/summarization') do
-          @allbut = true
-        end
       end
   
       # Summarizes according to a complete order

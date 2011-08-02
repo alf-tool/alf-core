@@ -1,1 +1,1 @@
-alf --text rank parts --order=weight
+alf --text rank parts -- weight

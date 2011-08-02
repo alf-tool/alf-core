@@ -27,6 +27,7 @@ module Alf
       signature do |s|
         s.argument :attributes, ProjectionKey, []
         s.argument :as, AttrName, :group
+        s.option :allbut, Boolean, false, 'Group all but specified attributes?'
       end
       
       # Creates a Group instance
@@ -36,12 +37,6 @@ module Alf
         @allbut = allbut
       end
   
-      options do |opt|
-        opt.on('--allbut', "Group all but specified attributes"){ 
-          @allbut = true 
-        }
-      end
-      
       protected 
   
       # See Operator#_prepare
