@@ -26,9 +26,10 @@ _relations_... Let's stop the segregation ;-)
 
 ### Links
     
-* {http://rubydoc.info/github/blambeau/alf/master/frames} (read this file there!)
-* {http://github.com/blambeau/alf} (source code)
-* {http://revision-zero.org} (author's blog)
+* http://blambeau.github.com/alf
+* http://rubydoc.info/gems/alf
+* http://github.com/blambeau/alf
+* http://rubygems.org/gems/alf
 
 ### Quick overview
 

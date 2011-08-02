@@ -26,7 +26,8 @@ variables:
   authors: 
     - {name: Bernard Lambeau, email: blambeau@gmail.com}
   links:
-    - http://rubydoc.info/github/blambeau/alf/master/frames
+    - http://blambeau.github.com/alf
+    - http://rubydoc.info/gems/alf
     - http://github.com/blambeau/alf
     - http://rubygems.org/gems/alf
   dependencies: 
