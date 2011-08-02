@@ -10,11 +10,11 @@ module Alf
     # DESCRIPTION
     #
     # This non-relational operator guarantees uniqueness of output tuples by
-    # adding an attribute called 'ATTRNAME' whose value is an Integer. No 
-    # guarantee is given about ordering of output tuples, nor to the fact
-    # that this autonumber is sequential. Only that all values are different.
-    # If the presence of duplicates was the only "non-relational" aspect of
-    # input tuples, the result may be considered a valid relation representation.
+    # adding an attribute ATTRNAME whose value is an auto-numbered Integer. 
+    # 
+    # If the presence of duplicates was the only "non-relational" aspect of 
+    # the input, the result is a valid relation for which ATTRNAME is a 
+    # candidate key.
     #
     # EXAMPLE
     #
