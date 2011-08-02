@@ -4,30 +4,21 @@ module Alf
     # Relational summarization (group-by + aggregate ops)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] [--allbut] -- BY -- SUMMARIZATION
+    #
+    #   #{shell_signature}
     #
     # OPTIONS
     # #{summarized_options}
     #
-    # API & EXAMPLE
-    #
-    #   (summarize :supplies, [:sid],
-    #                         :total_qty => Aggregator.sum(:qty))
-    #
-    #   # Or, to specify an allbut projection
-    #   (summarize :supplies, [:qty, :pid],
-    #                         {:total_qty => Aggregator.sum(:qty)}, 
-    #                         {:allbut => true})
-    #
     # DESCRIPTION
     #
-    # This operator summarizes input tuples on the projection on KEY1,KEY2,...
-    # attributes and applies aggregate operators on sets of matching tuples.
-    # Introduced names AGG should be disjoint from KEY attributes.
+    # This operator summarizes input tuples over a projection given by BY_LIST.
+    # SUMMARIZATION is a list of (name, aggregator) pairs.
     #
-    # When used in shell, the aggregations are taken from commandline arguments
-    # AGG and EXPR, where AGG is the name of a new attribute and EXPR is an
-    # aggregation expression evaluated on Aggregator:
+    # With --allbut, the operator uses all attributes not in BY_LIST as 
+    # projection key.
+    #
+    # EXAMPLE
     #
     #   alf summarize supplies -- sid -- total_qty "sum(:qty)" 
     #   alf summarize supplies --allbut -- pid qty -- total_qty "sum(:qty)" 
@@ -36,7 +27,7 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
       signature do |s|
-        s.argument :by, AttrList, []
+        s.argument :by_list, AttrList, []
         s.argument :summarization, Summarization, {}
         s.option :allbut, Boolean, false, "Summarize on all but specified attributes?"
       end
@@ -101,11 +92,11 @@ module Alf
       
       def longexpr
         if @allbut
-          chain HashBased.new(@by, @allbut, @summarization),
+          chain HashBased.new(@by_list, @allbut, @summarization),
                 datasets
         else
-          chain SortBased.new(@by, @allbut, @summarization),
-                Operator::NonRelational::Sort.new(@by.to_ordering),
+          chain SortBased.new(@by_list, @allbut, @summarization),
+                Operator::NonRelational::Sort.new(@by_list.to_ordering),
                 datasets
         end
       end
