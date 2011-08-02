@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<head> 
+<meta charset='utf-8'> 
+<title>Alf - Relational algebra at your finger tips (${version})</title> 
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script>
+<![endif]--> 
+<link href='css/style.css' rel='stylesheet'>
+</head>
+<body>
+<<+{menu.wtpl share all}
+?{knows?(:operator)}{<<+{operator.wtpl share all}}
+</body>
+

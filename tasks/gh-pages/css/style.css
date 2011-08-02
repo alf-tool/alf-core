@@ -1,0 +1,26 @@
+body {
+  padding: 10px 100px;
+  font-family: corbel, 'lucida grande', helvetica, sans-serif;
+  font-size: 16px;  
+}
+
+a, a:visited {
+  text-decoration: none;
+  color: blue;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+#menu {
+  position: absolute;
+  text-align: right;
+}
+#menu ul {
+  list-style: none;
+}
+
+#operator {
+  font-size: 14px;  
+  margin-left: 250px;
+}

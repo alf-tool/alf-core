@@ -1,7 +1,7 @@
 module Alf
   module Command
     #
-    # alf - Classy data-manipulation dressed in a DSL (+ commandline)
+    # alf - Relational algebra at your fingertips
     #
     # SYNOPSIS
     #   alf [--version] [--help] 

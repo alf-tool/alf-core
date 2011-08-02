@@ -1,0 +1,4 @@
+>>{!{outdir}/index.html}{<<+{template.wtpl share all}}
+*{Alf::Operator as op}{
+  >>{!{outdir}/!{op.command_name}.html}{<<+{template.wtpl share all with operator:op}}
+}

@@ -1,0 +1,11 @@
+<div id="menu">
+<div class="entry">Relational operators</div>
+<ul>*{Alf::Operator::Relational as op}{
+<li><a href="{op.command_name}.html">${op.command_name}</a></li>
+}</ul>
+<div class="entry">Non-relational operators</div>
+<ul>*{Alf::Operator::NonRelational as op}{
+<li><a href="{op.command_name}.html">${op.command_name}</a></li>
+}</ul>
+</div>
+
