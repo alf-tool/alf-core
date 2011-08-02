@@ -13,19 +13,19 @@ module Alf
     # OPTIONS
     # #{summarized_options}
     #
-    # RELATIONAL COMMANDS
+    # RELATIONAL OPERATORS
     # #{summarized_subcommands subcommands.select{|cmd| 
     #    cmd.include?(Alf::Operator::Relational) &&
     #    !cmd.include?(Alf::Operator::Experimental)
     # }}
     #
-    # EXPERIMENTAL OPERATORS
+    # EXPERIMENTAL RELATIONAL OPERATORS
     # #{summarized_subcommands subcommands.select{|cmd| 
     #    cmd.include?(Alf::Operator::Relational) &&
     #    cmd.include?(Alf::Operator::Experimental)
     # }}
     #
-    # NON-RELATIONAL COMMANDS
+    # NON-RELATIONAL OPERATORS
     # #{summarized_subcommands subcommands.select{|cmd| 
     #    cmd.include?(Alf::Operator::NonRelational)
     # }}

@@ -1,4 +1,8 @@
 <div id="menu">
+<div class="entry">Overview</div>
+<ul>
+<li><a href="shell.html">alf in shell</a></li>
+</ul>
 <div class="entry">Relational operators</div>
 <ul>*{Alf::Operator::Relational as op}{
 <li><a href="{op.command_name}.html">${op.command_name}</a></li>
