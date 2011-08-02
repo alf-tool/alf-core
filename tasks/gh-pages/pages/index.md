@@ -1,6 +1,6 @@
 ## Why Alf?
 
-The end of the relational era has been predicted many times since the middle of 90'. As of today, it has not been replaced by XML, nor by Object-Oriented databases, and I strongly predict that it won't be superseded by NoSQL technologies. 
+The end of the relational era has been predicted many times since the middle of the '90s. So far, it has not been replaced by XML, nor by Object-Oriented databases, and I strongly predict that it won't be superseded by NoSQL technologies. 
 
 Like a few others, I'm personally convinced that the so-called 'relational model' will stay. There are very good reasons for this, most of them have been explained in depth elsewhere. At the heart of our certainty the fact that the relational **is** a theory: a **sound**, **mathematical**, **powerful**, and **simple** theory. Almost all 'alternatives' are not.
 
