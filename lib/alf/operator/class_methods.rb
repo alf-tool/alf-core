@@ -7,19 +7,6 @@ module Alf
     module ClassMethods
       
       #
-      # Yields non-relational then relational operators, in turn.
-      #
-      def each
-        Operator::NonRelational.each{|x| yield(x)}
-        Operator::Relational.each{|x| yield(x)}
-      end
-      
-      # Ensures that the Introspection module is set on real operators
-      def included(mod)
-        mod.extend(ClassMethods) if mod.is_a?(Class)
-      end
-      
-      #
       # Returns true if this operator is an unary operator, false otherwise
       #
       def unary?
@@ -49,6 +36,19 @@ module Alf
       end
       
     end # module ClassMethods
-    extend(ClassMethods)
+
+    #
+    # Yields non-relational then relational operators, in turn.
+    #
+    def self.each
+      Operator::NonRelational.each{|x| yield(x)}
+      Operator::Relational.each{|x| yield(x)}
+    end
+    
+    # Ensures that the Introspection module is set on real operators
+    def self.included(mod)
+      mod.extend(ClassMethods) if mod.is_a?(Class)
+    end
+      
   end # module Operator
 end # module Alf
