@@ -4,38 +4,25 @@ module Alf
     # Relational ranking (explicit tuple positions)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ORDERING -- [RANKNAME]
     #
-    # OPTIONS
-    # #{summarized_options}
-    #
-    # API & EXAMPLE
-    #
-    #   # Position attribute => # of tuples with smaller weight 
-    #   (rank :parts, [:weight], :position)
-    #    
-    #   # Position attribute => # of tuples with greater weight 
-    #   (rank :parts, [[:weight, :desc]], :position)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator computes the ranking of input tuples, according to an order
-    # relation. Precisely, it extends the input tuples with a RANKNAME attribute
-    # whose value is the number of tuples which are considered strictly less
-    # according to the specified order. For the two examples above:
+    # This operator computes the ranking of input tuples, according to ORDERING. 
+    #
+    # Precisely, it extends its operand with a RANK_NAME attribute whose value 
+    # is the number of tuples which are considered strictly less according to 
+    # ORDERING. 
+    #
+    # Note that, unless the ordering includes a candidate key for the input
+    # relation, the newly RANK_NAME attribute is not necessarily a candidate key
+    # for the output. 
+    #
+    # EXAMPLE
     #
     #   alf rank parts -- weight -- position
     #   alf rank parts -- weight desc -- position
-    #
-    # Note that, unless the ordering key includes a candidate key for the input
-    # relation, the newly RANKNAME attribute is not necessarily a candidate key
-    # for the output one. In the example above, adding the :pid attribute 
-    # ensured that position will contain all different values: 
-    #
-    #   alf rank parts -- weight pid -- position
-    # 
-    # Or even:
-    #
     #   alf rank parts -- weight desc pid asc -- position
     #
     class Rank < Alf::Operator(__FILE__, __LINE__)
@@ -43,15 +30,15 @@ module Alf
   
       signature do |s|
         s.argument :ordering, Ordering, []
-        s.argument :ranking_name, AttrName, :rank
+        s.argument :rank_name, AttrName, :rank
       end
       
       class SortBased
         include Operator, Operator::Cesure
         
-        def initialize(ordering, ranking_name)
+        def initialize(ordering, rank_name)
           @by_key = AttrList.coerce(ordering)
-          @ranking_name = ranking_name
+          @rank_name = rank_name
         end
         
         protected
@@ -69,7 +56,7 @@ module Alf
   
         # (see Operator::Cesure#accumulate_cesure)
         def accumulate_cesure(tuple, receiver)
-          receiver.call tuple.merge(@ranking_name => @rank)
+          receiver.call tuple.merge(@rank_name => @rank)
           @last_block += 1
         end
         
@@ -83,7 +70,7 @@ module Alf
       protected
       
       def longexpr
-        chain SortBased.new(@ordering, @ranking_name),
+        chain SortBased.new(@ordering, @rank_name),
               Operator::NonRelational::Sort.new(@ordering),
               datasets
       end 
