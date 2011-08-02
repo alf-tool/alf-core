@@ -4,20 +4,16 @@ module Alf
     # Relational union
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [LEFT] RIGHT
     #
-    # API & EXAMPLE
-    #
-    #   (union (project :suppliers, [:city]), 
-    #          (project :parts,     [:city]))
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator computes the union join of two input iterators. Input 
-    # iterators should have the same heading. The result never contain duplicates.
+    # This operator computes the union of its operands, that is the set of 
+    # tuples that appear in LEFT or in RIGHT. 
     #
-    #   alf union ... ...
-    #  
+    # The result is a valid relation in that it never contains duplicates.
+    #
     class Union < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
