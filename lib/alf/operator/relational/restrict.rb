@@ -4,25 +4,20 @@ module Alf
     # Relational restriction (aka where, predicate filtering)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- EXPR
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 VAL1 ...
     #
-    # API & EXAMPLE
-    #
-    #   # Restrict to suppliers with status greater than 20
-    #   (restrict :suppliers, lambda{ status > 20 })
-    #
-    #   # Restrict to suppliers that live in London
-    #   (restrict :suppliers, lambda{ city == 'London' })
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This command restricts tuples to those for which EXPR evaluates to true.
-    # EXPR must be a valid tuple expression that should return a truth-value.
-    # When used in shell, the predicate is taken as a string and coerced to a
-    # TupleExpression. We also provide a shortcut for equality expressions. 
-    # Note that, in that case, values are expected to be ruby code literals,
-    # evaluated with Kernel.eval. Therefore, strings must be doubly quoted.  
+    # This command restricts tuples to those for which PREDICATE evaluates to 
+    # true.
+    #
+    # PREDICATE must be a valid tuple expression that returns a truth-value.
+    # It may be specified as a ruby code literal, or a list of (name, value)
+    # pairs. In the latter case, PREDICATE is built as a conjunction of 
+    # attribute equalities.
+    #
+    # EXAMPLE
     #
     #   alf restrict suppliers -- "status > 20"
     #   alf restrict suppliers -- city "'London'"
