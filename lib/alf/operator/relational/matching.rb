@@ -1,24 +1,21 @@
 module Alf
   module Operator::Relational
     # 
-    # Relational matching
+    # Relational matching (join + project back on left)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [LEFT] RIGHT
     #
-    # API & EXAMPLE
-    #
-    #   (matching :suppliers, :supplies)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator restricts left tuples to those for which there exists at 
-    # least one right tuple that joins. This is a shortcut operator for the
-    # longer expression:
+    # This operator restricts its left operands to tuples for which there exists 
+    # at least one right tuple that joins. This is a shortcut operator for the
+    # following longer expression:
     #
     #   (project (join xxx, yyy), [xxx's attributes])
     #
-    # In shell:
+    # EXAMPLE
     #
     #   alf matching suppliers supplies 
     #  
