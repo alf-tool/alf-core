@@ -12,6 +12,7 @@ task :"gh-pages" do
 
   # copy assets
   FileUtils.cp_r File.join(indir, "css"), outdir
+  FileUtils.cp_r File.join(indir, "images"), outdir
 
   # launch wlang on main template
   puts WLang::file_instantiate File.join(indir, 'main.wtpl'), {

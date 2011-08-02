@@ -1,24 +1,29 @@
 <div id="menu">
-<div class="entry">Theory &amp; Overview</div>
-<ul>
-<li><a href="index.html">Home</a></li>
-<li><a href="shell.html">alf in shell</a></li>
-</ul>
+
+<div class="entry">Overview</div>
+<p class="ops">
+<a href="index.html">why?</a>,
+<a href="shell.html">in shell</a>
+</p>
+
 <div class="entry">Relational operators</div>
-<ul>*{main.relational_operators as op}{
-<li><a href="{op.command_name}.html">${op.command_name}</a></li>
-}</ul>
+<p class="ops">*{main.relational_operators as op}{<a href="{op.command_name}.html">${op.command_name}</a>}{, }</p>
+
 <div class="entry">Experimental operators</div>
-<ul>*{main.experimental_operators as op}{
-<li><a href="{op.command_name}.html">${op.command_name}</a></li>
-}</ul>
+<p class="ops">*{main.experimental_operators as op}{<a href="{op.command_name}.html">${op.command_name}</a>}{, }</p>
+
 <div class="entry">Non-relational operators</div>
-<ul>*{main.non_relational_operators as op}{
-<li><a href="{op.command_name}.html">${op.command_name}</a></li>
-}</ul>
-<div class="entry">Other non-relational commands</div>
-<ul>*{main.other_non_relational_commands as op}{
-<li><a href="{op.command_name}.html">${op.command_name}</a></li>
-}</ul>
+<p class="ops">*{main.non_relational_operators as op}{<a href="{op.command_name}.html">${op.command_name}</a>}{, }</p>
+
+<div class="entry">Other commands</div>
+<p class="ops">*{main.other_non_relational_commands as op}{<a href="{op.command_name}.html">${op.command_name}</a>}{, }</p>
+
+<div class="entry">Questions, issues, etc.</div>
+<div class="links">
+<a href="mailto:blambeau@gmail.com"><img src="images/mail.png"/></a> 
+<a href="http://twitter.com/blambeau" target="_blank"><img src="images/twitter.png"/></a> 
+<a href="http://blambeau.github.com/" target="_blank"><img src="images/github.png"/></a> 
 </div>
+</div>
+
 

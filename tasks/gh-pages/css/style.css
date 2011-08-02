@@ -17,21 +17,32 @@ h2 {
 }
 
 #menu {
+  width: 280px;
   position: absolute;
-  top: 128px;
-  text-align: right;
-  padding-right: 15px;
+  top: 105px;
 }
 #menu ul {
+  text-align: right;
   list-style: none;
+}
+#menu .links {
+  padding-top: 15px;
+}
+#menu p.ops {
+  font-size: 16px;
+  /*text-align: justify;*/
+}
+#menu .entry {
+  border-bottom: 1px solid #444444;
 }
 
 #operator {
-  margin-left: 300px;
+  font-size: 14px;
+  margin-left: 320px;
 }
 
 #page {
-  margin-left: 300px;
+  margin-left: 320px;
   padding-right: 30px;
   text-align: justify;
 }
