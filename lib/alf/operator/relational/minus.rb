@@ -4,22 +4,14 @@ module Alf
     # Relational minus (aka difference)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [LEFT] RIGHT
     #
-    # API & EXAMPLE
-    #
-    #   # Give all suppliers but those living in Paris
-    #   (minus :suppliers, 
-    #          (restrict :suppliers, lambda{ city == 'Paris' }))
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
     # This operator computes the difference between its two operands. The 
-    # difference is simply the set of tuples in left operands non shared by
-    # the right one.
+    # difference is simply the set of LEFT tuples non present in RIGHT.
     #
-    #   alf minus ... ...
-    #  
     class Minus < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
