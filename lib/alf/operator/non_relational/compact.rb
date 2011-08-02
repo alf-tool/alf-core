@@ -31,7 +31,7 @@ module Alf
         include Operator, Operator::Cesure
 
         def initialize
-          @cesure_key ||= ProjectionKey.new([])
+          @cesure_key ||= AttrList.new([])
         end
           
         protected

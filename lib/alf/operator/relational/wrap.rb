@@ -23,7 +23,7 @@ module Alf
       include Operator::Relational, Operator::Transform
   
       signature do |s|
-        s.argument :attributes, ProjectionKey, []
+        s.argument :attributes, AttrList, []
         s.argument :as, AttrName, :wrapped
       end
       

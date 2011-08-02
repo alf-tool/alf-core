@@ -50,7 +50,7 @@ module Alf
         include Operator, Operator::Cesure
         
         def initialize(order, ranking_name)
-          @by_key = ProjectionKey.coerce(order)
+          @by_key = AttrList.coerce(order)
           @ranking_name = ranking_name
         end
         

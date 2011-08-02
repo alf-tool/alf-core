@@ -36,7 +36,7 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
       signature do |s|
-        s.argument :by, ProjectionKey, []
+        s.argument :by, AttrList, []
         s.argument :summarization, Summarization, {}
         s.option :allbut, Boolean, false, "Summarize on all but specified attributes?"
       end

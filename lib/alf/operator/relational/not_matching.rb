@@ -42,10 +42,10 @@ module Alf
             seen ||= begin
               h = Hash.new
               right.each do |right_tuple|
-                key ||= coerce(left_tuple.keys & right_tuple.keys, ProjectionKey)
+                key ||= coerce(left_tuple.keys & right_tuple.keys, AttrList)
                 h[key.project(right_tuple)] = true
               end
-              key ||= coerce([], ProjectionKey)
+              key ||= coerce([], AttrList)
               h
             end
             yield(left_tuple) unless seen.has_key?(key.project(left_tuple))

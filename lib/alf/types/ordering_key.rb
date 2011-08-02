@@ -18,7 +18,7 @@ module Alf
       # Implemented coercions are:
       # * Array of symbols (all attributes in ascending order)
       # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
-      # * ProjectionKey (all its attributes in ascending order)
+      # * AttrList (all its attributes in ascending order)
       # * OrderingKey (self)
       #
       # @return [OrderingKey]
@@ -28,7 +28,7 @@ module Alf
         case arg
         when OrderingKey
           arg
-        when ProjectionKey
+        when AttrList
           arg.to_ordering_key
         when Array
           if arg.all?{|a| a.is_a?(Array)}

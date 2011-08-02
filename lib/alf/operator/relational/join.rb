@@ -66,7 +66,7 @@ module Alf
           #
           # @param [Hash] tuple a left tuple of the join
           # @return [Array] an array of two elements, the key and the rest
-          # @see ProjectionKey#split
+          # @see AttrList#split
           #
           def split(tuple)
             _init(tuple) unless @key
@@ -89,10 +89,10 @@ module Alf
           def _init(right)
             @buffer = Hash.new{|h,k| h[k] = []}
             @enum.each do |left|
-              @key ||= coerce(left.keys & right.keys, ProjectionKey)
+              @key ||= coerce(left.keys & right.keys, AttrList)
               @buffer[@key.project(left)] << left
             end
-            @key ||= coerce([], ProjectionKey)
+            @key ||= coerce([], AttrList)
           end
           
         end # class JoinBuffer

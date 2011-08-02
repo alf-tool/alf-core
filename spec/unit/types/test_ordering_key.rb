@@ -52,7 +52,7 @@ module Alf
       end
 
       specify "when passed a projection key" do
-        pkey = ProjectionKey.new [:a, :b]
+        pkey = AttrList.new [:a, :b]
         key = OrderingKey.coerce pkey
         key.attributes.should == [:a, :b]
         key.order_of(:a).should == :asc

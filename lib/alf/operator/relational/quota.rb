@@ -26,7 +26,7 @@ module Alf
               Operator::Shortcut, Operator::Unary
   
       signature do |s|
-        s.argument :by, ProjectionKey, []
+        s.argument :by, AttrList, []
         s.argument :order, OrderingKey, []
         s.argument :summarization, Summarization, {}
       end

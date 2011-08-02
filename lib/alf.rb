@@ -21,7 +21,7 @@ module Alf
     require 'alf/types/boolean'
     require 'alf/types/heading'
     require 'alf/types/ordering_key'
-    require 'alf/types/projection_key'
+    require 'alf/types/attr_list'
     require 'alf/types/renaming'
     require 'alf/types/tuple_expression'
     require 'alf/types/restriction'

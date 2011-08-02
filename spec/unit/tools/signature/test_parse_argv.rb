@@ -12,16 +12,16 @@ module Alf
         signature.parse_argv(argv, receiver)
       }
  
-      describe "on a singleton signature with a ProjectionKey" do
+      describe "on a singleton signature with a AttrList" do
         let(:signature){ 
           Signature.new do |s|
-            s.argument :proj, ProjectionKey
+            s.argument :proj, AttrList
           end
         }
         let(:argv){ %w{-- hello world} }
         specify{
           subject.should eq([])
-          receiver.proj.should eq(ProjectionKey.new([:hello, :world])) 
+          receiver.proj.should eq(AttrList.new([:hello, :world])) 
         }
       end
       
@@ -41,7 +41,7 @@ module Alf
       describe "On quota signature" do
         let(:signature){
           Signature.new do |s|
-            s.argument :by, ProjectionKey, []
+            s.argument :by, AttrList, []
             s.argument :order, OrderingKey, []
             s.argument :summarization, Summarization, {}
           end
@@ -49,7 +49,7 @@ module Alf
         let(:argv){ %w{op1 -- a -- time -- time_sum sum(:time) time_max max(:time)} }
         specify{
           subject.should eq(["op1"])
-          receiver.by.should eq(ProjectionKey.new([:a]))
+          receiver.by.should eq(AttrList.new([:a]))
           receiver.order.should eq(OrderingKey.coerce([:time]))
         }
       end
@@ -57,7 +57,7 @@ module Alf
       describe "When signature contains options" do
         let(:signature){
           Signature.new do |s|
-            s.argument :by, ProjectionKey, []
+            s.argument :by, AttrList, []
             s.option :allbut, Boolean, false, "Allbut?"
           end
         }
@@ -66,7 +66,7 @@ module Alf
           let(:argv){ %w{op1 --allbut -- a} }
           specify{
             subject.should eq(["op1"])
-            receiver.by.should eq(ProjectionKey.new([:a]))
+            receiver.by.should eq(AttrList.new([:a]))
             receiver.allbut.should eql(true)
           }
         end
@@ -75,7 +75,7 @@ module Alf
           let(:argv){ %w{op1 -- a} }
           specify{
             subject.should eq(["op1"])
-            receiver.by.should eq(ProjectionKey.new([:a]))
+            receiver.by.should eq(AttrList.new([:a]))
             receiver.allbut.should eql(false)
           }
         end

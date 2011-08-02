@@ -25,7 +25,7 @@ module Alf
       include Operator::Relational, Operator::Unary
       
       signature do |s|
-        s.argument :attributes, ProjectionKey, []
+        s.argument :attributes, AttrList, []
         s.argument :as, AttrName, :group
         s.option :allbut, Boolean, false, 'Group all but specified attributes?'
       end

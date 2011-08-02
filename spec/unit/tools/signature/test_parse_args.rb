@@ -13,15 +13,15 @@ module Alf
         receiver
       }
         
-      describe "on a singleton signature with a ProjectionKey" do
+      describe "on a singleton signature with a AttrList" do
         let(:signature){ 
           Signature.new do |s|
-            s.argument :proj, ProjectionKey
+            s.argument :proj, AttrList
           end
         }
         let(:args){ [%w{hello world}] }
         specify{
-          subject.proj.should eq(ProjectionKey.new([:hello, :world])) 
+          subject.proj.should eq(AttrList.new([:hello, :world])) 
         }
       end
       
@@ -40,7 +40,7 @@ module Alf
       describe "on a signature with options" do
         let(:signature){
           Signature.new do |s|
-            s.argument :key, ProjectionKey, []
+            s.argument :key, AttrList, []
             s.option   :allbut, Boolean, false
           end
         }
@@ -48,7 +48,7 @@ module Alf
         describe "when no option is provided" do
           let(:args){ [[:hello, :world]] }
           specify{
-            subject.key.should eql(ProjectionKey.new([:hello, :world]))
+            subject.key.should eql(AttrList.new([:hello, :world]))
             subject.allbut.should eql(false)
           }
         end

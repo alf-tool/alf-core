@@ -3,7 +3,7 @@ module Alf
     #
     # Defines a projection key
     # 
-    class ProjectionKey
+    class AttrList
     
       # Projection attributes
       attr_accessor :attributes
@@ -14,12 +14,12 @@ module Alf
     
       def self.coerce(arg)
         case arg
-        when ProjectionKey
+        when AttrList
           arg
         when OrderingKey
-          ProjectionKey.new(arg.attributes)
+          AttrList.new(arg.attributes)
         when Array
-          ProjectionKey.new(arg.collect{|s| Tools.coerce(s, AttrName)})
+          AttrList.new(arg.collect{|s| Tools.coerce(s, AttrName)})
         else
           raise ArgumentError, "Unable to coerce #{arg} to a projection key"
         end
@@ -47,10 +47,10 @@ module Alf
       end
 
       def ==(other)
-        other.is_a?(ProjectionKey) && (other.attributes == attributes)          
+        other.is_a?(AttrList) && (other.attributes == attributes)          
       end
       alias :eql? :==
       
-    end # class ProjectionKey
+    end # class AttrList
   end # module Types
 end # module Alf

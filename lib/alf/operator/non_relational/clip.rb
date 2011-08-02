@@ -34,7 +34,7 @@ module Alf
       include Operator::NonRelational, Operator::Transform
   
       signature do |s|
-        s.argument :projection_key, ProjectionKey, []
+        s.argument :attr_list, AttrList, []
         s.option :allbut, Boolean, false, "Apply an allbut clipping?"
       end
       
@@ -42,7 +42,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        @projection_key.project(tuple, @allbut)
+        @attr_list.project(tuple, @allbut)
       end
   
     end # class Clip
