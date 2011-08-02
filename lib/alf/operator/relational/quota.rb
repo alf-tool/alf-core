@@ -1,23 +1,23 @@
 module Alf
   module Operator::Relational
     # 
-    # Relational quota-queries (position, sum progression, etc.)
+    # Generalized quota-queries (position, sum progression, etc.)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- BY -- ORDER -- SUMMARIZATION
     #
-    # OPTIONS
-    # #{summarized_options}
-    #
-    # API & EXAMPLE
-    #
-    #   (quota :supplies, [:sid], [:qty],
-    #                     :position => Aggregator.count,
-    #                     :sum_qty  => Aggregator.sum(:qty))
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator computes quota values on input tuples.
+    # **This operator is a work in progress and should be used with care.**
+    # 
+    # This operator is an attempt to generalize RANK in two ways:
+    #   * Use a full SUMMARIZATION instead of hard-coding a ranking attribute 
+    #     through count()
+    #   * Providing a BY key so that sumarizations can actually be done on 
+    #     sub-groups
+    #
+    # EXAMPLE
     #
     #   alf quota supplies -- sid -- qty -- position count sum_qty "sum(:qty)"
     #
