@@ -16,7 +16,8 @@ module Alf
     #
     #   # Or, to specify an allbut projection
     #   (summarize :supplies, [:qty, :pid],
-    #                         :total_qty => Aggregator.sum(:qty), true)
+    #                         {:total_qty => Aggregator.sum(:qty)}, 
+    #                         {:allbut => true})
     #
     # DESCRIPTION
     #
@@ -40,12 +41,6 @@ module Alf
         s.option :allbut, Boolean, false, "Summarize on all but specified attributes?"
       end
       
-      def initialize(by = [], summarization = {}, allbut = false)
-        @by = coerce(by, ProjectionKey)
-        @summarization = coerce(summarization, Summarization)
-        @allbut = allbut
-      end
-  
       # Summarizes according to a complete order
       class SortBased
         include Operator, Operator::Cesure      

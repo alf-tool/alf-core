@@ -51,7 +51,7 @@ module Alf
         end
     
         describe "When factored with Lispy" do
-          let(:operator){ Lispy.summarize(input, [:time], aggs, true) }
+          let(:operator){ Lispy.summarize(input, [:time], aggs, :allbut => true) }
           it { should == expected }
         end
 
