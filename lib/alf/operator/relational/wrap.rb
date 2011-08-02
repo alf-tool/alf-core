@@ -4,18 +4,17 @@ module Alf
     # Relational wraping (tuple-valued attributes)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ... -- NEWNAME
     #
-    # API & EXAMPLE
-    #
-    #   (wrap :suppliers, [:city, :status], :loc_and_status)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator wraps attributes ATTR1 to ATTRN as a new, tuple-based
-    # attribute whose name is NEWNAME. When used in shell, names of wrapped 
-    # attributes are taken from commandline arguments, expected the last one
-    # which defines the new name to use:
+    # This operator wraps attributes in ATTR_LIST as a new, tuple-valued
+    # attribute named AS.
+    #
+    # With --allbut, it wraps all attributes not specified in ATTR_LIST instead.
+    #
+    # EXAMPLE
     #
     #   alf wrap suppliers -- city status -- loc_and_status
     #
@@ -23,7 +22,7 @@ module Alf
       include Operator::Relational, Operator::Transform
   
       signature do |s|
-        s.argument :attributes, AttrList, []
+        s.argument :attr_list, AttrList, []
         s.argument :as, AttrName, :wrapped
       end
       
@@ -31,7 +30,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        wrapped, others = @attributes.split(tuple)
+        wrapped, others = @attr_list.split(tuple)
         others[@as] = wrapped
         others
       end
