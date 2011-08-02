@@ -1,26 +1,23 @@
 module Alf
   module Operator::Relational
     # 
-    # Relational not matching
+    # Relational not matching (inverse of matching)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [LEFT] RIGHT
     #
-    # API & EXAMPLE
-    #
-    #   (not_matching :suppliers, :supplies)
+    #   #{shell_signature}
     #
     # DESCRIPTION
     #
-    # This operator restricts left tuples to those for which there does not 
-    # exist any right tuple that joins. This is a shortcut operator for the
-    # longer expression: 
+    # This operator restricts LEFT tuples to those for which there does not 
+    # exist any tuple in RIGHT that (naturally) joins. This is a shortcut 
+    # operator for the following longer expression: 
     #
     #         (minus xxx, (matching xxx, yyy))
     # 
-    # In shell:
+    # EXAMPLE
     #
-    #   alf not-matching suppliers supplies 
+    #   alf not-matching suppliers supplies
     #  
     class NotMatching < Alf::Operator(__FILE__, __LINE__)
       include Operator::Relational, Operator::Shortcut, Operator::Binary

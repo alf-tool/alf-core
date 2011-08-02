@@ -9,9 +9,9 @@ module Alf
     #
     # DESCRIPTION
     #
-    # This operator restricts its left operands to tuples for which there exists 
-    # at least one right tuple that joins. This is a shortcut operator for the
-    # following longer expression:
+    # This operator restricts its LEFT operand to tuples for which there exists 
+    # at least one tuple in RIGHT that (naturally) joins. This is a shortcut 
+    # operator for the following longer expression:
     #
     #   (project (join xxx, yyy), [xxx's attributes])
     #
