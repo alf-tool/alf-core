@@ -14,32 +14,53 @@ module Alf
     # #{summarized_options}
     #
     # RELATIONAL OPERATORS
-    # #{summarized_subcommands subcommands.select{|cmd| 
-    #    cmd.include?(Alf::Operator::Relational) &&
-    #    !cmd.include?(Alf::Operator::Experimental)
-    # }}
+    # #{summarized_subcommands relational_operators}
     #
     # EXPERIMENTAL RELATIONAL OPERATORS
-    # #{summarized_subcommands subcommands.select{|cmd| 
-    #    cmd.include?(Alf::Operator::Relational) &&
-    #    cmd.include?(Alf::Operator::Experimental)
-    # }}
+    # #{summarized_subcommands experimental_operators}
     #
     # NON-RELATIONAL OPERATORS
-    # #{summarized_subcommands subcommands.select{|cmd| 
-    #    cmd.include?(Alf::Operator::NonRelational)
-    # }}
+    # #{summarized_subcommands non_relational_operators}
     #
     # OTHER NON-RELATIONAL COMMANDS
-    # #{summarized_subcommands subcommands.select{|cmd| 
-    #    cmd.include?(Alf::Command)
-    # }}
+    # #{summarized_subcommands other_non_relational_commands}
     #
     # See '#{program_name} help COMMAND' for details about a specific command.
     #
     class Main < Quickl::Delegator(__FILE__, __LINE__)
       include Command
     
+      module ClassMethods
+
+        def relational_operators
+          subcommands.select{|cmd| 
+             cmd.include?(Alf::Operator::Relational) &&
+            !cmd.include?(Alf::Operator::Experimental)
+          }
+        end
+
+        def experimental_operators
+          subcommands.select{|cmd| 
+            cmd.include?(Alf::Operator::Relational) &&
+            cmd.include?(Alf::Operator::Experimental)
+          }
+        end
+
+        def non_relational_operators
+          subcommands.select{|cmd| 
+            cmd.include?(Alf::Operator::NonRelational)
+          }
+        end
+
+        def other_non_relational_commands
+          subcommands.select{|cmd| 
+            cmd.include?(Alf::Command)
+          }
+        end
+
+      end
+      extend(ClassMethods)
+
       # Environment instance to use to get base iterators
       attr_accessor :environment
     

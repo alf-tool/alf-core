@@ -12,6 +12,7 @@ task :"gh-pages" do
   # launch wlang on main template
   puts WLang::file_instantiate File.join(indir, 'main.wtpl'), {
     :version => Alf::VERSION,
-    :outdir  => outdir
+    :outdir  => outdir,
+    :main    => Alf::Command::Main
   }
 end

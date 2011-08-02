@@ -1,14 +1,22 @@
 <div id="menu">
-<div class="entry">Overview</div>
+<div class="entry">Theory &amp; Overview</div>
 <ul>
 <li><a href="shell.html">alf in shell</a></li>
 </ul>
 <div class="entry">Relational operators</div>
-<ul>*{Alf::Operator::Relational as op}{
+<ul>*{main.relational_operators as op}{
+<li><a href="{op.command_name}.html">${op.command_name}</a></li>
+}</ul>
+<div class="entry">Experimental operators</div>
+<ul>*{main.experimental_operators as op}{
 <li><a href="{op.command_name}.html">${op.command_name}</a></li>
 }</ul>
 <div class="entry">Non-relational operators</div>
-<ul>*{Alf::Operator::NonRelational as op}{
+<ul>*{main.non_relational_operators as op}{
+<li><a href="{op.command_name}.html">${op.command_name}</a></li>
+}</ul>
+<div class="entry">Other non-relational commands</div>
+<ul>*{main.other_non_relational_commands as op}{
 <li><a href="{op.command_name}.html">${op.command_name}</a></li>
 }</ul>
 </div>
