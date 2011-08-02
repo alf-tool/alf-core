@@ -4,28 +4,25 @@ module Alf
     # Clip input tuples to a subset of attributes
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2...
+    #
+    #   #{shell_signature}
     #
     # OPTIONS
     # #{summarized_options}
     #
-    # API & EXAMPLE
-    #
-    #   # Keep only name and city attributes
-    #   (clip :suppliers, [:name, :city])
-    #
-    #   # Keep all but name and city attributes
-    #   (clip :suppliers, [:name, :city], :allbut => true)
-    #
     # DESCRIPTION
     #
-    # This operator clips tuples on attributes whose names are specified as 
-    # arguments. This is similar to the relational PROJECT operator, expect
-    # that this one does not removed duplicates that can occur from clipping.
-    # In other words, clipping may lead to bags of tuples instead of sets.
+    # This operator clips tuples on attributes whose names are specified in 
+    # ATTR_LIST. This is similar to the relational PROJECT operator, expect
+    # that CLIP does not remove duplicates afterwards.
+    #
+    # Clipping may therefore lead to bags of tuples instead of sets. The result
+    # is **not** a valid relation unless a candidate key is preserved.
+    #
+    # With --allbut, the operator keeps attributes in ATTR_LIST, instead of 
+    # projecting them away. 
     # 
-    # When used in shell, the clipping/projection key is simply taken from
-    # commandline arguments:
+    # EXAMPLE
     #
     #   alf clip suppliers -- name city
     #   alf clip suppliers --allbut -- name city
