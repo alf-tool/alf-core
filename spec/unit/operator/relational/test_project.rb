@@ -38,7 +38,12 @@ module Alf
           it { should == expected } 
         end
   
-        describe "and factored with Lispy" do
+        describe "and factored with Lispy#project" do
+          let(:operator){ Lispy.project(input, [:a], :allbut => true) }
+          it { should == expected } 
+        end
+  
+        describe "and factored with Lispy#allbut" do
           let(:operator){ Lispy.allbut(input, [:a]) }
           it { should == expected } 
         end
@@ -59,7 +64,7 @@ module Alf
         end
         
         describe "when allbut is used" do
-          let(:operator){ Lispy.project(input, [:a, :b], true) }
+          let(:operator){ Lispy.project(input, [:a, :b], :allbut => true) }
           it { should == expected } 
         end
         

@@ -1,2 +1,3 @@
 #!/usr/bin/env alf
 (project :suppliers, [:name, :city])
+(project :suppliers, [:name, :city], :allbut => true)

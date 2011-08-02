@@ -67,7 +67,7 @@ module Alf
   
       # Shortcut for project(attributes, true)
       def allbut(attributes)
-        project(attributes, true)
+        project(attributes, :allbut => true)
       end
           
       #

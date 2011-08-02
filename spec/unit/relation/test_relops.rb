@@ -15,7 +15,7 @@ module Alf
 
     specify "project" do
       rel1.project([]).should eq(rel({}))
-      rel1.project([:sid], true).should eq(rel({}))
+      rel1.project([:sid], :allbut => true).should eq(rel({}))
     end
     
     specify "allbut" do

@@ -14,7 +14,7 @@ module Alf
     #   (project :suppliers, [:name, :city])
     #
     #   # Project on all but name and city attributes
-    #   (allbut :suppliers, [:name, :city])
+    #   (project :suppliers, [:name, :city], :allbut => true)
     #
     # DESCRIPTION
     #
@@ -36,12 +36,6 @@ module Alf
         s.option :allbut, Boolean, false, 'Project all but specified attributes?'
       end
       
-      # Builds a Project operator instance
-      def initialize(attributes = [], allbut = false)
-        @projection_key = coerce(attributes, ProjectionKey)
-        @allbut = allbut
-      end
-    
       protected 
     
       # (see Operator::Shortcut#longexpr)

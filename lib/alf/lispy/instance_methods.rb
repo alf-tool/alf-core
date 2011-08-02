@@ -92,7 +92,7 @@ module Alf
     end # Operators::each
       
     def allbut(child, attributes)
-      (project child, attributes, true)
+      (project child, attributes, :allbut => true)
     end
   
     # 
