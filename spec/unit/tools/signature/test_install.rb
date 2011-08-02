@@ -19,7 +19,7 @@ module Alf
         let(:signature){ 
           Signature.new do |s|
             s.argument :attrname, AttrName
-            s.argument :ordering, OrderingKey
+            s.argument :ordering, Ordering
             s.option   :allbut,   Boolean, true
           end 
         }

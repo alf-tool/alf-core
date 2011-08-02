@@ -42,7 +42,7 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
       signature do |s|
-        s.argument :order, OrderingKey, []
+        s.argument :order, Ordering, []
         s.argument :ranking_name, AttrName, :rank
       end
       

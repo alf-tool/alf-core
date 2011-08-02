@@ -16,7 +16,7 @@ module Alf
         case arg
         when AttrList
           arg
-        when OrderingKey
+        when Ordering
           AttrList.new(arg.attributes)
         when Array
           AttrList.new(arg.collect{|s| Tools.coerce(s, AttrName)})
@@ -29,8 +29,8 @@ module Alf
         coerce(argv)
       end
           
-      def to_ordering_key
-        OrderingKey.new attributes.collect{|arg| [arg, :asc]}
+      def to_ordering
+        Ordering.new attributes.collect{|arg| [arg, :asc]}
       end
     
       def project(tuple, allbut = false)

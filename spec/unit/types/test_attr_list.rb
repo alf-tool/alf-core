@@ -18,8 +18,8 @@ module Alf
         }
       end
 
-      describe "when passed an OrderingKey" do
-        let(:arg){ OrderingKey.new [[:a, :asc], [:b, :asc]] }
+      describe "when passed an Ordering" do
+        let(:arg){ Ordering.new [[:a, :asc], [:b, :asc]] }
         it{ should eq(AttrList.new([:a, :b])) }
       end
 
@@ -46,11 +46,11 @@ module Alf
         
     end
 
-    describe "to_ordering_key" do
+    describe "to_ordering" do
 
       specify "when passed an array" do
         key = AttrList.coerce [:a, :b]
-        okey = key.to_ordering_key
+        okey = key.to_ordering
         okey.attributes.should == [:a, :b]
         okey.order_of(:a).should == :asc
         okey.order_of(:b).should == :asc

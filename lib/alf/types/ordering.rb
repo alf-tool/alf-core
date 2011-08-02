@@ -3,7 +3,7 @@ module Alf
     #
     # Encapsulates tools for computing orders on tuples
     #
-    class OrderingKey
+    class Ordering
     
       attr_reader :ordering
     
@@ -19,27 +19,27 @@ module Alf
       # * Array of symbols (all attributes in ascending order)
       # * Array of [Symbol, :asc|:desc] pairs (obvious semantics)
       # * AttrList (all its attributes in ascending order)
-      # * OrderingKey (self)
+      # * Ordering (self)
       #
-      # @return [OrderingKey]
+      # @return [Ordering]
       # @raises [ArgumentError] when `arg` is not recognized
       #
       def self.coerce(arg)
         case arg
-        when OrderingKey
+        when Ordering
           arg
         when AttrList
-          arg.to_ordering_key
+          arg.to_ordering
         when Array
           if arg.all?{|a| a.is_a?(Array)}
-            OrderingKey.new(arg)
+            Ordering.new(arg)
           else
             symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
             sliced = symbolized.each_slice(2) 
             if sliced.all?{|a,o| [:asc,:desc].include?(o)}
-              OrderingKey.new sliced.to_a
+              Ordering.new sliced.to_a
             else
-              OrderingKey.new symbolized.collect{|a| [a, :asc]}
+              Ordering.new symbolized.collect{|a| [a, :asc]}
             end
           end
         else
@@ -80,14 +80,14 @@ module Alf
       end
     
       def +(other)
-        other = OrderingKey.coerce(other)
-        OrderingKey.new(@ordering + other.ordering)
+        other = Ordering.coerce(other)
+        Ordering.new(@ordering + other.ordering)
       end
     
       def ==(other)
-        other.is_a?(OrderingKey) && (other.ordering == ordering)
+        other.is_a?(Ordering) && (other.ordering == ordering)
       end
       
-    end # class OrderingKey
+    end # class Ordering
   end # module Types
 end # module Alf

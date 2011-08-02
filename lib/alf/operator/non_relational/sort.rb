@@ -17,7 +17,7 @@ module Alf
     #   # sort on city DESC then on name ASC
     #   (sort :suppliers, [[:city, :desc], [:name, :asc]])
     #
-    #   => See OrderingKey about specifying orderings
+    #   => See Ordering about specifying orderings
     #
     # DESCRIPTION
     #
@@ -39,7 +39,7 @@ module Alf
       include Operator::NonRelational, Operator::Unary
 
       signature do |s|
-        s.argument :ordering, OrderingKey, []
+        s.argument :ordering, Ordering, []
       end
           
       protected 

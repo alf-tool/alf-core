@@ -5,7 +5,7 @@ module Alf
     #
     # Example:
     #
-    #   sorted = Buffer::Sorted.new OrderingKey.new(...)
+    #   sorted = Buffer::Sorted.new Ordering.new(...)
     #   sorted.add_all(...)
     #   sorted.each do |tuple|
     #     # tuples are ordered here 
@@ -16,8 +16,8 @@ module Alf
       #
       # Creates a buffer instance with an ordering key
       #
-      def initialize(ordering_key)
-        @ordering_key = ordering_key
+      def initialize(ordering)
+        @ordering = ordering
         @buffer = []
       end
   
@@ -25,7 +25,7 @@ module Alf
       # Adds all elements of an iterator to the buffer
       #
       def add_all(enum)
-        sorter = @ordering_key.sorter
+        sorter = @ordering.sorter
         @buffer = merge_sort(@buffer, enum.to_a.sort(&sorter), sorter)
       end
   

@@ -105,7 +105,7 @@ module Alf
                 datasets
         else
           chain SortBased.new(@by, @allbut, @summarization),
-                Operator::NonRelational::Sort.new(@by.to_ordering_key),
+                Operator::NonRelational::Sort.new(@by.to_ordering),
                 datasets
         end
       end

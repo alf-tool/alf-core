@@ -42,7 +42,7 @@ module Alf
         let(:signature){
           Signature.new do |s|
             s.argument :by, AttrList, []
-            s.argument :order, OrderingKey, []
+            s.argument :order, Ordering, []
             s.argument :summarization, Summarization, {}
           end
         }
@@ -50,7 +50,7 @@ module Alf
         specify{
           subject.should eq(["op1"])
           receiver.by.should eq(AttrList.new([:a]))
-          receiver.order.should eq(OrderingKey.coerce([:time]))
+          receiver.order.should eq(Ordering.coerce([:time]))
         }
       end
 
