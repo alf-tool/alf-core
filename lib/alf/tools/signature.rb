@@ -141,9 +141,15 @@ module Alf
       end
 
       def to_shell_doc(operator = nil)
-        options.collect{|opt| 
-          opts.first.to_s
-        }
+        opts = options.collect{|option| 
+          "[#{option_name(option)}]"
+        }.join(" ")
+        args = arguments.collect{|name,_| 
+          name.to_s.upcase
+        }.join(" -- ")
+        (args.empty? ? 
+          "#{opts} OPERANDS" : 
+          "#{opts} OPERANDS -- #{args}").strip
       end
 
       private
