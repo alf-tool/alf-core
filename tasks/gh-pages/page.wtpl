@@ -1,0 +1,3 @@
+<div id="page">
++{BlueCloth.new(File.read(p)).to_html}
+</div>

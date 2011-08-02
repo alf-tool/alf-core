@@ -2,6 +2,7 @@ task :"gh-pages" do
   require 'fileutils'
   require 'wlang'
   require 'alf'
+  require 'bluecloth'
 
   indir  = File.expand_path('../gh-pages', __FILE__)
   outdir = File.expand_path('../../doc/gh-pages', __FILE__)
@@ -16,6 +17,7 @@ task :"gh-pages" do
   puts WLang::file_instantiate File.join(indir, 'main.wtpl'), {
     :version => Alf::VERSION,
     :outdir  => outdir,
-    :main    => Alf::Command::Main
+    :main    => Alf::Command::Main,
+    :pages   => Dir[File.join(indir, 'pages', '*.md')].to_a
   }
 end

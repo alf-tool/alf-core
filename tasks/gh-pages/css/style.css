@@ -1,7 +1,7 @@
 body {
-  padding: 10px 100px;
+  padding: 20px 130px;
   font-family: corbel, 'lucida grande', helvetica, sans-serif;
-  font-size: 16px;  
+  font-size: 18px;  
 }
 
 a, a:visited {
@@ -12,15 +12,26 @@ a:hover {
   text-decoration: underline;
 }
 
+h2 {
+  line-height: 50px;
+}
+
 #menu {
   position: absolute;
+  top: 128px;
   text-align: right;
+  padding-right: 15px;
 }
 #menu ul {
   list-style: none;
 }
 
 #operator {
-  font-size: 14px;  
-  margin-left: 250px;
+  margin-left: 300px;
+}
+
+#page {
+  margin-left: 300px;
+  padding-right: 30px;
+  text-align: justify;
 }

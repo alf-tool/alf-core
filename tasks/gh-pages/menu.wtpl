@@ -1,6 +1,7 @@
 <div id="menu">
 <div class="entry">Theory &amp; Overview</div>
 <ul>
+<li><a href="index.html">Home</a></li>
 <li><a href="shell.html">alf in shell</a></li>
 </ul>
 <div class="entry">Relational operators</div>
