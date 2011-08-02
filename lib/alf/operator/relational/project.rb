@@ -1,29 +1,25 @@
 module Alf
   module Operator::Relational
+    #
     # Relational projection (clip + compact)
     #
     # SYNOPSIS
-    #   #{program_name} #{command_name} [OPERAND] -- ATTR1 ATTR2 ...
+    #
+    #   #{shell_signature}
     #
     # OPTIONS
     # #{summarized_options}
     #
-    # API & EXAMPLE
-    #
-    #   # Project on name and city attributes
-    #   (project :suppliers, [:name, :city])
-    #
-    #   # Project on all but name and city attributes
-    #   (project :suppliers, [:name, :city], :allbut => true)
-    #
     # DESCRIPTION
     #
-    # This operator projects tuples on attributes whose names are specified as 
-    # arguments. This is similar to clip, except that this ones is a truly 
-    # relational one, that is, it also removes duplicates tuples. 
+    # This operator projects tuples on attributes whose names are specified in 
+    # ATTR_LIST. Unlike SQL, this operator **always** removes duplicates in the
+    # result so that the output is a set of tuples, that is, a relation.
+    #
+    # With --allbut, the operators projects attributes in ATTR_LIST away instead 
+    # of keeping them. 
     # 
-    # When used in shell, the clipping/projection key is simply taken from
-    # commandline arguments:
+    # EXAMPLE
     #
     #   alf project suppliers -- name city
     #   alf project --allbut suppliers -- name city
