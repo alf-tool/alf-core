@@ -27,15 +27,15 @@ module Alf
   
       signature do |s|
         s.argument :by, AttrList, []
-        s.argument :order, Ordering, []
+        s.argument :ordering, Ordering, []
         s.argument :summarization, Summarization, {}
       end
       
       class SortBased
         include Operator, Operator::Cesure
         
-        def initialize(by, order, summarization)
-          @by, @order, @summarization  = by, order, summarization
+        def initialize(by, ordering, summarization)
+          @by, @ordering, @summarization  = by, ordering, summarization
         end
         
         protected
@@ -61,8 +61,8 @@ module Alf
       protected
       
       def longexpr
-        sort_key = @by.to_ordering + @order
-        chain SortBased.new(@by, @order, @summarization),
+        sort_key = @by.to_ordering + @ordering
+        chain SortBased.new(@by, @ordering, @summarization),
               Operator::NonRelational::Sort.new(sort_key),
               datasets
       end 

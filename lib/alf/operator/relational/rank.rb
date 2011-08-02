@@ -42,15 +42,15 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
       signature do |s|
-        s.argument :order, Ordering, []
+        s.argument :ordering, Ordering, []
         s.argument :ranking_name, AttrName, :rank
       end
       
       class SortBased
         include Operator, Operator::Cesure
         
-        def initialize(order, ranking_name)
-          @by_key = AttrList.coerce(order)
+        def initialize(ordering, ranking_name)
+          @by_key = AttrList.coerce(ordering)
           @ranking_name = ranking_name
         end
         
@@ -83,8 +83,8 @@ module Alf
       protected
       
       def longexpr
-        chain SortBased.new(@order, @ranking_name),
-              Operator::NonRelational::Sort.new(@order),
+        chain SortBased.new(@ordering, @ranking_name),
+              Operator::NonRelational::Sort.new(@ordering),
               datasets
       end 
   
