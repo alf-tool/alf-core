@@ -1,7 +1,0 @@
-*{pages as p}{
->>{!{outdir}/!{File.basename(p, '.md')}.html}{<<+{template.wtpl share all with page: p}}
-}
->>{!{outdir}/shell.html}{<<+{template.wtpl share all with operator: main}}
-*{main.subcommands as op}{
-  >>{!{outdir}/!{op.command_name}.html}{<<+{template.wtpl share all with operator:op}}
-}

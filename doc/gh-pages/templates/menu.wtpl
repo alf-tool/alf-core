@@ -1,0 +1,11 @@
+<<={menu.yaml as entries}
+<div id="menu">
+
+*{entries as e}{
+<div class="entry">${e.name}</div>
+<<+{menu/!{e.id}.wtpl share all}
+}
+
+</div>
+
+

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<head> 
+<meta charset='utf-8'> 
+<title>Alf -- Relational algebra at your finger tips (${version})</title> 
+<!--[if lt IE 9]>
+<script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script>
+<![endif]--> 
+<link href="{prefix}/css/style.css" rel='stylesheet'>
+<link rel="stylesheet" href="http://yandex.st/highlightjs/6.0/styles/github.min.css">
+<script src="http://yandex.st/highlightjs/6.0/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</head>
+<body>
+<a href="http://github.com/blambeau/alf"><img style="position: fixed; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+<<+{menu.wtpl share all}
+<<+{center.wtpl share all}
+<div id="links">
+<a href="http://github.com/blambeau/alf" target="_blank"><img src="{prefix}/images/github-128.png"/></a> 
+<a href="http://twitter.com/blambeau" target="_blank"><img src="{prefix}/images/twitter-128.png"/></a> 
+</div>
+<script type="text/javascript">
+  var _gaq = _gaq || [];
+  _gaq.push(['_setAccount', 'UA-16520635-5']);
+  _gaq.push(['_trackPageview']);
+  (function() {
+    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+  })();
+</script>
+</body>
+

@@ -1,0 +1,2 @@
+<p class="ops">*{ops as op}{<a href="{prefix}/!{categ}/!{op.command_name}.html">${op.command_name}</a>}{, }</p>
+

@@ -1,0 +1,85 @@
+body {
+  padding: 10px 10px;
+  font-family: Palatino, serif;
+  font-size: 18px;
+  overflow: scroll;
+}
+
+a, a:visited {
+  text-decoration: none;
+  color: blue;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+#links {
+  width: 140px;
+  position:fixed;
+  right: 20px;
+  top: 140px;
+}
+#links a {
+  display: block;
+}
+
+#menu {
+  width: 200px;
+  position:fixed;
+  left: 20px;
+  top: 80px;
+}
+
+#menu div.entry {
+  border-top: 1px solid #444444;
+  margin-top: 20px;
+}
+#menu div.subentry {
+  font-size: 16px;
+  text-align: right;
+  margin-left: 10px;
+  padding-top: 5px;
+  margin-bottom: 5px;
+/*  border-bottom: 1px dashed #333333;*/
+  text-decoration: underline;
+}
+#menu a.click-to-expand {
+  display: block;
+  text-align: center;
+  color: black;
+  font-family: Arial, sans-serif;
+  font-size: 14px;
+}
+#menu ul {
+  text-align: right;
+  list-style: none;
+  margin: 0px;
+}
+#menu p.ops {
+  margin-left: 10px;
+  font-size: 16px;
+  text-align: right;
+  margin: 0px;
+  padding: 0px;
+}
+
+#operator {
+  font-size: 14px;
+  margin-left: 320px;
+}
+
+#page {
+  padding-left: 240px;
+  padding-right: 180px;
+  text-align: justify;
+}
+#page h2 {
+  font-family: Tahoma, serif;
+}
+#page ul { padding-left: 20px; }
+
+pre {
+  font-size: 12px;
+  width: 100%;
+  overflow: hidden;
+}

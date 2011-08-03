@@ -1,0 +1,9 @@
+- id: overview
+  name: Overview
+  page: 1-why
+- id: shell
+  name: Alf in Shell
+  page: index
+- id: ruby
+  name: Alf in Ruby
+  page: index

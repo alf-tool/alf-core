@@ -1,3 +1,0 @@
-<div id="page">
-+{RedcarpetCompat.new(File.read(p)).to_html}
-</div>

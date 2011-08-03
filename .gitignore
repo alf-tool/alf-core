@@ -2,7 +2,7 @@ coverage/*
 *.DS_Store
 pkg
 doc/api
-doc/gh-pages
+doc/deploy-gh-pages
 .yardoc
 .bundle
 .project
