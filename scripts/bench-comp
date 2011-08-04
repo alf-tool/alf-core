@@ -1,0 +1,13 @@
+#!/usr/bin/env ruby
+require 'benchmark'
+
+def which_ruby
+  if Object.const_defined?(:RUBY_DESCRIPTION)
+    RUBY_DESCRIPTION
+  else
+    "ruby #{RUBY_VERSION} (#{RUBY_PLATFORM})"
+  end
+end
+
+tms = Benchmark.measure { `rake test` }
+puts which_ruby + ":" + tms.to_s
