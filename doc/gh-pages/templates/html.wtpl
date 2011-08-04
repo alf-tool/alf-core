@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <head> 
 <meta charset='utf-8'> 
-<title>Alf -- Relational algebra at your finger tips (${version})</title> 
+<title>${title}</title> 
 <!--[if lt IE 9]>
 <script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script>
 <![endif]--> 
@@ -17,6 +17,9 @@
 <div id="links">
 <a href="http://github.com/blambeau/alf" target="_blank"><img src="{prefix}/images/github-128.png"/></a> 
 <a href="http://twitter.com/blambeau" target="_blank"><img src="{prefix}/images/twitter-128.png"/></a> 
+</div>
+<div id="social">
+<a href="http://twitter.com/share" class="twitter-share-button" data-count="horizontal" data-via="blambeau">Tweet</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
 </div>
 <script type="text/javascript">
   var _gaq = _gaq || [];

@@ -30,10 +30,13 @@ task :"gh-pages" do
     FileUtils.mkdir File.join(outdir, entry)
     ctx = context.merge(:prefix  => "..", :entry => entry.to_sym)
     Dir[File.join(indir, entry, '*.md')].each do |file|
+      md     = File.read(file)
+      title  = md.split("\n").first[3..-1]
+      text   = Redcarpet.new(md).to_html
       target = File.join(outdir, entry, "#{File.basename(file, ".md")}.html")
-      text   = Redcarpet.new(File.read(file)).to_html
       File.open(target, "w") do |io|
-        io << WLang.file_instantiate(html, ctx.merge(:text => text))
+        ctx2 = ctx.merge(:text => text, :title => title)
+        io << WLang.file_instantiate(html, ctx2)
       end
     end
   }
@@ -46,7 +49,8 @@ task :"gh-pages" do
     ctx    = context.merge(:prefix  => "..", :entry => entry.to_sym)
     target = File.join(outdir, entry, "#{sub.command_name}.html")
     File.open(target, "w") do |io|
-      io << WLang.file_instantiate(html, ctx.merge(:operator => sub))
+      ctx2 = ctx.merge(:operator => sub, :title => "Alf in Shell: #{sub.command_name}")
+      io << WLang.file_instantiate(html, ctx2)
     end
   end
 

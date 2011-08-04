@@ -1,4 +1,4 @@
-# Welcome to Alf!
+# Relational Algebra at your Fingertips
 
 **Alf brings the relational algebra in Shell and in Ruby.**
 

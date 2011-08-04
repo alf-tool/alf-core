@@ -24,6 +24,11 @@ a:hover {
 #links a {
   display: block;
 }
+#social {
+  position: absolute;
+  right: 200px;
+  top: 45px;
+}
 
 #menu {
   width: 220px;
