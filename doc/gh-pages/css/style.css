@@ -3,14 +3,16 @@ body {
   font-family: Palatino, serif;
   font-size: 18px;
   overflow: scroll;
+  color: #212122;
 }
 
 a, a:visited {
   text-decoration: none;
-  color: blue;
+  color: #A30600;
 }
 a:hover {
   text-decoration: underline;
+  cursor: pointer;
 }
 
 #links {
@@ -24,15 +26,19 @@ a:hover {
 }
 
 #menu {
-  width: 200px;
+  width: 220px;
   position:fixed;
   left: 20px;
-  top: 80px;
+  top: 30px;
 }
 
 #menu div.entry {
-  border-top: 1px solid #444444;
+  font-family: Tahoma, serif;
+  color: black;
+  border-bottom: 1px solid #444444;
   margin-top: 20px;
+  margin-bottom: 5px;
+  font-weight: bold;
 }
 #menu div.subentry {
   font-size: 16px;
@@ -54,6 +60,7 @@ a:hover {
   text-align: right;
   list-style: none;
   margin: 0px;
+  padding: 0px;
 }
 #menu p.ops {
   margin-left: 10px;
@@ -69,14 +76,23 @@ a:hover {
 }
 
 #page {
-  padding-left: 240px;
+  padding-left: 260px;
   padding-right: 180px;
   text-align: justify;
 }
-#page h2 {
+#page h2, #page h3 {
+  color: black;
+  border-bottom: 1px solid black;
   font-family: Tahoma, serif;
 }
 #page ul { padding-left: 20px; }
+
+#page ul {
+  list-style: square;
+}
+#page ul li a, #page ul li a:visited {
+  
+}
 
 pre {
   font-size: 12px;

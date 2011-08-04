@@ -9,3 +9,8 @@ Unfortunately, the relational theory is as unknown (or at least ill-known) as it
 For this, we need to spend efforts along two lines: papers and tools. Alf mostly belongs to the second category. It is a relational tool, more precisely a pragmatic implementation of a flavor of **relational algebra**. You can use it both in Ruby and in Shell, using .csv files, DBMS tables, log files, or whatever you want as input data sources.
 
 Yet, Alf is not about SQL. It is not even about databases, in fact. The relational theory covers a lot of co-related yet orthogonal concepts. One of them is the relational algebra. The latter is often seen as an _old-fashioned way of writing database queries_. I would be tempted to retort that elementary algebra must be an _old technique to solve problems in the ancient city of Babylon_. Is it?
+
+### Further reading
+
+* [Relational basics](/overview/relational-basics.html)
+* [Where does Alf come from?](/overview/where-does-alf-come-from.html)
