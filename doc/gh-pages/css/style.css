@@ -31,7 +31,7 @@ a:hover {
 }
 
 #menu {
-  width: 220px;
+  width: 240px;
   position:fixed;
   left: 20px;
   top: 30px;
@@ -81,7 +81,7 @@ a:hover {
 }
 
 #page {
-  padding-left: 260px;
+  padding-left: 280px;
   padding-right: 180px;
   text-align: justify;
 }

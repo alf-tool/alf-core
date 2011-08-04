@@ -4,6 +4,7 @@ task :"gh-pages" do
   require 'wlang/ext/hash_methodize'
   require 'alf'
   require 'bluecloth'
+  require 'redcarpet'
 
   indir  = File.expand_path('../../doc/gh-pages', __FILE__)
   outdir = File.expand_path('../../doc/deploy-gh-pages', __FILE__)
@@ -32,7 +33,7 @@ task :"gh-pages" do
     Dir[File.join(indir, entry, '*.md')].each do |file|
       md     = File.read(file)
       title  = md.split("\n").first[3..-1]
-      text   = BlueCloth.new(md).to_html
+      text   = Redcarpet.new(md).to_html
       target = File.join(outdir, entry, "#{File.basename(file, ".md")}.html")
       File.open(target, "w") do |io|
         ctx2 = ctx.merge(:text => text, :title => title)

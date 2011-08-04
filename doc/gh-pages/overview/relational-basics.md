@@ -84,7 +84,35 @@ The type of a relation is simply defined in terms of its heading. For example, t
 
 ### Relational algebra
 
-... under construction ...
+Relational algebra is to relations what elementary algebra is to numbers and quantities in formulae and equations. Consider the following elementary formula:
+
+<pre class="theory"><code class="ruby">z = 2 * (x + y)</code></pre>
+
+Evaluating this formula with `x = 5` and `y = 3` yields a value for `z`:
+
+<pre class="theory"><code class="ruby">16 = 2 * (5 + 3)</code></pre>
+
+Thanks to known properties of the operators, like associativity or commutativity, formulae can be manipulated. For example, the formula above can be rewritten into the following equivalent form:
+
+<pre class="theory"><code class="ruby">z = (2 * x) +  (2 * y) </code></pre>
+
+Relational algebra is similar, but applies on relations, and have different operators and associated rules. For example:
+
+<pre class="theory"><code class="ruby">#
+#  What are red or heavy parts ?
+#
+(union 
+  (restrict :parts, ->(){ color == Color('red') }),
+  (restrict :parts, ->(){ heavy == true         }))
+</code></pre>
+
+Can be rephrased/rewritten as
+
+<pre class="theory"><code class="ruby">#
+#  What parts are either red or heavy ?
+#
+(restrict :parts, ->(){ (color == Color('red')) or (heavy == true) })
+</code></pre>
 
 ### Footnotes
 
