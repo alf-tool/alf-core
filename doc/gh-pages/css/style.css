@@ -26,7 +26,7 @@ a:hover {
 }
 #social {
   position: absolute;
-  right: 200px;
+  right: 190px;
   top: 45px;
 }
 
@@ -90,6 +90,11 @@ a:hover {
   border-bottom: 1px solid black;
   font-family: Tahoma, serif;
 }
+#page h4 {
+  color: black;
+  border-bottom: 1px dashed black;
+  font-family: Tahoma, serif;
+}
 #page ul { padding-left: 20px; }
 
 #page ul {
@@ -98,9 +103,23 @@ a:hover {
 #page ul li a, #page ul li a:visited {
   
 }
+#page p.note {
+  padding: 0px 0px 0px 30px;
+  font-family: Arial, serif;
+  font-size: 16px;
+}
 
 pre {
   font-size: 12px;
   width: 100%;
   overflow: hidden;
+}
+#page pre.theory {
+  width: auto;
+  padding: 0px 100px 0px 30px;
+  font-size: 14px;
+  overflow: hidden;
+}
+#page pre.theory code {
+  background: white;
 }

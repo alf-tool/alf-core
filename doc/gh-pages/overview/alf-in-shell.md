@@ -33,7 +33,7 @@ $ alf join parts supplies | alf summarize -- city pid -- total 'sum{weight*qty}'
 +--------+---------------------+
 </code></pre>
 
-As show below, Alf provides a fully-featured relational algebra. [Learn more about it!](/ruby/index.html)
+As show below, Alf provides a fully-featured relational algebra.
 
 <pre><code class="bash">
 $ ./bin/alf --help
