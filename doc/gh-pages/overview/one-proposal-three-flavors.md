@@ -63,6 +63,8 @@ An order direction is simply ascending or descending. In the ruby DSL:
 
 An ordering is a ordered mapping between attribute names and order directions. To stress the fact that an ordering is itself *ordered* (unlike a heading or a renaming), the idiomatic way of expressing orderings in the ruby DSL is as follows: 
 
+... under construction ...
+
 ### References and footnotes
 
 1. Arie van Deursen, Paul Klint, and Joost Visser. *Domain-specific languages: an annotated bibliography*. ACM SIGPLAN Vol 35., pages 26-36, June 2000.
