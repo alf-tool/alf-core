@@ -177,11 +177,17 @@ module Alf
   module Command
 
     # Main documentation folder
-    DOC_FOLDER = File.expand_path('../../doc/commands', __FILE__)
+    DOC_FOLDER = File.expand_path('../../doc/', __FILE__)
 
     # This is the main documentation extractor
     DOC_EXTRACTOR = lambda{|cmd, options|
-      file = File.join(DOC_FOLDER, "#{cmd.command_name}.md")
+      file = if cmd.ancestors.include?(Command)
+        File.join(DOC_FOLDER, "commands", "#{cmd.command_name}.md")
+      elsif cmd.ancestors.include?(Operator::Relational) 
+        File.join(DOC_FOLDER, "operators", "relational", "#{cmd.command_name}.md")
+      elsif cmd.ancestors.include?(Operator::NonRelational) 
+        File.join(DOC_FOLDER, "operators", "non_relational", "#{cmd.command_name}.md")
+      end
       if File.exists?(file)
         text = File.read(file)
         cmd.instance_eval("%Q{#{text}}", file, 0)
@@ -233,7 +239,7 @@ module Alf
     #
     # Operator factory
     #
-    def Alf.Operator(file, line)
+    def Alf.Operator(file = nil, line = nil)
       Alf.Command(file, line) do |b|
         b.instance_module Alf::Operator
       end
