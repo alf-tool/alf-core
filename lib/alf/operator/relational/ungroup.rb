@@ -1,22 +1,6 @@
 module Alf
   module Operator::Relational
-    # 
-    # Relational un-grouping (inverse of group)
-    #
-    # SYNOPSIS
-    #
-    #   #{shell_signature}
-    #
-    # DESCRIPTION
-    #
-    # This operator flattens its operand by ungrouping the relation-valued 
-    # attribute ATTR. 
-    #
-    # EXAMPLE
-    #
-    #   alf ungroup group -- supplying
-    #
-    class Ungroup < Alf::Operator(__FILE__, __LINE__)
+    class Ungroup < Alf::Operator()
       include Operator::Relational, Operator::Unary
       
       signature do |s|

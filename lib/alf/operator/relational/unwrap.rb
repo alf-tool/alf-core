@@ -1,18 +1,6 @@
 module Alf
   module Operator::Relational
-    # 
-    # Relational un-wraping (inverse of wrap)
-    #
-    # SYNOPSIS
-    #
-    #   #{shell_signature}
-    #
-    # DESCRIPTION
-    #
-    # This operator flattens its operand by unwrapping the tuple-valued 
-    # attribute ATTR.
-    #
-    class Unwrap < Alf::Operator(__FILE__, __LINE__)
+    class Unwrap < Alf::Operator()
       include Operator::Relational, Operator::Transform
   
       signature do |s|

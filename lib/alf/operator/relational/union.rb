@@ -1,20 +1,6 @@
 module Alf
   module Operator::Relational
-    # 
-    # Relational union
-    #
-    # SYNOPSIS
-    #
-    #   #{shell_signature}
-    #
-    # DESCRIPTION
-    #
-    # This operator computes the union of its operands, that is the set of 
-    # tuples that appear in LEFT or in RIGHT. 
-    #
-    # The result is a valid relation in that it never contains duplicates.
-    #
-    class Union < Alf::Operator(__FILE__, __LINE__)
+    class Union < Alf::Operator()
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature do |s|

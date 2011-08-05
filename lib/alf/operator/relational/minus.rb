@@ -1,18 +1,6 @@
 module Alf
   module Operator::Relational
-    # 
-    # Relational minus (aka difference)
-    #
-    # SYNOPSIS
-    #
-    #   #{shell_signature}
-    #
-    # DESCRIPTION
-    #
-    # This operator computes the difference between its two operands. The 
-    # difference is simply the set of LEFT tuples non present in RIGHT.
-    #
-    class Minus < Alf::Operator(__FILE__, __LINE__)
+    class Minus < Alf::Operator()
       include Operator::Relational, Operator::Shortcut, Operator::Binary
       
       signature do |s|
