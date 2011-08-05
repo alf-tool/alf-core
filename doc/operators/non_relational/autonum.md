@@ -16,6 +16,7 @@ candidate key.
 
 EXAMPLE
 
-  alf autonum suppliers
-  alf autonum suppliers -- unique_id
+  !{alf autonum suppliers}
+
+  !{alf autonum suppliers -- unique_id}
 

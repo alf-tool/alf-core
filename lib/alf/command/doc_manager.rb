@@ -11,7 +11,15 @@ module Alf
       def call(cmd, options = {})
         if File.exists?(file = find_file(cmd))
           text = File.read(file)
-          text.gsub(/#\{([^\}]+)\}/){|match| cmd.instance_eval($1)}
+          text = text.gsub(/#\{([^\}]+)\}/){|match| 
+            cmd.instance_eval($1)
+          }
+          text = text.gsub(/^([ ]*)!\{alf ([^\}]+)\}/){|match| 
+            spacing, invocation  = $1, $2
+            args = Quickl.parse_commandline_args(invocation)
+            res  = Alf.lispy(Alf::Environment.examples).run(args).to_rel.to_s
+            "#{spacing}$ alf #{invocation}\n#{spacing}\n#{res.gsub(/^/, spacing + '  ')}"
+          }
         else
           "Sorry, no documentation available for #{cmd.command_name}"
         end
