@@ -176,28 +176,10 @@ module Alf
   #
   module Command
     require 'alf/command/class_methods'
-
-    # Main documentation folder
-    DOC_FOLDER = File.expand_path('../../doc/', __FILE__)
+    require 'alf/command/doc_manager'
 
     # This is the main documentation extractor
-    DOC_EXTRACTOR = lambda{|cmd, options|
-      file = if cmd.command?
-        File.join(DOC_FOLDER, "commands", "#{cmd.command_name}.md")
-      elsif cmd.operator? && cmd.relational?
-        File.join(DOC_FOLDER, "operators", "relational", "#{cmd.command_name}.md")
-      elsif cmd.operator? && cmd.non_relational?
-        File.join(DOC_FOLDER, "operators", "non_relational", "#{cmd.command_name}.md")
-      else 
-        raise "Unexpected command #{cmd}"
-      end
-      if File.exists?(file)
-        text = File.read(file)
-        cmd.instance_eval("%Q{#{text}}", file, 0)
-      else
-        "Sorry, no documentation available for #{cmd.command_name}"
-      end
-    }
+    DOC_EXTRACTOR = DocManager.new
 
     #
     # Delegator command factory
