@@ -1,20 +1,6 @@
 module Alf
   module Command
-    # 
-    # Executes an .alf file on current environment
-    #
-    # SYNOPSIS
-    #   #{program_name} #{command_name} [FILE]
-    #
-    # OPTIONS
-    # #{summarized_options}
-    #
-    # DESCRIPTION
-    #
-    # This command executes the .alf file passed as first argument (or what comes
-    # on standard input) as a alf query to be executed on the current environment.
-    #
-    class Exec < Alf::Command(__FILE__, __LINE__)
+    class Exec < Alf::Command()
       include Command
       
       def execute(args)

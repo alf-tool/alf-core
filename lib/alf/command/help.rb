@@ -1,12 +1,6 @@
 module Alf
   module Command
-    # 
-    # Show help about a specific command
-    #
-    # SYNOPSIS
-    #   #{program_name} #{command_name} COMMAND
-    #
-    class Help < Alf::Command(__FILE__, __LINE__)
+    class Help < Alf::Command()
       include Command
       
       # Let NoSuchCommandError be passed to higher stage
@@ -16,7 +10,8 @@ module Alf
       def execute(args)
         sup = Quickl.super_command(self)
         sub = (args.size != 1) ? sup : Quickl.sub_command!(sup, args.first)
-        puts Quickl.help(sub)
+        doc = Quickl.help(sub)
+        puts doc
       end
       
     end # class Help

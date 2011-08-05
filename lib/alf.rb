@@ -203,11 +203,19 @@ module Alf
     #
     # Command factory
     #
-    def Alf.Command(file, line) 
-      Quickl::Command(file, line){|builder|
-        builder.command_parent = Alf::Command::Main
-        yield(builder) if block_given?
-      }
+    def Alf.Command(file = nil, line = nil) 
+      if file
+        Quickl::Command(file, line){|builder|
+          builder.command_parent = Alf::Command::Main
+          yield(builder) if block_given?
+        }
+      else
+        Quickl::Command(){|builder|
+          builder.command_parent = Alf::Command::Main
+          builder.doc_extractor  = DOC_EXTRACTOR
+          yield(builder) if block_given?
+        }
+      end
     end
 
     require 'alf/command/main'
