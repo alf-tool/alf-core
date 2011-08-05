@@ -8,15 +8,21 @@ describe "Alf's alf command / " do
     describe "#{File.basename(input)}: #{cmd}" do
       let(:argv)     { Quickl.parse_commandline_args(cmd)[1..-1] }
       let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
-      let(:expected) { wlang(File.read(stdout), binding) }
+      let(:stderr)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stderr") }
+      let(:stdout_expected) { File.exists?(stdout) ? wlang(File.read(stdout), binding) : "" }
+      let(:stderr_expected) { File.exists?(stderr) ? wlang(File.read(stderr), binding) : "" }
 
       before{ 
         $oldstdout = $stdout 
+        $oldstderr = $stderr
         $stdout = StringIO.new
+        $stderr = StringIO.new
       }
       after { 
         $stdout = $oldstdout
+        $stderr = $oldstderr
         $oldstdout = nil 
+        $oldstderr = nil 
       }
       
       specify{
@@ -25,14 +31,15 @@ describe "Alf's alf command / " do
           main = Alf::Command::Main.new
           main.environment = Alf::Environment.folder(dir)
           main.run(argv, __FILE__)
-        rescue Quickl::Exit => ex
+        rescue => ex
           begin
-            ex.react!
+            Alf::Command::Main.handle_error(ex, main)
           rescue SystemExit
-            $stdout << SystemExit << "\n"
+            $stdout << "SystemExit" << "\n"
           end
         end
-        $stdout.string.should(eq(expected)) unless RUBY_VERSION < "1.9"
+        $stdout.string.should(eq(stdout_expected)) unless RUBY_VERSION < "1.9"
+        $stderr.string.should(eq(stderr_expected)) unless RUBY_VERSION < "1.9"
       }
     end
   end

@@ -176,6 +176,30 @@ module Alf
   #
   module Command
 
+    # Main documentation folder
+    DOC_FOLDER = File.expand_path('../../doc/commands', __FILE__)
+
+    # This is the main documentation extractor
+    DOC_EXTRACTOR = lambda{|cmd, options|
+      file = File.join(DOC_FOLDER, "#{cmd.command_name}.md")
+      if File.exists?(file)
+        text = File.read(file)
+        cmd.instance_eval("%Q{#{text}}", file, 0)
+      else
+        "Sorry, no documentation available for #{cmd.command_name}"
+      end
+    }
+
+    #
+    # Delegator command factory
+    #
+    def Alf.Delegator() 
+      Quickl::Delegator(){|builder|
+        builder.doc_extractor = DOC_EXTRACTOR
+        yield(builder) if block_given?
+      }
+    end
+
     #
     # Command factory
     #
