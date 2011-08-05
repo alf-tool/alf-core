@@ -1,22 +1,6 @@
 module Alf
   module Operator::NonRelational
-
-    # 
-    # Force attribute coercion according to a heading
-    #
-    # SYNOPSIS
-    #
-    #   #{shell_signature}
-    #
-    # DESCRIPTION
-    #
-    # This operator coerces attributes of the input tuples according to HEADING.
-    #
-    # EXAMPLE
-    #
-    #   alf coerce parts -- weight Float color Color
-    #
-    class Coerce < Alf::Operator(__FILE__, __LINE__)
+    class Coerce < Alf::Operator()
       include Operator::NonRelational, Operator::Transform
     
       signature do |s|
