@@ -7,6 +7,34 @@ module Alf
     module ClassMethods
 
       #
+      # Returns false
+      #
+      def command?
+        false
+      end
+    
+      #
+      # Returns true
+      #
+      def operator?
+        true
+      end
+
+      #
+      # Returns true if this is a relational operator, false otherwise
+      #
+      def relational?
+        ancestors.include?(Relational)
+      end
+    
+      #
+      # Returns true if this is a non relational operator, false otherwise
+      #
+      def non_relational?
+        ancestors.include?(NonRelational)
+      end
+    
+      #
       # Runs the command on commandline arguments
       #
       # @param [Array] argv an array of commandline arguments, typically ARGV

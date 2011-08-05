@@ -175,18 +175,21 @@ module Alf
   # operators at all. 
   #
   module Command
+    require 'alf/command/class_methods'
 
     # Main documentation folder
     DOC_FOLDER = File.expand_path('../../doc/', __FILE__)
 
     # This is the main documentation extractor
     DOC_EXTRACTOR = lambda{|cmd, options|
-      file = if cmd.ancestors.include?(Command)
+      file = if cmd.command?
         File.join(DOC_FOLDER, "commands", "#{cmd.command_name}.md")
-      elsif cmd.ancestors.include?(Operator::Relational) 
+      elsif cmd.operator? && cmd.relational?
         File.join(DOC_FOLDER, "operators", "relational", "#{cmd.command_name}.md")
-      elsif cmd.ancestors.include?(Operator::NonRelational) 
+      elsif cmd.operator? && cmd.non_relational?
         File.join(DOC_FOLDER, "operators", "non_relational", "#{cmd.command_name}.md")
+      else 
+        raise "Unexpected command #{cmd}"
       end
       if File.exists?(file)
         text = File.read(file)
@@ -209,19 +212,12 @@ module Alf
     #
     # Command factory
     #
-    def Alf.Command(file = nil, line = nil) 
-      if file
-        Quickl::Command(file, line){|builder|
-          builder.command_parent = Alf::Command::Main
-          yield(builder) if block_given?
-        }
-      else
-        Quickl::Command(){|builder|
-          builder.command_parent = Alf::Command::Main
-          builder.doc_extractor  = DOC_EXTRACTOR
-          yield(builder) if block_given?
-        }
-      end
+    def Alf.Command() 
+      Quickl::Command(){|builder|
+        builder.command_parent = Alf::Command::Main
+        builder.doc_extractor  = DOC_EXTRACTOR
+        yield(builder) if block_given?
+      }
     end
 
     require 'alf/command/main'
@@ -239,8 +235,8 @@ module Alf
     #
     # Operator factory
     #
-    def Alf.Operator(file = nil, line = nil)
-      Alf.Command(file, line) do |b|
+    def Alf.Operator()
+      Alf.Command() do |b|
         b.instance_module Alf::Operator
       end
     end
