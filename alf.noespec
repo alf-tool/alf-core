@@ -31,7 +31,7 @@ variables:
     - http://github.com/blambeau/alf
     - http://rubygems.org/gems/alf
   dependencies: 
-    - {name: quickl,       version: "~> 0.3.0",  groups: [runtime      ]}
+    - {name: quickl,       version: "~> 0.4.0",  groups: [runtime      ]}
     - {name: myrrha,       version: "~> 1.2.0",  groups: [runtime      ]}
     - {name: rake,         version: "~> 0.9.2",  groups: [test, release]}
     - {name: rspec,        version: "~> 2.6.0",  groups: [test, release]}
