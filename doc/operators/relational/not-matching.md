@@ -11,9 +11,10 @@ This operator restricts LEFT tuples to those for which there does not
 exist any tuple in RIGHT that (naturally) joins. This is a shortcut 
 operator for the following longer expression: 
 
-        (minus xxx, (matching xxx, yyy))
+    (minus xxx, (matching xxx, yyy))
 
 EXAMPLE
 
-  alf not-matching suppliers supplies
+    # Which suppliers do not supply any part?
+    !{alf not-matching suppliers supplies}
 

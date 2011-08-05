@@ -14,5 +14,6 @@ With --allbut, it wraps all attributes not specified in ATTR_LIST instead.
 
 EXAMPLE
 
+  # Wrap `city` and `status` and a tuple-value attribute named `loc_and_status` 
   alf wrap suppliers -- city status -- loc_and_status
 

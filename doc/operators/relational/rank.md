@@ -19,7 +19,10 @@ for the output.
 
 EXAMPLE
 
-  alf rank parts -- weight -- position
-  alf rank parts -- weight desc -- position
-  alf rank parts -- weight desc pid asc -- position
+    # Rank parts by weight 
+    !{alf rank parts -- weight -- position}
+
+    # Rank parts by weight in descending order. Ensure that position is a 
+    # candidate key by including a key in ordering
+    !{alf rank parts -- weight desc pid asc -- position}
 

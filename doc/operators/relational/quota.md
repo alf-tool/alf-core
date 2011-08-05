@@ -17,5 +17,6 @@ This operator is an attempt to generalize RANK in two ways:
 
 EXAMPLE
 
-  alf quota supplies -- sid -- qty -- position count sum_qty "sum(:qty)"
+    # Compute linear progression of quantities by supplier number
+    !{alf quota supplies -- sid -- qty -- position count  sum_qty "sum(:qty)"}
 

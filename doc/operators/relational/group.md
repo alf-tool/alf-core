@@ -14,6 +14,9 @@ With --allbut, it groups all attributes not specified in ATTR_LIST instead.
 
 EXAMPLE
 
-  alf group supplies -- pid qty -- supplying
-  alf group supplies --allbut -- sid -- supplying
+    # Group pid and qty as a relation-valued attribute names supplying
+    !{alf group supplies -- pid qty -- supplying}
+
+    # Group all but pid ...
+    !{alf group supplies --allbut -- pid -- supplying}
 

@@ -17,6 +17,9 @@ attribute equalities.
 
 EXAMPLE
 
-  alf restrict suppliers -- "status > 20"
-  alf restrict suppliers -- city "'London'"
+    # Who are suppliers with a status greater than 20?
+    !{alf restrict suppliers -- "status > 20"}
+
+    # Which suppliers live in London?
+    !{alf restrict suppliers -- city "'London'"}
 

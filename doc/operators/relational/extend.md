@@ -14,5 +14,6 @@ ruby code literals.
 
 EXAMPLE
 
-  alf extend supplies -- big "qty > 100"  price "qty * 12.2"
+    # Compute a few attributes on suppliers by extension
+    !{alf extend supplies -- big "qty > 100"  price "qty * 12.2"}
 

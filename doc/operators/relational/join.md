@@ -15,5 +15,6 @@ this behavior does not fit your needs.
 
 EXAMPLE
 
-  alf join suppliers supplies 
+    # Computes natural join of suppliers and supplies
+    !{alf join suppliers supplies}
 

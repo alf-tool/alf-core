@@ -15,5 +15,6 @@ operator for the following longer expression:
 
 EXAMPLE
 
-  alf matching suppliers supplies 
+    # Which suppliers supply at least one part?
+    !{alf matching suppliers supplies}
 

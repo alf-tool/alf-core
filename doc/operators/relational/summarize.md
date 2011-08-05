@@ -18,6 +18,6 @@ projection key.
 
 EXAMPLE
 
-  alf summarize supplies -- sid -- total_qty "sum(:qty)" 
-  alf summarize supplies --allbut -- pid qty -- total_qty "sum(:qty)" 
+    # Compute the sum of supplied quantities, by supplier id
+    !{alf summarize supplies -- sid -- total_qty "sum(:qty)"}
 

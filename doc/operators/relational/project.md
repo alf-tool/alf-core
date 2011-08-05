@@ -19,6 +19,9 @@ of keeping them.
 
 EXAMPLE
 
-  alf project suppliers -- name city
-  alf project --allbut suppliers -- name city
+    # What are supplier cities ?
+    !{alf project suppliers -- city}
+
+    # What are all but supplier's id and name
+    !{alf project --allbut suppliers -- sid name}
 

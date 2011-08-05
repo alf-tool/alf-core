@@ -12,5 +12,6 @@ successive (old name, new name) pairs
 
 EXAMPLE
 
-  alf rename suppliers -- name supplier_name  city supplier_city
+    # Rename a few supplier attributes
+    !{alf rename suppliers -- name supplier_name  city supplier_city}
 
