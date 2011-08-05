@@ -1,5 +1,4 @@
 ## !{op}
 
-<pre><code class="bash">
-!{op.documentation}
-</code></pre>
++{Redcarpet.new(op.documentation).to_html}
+
