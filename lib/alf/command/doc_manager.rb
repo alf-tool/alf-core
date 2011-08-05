@@ -18,7 +18,7 @@ module Alf
             spacing, invocation  = $1, $2
             args = Quickl.parse_commandline_args(invocation)
             res  = Alf.lispy(Alf::Environment.examples).run(args).to_rel.to_s
-            "#{spacing}$ alf #{invocation}\n#{spacing}\n#{res.gsub(/^/, spacing + '  ')}"
+            "#{spacing}$ alf #{invocation}\n#{spacing}\n#{res.gsub(/^/, spacing + '  ')[0...-1]}"
           }
         else
           "Sorry, no documentation available for #{cmd.command_name}"

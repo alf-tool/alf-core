@@ -16,7 +16,9 @@ candidate key.
 
 EXAMPLE
 
-  !{alf autonum suppliers}
+    # Autonumber suppliers with default attribute name
+    !{alf autonum suppliers}
 
-  !{alf autonum suppliers -- unique_id}
+    # Autonumber suppliers with a `unique_id` attribute
+    !{alf autonum suppliers -- unique_id}
 

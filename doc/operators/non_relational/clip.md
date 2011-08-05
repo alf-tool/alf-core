@@ -22,6 +22,9 @@ projecting them away.
 
 EXAMPLE
 
-  alf clip suppliers -- name city
-  alf clip suppliers --allbut -- name city
+  # Clip suppliers on `name` and `city`
+  !{alf clip suppliers -- name city}
+
+  # Clip suppliers on all other attributes
+  !{alf clip suppliers --allbut -- name city}
 
