@@ -11,7 +11,7 @@ module Alf
       def call(cmd, options = {})
         if File.exists?(file = find_file(cmd))
           text = File.read(file)
-          cmd.instance_eval("%Q{#{text}}", file, 0)
+          text.gsub(/#\{([^\}]+)\}/){|match| cmd.instance_eval($1)}
         else
           "Sorry, no documentation available for #{cmd.command_name}"
         end
