@@ -3,7 +3,7 @@ Relational wraping (tuple-valued attributes)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

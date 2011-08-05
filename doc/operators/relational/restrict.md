@@ -3,7 +3,7 @@ Relational restriction (aka where, predicate filtering)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

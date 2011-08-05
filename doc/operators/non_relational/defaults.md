@@ -3,7 +3,7 @@ Force default values on missing/nil attributes
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 OPTIONS
 #{summarized_options}

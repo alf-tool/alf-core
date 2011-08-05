@@ -3,7 +3,7 @@ Relational join (and cross-join)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

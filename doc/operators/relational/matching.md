@@ -3,7 +3,7 @@ Relational matching (join + project back on left)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

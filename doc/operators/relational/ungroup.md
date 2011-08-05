@@ -3,7 +3,7 @@ Relational un-grouping (inverse of group)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

@@ -3,7 +3,7 @@ Extend its operand with an unique autonumber attribute
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

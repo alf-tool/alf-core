@@ -3,7 +3,7 @@ Relational minus (aka difference)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

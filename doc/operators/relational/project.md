@@ -3,7 +3,7 @@ Relational projection (clip + compact)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 OPTIONS
 #{summarized_options}

@@ -3,7 +3,7 @@ Generalized quota-queries (position, sum progression, etc.)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

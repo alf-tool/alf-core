@@ -3,7 +3,7 @@ Remove tuple duplicates
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 

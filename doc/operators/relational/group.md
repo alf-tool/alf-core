@@ -3,7 +3,7 @@ Relational grouping (relation-valued attributes)
 
 SYNOPSIS
 
-  #{shell_signature}
+    #{shell_signature}
 
 DESCRIPTION
 
