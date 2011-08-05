@@ -1,6 +1,6 @@
 ## Using Alf in Ruby
 
-Alf provides a Domain Specific Language (DSL), written in Ruby, for writing and executing relational queries. This DSL aims at being powerful yet simple and intuitive to use.
+Alf comes with a Domain Specific Language (DSL), written in Ruby, for writing and executing relational queries. This DSL aims at being powerful yet simple and intuitive to use.
 
     #
     # What are total weight of supplied products, by city, then by product id?

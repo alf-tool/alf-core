@@ -1,9 +1,8 @@
 ## Using Alf in shell
 
-Alf provides a set of shell commands to manipulate data with relational algebra. Those commands are able to manipulate .csv files, SQL tables, log files, and so on. If you know ruby, writing an adapter for recognizing other data sources is almost straightforward.
+Alf comes with a set of shell commands to manipulate data with relational algebra. Those commands are able to manipulate .csv files, SQL tables, log files, and so on. If you know ruby, writing an adapter for recognizing other data sources is almost straightforward.
 
-<pre><code class="bash">
-#
+<pre><code class="bash">#
 # What are total weight of supplied products, by city, then by product id?
 #
 
@@ -33,10 +32,10 @@ $ alf join parts supplies | alf summarize -- city pid -- total 'sum{weight*qty}'
 +--------+---------------------+
 </code></pre>
 
-As show below, Alf provides a fully-featured relational algebra.
 
-<pre><code class="bash">
-$ ./bin/alf --help
+As show below, Alf provides you with a fully-featured relational algebra.
+
+<pre><code class="bash">$ ./bin/alf --help
 
 alf - Relational algebra at your fingertips
 

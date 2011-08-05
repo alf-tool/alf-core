@@ -1,6 +1,6 @@
 ## Relational basics
 
-This page provides the necessary background on relational theory to understand Alf. Note that it only covers the concepts needed to understand the relational *algebra*; that is, nothing is said about database schemas, normal forms, transactions, ACID properties, and so on. Refer to standard database literature for those.
+This page describes the necessary background on relational theory to understand Alf. Note that it only covers the concepts needed to understand the relational *algebra*; that is, nothing is said about database schemas, normal forms, transactions, ACID properties, and so on. Refer to standard database literature for those.
 
 The background given below is a rephrasing of what can be found in The Third Manifesto (TTM), by Hugh Darwen and C.J. Date. See [www.thethirdmanifesto.com](http://www.thethirdmanifesto.com), [the TTM book](http://www.amazon.com/Databases-Types-Relational-Model-3rd/dp/0321399420) or [Where does Alf come from?](/overview/where-alf-does-come-from.html).
 
@@ -81,6 +81,22 @@ We will denote relation literals as follows:
 The type of a relation is simply defined in terms of its heading. For example, the heading of the relation show above is:
 
 <pre class="theory"><code class="ruby">Heading( pid: String, name: String, color: Color, heavy: Boolean )</code></pre>
+
+### A few consequences
+
+The following list of bullets are logical consequences of the definitions above. Alf considers them as part of its specification; if it does not respect it, it is either a bug or a limitation... for which patches are welcome!
+
+* Tuples and relations may contain values of any complexity, providing that the corresponding type is consistent with the theory of types stated above.
+* In particular, tuples and relations may contain... tuples and relations.
+
+The following list of bullets are other logical consequences of the definitions above. Alf considers them as pre-conditions of all relational operators, without necessarily enforcing them:
+
+* All tuples that forms relations have the same "structure", that is, the same heading
+* Tuples and relations never contain NULL
+* No left-right ordering of attributes applies to tuples and relations
+* No tuple ordering applies to relations
+
+That being said, Alf also provides you with a few non-relational operators to clean "noisy" data upstream of relational operators. Also, Alf tend to be "friendly enough" about ordering and NULL. It does not guarantee any behavior nor does it provide you with ways of specifying such behavior on relational operators. 
 
 ### Relational algebra
 
