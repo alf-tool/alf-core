@@ -114,6 +114,9 @@ pre {
   width: 100%;
   overflow: hidden;
 }
+code.theory {
+  font-size: 14px;
+}
 #page pre.theory {
   width: auto;
   padding: 0px 100px 0px 30px;
