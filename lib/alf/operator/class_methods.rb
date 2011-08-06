@@ -53,9 +53,11 @@ module Alf
 
         # normalize operands
         operands = [ stdin_reader ] + Array(operands)
-        operands = if unary?
+        operands = if nullary?
+          []
+        elsif unary?
           operands.last
-        else
+        elsif binary?
           operands[-2..-1]
         end
 

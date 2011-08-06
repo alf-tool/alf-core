@@ -25,10 +25,16 @@ shared_examples_for "An operator class" do
     operator_class.should respond_to(:binary?)
   end
   
+  it "should have a nullary? class method" do
+    operator_class.should respond_to(:nullary?)
+  end
+  
   it "should implement unary? and binary? accurately" do
-    operator_class.unary?.should_not eq(operator_class.binary?)
-    operator_class.unary?.should eq(operator_class.ancestors.include?(Alf::Operator::Unary))
-    operator_class.binary?.should eq(operator_class.ancestors.include?(Alf::Operator::Binary))
+    op = operator_class
+    (op.nullary? || op.unary? || op.binary?).should be_true
+    (op.nullary? && op.unary?).should be_false
+    (op.nullary? && op.binary?).should be_false
+    (op.unary? && op.binary?).should be_false
   end
 
 end
