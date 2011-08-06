@@ -18,6 +18,7 @@ GEM
     fastercsv (1.5.4)
     rake (0.9.2)
     rcov (0.9.9)
+    rcov (0.9.9-java)
     redcarpet (1.17.2)
     request-log-analyzer (1.11.0)
     rspec (2.6.0)
