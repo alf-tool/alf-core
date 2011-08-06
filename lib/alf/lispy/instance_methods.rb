@@ -104,7 +104,14 @@ module Alf
     #     op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
     #
     def run(argv, requester = nil)
-      Alf::Command::Main.new(environment).run(argv, requester)
+      argv = Quickl.parse_commandline_args(argv) if argv.is_a?(String)
+      argv = Quickl.split_commandline_args(argv, '|')
+      argv.inject(nil) do |cmd,arr|
+        arr.shift if arr.first == "alf"
+        main = Alf::Command::Main.new(environment)
+        main.stdin_reader = cmd unless cmd.nil?
+        main.run(arr, requester)
+      end
     end
 
     private 

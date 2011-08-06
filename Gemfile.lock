@@ -6,7 +6,7 @@ GIT
 
 GIT
   remote: git://github.com/blambeau/quickl.git
-  revision: a894fe96d028f6dad39db48a5046a64df24f3392
+  revision: 29ae87d826d1e0c733343e08aa76657042fe8809
   specs:
     quickl (0.4.0)
 

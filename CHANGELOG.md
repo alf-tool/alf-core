@@ -41,6 +41,8 @@
 
 * Added 'alf --input-reader' to specify $stdin format (csv, rash, etc.)
 * Added 'alf -Ipath' that mimics ruby's -I (add path to $LOAD_PATH before run)
+* Lispy#run supports command arguments to be passed as a string
+* Lispy#run supports piped commands, with '|' as in shell
 
 ## Hurting changes to Lispy DSL (and therefore to Relation)
 

@@ -48,7 +48,10 @@ module Alf
 
       # Environment instance to use to get base iterators
       attr_accessor :environment
-    
+
+      # The reader to use when stdin is used as operand
+      attr_accessor :stdin_reader
+
       # Output renderer
       attr_accessor :renderer
       
@@ -109,7 +112,7 @@ module Alf
       # --input-reader= option
       #
       def stdin_reader
-        Reader.send(@input_reader, $stdin)
+        @stdin_reader || Reader.send(@input_reader, $stdin)
       end
 
       #
