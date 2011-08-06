@@ -2,5 +2,6 @@
 Show help about a specific command
 
 SYNOPSIS
-  alf #{command_name} COMMAND
+
+    alf #{command_name} COMMAND
 

@@ -6,7 +6,8 @@ SYNOPSIS
     #{shell_signature}
 
 OPTIONS
-#{summarized_options}
+
+    #{summarized_options}
 
 DESCRIPTION
 

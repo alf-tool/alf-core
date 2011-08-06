@@ -5,6 +5,10 @@ SYNOPSIS
 
     #{shell_signature}
 
+OPTIONS
+
+    #{summarized_options}
+
 DESCRIPTION
 
 This operator wraps attributes in ATTR_LIST as a new, tuple-valued

@@ -5,6 +5,10 @@ SYNOPSIS
 
     #{shell_signature}
 
+OPTIONS
+
+    #{summarized_options}
+
 DESCRIPTION
 
 This operator groups attributes in ATTR_LIST as a new, relation-valued

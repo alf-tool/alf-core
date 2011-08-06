@@ -11,14 +11,20 @@ module Alf
       def call(cmd, options = {})
         if File.exists?(file = find_file(cmd))
           text = File.read(file)
+          text = text.gsub(/^([ \t]*)#\{([^\}]+)\}/){|match| 
+            spacing, invocation  = $1, $2
+            res = cmd.instance_eval(invocation)
+            realign(res, spacing, true)
+          }
           text = text.gsub(/#\{([^\}]+)\}/){|match| 
             cmd.instance_eval($1)
           }
-          text = text.gsub(/^([ ]*)!\{alf ([^\}]+)\}/){|match| 
+          text = text.gsub(/^([ \t]*)!\{([^\}]+)\}/){|match| 
             spacing, invocation  = $1, $2
-            args = Quickl.parse_commandline_args(invocation)
+            args = Quickl.parse_commandline_args(invocation)[1..-1]
             res  = Alf.lispy(Alf::Environment.examples).run(args).to_rel.to_s
-            "#{spacing}$ alf #{invocation}\n#{spacing}\n#{res.gsub(/^/, spacing + '  ')[0...-1]}"
+            res  = realign(res, spacing, false)[0...-1]
+            realign("$ #{invocation}\n\n#{res}", spacing, false)
           }
         else
           "Sorry, no documentation available for #{cmd.command_name}"
@@ -26,6 +32,11 @@ module Alf
       end
 
       private 
+
+      def realign(txt, spacing, strip)
+        rx = strip ? /^[ \t]*/ : /^/
+        txt.gsub(rx, spacing)
+      end
 
       def find_file(cmd)
         where = if cmd.command?

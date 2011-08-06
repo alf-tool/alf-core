@@ -2,13 +2,15 @@
 Output input tuples through a specific renderer (text, yaml, ...)
 
 SYNOPSIS
-  alf show DATASET
+
+    alf show DATASET
 
 OPTIONS
-      --rash                       Render output as ruby hashes
-      --text                       Render output as a text table
-      --yaml                       Render output as a yaml output
-      --csv                        Render output as a csv file
+
+    --rash                       Render output as ruby hashes
+    --text                       Render output as a text table
+    --yaml                       Render output as a yaml output
+    --csv                        Render output as a csv file
 
 DESCRIPTION
 
