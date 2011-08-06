@@ -78,6 +78,13 @@ module Alf
       end
 
       #
+      # Returns true if this operator is a zero-ary operator, false otherwise
+      #
+      def nullary?
+        ancestors.include?(Operator::Nullary)
+      end
+
+      #
       # Returns true if this operator is an unary operator, false otherwise
       #
       def unary?

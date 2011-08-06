@@ -86,6 +86,10 @@ module Alf
           operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
           op_class.new(*args).pipe(operands, environment)
         end
+      elsif op_class.nullary?
+        define_method(meth_name) do |*args|
+          op_class.new(*args).pipe(nil, environment)
+        end
       else
         raise "Unexpected operator #{op_class}"
       end

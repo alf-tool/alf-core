@@ -57,6 +57,11 @@ module Alf
             op = op_class.new(*args).pipe([self, Iterator.coerce(right)])
             Relation.coerce(op)
           end
+        elsif op_class.nullary?
+          define_method(meth_name) do |*args|
+            op = op_class.new(*args)
+            Relation.coerce(op)
+          end
         else
           raise "Unexpected operator #{op_class}"
         end

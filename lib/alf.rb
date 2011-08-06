@@ -225,6 +225,7 @@ module Alf
 
     require 'alf/operator/class_methods'
     require 'alf/operator/base'
+    require 'alf/operator/nullary'
     require 'alf/operator/unary'
     require 'alf/operator/binary'
     require 'alf/operator/cesure'
@@ -243,6 +244,7 @@ module Alf
       require 'alf/operator/non_relational/sort'
       require 'alf/operator/non_relational/clip'
       require 'alf/operator/non_relational/coerce'
+      require 'alf/operator/non_relational/generator'
   
       #
       # Yields the block with each operator module in turn

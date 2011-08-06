@@ -11,6 +11,7 @@ module Alf
         Alf::Operator::NonRelational::Coerce,
         Alf::Operator::NonRelational::Compact,
         Alf::Operator::NonRelational::Defaults,
+        Alf::Operator::NonRelational::Generator,
         Alf::Operator::NonRelational::Sort,
       ]
     end
