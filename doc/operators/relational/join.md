@@ -22,3 +22,6 @@ EXAMPLE
     # attribute they have in common)
     !{alf join suppliers supplies}
 
+    # The following example demontrates the cross join feature with a generated 
+    # relation
+    !{alf generator -- 3 -- num | alf join cities}
