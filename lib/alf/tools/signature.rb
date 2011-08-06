@@ -152,7 +152,8 @@ module Alf
 
       def to_shell_doc(operator = nil)
         ope = if operator
-          operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT"
+          operator.nullary? ? "" :
+            (operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT")
         else
           "OPERANDS"
         end

@@ -60,6 +60,12 @@ module Alf
         it{ should eq("[--allbut] [--newname=NEWNAME] OPERANDS -- PROJ -- ORDERING") }
       end
 
+      describe "when an nullary operator is passed" do
+        subject{ signature.to_shell_doc(Operator::NonRelational::Generator) }
+        let(:signature){ Signature.new{|s|} }
+        it{ should eq("") }
+      end
+
       describe "when an unary operator is passed" do
         subject{ signature.to_shell_doc(Operator::Relational::Restrict) }
         let(:signature){ Signature.new{|s|} }
