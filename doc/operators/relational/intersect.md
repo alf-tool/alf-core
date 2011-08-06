@@ -7,7 +7,7 @@ SYNOPSIS
 
 DESCRIPTION
 
-This operator computes the relational intersection between its two 
-operands. The intersection is simply the set of tuples that appear both
-in LEFT and RIGHT operands.
+This operator computes the relational intersection of its operands. Such
+intersection is simply the set of tuples that appear both in LEFT and in 
+RIGHT.
 
