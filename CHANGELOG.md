@@ -23,6 +23,9 @@
   
 ## New operators and enhancements
 
+* A GENERATOR operator is introduced. It allows generating a relation with one
+  auto-number attribute, up to a given size.
+
 * A COERCE operator is introduced. It provides a quick way to obtain type-safe
   relations from type-unsafe sources like .csv files. For example:
   
