@@ -92,13 +92,29 @@ A tuple predicate is a tuple expression which returns a Boolean value. For examp
 
 A tuple computation is a mapping between attribute names and tuple expressions (a partial function, in fact). For example:
 
-<pre class="theory"><code class="ruby">
-{}                                                         # the empty computation
+<pre class="theory"><code class="ruby">{}                                                         # the empty computation
 {:total => ->(){ qty * price }}                            # a singleton computation
 {:big => ->{ qty > 100 }, :total => ->(){ qty * price }}   # a general case
 </code></pre>
 
 #### Summarizing expression
+
+A summarizing expression denotes the name of a summarization operator together with a tuple expression. For example:
+
+<pre class="theory"><code class="ruby">count{ }
+sum{ qty * price }             # `qty` and `price` denote tuple attributes
+</code></pre>
+
+Alf currently supports the following summarization operators: `count`, `sum`, `avg`, `max`, `min`, `group`, `collect` and `concat`.
+
+#### Summarization
+
+A summarization is a mapping between attribute names and summarizing expressions. For example:
+
+<pre class="theory"><code class="ruby">{}                                                    # the empty summarization
+{:howmany => count{ }}                                # a singleton summarization
+{:howmany => count{ }, :total => sum{ qty * price }}  # a general case
+</code></pre>
 
 ### References and footnotes
 
