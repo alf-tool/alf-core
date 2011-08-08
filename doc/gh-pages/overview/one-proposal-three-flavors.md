@@ -1,27 +1,23 @@
 ## One proposal, three flavors
 
-As I explain [here](/overview/where-does-alf-come-from.html), I've started Alf because I wanted to split the effective execution of benchmarks from the summarization and displaying of their results. It has been written with a strong background about relational theory, so that it ends up being actually a proposal of query language plus an implementation supporting three syntactic flavors.
-
-### Overview
-
-Our query language proposal is not about the semantics of relational algebra, which is borrowed from [The Third Manifesto and TUTORIAL D](http://thethirdmanifesto.com/). Instead, it is about syntactic issues and a few suggestions for using relational algebra in dynamic languages like python, ruby, clojure, javascript and the like. We call the latter the "hosting language" below. Specifically, we propose
+Alf supports three syntactic flavors of relational algebra: one to use Alf in shell, two others to use it in Ruby (one with a functional style and an object-oriented one). This page summarizes the common parts in terms of:
 
 * a list of *named relational operators* together with their *signature* in terms of *operands*, *arguments* and *options*
 * a specification of the *types* of arguments and options
 
-Note that, this is neither purely semantic nor purely syntactic and should be seen as a definition of an abstract Domain Specific Language (DSL) [1, 2]. Alf provides three syntactic flavors of this DSL (one for expressing queries in shell, two others for expressing queries in Ruby) and an execution engine. Note that,
+Note that, this is neither purely semantic nor purely syntactic. It should better be seen as a definition of an abstract Domain Specific Language (DSL) [1, 2] for which Alf provides three syntactic implementations. Note that,
 
-* as such, the query language **says nothing about how** queries are executed. Alf's engine is a pragmatic reference implementation that tries not to load whole relations in memory, where possible [3].
-* the boundaries of the proposed query language are intentionally limited to avoid perturbating the hosting language with concepts that would make it impossible to implement [4].
-* in particular, it does not prescribe a predefined set of supported scalar types and operators. Most hosting languages support Boolean, Integer or String, etc. and provides users with ways for implementing new ones.
+* as such, the DSL **says nothing about how** queries are executed. The Alf engine is a pragmatic implementation that tries not to load whole relations in memory, where possible. [3]
+* the boundaries of the DSL are intentionally limited to avoid perturbating implementations with concepts that would make it impossible to implement. The aim here is to set a basis that could be ported without much effor to other dynamic languages such as clojure, python, javascript, and so on. [4] 
+* in particular, it does not prescribe a predefined set of supported scalar types and operators. Most implementation languages support Boolean, Integer or String, etc. and provides users with ways for implementing new ones.
 
 ### Basic types
 
-This section describes the basic types used in query expressions. The proposal **does not prescribe any dedicated syntax for literals**, that must be made clear by each DSL implementation. Examples below are valid literals when using the functional Ruby DSL of Alf. 
+This section describes the basic types used in query expressions. Note that it does not prescribe any dedicated syntax for literals, that are implementation specific. Examples below are valid literals when using the functional Ruby DSL of Alf. 
 
 #### Name
 
-A name is used to denote base relations, attributes and types. When relevant, the context distinguish between attribute names, relation names and type names. Examples are:
+A name is used to denote base relations, attributes and types. When relevant, the context distinguishes between attribute names, relation names and type names. Examples are:
 
 <pre class="theory"><code class="ruby">:suppliers, :parts             # relation names
 :name, :city, :color_in_rgb    # attribute names
@@ -30,7 +26,7 @@ String, Float, Color           # type names
 
 #### Attribute list
 
-An attribute list is simply a list of attribute *names*. Such a list has a left-to-right ordering which may or may not be relevant in the context of its use. Generally, duplicates in attributes lists does not make sense. Examples of attribute lists are:
+An attribute list is simply a list of attribute *names*. Such a list has a left-to-right ordering whose relevance is context specific. Generally, attribute lists have no duplicates. Examples of attribute lists are:
 
 <pre class="theory"><code class="ruby">[]                      # the empty list
 [:name]                 # the singleton list
@@ -63,7 +59,46 @@ An order direction is simply ascending or descending. In the ruby DSL:
 
 An ordering is a ordered mapping between attribute names and order directions. To stress the fact that an ordering is itself *ordered* (unlike a heading or a renaming), the idiomatic way of expressing orderings in the ruby DSL is as follows: 
 
-... under construction ...
+<pre class="theory"><code class="ruby">[]                                  # the empty ordering
+[[:name, :asc]]                     # name, in ascending order
+[[:name, :asc], [:city, :desc]]     # name in ascending order, then city in descending order
+</code></pre>
+
+As full ascending orders are commonly used, the following shortcuts are also supported:
+
+<pre class="theory"><code class="ruby">[:name]                             # name, in ascending order
+[:name, :city]                      # name in ascending order, then city in ascending order as well
+</code></pre>
+
+#### Tuple expression
+
+A tuple expression is an expression evaluated in the context/scoping of a tuple. The DSL does not prescribe what forms a valid expression, which is implementation specific. We assume purely functional expressions, since the affectation is useless when considering relational algebra in isolation.
+
+In ruby DSL, Alf uses lambda functions for tuple expressions. For example:
+
+<pre class="theory"><code class="ruby">->(){ true }                        # expression that always evaluates to true
+->(){ qty * price }                 # `qty` and `price` denote tuple attributes
+</code></pre>
+
+#### Tuple predicate
+
+A tuple predicate is a tuple expression which returns a Boolean value. For example:
+
+<pre class="theory"><code class="ruby">->(){ true }                        # the `true` predicate
+->(){ qty > 100 }                   # `qty` denotes a tuple attribute
+</code></pre>
+
+#### Tuple computation
+
+A tuple computation is a mapping between attribute names and tuple expressions (a partial function, in fact). For example:
+
+<pre class="theory"><code class="ruby">
+{}                                                         # the empty computation
+{:total => ->(){ qty * price }}                            # a singleton computation
+{:big => ->{ qty > 100 }, :total => ->(){ qty * price }}   # a general case
+</code></pre>
+
+#### Summarizing expression
 
 ### References and footnotes
 

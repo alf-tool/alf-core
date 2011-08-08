@@ -112,7 +112,7 @@ Thanks to known properties of the operators, like associativity or commutativity
 
 <pre class="theory"><code class="ruby">z = (2 * x) +  (2 * y) </code></pre>
 
-Relational algebra is similar, but applies on relations, and have different operators and associated rules. For example:
+Relational algebra is similar, but applies to relations. For example:
 
 <pre class="theory"><code class="ruby">#
 #  What are red or heavy parts ?
