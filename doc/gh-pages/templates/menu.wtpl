@@ -1,11 +1,25 @@
+<script type="text/javascript">
+  var current = "{entry}";
+  function open(entry) {
+    hide(current);
+    current = entry;
+    show(current);
+  };
+  function show(entry) {
+    $('#menu-' + entry + " .content").slideDown();
+  };
+  function hide(entry) {
+    $('#menu-' + entry + " .content").slideUp();
+  };
+</script>
 <<={menu.yaml as entries}
 <div id="menu">
-
 *{entries as e}{
-<div class="entry">${e.name}</div>
-<<+{menu/!{e.id}.wtpl share all}
+<div class="menu-entry" id="menu-!{e.id}">
+<div class="head"><a href="javascript:open('{e.id}');">${e.name}</a></div>
+<div class="content" ?{e.id.to_sym == entry}{}{style="display:none;"}><<+{menu/!{e.id}.wtpl share all}</div>
+</div>
 }
-
 </div>
 
 

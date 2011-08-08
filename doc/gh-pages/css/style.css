@@ -37,7 +37,7 @@ a:hover {
   top: 30px;
 }
 
-#menu div.entry {
+#menu .menu-entry .head {
   font-family: Tahoma, serif;
   color: black;
   border-bottom: 1px solid #444444;
@@ -45,21 +45,13 @@ a:hover {
   margin-bottom: 5px;
   font-weight: bold;
 }
-#menu div.subentry {
-  font-size: 16px;
+#menu .menu-entry .subentry {
+  font-size: 18px;
   text-align: right;
   margin-left: 10px;
   padding-top: 5px;
   margin-bottom: 5px;
-/*  border-bottom: 1px dashed #333333;*/
   text-decoration: underline;
-}
-#menu a.click-to-expand {
-  display: block;
-  text-align: center;
-  color: black;
-  font-family: Arial, sans-serif;
-  font-size: 14px;
 }
 #menu ul {
   text-align: right;
