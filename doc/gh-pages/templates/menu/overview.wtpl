@@ -3,8 +3,6 @@
 <li><a href="{prefix}/overview/why.html">Why Alf ?</a></li>
 <li><a href="{prefix}/overview/relational-basics.html">Relational basics</a></li>
 <li><a href="{prefix}/overview/one-proposal-three-flavors.html">One proposal, three flavors</a></li>
-<li><a href="{prefix}/overview/alf-in-shell.html">Using Alf in shell</a></li>
-<li><a href="{prefix}/overview/alf-in-ruby.html">Using Alf in Ruby</a></li>
 <li><a href="{prefix}/overview/where-does-alf-come-from.html">Where does Alf come from?</a></li>
 </ul>
 
