@@ -12,5 +12,5 @@ Yet, Alf is not about SQL. It is not even about databases, in fact. The relation
 
 ### Further reading
 
-* [Relational basics](/overview/relational-basics.html)
-* [Where does Alf come from?](/overview/where-does-alf-come-from.html)
+* [Relational basics](overview/relational-basics.html)
+* [Where does Alf come from?](overview/where-does-alf-come-from.html)
