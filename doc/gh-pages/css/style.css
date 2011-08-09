@@ -46,6 +46,15 @@ a:hover {
   margin-bottom: 5px;
   font-weight: bold;
 }
+
+#menu .menu-entry .head a, #menu .menu-entry .head a:visited {
+  color: black;
+}
+#menu .menu-entry .head a:hover {
+  color: #A30600;
+  text-decoration: none;
+}
+
 #menu .menu-entry .subentry {
   font-size: 18px;
   text-align: right;
@@ -105,24 +114,16 @@ a:hover {
 code {
   font-size: 13px;
 }
-pre {
-  font-size: 12px;
-  width: 100%;
-  overflow: hidden;
-}
-pre code {
-  font-size: 12px;
-}
 code.theory {
   font-size: 14px;
 }
-#page pre.theory {
+#page pre {
   width: auto;
   padding: 0px 100px 0px 30px;
   font-size: 14px;
   overflow: hidden;
 }
-#page pre.theory code {
+#page pre code {
   background: white;
   font-size: 14px;
 }

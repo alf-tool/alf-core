@@ -6,7 +6,9 @@
     show(current);
   };
   function show(entry) {
-    $('#menu-' + entry + " .content").slideDown();
+    $('#menu-' + entry + " .content").slideDown(function(){
+      window.location = entry + "/index.html";
+    });
   };
   function hide(entry) {
     $('#menu-' + entry + " .content").slideUp();

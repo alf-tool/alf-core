@@ -9,7 +9,7 @@ Alf provides you with the relational algebra in Shell and in Ruby. It is a succe
 ### Example
 
 <pre class="theory"><code class="ruby">#                                                 
-# What are total weight of supplied products,     
+# What is the total weight of supplied products,     
 # by city, then by product id?                    
 #                                                 
 (group                                            +--------+---------------------+
