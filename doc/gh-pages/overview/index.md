@@ -6,7 +6,27 @@ Alf provides you with the relational algebra in Shell and in Ruby. It is a succe
 * The pragmatism and beauty of the Ruby programming language;
 * Open-Source Software development (MIT Licence)
 
-### How to install
+### What does it provide?
+
+A sound and very powerful relational algebra:
+
+<pre class="theory"><code class="ruby">#                                                 
+# What are total weight of supplied products,     
+# by city, then by product id?                    
+#                                                 
+(group                                            +--------+---------------------+
+  (summarize (join :parts, :supplies),            | :city  | :supplying          |
+    [:city, :pid],                                +--------+---------------------+
+    :total => sum{ weight * qty }),               | London | +------+---------+  |
+  [:pid, :total], :supplying)                     |        | | :pid | :total  |  |
+                                                  |        | +------+---------+  |
+                                                  |        | | P1   | 7200.00 |  |
+                                                  |        | | P4   | 7000.00 |  |
+                                                  |        | | P6   | 1900.00 |  |
+                                                  | ...    | | ...  | ...     |  |
+</code></pre>
+
+### How to install?
 
 Alf requires Ruby. We strongly recommend using ruby 1.9.2. Then,
 
