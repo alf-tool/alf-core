@@ -2,7 +2,7 @@
 
 This page describes the necessary background on relational theory to understand Alf. Note that it only covers the concepts needed to understand the relational *algebra*; that is, nothing is said about database schemas, normal forms, transactions, ACID properties, and so on. Refer to standard database literature for those.
 
-The background given below is a rephrasing of what can be found in The Third Manifesto (TTM), by Hugh Darwen and C.J. Date. See [www.thethirdmanifesto.com](http://www.thethirdmanifesto.com), [the TTM book](http://www.amazon.com/Databases-Types-Relational-Model-3rd/dp/0321399420) or [Where does Alf come from?](overview/where-does-alf-come-from.html)
+The background given below is a rephrasing of what can be found in The Third Manifesto (TTM), by Hugh Darwen and C.J. Date. See [www.thethirdmanifesto.com](http://www.thethirdmanifesto.com) or [the TTM book](http://www.amazon.com/Databases-Types-Relational-Model-3rd/dp/0321399420).
 
 ### A theory of types
 
