@@ -3,7 +3,7 @@
 Alf provides you with the relational algebra in Shell and in Ruby. It is a successful meeting between:
 
 * A sound flavor of relational algebra borrowed from [The Third Manifesto](http://thethirdmanifesto.com) and TUTORIAL D;
-* The pragmatism and beauty inherent to the Ruby programming language;
+* The pragmatism and beauty of the Ruby programming language;
 * Open-Source Software development (MIT Licence)
 
 ### How to install
