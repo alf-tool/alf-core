@@ -28,7 +28,13 @@ A sound and very powerful relational algebra:
 
 ### How to install?
 
-Alf requires Ruby. We strongly recommend using ruby 1.9.2. Then,
+Alf requires an installation of the [Ruby](http://ruby-lang.org/) programming 
+language. We strongly recommend using ruby 1.9.2. If you are under windows or 
+if you are familiar with Java, have a look at [JRuby](http://www.jruby.org/), 
+it's simple to install and easy to use. 
+
+Then, the `gem` command is bundled with your Ruby installation and allows 
+automatically installing alf and its dependencies:
 
     [sudo] gem install alf [fastercsv] [sequel] [sqlite3 pg ...]
 
