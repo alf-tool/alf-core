@@ -6,9 +6,7 @@ Alf provides you with the relational algebra in Shell and in Ruby. It is a succe
 * The pragmatism and beauty of the Ruby programming language;
 * Open-Source Software development (MIT Licence)
 
-### What does it provide?
-
-A sound and very powerful relational algebra:
+### Example
 
 <pre class="theory"><code class="ruby">#                                                 
 # What are total weight of supplied products,     
