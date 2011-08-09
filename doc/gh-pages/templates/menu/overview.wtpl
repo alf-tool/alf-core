@@ -1,8 +1,8 @@
 <ul>
-<li><a href="/overview/index.html">Home</a></li>
-<li><a href="/overview/why.html">Why Alf ?</a></li>
-<li><a href="/overview/relational-basics.html">Relational basics</a></li>
-<li><a href="/overview/one-proposal-three-flavors.html">One proposal, three flavors</a></li>
-<li><a href="/overview/where-does-alf-come-from.html">Where does Alf come from?</a></li>
+<li><a href="overview/index.html">Home</a></li>
+<li><a href="overview/why.html">Why Alf ?</a></li>
+<li><a href="overview/relational-basics.html">Relational basics</a></li>
+<li><a href="overview/one-proposal-three-flavors.html">One proposal, three flavors</a></li>
+<li><a href="overview/where-does-alf-come-from.html">Where does Alf come from?</a></li>
 </ul>
 
