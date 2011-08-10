@@ -38,11 +38,11 @@ module Alf
       # On Command and Operator
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|
-        cmd  = v.class.command_name.to_s.gsub('-', '_')
+        cmdname  = v.class.command_name.to_s.gsub('-', '_')
         oper, args, opts = v.class.signature.collect_on(v)
         args = opts.empty? ? (oper + args) : (oper + args + [ opts ])
         args = args.collect{|arg| r.coerce(arg)}
-        "(#{cmd} #{args.join(', ')})"
+        "(#{cmdname} #{args.join(', ')})"
       end
 
       # Let's assume to to_ruby_literal will make the job

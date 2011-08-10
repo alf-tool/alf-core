@@ -33,8 +33,12 @@ module Alf
           text = text.gsub(/^([ \t]*)!\{([^\}]+)\}/){|match| 
             spacing, invocation  = $1, $2
             args = Quickl.parse_commandline_args(invocation)[1..-1]
-            res  = Alf.lispy(Alf::Environment.examples).run(args).to_rel.to_s
+            op   = Alf.lispy(Alf::Environment.examples).run(args)
+            res  = op.to_rel.to_s
             res  = realign(res, spacing, false)[0...-1]
+            if options[:method] == :lispy
+              invocation = Tools.to_lispy(op)
+            end
             realign("$ #{invocation}\n\n#{res}", spacing, false)
           }
 
