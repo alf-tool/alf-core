@@ -1,5 +1,5 @@
 module Alf
-  module Tools
+  module Operator
     # Provides an operator signature
     class Signature
 
@@ -224,5 +224,5 @@ module Alf
       end
       
     end # class Signature
-  end # module Tools
+  end # module Operator
 end # module Alf

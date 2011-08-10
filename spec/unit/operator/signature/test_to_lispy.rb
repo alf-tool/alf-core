@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  module Tools
+  module Operator
     describe Signature, '#to_lispy' do
 
       subject{ signature.to_lispy }

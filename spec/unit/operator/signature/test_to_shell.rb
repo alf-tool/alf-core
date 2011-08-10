@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  module Tools
+  module Operator
     describe Signature, '#to_shell' do
 
       subject{ signature.to_shell }

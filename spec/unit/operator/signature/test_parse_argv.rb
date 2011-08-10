@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  module Tools
+  module Operator
     describe Signature, "#parse_argv" do
       
       let(:clazz){ Class.new(Object) }

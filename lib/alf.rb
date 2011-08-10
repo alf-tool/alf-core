@@ -41,7 +41,6 @@ module Alf
     require 'alf/tools/coerce'
     require 'alf/tools/to_ruby_literal'
     require 'alf/tools/tuple_handle'
-    require 'alf/tools/signature'
     require 'alf/tools/miscellaneous'
 
     extend Tools
@@ -224,6 +223,7 @@ module Alf
     end
 
     require 'alf/operator/class_methods'
+    require 'alf/operator/signature'
     require 'alf/operator/base'
     require 'alf/operator/nullary'
     require 'alf/operator/unary'

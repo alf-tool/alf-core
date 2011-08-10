@@ -91,13 +91,13 @@ module Alf
       #
       def signature
         if block_given?
-          @signature = Tools::Signature.new(self, &Proc.new) 
+          @signature = Signature.new(self, &Proc.new) 
           @signature.install
           options do |opt|
             signature.fill_option_parser(opt, self)
           end
         else
-          @signature ||= Tools::Signature.new(self)
+          @signature ||= Signature.new(self)
         end
       end
       
