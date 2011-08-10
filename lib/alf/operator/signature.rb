@@ -169,6 +169,14 @@ module Alf
         [oper, args, opts]
       end
 
+      #
+      # Returns a lispy synopsis for this signature
+      #
+      # Example:
+      #
+      #     Alf::Operator::Relational::Project.signature.to_shell
+      #     # => "(project operand, attributes:AttrList, {allbut: Boolean})"
+      #
       def to_lispy
         cmd  = operator.command_name.to_s.gsub('-', '_')
         oper = operator.nullary? ? "" :
@@ -190,6 +198,14 @@ module Alf
         "(#{cmd} #{argopt}".strip + ")"
       end
 
+      #
+      # Returns a shell synopsis for this signature.
+      #
+      # Example:
+      #
+      #     Alf::Operator::Relational::Project.signature.to_shell
+      #     # => "alf project [--allbut] [OPERAND] -- ATTRIBUTES"
+      #
       def to_shell
         oper = operator.nullary? ? "" :
               (operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT")
