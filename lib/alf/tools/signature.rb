@@ -159,10 +159,24 @@ module Alf
       end
 
       def to_lispy_doc
+        cmd  = operator.command_name.to_s.gsub('-', '_')
         oper = operator.nullary? ? "" :
               (operator.unary? ? "operand" : "left, right")
-        args = arguments.collect{|name,_| name.to_s.upcase }.join(", ")
-        (args.empty? ? "#{oper}" : "#{oper}, #{args}").strip
+
+        args = arguments.collect{|name,dom,_| 
+          dom.to_s =~ /::([A-Za-z]+)$/
+          "#{name}:#{$1}" 
+        }.join(", ")
+        args = (args.empty? ? "#{oper}" : "#{oper}, #{args}").strip
+
+        opts = options.collect{|name,dom,_|
+          dom.to_s =~ /::([A-Za-z]+)$/
+          "#{name}: #{$1}" 
+        }.join(', ')
+        opts = opts.empty? ? "" : "{#{opts}}"
+
+        argopt = [args, opts].select{|s| !s.empty?}.join(', ')
+        "(#{cmd} #{argopt}".strip + ")"
       end
 
       def to_shell_doc
