@@ -53,6 +53,9 @@ module Alf
 
         # normalize operands
         operands = [ stdin_reader ] + Array(operands)
+        operands = operands.collect{|op| 
+          Iterator.coerce(op, req && req.environment)
+        }
         operands = if nullary?
           []
         elsif unary?

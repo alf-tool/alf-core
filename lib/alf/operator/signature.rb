@@ -158,6 +158,16 @@ module Alf
         operands
       end
 
+      def collect_on(op)
+        oper = op.datasets
+        oper = [oper] unless oper.is_a?(Array)
+        args = arguments.collect{|name,_| op.send(name) }
+        opts = Hash[options.collect{|name,_| 
+          [name, op.send(name)]
+        }]
+        [oper, args, opts]
+      end
+
       def to_lispy
         cmd  = operator.command_name.to_s.gsub('-', '_')
         oper = operator.nullary? ? "" :
