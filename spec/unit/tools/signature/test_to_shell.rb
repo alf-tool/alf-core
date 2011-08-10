@@ -1,16 +1,16 @@
 require 'spec_helper'
 module Alf
   module Tools
-    describe Signature, '#to_lispy_doc' do
+    describe Signature, '#to_shell' do
 
-      subject{ signature.to_lispy_doc }
+      subject{ signature.to_shell }
 
       describe "on a nullary signature" do
         let(:clazz){ Operator::NonRelational::Generator }
 
         describe "on an empty signature" do
           let(:signature){ Signature.new(clazz){|s|} }
-          it{ should eq("(generator)") }
+          it{ should eq("alf generator") }
         end
 
         describe "on an option-only signature" do
@@ -19,7 +19,7 @@ module Alf
               s.option :allbut, Boolean
             end
           }
-          it{ should eq("(generator {allbut: Boolean})") }
+          it{ should eq("alf generator [--allbut]") }
         end
 
       end # nullary signature
@@ -29,7 +29,7 @@ module Alf
 
         describe "on an empty signature" do
           let(:signature){ Signature.new(clazz){|s|} }
-          it{ should eq("(coerce operand)") }
+          it{ should eq("alf coerce [OPERAND]") }
         end
 
         describe "on an option-only signature" do
@@ -38,7 +38,7 @@ module Alf
               s.option :allbut, Boolean
             end
           }
-          it{ should eq("(coerce operand, {allbut: Boolean})") }
+          it{ should eq("alf coerce [--allbut] [OPERAND]") }
         end
 
         describe "on an option-only signature with multiple options" do
@@ -48,37 +48,38 @@ module Alf
               s.option :newname, AttrName
             end
           }
-          it{ should eq("(coerce operand, {allbut: Boolean, newname: AttrName})") }
+          it{ should eq("alf coerce [--allbut] [--newname=NEWNAME] [OPERAND]") }
         end
 
         describe "on a signature with one argument only" do
           let(:signature){ 
             Signature.new(clazz) do |s|
-              s.argument :by, AttrList
+              s.argument :proj, AttrList
             end
           }
-          it{ should eq("(coerce operand, by:AttrList)") }
+          it{ should eq("alf coerce [OPERAND] -- PROJ") }
         end
 
         describe "on a signature with multiple arguments" do
           let(:signature){ 
             Signature.new(clazz) do |s|
-              s.argument :by, AttrList
-              s.argument :order, Ordering
+              s.argument :proj, AttrList
+              s.argument :ordering, Ordering
             end
           }
-          it{ should eq("(coerce operand, by:AttrList, order:Ordering)") }
+          it{ should eq("alf coerce [OPERAND] -- PROJ -- ORDERING") }
         end
 
         describe "on a full signature" do
           let(:signature){ 
             Signature.new(clazz) do |s|
-              s.argument :by, AttrList
-              s.argument :order, Ordering
+              s.argument :proj, AttrList
+              s.argument :ordering, Ordering
               s.option :allbut, Boolean
+              s.option :newname, AttrName
             end
           }
-          it{ should eq("(coerce operand, by:AttrList, order:Ordering, {allbut: Boolean})") }
+          it{ should eq("alf coerce [--allbut] [--newname=NEWNAME] [OPERAND] -- PROJ -- ORDERING") }
         end
 
       end
@@ -92,7 +93,7 @@ module Alf
               s.option :allbut, Boolean
             end
           }
-          it{ should eq("(join left, right, {allbut: Boolean})") }
+          it{ should eq("alf join [--allbut] [LEFT] RIGHT") }
         end
 
       end

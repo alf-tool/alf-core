@@ -158,7 +158,7 @@ module Alf
         operands
       end
 
-      def to_lispy_doc
+      def to_lispy
         cmd  = operator.command_name.to_s.gsub('-', '_')
         oper = operator.nullary? ? "" :
               (operator.unary? ? "operand" : "left, right")
@@ -179,7 +179,7 @@ module Alf
         "(#{cmd} #{argopt}".strip + ")"
       end
 
-      def to_shell_doc
+      def to_shell
         oper = operator.nullary? ? "" :
               (operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT")
         opts =   options.collect{|opt|   "[#{option_name(opt)}]" }.join(" ")
@@ -189,7 +189,7 @@ module Alf
       end
 
       def to_s
-        to_shell_doc
+        to_shell
       end
 
       private

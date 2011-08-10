@@ -66,20 +66,6 @@ module Alf
       end
 
       #
-      # Returns the Lispy signature as a String
-      #
-      def lispy_signature
-        "(#{command_name} #{signature.to_lispy_doc})"
-      end
-
-      #
-      # Returns the shell signature as a String
-      #
-      def shell_signature
-        "alf #{command_name} #{signature.to_shell_doc}"
-      end
-
-      #
       # Returns true if this operator is a zero-ary operator, false otherwise
       #
       def nullary?
