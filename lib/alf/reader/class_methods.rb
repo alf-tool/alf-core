@@ -71,12 +71,6 @@ module Alf
           arg
         when IO
           rash(arg, environment)
-        when String, Symbol
-          if environment
-            environment.dataset(arg.to_sym)
-          else
-            raise "No environment set"
-          end
         else
           raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
         end
