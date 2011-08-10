@@ -158,6 +158,17 @@ module Alf
         operands
       end
 
+      #
+      # Collects signature values on a given operator.
+      #
+      # This methods returns a triple `[datasets, arguments, options]` with
+      # the respective values collected on `op`.
+      #
+      # @param [Operator] op an operator, which should be an instance of 
+      #                   `self.operator`
+      # @return [Array] a triple [datasets, arguments, options] with operands, 
+      #                 then signature values
+      #
       def collect_on(op)
         oper = op.datasets
         oper = [oper] unless oper.is_a?(Array)
