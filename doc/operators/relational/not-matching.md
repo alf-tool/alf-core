@@ -3,7 +3,7 @@ Relational not matching (inverse of matching)
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

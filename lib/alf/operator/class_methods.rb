@@ -69,14 +69,14 @@ module Alf
       # Returns the Lispy signature as a String
       #
       def lispy_signature
-        "(#{command_name} #{signature.to_lispy_doc(self)})"
+        "(#{command_name} #{signature.to_lispy_doc})"
       end
 
       #
       # Returns the shell signature as a String
       #
       def shell_signature
-        "alf #{command_name} #{signature.to_shell_doc(self)}"
+        "alf #{command_name} #{signature.to_shell_doc}"
       end
 
       #
@@ -105,13 +105,13 @@ module Alf
       #
       def signature
         if block_given?
-          @signature = Tools::Signature.new &Proc.new
-          @signature.install(self)
+          @signature = Tools::Signature.new(self, &Proc.new) 
+          @signature.install
           options do |opt|
             signature.fill_option_parser(opt, self)
           end
         else
-          @signature || Tools::Signature::EMPTY
+          @signature ||= Tools::Signature.new(self)
         end
       end
       

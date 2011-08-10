@@ -6,7 +6,7 @@ module Alf
       let(:clazz){ Class.new(Object) }
       let(:receiver){ clazz.new }
       before{ 
-        signature.install(clazz) 
+        signature.install 
       }
       subject{
         signature.parse_argv(argv, receiver)
@@ -14,7 +14,7 @@ module Alf
  
       describe "on a singleton signature with a AttrList" do
         let(:signature){ 
-          Signature.new do |s|
+          Signature.new(clazz) do |s|
             s.argument :proj, AttrList
           end
         }
@@ -27,7 +27,7 @@ module Alf
       
       describe "on a singleton signature with a default" do
         let(:signature){ 
-          Signature.new do |s|
+          Signature.new(clazz) do |s|
             s.argument :attrname, AttrName, :autonum
           end
         }
@@ -40,7 +40,7 @@ module Alf
 
       describe "On quota signature" do
         let(:signature){
-          Signature.new do |s|
+          Signature.new(clazz) do |s|
             s.argument :by, AttrList, []
             s.argument :order, Ordering, []
             s.argument :summarization, Summarization, {}
@@ -56,7 +56,7 @@ module Alf
 
       describe "When signature contains options" do
         let(:signature){
-          Signature.new do |s|
+          Signature.new(clazz) do |s|
             s.argument :by, AttrList, []
             s.option :allbut, Boolean, false, "Allbut?"
           end

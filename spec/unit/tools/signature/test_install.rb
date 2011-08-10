@@ -4,10 +4,10 @@ module Alf
     describe Signature, '.install' do
       
       let(:clazz){ Class.new(Object) }
-      subject{ signature.install(clazz) }
+      subject{ signature.install }
       
       describe "on an empty signature" do
-        let(:signature){ Signature.new }
+        let(:signature){ Signature.new(clazz) }
         it{ should eq({}) }
         specify{
           lambda{ subject }.should_not raise_error
@@ -17,7 +17,7 @@ module Alf
       describe "on a non empty signature" do
 
         let(:signature){ 
-          Signature.new do |s|
+          Signature.new(clazz) do |s|
             s.argument :attrname, AttrName
             s.argument :ordering, Ordering
             s.option   :allbut,   Boolean, true

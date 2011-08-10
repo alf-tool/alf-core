@@ -3,7 +3,7 @@ Relational union
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

@@ -3,7 +3,7 @@ Relational renaming (rename some attributes)
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

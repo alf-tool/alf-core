@@ -3,7 +3,7 @@ Relational un-wraping (inverse of wrap)
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

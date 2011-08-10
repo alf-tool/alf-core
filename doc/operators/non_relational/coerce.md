@@ -3,7 +3,7 @@ Force attribute coercion according to a heading
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

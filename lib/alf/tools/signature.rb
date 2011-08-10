@@ -2,6 +2,9 @@ module Alf
   module Tools
     # Provides an operator signature
     class Signature
+
+      # @return [Class] the operator class to which this signature belongs
+      attr_reader :operator
       
       # @return [Array] signature arguments
       attr_reader :arguments
@@ -12,7 +15,8 @@ module Alf
       #
       # Creates a signature instance
       #
-      def initialize
+      def initialize(operator)
+        @operator = operator
         @arguments = []
         @options = []
         yield(self) if block_given?
@@ -78,15 +82,15 @@ module Alf
       end
       
       #
-      # Installs the signature on `clazz` class 
+      # Installs the signature on the operator class
       #
       # This method installs an attr reader and an attr writer for each
       # signature argument and each signature option.
       #
-      # @param [Class] clazz a class on which the signature must be installed
       # @return [Hash] the default options to use
       #
-      def install(clazz)
+      def install
+        clazz = operator
         code = (arguments + options).each{|siginfo|
           name, domain, = siginfo
           clazz.send(:attr_reader, name)
@@ -98,6 +102,13 @@ module Alf
         default_options
       end
       
+      #
+      # Parses arguments `args` passed to the operator `initialize` and 
+      # sets attributes accordingly on `receiver`.
+      #
+      # @param [Array] args an array of initialize arguments
+      # @param [Operator] receiver an operator instance
+      #
       def parse_args(args, receiver)
         invalid_args!(args) if args.size > (1+arguments.size)
 
@@ -119,6 +130,13 @@ module Alf
         end
       end
       
+      #
+      # Parses arguments `args` used to create an operator initialize from
+      # commandline arguments and sets attributes accordingly on `receiver`.
+      #
+      # @param [Array] argv an array of commandline arguments
+      # @param [Operator] receiver an operator instance
+      #
       def parse_argv(argv, receiver)
         # First split over --
         argv = Quickl.split_commandline_args(argv)
@@ -140,32 +158,24 @@ module Alf
         operands
       end
 
-      def to_lispy_doc(operator = nil)
-        ope = operator.unary? ? "operand" : "left, right"
-        args = arguments.collect{|name,_| 
-          name.to_s.upcase
-        }.join(", ")
-        (args.empty? ? 
-          "#{ope}" : 
-          "#{ope}, #{args}").strip
+      def to_lispy_doc
+        oper = operator.nullary? ? "" :
+              (operator.unary? ? "operand" : "left, right")
+        args = arguments.collect{|name,_| name.to_s.upcase }.join(", ")
+        (args.empty? ? "#{oper}" : "#{oper}, #{args}").strip
       end
 
-      def to_shell_doc(operator = nil)
-        ope = if operator
-          operator.nullary? ? "" :
-            (operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT")
-        else
-          "OPERANDS"
-        end
-        opts = options.collect{|option| 
-          "[#{option_name(option)}]"
-        }.join(" ")
-        args = arguments.collect{|name,_| 
-          name.to_s.upcase
-        }.join(" -- ")
-        (args.empty? ? 
-          "#{opts} #{ope}" : 
-          "#{opts} #{ope} -- #{args}").strip
+      def to_shell_doc
+        oper = operator.nullary? ? "" :
+              (operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT")
+        opts =   options.collect{|opt|   "[#{option_name(opt)}]" }.join(" ")
+        args = arguments.collect{|arg,_| "#{arg.to_s.upcase}"    }.join(" -- ")
+        optargs = "#{opts} #{oper} " + (args.empty? ? "" : "-- #{args}")
+        "alf #{operator.command_name} #{optargs.strip}".strip
+      end
+
+      def to_s
+        to_shell_doc
       end
 
       private
@@ -199,7 +209,6 @@ module Alf
         raise ArgumentError, "Invalid `#{args.inspect}` for #{self}"
       end
       
-      EMPTY = Signature.new
     end # class Signature
   end # module Tools
 end # module Alf

@@ -3,7 +3,7 @@ Relational intersection (aka a logical and)
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

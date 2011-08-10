@@ -3,7 +3,7 @@ Sort input tuples according to an order relation
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

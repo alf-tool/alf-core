@@ -3,7 +3,7 @@ Relational summarization (group-by + aggregate ops)
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 OPTIONS
 

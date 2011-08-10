@@ -3,7 +3,7 @@ Relational ranking (explicit tuple positions)
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

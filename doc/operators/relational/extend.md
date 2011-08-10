@@ -3,7 +3,7 @@ Relational extension (additional, computed attributes)
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 

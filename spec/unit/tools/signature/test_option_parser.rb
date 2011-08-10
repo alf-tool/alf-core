@@ -3,15 +3,15 @@ module Alf
   module Tools
     describe Signature, '#option_parser' do
 
+      let(:clazz){ Class.new(Object) }
       let(:signature){
-        Signature.new do |s|
+        Signature.new(clazz) do |s|
           s.option :allbut, Boolean,  true
           s.option :name,   AttrName, :autonum
         end
       }
-      let(:clazz){ Class.new(Object) }
       let(:receiver){ clazz.new }
-      before{ signature.install(clazz) }
+      before{ signature.install }
       subject{ signature.option_parser(receiver) }
 
       specify "expected" do

@@ -3,7 +3,7 @@ Clip input tuples to a subset of attributes
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 OPTIONS
 

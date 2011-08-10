@@ -3,7 +3,7 @@ Generates a relation with an auto-numbered attribute
 
 SYNOPSIS
 
-    #{shell_signature}
+    #{signature}
 
 DESCRIPTION
 
