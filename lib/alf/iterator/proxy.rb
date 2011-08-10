@@ -3,6 +3,9 @@ module Alf
     class Proxy
       include Iterator
 
+      # @return [Symbol] name of the dataset to request to environment
+      attr_reader :dataset
+
       #
       # Creates a proxy instance.
       #
