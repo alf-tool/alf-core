@@ -5,3 +5,7 @@ SYNOPSIS
 
     alf #{command_name} COMMAND
 
+OPTIONS
+
+    #{summarized_options}
+

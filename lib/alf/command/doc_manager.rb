@@ -12,6 +12,11 @@ module Alf
         if File.exists?(file = find_file(cmd))
           text = File.read(file)
 
+          # Replace occurences of #{signature} to #{signature.to_xxx}
+          # according to options
+          method = (options[:method] || "shell").to_s
+          text = text.gsub('#{signature}', '#{signature.to_' + method + '}')
+
           # Replace occurences of #{...} on single lines
           text = text.gsub(/^([ \t]*)#\{([^\}]+)\}/){|match| 
             spacing, invocation  = $1, $2
