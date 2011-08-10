@@ -28,7 +28,11 @@ module Alf
         when Proc
           TupleExpression.new(arg)
         when String, Symbol
-          coerce(eval("lambda{ #{arg} }"))
+          expr = coerce(eval("lambda{ #{arg} }"))
+          (class << expr; self; end).send(:define_method, :to_lispy){
+            "->(){ #{arg} }"
+          }
+          expr
         else
           raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
         end

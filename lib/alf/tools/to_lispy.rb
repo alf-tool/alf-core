@@ -35,6 +35,7 @@ module Alf
         Tools.to_ruby_literal(v.dataset)
       end
 
+      # On Command and Operator
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|
         cmd  = v.class.command_name.to_s.gsub('-', '_')

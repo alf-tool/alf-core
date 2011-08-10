@@ -4,6 +4,11 @@ module Alf
     
     subject{ Tools.to_lispy(value) } 
     
+    describe "on a Proxy" do
+      let(:value){ Iterator::Proxy.new(nil, :suppliers) }
+      it { should eq(":suppliers") }
+    end
+
     describe "on an AttrName" do
       let(:value){ :city }
       it { should eq(":city") }
@@ -29,9 +34,14 @@ module Alf
       it { should eq("{:old => :new}") }
     end
 
-    describe "on a Proxy" do
-      let(:value){ Iterator::Proxy.new(nil, :suppliers) }
-      it { should eq(":suppliers") }
+    describe "on a TupleExpression" do
+      let(:value){ TupleExpression.coerce(arg) }
+
+      describe "When built from a string" do
+        let(:arg){ "status.upcase" }
+        it{ should eq("->(){ status.upcase }")}
+      end
+
     end
 
     describe "on an nullary operator" do
