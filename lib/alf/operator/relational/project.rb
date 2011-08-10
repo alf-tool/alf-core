@@ -4,8 +4,8 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
     
       signature do |s|
-        s.argument :attr_list, AttrList, []
-        s.option :allbut, Boolean, false, 'Project all but specified attributes?'
+        s.argument :attributes, AttrList, []
+        s.option   :allbut,     Boolean,  false, 'Project all but specified attributes?'
       end
       
       protected 
@@ -13,7 +13,7 @@ module Alf
       # (see Operator::Shortcut#longexpr)
       def longexpr
         chain Operator::NonRelational::Compact.new,
-              Operator::NonRelational::Clip.new(@attr_list, {:allbut => @allbut}),
+              Operator::NonRelational::Clip.new(@attributes, {:allbut => @allbut}),
               datasets
       end
     

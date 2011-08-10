@@ -1,5 +1,5 @@
 
-Generates a relation with an auto-numbered attribute
+Generate a relation with an auto-numbered attribute
 
 SYNOPSIS
 
@@ -7,12 +7,12 @@ SYNOPSIS
 
 DESCRIPTION
 
-This non-relational operator generates a relation containing an attribute 
-ATTR_NAME whose value is an auto-number from 1 to SIZE.
+This non-relational operator generates a relation of one attribute called AS, 
+whose value is an auto-number ranging from 1 to SIZE, inclusively.
 
 EXAMPLE
 
-    # Default behavior: ATTR_NAME is `num` and SIZE is 10
+    # Default behavior: AS is `num` and SIZE is 10
     !{alf generator}
 
     # That you can override

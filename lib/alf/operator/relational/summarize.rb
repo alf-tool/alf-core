@@ -4,9 +4,9 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
       
       signature do |s|
-        s.argument :by_list, AttrList, []
+        s.argument :by,            AttrList, []
         s.argument :summarization, Summarization, {}
-        s.option :allbut, Boolean, false, "Summarize on all but specified attributes?"
+        s.option   :allbut,        Boolean, false, "Summarize on all but specified attributes?"
       end
       
       # Summarizes according to a complete order
@@ -69,11 +69,11 @@ module Alf
       
       def longexpr
         if @allbut
-          chain HashBased.new(@by_list, @allbut, @summarization),
+          chain HashBased.new(@by, @allbut, @summarization),
                 datasets
         else
-          chain SortBased.new(@by_list, @allbut, @summarization),
-                Operator::NonRelational::Sort.new(@by_list.to_ordering),
+          chain SortBased.new(@by, @allbut, @summarization),
+                Operator::NonRelational::Sort.new(@by.to_ordering),
                 datasets
         end
       end

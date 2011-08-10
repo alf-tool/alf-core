@@ -47,13 +47,15 @@ task :"gh-pages" do
     static.call(f)
   end
 
-  entry = "shell"
-  Alf::Command::Main.subcommands.each do |sub| 
-    ctx    = context.merge(:prefix  => "..", :entry => entry.to_sym)
-    target = File.join(outdir, entry, "#{sub.command_name}.html")
-    File.open(target, "w") do |io|
-      ctx2 = ctx.merge(:operator => sub, :title => "Alf in Shell: #{sub.command_name}")
-      io << WLang.file_instantiate(html, ctx2)
+  ["shell", "ruby"].each do |entry|
+    Alf::Command::Main.subcommands.each do |sub| 
+      ctx    = context.merge(:prefix  => "..", :entry => entry.to_sym)
+      target = File.join(outdir, entry, "#{sub.command_name}.html")
+      File.open(target, "w") do |io|
+        ctx2 = ctx.merge(:operator => sub, 
+                         :title => "Alf in #{entry.capitalize}: #{sub.command_name}")
+        io << WLang.file_instantiate(html, ctx2)
+      end
     end
   end
 

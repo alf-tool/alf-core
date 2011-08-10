@@ -4,7 +4,7 @@ module Alf
       include Operator::Relational, Operator::Transform
   
       signature do |s|
-        s.argument :extensions, TupleComputation, {}
+        s.argument :ext, TupleComputation, {}
       end
       
       protected 
@@ -16,7 +16,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        tuple.merge @extensions.evaluate(@handle.set(tuple))
+        tuple.merge @ext.evaluate(@handle.set(tuple))
       end
   
     end # class Extend

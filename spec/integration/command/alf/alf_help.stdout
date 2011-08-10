@@ -54,7 +54,7 @@ NON-RELATIONAL OPERATORS
     sort          Sort input tuples according to an order relation
     clip          Clip input tuples to a subset of attributes
     coerce        Force attribute coercion according to a heading
-    generator     Generates a relation with an auto-numbered attribute
+    generator     Generate a relation with an auto-numbered attribute
 
 OTHER NON-RELATIONAL COMMANDS
 

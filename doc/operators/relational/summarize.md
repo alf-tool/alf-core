@@ -11,11 +11,12 @@ OPTIONS
 
 DESCRIPTION
 
-This operator summarizes input tuples over a projection given by BY_LIST.
-SUMMARIZATION is a list of (name, aggregator) pairs.
+This operator summarizes input tuples over a projection given by BY. 
+SUMMARIZATION is a mapping between attribute names and summarizing 
+expressions.
 
-With --allbut, the operator uses all attributes not in BY_LIST as 
-projection key.
+With the allbut option, the operator uses all attributes not specified 
+in BY as the projection key.
 
 EXAMPLE
 

@@ -3,7 +3,7 @@ module Alf
     class Generator < Alf::Operator()
       include Operator::NonRelational, Operator::Nullary
 
-      class SizeDom < Integer
+      class Size < Integer
         extend Myrrha::Domain
 
         def self.coerce(args)
@@ -18,18 +18,18 @@ module Alf
           @predicate ||= lambda{|i| i >= 0}
         end
 
-      end # SizeDom
+      end # Size
 
       signature do |s|
-        s.argument :size, SizeDom, 10
-        s.argument :attr_name, AttrName, :num
+        s.argument :size, Size, 10
+        s.argument :as,   AttrName, :num
       end
           
       protected
 
       def _each
         size.times do |i|
-          yield(attr_name => i+1)
+          yield(@as => i+1)
         end
       end
 

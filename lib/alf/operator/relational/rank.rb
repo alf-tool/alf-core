@@ -4,16 +4,16 @@ module Alf
       include Operator::Relational, Operator::Shortcut, Operator::Unary
   
       signature do |s|
-        s.argument :ordering, Ordering, []
-        s.argument :rank_name, AttrName, :rank
+        s.argument :order, Ordering, []
+        s.argument :as, AttrName, :rank
       end
       
       class SortBased
         include Operator, Operator::Cesure
         
-        def initialize(ordering, rank_name)
-          @by_key = AttrList.coerce(ordering)
-          @rank_name = rank_name
+        def initialize(order, as)
+          @by_key = AttrList.coerce(order)
+          @as = as
         end
         
         protected
@@ -31,7 +31,7 @@ module Alf
   
         # (see Operator::Cesure#accumulate_cesure)
         def accumulate_cesure(tuple, receiver)
-          receiver.call tuple.merge(@rank_name => @rank)
+          receiver.call tuple.merge(@as => @rank)
           @last_block += 1
         end
         
@@ -45,8 +45,8 @@ module Alf
       protected
       
       def longexpr
-        chain SortBased.new(@ordering, @rank_name),
-              Operator::NonRelational::Sort.new(@ordering),
+        chain SortBased.new(@order, @as),
+              Operator::NonRelational::Sort.new(@order),
               datasets
       end 
   

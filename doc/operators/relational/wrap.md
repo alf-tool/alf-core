@@ -11,10 +11,11 @@ OPTIONS
 
 DESCRIPTION
 
-This operator wraps attributes in ATTR_LIST as a new, tuple-valued
-attribute named AS.
+This operator wraps attributes in ATTRIBUTES as a new, tuple-valued attribute 
+named AS.
 
-With --allbut, it wraps all attributes not specified in ATTR_LIST instead.
+With the allbut option, it wraps all attributes not specified in ATTRIBUTES 
+instead.
 
 EXAMPLE
 

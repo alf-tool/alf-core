@@ -7,8 +7,8 @@ SYNOPSIS
 
 DESCRIPTION
 
-This command renames attributes as specified in RENAMING, taken as 
-successive (old name, new name) pairs
+This command renames attributes as specified in RENAMING, taken as successive 
+(old name, new name) pairs
 
 EXAMPLE
 

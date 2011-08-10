@@ -10,10 +10,10 @@ DESCRIPTION
 This command restricts tuples to those for which PREDICATE evaluates to 
 true.
 
-PREDICATE must be a valid tuple expression that returns a truth-value.
-It may be specified as a ruby code literal, or a list of (name, value)
-pairs. In the latter case, PREDICATE is built as a conjunction of 
-attribute equalities.
+PREDICATE must be a valid tuple expression that returns a truth-value. It 
+may be specified as a ruby code literal, or a mapping between (name, value) 
+pairs. In the latter case, PREDICATE is built as a conjunction of attribute 
+equalities.
 
 EXAMPLE
 

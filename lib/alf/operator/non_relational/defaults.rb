@@ -5,7 +5,7 @@ module Alf
   
       signature do |s|
         s.argument :defaults, TupleComputation, {}
-        s.option :strict, Boolean, false, "Restrict to default attributes only?"
+        s.option   :strict,   Boolean, false, "Restrict to default attributes only?"
       end
       
       protected 

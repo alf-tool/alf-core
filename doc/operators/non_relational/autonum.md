@@ -7,12 +7,11 @@ SYNOPSIS
 
 DESCRIPTION
 
-This non-relational operator guarantees uniqueness of output tuples by
-adding an attribute ATTRNAME whose value is an auto-numbered Integer. 
+This non-relational operator guarantees uniqueness of output tuples by adding 
+an attribute called AS whose value is an auto-numbered Integer. 
 
-If the presence of duplicates was the only "non-relational" aspect of 
-the input, the result is a valid relation for which ATTRNAME is a 
-candidate key.
+If the presence of duplicates was the only "non-relational" aspect of the input, 
+the result is a valid relation for which AS is a candidate key.
 
 EXAMPLE
 

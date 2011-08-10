@@ -11,10 +11,11 @@ OPTIONS
 
 DESCRIPTION
 
-This operator groups attributes in ATTR_LIST as a new, relation-valued
+This operator groups attributes in ATTRIBUTES as a new, relation-valued 
 attribute named AS.
 
-With --allbut, it groups all attributes not specified in ATTR_LIST instead.
+With the allbut option, it groups all attributes not specified in ATTRIBUTES
+instead.
 
 EXAMPLE
 

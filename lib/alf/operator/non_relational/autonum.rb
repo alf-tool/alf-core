@@ -4,7 +4,7 @@ module Alf
       include Operator::NonRelational, Operator::Transform
     
       signature do |s|
-        s.argument :attrname, AttrName, :autonum
+        s.argument :as, AttrName, :autonum
       end
           
       protected
@@ -16,7 +16,7 @@ module Alf
       
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        tuple.merge(@attrname => (@autonum += 1))
+        tuple.merge(@as => (@autonum += 1))
       end
     
     end # class Autonum

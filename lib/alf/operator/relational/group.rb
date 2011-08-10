@@ -4,9 +4,9 @@ module Alf
       include Operator::Relational, Operator::Unary
       
       signature do |s|
-        s.argument :attr_list, AttrList, []
-        s.argument :as, AttrName, :group
-        s.option :allbut, Boolean, false, 'Group all but specified attributes?'
+        s.argument :attributes, AttrList, []
+        s.argument :as,         AttrName, :group
+        s.option   :allbut,     Boolean,  false, 'Group all but specified attributes?'
       end
       
       protected 
@@ -15,7 +15,7 @@ module Alf
       def _prepare
         @index = Hash.new{|h,k| h[k] = Set.new} 
         each_input_tuple do |tuple|
-          key, rest = @attr_list.split(tuple, !@allbut)
+          key, rest = @attributes.split(tuple, !@allbut)
           @index[key] << rest
         end
       end

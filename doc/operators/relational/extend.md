@@ -7,10 +7,9 @@ SYNOPSIS
 
 DESCRIPTION
 
-This operator extends its operand with new attributes whose value is the 
-result of evaluating tuple expressions. The latter are specified as 
-(name, tuple expression) pairs. Tuple expressions must be specified as 
-ruby code literals. 
+This operator extends its operand with new attributes whose value is the result 
+of evaluating tuple expressions specified in EXT. The latter are specified as 
+(name, expression) pairs.
 
 EXAMPLE
 

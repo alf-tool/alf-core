@@ -12,14 +12,14 @@ OPTIONS
 DESCRIPTION
 
 This operator clips tuples on attributes whose names are specified in 
-ATTR_LIST. This is similar to the relational PROJECT operator, expect
+ATTRIBUTES. This is similar to the relational PROJECT operator, expect 
 that CLIP does not remove duplicates afterwards.
 
 Clipping may therefore lead to bags of tuples instead of sets. The result
-is **not** a valid relation unless a candidate key is preserved.
+is therefore **not** a valid relation unless a candidate key is preserved.
 
-With --allbut, the operator keeps attributes in ATTR_LIST, instead of 
-projecting them away. 
+With the allbut option, the operator keeps attributes in ATTRIBUTES, instead 
+of projecting them away. 
 
 EXAMPLE
 

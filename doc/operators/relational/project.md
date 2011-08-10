@@ -12,11 +12,11 @@ OPTIONS
 DESCRIPTION
 
 This operator projects tuples on attributes whose names are specified in 
-ATTR_LIST. Unlike SQL, this operator **always** removes duplicates in the
+ATTRIBUTES. Unlike SQL, this operator **always** removes duplicates in the
 result so that the output is a set of tuples, that is, a relation.
 
-With --allbut, the operators projects attributes in ATTR_LIST away instead 
-of keeping them. 
+With the allbut option, the operator projects ATTRIBUTES away instead of 
+keeping them. 
 
 EXAMPLE
 
