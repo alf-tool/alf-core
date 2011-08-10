@@ -162,9 +162,10 @@ module Alf
         oper = op.datasets
         oper = [oper] unless oper.is_a?(Array)
         args = arguments.collect{|name,_| op.send(name) }
-        opts = Hash[options.collect{|name,_| 
-          [name, op.send(name)]
-        }]
+        opts = Hash[options.collect{|name,dom,defa,_| 
+          val = op.send(name)
+          (val == defa) ? nil : [name, val]
+        }.compact]
         [oper, args, opts]
       end
 

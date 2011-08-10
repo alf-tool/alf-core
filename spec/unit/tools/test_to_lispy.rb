@@ -44,5 +44,10 @@ module Alf
       it { should eq("(project :suppliers, [:city], {:allbut => true})") }
     end
 
+    describe "on an monadic operator without the option" do
+      let(:value){ Alf.lispy.run(%w{project suppliers -- city}) } 
+      it { should eq("(project :suppliers, [:city])") }
+    end
+
   end
 end
