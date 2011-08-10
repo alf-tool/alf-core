@@ -100,6 +100,7 @@ module Alf
 
     require 'alf/iterator/class_methods'
     require 'alf/iterator/base'
+    require 'alf/iterator/proxy'
   end # module Iterator
 
   #
