@@ -44,9 +44,14 @@ module Alf
       it { should eq("(project :suppliers, [:city], {:allbut => true})") }
     end
 
-    describe "on an monadic operator without the option" do
+    describe "on an monadic operator with default values for options" do
       let(:value){ Alf.lispy.run(%w{project suppliers -- city}) } 
       it { should eq("(project :suppliers, [:city])") }
+    end
+
+    describe "on an dyadic operator without no args nor any option" do
+      let(:value){ Alf.lispy.run(%w{join suppliers cities}) } 
+      it { should eq("(join :suppliers, :cities)") }
     end
 
   end

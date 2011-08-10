@@ -199,10 +199,6 @@ module Alf
         "alf #{operator.command_name} #{optargs.strip}".strip
       end
 
-      def to_s
-        to_shell
-      end
-
       private
 
       def option_name(option)
