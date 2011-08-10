@@ -1,6 +1,6 @@
 # The MIT Licence
 
-    Copyright (c) 2011 - Bernard Lambeau
+    Copyright (c) 2011 - Bernard Lambeau & The University of Louvain (Belgium)
 
     Permission is hereby granted, free of charge, to any person obtaining
     a copy of this software and associated documentation files (the

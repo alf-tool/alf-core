@@ -98,13 +98,8 @@ a:hover {
   font-family: Tahoma, serif;
 }
 #page ul { padding-left: 20px; }
-
-#page ul {
-  list-style: square;
-}
-#page ul li a, #page ul li a:visited {
-  
-}
+#page ul { list-style: square; }
+#page ul ul { list-style: circle; }
 #page p.note {
   padding: 0px 0px 0px 30px;
   font-family: Arial, serif;

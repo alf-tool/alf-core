@@ -33,7 +33,7 @@ task :"gh-pages" do
     ctx = context.merge(:prefix  => "..", :entry => entry.to_sym)
     Dir[File.join(indir, entry, '*.md')].each do |file|
       md     = File.read(file)
-      title  = md.split("\n").first[3..-1]
+      title  = md.split("\n").first[3..-1].gsub("&mdash;", "-")
       text   = Redcarpet.new(md).to_html
       target = File.join(outdir, entry, "#{File.basename(file, ".md")}.html")
       File.open(target, "w") do |io|
@@ -42,9 +42,10 @@ task :"gh-pages" do
       end
     end
   }
-  static.call("overview")
-  static.call("shell")
-  static.call("ruby")
+
+  ["overview", "shell", "ruby", "devel"].each do |f|
+    static.call(f)
+  end
 
   entry = "shell"
   Alf::Command::Main.subcommands.each do |sub| 
