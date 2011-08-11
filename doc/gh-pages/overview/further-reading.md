@@ -16,5 +16,7 @@ If you do not know this technical background, I would strongly suggest reading o
 
 * The Third Manifesto has a [dedicated website](http://thethirdmanifesto.com/) and a mailing list where TTM-related topics are discussed with the TTM authors, database researchers, professionals and practionners as well as TTM-related project developers.
 * [Rel](http://dbappbuilder.sourceforge.net/Rel.php) is an implementation of TUTORIAL D (the very first one, and the most complete), written in Java, that can be used for learning, teaching, and exploring relational database concepts. 
-* Other implementation projects [can be found here](http://www.dcs.warwick.ac.uk/~hugh/TTM/Projects.html).
+* Greg Gaughan's [Dee](http://www.quicksort.co.uk/) project is similar to Alf, but anterior and written in Python. Don't forget to have a look at it if you prefer Python to Ruby!
 * Dan Kubb's [Veritas](https://github.com/dkubb/veritas) ruby library project is worth looking at in the Ruby community. While being very similar to Alf in providing a pure ruby algebra implementation, Veritas mostly provides a framework for manipulating and statically analyzing algebra expressions so as to be able to [optimize them](https://github.com/dkubb/veritas-optimizer) and [compile them to SQL](https://github.com/dkubb/veritas-sql-generator). We are working together with Dan Kubb to see how Alf and Veritas could be closer from each other in the future, if not in their codebase, at least in having a common basis in terms of terminology and API.
+* Other implementation projects [can be found here](http://www.dcs.warwick.ac.uk/~hugh/TTM/Projects.html).
+
