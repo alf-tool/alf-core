@@ -18,19 +18,28 @@ module Alf
       describe "with a String" do
         let(:arg){ "true" }
         it { should be_a(TupleExpression) }
-        specify{ subject.evaluate(handle).should eql(true) }
+        specify{ 
+          subject.evaluate(handle).should eql(true) 
+          subject.source.should eq("true")
+        }
       end
       
       describe "with a Symbol" do
         let(:arg){ :status }
         it { should be_a(TupleExpression) }
-        specify{ subject.evaluate(handle).should eql(10) }
+        specify{ 
+          subject.evaluate(handle).should eql(10) 
+          subject.source.should eq("status")
+        }
       end
       
       describe "with a Proc" do
         let(:arg){ lambda{ :hello } }
         it { should be_a(TupleExpression) }
-        specify{ subject.evaluate(handle).should eql(:hello) }
+        specify{ 
+          subject.evaluate(handle).should eql(:hello) 
+          subject.source.should be_nil
+        }
       end
       
     end

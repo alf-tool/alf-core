@@ -9,13 +9,17 @@ module Alf
       # @return [Proc] the lambda expression
       attr_reader :expr_lambda
       
+      # @return [String] the expression source code 
+      attr_reader :source
+      
       #
       # Creates a tuple expression from a Proc object
       #
       # @param [Proc] expr a Proc for the expression 
       #
-      def initialize(expr)
+      def initialize(expr, source = nil)
         @expr_lambda = expr
+        @source = source
       end
       
       # 
@@ -26,13 +30,10 @@ module Alf
         when TupleExpression
           arg
         when Proc
-          TupleExpression.new(arg)
+          TupleExpression.new(arg, nil)
         when String, Symbol
-          expr = coerce(eval("lambda{ #{arg} }"))
-          (class << expr; self; end).send(:define_method, :to_lispy){
-            "->(){ #{arg} }"
-          }
-          expr
+          lamb = eval("lambda{ #{arg} }")
+          TupleExpression.new(lamb, arg.to_s)
         else
           raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
         end
@@ -43,7 +44,7 @@ module Alf
         raise ArgumentError if argv.size > 1
         coerce(argv.first || options[:default])
       end
-            
+
       #
       # Evaluates in the context of obj
       #

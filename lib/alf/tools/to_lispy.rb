@@ -35,6 +35,14 @@ module Alf
         Tools.to_ruby_literal(v.dataset)
       end
 
+      # On TupleExpression
+      r.upon(Types::TupleExpression) do |v, rd|
+        unless src = v.source
+          raise NotImplementedError, "TupleExpression #{v} has no source"
+        end
+        "->(){ #{src} }"
+      end
+
       # On Command and Operator
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|
