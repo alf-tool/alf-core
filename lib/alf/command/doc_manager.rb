@@ -15,7 +15,7 @@ module Alf
           # Replace occurences of #{signature} to #{signature.to_xxx}
           # according to options
           method = (options[:method] || "shell").to_s
-          text = text.gsub('#{signature}', '#{signature.to_' + method + '}')
+          text = text.gsub('#(signature)', '#(signature.to_' + method + ')')
 
           # Replace occurences of #{...} on single lines
           text = text.gsub(/^([ \t]*)#\(([^\)]+)\)/){|match| 
