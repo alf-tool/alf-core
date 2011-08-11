@@ -12,5 +12,9 @@ attribute ATTR.
 
 EXAMPLE
 
-  alf ungroup group -- supplying
+    # Given `pid` and `qty` groupped as `supplying`
+    !{alf group supplies -- pid qty -- supplying}
+
+    # Let's ungroup them
+    !{alf group supplies -- pid qty -- supplying | alf ungroup -- supplying}
 

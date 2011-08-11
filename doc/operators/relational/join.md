@@ -1,5 +1,5 @@
 
-Relational join (and cross-join)
+Relational join (and cartesian product)
 
 SYNOPSIS
 
@@ -14,7 +14,7 @@ performed on common attribute names. You can use the `rename` operator if this
 behavior does not fit your needs.
 
 When operands have no attribute in common, this operator naturally "degenerates" 
-to a cross join.
+to a cartesian product.
 
 EXAMPLE
 
@@ -22,6 +22,6 @@ EXAMPLE
     # attribute they have in common)
     !{alf join suppliers supplies}
 
-    # The following example demontrates the cross join feature with a generated 
+    # The following example demontrates the cartesian product with a generated 
     # relation
     !{alf generator -- 3 -- num | alf join cities}
