@@ -34,6 +34,11 @@ module Alf
       it { should eq("{:old => :new}") }
     end
 
+    describe "on an Aggregation" do
+      let(:value){ Aggregator.coerce("sum{ qty*price }") }
+      it { should eq("sum{ qty*price }") }
+    end
+
     describe "on a TupleExpression" do
       let(:value){ TupleExpression.coerce(arg) }
 
@@ -97,7 +102,17 @@ module Alf
         it{ should eq("{:upcased => ->(){ status.upcase }}")}
       end
 
-    end # TupleExpression
+    end # TupleComputation
+
+    describe "on a Summarization" do
+      let(:value){ Summarization.coerce(arg) }
+
+      describe "When built from an Array" do
+        let(:arg){ {"total" => "sum{ qty*price }"} }
+        it{ should eq("{:total => sum{ qty*price }}") }
+      end
+
+    end # Summarization
 
     describe "on an nullary operator" do
       let(:value){ Alf.lispy.run(%w{generator -- 10 -- id}) } 

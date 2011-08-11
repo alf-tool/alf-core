@@ -58,6 +58,21 @@ module Alf
         }.join(', ') + "}"
       end
 
+      # On Aggregator
+      r.upon(lambda{|v,_| Aggregator === v}) do |v, rd|
+        unless src = v.source
+          raise NotImplementedError, "Aggregator #{v} has no source"
+        end
+        src
+      end
+
+      # On Summarization
+      r.upon(Types::Summarization) do |v, rd|
+        "{" + v.aggregations.collect{|name,compu|
+          [name.inspect, r.coerce(compu)].join(" => ")
+        }.join(', ') + "}"
+      end
+
       # On Command and Operator
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|

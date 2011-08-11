@@ -2,9 +2,15 @@ module Alf
   class Aggregator
     module Base
       
-      # Aggregate options 
+      # @return [Hash] Aggregation options 
       attr_reader :options
-    
+
+      # @return [TupleExpression] the underlying functor
+      attr_reader :functor
+
+      # @return [String] source code of the aggregator, if any
+      attr_accessor :source
+
       #
       # Creates an Aggregator instance.
       #

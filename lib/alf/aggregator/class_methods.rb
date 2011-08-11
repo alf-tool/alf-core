@@ -29,7 +29,9 @@ module Alf
         when Aggregator
           arg
         when String
-          instance_eval(arg)
+          agg = instance_eval(arg)
+          agg.source = arg
+          agg
         else
           raise ArgumentError, "Invalid arg `arg` for Aggregator()"
         end
