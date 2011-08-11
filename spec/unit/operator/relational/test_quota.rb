@@ -25,15 +25,15 @@ module Alf
       subject{ operator.to_a }
   
       describe "When factored with commandline args" do
-        let(:aggs){ ["--", "a", "--", "time", "--", "time_sum", "sum(:time)", "time_max", "max(:time)"] }
+        let(:aggs){ ["--", "a", "--", "time", "--", "time_sum", "sum{ time }", "time_max", "max{ time }"] }
         let(:operator){ Quota.run(aggs) }
         before{ operator.pipe(input) }
         it { should == expected }
       end
   
       describe "When factored with Lispy" do
-        let(:aggs){{:time_sum => Aggregator.sum(:time),
-                    :time_max => Aggregator.max(:time)}} 
+        let(:aggs){{:time_sum => Aggregator.sum{ time },
+                    :time_max => Aggregator.max{ time }}} 
         let(:operator){ Lispy.quota(input, [:a], [:time], aggs) }
         it { should == expected }
       end

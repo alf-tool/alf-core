@@ -21,5 +21,5 @@ in BY as the projection key.
 EXAMPLE
 
     # Compute the sum of supplied quantities, by supplier id
-    !{alf summarize supplies -- sid -- total_qty "sum(:qty)"}
+    !(alf summarize supplies -- sid -- total_qty "sum{ qty }")
 

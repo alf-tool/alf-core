@@ -29,7 +29,7 @@ RELATIONAL OPERATORS
     extend           Relational extension (additional, computed attributes)
     rename           Relational renaming (rename some attributes)
     restrict         Relational restriction (aka where, predicate filtering)
-    join             Relational join (and cross-join)
+    join             Relational join (and cartesian product)
     intersect        Relational intersection (aka a logical and)
     minus            Relational minus (aka difference)
     union            Relational union

@@ -17,5 +17,5 @@ This operator is an attempt to generalize RANK in two directions:
 EXAMPLE
 
     # Compute linear progression of quantities by supplier number
-    !{alf quota supplies -- sid -- qty -- position count  sum_qty "sum(:qty)"}
+    !(alf quota supplies -- sid -- qty -- position count  sum_qty "sum{ qty }")
 

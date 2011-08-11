@@ -47,11 +47,11 @@ module Alf
     end # class Max
   
     #
-    # Defines a COLLECT aggregation operator
+    # Defines a GROUP aggregation operator
     #
     class Group < Aggregator
       def initialize(*attrs)
-        super(nil, {}){
+        super({}){
           Tools.tuple_collect(attrs){|k| [k, self.send(k)] }
         }
       end

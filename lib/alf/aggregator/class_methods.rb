@@ -9,8 +9,7 @@ module Alf
       #   class Sum < Aggregate   # will give a method Aggregator.sum
       #     ...
       #   end
-      #   Aggregator.sum(:size)   # factor an Sum aggregator on tuple[:size]
-      #   Aggregator.sum{ size }  # idem but works on any tuple expression
+      #   Aggregator.sum{ size }
       # 
       def inherited(clazz)
         basename = Tools.ruby_case(Tools.class_name(clazz))

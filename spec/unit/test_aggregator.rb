@@ -10,34 +10,33 @@ module Alf
     ]}
 
     it "should behave correctly on count" do
-      Aggregator.count(:a).aggregate(input).should == 4
+      Aggregator.count{a}.aggregate(input).should == 4
     end
 
     it "should behave correctly on sum" do
-      Aggregator.sum(:a).aggregate(input).should == 7
+      Aggregator.sum{a}.aggregate(input).should == 7
     end
 
     it "should behave correctly on avg" do
-      Aggregator.avg(:a).aggregate(input).should == 7.0 / 4.0
+      Aggregator.avg{a}.aggregate(input).should == 7.0 / 4.0
     end
 
     it "should behave correctly on min" do
-      Aggregator.min(:a).aggregate(input).should == 1
+      Aggregator.min{a}.aggregate(input).should == 1
     end
 
     it "should behave correctly on max" do
-      Aggregator.max(:a).aggregate(input).should == 3
+      Aggregator.max{a}.aggregate(input).should == 3
     end
 
     it "should behave correctly on concat" do
-      Aggregator.concat(:a).aggregate(input).should == "1231"
-      Aggregator.concat(:a, :between => " ").aggregate(input).should == "1 2 3 1"
-      Aggregator.concat(:a, :before => "[", :after => "]").aggregate(input).should == "[1231]"
+      Aggregator.concat{a}.aggregate(input).should == "1231"
+      Aggregator.concat(:between => " "){ a }.aggregate(input).should == "1 2 3 1"
       Aggregator.concat(:before => "[", :after => "]"){ a }.aggregate(input).should == "[1231]"
     end
 
     it "should behave correctly on collect" do
-      Aggregator.collect(:a).aggregate(input).should == [1, 2, 3, 1]
+      Aggregator.collect{a}.aggregate(input).should == [1, 2, 3, 1]
       Aggregator.collect{ {:a => a, :sign => sign} }.aggregate(input).should == input
     end
 
@@ -63,12 +62,12 @@ module Alf
       subject{ Aggregator.coerce(arg) }
       
       describe "from an Aggregator" do
-        let(:arg){ Aggregator.sum(:a) }
+        let(:arg){ Aggregator.sum{a} }
         it{ should eq(arg) }
       end
       
       describe "from a String" do
-        let(:arg){ "sum(:a)" }
+        let(:arg){ "sum{a}" }
         it{ should be_a(Aggregator::Sum) }
         specify{ subject.aggregate(input).should eql(7) }
       end

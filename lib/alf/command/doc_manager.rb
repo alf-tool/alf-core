@@ -30,7 +30,7 @@ module Alf
           }
 
           # Replace occurences of !{...} by the execution of the example
-          text = text.gsub(/^([ \t]*)!\{([^\}]+)\}/){|match| 
+          gsubber = lambda{|match| 
             spacing, invocation  = $1, $2
             args = Quickl.parse_commandline_args(invocation)[1..-1]
             op   = Alf.lispy(Alf::Environment.examples).run(args)
@@ -41,6 +41,8 @@ module Alf
             end
             realign("$ #{invocation}\n\n#{res}", spacing, false)
           }
+          text = text.gsub(/^([ \t]*)!\(([^\)]+)\)/, &gsubber)
+          text = text.gsub(/^([ \t]*)!\{([^\}]+)\}/, &gsubber)
 
         else
           "Sorry, no documentation available for #{cmd.command_name}"

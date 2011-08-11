@@ -7,12 +7,12 @@ module Alf
       subject{ Summarization.coerce(arg) }
       
       describe "from a Summarization" do
-        let(:arg){ Summarization.new(:s => Aggregator.sum(:qty)) }
+        let(:arg){ Summarization.new(:s => Aggregator.sum{ qty }) }
         it{ should eq(arg) }
       end
       
       describe "from a Hash" do
-        let(:arg){ { :s => "sum(:qty)", :m => Aggregator.max(:size) } }
+        let(:arg){ { :s => "sum{ qty }", :m => Aggregator.max{ size } } }
         it{ should be_a(Summarization) }
         specify{ 
           subject.aggregations.values.all?{|v|
@@ -22,7 +22,7 @@ module Alf
       end
       
       describe "from an Array" do
-        let(:arg){ ["s", "sum(:qty)", "m", "max(:size)"] }
+        let(:arg){ ["s", "sum{ qty }", "m", "max{ size }"] }
         it{ should be_a(Summarization) }
         specify{ 
           ([:s, :m] & subject.aggregations.keys).should eq([:s, :m]) 
@@ -39,7 +39,7 @@ module Alf
       subject{ Summarization.from_argv(argv) }
       
       describe "from an Array" do
-        let(:argv){ ["s", "sum(:qty)", "m", "max(:size)"] }
+        let(:argv){ ["s", "sum{ qty }", "m", "max{ size }"] }
         it{ should be_a(Summarization) }
         specify{ 
           ([:s, :m] & subject.aggregations.keys).should eq([:s, :m]) 
@@ -52,7 +52,7 @@ module Alf
     end
     
     specify "least -> happens -> finalize" do
-      summ = Summarization.coerce(["s", "sum(:qty)", "m", "max(:size)"])
+      summ = Summarization.coerce(["s", "sum{ qty }", "m", "max{ size }"])
       (x = summ.least).should eql(:s => 0, :m => nil)
       (x = summ.happens(x, :qty => 10, :size => 12)).should eq(:s => 10, :m => 12)
       (x = summ.happens(x, :qty => 5, :size => 5)).should eq(:s => 15, :m => 12)

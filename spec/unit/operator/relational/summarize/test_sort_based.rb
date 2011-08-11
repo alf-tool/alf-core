@@ -17,8 +17,8 @@ module Alf
       ]}
   
       let(:aggs){Summarization.new(
-        :time_sum => Aggregator.sum(:time),
-        :time_max => Aggregator.max(:time)
+        :time_sum => Aggregator.sum{ time },
+        :time_max => Aggregator.max{ time }
       )} 
       let(:operator){ Summarize::SortBased.new(by_key, allbut, aggs) }
   

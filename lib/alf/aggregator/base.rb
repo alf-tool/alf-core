@@ -14,18 +14,14 @@ module Alf
       #
       # Creates an Aggregator instance.
       #
-      # This constructor can be used either by passing an attribute
-      # argument or a block that will be evaluated on a TupleHandle
-      # instance set on each aggregated tuple.
+      # Example:
       #
-      #   Aggregator.new(:size) # will aggregate on tuple[:size]
-      #   Aggregator.new{ size * price } # ... on tuple[:size] * tuple[:price]
+      #   Aggregator.new{ size * price }
       #
-      def initialize(attribute = nil, options = {}, &block)
-        attribute, options = nil, attribute if attribute.is_a?(Hash)
+      def initialize(options = {}, &block)
         @handle = Tools::TupleHandle.new
         @options = default_options.merge(options)
-        @functor = Tools.coerce(attribute || block, TupleExpression)
+        @functor = Tools.coerce(block, TupleExpression)
       end
     
       #

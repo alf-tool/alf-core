@@ -46,7 +46,7 @@ module Alf
             s.argument :summarization, Summarization, {}
           end
         }
-        let(:argv){ %w{op1 -- a -- time -- time_sum sum(:time) time_max max(:time)} }
+        let(:argv){ %w|op1 -- a -- time -- time_sum sum{time} time_max max{time}| }
         specify{
           subject.should eq(["op1"])
           receiver.by.should eq(AttrList.new([:a]))
