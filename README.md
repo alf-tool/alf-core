@@ -378,7 +378,7 @@ operators works on relations and return relations), you can use a sub expression
               :supplies), 
         :cities),
       [:country],
-      :which => Agg::group(:pid),
+      :which => Agg::collect(:pid),
       :total => Agg::sum{ qty })
 
 Of course, complex queries quickly become unreadable that way. But you can always
@@ -389,30 +389,19 @@ split complex tasks in more simple ones:
     supplying      = (join with_countries, :supplies)
     (summarize supplying,
                [:country],
-               :which => Agg::group(:pid),
+               :which => Agg::collect(:pid),
                :total => Agg::sum{ qty })
 
 And here is the result !
 
-    +----------+----------+--------+
-    | :country | :which   | :total |
-    +----------+----------+--------+
-    | England  | +------+ |   2200 |
-    |          | | :pid | |        |
-    |          | +------+ |        |
-    |          | | P1   | |        |
-    |          | | P2   | |        |
-    |          | | P3   | |        |
-    |          | | P4   | |        |
-    |          | | P5   | |        |
-    |          | | P6   | |        |
-    |          | +------+ |        |
-    | France   | +------+ |    200 |
-    |          | | :pid | |        |
-    |          | +------+ |        |
-    |          | | P2   | |        |
-    |          | +------+ |        |
-    +----------+----------+--------+
+    +------+--------+--------------------------+
+    | :sid | :total | :which                   |
+    +------+--------+--------------------------+
+    | S1   |   1300 | [P1, P2, P3, P4, P5, P6] |
+    | S2   |    700 | [P1, P2]                 |
+    | S3   |    200 | [P2]                     |
+    | S4   |    900 | [P2, P4, P5]             |
+    +------+--------+--------------------------+
 
 ### Reference API
 

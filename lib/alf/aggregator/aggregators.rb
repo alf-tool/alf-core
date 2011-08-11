@@ -45,24 +45,6 @@ module Alf
         memo.nil? ? val : (memo > val ? memo : val) 
       end
     end # class Max
-  
-    #
-    # Defines a GROUP aggregation operator
-    #
-    class Group < Aggregator
-      def initialize(*attrs)
-        super({}){
-          Tools.tuple_collect(attrs){|k| [k, self.send(k)] }
-        }
-      end
-      def least(); Set.new; end
-      def _happens(memo, val)
-        memo << val
-      end
-      def finalize(memo)
-        Relation.coerce memo
-      end
-    end
     
     #
     # Defines a COLLECT aggregation operator

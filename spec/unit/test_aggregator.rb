@@ -40,19 +40,6 @@ module Alf
       Aggregator.collect{ {:a => a, :sign => sign} }.aggregate(input).should == input
     end
 
-    it "should behave correctly on group" do
-      Aggregator.group(:a).aggregate(input).should == rel(
-        {:a => 1},
-        {:a => 2},
-        {:a => 3}
-      )
-      Aggregator.group(:a, :sign).aggregate(input).should == rel(
-        {:a => 1, :sign => -1},
-        {:a => 2, :sign => 1 },
-        {:a => 3, :sign => -1}
-      )
-    end
-
     it "should allow specific tuple computations" do
       Aggregator.sum{ 1.0 * a * sign }.aggregate(input).should == -3.0
     end

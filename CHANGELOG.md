@@ -54,6 +54,10 @@
       Agg::sum(:qty)   # !! error !!
       Agg::sum{ qty }  # works
 
+* The group aggregation operator has been removed. It will probably be replaced 
+  in a future version. In the meantime, the GROUP relational operator allows 
+  obtaining similar results.
+
 * Lispy syntax of CLIP has changed (when used with --allbut option)
 
       (clip :suppliers, [:name, :city], true)                           (before)
