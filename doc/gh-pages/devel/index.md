@@ -24,4 +24,4 @@ The overal mechanism to contribute is by forking the project on [Github](https:/
 #### Ideas, issues and critical reading
 
   * New ideas are welcome, for almost everything. Implemented ideas are prefered, but not required. 
-  * Critical reading from TTM-aware people is necessary and welcome. Create an issue in [our bug tracker]((https://github.com/blambeau/alf/issues) if your review/question/proposal is limited to Alf (misunderstanding of a TUTORIAL D operator by Alf, for example). Start a new thread on the TTM mailing list if it is more general (like discussing an experimental operator implemented in Alf).
+  * Critical reading from TTM-aware people is necessary and welcome. Create an issue in [our bug tracker]((https://github.com/blambeau/alf/issues) if your review/question/proposal is limited to Alf (misunderstanding of a **Tutorial D** operator by Alf, for example). Start a new thread on the TTM mailing list if it is more general (like discussing an experimental operator implemented in Alf).

@@ -70,9 +70,9 @@ of a truly relational algebra approach. Objectives behind Alf are manifold:
 
 * Alf is also an educational tool, that I've written to draw people attention
   about the ill-known relational theory (and ill-represented by SQL). The tool
-  is largely inspired from TUTORIAL D, the tutorial language of Chris Date and 
+  is largely inspired from **Tutorial D**, the tutorial language of Chris Date and 
   Hugh Darwen in their books, more specifically in 
-  {http://www.thethirdmanifesto.com/ The Third Manifesto (TTM)}. 
+  {http://www.thethirdmanifesto.com/ *The Third Manifesto* (TTM)}. 
   However, Alf only provides an overview of the relational _algebra_ defined 
   there (Alf is neither a relational _database_, nor a relational _language_). 
   I hope that people (especially talented developers) will be sufficiently 
@@ -238,7 +238,7 @@ you want! The same query, in shell:
     
 ## What is Alf exactly?   
 
-The Third Manifesto defines a series of prescriptions, proscriptions and very 
+*The Third Manifesto* defines a series of prescriptions, proscriptions and very 
 strong suggestions for designing a truly relational _language_, called a _D_, 
 as an alternative to SQL for managing relational databases. This is far behind
 my objective with Alf, as it does not touch at database issues at all (persistence,
@@ -773,7 +773,7 @@ following template for contributions in lib/alf/renderer
   third manifesto paper} itself? 
 - Also have a look at {http://www.dcs.warwick.ac.uk/~hugh/TTM/Projects.html other 
   implementation projects}, especially {http://dbappbuilder.sourceforge.net/Rel.php Rel}
-  which provides an implementation of the TUTORIAL D language.
+  which provides an implementation of the **Tutorial D** language.
 - {https://github.com/dkubb/veritas Dan Kubb's Veritas} project is worth considering 
   also in the Ruby community. While very similar to Alf in providing a pure ruby
   algebra implementation, Veritas mostly provides a framework for manipulating

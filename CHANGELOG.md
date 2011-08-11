@@ -164,7 +164,7 @@
       % alf --env=. --yaml show suppliers
       
 * 'alf --help' now distinguishes experimental operators (quota in particular) 
-  from those coming from the (much more stable) TUTORIAL D specification. The 
+  from those coming from the (much more stable) **Tutorial D** specification. The 
   former should be used with care as their specification may change at any 
   time.  
 
@@ -263,7 +263,7 @@
   sound.
 
 * Nest and Unnest have been renamed to Wrap and Unwrap respectively. This is
-  to better conform to TUTORIAL D's terminology.
+  to better conform to **Tutorial D**'s terminology.
   
 * Lispy#chain was kept public in 0.9.0 by error and has been entirely removed 
   from the DSL.
