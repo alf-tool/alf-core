@@ -51,6 +51,13 @@ module Alf
         "->(){ #{src} }"
       end
 
+      # On TupleComputation
+      r.upon(Types::TupleComputation) do |v, rd|
+        "{" + v.computation.collect{|name,compu|
+          [name.inspect, r.coerce(compu)].join(" => ")
+        }.join(', ') + "}"
+      end
+
       # On Command and Operator
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|
