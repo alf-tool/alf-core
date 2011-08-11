@@ -40,6 +40,8 @@
   that way. This allows specifying default values as being computed on the 
   current tuple.
 
+* Aggregations in the Lispy DSL must not be prefixed by Agg:: anymore.
+
 ## Miscellaneous enhancements
 
 * Added 'alf --input-reader' to specify $stdin format (csv, rash, etc.)
@@ -49,10 +51,12 @@
 
 ## Hurting changes to Lispy DSL (and therefore to Relation)
 
-* The attribute-name syntax of aggregation operators has been removed
+* The attribute-name syntax of aggregation operators has been removed. The Agg::
+  prefix must not be specified anymore.
 
-      Agg::sum(:qty)   # !! error !!
-      Agg::sum{ qty }  # works
+      Agg::sum(:qty)    # !! error !!
+      Agg::sum{ qty }   # !! error !!
+      sum{ qty }        # simply, and only!
 
 * The group aggregation operator has been removed. It will probably be replaced 
   in a future version. In the meantime, the GROUP relational operator allows 

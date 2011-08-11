@@ -3,5 +3,5 @@ with_countries = (join kept_suppliers, :cities)
 supplying      = (join with_countries, :supplies)
 (summarize supplying,
            [:country],
-           :which => Agg::collect{ pid },
-           :total => Agg::sum{ qty })
+           :which => collect{ pid },
+           :total => sum{ qty })

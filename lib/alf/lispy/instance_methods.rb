@@ -66,7 +66,9 @@ module Alf
       @environment.dataset(name)
     end
 
-    # Functional equivalent to Alf::Relation[...]
+    #
+    # Functionally equivalent to Alf::Relation[...]
+    #
     def relation(*tuples)
       Relation.coerce(tuples)
     end
@@ -74,7 +76,7 @@ module Alf
     # 
     # Install the DSL through iteration over defined operators
     #
-    Operator::each do |op_class|
+    Operator.each do |op_class|
       meth_name = Tools.ruby_case(Tools.class_name(op_class)).to_sym
       if op_class.unary?
         define_method(meth_name) do |child, *args|
@@ -94,7 +96,21 @@ module Alf
         raise "Unexpected operator #{op_class}"
       end
     end # Operators::each
-      
+
+    # 
+    # Install the DSL through iteration over defined aggregators
+    #
+    Aggregator.each do |agg_class|
+      agg_name = Tools.ruby_case(Tools.class_name(agg_class)).to_sym
+      if method_defined?(agg_name)
+        raise "Unexpected method clash on Lispy: #{agg_name}"
+      else
+        define_method(agg_name) do |*args, &block|
+          agg_class.new(*args, &block)
+        end
+      end
+    end
+
     def allbut(child, attributes)
       (project child, attributes, :allbut => true)
     end

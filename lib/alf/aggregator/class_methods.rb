@@ -3,6 +3,20 @@ module Alf
     module ClassMethods
       
       #
+      # Returns registered aggregators as an Array of classes
+      #
+      def aggregators
+        @aggregators ||= []
+      end
+
+      #
+      # Yields aggregator classes in turn
+      # 
+      def each
+        aggregators.each(&Proc.new)
+      end
+
+      #
       # Automatically installs factory methods for inherited classes.
       #
       # Example: 
@@ -12,6 +26,7 @@ module Alf
       #   Aggregator.sum{ size }
       # 
       def inherited(clazz)
+        aggregators << clazz
         basename = Tools.ruby_case(Tools.class_name(clazz))
         instance_eval <<-EOF
           def #{basename}(*args, &block)

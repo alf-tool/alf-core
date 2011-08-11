@@ -359,7 +359,6 @@ module Alf
   module Lispy
     require 'alf/lispy/instance_methods'
     
-    Agg = Alf::Aggregator
     DUM = Relation::DUM
     DEE = Relation::DEE
   end # module Lispy

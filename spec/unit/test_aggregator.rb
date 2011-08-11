@@ -9,6 +9,13 @@ module Alf
       {:a => 1, :sign => -1},
     ]}
 
+    it "should keep track of registered aggregators" do
+      Aggregator.aggregators.should_not be_empty
+      Aggregator.each do |agg|
+        agg.should be_a(Class)
+      end
+    end
+
     it "should behave correctly on count" do
       Aggregator.count{a}.aggregate(input).should == 4
     end

@@ -11,4 +11,4 @@
             lambda{ (http_status == 200) and 
                     not(user_agent =~ /[Bb]ot/ or path =~ /robots.txt/) }),
   [:path],
-  :hits   => Agg::count())
+  :hits   => count())

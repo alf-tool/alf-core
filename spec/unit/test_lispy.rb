@@ -19,5 +19,9 @@ module Alf
       operator.to_a.should == expected
     end
 
+    it "should allow building aggregators" do
+      sum{ qty }.should be_a(Aggregator::Sum)
+    end
+
   end
 end

@@ -1,4 +1,4 @@
 #!/usr/bin/env alf
 (quota :supplies, [:sid], [:qty],
-       :position => Agg::count,
-       :sum_qty  => Agg::sum{ qty })
+       :position => count(),
+       :sum_qty  => sum{ qty })
