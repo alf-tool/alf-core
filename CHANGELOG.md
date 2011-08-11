@@ -49,6 +49,11 @@
 
 ## Hurting changes to Lispy DSL (and therefore to Relation)
 
+* The attribute-name syntax of aggregation operators has been removed
+
+      Agg::sum(:qty)   # !! error !!
+      Agg::sum{ qty }  # works
+
 * Lispy syntax of CLIP has changed (when used with --allbut option)
 
       (clip :suppliers, [:name, :city], true)                           (before)
@@ -76,6 +81,11 @@
 
 ## Hurting changes in shell
 
+* The attribute-name syntax of aggregation operators has been removed
+
+      sum(:qty)   # !! error !!
+      sum{ qty }  # works
+
 * Shell syntax of GROUP has changed (option separator before introduced name)
 
       % alf --text group supplies  -- pid qty supplying                 (before)
@@ -88,8 +98,8 @@
 
 * Shell syntax of QUOTA has changed (--by and --order become pure arguments)
 
-      % alf quota supplies --by=sid --order=qty -- position count sum_qty "sum(:qty)" (before)
-      % alf quota supplies -- sid -- qty -- position count sum_qty "sum(:qty)"        (after)
+      % alf quota supplies --by=sid --order=qty -- position count sum_qty "sum{ qty }" (before)
+      % alf quota supplies -- sid -- qty -- position count sum_qty "sum{ qty }"        (after)
 
 * Shell syntax of RANK has changed (--order becomes a pure argument)
 
@@ -98,8 +108,8 @@
 
 * Shell syntax of SUMMARIZE has changed (--by becomes a pure argument)
 
-      % alf summarize supplies --by=sid -- total_qty "sum(:qty)"        (before)
-      % alf summarize supplies -- sid -- total_qty "sum(:qty)"          (after)
+      % alf summarize supplies --by=sid -- total_qty "sum{ qty }"        (before)
+      % alf summarize supplies -- sid -- total_qty "sum{ qty }"          (after)
 
 ## Bug fixes 
 
