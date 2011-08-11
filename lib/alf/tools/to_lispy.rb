@@ -43,6 +43,14 @@ module Alf
         "->(){ #{src} }"
       end
 
+      # On Restriction
+      r.upon(Types::Restriction) do |v, rd|
+        unless src = v.source
+          raise NotImplementedError, "Restriction #{v} has no source"
+        end
+        "->(){ #{src} }"
+      end
+
       # On Command and Operator
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|

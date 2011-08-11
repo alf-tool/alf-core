@@ -42,7 +42,53 @@ module Alf
         it{ should eq("->(){ status.upcase }")}
       end
 
-    end
+      describe "When built from a symbol" do
+        let(:arg){ :status }
+        it{ should eq("->(){ status }")}
+      end
+
+    end # TupleExpression
+
+
+    describe "on a Restriction" do
+      let(:value){ Restriction.coerce(arg) }
+
+      describe "When built from a TupleExpression" do
+        let(:arg){ TupleExpression.coerce("status > 10") }
+        it{ should eq("->(){ status > 10 }")}
+      end
+
+      describe "When built from a boolean" do
+        let(:arg){ true }
+        it{ should eq("->(){ true }")}
+      end
+
+      describe "When built from a String" do
+        let(:arg){ "status > 10" }
+        it{ should eq("->(){ status > 10 }")}
+      end
+
+      describe "When built from a Hash" do
+        let(:arg){ {:status => 10} }
+        it{ should eq("->(){ (self.status == 10) }")}
+      end
+
+      describe "When built with a singleton Array" do
+        let(:arg){ ["status > 10"] }
+        it{ should eq("->(){ status > 10 }")}
+      end
+
+      describe "When built with a Hash-Array" do
+        let(:arg){ ["status", "10"] }
+        it{ should eq("->(){ (self.status == 10) }")}
+      end
+
+      describe "When built with a Hash-Array without coercion" do
+        let(:arg){ [:status, "10"] }
+        it{ should eq("->(){ (self.status == \"10\") }")}
+      end
+
+    end # TupleExpression
 
     describe "on an nullary operator" do
       let(:value){ Alf.lispy.run(%w{generator -- 10 -- id}) } 
