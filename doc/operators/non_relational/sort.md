@@ -3,7 +3,7 @@ Sort input tuples according to an order relation
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -16,9 +16,9 @@ non-relational inputs.
 EXAMPLE
 
   # Sort suppliers by name
-  !{alf sort suppliers -- name asc}
+  !(alf sort suppliers -- name asc)
 
   # Sort suppliers by city in descending order, then on name on ascending 
   # order
-  !{alf sort suppliers -- city desc name asc}
+  !(alf sort suppliers -- city desc name asc)
 

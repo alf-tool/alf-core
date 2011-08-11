@@ -1,1 +1,1 @@
-  !{alf autonum suppliers -- unique_id}
+  !(alf autonum suppliers -- unique_id)

@@ -3,11 +3,11 @@ Force default values on missing/nil attributes
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 

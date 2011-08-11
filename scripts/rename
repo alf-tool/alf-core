@@ -5,7 +5,7 @@ raise if from.nil? or to.nil?
 rx = Regexp.compile(from)
 
 dir = File.dirname(File.dirname(__FILE__))
-Dir["#{dir}/**/*.rb"].each do |file|
+Dir["#{dir}/**/*.md"].each do |file|
   before = File.read(file)
   if before =~ rx
     puts "Rewriting #{file}"

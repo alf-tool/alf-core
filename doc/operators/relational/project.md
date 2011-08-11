@@ -3,11 +3,11 @@ Relational projection (clip + compact)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 
@@ -21,8 +21,8 @@ keeping them.
 EXAMPLE
 
     # What are supplier cities ?
-    !{alf project suppliers -- city}
+    !(alf project suppliers -- city)
 
     # What are all but supplier's id and name
-    !{alf project --allbut suppliers -- sid name}
+    !(alf project --allbut suppliers -- sid name)
 

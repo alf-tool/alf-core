@@ -3,7 +3,7 @@ Relational minus (aka difference)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 

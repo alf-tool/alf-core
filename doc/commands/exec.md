@@ -3,11 +3,11 @@ Executes an .alf file on current environment
 
 SYNOPSIS
 
-    alf #{command_name} [FILE]
+    alf #(command_name) [FILE]
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 

@@ -3,11 +3,11 @@ Relational grouping (relation-valued attributes)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 
@@ -20,8 +20,8 @@ instead.
 EXAMPLE
 
     # Group pid and qty as a relation-valued attribute names supplying
-    !{alf group supplies -- pid qty -- supplying}
+    !(alf group supplies -- pid qty -- supplying)
 
     # Group all but pid ...
-    !{alf group supplies --allbut -- pid -- supplying}
+    !(alf group supplies --allbut -- pid -- supplying)
 

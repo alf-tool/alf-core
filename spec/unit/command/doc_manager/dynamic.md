@@ -1,1 +1,1 @@
-#{command_name}
+#(command_name)

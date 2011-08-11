@@ -3,7 +3,7 @@ Remove tuple duplicates
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 

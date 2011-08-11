@@ -3,7 +3,7 @@ Relational restriction (aka where, predicate filtering)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -18,8 +18,8 @@ equalities.
 EXAMPLE
 
     # Who are suppliers with a status greater than 20?
-    !{alf restrict suppliers -- "status > 20"}
+    !(alf restrict suppliers -- "status > 20")
 
     # Which suppliers live in London?
-    !{alf restrict suppliers -- city "'London'"}
+    !(alf restrict suppliers -- city "'London'")
 

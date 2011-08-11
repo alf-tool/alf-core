@@ -3,11 +3,11 @@ Clip input tuples to a subset of attributes
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 
@@ -24,8 +24,8 @@ of projecting them away.
 EXAMPLE
 
     # Clip suppliers on `name` and `city`
-    !{alf clip suppliers -- name city}
+    !(alf clip suppliers -- name city)
 
     # Clip suppliers on all other attributes
-    !{alf clip suppliers --allbut -- name city}
+    !(alf clip suppliers --allbut -- name city)
 

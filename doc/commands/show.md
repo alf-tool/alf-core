@@ -3,11 +3,11 @@ Output input tuples through a specific renderer (text, yaml, ...)
 
 SYNOPSIS
 
-    alf #{command_name} DATASET
+    alf #(command_name) DATASET
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 

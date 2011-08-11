@@ -3,7 +3,7 @@ Relational un-grouping (inverse of group)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -13,8 +13,8 @@ attribute ATTR.
 EXAMPLE
 
     # Given `pid` and `qty` groupped as `supplying`
-    !{alf group supplies -- pid qty -- supplying}
+    !(alf group supplies -- pid qty -- supplying)
 
     # Let's ungroup them
-    !{alf group supplies -- pid qty -- supplying | alf ungroup -- supplying}
+    !(alf group supplies -- pid qty -- supplying | alf ungroup -- supplying)
 

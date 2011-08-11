@@ -3,7 +3,7 @@ Relational ranking (explicit tuple positions)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -19,9 +19,9 @@ the new AS attribute is not necessarily a candidate key for the output.
 EXAMPLE
 
     # Rank parts by weight 
-    !{alf rank parts -- weight -- position}
+    !(alf rank parts -- weight -- position)
 
     # Rank parts by weight in descending order. Ensure that position is a 
     # candidate key by including a key in ordering
-    !{alf rank parts -- weight desc pid asc -- position}
+    !(alf rank parts -- weight desc pid asc -- position)
 

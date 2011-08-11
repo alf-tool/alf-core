@@ -3,7 +3,7 @@ Relational matching (join + project back on left)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -16,5 +16,5 @@ operator for the following longer expression:
 EXAMPLE
 
     # Which suppliers supply at least one part?
-    !{alf matching suppliers supplies}
+    !(alf matching suppliers supplies)
 

@@ -11,23 +11,23 @@ SYNOPSIS
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 RELATIONAL OPERATORS
 
-    #{summarized_subcommands relational_operators}
+    #(summarized_subcommands relational_operators)
 
 EXPERIMENTAL RELATIONAL OPERATORS
 
-    #{summarized_subcommands experimental_operators}
+    #(summarized_subcommands experimental_operators)
 
 NON-RELATIONAL OPERATORS
 
-    #{summarized_subcommands non_relational_operators}
+    #(summarized_subcommands non_relational_operators)
 
 OTHER NON-RELATIONAL COMMANDS
 
-    #{summarized_subcommands other_non_relational_commands}
+    #(summarized_subcommands other_non_relational_commands)
 
 See 'alf help COMMAND' for details about a specific command.
 

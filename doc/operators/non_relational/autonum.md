@@ -3,7 +3,7 @@ Extend its operand with an unique autonumber attribute
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -16,8 +16,8 @@ the result is a valid relation for which AS is a candidate key.
 EXAMPLE
 
     # Autonumber suppliers with default attribute name
-    !{alf autonum suppliers}
+    !(alf autonum suppliers)
 
     # Autonumber suppliers with a `unique_id` attribute
-    !{alf autonum suppliers -- unique_id}
+    !(alf autonum suppliers -- unique_id)
 

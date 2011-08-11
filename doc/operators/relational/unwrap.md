@@ -3,7 +3,7 @@ Relational un-wraping (inverse of wrap)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -13,8 +13,8 @@ attribute ATTR.
 EXAMPLE
 
     # Given, `city` and `status` wrapped as `loc_and_status` 
-    !{alf wrap suppliers -- city status -- loc_and_status}
+    !(alf wrap suppliers -- city status -- loc_and_status)
 
     # Let's unwrap them
-    !{alf wrap suppliers -- city status -- loc_and_status | alf unwrap -- loc_and_status}
+    !(alf wrap suppliers -- city status -- loc_and_status | alf unwrap -- loc_and_status)
 

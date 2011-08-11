@@ -3,7 +3,7 @@ Relational join (and cartesian product)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -20,8 +20,8 @@ EXAMPLE
 
     # Computes natural join of suppliers and supplies (on sid, the only 
     # attribute they have in common)
-    !{alf join suppliers supplies}
+    !(alf join suppliers supplies)
 
     # The following example demontrates the cartesian product with a generated 
     # relation
-    !{alf generator -- 3 -- num | alf join cities}
+    !(alf generator -- 3 -- num | alf join cities)

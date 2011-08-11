@@ -3,11 +3,11 @@ Relational wraping (tuple-valued attributes)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 
@@ -20,5 +20,5 @@ instead.
 EXAMPLE
 
     # Wrap `city` and `status` and a tuple-value attribute named `loc_and_status` 
-    !{alf wrap suppliers -- city status -- loc_and_status}
+    !(alf wrap suppliers -- city status -- loc_and_status)
 

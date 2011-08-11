@@ -18,19 +18,19 @@ module Alf
           text = text.gsub('#{signature}', '#{signature.to_' + method + '}')
 
           # Replace occurences of #{...} on single lines
-          text = text.gsub(/^([ \t]*)#\{([^\}]+)\}/){|match| 
+          text = text.gsub(/^([ \t]*)#\(([^\)]+)\)/){|match| 
             spacing, invocation  = $1, $2
             res = cmd.instance_eval(invocation).to_s
             realign(res, spacing, true)
           }
 
           # Replace occurences of #{...} in other places
-          text = text.gsub(/#\{([^\}]+)\}/){|match| 
+          text = text.gsub(/#\(([^\)]+)\)/){|match| 
             cmd.instance_eval($1).to_s
           }
 
           # Replace occurences of !{...} by the execution of the example
-          gsubber = lambda{|match| 
+          text = text.gsub(/^([ \t]*)!\(([^\)]+)\)/){|match| 
             spacing, invocation  = $1, $2
             args = Quickl.parse_commandline_args(invocation)[1..-1]
             op   = Alf.lispy(Alf::Environment.examples).run(args)
@@ -41,8 +41,6 @@ module Alf
             end
             realign("$ #{invocation}\n\n#{res}", spacing, false)
           }
-          text = text.gsub(/^([ \t]*)!\(([^\)]+)\)/, &gsubber)
-          text = text.gsub(/^([ \t]*)!\{([^\}]+)\}/, &gsubber)
 
         else
           "Sorry, no documentation available for #{cmd.command_name}"

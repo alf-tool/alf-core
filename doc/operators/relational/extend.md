@@ -3,7 +3,7 @@ Relational extension (additional, computed attributes)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -14,5 +14,5 @@ of evaluating tuple expressions specified in EXT. The latter are specified as
 EXAMPLE
 
     # Compute a few attributes on suppliers by extension
-    !{alf extend supplies -- big "qty > 100"  price "qty * 12.2"}
+    !(alf extend supplies -- big "qty > 100"  price "qty * 12.2")
 

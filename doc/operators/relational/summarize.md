@@ -3,11 +3,11 @@ Relational summarization (group-by + aggregate ops)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 OPTIONS
 
-    #{summarized_options}
+    #(summarized_options)
 
 DESCRIPTION
 

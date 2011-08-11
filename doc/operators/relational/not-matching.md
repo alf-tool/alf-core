@@ -3,7 +3,7 @@ Relational not matching (inverse of matching)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -16,5 +16,5 @@ operator for the following longer expression:
 EXAMPLE
 
     # Which suppliers do not supply any part?
-    !{alf not-matching suppliers supplies}
+    !(alf not-matching suppliers supplies)
 

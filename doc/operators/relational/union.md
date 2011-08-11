@@ -3,7 +3,7 @@ Relational union
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 

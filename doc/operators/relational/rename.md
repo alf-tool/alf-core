@@ -3,7 +3,7 @@ Relational renaming (rename some attributes)
 
 SYNOPSIS
 
-    #{signature}
+    #(signature)
 
 DESCRIPTION
 
@@ -13,5 +13,5 @@ This command renames attributes as specified in RENAMING, taken as successive
 EXAMPLE
 
     # Rename a few supplier attributes
-    !{alf rename suppliers -- name supplier_name  city supplier_city}
+    !(alf rename suppliers -- name supplier_name  city supplier_city)
 
