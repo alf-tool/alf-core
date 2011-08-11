@@ -4,24 +4,24 @@ module Alf
     # Specialization of TupleExpression to boolean expressions 
     # specifically
     #
-    class Restriction < TupleExpression
+    class TuplePredicate < TupleExpression
       
       # 
-      # Coerces `arg` to a Restriction
+      # Coerces `arg` to a TuplePredicate
       #
       def self.coerce(arg)
         case arg
-        when Restriction
+        when TuplePredicate
           arg
         when TupleExpression
-          Restriction.new arg.expr_lambda, arg.source
+          TuplePredicate.new arg.expr_lambda, arg.source
         when TrueClass, FalseClass
-          Restriction.new lambda{ arg }, arg.to_s
+          TuplePredicate.new lambda{ arg }, arg.to_s
         when Proc
-          Restriction.new arg, nil
+          TuplePredicate.new arg, nil
         when String, Symbol
           l = eval("lambda{ #{arg} }")
-          Restriction.new l, arg.to_s
+          TuplePredicate.new l, arg.to_s
         when Hash
           h = Tools.tuple_collect(arg){|k,v|
             (AttrName === k) ? 
@@ -44,6 +44,6 @@ module Alf
         coerce(argv)
       end
       
-    end # class Restriction
+    end # class TuplePredicate
   end # module Types
 end # module Alf

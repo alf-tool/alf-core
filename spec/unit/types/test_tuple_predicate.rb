@@ -1,14 +1,14 @@
 require 'spec_helper'
 module Alf
-  describe Restriction do
+  describe TuplePredicate do
 
     let(:handle){ Tools::TupleHandle.new.set(:status => 10) }
       
     describe "coerce" do
-      subject{ Restriction.coerce(arg).evaluate(handle) }
+      subject{ TuplePredicate.coerce(arg).evaluate(handle) }
       
-      describe "from Restriction" do
-        let(:arg){ Restriction.new(lambda{ status == 10 }) }
+      describe "from TuplePredicate" do
+        let(:arg){ TuplePredicate.new(lambda{ status == 10 }) }
         it{ should eql(true) }
       end
       
@@ -60,7 +60,7 @@ module Alf
     end
     
     describe "from_argv" do
-      subject{ Restriction.from_argv(argv).evaluate(handle) }
+      subject{ TuplePredicate.from_argv(argv).evaluate(handle) }
       
       
       describe "from a singleton Array" do

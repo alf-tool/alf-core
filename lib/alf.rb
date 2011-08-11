@@ -24,7 +24,7 @@ module Alf
     require 'alf/types/attr_list'
     require 'alf/types/renaming'
     require 'alf/types/tuple_expression'
-    require 'alf/types/restriction'
+    require 'alf/types/tuple_predicate'
     require 'alf/types/summarization'
     require 'alf/types/tuple_computation'
 

@@ -43,10 +43,10 @@ module Alf
         "->(){ #{src} }"
       end
 
-      # On Restriction
-      r.upon(Types::Restriction) do |v, rd|
+      # On TuplePredicate
+      r.upon(Types::TuplePredicate) do |v, rd|
         unless src = v.source
-          raise NotImplementedError, "Restriction #{v} has no source"
+          raise NotImplementedError, "TuplePredicate #{v} has no source"
         end
         "->(){ #{src} }"
       end

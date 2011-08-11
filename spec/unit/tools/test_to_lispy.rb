@@ -50,8 +50,8 @@ module Alf
     end # TupleExpression
 
 
-    describe "on a Restriction" do
-      let(:value){ Restriction.coerce(arg) }
+    describe "on a TuplePredicate" do
+      let(:value){ TuplePredicate.coerce(arg) }
 
       describe "When built from a TupleExpression" do
         let(:arg){ TupleExpression.coerce("status > 10") }

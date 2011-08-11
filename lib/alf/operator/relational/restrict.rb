@@ -4,7 +4,7 @@ module Alf
       include Operator::Relational, Operator::Unary
       
       signature do |s|
-        s.argument :predicate, Restriction, "true"
+        s.argument :predicate, TuplePredicate, "true"
       end
       
       protected 
