@@ -10,12 +10,12 @@ To understand what relational algebra is about, we need to briefly review a few 
 
 * A *type* is a (finite) **set** of values. A *subtype* is a subset. Sets are **not ordered** and have **no duplicates**.
 * A *value* is an element of a type. We say that the value *belongs to* the type.
-* A value is **immutable**, intrinsically **typed** [1], has no localization in time and space, and can be of arbitrary complexity.
+* A value is **immutable**, intrinsically **typed**, has no localization in time and space, and can be of arbitrary complexity.
 * A type is always accompanied with an equality operator, say `==`, that allows checking if two of its elements actually denote the same value. The notion of 'duplicate' precisely relies on this operator in an obvious way.
 
 Oh! and,
 
-* NULL is **not** a value. Precisely, ''treating NULL as a value'' on one side and ''keeping a theory simple enough to be of any practical yet sound use'' on the other side are conflictual requirements. Therefore, here, NULL is not a value. 
+* NULL is **not** a value. Precisely, ''treating NULL as a value'' on one side and ''keeping a theory simple enough to be of any practical yet sound use'' on the other side are conflicting requirements. Therefore, here, NULL is not a value. 
 
 #### A few examples
 
@@ -46,21 +46,21 @@ Tuples and relations are values as well. In contrast to integers or strings howe
 We will denote tuple literals as follows (we assume that a Color type exists):
 
 <pre class="theory"><code class="ruby">#
-# The product whose id is 'P3',
-#  * is named 'Screw', 
-#  * has a color denoted by 'blue', and 
+# The product whose id is 'P1',
+#  * is named 'Nut', 
+#  * has a color denoted by 'red', and 
 #  * is known to be heavy.
 #
 Tuple( pid: 'P1', name: 'Nut', color: Color('red'), heavy: true )
 </code></pre>
 
-<p class="note">Alf uses Ruby Hashes for implementing tuples. The example above is syntaxtically correct in Ruby 1.9.x and returns a Hash when usign Alf. Of course, there are hashes that do not implement valid tuples (those containing nil, for example). Alf assumes that you use them in accordance with this background (in an immutable way, among others); it does **not** systematically enforce this precondition. It's up to you to use Alf the correct way.<p>
+<p class="note">Alf uses Ruby Hashes for implementing tuples. The example above is syntactically correct in Ruby 1.9.x and returns a Hash when usign Alf. Of course, there are hashes that do not implement valid tuples (those containing nil, for example). Alf assumes that you use them in accordance with this background (in an immutable way, among others); it does **not** systematically enforce this precondition. It's up to you to use Alf the correct way.<p>
 
 The type of a tuple is simply defined in terms of its heading. A *heading* is defined as a set of attribute (name, type name) pairs. For example, the heading of the tuple show above is:
 
 <pre class="theory"><code class="ruby">Heading( pid: String, name: String, color: Color, heavy: Boolean )</code></pre>
 
-<p class="note">Alf assumes that types are implemented with Ruby classes. String, Color and Boolean are all valid class names in Ruby, though it's worth noting that the Boolean class does not natively exists. As it is of huge importance for Alf, it defines it in such a way that everything looks fine. The Color class is assumed here to be a user-defined class. Not all user-defined classes implement valid types. Alf assumes that you use them in accordance with this background; it does **not** systematically enforce this precondition. It's up to you to use Alf the correct way.<p>
+<p class="note">Alf assumes that types are implemented with Ruby classes. String, Color and Boolean are all valid class names in Ruby, though it's worth noting that the Boolean class does not natively exist. As it is of huge importance for Alf, it defines it in such a way that everything looks fine. The Color class is assumed here to be a user-defined class. Not all user-defined classes implement valid types. Alf assumes that you use them in accordance with this background; it does **not** systematically enforce this precondition. It's up to you to use Alf the correct way.<p>
 
 #### Relation
 
@@ -76,7 +76,7 @@ We will denote relation literals as follows:
   Tuple( pid: 'P3', name: 'Screw', color: Color('blue'),  heavy: false )
 )</code></pre>
 
-<p class="note">The example above is syntaxtically correct in Alf and returns a relation data structure. Alf support other ways of obtaining relations than literals. Among others, it recognizes different data sources, like .csv files or SQL tables. In any way, Alf assumes that you use relations in accordance with this background; it does **not** systematically enforce this precondition. It's up to you to use Alf the correct way.<p>
+<p class="note">The example above is syntactically correct in Alf and returns a relation data structure. Alf supports other ways of obtaining relations than by using literals. Among others, it recognizes different data sources, like .csv files or SQL tables. In any way, Alf assumes that you use relations in accordance with this background; it does **not** systematically enforce this precondition. It's up to you to use Alf the correct way.<p>
 
 The type of a relation is simply defined in terms of its heading. For example, the heading of the relation show above is:
 
@@ -84,19 +84,19 @@ The type of a relation is simply defined in terms of its heading. For example, t
 
 ### A few consequences
 
-The following list of bullets are logical consequences of the definitions above. Alf considers them as part of its specification; if it does not respect it, it is either a bug or a limitation... for which patches are welcome!
+The following list of bullets are logical consequences of the definitions above. Alf considers them as part of its specification; if you see Alf behaving differently from what is being said here, then it's a bug or a limitation of the current version... for which patches are welcome!
 
-* Tuples and relations may contain values of any complexity, providing that the corresponding type is consistent with the theory of types stated above.
+* Tuples and relations may contain values of any complexity, provided that the corresponding type is consistent with the theory of types stated above.
 * In particular, tuples and relations may contain... tuples and relations.
 
-The following list of bullets are other logical consequences of the definitions above. Alf considers them as pre-conditions of all relational operators, without necessarily enforcing them:
+The following points are other logical consequences of the definitions above. Alf considers them as pre-conditions of all relational operators, without necessarily enforcing them:
 
-* All tuples that forms relations have the same "structure", that is, the same heading
+* All tuples that are member of a relation must have the same "structure", precisely, the same heading than the relation itself
 * Tuples and relations never contain NULL
 * No left-right ordering of attributes applies to tuples and relations
 * No tuple ordering applies to relations
 
-That being said, Alf also provides you with a few non-relational operators to clean "noisy" data upstream of relational operators. Also, Alf tend to be "friendly enough" about ordering and NULL. It does not guarantee any behavior nor does it provide you with ways of specifying such behavior on relational operators. 
+That said, Alf does however provide a few facilities that make it more comfortable for the user to deal with any deviations from the theory stated here, as they might occur in any SQL product(s) you might be using as a data source. Have a look at the so-called "non-relational" operators. 
 
 ### Relational algebra
 
@@ -129,8 +129,4 @@ Can be rephrased/rewritten as
 #
 (restrict :parts, ->(){ (color == Color('red')) or (heavy == true) })
 </code></pre>
-
-### Footnotes
-
-[1] even if you don't *declare* that type, it exists. So-called 'duck typing' does not mean 'types do not exists', it means 'we do not enforce them when passing arguments', roughly. 
 
