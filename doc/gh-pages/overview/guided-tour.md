@@ -45,7 +45,8 @@ All examples in Alf documentation are based on this "database". Relation names a
 
 Alf recognizes .csv files as first class citizens. Download [books.csv](downloads/books.csv) and save it somewhere (credits to [parseomatic.com](http://www.parseomatic.com/parse/pskb/CSV-File-Format.htm)). Then try:
 
-<pre class="theory"><code class="ruby">$ alf show books.csv
+<pre class="theory"><code class="ruby">$ cd somewhere
+$ alf show books.csv
 +--------------+-----------------------------+------------+--------+
 | :review_date | :author                     | :isbn      | :price |
 +--------------+-----------------------------+------------+--------+
@@ -67,9 +68,36 @@ Oh, of course; .csv files are text files (observe that `:price` is aligned at le
 | ...                       | ...                         | ...        | ...    |
 </code></pre>
 
+Now that types are properly recognized, you may manipulate your data with the conjoined power of Alf and Ruby: 
+
+<pre class="theory"><code class="ruby">$ alf coerce books.csv -- review_date "Time" | alf --text restrict -- "review_date.year == 2004"
++---------------------------+-------------------+------------+--------+
+| :review_date              | :author           | :isbn      | :price |
++---------------------------+-------------------+------------+--------+
+| 2004-10-04 00:00:00 +0200 | Benjamin Radcliff | 0804818088 |  4.950 |
+| 2004-10-04 00:00:00 +0200 | Randel Helms      | 0879755725 |  4.500 |
++---------------------------+-------------------+------------+--------+
+</code></pre>
+
+I forgot to mention so far. The relational algebra is closed under its operators: they take relations as input, and return a relation. It shell, it means that Alf invocations can **always** be piped (in the example above, observe that the `--text` option has moved).
+
+Talking about output options. Why not outputting query results in yaml or csv? 
+
+<pre class="theory"><code class="yaml">$ alf coerce ... | alf --yaml restrict -- "review_date.year == 2004"
+--- 
+- :review_date: 2004-10-04 00:00:00 +02:00
+  :author: Benjamin Radcliff
+  :isbn: 0804818088
+  :price: 4.95
+- :review_date: 2004-10-04 00:00:00 +02:00
+  :author: Randel Helms
+  :isbn: 0879755725
+  :price: 4.5
+</code></pre>
+
 ### Connecting to SQL sources
 
-Alf is also able to connect to your SQL servers and files. For example, suppose that you have a SQLite `northwind.db` file. Try this:
+Alf is also able to connect to SQL servers and SQLite files (provided that you install the `sequel` ruby library, as well as specific adapters: `pg`, `sqlite3`, and so on.). For example, suppose that you have a SQLite `northwind.db` file. Try this:
 
 <pre class="theory"><code class="ruby">$ alf --env=northwind.db --text project customers -- Country
 +-------------+
@@ -82,6 +110,19 @@ Alf is also able to connect to your SQL servers and files. For example, suppose 
 | France      |
 | Spain       |
 | Canada      |
+| ...         |
+</code></pre>
+
+In the example above, the returned relation will never contain duplicate country names. Unlike SQL, here, relations are *sets*, not *bags*. The `project` operator automatically removes duplicates. 
+
+Now, maybe you use a PostgreSQL database, or MySQL, etc.? No problem! Every DBMS supported by `sequel`, is supported by Alf (with credits to Jeremy Evans for such awesomeness):
+
+<pre class="theory"><code class="ruby">$ alf --env=postgres://user:password@localhost:port/database --text project customers -- Country
++-------------+
+| :Country    |
++-------------+
+| Germany     |
+| Mexico      |
 | ...         |
 </code></pre>
 
