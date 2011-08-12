@@ -20,8 +20,8 @@ module Alf
     end
 
     describe "on a Heading" do
-      let(:value){ Heading.new(:name => String, :price => Float) }
-      it { should eq("{:name => String, :price => Float}") }
+      let(:value){ Heading.new(:name => String) }
+      it { should eq("{:name => String}") }
     end
 
     describe "on an Ordering" do
