@@ -1,7 +1,7 @@
 body {
   padding: 10px 10px;
-  font-family: Palatino, serif;
-  font-size: 18px;
+  font-family: 'Nunito', 'Palatino', sans-serif;
+  font-size: 17px;
   overflow: scroll;
   color: #212122;
 }
@@ -39,7 +39,6 @@ a:hover {
 }
 
 #menu .menu-entry .head {
-  font-family: Tahoma, serif;
   color: black;
   border-bottom: 1px solid #444444;
   margin-top: 20px;
@@ -90,19 +89,16 @@ a:hover {
 #page h2, #page h3 {
   color: black;
   border-bottom: 1px solid black;
-  font-family: Tahoma, serif;
 }
 #page h4 {
   color: black;
   border-bottom: 1px dashed black;
-  font-family: Tahoma, serif;
 }
 #page ul { padding-left: 20px; }
 #page ul { list-style: square; }
 #page ul ul { list-style: circle; }
 #page p.note {
   padding: 0px 0px 0px 30px;
-  font-family: Arial, serif;
   font-size: 16px;
 }
 
