@@ -1,6 +1,5 @@
 Relation({
   :suppliers => (Relation :suppliers),
   :parts     => (Relation :parts),
-  :cities    => (Relation :cities),
-  :supplies  => (Relation :supplies)
+  :supplies  => (Relation :supplies),
 })
