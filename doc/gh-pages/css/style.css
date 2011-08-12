@@ -1,7 +1,8 @@
 body {
   padding: 10px 10px;
-  font-family: 'Nunito', 'Palatino', sans-serif;
-  font-size: 17px;
+  /*font-family: 'Nunito', 'Palatino', sans-serif;*/
+  font-family: Palatino, serif;
+  font-size: 18px;
   overflow: scroll;
   color: #212122;
 }
