@@ -52,7 +52,7 @@ module Alf
             when Symbol
               value.inspect
             when Float
-              "%.7f" % value
+              "%.3f" % value
             when Hash
               value.inspect
             when Alf::Iterator
