@@ -1,6 +1,6 @@
-Alf::Relation[{
-  :suppliers => (dataset :suppliers),
-  :parts     => (dataset :parts),
-  :cities    => (dataset :cities),
-  :supplies  => (dataset :supplies)
-}]
+Relation({
+  :suppliers => (Relation :suppliers),
+  :parts     => (Relation :parts),
+  :cities    => (Relation :cities),
+  :supplies  => (Relation :supplies)
+})

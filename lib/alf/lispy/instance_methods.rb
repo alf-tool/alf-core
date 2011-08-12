@@ -47,32 +47,45 @@ module Alf
     #   }
     #
     def evaluate(expr = nil, path = nil, &block)
-      compile(expr, path, &block).to_rel
+      compiled = compile(expr, path, &block)
+      case compiled
+      when Iterator
+        compiled.to_rel
+      else
+        compiled
+      end
     end
     
     #
-    # Delegated to the current environment
+    # Coerces `h` to a valid tuple.
     #
-    # This method returns the dataset associated to a given name. The result
-    # may depend on the current environment, but is generally an Iterator, 
-    # often a Reader instance.
+    # @param [Hash] h, a hash mapping symbols to values
     #
-    # @param [Symbol] name name of the dataset to retrieve
-    # @return [Iterator] the dataset as an iterator
-    # @see Environment#dataset
+    def Tuple(h)
+      unless h.keys.all?{|k| k.is_a?(Symbol)} &&
+             h.values.all?{|v| !v.nil?}
+        raise ArgumentError, "Invalid tuple literal #{h.inspect}"
+      end
+      h
+    end
+    
     #
-    def dataset(name)
-      raise "Environment not set" unless @environment
-      @environment.dataset(name)
+    # Coerces `args` to a valid relation.
+    #
+    def Relation(first, *args)
+      if args.empty?
+        if first.is_a?(Symbol)
+          environment.dataset(first).to_rel
+        elsif first.is_a?(Hash)
+          Alf::Relation[first]
+        else
+          raise ArgumentError, "Unable to coerce `#{first.inspect}` to a relation"
+        end
+      else
+        Alf::Relation[*args.unshift(first)] 
+      end
     end
 
-    #
-    # Functionally equivalent to Alf::Relation[...]
-    #
-    def relation(*tuples)
-      Relation.coerce(tuples)
-    end
-   
     # 
     # Install the DSL through iteration over defined operators
     #

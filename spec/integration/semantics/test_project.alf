@@ -1,8 +1,7 @@
-cities = relation(
-  {:city => 'London'}, 
-  {:city => 'Paris'}, 
-  {:city => 'Athens'}
-)
+cities = Relation(
+  Tuple(:city => 'London'), 
+  Tuple(:city => 'Paris'), 
+  Tuple(:city => 'Athens'))
 (specify \
   "(project ..., [...]) should remove duplicates",
   (rel_equal \
