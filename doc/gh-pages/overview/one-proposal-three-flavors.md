@@ -5,19 +5,19 @@ Alf supports three syntactic flavors of relational algebra: one to use Alf in sh
 * a list of *named relational operators* together with their *signature* in terms of *operands*, *arguments* and *options*
 * a specification of the *types* of arguments and options
 
-Note that, this is neither purely semantic nor purely syntactic. It should better be seen as a definition of an abstract Domain Specific Language (DSL) [1, 2] for which Alf provides three syntactic implementations. Note that,
+Note that this is neither purely semantic nor purely syntactic. It should better be seen as a definition of an abstract Domain Specific Language (DSL) [1, 2] for which Alf provides three syntactic implementations. Note that,
 
 * as such, the DSL **says nothing about how** queries are executed. The Alf engine is a pragmatic implementation that tries not to load whole relations in memory, where possible. [3]
-* the boundaries of the DSL are intentionally limited to avoid perturbating implementations with concepts that would make it impossible to implement. The aim here is to set a basis that could be ported without much effor to other dynamic languages such as clojure, python, javascript, and so on. [4] 
+* the boundaries of the DSL are intentionally limited to avoid perturbating implementations with concepts that would make it impossible to implement. The aim here is to set a basis that could be ported without much effort to other dynamic languages such as clojure, python, javascript, and so on. [4] 
 * in particular, it does not prescribe a predefined set of supported scalar types and operators. Most implementation languages support Boolean, Integer or String, etc. and provides users with ways for implementing new ones.
 
 ### Basic types
 
-This section describes the basic types used in query expressions. Note that it does not prescribe any dedicated syntax for literals, that are implementation specific. Examples below are valid literals when using the functional Ruby DSL of Alf. 
+This section describes the basic types used in query expressions. Note that it does not prescribe any dedicated syntax for literals; the latter is considered implementation specific. Examples below are valid literals when using the functional Ruby DSL of Alf. 
 
 #### Name
 
-A name is used to denote base relations, attributes and types. When relevant, the context distinguishes between attribute names, relation names and type names. Examples are:
+A name is used to denote base relation variables (aka relvars), attributes and types. When relevant, the context distinguishes between attribute names, relation variable names and type names specifically. Examples are:
 
 <pre class="theory"><code class="ruby">:suppliers, :parts             # relation names
 :name, :city, :color_in_rgb    # attribute names
@@ -94,7 +94,7 @@ A tuple computation is a mapping between attribute names and tuple expressions (
 
 <pre class="theory"><code class="ruby">{}                                                         # the empty computation
 {:total => ->(){ qty * price }}                            # a singleton computation
-{:big => ->{ qty > 100 }, :total => ->(){ qty * price }}   # a general case
+{:big => ->(){ qty > 100 }, :total => ->(){ qty * price }}   # a general case
 </code></pre>
 
 #### Summarizing expression
