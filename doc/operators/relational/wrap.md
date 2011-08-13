@@ -1,5 +1,5 @@
 
-Relational wraping (tuple-valued attributes)
+Relational wrapping (tuple-valued attributes)
 
 SYNOPSIS
 

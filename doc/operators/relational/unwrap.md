@@ -1,5 +1,5 @@
 
-Relational un-wraping (inverse of wrap)
+Relational un-wrapping (inverse of wrap)
 
 SYNOPSIS
 

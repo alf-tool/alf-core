@@ -4,7 +4,7 @@
         (rename :suppliers, [:name, :city], :suffix => "_sup")
         (rename :suppliers, [:name, :city], lambda{|name| name.upcase}) 
 
-* WRAP: provide a multi-wraping ability?
+* WRAP: provide a multi-wrapping ability?
 
         (wrap (wrap :supplies, [:a, :b], :x), [:x, :c], :y)
          => (wrap :supplies, :x => [:a, :b], :y => [:x, :c])

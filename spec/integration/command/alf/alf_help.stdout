@@ -35,8 +35,8 @@ RELATIONAL OPERATORS
     union            Relational union
     matching         Relational matching (join + project back on left)
     not-matching     Relational not matching (inverse of matching)
-    wrap             Relational wraping (tuple-valued attributes)
-    unwrap           Relational un-wraping (inverse of wrap)
+    wrap             Relational wrapping (tuple-valued attributes)
+    unwrap           Relational un-wrapping (inverse of wrap)
     group            Relational grouping (relation-valued attributes)
     ungroup          Relational un-grouping (inverse of group)
     summarize        Relational summarization (group-by + aggregate ops)
