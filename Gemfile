@@ -1,8 +1,8 @@
 source 'http://rubygems.org'
 
 group :runtime do
-  gem "quickl", :git => "git://github.com/blambeau/quickl.git" # "~> 0.4.0"
-  gem "myrrha", :git => "git://github.com/blambeau/myrrha.git" # "~> 1.2.0"
+  gem "quickl", "~> 0.4.0"
+  gem "myrrha", "~> 1.2.0"
 end
 
 group :test do
@@ -25,7 +25,7 @@ end
 
 group :extra do
   gem "fastercsv", "~> 1.5.4"
-  gem "request-log-analyzer", "= 1.11.0"
+  gem "request-log-analyzer", "~> 1.11.0"
   gem "sequel", "~> 3.25.0"
   gem "sqlite3", "~> 1.3.0"
 end
