@@ -8,6 +8,8 @@ template-info:
       ignore: true
     tasks/unit_test.rake: 
       safe-override: false
+    tasks/debug_mail.txt:
+      safe-override: false
 variables:
   lower: 
     alf
@@ -27,9 +29,9 @@ variables:
     - {name: Bernard Lambeau, email: blambeau@gmail.com}
   links:
     - http://blambeau.github.com/alf
-    - http://rubydoc.info/gems/alf
     - http://github.com/blambeau/alf
     - http://rubygems.org/gems/alf
+    - http://rubydoc.info/gems/alf
   dependencies: 
     - {name: quickl,       version: "~> 0.4.0",  groups: [runtime      ]}
     - {name: myrrha,       version: "~> 1.2.0",  groups: [runtime      ]}

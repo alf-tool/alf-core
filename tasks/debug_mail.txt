@@ -8,6 +8,11 @@ Subject: [ANN] !{lower} !{version} Released
 
 !{description}
 
+Alf follows semantic versioning (http://semver.org/) and has not reached its 
+first stable 1.0.0 release. Quoting semver.org: "Anything may change at any 
+time. The public API should not be considered stable". Including alf with the 
+version requirement "~> !{version}" shouldn't break your code.
+
 Changes:
 
 !{changes}
