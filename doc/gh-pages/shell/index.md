@@ -1,13 +1,20 @@
 ## Using Alf in shell
 
-Alf comes with a set of shell commands to manipulate data with relational algebra. Those commands are able to manipulate .csv files, SQL tables, log files, and so on. If you know ruby, writing an adapter for recognizing other data sources is almost straightforward.
+Alf comes with a set of operators and commands to evaluate relational queries (see the menu at left). 
 
-<pre><code class="bash">#
-# What is the total weight of supplied products, 
+* Operators always take relations (often one) as input and output a relation. 
+* Input relations may come from .rash files (ruby hashes), .csv files, SQL tables, log files, and so on.
+* Alf is read-only: it never modifies the files or SQL tables where the data come from!
+
+Here is an example:
+
+<pre><code class="bash"># What is the total weight of supplied products, 
 # by city, then by product id?
-#
 
-$ alf join parts supplies | alf summarize -- city pid -- total 'sum{weight*qty}' | alf group -- pid total -- supplying | alf show
+$ alf join parts supplies | \
+  alf summarize -- city pid -- total 'sum{weight*qty}' | \
+  alf group -- pid total -- supplying | \
+  alf show
 
 +--------+---------------------+
 | :city  | :supplying          |
@@ -21,26 +28,26 @@ $ alf join parts supplies | alf summarize -- city pid -- total 'sum{weight*qty}'
 | ...    | | ...  | ...     |  |
 </code></pre>
 
-Alf provides you with a fully-featured relational algebra, see `alf --help` for the list of commands or have a look at the menu at left.
+Refer to the menu at left to learn about available operators.
 
-### A few stuff you want to know
+### A few bits and pieces you want to know
 
 * Alf is not limited to the use of simple scalar types. Attribute can be any ruby class/object implementing a type/value in a consistent way. You also have full Ruby power in expressions:
 
 <pre><code class="terminal">$ alf restrict suppliers -- "city =~ /^P/"</code></pre>
 
-* You can use .csv or .log files as first class input relations
+* Alf automatically resolves relation names according to an environment of use. By default, the latter is bound to the examples bundled with Alf. This way, you can learn Alf without worrying about where data come from, or even get it:
+
+<pre><code class="terminal">$ alf show suppliers
+$ alf --csv show suppliers > suppliers.csv</code></pre>
+
+* But, you can also use .csv or .log files as first class input relations
 
 <pre><code class="terminal">$ alf restrict suppliers.csv -- "city == 'Paris'"</code></pre>
 
 * You can export any query result to a .csv, .yaml or ruby file with only one additional option
 
 <pre><code class="terminal">$ alf --yaml restrict suppliers.csv -- "city == 'Paris'"</code></pre>
-
-* Alf automatically resolves relation names according to an environment of use. By default, the latter is bound to the examples bundled with Alf. This way, you can learn Alf without worrying about where data come from, or even get it:
-
-<pre><code class="terminal">$ alf show suppliers
-$ alf --csv show suppliers > suppliers.csv</code></pre>
 
 * Of course, you can connect Alf to other datasources
 

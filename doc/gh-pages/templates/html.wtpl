@@ -5,10 +5,10 @@
 <!--[if lt IE 9]>
 <script src='http://html5shim.googlecode.com/svn/trunk/html5.js'></script>
 <![endif]--> 
-<base href="file:///home/blambeau/work/devel/alf/doc/deploy-gh-pages/index.html" />
 <!--
-<base href="http://blambeau.github.com/alf/index.html" />
+<base href="file:///home/blambeau/work/devel/alf/doc/deploy-gh-pages/index.html" />
 -->
+<base href="http://blambeau.github.com/alf/index.html" />
 <!--
 <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Gloria+Hallelujah|Nunito:300' type='text/css'> 
 -->

@@ -36,7 +36,7 @@ Alf.lispy.evaluate{
 }
 </code></pre>
 
-### A few stuff you want to know
+### A few bits and pieces you want to know
 
 * Alf is not limited to the use of simple scalar types. Attribute can be any ruby class/object implementing a type/value in a consistent way. You also have full Ruby power in expressions:
 

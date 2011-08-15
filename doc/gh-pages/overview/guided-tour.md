@@ -39,7 +39,7 @@ What is this? A relation that "contains" other relations; nothing spectacular in
 +------+-------+---------+--------+--------------------+
 </code></pre>
 
-All examples in Alf documentation are based on this "database". Relation names are also magically resolved (as in the example above), so that you can learn quickly and easily. Of course, Alf is not limited to the *suppliers-and-parts* example. It actually recognizes various sources for base "relations".
+All examples in Alf documentation are based on this "database". Relation names are automatically resolved (as in the example above), so that you can learn quickly and easily. Of course, Alf is not limited to the *suppliers-and-parts* example. It actually recognizes various sources for base "relations".
 
 ### Manipulating .csv files
 
@@ -79,21 +79,7 @@ Now that types are properly recognized, you may manipulate your data with the co
 +---------------------------+-------------------+------------+--------+
 </code></pre>
 
-I forgot to mention so far. The relational algebra is closed under its operators: they take relations as input, and return a relation. It shell, it means that Alf invocations can **always** be piped (in the example above, observe that the `--text` option has moved).
-
-Talking about output options. Why not outputting query results in yaml or csv? 
-
-<pre class="theory"><code class="yaml">$ alf coerce ... | alf --yaml restrict -- "review_date.year == 2004"
---- 
-- :review_date: 2004-10-04 00:00:00 +02:00
-  :author: Benjamin Radcliff
-  :isbn: 0804818088
-  :price: 4.95
-- :review_date: 2004-10-04 00:00:00 +02:00
-  :author: Randel Helms
-  :isbn: 0879755725
-  :price: 4.5
-</code></pre>
+&raquo; Read more about using [Alf in Shell](shell/index)
 
 ### Connecting to SQL sources
 

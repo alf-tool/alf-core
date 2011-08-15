@@ -44,7 +44,7 @@ Where
 
 ### Then ?
 
-* [Overview](overview/why.html) covers Alf history and gives background on relational theory.
+* [Guided Tour](overview/guided-tour.html) gives you an overview of Alf features.
 * [Using Alf in Shell](shell/index.html) is the reference guide for using Alf in Shell. It contains lots of examples.
 * [Using Alf in Ruby](ruby/index.html) is the reference guide for using Alf in Ruby. It contains lots of examples as well.
 

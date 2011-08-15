@@ -13,4 +13,4 @@ Yet, Alf is not about SQL. It is not even about databases, in fact. The relation
 ### Further reading
 
 * [Relational basics](overview/relational-basics.html)
-* [One proposal, three flavors](overview/one-proposal-three-flavors.html)
+
