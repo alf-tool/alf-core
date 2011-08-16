@@ -281,6 +281,7 @@ module Alf
       require 'alf/operator/relational/summarize'
       require 'alf/operator/relational/rank'
       require 'alf/operator/relational/quota'
+      require 'alf/operator/relational/heading'
   
       # 
       # Yields the block with each operator module in turn
