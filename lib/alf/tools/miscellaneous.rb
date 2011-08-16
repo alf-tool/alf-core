@@ -73,5 +73,12 @@ module Alf
       Hash[enum.collect{|elm| yield(elm)}]
     end
 
+    #
+    # Infers the heading from a tuple
+    #
+    def tuple_heading(tuple)
+      Heading[tuple_collect(tuple){|k,v| [k, v.class]}]
+    end
+
   end # module Tools
 end # module Alf
