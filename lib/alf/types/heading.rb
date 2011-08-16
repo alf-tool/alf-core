@@ -57,6 +57,21 @@ module Alf
       end
       alias :size  :cardinality
       alias :count :cardinality
+
+      #
+      # Computes the union of this heading with `other`
+      #
+      def union(other)
+        merged = attributes.merge(other){|k,t1,t2|
+          if t1 == t2 
+            t1 
+          else
+            Object
+          end
+        }
+        Heading.new(merged)
+      end
+      alias :+ :union
       
       #
       # Returns heading's hash code
