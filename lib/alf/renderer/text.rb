@@ -136,17 +136,52 @@ module Alf
   
       end # class Table
   
+      class PrettyBuffer 
+        
+        def initialize(out, options)
+          @out = out
+          @trim_at = options[:trim_at]
+          @page_at = options[:page_at] - 2
+          @page_line = 0
+        end
+
+        def <<(str)
+          print_a_line trim(str)
+          self
+        end
+
+        def trim(str)
+          return str unless (@trim_at && (str.length > @trim_at))
+          trimmed = (str[0..(@trim_at-4)] + "...")
+          trimmed << "\n" if str =~ /\n$/
+          trimmed
+        end
+
+        def print_a_line(line)
+          @out << line
+          @page_line += 1
+          do_wait if @page_at && (@page_line > @page_at)
+        end
+
+        def do_wait
+          @out << "--- Press ENTER (or quit) ---\n"
+          throw :stop if $stdin.getc =~ /^[qQ](uit)?/
+          @page_line = 0
+        end
+
+      end # class PrettyBuffer
+
       protected
       
       def render(input, output)
         relation = input.to_a
-        attrs = relation.inject([]){|memo,t| 
-          memo | t.keys
-        }
-        records = relation.collect{|t|
-          attrs.collect{|a| t[a]}
-        }
-        Table.new(records, attrs).render(output)
+        attrs    = relation.inject([]){|memo,t| (memo | t.keys)}
+        records  = relation.collect{|t| attrs.collect{|a| t[a]}}
+        table    = Table.new(records, attrs)
+        buffer   = options[:pretty] ? 
+                   PrettyBuffer.new(output, options) : output
+        catch(:stop){ table.render(buffer) }
+        output
       end
       
       def self.render(input, output)
