@@ -1,8 +1,8 @@
 Subject: [ANN] alf 0.10.0 Released
 
-Hi all! Alf version 0.10.0 has been released! This release has lots of new 
-features and enhancements and a fresh new documentation website available at 
-http://blambeau.github.com/alf.
+Hi all! Alf version 0.10.0 has been released! This release brings lots of new 
+features and enhancements as well as a fresh new documentation website available 
+at http://blambeau.github.com/alf.
 
 Relational Algebra at your fingertips
 
