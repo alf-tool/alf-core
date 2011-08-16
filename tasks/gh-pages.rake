@@ -44,7 +44,7 @@ task :"gh-pages" do
     end
   }
 
-  ["overview", "shell", "ruby", "devel"].each do |f|
+  ["overview", "shell", "ruby", "devel", "use-cases"].each do |f|
     static.call(f)
   end
 

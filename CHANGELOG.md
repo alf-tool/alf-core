@@ -1,3 +1,9 @@
+# 0.10.1 / FIX ME
+
+## Miscellaneous enhancements
+
+* Added a --pretty option to 'alf show' 
+
 # 0.10.0 / 2011-08-15
 
 ## New recognized data sources

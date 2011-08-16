@@ -6,4 +6,6 @@
   name: Alf in Ruby
 - id: devel
   name: Development
+- id: use-cases
+  name: Use cases
 
