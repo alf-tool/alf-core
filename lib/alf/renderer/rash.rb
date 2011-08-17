@@ -7,10 +7,24 @@ module Alf
   
       # (see Renderer#render)
       def render(input, output)
-        input.each do |tuple|
-          output << Tools.to_ruby_literal(tuple) << "\n"
+        if options[:pretty]
+          input.each do |tuple|
+            output << "{\n" << tuple.collect{|k,v| 
+              "  #{lit(k)} => #{lit(v)}" 
+            }.join(",\n") << "\n}\n"
+          end
+        else
+          input.each do |tuple|
+            output << lit(tuple) << "\n"
+          end
         end
         output
+      end
+
+      private 
+
+      def lit(x)
+        Tools.to_ruby_literal(x)
       end
   
       Renderer.register(:rash, "as ruby hashes", self)

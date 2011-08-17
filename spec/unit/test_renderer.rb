@@ -21,6 +21,17 @@ module Alf
         subject.execute(output).should == expected
       }
     end
+
+    describe 'rash --pretty' do
+      subject{ Renderer.rash(input, {:pretty => true}) } 
+      let(:input){ [{:a => 1}] }
+      let(:output){ "" }
+      let(:expected){ "{\n  :a => 1\n}\n" }
+      specify{ 
+        subject.should be_a(Renderer)
+        subject.execute(output).should == expected
+      }
+    end
     
     describe 'text' do
       subject{ Renderer.text(input) } 
