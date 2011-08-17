@@ -141,7 +141,7 @@ module Alf
         def initialize(out, options)
           @out = out
           @trim_at = options[:trim_at]
-          @page_at = options[:page_at] - 2
+          @page_at = options[:page_at]
           @page_line = 0
         end
 
