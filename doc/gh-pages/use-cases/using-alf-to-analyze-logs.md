@@ -3,6 +3,7 @@
 So, let first see if everything is ok. To check that Alf correctly recognizes the log file, we just ask him to show it as a relation. The `--pretty` option helper here keeping stuff readable by enabling wrapping and paging of the output:
 
 <pre><code class="terminal">$ alf show --pretty access.log
+
 +-----------------+-----------------+-------+----------------+--------------+...
 | :remote_host    | :remote_logname | :user | :timestamp     | :http_method |...
 +-----------------+-----------------+-------+----------------+--------------+...
@@ -18,7 +19,13 @@ Looks fine so far, except that some attributes have no value (nil is not a value
 
 So, what are all available attributes?
 
-<pre><code class="terminal">$ alf heading access.log | alf show</code></pre>
+<pre><code class="terminal">$ alf heading access.log
+
+{:remote_host => String, :remote_logname => NilClass, :user => NilClass,
+ :timestamp => Bignum, :http_method => String, :path => String,
+ :http_version => String, :http_status => Fixnum, :bytes_sent => Fixnum,
+ :line_type => Symbol, :lineno => Fixnum, :source => NilClass}
+</code></pre>
 
 
 

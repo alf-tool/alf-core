@@ -25,14 +25,14 @@ OPTIONS
 
 RELATIONAL OPERATORS
 
-    project          Relational projection (clip + compact)
     extend           Relational extension (additional, computed attributes)
-    rename           Relational renaming (rename some attributes)
+    project          Relational projection (clip + compact)
     restrict         Relational restriction (aka where, predicate filtering)
-    join             Relational join (and cartesian product)
-    intersect        Relational intersection (aka a logical and)
-    minus            Relational minus (aka difference)
+    rename           Relational renaming (rename some attributes)
     union            Relational union
+    minus            Relational minus (aka difference)
+    intersect        Relational intersection (aka a logical and)
+    join             Relational join (and cartesian product)
     matching         Relational matching (join + project back on left)
     not-matching     Relational not matching (inverse of matching)
     wrap             Relational wrapping (tuple-valued attributes)
@@ -41,6 +41,7 @@ RELATIONAL OPERATORS
     ungroup          Relational un-grouping (inverse of group)
     summarize        Relational summarization (group-by + aggregate ops)
     rank             Relational ranking (explicit tuple positions)
+    heading          Sorry, no documentation available for heading
 
 EXPERIMENTAL RELATIONAL OPERATORS
 

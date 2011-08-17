@@ -264,23 +264,29 @@ module Alf
     # Marker module and namespace for relational operators
     #
     module Relational
-      require 'alf/operator/relational/project'
       require 'alf/operator/relational/extend'
-      require 'alf/operator/relational/rename'
+      require 'alf/operator/relational/project'
       require 'alf/operator/relational/restrict'
-      require 'alf/operator/relational/join'
-      require 'alf/operator/relational/intersect'
-      require 'alf/operator/relational/minus'
+      require 'alf/operator/relational/rename'
+
       require 'alf/operator/relational/union'
+      require 'alf/operator/relational/minus'
+      require 'alf/operator/relational/intersect'
+      require 'alf/operator/relational/join'
+
       require 'alf/operator/relational/matching'
       require 'alf/operator/relational/not_matching'
+
       require 'alf/operator/relational/wrap'
       require 'alf/operator/relational/unwrap'
+
       require 'alf/operator/relational/group'
       require 'alf/operator/relational/ungroup'
+
       require 'alf/operator/relational/summarize'
       require 'alf/operator/relational/rank'
       require 'alf/operator/relational/quota'
+
       require 'alf/operator/relational/heading'
   
       # 

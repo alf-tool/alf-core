@@ -2,6 +2,7 @@ module Alf
   module Operator::Relational
     class Heading < Alf::Operator()
       include Operator::Relational, 
+              Operator::Experimental,
               Operator::Unary
     
       signature do |s|

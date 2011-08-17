@@ -1,9 +1,9 @@
 <div class="subentry">Relational operators</div>
-<<+{oplist.wtpl share all with ops: main.relational_operators(true), categ: 'ruby'}
+<<+{oplist.wtpl share all with ops: main.relational_operators, categ: 'ruby'}
 
 <div class="subentry">Experimental operators</div>
-<<+{oplist.wtpl share all with ops: main.experimental_operators(true), categ: 'ruby'}
+<<+{oplist.wtpl share all with ops: main.experimental_operators, categ: 'ruby'}
 
 <div class="subentry">Non-relational operators</div>
-<<+{oplist.wtpl share all with ops: main.non_relational_operators(true), categ: 'ruby'}
+<<+{oplist.wtpl share all with ops: main.non_relational_operators, categ: 'ruby'}
 
