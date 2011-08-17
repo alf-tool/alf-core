@@ -2,7 +2,7 @@
 
 ## Miscellaneous enhancements
 
-* Added a --pretty option to 'alf show' 
+* Added a --pretty option to 'alf', whose semantics is delegated to renderers
 
 # 0.10.0 / 2011-08-15
 

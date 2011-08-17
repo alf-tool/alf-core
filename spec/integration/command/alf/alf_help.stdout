@@ -20,6 +20,7 @@ OPTIONS
     --input-reader=READER        Specify the kind of reader when reading on $stdin (rash,alf,csv,logs)
     -Idirectory                      Specify $LOAD_PATH directory (may be used more than once)
     -rlibrary                        Require the library, before executing alf
+    --[no-]pretty                Enable/disable pretty print best effort
     -h, --help                       Show help
     -v, --version                    Show version
 
@@ -41,11 +42,11 @@ RELATIONAL OPERATORS
     ungroup          Relational un-grouping (inverse of group)
     summarize        Relational summarization (group-by + aggregate ops)
     rank             Relational ranking (explicit tuple positions)
-    heading          Sorry, no documentation available for heading
 
 EXPERIMENTAL RELATIONAL OPERATORS
 
-    quota     Generalized quota-queries (position, sum progression, etc.)
+    quota       Generalized quota-queries (position, sum progression, etc.)
+    heading     Sorry, no documentation available for heading
 
 NON-RELATIONAL OPERATORS
 

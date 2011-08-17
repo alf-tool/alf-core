@@ -30,7 +30,10 @@ module Alf
       # Returns a CSV instance bound to a given io and options
       #
       def get_csv(io)
-        get_csv_class.new(io, options)
+        csv_class = get_csv_class
+        def_opts = csv_class.const_get(:DEFAULT_OPTIONS)
+        csv_opts = options.delete_if{|k,v| !def_opts.has_key?(k)}
+        csv_class.new(io, csv_opts)
       end
       
     end # module Commons

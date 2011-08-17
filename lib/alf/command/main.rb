@@ -53,7 +53,7 @@ module Alf
       attr_accessor :stdin_reader
 
       # Output renderer
-      attr_accessor :renderer
+      attr_accessor :renderer_class
       
       # Creates a command instance
       def initialize(env = Environment.default)
@@ -67,10 +67,10 @@ module Alf
           @execute = true
         end
         
-        @renderer = nil
+        @renderer_class = nil
         Renderer.each_renderer do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){ 
-            @renderer = clazz.new 
+            @renderer_class = clazz
           }
         end
         
@@ -97,6 +97,12 @@ module Alf
           require(value)
         end
         
+        @pretty = false
+        opt.on("--[no-]pretty", 
+               "Enable/disable pretty print best effort") do |val|
+          @pretty = val
+        end
+
         opt.on_tail('-h', "--help", "Show help") do
           raise Quickl::Help
         end
@@ -134,11 +140,34 @@ module Alf
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
-          renderer = self.renderer ||= Renderer::Rash.new
+          renderer_class = self.renderer_class ||= Renderer::Rash
+          renderer = renderer_class.new(rendering_options)
           renderer.pipe(operator, environment).execute($stdout)
         else
           operator
         end
+      end
+
+      #
+      # Returns rendering options
+      #
+      def rendering_options
+        opts = {:pretty => @pretty}
+        if @pretty && (hl = highline)
+          opts[:trim_at] = hl.output_cols
+          opts[:page_at] = hl.output_rows
+        end
+        opts
+      end
+
+      #
+      # Returns a highline instance
+      # 
+      def highline
+        require 'highline'
+        HighLine.new($stdin, $stdout)
+      rescue LoadError => ex
+        nil
       end
       
     end # class Main

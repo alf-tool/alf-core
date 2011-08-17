@@ -4,24 +4,18 @@ module Alf
       include Command
     
       options do |opt|
-        @renderer = nil
+        @renderer_class = nil
         Renderer.each_renderer do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){ 
-            @renderer = clazz.new 
+            @renderer_class = clazz
           }
-        end
-
-        @pretty = false
-        opt.on("--[no-]pretty", 
-               "Enable/disable pretty print based on console inference") do |val|
-          @pretty = val
         end
       end
         
       def execute(args)
-        requester.renderer = (@renderer || 
-                              requester.renderer || 
-                              Text::Renderer.new(rendering_options))
+        requester.renderer_class = (@renderer_class || 
+                                    requester.renderer_class || 
+                                    Text::Renderer)
         args = [ stdin_reader ] if args.empty?
         args.first
       end
@@ -34,22 +28,6 @@ module Alf
         else 
           Reader.coerce($stdin)
         end
-      end
-
-      def rendering_options
-        opts = {:pretty => @pretty}
-        if @pretty && (hl = highline)
-          opts[:trim_at] = hl.output_cols
-          opts[:page_at] = hl.output_rows
-        end
-        opts
-      end
-
-      def highline
-        require 'highline'
-        HighLine.new($stdin, $stdout)
-      rescue LoadError => ex
-        nil
       end
 
     end # class Show
