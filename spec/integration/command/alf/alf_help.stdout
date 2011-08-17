@@ -46,7 +46,7 @@ RELATIONAL OPERATORS
 EXPERIMENTAL RELATIONAL OPERATORS
 
     quota       Generalized quota-queries (position, sum progression, etc.)
-    heading     Sorry, no documentation available for heading
+    heading     Relational heading (print the relation type)
 
 NON-RELATIONAL OPERATORS
 

@@ -41,8 +41,7 @@ Listed attributes are our universe of discourse, what we are talking about. Simp
 
 <pre><code class="terminal"># Number of hits per page?
 alf summarize access.log -- path -- hits "count()" | \
-alf sort -- hits desc | \
-alf show
+alf show -- hits desc
 
 +-------------------------------------------------------------------+-------+
 | :path                                                             | :hits |

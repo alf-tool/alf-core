@@ -3,7 +3,7 @@ Output input tuples through a specific renderer (text, yaml, ...)
 
 SYNOPSIS
 
-    alf show DATASET
+    alf show DATASET -- [ORDERING]
 
 OPTIONS
 

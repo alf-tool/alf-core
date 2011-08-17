@@ -16,16 +16,31 @@ module Alf
                "Enable/disable pretty print best effort") do |val|
           @pretty = val
         end
-
       end
         
-      def execute(args)
+      def run(argv, requester)
+        # set requester and parse options
+        @requester = requester
+        argv = parse_options(argv, :split)
+
+        # Set options on the requester
         requester.pretty = @pretty unless @pretty.nil?
         requester.renderer_class = (@renderer_class || 
                                     requester.renderer_class || 
                                     Text::Renderer)
+
+        # normalize args
+        args = argv.first
         args = [ stdin_reader ] if args.empty?
-        args.first
+        chain = args.first
+
+        # put a sorter
+        if argv[1]
+          sorter = Alf::Operator::NonRelational::Sort.new(argv[1])
+          chain  = sorter.pipe(chain, requester.environment)
+        end
+
+        chain
       end
     
       private 

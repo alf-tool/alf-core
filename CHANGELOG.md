@@ -4,6 +4,9 @@
 
 * Added a --pretty option to 'alf', whose semantics is delegated to the output 
   renderer. Same option is available on 'alf show'.
+* 'alf show' now accepts an optional ordering argument. This avoids explicitely
+  including non-relational sort invocations in your pipe (sorting should be 
+  seen as a displaying issue)
 
 # 0.10.0 / 2011-08-15
 
