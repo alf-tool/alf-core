@@ -10,9 +10,17 @@ module Alf
             @renderer_class = clazz
           }
         end
+        
+        @pretty = nil
+        opt.on("--[no-]pretty", 
+               "Enable/disable pretty print best effort") do |val|
+          @pretty = val
+        end
+
       end
         
       def execute(args)
+        requester.pretty = @pretty unless @pretty.nil?
         requester.renderer_class = (@renderer_class || 
                                     requester.renderer_class || 
                                     Text::Renderer)

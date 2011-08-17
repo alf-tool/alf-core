@@ -54,6 +54,9 @@ module Alf
 
       # Output renderer
       attr_accessor :renderer_class
+
+      # Pretty output
+      attr_accessor :pretty
       
       # Creates a command instance
       def initialize(env = Environment.default)

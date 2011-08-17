@@ -11,6 +11,7 @@ OPTIONS
     --text                       Render output as a text table
     --yaml                       Render output as a yaml output
     --csv                        Render output as a csv file
+    --[no-]pretty                Enable/disable pretty print best effort
 
 DESCRIPTION
 
