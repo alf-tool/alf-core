@@ -53,7 +53,7 @@ module Alf
             when Symbol
               value.inspect
             when Float
-              (@options[:float_precision] || "%.3f") % value
+              (@options[:float_format] || "%.3f") % value
             when Hash
               value.inspect
             when Alf::Iterator

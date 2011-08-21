@@ -7,7 +7,8 @@
 * 'alf show' now accepts an optional ordering argument. This avoids explicitely
   including non-relational sort invocations in your pipe (sorting should be 
   seen as a displaying issue)
-* Added an options hash to text renderer, :float_precision among others
+* Added an options hash to text renderer, :float_format among others
+* Added a --ff option to 'alf show', for float format in text rendering
 
 # 0.10.0 / 2011-08-15
 

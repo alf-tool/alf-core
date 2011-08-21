@@ -13,7 +13,7 @@ module Alf
         Cell.new(10/3.0).text_rendering.should == "3.333"
         Cell.new([]).text_rendering.should == "[]"
         Cell.new([10/3.0, true]).text_rendering.should == "[3.333, true]"
-        Cell.new(10/3.0, {:float_precision => "%.6f"}).text_rendering.should == "3.333333"
+        Cell.new(10/3.0, {:float_format => "%.6f"}).text_rendering.should == "3.333333"
       end
 
       specify "min_width" do
