@@ -25,8 +25,9 @@ module Alf
       class Cell
         include Utils
   
-        def initialize(value)
+        def initialize(value, options = {})
           @value = value
+          @options = options
         end
   
         def min_width
@@ -52,7 +53,7 @@ module Alf
             when Symbol
               value.inspect
             when Float
-              "%.3f" % value
+              (@options[:float_precision] || "%.3f") % value
             when Hash
               value.inspect
             when Alf::Iterator
@@ -84,8 +85,9 @@ module Alf
       class Row
         include Utils        
   
-        def initialize(values)
-          @cells = values.collect{|v| Cell.new(v)}
+        def initialize(values, options = {})
+          @cells = values.collect{|v| Cell.new(v, options)}
+          @options = options
         end
   
         def min_widths
@@ -112,9 +114,10 @@ module Alf
       class Table
         include Utils
   
-        def initialize(records, attributes)
+        def initialize(records, attributes, options = {})
           @header = Row.new(attributes)
-          @rows = records.collect{|r| Row.new(r)}
+          @rows = records.collect{|r| Row.new(r, options)}
+          @options = options
         end
   
         def render(buffer = "")
@@ -177,7 +180,7 @@ module Alf
         relation = input.to_a
         attrs    = relation.inject([]){|memo,t| (memo | t.keys)}
         records  = relation.collect{|t| attrs.collect{|a| t[a]}}
-        table    = Table.new(records, attrs)
+        table    = Table.new(records, attrs, options)
         buffer   = options[:pretty] ? 
                    PrettyBuffer.new(output, options) : output
         catch(:stop){ table.render(buffer) }
