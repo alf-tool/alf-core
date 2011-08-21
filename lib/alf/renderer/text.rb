@@ -57,7 +57,7 @@ module Alf
             when Hash
               value.inspect
             when Alf::Iterator
-              Text::Renderer.render(value, "")
+              Text::Renderer.render(value, "", @options)
             when Array
               array_rendering(value)
             else
@@ -187,8 +187,8 @@ module Alf
         output
       end
       
-      def self.render(input, output)
-        new(input).execute(output)
+      def self.render(input, output, options= {})
+        new(input, options).execute(output)
       end
       
       ::Alf::Renderer.register(:text, "as a text table",  self)
