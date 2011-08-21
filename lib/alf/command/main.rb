@@ -55,12 +55,13 @@ module Alf
       # Output renderer
       attr_accessor :renderer_class
 
-      # Pretty output
-      attr_accessor :pretty
-      
+      # Rendering options
+      attr_reader :rendering_options
+
       # Creates a command instance
       def initialize(env = Environment.default)
         @environment = env
+        @rendering_options = {}
       end
       
       # Install options
@@ -100,10 +101,9 @@ module Alf
           require(value)
         end
         
-        @pretty = false
         opt.on("--[no-]pretty", 
                "Enable/disable pretty print best effort") do |val|
-          @pretty = val
+          self.pretty = val
         end
 
         opt.on_tail('-h', "--help", "Show help") do
@@ -154,13 +154,13 @@ module Alf
       #
       # Returns rendering options
       #
-      def rendering_options
-        opts = {:pretty => @pretty}
-        if @pretty && (hl = highline)
-          opts[:trim_at] = hl.output_cols
-          opts[:page_at] = hl.output_rows
+      def pretty=(val)
+        @rendering_options[:pretty] = val
+        if val && (hl = highline)
+          @rendering_options[:trim_at] = hl.output_cols
+          @rendering_options[:page_at] = hl.output_rows
         end
-        opts
+        val
       end
 
       #
