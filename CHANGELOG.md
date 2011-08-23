@@ -10,6 +10,11 @@
 * Added an options hash to text renderer, :float_format among others
 * Added a --ff option to 'alf show', for float format in text rendering
 
+## Bugfixes
+
+* Alf::Environment::(Folder/Explicit)#dataset correctly raise NoSuchDatasetError 
+  when the dataset cannot be found, as required in their specification.
+
 # 0.10.0 / 2011-08-15
 
 ## New recognized data sources

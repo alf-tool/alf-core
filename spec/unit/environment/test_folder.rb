@@ -26,7 +26,7 @@ module Alf
       
       describe "when called on unexisting" do
         let(:name){ "notavalidone" }
-        specify{ lambda{ subject }.should raise_error }
+        specify{ lambda{ subject }.should raise_error(Alf::NoSuchDatasetError) }
       end
       
     end

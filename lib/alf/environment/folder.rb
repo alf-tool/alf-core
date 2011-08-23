@@ -36,7 +36,7 @@ module Alf
         if file = find_file(name)
           Reader.reader(file, self)
         else
-          raise "No such dataset #{name} (#{@folder})"
+          raise NoSuchDatasetError, "No such dataset #{name} (#{@folder})"
         end
       end
       

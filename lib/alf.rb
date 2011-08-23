@@ -1,5 +1,6 @@
 require "alf/version"
 require "alf/loader"
+require "alf/errors"
 
 require "enumerator"
 require "stringio"

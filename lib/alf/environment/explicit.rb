@@ -29,7 +29,7 @@ module Alf
         elsif @child
           @child.dataset(name)
         else
-          raise "No such dataset #{name}"
+          raise NoSuchDatasetError, "No such dataset #{name}"
         end 
       end
       
