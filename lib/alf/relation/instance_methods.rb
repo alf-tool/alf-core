@@ -111,6 +111,13 @@ module Alf
         ary.sort!(&okey.sorter) if okey
         ary
       end
+
+      # 
+      # Returns a json representation of this Relation.
+      #
+      def to_json(*args)
+        to_a.to_json(*args)
+      end
       
       #
       # Returns a  literal representation of this relation
