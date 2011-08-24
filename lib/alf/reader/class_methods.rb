@@ -69,7 +69,7 @@ module Alf
         case arg
         when Reader
           arg
-        when IO
+        when IO, StringIO
           rash(arg, environment)
         else
           raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"

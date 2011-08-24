@@ -14,6 +14,8 @@
 
 * Alf::Environment::(Folder/Explicit)#dataset correctly raise NoSuchDatasetError 
   when the dataset cannot be found, as required in their specification.
+* Alf::Reader.reader now correctly returns a Rash reader when invoked on a 
+  StringIO
 
 # 0.10.0 / 2011-08-15
 
