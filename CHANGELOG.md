@@ -2,6 +2,7 @@
 
 ## Miscellaneous enhancements
 
+* Added a Stddev aggregation operator, available under Aggregator.stddev{}
 * Added a --pretty option to 'alf', whose semantics is delegated to the output 
   renderer. Same option is available on 'alf show'.
 * 'alf show' now accepts an optional ordering argument. This avoids explicitely

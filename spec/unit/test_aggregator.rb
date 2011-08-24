@@ -50,6 +50,18 @@ module Alf
     it "should allow specific tuple computations" do
       Aggregator.sum{ 1.0 * a * sign }.aggregate(input).should == -3.0
     end
+
+    describe Aggregator::Stddev do
+      let(:values){ [2, 4, 4, 4, 5, 5, 7, 9] }
+      let(:stdev){ Aggregator::Stddev.new }
+      specify{
+        memo = values.inject(stdev.least){|memo,val| 
+          stdev._happens(memo, val)
+        }
+        stdev.finalize(memo).should eq(2.0)
+      }
+    end
+
     
     describe "coerce" do
      

@@ -25,6 +25,25 @@ module Alf
       def _happens(memo, val) [memo.first + val, memo.last + 1]; end
       def finalize(memo) memo.first / memo.last end
     end # class Sum
+
+    # 
+    # Defines an standard deviation aggregation operator
+    #
+    class Stddev < Aggregator
+      def least(); [0, 0.0, 0.0]; end
+      def _happens(memo, x) 
+        count, mean, m2 = memo
+        count += 1
+        delta = x - mean
+        mean  += (delta / count)
+        m2    += delta*(x - mean)
+        [count, mean, m2]
+      end
+      def finalize(memo) 
+        count, mean, m2 = memo
+        Math.sqrt(m2 / count)
+      end
+    end # class Stddev
   
     # 
     # Defines a MIN aggregation operator
