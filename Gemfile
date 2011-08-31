@@ -29,4 +29,3 @@ group :extra do
   gem "sequel", "~> 3.25.0"
   gem "sqlite3", "~> 1.3.0"
 end
-

@@ -1,0 +1,47 @@
+Subject: [ANN] alf 0.10.1 Released
+
+alf version 0.10.1 has been released!
+
+Relational Algebra at your fingertips
+
+* <http://blambeau.github.com/alf>
+* <http://github.com/blambeau/alf>
+* <http://rubygems.org/gems/alf>
+* <http://rubydoc.info/gems/alf>
+
+Alf brings the relational algebra both in Shell and in Ruby. In Shell, because 
+manipulating any relation-like data source should be as straightforward as a 
+one-liner. In Ruby, because I've never understood why programming languages 
+provide data structures like arrays, hashes, sets, trees and graphs but not 
+_relations_... Let's stop the segregation ;-)
+
+Alf follows semantic versioning (http://semver.org/) and has not reached its 
+first stable 1.0.0 release. Quoting semver.org: "Anything may change at any 
+time. The public API should not be considered stable". Including alf with the 
+version requirement "~> 0.10.1" shouldn't break your code.
+
+Changes:
+
+# 0.10.1 / 2011-08-31
+
+## Miscellaneous enhancements
+
+* Added Variance and Stddev aggregation operators; they are available under 
+  Aggregator.variance{} and Aggregator.stddev{}, respectively
+* Added a --pretty option to 'alf', whose semantics is delegated to the output 
+  renderer. Same option is available on 'alf show'.
+* 'alf show' now accepts an optional ordering argument. This avoids explicitely
+  including non-relational sort invocations in your pipe (sorting should be 
+  seen as a displaying issue)
+* Added an options hash to text renderer, :float_format among others
+* Added a --ff option to 'alf show', for float format in text rendering
+
+## Bugfixes
+
+* Alf::Environment::(Folder/Explicit)#dataset now correctly raises a 
+  NoSuchDatasetError when the dataset cannot be found, as required by the
+  specification.
+* Alf::Reader.reader now correctly returns a Rash reader when invoked on a 
+  StringIO
+
+

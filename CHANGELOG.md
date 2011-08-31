@@ -1,3 +1,9 @@
+# 0.10.2 / FIX ME
+
+* On the development side
+
+  * Bumped ruby.noe to 1.5.1
+
 # 0.10.1 / 2011-08-31
 
 ## Miscellaneous enhancements
