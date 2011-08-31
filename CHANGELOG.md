@@ -1,8 +1,8 @@
-# 0.10.1 / FIX ME
+# 0.10.1 / 2011-08-31
 
 ## Miscellaneous enhancements
 
-* Added Variance and Stddev aggregation operators, available under 
+* Added Variance and Stddev aggregation operators; they are available under 
   Aggregator.variance{} and Aggregator.stddev{}, respectively
 * Added a --pretty option to 'alf', whose semantics is delegated to the output 
   renderer. Same option is available on 'alf show'.
