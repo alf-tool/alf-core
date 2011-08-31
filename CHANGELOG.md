@@ -2,7 +2,8 @@
 
 ## Miscellaneous enhancements
 
-* Added a Stddev aggregation operator, available under Aggregator.stddev{}
+* Added Variance and Stddev aggregation operators, available under 
+  Aggregator.variance{} and Aggregator.stddev{}, respectively
 * Added a --pretty option to 'alf', whose semantics is delegated to the output 
   renderer. Same option is available on 'alf show'.
 * 'alf show' now accepts an optional ordering argument. This avoids explicitely
@@ -13,8 +14,9 @@
 
 ## Bugfixes
 
-* Alf::Environment::(Folder/Explicit)#dataset correctly raise NoSuchDatasetError 
-  when the dataset cannot be found, as required in their specification.
+* Alf::Environment::(Folder/Explicit)#dataset now correctly raises a 
+  NoSuchDatasetError when the dataset cannot be found, as required by the
+  specification.
 * Alf::Reader.reader now correctly returns a Rash reader when invoked on a 
   StringIO
 

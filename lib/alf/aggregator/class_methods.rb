@@ -29,7 +29,7 @@ module Alf
         aggregators << clazz
         basename = Tools.ruby_case(Tools.class_name(clazz))
         instance_eval <<-EOF
-          def #{basename}(*args, &block)
+          def Aggregator.#{basename}(*args, &block)
             #{clazz}.new(*args, &block)
           end
         EOF

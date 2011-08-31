@@ -27,9 +27,9 @@ module Alf
     end # class Sum
 
     # 
-    # Defines an standard deviation aggregation operator
+    # Defines a variance aggregation operator
     #
-    class Stddev < Aggregator
+    class Variance < Aggregator
       def least(); [0, 0.0, 0.0]; end
       def _happens(memo, x) 
         count, mean, m2 = memo
@@ -41,7 +41,16 @@ module Alf
       end
       def finalize(memo) 
         count, mean, m2 = memo
-        Math.sqrt(m2 / count)
+        m2 / count
+      end
+    end # class Variance
+  
+    # 
+    # Defines an standard deviation aggregation operator
+    #
+    class Stddev < Variance
+      def finalize(memo) 
+        Math.sqrt(super(memo))
       end
     end # class Stddev
   
