@@ -133,9 +133,9 @@ Gem::Specification.new do |s|
   s.add_development_dependency("request-log-analyzer", "~> 1.11.0")
   s.add_development_dependency("sequel", "~> 3.25.0")
   s.add_development_dependency("sqlite3", "~> 1.3.0")
+  s.add_development_dependency("highline", "~> 1.6.2")
   s.add_dependency("quickl", "~> 0.4.1")
   s.add_dependency("myrrha", "~> 1.2.1")
-  s.add_dependency("highline", "~> 1.6.2")
 
   # The version of ruby required by this gem
   #

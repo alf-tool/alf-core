@@ -3,7 +3,6 @@ source 'http://rubygems.org'
 group :runtime do
   gem "quickl", "~> 0.4.1"
   gem "myrrha", "~> 1.2.1"
-  gem "highline", "~> 1.6.2"
 end
 
 group :test do
@@ -28,4 +27,5 @@ group :extra do
   gem "request-log-analyzer", "~> 1.11.0"
   gem "sequel", "~> 3.25.0"
   gem "sqlite3", "~> 1.3.0"
+  gem "highline", "~> 1.6.2"
 end
