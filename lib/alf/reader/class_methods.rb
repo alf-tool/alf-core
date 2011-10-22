@@ -42,10 +42,10 @@ module Alf
       # @return [Reader] a reader instance
       # 
       def reader(filepath, *args)
-        if filepath.is_a?(String)
+        if filepath.respond_to? :to_str or filepath.respond_to? :to_path
           ext = File.extname(filepath)
           if registered = readers.find{|r| r[1].include?(ext)}
-            registered[2].new(filepath, *args)
+            registered[2].new(filepath.to_s, *args)
           else
             raise "No registered reader for #{ext} (#{filepath})"
           end
