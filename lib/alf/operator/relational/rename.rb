@@ -11,7 +11,7 @@ module Alf
     
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        @renaming.apply(tuple)
+        @renaming.rename_tuple(tuple)
       end
   
     end # class Rename
