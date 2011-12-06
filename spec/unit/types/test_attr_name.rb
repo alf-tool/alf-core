@@ -27,6 +27,23 @@ module Alf
 
     end # ===
 
+    describe "coerce" do
+
+      it 'should work on valid attribute names' do
+        AttrName.coerce("city").should eq(:city)
+        AttrName.coerce(:big?).should eq(:big?)
+      end
+
+      it 'should be aliased as []' do
+        AttrName["city"].should eq(:city)
+      end
+
+      it 'should raise ArgumentError otherwise' do
+        lambda{ AttrName["!123"] }.should raise_error(ArgumentError)
+      end
+
+    end # coerce
+
     describe "from_argv" do
 
       subject{ AttrName.from_argv(argv, opts) }

@@ -1,10 +1,12 @@
 module Alf
   module Types
     #
-    # Attribute list.
-    #
     # An attribute list is an ordered collection of attribute names (see 
     # AttrName).
+    #
+    # Example:
+    #
+    #     list = AttrList[:name, :city]
     #
     class AttrList
 

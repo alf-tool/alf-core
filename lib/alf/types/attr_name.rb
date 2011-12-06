@@ -8,6 +8,11 @@ module Alf
     #
     #     /^[a-zA-Z0-9_]+[?!]?$/
     #
+    # Example:
+    #
+    #     AttrName["city"]
+    #     # => :city
+    #
     class AttrName < Symbol
       extend Myrrha::Domain
 
@@ -38,6 +43,7 @@ module Alf
           end
           raise ArgumentError, "Unable to coerce `#{arg.inspect}` to AttrName"
         end
+        alias :[] :coerce
 
         # Converts commandline arguments to an AttrName.
         #
