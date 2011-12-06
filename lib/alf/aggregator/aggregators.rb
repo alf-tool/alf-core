@@ -6,6 +6,7 @@ module Alf
     require 'alf/aggregator/max'
     require 'alf/aggregator/avg'
     require 'alf/aggregator/variance'
+    require 'alf/aggregator/collect'
 
     # 
     # Defines an standard deviation aggregation operator
@@ -16,16 +17,6 @@ module Alf
       end
     end # class Stddev
 
-    #
-    # Defines a COLLECT aggregation operator
-    #
-    class Collect < Aggregator
-      def least(); []; end
-      def _happens(memo, val) 
-        memo << val
-      end
-    end
-  
     # 
     # Defines a CONCAT aggregation operator
     # 
