@@ -4,15 +4,7 @@ module Alf
     require 'alf/aggregator/sum'
     require 'alf/aggregator/min'
     require 'alf/aggregator/max'
-
-    # 
-    # Defines an AVG aggregation operator
-    #
-    class Avg < Aggregator
-      def least(); [0.0, 0.0]; end
-      def _happens(memo, val) [memo.first + val, memo.last + 1]; end
-      def finalize(memo) memo.first / memo.last end
-    end # class Sum
+    require 'alf/aggregator/avg'
 
     # 
     # Defines a variance aggregation operator
