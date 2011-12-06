@@ -2,6 +2,7 @@ module Alf
   class Aggregator
     require 'alf/aggregator/count'
     require 'alf/aggregator/sum'
+    require 'alf/aggregator/min'
 
     # 
     # Defines an AVG aggregation operator
@@ -39,16 +40,6 @@ module Alf
         Math.sqrt(super(memo))
       end
     end # class Stddev
-  
-    # 
-    # Defines a MIN aggregation operator
-    #
-    class Min < Aggregator
-      def least(); nil; end
-      def _happens(memo, val) 
-        memo.nil? ? val : (memo < val ? memo : val) 
-      end
-    end # class Min
   
     # 
     # Defines a MAX aggregation operator
