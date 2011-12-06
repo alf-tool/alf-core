@@ -8,23 +8,6 @@ module Alf
     require 'alf/aggregator/variance'
     require 'alf/aggregator/stddev'
     require 'alf/aggregator/collect'
-
-    # 
-    # Defines a CONCAT aggregation operator
-    # 
-    class Concat < Aggregator
-      def least(); ""; end
-      def default_options
-        {:before => "", :after => "", :between => ""}
-      end
-      def _happens(memo, val) 
-        memo << options[:between].to_s unless memo.empty?
-        memo << val.to_s
-      end
-      def finalize(memo)
-        options[:before].to_s + memo + options[:after].to_s
-      end
-    end
-  
+    require 'alf/aggregator/concat'
   end # class Aggregator
 end # module Alf
