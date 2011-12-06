@@ -1,14 +1,7 @@
 module Alf
   class Aggregator
-  
-    # 
-    # Defines a COUNT aggregation operator
-    #
-    class Count < Aggregator
-      def least(); 0; end
-      def happens(memo, tuple) memo + 1; end
-    end # class Count
-  
+    require 'alf/aggregator/count'
+
     # 
     # Defines a SUM aggregation operator
     #
