@@ -310,7 +310,7 @@ module Alf
   #
   class Aggregator
     require 'alf/aggregator/class_methods'
-    require 'alf/aggregator/base'
+    require 'alf/aggregator/instance_methods'
     require 'alf/aggregator/aggregators'
 
   end # class Aggregator
