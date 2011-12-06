@@ -6,7 +6,7 @@ module Alf
     class Renaming
 
       # @return [Hash] a renaming mapping as AttrName -> AttrName
-      attr_reader :renaming     
+      attr_reader :renaming
 
       # Creates a renaming instance
       #
