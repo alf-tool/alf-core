@@ -1,15 +1,8 @@
 module Alf
   class Aggregator
     require 'alf/aggregator/count'
+    require 'alf/aggregator/sum'
 
-    # 
-    # Defines a SUM aggregation operator
-    #
-    class Sum < Aggregator
-      def least(); 0; end
-      def _happens(memo, val) memo + val; end
-    end # class Sum
-  
     # 
     # Defines an AVG aggregation operator
     #

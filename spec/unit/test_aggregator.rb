@@ -16,14 +16,6 @@ module Alf
       end
     end
 
-    it "should behave correctly on count" do
-      Aggregator.count{a}.aggregate(input).should == 4
-    end
-
-    it "should behave correctly on sum" do
-      Aggregator.sum{a}.aggregate(input).should == 7
-    end
-
     it "should behave correctly on avg" do
       Aggregator.avg{a}.aggregate(input).should == 7.0 / 4.0
     end

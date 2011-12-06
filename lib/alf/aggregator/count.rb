@@ -9,7 +9,7 @@ module Alf
     #   Alf::Aggregator.count.aggregate(...)
     #
     #   # lispy 
-    #   Alf::evaluate{ (summarize suppliers, :count => count) }
+    #   (summarize :supplies, [:sid], :num_orders => count)
     #
     class Count < Aggregator
 
