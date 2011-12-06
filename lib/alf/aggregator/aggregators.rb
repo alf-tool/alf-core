@@ -5,26 +5,8 @@ module Alf
     require 'alf/aggregator/min'
     require 'alf/aggregator/max'
     require 'alf/aggregator/avg'
+    require 'alf/aggregator/variance'
 
-    # 
-    # Defines a variance aggregation operator
-    #
-    class Variance < Aggregator
-      def least(); [0, 0.0, 0.0]; end
-      def _happens(memo, x) 
-        count, mean, m2 = memo
-        count += 1
-        delta = x - mean
-        mean  += (delta / count)
-        m2    += delta*(x - mean)
-        [count, mean, m2]
-      end
-      def finalize(memo) 
-        count, mean, m2 = memo
-        m2 / count
-      end
-    end # class Variance
-  
     # 
     # Defines an standard deviation aggregation operator
     #

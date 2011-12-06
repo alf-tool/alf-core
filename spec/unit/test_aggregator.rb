@@ -16,25 +16,6 @@ module Alf
       end
     end
 
-    it "should behave correctly on avg" do
-      Aggregator.avg{a}.aggregate(input).should == 7.0 / 4.0
-    end
-
-    it "should behave correctly on min" do
-      Aggregator.min{a}.aggregate(input).should == 1
-    end
-
-    it "should behave correctly on max" do
-      Aggregator.max{a}.aggregate(input).should == 3
-    end
-
-    it "should behave correctly on variance" do
-      vals = input.collect{|t| t[:a]}
-      mean = vals.inject(:+) / vals.size.to_f
-      exp  = vals.collect{|v| (v - mean)**2 }.inject(:+) / vals.size.to_f
-      Aggregator.variance{a}.aggregate(input).should == exp
-    end
-
     it "should behave correctly on stddev" do
       vals = input.collect{|t| t[:a]}
       mean = vals.inject(:+) / vals.size.to_f
