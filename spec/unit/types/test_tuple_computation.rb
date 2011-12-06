@@ -2,11 +2,32 @@ require 'spec_helper'
 module Alf
   describe TupleComputation do
 
+    describe "the class itself" do
+      let(:type){ TupleComputation }
+      def TupleComputation.exemplars
+        [
+          {:status => 10},
+          {:big    => "status > 10"}
+        ].map{|x| TupleComputation.coerce(x)}
+      end
+      it_should_behave_like 'A valid type implementation'
+    end
+
+    it 'should have a valid example' do
+      computation = TupleComputation[
+        :big => lambda{ status > 20 },
+        :who => lambda{ "#{first} #{last}" }
+      ]
+      res = computation.call(:last => "Jones", :first => "Bill", :status => 10)
+      res.should eq(:big => false, :who => "Bill Jones")
+    end
+
     let(:handle){ Tools::TupleHandle.new.set(:who => "alf") }
-      
+
     describe "coerce" do
+
       subject{ TupleComputation.coerce(arg).evaluate(handle) }
-      
+
       describe "from a TupleComputation" do
         let(:arg){ TupleComputation.new :hello => TupleExpression.coerce(:who) } 
         it{ should eql(:hello => "alf") } 
@@ -23,7 +44,7 @@ module Alf
         }
         it{ should eql(expected) }
       end
-        
+
       describe "from a Hash with coercion" do
         let(:arg){ 
           {"hello" => "who", "hello2" => "2"}
@@ -33,7 +54,7 @@ module Alf
         }
         it{ should eql(expected) }
       end
-        
+
       describe "from an Array with coercions" do
         let(:arg){ ["hello", "who", "hello2", "2"] }
         let(:expected){
@@ -41,9 +62,11 @@ module Alf
         }
         it{ should eql(expected) }
       end
-    end
-    
+
+    end # coerce
+
     describe "from_argv" do
+
       subject{ TupleComputation.from_argv(argv).evaluate(handle) }
 
       describe "from an Array with coercions" do
@@ -53,8 +76,8 @@ module Alf
         }
         it{ should eql(expected) }
       end
-      
-    end
-        
+
+    end # from_argv
+
   end
 end

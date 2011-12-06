@@ -87,10 +87,10 @@ module Alf
       #
       # This is a convenient method for the following, longer expression:
       #
-      #     expr.evaluate(TupleHandle.new.set(tuple))
+      #     evaluate(TupleHandle.new.set(tuple))
       # 
-      # Note, however, using a Handle as in the the expression above is much
-      # more efficient when evaluating the same expression on multiple tuples
+      # Note, however, using a Handle as in the example above is much more 
+      # efficient when evaluating the same expression on multiple tuples
       # in sequence.
       #
       # @param [Hash] tuple a Tuple instance
