@@ -20,7 +20,7 @@ module Alf
         #
         #   buffer = Buffer::Join.new(...) # pass the right part of the join
         #   left.each do |left_tuple|
-        #     key, rest = buffer.split(tuple)
+        #     key, rest = buffer.split_tuple(tuple)
         #     buffer.each(key) do |right_tuple|
         #       #
         #       # do whatever you want with left and right tuples
@@ -47,18 +47,18 @@ module Alf
           #
           # @param [Hash] tuple a left tuple of the join
           # @return [Array] an array of two elements, the key and the rest
-          # @see AttrList#split
+          # @see AttrList#split_tuple
           #
-          def split(tuple)
+          def split_tuple(tuple)
             _init(tuple) unless @key
-            @key.split(tuple)
+            @key.split_tuple(tuple)
           end
           
           #
           # Yields each right tuple that matches a given key value.
           #
           # @param [Hash] key a tuple that matches elements of the common key
-          #        (typically the first element returned by #split) 
+          #        (typically the first element returned by #split_tuple) 
           #
           def each(key)
             @buffer[key].each(&Proc.new) if @buffer.has_key?(key)
@@ -71,7 +71,7 @@ module Alf
             @buffer = Hash.new{|h,k| h[k] = []}
             @enum.each do |left|
               @key ||= coerce(left.keys & right.keys, AttrList)
-              @buffer[@key.project(left)] << left
+              @buffer[@key.project_tuple(left)] << left
             end
             @key ||= coerce([], AttrList)
           end
@@ -84,7 +84,7 @@ module Alf
         def _each
           buffer = JoinBuffer.new(right)
           left.each do |left_tuple|
-            key, rest = buffer.split(left_tuple)
+            key, rest = buffer.split_tuple(left_tuple)
             buffer.each(key) do |right|
               yield(left_tuple.merge(right))
             end

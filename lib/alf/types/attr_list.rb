@@ -67,17 +67,17 @@ module Alf
       #   list = AttrList.new([:name])
       #   tuple = {:name => "Jones", :city => "London"}
       #
-      #   list.split(tuple)
+      #   list.split_tuple(tuple)
       #   # => [{:name => "Jones"}, {:city => "London"}]
       #
-      #   list.split(tuple, true)
+      #   list.split_tuple(tuple, true)
       #   # => [{:city => "London"}, {:name => "Jones"}]
       #
       # @param [Hash] tuple a tuple to split
       # @param [Boolean] allbut unknown attributes as first result?
       # @return [Array<Hash>] an array containing two tuples, according to known
       #         attributes and `allbut`
-      def split(tuple, allbut = false)
+      def split_tuple(tuple, allbut = false)
         projection, rest = {}, tuple.dup
         attributes.each do |a|
           projection[a] = tuple[a]
@@ -92,17 +92,17 @@ module Alf
       #   list = AttrList.new([:name])
       #   tuple = {:name => "Jones", :city => "London"}
       #
-      #   list.project(tuple)
+      #   list.project_tuple(tuple)
       #   # => {:name => "Jones"}
       #
-      #   list.project(tuple, true)
+      #   list.project_tuple(tuple, true)
       #   # => {:city => "London"}
       #
       # @param [Hash] tuple a tuple to project
       # @param [Boolean] allbut projection?
       # @return Hash the projected tuple
-      def project(tuple, allbut = false)
-        split(tuple, allbut).first
+      def project_tuple(tuple, allbut = false)
+        split_tuple(tuple, allbut).first
       end
 
       # Checks equality with another attribute list.

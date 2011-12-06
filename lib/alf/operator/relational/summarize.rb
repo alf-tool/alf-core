@@ -21,7 +21,7 @@ module Alf
   
         # (see Operator::Cesure#project)
         def project(tuple)
-          @by_key.project(tuple, @allbut)
+          @by_key.project_tuple(tuple, @allbut)
         end
         
         # (see Operator::Cesure#start_cesure)
@@ -55,7 +55,7 @@ module Alf
         def _each
           index = Hash.new{|h,k| @summarization.least}
           each_input_tuple do |tuple|
-            key, rest = @by_key.split(tuple, @allbut)
+            key, rest = @by_key.split_tuple(tuple, @allbut)
             index[key] = @summarization.happens(index[key], tuple)
           end
           index.each_pair do |key,aggs|

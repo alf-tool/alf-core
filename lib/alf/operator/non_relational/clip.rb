@@ -12,7 +12,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        @attributes.project(tuple, @allbut)
+        @attributes.project_tuple(tuple, @allbut)
       end
   
     end # class Clip

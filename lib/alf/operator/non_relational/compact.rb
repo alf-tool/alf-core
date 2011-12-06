@@ -18,7 +18,7 @@ module Alf
         
         # (see Operator::Cesure#project)
         def project(tuple)
-          @cesure_key.project(tuple, true)
+          @cesure_key.project_tuple(tuple, true)
         end
   
         # (see Operator::Cesure#accumulate_cesure)

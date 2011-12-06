@@ -15,7 +15,7 @@ module Alf
       def _prepare
         @index = Hash.new{|h,k| h[k] = Set.new} 
         each_input_tuple do |tuple|
-          key, rest = @attributes.split(tuple, !@allbut)
+          key, rest = @attributes.split_tuple(tuple, !@allbut)
           @index[key] << rest
         end
       end

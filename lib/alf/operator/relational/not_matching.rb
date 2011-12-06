@@ -21,12 +21,12 @@ module Alf
               h = Hash.new
               right.each do |right_tuple|
                 key ||= coerce(left_tuple.keys & right_tuple.keys, AttrList)
-                h[key.project(right_tuple)] = true
+                h[key.project_tuple(right_tuple)] = true
               end
               key ||= coerce([], AttrList)
               h
             end
-            yield(left_tuple) unless seen.has_key?(key.project(left_tuple))
+            yield(left_tuple) unless seen.has_key?(key.project_tuple(left_tuple))
           end
         end
         

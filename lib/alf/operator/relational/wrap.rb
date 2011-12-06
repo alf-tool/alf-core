@@ -12,7 +12,7 @@ module Alf
   
       # (see Operator::Transform#_tuple2tuple)
       def _tuple2tuple(tuple)
-        wrapped, others = @attributes.split(tuple)
+        wrapped, others = @attributes.split_tuple(tuple)
         others[@as] = wrapped
         others
       end

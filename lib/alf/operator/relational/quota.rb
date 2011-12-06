@@ -21,7 +21,7 @@ module Alf
         
         # (see Operator::Cesure#project)
         def project(tuple)
-          @by.project(tuple, false)
+          @by.project_tuple(tuple, false)
         end
         
         # (see Operator::Cesure#start_cesure)
