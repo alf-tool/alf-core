@@ -6,16 +6,8 @@ module Alf
     require 'alf/aggregator/max'
     require 'alf/aggregator/avg'
     require 'alf/aggregator/variance'
+    require 'alf/aggregator/stddev'
     require 'alf/aggregator/collect'
-
-    # 
-    # Defines an standard deviation aggregation operator
-    #
-    class Stddev < Variance
-      def finalize(memo) 
-        Math.sqrt(super(memo))
-      end
-    end # class Stddev
 
     # 
     # Defines a CONCAT aggregation operator
