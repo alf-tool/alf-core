@@ -1,17 +1,17 @@
 module Alf
   class Aggregator
     #
-    # Defines a `min()` aggregation operator.
+    # Defines a `max()` aggregation operator.
     #
     # Example:
     #
     #   # direct ruby usage
-    #   Alf::Aggregator.min{ qty }.aggregate(...)
+    #   Alf::Aggregator.max{ qty }.aggregate(...)
     #
     #   # lispy 
-    #   (summarize :supplies, [:sid], :max => min{ qty })
+    #   (summarize :supplies, [:sid], :max => max{ qty })
     #
-    class Min < Aggregator
+    class Max < Aggregator
 
       # Returns nil as least value.
       #
@@ -20,13 +20,13 @@ module Alf
         nil
       end
 
-      # Aggregates on a tuple occurence through `memo < val ? memo : val`
+      # Aggregates on a tuple occurence through `memo > val ? memo : val`
       #
       # @see Aggregator::InstanceMethods#_happens
       def _happens(memo, val) 
-        memo.nil? ? val : (memo < val ? memo : val)
+        memo.nil? ? val : (memo > val ? memo : val) 
       end
 
-    end # class Min
+    end # class Max
   end # class Aggregator
 end # module Alf
