@@ -13,4 +13,5 @@ def wlang(str, binding)
 end
 
 require 'shared/an_operator_class'
+require 'shared/a_valid_type_implementation'
 require 'shared/a_value'

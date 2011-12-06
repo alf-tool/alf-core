@@ -18,40 +18,45 @@ module Alf
         @attributes = attributes
       end
 
-      # Coerces `arg` to an AttrList.
-      #
-      # Recognizes coercions are:
-      # - AttrList -> self
-      # - Ordering -> the underlying list of attributes
-      # - Array    -> through AttrName coercion of its elements
-      #
-      # @param [Object] arg the value to coerce to an AttrList
-      # @return [AttrList] an attribute list if coercion succeeds
-      # @raise [ArgumentError] if the coercion fails
-      def self.coerce(arg)
-        case arg
-        when AttrList
-          arg
-        when Ordering
-          AttrList.new(arg.attributes)
-        when Array
-          AttrList.new(arg.collect{|s| Tools.coerce(s, AttrName)})
-        else
-          raise ArgumentError, "Unable to coerce #{arg} to a projection key"
-        end
-      end
+      class << self
 
-      # Builds an AttrList from commandline arguments.
-      #
-      # This method relies on `coerce` and therefore shares its spec.
-      #
-      # @param [Array] argv an array of commandline arguments
-      # @param [Hash] opts convertion options (unused)
-      # @return [AttrList] an attribute list if coercion succeeds
-      # @raise [ArgumentError] if the coercion fails
-      def self.from_argv(argv, opts = {})
-        coerce(argv)
-      end
+        # Coerces `arg` to an AttrList.
+        #
+        # Recognizes coercions are:
+        # - AttrList -> self
+        # - Ordering -> the underlying list of attributes
+        # - Array    -> through AttrName coercion of its elements
+        #
+        # @param [Object] arg the value to coerce to an AttrList
+        # @return [AttrList] an attribute list if coercion succeeds
+        # @raise [ArgumentError] if the coercion fails
+        def coerce(arg)
+          case arg
+          when AttrList
+            arg
+          when Ordering
+            AttrList.new(arg.attributes)
+          when Array
+            AttrList.new(arg.collect{|s| Tools.coerce(s, AttrName)})
+          else
+            raise ArgumentError, "Unable to coerce #{arg} to a projection key"
+          end
+        end
+        alias :[] :coerce
+
+        # Builds an AttrList from commandline arguments.
+        #
+        # This method relies on `coerce` and therefore shares its spec.
+        #
+        # @param [Array] argv an array of commandline arguments
+        # @param [Hash] opts convertion options (unused)
+        # @return [AttrList] an attribute list if coercion succeeds
+        # @raise [ArgumentError] if the coercion fails
+        def from_argv(argv, opts = {})
+          coerce(argv)
+        end
+
+      end # class << self
 
       # Converts this attribute list to an ordering.
       #
@@ -116,9 +121,19 @@ module Alf
       alias :eql? :==
 
       # Returns an hash code.
+      #
+      # @return [Integer] an hash code for this attribute list
       def hash
         attributes.hash
       end
+
+      # Returns a ruby literal for this attribute list.
+      #
+      # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
+      def to_ruby_literal
+        "Alf::AttrList[#{Tools.to_ruby_literal(attributes)}]"
+      end
+      alias :inspect :to_ruby_literal
 
     end # class AttrList
   end # module Types

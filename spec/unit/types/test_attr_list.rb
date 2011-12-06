@@ -2,6 +2,18 @@ require 'spec_helper'
 module Alf
   describe AttrList do
 
+    describe "the class itself" do
+      let(:type){ AttrList }
+      def AttrList.exemplars
+        [
+          [],
+          [:a],
+          [:a, :b]
+        ].map{|arg| AttrList.coerce(arg) }
+      end
+      it_should_behave_like 'A valid type implementation'
+    end
+
     describe "coerce" do
 
       subject{ AttrList.coerce(arg) }

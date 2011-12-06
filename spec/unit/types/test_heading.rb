@@ -2,6 +2,18 @@ require 'spec_helper'
 module Alf
   describe Heading do
 
+    describe "the class itself" do
+      let(:type){ Heading }
+      def Heading.exemplars
+        [
+          {},
+          {:a => String},
+          {:a => String, :b => Date}
+        ].map{|x| Heading.coerce(x)}
+      end
+      it_should_behave_like 'A valid type implementation'
+    end
+
     let(:h0){ Heading.new({}) }
     let(:h1){ Heading.new(:name => String) }
     let(:h2){ Heading.new(:name => String, :price => Float) }

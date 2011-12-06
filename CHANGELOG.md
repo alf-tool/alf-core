@@ -1,5 +1,10 @@
 # 0.10.2 / FIX ME
 
+## Broken APIs (private sections)
+
+* Ordering#order_of has been removed
+* Ordering#order_by has been removed
+
 * On the development side
 
   * Bumped ruby.noe to 1.5.1
