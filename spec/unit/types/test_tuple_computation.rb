@@ -7,7 +7,7 @@ module Alf
       def TupleComputation.exemplars
         [
           {:status => 10},
-          {:big    => "status > 10"}
+          {:big?   => "status > 10"}
         ].map{|x| TupleComputation.coerce(x)}
       end
       it_should_behave_like 'A valid type implementation'
@@ -15,11 +15,11 @@ module Alf
 
     it 'should have a valid example' do
       computation = TupleComputation[
-        :big => lambda{ status > 20 },
-        :who => lambda{ "#{first} #{last}" }
+        :big? => lambda{ status > 20 },
+        :who  => lambda{ "#{first} #{last}" }
       ]
       res = computation.call(:last => "Jones", :first => "Bill", :status => 10)
-      res.should eq(:big => false, :who => "Bill Jones")
+      res.should eq(:big? => false, :who => "Bill Jones")
     end
 
     let(:handle){ Tools::TupleHandle.new.set(:who => "alf") }

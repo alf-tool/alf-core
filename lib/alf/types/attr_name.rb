@@ -6,7 +6,7 @@ module Alf
     # Attribute names are ruby symbols that match the following regular 
     # expression:
     #
-    #     /^[a-zA-Z0-9_]+$/
+    #     /^[a-zA-Z0-9_]+[?!]?$/
     #
     class AttrName < Symbol
       extend Myrrha::Domain
@@ -14,7 +14,7 @@ module Alf
       class << self
 
         # The domain predicate
-        PREDICATE = lambda{|s| s.to_s =~ /^[a-zA-Z0-9_]+$/}
+        PREDICATE = lambda{|s| s.to_s =~ /^[a-zA-Z0-9_]+[?!]?$/}
 
         # Returns the domain predicate.
         #

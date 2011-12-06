@@ -5,8 +5,8 @@ module Alf
     #
     # Example:
     #   computation = TupleComputation[
-    #     :big => lambda{ status > 20 }
-    #     :who => lambda{ "#{first} #{last}" }
+    #     :big? => lambda{ status > 20 }
+    #     :who  => lambda{ "#{first} #{last}" }
     #   ]
     #   computation.call(:last => "Jones", :first => "Bill", :status => 10)
     #   # => {:big? => false, :who => "Bill Jones"}
