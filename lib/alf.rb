@@ -18,6 +18,7 @@ module Alf
   # Encapsulates all types
   #
   module Types
+    require 'alf/types/class_methods'
     require 'alf/types/attr_name'
     require 'alf/types/boolean'
     require 'alf/types/heading'
