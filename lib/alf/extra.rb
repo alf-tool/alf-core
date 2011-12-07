@@ -1,2 +1,0 @@
-require 'alf/extra/yaml'
-

@@ -1,4 +1,4 @@
-[ "alf-csv", "alf-sequel", "alf-logs" ].each do |contrib|
+[ "alf-csv", "alf-sequel", "alf-logs", "alf-yaml" ].each do |contrib|
   $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), contrib))
 end
 
@@ -53,7 +53,7 @@ module Alf
   end
   
 end # module Alf
-require "alf/extra"
 require "alf/sequel"
+require 'alf/yaml'
 require 'alf/csv'
 require 'alf/logs'
