@@ -1,8 +1,12 @@
 module Alf
   class Environment
+    #
+    # This methods provides base methods for implementing the Environment 
+    # contract. The Environment class already includes it and should be used
+    # as a superclass of specific implementations.
+    #
     module InstanceMethods
 
-      #
       # Returns a dataset whose name is provided.
       #
       # This method resolves named datasets to tuple enumerables. When the 
@@ -12,21 +16,17 @@ module Alf
       # @param [Symbol] name the name of a dataset
       # @return [Iterator] an iterator, typically a Reader instance
       # @raise [NoSuchDatasetError] when the dataset does not exists
-      #
       def dataset(name)
       end
       undef :dataset
-      
-      #
+
       # Branches this environment and puts some additional explicit 
       # definitions.
       #
-      # This method is provided for (with ...) expressions and should not
-      # be overriden by subclasses.
+      # This method is not intended to be be overriden by subclasses.
       #
       # @param [Hash] a set of (name, Iterator) pairs.
       # @return [Environment] an environment instance with new definitions set
-      #
       def branch(defs)
         Explicit.new(defs, self)
       end
