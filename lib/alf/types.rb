@@ -6,6 +6,7 @@ module Alf
   #
   module Types
     require 'alf/types/boolean'
+    require 'alf/types/size'
     require 'alf/types/attr_name'
     require 'alf/types/attr_list'
     require 'alf/types/heading'
