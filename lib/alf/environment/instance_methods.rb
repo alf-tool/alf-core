@@ -1,6 +1,6 @@
 module Alf
   class Environment
-    module Base
+    module InstanceMethods
 
       #
       # Returns a dataset whose name is provided.
@@ -31,7 +31,7 @@ module Alf
         Explicit.new(defs, self)
       end
 
-    end # module Base
-    include(Base)
+    end # module InstanceMethods
+    include(InstanceMethods)
   end # class Environment
 end # module Alf
