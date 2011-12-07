@@ -1,25 +1,32 @@
 module Alf
   class Environment
+    #
+    # Installs class-level methods for Alf environments.
+    #
     module ClassMethods
 
-      #
       # Returns registered environments
       #
+      # @return [Array<Environment>] registered environments.
       def environments
         @environments ||= []
       end
-      
-      #
+
       # Register an environment class under a specific name. 
       #
       # Registered class must implement a recognizes? method that takes an array
-      # of arguments; it must returns true if an environment instance can be built
-      # using those arguments, false otherwise. Please be very specific in the 
-      # implementation for returning true. See also autodetect and recognizes?
+      # of arguments; it must returns true if an environment instance can be 
+      # built using those arguments, false otherwise.
       #
+      # Example:
+      #
+      #     Environment.register(:sqlite, MySQLiteEnvClass)
+      #     Environment.sqlite(...)        # MySQLiteEnvClass.new(...)
+      #     Environment.autodetect(...)    # => MySQLiteEnvClass.new(...)
+      #
+      # @see also autodetect and recognizes?
       # @param [Symbol] name name of the environment kind
       # @param [Class] clazz class that implemented the environment
-      #
       def register(name, clazz)
         environments << [name, clazz]
         (class << self; self; end).
@@ -27,36 +34,27 @@ module Alf
             clazz.new(*args)
           end
       end
-      
-      #
+
       # Auto-detect the environment to use for specific arguments.
       #
-      # This method returns an instance of the first registered Environment class 
-      # that returns true to an invocation of recognizes?(args). It raises an 
-      # ArgumentError if no such class can be found.    
+      # This method returns an instance of the first registered Environment 
+      # class that returns true to an invocation of recognizes?(args). It raises 
+      # an ArgumentError if no such class can be found.
       #
+      # @param [Array] args arguments for the Environment constructor
       # @return [Environment] an environment instance
       # @raise [ArgumentError] when no registered class recognizes the arguments
-      #
       def autodetect(*args)
         if (args.size == 1) && args.first.is_a?(Environment)
           return args.first
         else
-          environments.each do |name,clazz|
-            return clazz.new(*args) if clazz.recognizes?(args)
-          end
+          name, clazz = environments.find{|nc| nc.last.recognizes?(args)}
+          return clazz.new(*args) if clazz
         end
         raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect}"
       end
-      
-      #
-      # (see Environment.autodetect)
-      #
-      def coerce(*args)
-        autodetect(*args)
-      end
-      
-      #
+      alias :coerce :autodetect
+
       # Returns true _args_ can be used for building an environment instance,
       # false otherwise.
       #
@@ -69,24 +67,27 @@ module Alf
       # registered environments for a chain and each of them should have a 
       # chance of being selected.
       #
+      # @param [Array] args arguments for the Environment constructor
+      # @return [Boolean] true if an environment may be built using `args`,
+      #         false otherwise.
       def recognizes?(args)
         false
       end
-      
+
+      # Returns Alf's default environment
       #
-      # Returns the default environment
-      #
+      # @return [Environment] the default environment instance.
       def default
         examples
       end
-      
+
+      # Returns an environment on Alf's examples
       #
-      # Returns the examples environment
-      #
+      # @return [Environment] an environment on Alf's examples.
       def examples
         folder File.expand_path('../../../../examples/operators', __FILE__)
       end
-    
+
     end # module ClassMethods
     extend(ClassMethods)
   end # class Environment
