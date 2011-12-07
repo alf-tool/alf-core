@@ -1,41 +1,57 @@
 module Alf
   module Tools
 
+    # Converts `value` to a lispy expression.
+    #
+    # Example:
+    #
+    #     expr = Alf.lispy.compile{ 
+    #       (project :suppliers, [:name])
+    #     }
+    #     Tools.to_lispy(expr)
+    #     # => (project :suppliers, [:name])
+    #
+    # @param [Object] expr any ruby object denoting a lispy expression
+    # @return [String] a lispy expression for `value`
+    def to_lispy(expr)
+      ToLispy.apply(expr)
+    end
+
     # Myrrha rules for converting to ruby literals
     ToLispy = Myrrha::coercions do |r|
-      
+
       # Delegate to #to_lispy if it exists
       lispy_able = lambda{|v,rd| v.respond_to?(:to_lispy)}
       r.upon(lispy_able) do |v,rd|
         v.to_lispy
       end
 
-      # On AttrList
+      # AttrList -> [:sid, :sname, ...]
       r.upon(Types::AttrList) do |v, rd|
         Tools.to_ruby_literal(v.attributes)
       end
 
-      # On Heading
+      # Heading -> {:sid => String, ...}
       r.upon(Types::Heading) do |v, rd|
         Tools.to_ruby_literal(v.attributes)
       end
 
-      # On Ordering
+      # Ordering -> [[:sid, :asc], ...]
       r.upon(Types::Ordering) do |v, rd|
         Tools.to_ruby_literal(v.ordering)
       end
 
-      # On Renaming
+      # Renaming -> {:old => :new, ...}
       r.upon(Types::Renaming) do |v, rd|
         Tools.to_ruby_literal(v.renaming)
       end
 
-      # On Renaming
+      # Iterator::Proxy -> :suppliers
       r.upon(lambda{|v,rd| Iterator::Proxy === v}) do |v, rd|
         Tools.to_ruby_literal(v.dataset)
       end
 
-      # On TupleExpression
+      # TupleExpression -> ->(){ ... }
       r.upon(Types::TupleExpression) do |v, rd|
         unless src = v.source
           raise NotImplementedError, "TupleExpression #{v} has no source"
@@ -43,7 +59,7 @@ module Alf
         "->(){ #{src} }"
       end
 
-      # On TuplePredicate
+      # TuplePredicate -> ->(){ ... }
       r.upon(Types::TuplePredicate) do |v, rd|
         unless src = v.source
           raise NotImplementedError, "TuplePredicate #{v} has no source"
@@ -51,14 +67,14 @@ module Alf
         "->(){ #{src} }"
       end
 
-      # On TupleComputation
+      # TupleComputation -> { :big => -(){ ... }, ... }
       r.upon(Types::TupleComputation) do |v, rd|
-        "{" + v.computation.collect{|name,compu|
+        "{" + v.computation.map{|name,compu|
           [name.inspect, r.coerce(compu)].join(" => ")
         }.join(', ') + "}"
       end
 
-      # On Aggregator
+      # Aggregator -> agg.source
       r.upon(lambda{|v,_| Aggregator === v}) do |v, rd|
         unless src = v.source
           raise NotImplementedError, "Aggregator #{v} has no source"
@@ -66,14 +82,14 @@ module Alf
         src
       end
 
-      # On Summarization
+      # Summarization -> { :total => ->(){ ... } }
       r.upon(Types::Summarization) do |v, rd|
-        "{" + v.aggregations.collect{|name,compu|
+        "{" + v.aggregations.map{|name,compu|
           [name.inspect, r.coerce(compu)].join(" => ")
         }.join(', ') + "}"
       end
 
-      # On Command and Operator
+      # Command and Operator -> (operator operands, args, options)
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|
         cmdname  = v.class.command_name.to_s.gsub('-', '_')
@@ -88,12 +104,7 @@ module Alf
         Tools.to_ruby_literal(v)
       end
 
-    end
-    
-    # Delegated to ToLispy
-    def to_lispy(value)
-      ToLispy.apply(value)
-    end
-    
+    end # ToLispy
+
   end # module Tools
 end # module Alf

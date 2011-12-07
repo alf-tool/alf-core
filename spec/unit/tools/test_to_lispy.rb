@@ -1,9 +1,16 @@
 require 'spec_helper'
 module Alf
   describe Tools, ".to_lispy" do
-    
+
+    it "should have a valid example" do
+      expr = Alf.lispy.compile{ 
+       (project :suppliers, [:name])
+      }
+      Tools.to_lispy(expr).should eq("(project :suppliers, [:name])")
+    end
+
     subject{ Tools.to_lispy(value) } 
-    
+
     describe "on a Proxy" do
       let(:value){ Iterator::Proxy.new(nil, :suppliers) }
       it { should eq(":suppliers") }

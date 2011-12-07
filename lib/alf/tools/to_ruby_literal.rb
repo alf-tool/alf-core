@@ -1,10 +1,6 @@
 module Alf
   module Tools
 
-    # Myrrha rules for converting to ruby literals
-    ToRubyLiteral = Myrrha::ToRubyLiteral.dup.append do
-    end
-
     # Converts `value` to a ruby literal
     #
     # This method is provided for code generation mechanisms used by Alf in
@@ -25,6 +21,10 @@ module Alf
     # @return [String] a ruby literal for `value`
     def to_ruby_literal(value)
       ToRubyLiteral.apply(value)
+    end
+
+    # Myrrha rules for converting to ruby literals
+    ToRubyLiteral = Myrrha::ToRubyLiteral.dup.append do
     end
 
   end # module Tools
