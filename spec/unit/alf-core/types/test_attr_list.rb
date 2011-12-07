@@ -28,6 +28,11 @@ module Alf
         it{ should eq(AttrList.new([:a, :b])) }
       end
 
+      describe "when passed a TupleComputation" do
+        let(:arg){ TupleComputation[:a => 12, :b => "Smith"] }
+        it{ should eq(AttrList.new([:a, :b])) }
+      end
+
       describe "when passed an array" do
         let(:arg){ [:a, :b] }
         it{ should eq(AttrList.new([:a, :b])) }

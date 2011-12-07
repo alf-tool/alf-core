@@ -33,11 +33,8 @@ module Alf
         # @return [AttrList] an attribute list if coercion succeeds
         # @raise [ArgumentError] if the coercion fails
         def coerce(arg)
+          return arg.to_attr_list if arg.respond_to?(:to_attr_list)
           case arg
-          when AttrList
-            arg
-          when Ordering
-            AttrList.new(arg.attributes)
           when Array
             AttrList.new(arg.collect{|s| Tools.coerce(s, AttrName)})
           else
@@ -134,6 +131,13 @@ module Alf
       # @return [Integer] an hash code for this attribute list
       def hash
         attributes.hash
+      end
+
+      # Converts to an attribute list.
+      #
+      # @return [AttrList] return self
+      def to_attr_list
+        self
       end
 
       # Returns a ruby literal for this attribute list.

@@ -116,6 +116,13 @@ module Alf
       end
       alias :eql? :==
 
+      # Converts to an attribute list.
+      #
+      # @return [AttrList] a list of computed attribute names
+      def to_attr_list
+        AttrList.new(computation.keys)
+      end
+
       # Returns a ruby literal for this expression.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`

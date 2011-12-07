@@ -173,5 +173,13 @@ module Alf
 
     end # +
 
+    describe "to_attr_list" do
+
+      it 'should return the correct list of attribute names' do
+        Ordering.new([[:a, :asc], [:b, :desc]]).to_attr_list.should eq(AttrList[:a, :b])
+      end
+
+    end # "to_attr_list"
+
   end # Ordering
 end # Alf

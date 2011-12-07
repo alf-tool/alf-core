@@ -125,6 +125,14 @@ module Alf
       end
       alias :eql? :==
 
+      # Converts to an attribute list.
+      #
+      # @return [AttrList] a list of attribute names that participate to the 
+      #         ordering
+      def to_attr_list
+        AttrList.new(attributes)
+      end
+
       # Returns a ruby literal for this ordering.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`

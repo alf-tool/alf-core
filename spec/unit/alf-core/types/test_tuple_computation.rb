@@ -79,5 +79,16 @@ module Alf
 
     end # from_argv
 
+    describe "to_attr_list" do
+
+      it 'should return the correct list of attribute names' do
+        TupleComputation[
+          :big? => lambda{ status > 20 },
+          :who  => lambda{ "#{first} #{last}" }
+        ].to_attr_list.should eq(AttrList[:big?, :who])
+      end
+
+    end # "to_attr_list"
+
   end
 end
