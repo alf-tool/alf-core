@@ -53,72 +53,8 @@ module Alf
     require 'alf/iterator/proxy'
   end # module Iterator
 
-  #
-  # Implements an Iterator at the interface with the outside world.
-  #
-  # The contrat of a Reader is simply to be an Iterator. Unlike operators, 
-  # however, readers are not expected to take other iterators as input, but IO 
-  # objects, database tables, or something similar instead. This base class 
-  # provides a default behavior for readers that works with IO objects. It can 
-  # be safely extended, overriden, or even mimiced (provided that you include 
-  # and implement the Iterator contract).
-  #
-  # This class also provides a registration mechanism to help getting Reader 
-  # instances for specific file extensions. A typical scenario for using this
-  # registration mechanism is as follows:
-  #
-  #   # Registers a reader kind named :foo, associated with ".foo" file 
-  #   # extensions and the FooFileDecoder class (typically a subclass of 
-  #   # Reader)
-  #   Reader.register(:foo, [".foo"], FooFileDecoder)   
-  #
-  #   # Later on, you can request a reader instance for a .foo file, as 
-  #   # illustrated below.  
-  #   r = Reader.reader('/a/path/to/a/file.foo')
-  #
-  #   # Also, a factory method is automatically installed on the Reader class
-  #   # itself. This factory method can be used with a String, or an IO object.
-  #   r = Reader.foo([a path or a IO object])
-  #
-  class Reader
-    include Iterator
-
-    require 'alf/reader/class_methods'
-    require 'alf/reader/base'
-    require 'alf/reader/rash'
-    require 'alf/reader/alf_file'
-  end # class Reader
-
-  #
-  # Renders a relation (given by any Iterator) in a specific format.
-  #
-  # A renderer takes an Iterator instance as input and renders it on an output
-  # stream. Renderers are **not** iterators themselves, even if they mimic the
-  # {#pipe} method. Their usage is made via the {#execute} method.
-  #
-  # Similarly to the {Reader} class, this one provides a registration mechanism
-  # for specific output formats. The common scenario is as follows:
-  #
-  #   # Register a new renderer for :foo format (automatically provides the 
-  #   # '--foo   Render output as a foo stream' option of 'alf show') and with
-  #   # the FooRenderer class for handling rendering.  
-  #   Renderer.register(:foo, "as a foo stream", FooRenderer)
-  #
-  #   # Later on, you can request a renderer instance for a specific format
-  #   # as follows (wiring input is optional) 
-  #   r = Renderer.renderer(:foo, [an Iterator])
-  #
-  #   # Also, a factory method is automatically installed on the Renderer class
-  #   # itself.
-  #   r = Renderer.foo([an Iterator])
-  #
-  class Renderer
-    require 'alf/renderer/class_methods'
-    require 'alf/renderer/base'
-    require 'alf/renderer/rash'
-    require 'alf/renderer/text'
-
-  end # class Renderer
+  require 'alf/reader'
+  require 'alf/renderer'
 
   #
   # Marker module and namespace for Alf main commands, those that are **not** 
