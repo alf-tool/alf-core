@@ -88,20 +88,23 @@ module Alf
       end
     end
 
+    # Builds a tuple through enumeration.
+    # 
+    # Iterates over enum and yields the block on each element. Collect block 
+    # results as key/value pairs returns them as a Hash.
     #
-    # Iterates over enum and yields the block on each element. 
-    # Collect block results as key/value pairs returns them as 
-    # a Hash.
-    #
+    # @param [Enumerable] enum any enumerable
+    # @return [Tuple] a tuple built from yield results
     def tuple_collect(enum)
-      Hash[enum.collect{|elm| yield(elm)}]
+      Hash[enum.map{|elm| yield(elm)}]
     end
 
-    #
     # Infers the heading from a tuple
     #
+    # @param [Tuple] tuple a tuple, represented by a Hash
+    # @param [Heading] the heading of the tuple
     def tuple_heading(tuple)
-      Heading[tuple_collect(tuple){|k,v| [k, v.class]}]
+      Heading[Hash[tuple.map{|k,v| [k, v.class]}]]
     end
 
   end # module Tools

@@ -1,20 +1,15 @@
 require 'spec_helper'
 module Alf
-  module Tools
-    describe "#tuple_heading" do
-      
-      subject{ Tools.tuple_heading(tuple) }
+  describe Tools, "tuple_heading" do
 
-      describe 'on the empty tuple' do
-        let(:tuple){ {} }
-        it { should == Heading::EMPTY }
-      end
-     
-      describe 'on a supplier-like tuple' do
-        let(:tuple){ {:name => "Jones", :old => false} }
-        it { should == Heading[:name => String, :old => FalseClass] }
-      end
-     
+    it 'should work on the empty tuple' do
+      Tools.tuple_heading({}).should eq(Heading::EMPTY)
     end
+
+    it 'should work on a supplier-like tuple' do
+      expected = Heading[:name => String, :old => FalseClass]
+      Tools.tuple_heading(:name => "Jones", :old => false).should eq(expected)
+    end
+
   end
 end
