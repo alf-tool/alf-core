@@ -1,16 +1,14 @@
 # 0.10.2 / FIX ME
 
-## Broken APIs (private sections)
+## Possibly broken APIs (mostly private sections)
 
 * Alf::Environment::Base -> Alf::Environment::InstanceMethods
 * Alf::Environment::Explicit has been removed as well as associated tools.
 * Alf::Aggregator::Base -> Alf::Aggregator::InstanceMethods
 * Ordering#order_of has been removed
 * Ordering#order_by has been removed
-
-* On the development side
-
-  * Bumped ruby.noe to 1.5.1
+* Alf::Tools.coerce now raise a Alf::CoercionError instead of a Myrrha::Error
+  in case of coercion failure
 
 # 0.10.1 / 2011-08-31
 

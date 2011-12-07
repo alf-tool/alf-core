@@ -1,14 +1,25 @@
 module Alf
   module Tools
 
-    # Coercion rules
+    # Defines all coercion rules, through Myrrha inheritance
     Coercions = Myrrha::Coerce.dup.append do
     end
-    
-    # Delegated to Coercions
-    def coerce(value, domain)
-      Coercions.apply(value, domain)
+
+    # Coerces a value to a particular domain.
+    #
+    # Example:
+    #
+    #   Tools.coerce("123", Integer) # => 123
+    #
+    # @param [Object] val any value
+    # @param [Class] domain a domain, represented by a ruby class
+    # @return [Object] an instance of `domain` resulting from the coercion
+    # @raise [Myrrha::CoercionError] if something goes wrong
+    def coerce(val, domain)
+      Coercions.apply(val, domain)
+    rescue Myrrha::Error => ex
+      raise CoercionError, ex.message, caller
     end
-    
+
   end # module Tools
 end # module Alf
