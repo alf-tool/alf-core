@@ -1,3 +1,7 @@
+[ "alf-csv", "alf-sequel", "alf-logs" ].each do |contrib|
+  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), contrib))
+end
+
 require "alf/version"
 require "alf/loader"
 require "alf/errors"
@@ -51,3 +55,5 @@ module Alf
 end # module Alf
 require "alf/extra"
 require "alf/sequel"
+require 'alf/csv'
+require 'alf/logs'

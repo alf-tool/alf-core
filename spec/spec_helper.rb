@@ -1,4 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('../../lib/alf-sequel', __FILE__)
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'alf'
 require "rspec"
