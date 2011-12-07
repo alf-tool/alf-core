@@ -40,7 +40,7 @@ module Alf
         @allbut = allbut
       end
 
-      # (see Iterator#each)
+      # (see Cog#each)
       def each
         @operand.each do |tuple|
           yield @attributes.project_tuple(tuple, @allbut)

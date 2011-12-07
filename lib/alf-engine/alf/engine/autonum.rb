@@ -30,7 +30,7 @@ module Alf
         @as = as
       end
 
-      # (see Iterator#each)
+      # (see Cog#each)
       def each
         autonum = 0
         @operand.each do |tuple|

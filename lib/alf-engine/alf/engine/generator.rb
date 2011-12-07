@@ -25,7 +25,7 @@ module Alf
         @as = as
       end
 
-      # (see Iterator#each)
+      # (see Cog#each)
       def each
         number.times do |i|
           yield(@as => i)

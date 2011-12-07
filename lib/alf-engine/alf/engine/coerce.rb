@@ -31,7 +31,7 @@ module Alf
         @heading = heading
       end
 
-      # (see Iterator#each)
+      # (see Cog#each)
       def each
         @operand.each do |tuple|
           yield tuple.merge(Hash[@heading.map{|k,d|
