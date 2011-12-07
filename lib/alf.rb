@@ -50,3 +50,4 @@ module Alf
   
 end # module Alf
 require "alf/extra"
+require "alf/sequel"
