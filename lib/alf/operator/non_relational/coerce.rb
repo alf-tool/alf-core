@@ -1,21 +1,16 @@
 module Alf
   module Operator::NonRelational
     class Coerce < Alf::Operator()
-      include Operator::NonRelational, Operator::Transform
-    
+      include NonRelational, Unary
+
       signature do |s|
         s.argument :heading, Heading, {}
       end
-      
-      protected 
-      
-      # (see Operator::Transform#_tuple2tuple)
-      def _tuple2tuple(tuple)
-        tuple.merge tuple_collect(@heading.attributes){|k,d|
-          [k, coerce(tuple[k], d)]
-        }
+
+      def each(&block)
+        Engine::Coerce.new(input, heading).each(&block)
       end
-    
+
     end # class Coerce
   end # module Operator::NonRelational
 end # module Alf
