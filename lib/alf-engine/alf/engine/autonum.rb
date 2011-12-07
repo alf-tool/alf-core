@@ -1,5 +1,21 @@
 module Alf
   module Engine
+    #
+    # Autonumbers input tuples under a new `as` attribute. Autonumbering starts
+    # at 0.
+    #
+    # Example:
+    #
+    #     operand = [
+    #       {:name => "Jones"}, 
+    #       {:name => "Smith"}
+    #     ]
+    #     Autonum.new(operand, :id).to_a
+    #     # => [
+    #     #      {:name => "Jones", :id => 0}, 
+    #     #      {:name => "Smith", :id => 1}
+    #     #    ]
+    #
     class Autonum < Cog
 
       # @return [Enumerable] The operand
