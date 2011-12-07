@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  describe "Tools#coalesce" do
+  describe Tools, "coalesce" do
     
     it "should support a varargs variant" do
       Tools.coalesce(:a, nil, :b, :c).should eql(:a)
@@ -11,5 +11,9 @@ module Alf
       Tools.coalesce(nil){ :hello }.should eql(:hello)
     end
     
+    it "should return nil otherwise" do
+      Tools.coalesce(nil).should be_nil
+    end
+
   end
 end

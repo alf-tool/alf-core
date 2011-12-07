@@ -15,11 +15,21 @@ module Alf
       types.map{|t| t===args.first ? args.shift : nil}
     end
 
+    # Attempts to require `who` the most friendly way as possible.
     #
-    # Attempt to require(who) the most friendly way as possible.
+    # This method allows loading weak dependencies in a friendly way. It takes
+    # care of ensuring the dependency requirement `req` through rubygems. The
+    # latter is loaded if required.
     #
-    def friendly_require(who, dep = nil, retried = false)
-      gem(who, dep) if dep && defined?(Gem)
+    # Example:
+    #
+    #     Tools.friendly_require('sequel', '~> 3.0')
+    #
+    # @param [String] who the name of a gem
+    # @param [String] req optional requirements on the gem version
+    # @param [Boolean] retried (private parameter)
+    def friendly_require(who, req = nil, retried = false)
+      gem(who, req) if req && defined?(Gem)
       require who
     rescue LoadError => ex
       if retried
@@ -27,45 +37,57 @@ module Alf
               "Try 'gem install #{who}'"
       else
         require 'rubygems' unless defined?(Gem)
-        friendly_require(who, dep, true)
+        friendly_require(who, req, true)
       end
     end
 
-    # Returns the unqualified name of a ruby class or module
+    # Returns the unqualified name of a ruby class or module.
     #
     # Example
     #
     #   class_name(Alf::Tools) -> :Tools
     #
+    # @param [Class] clazz a ruby class
+    # @return [Symbol] the unqualified name of the class as a Symbol
     def class_name(clazz)
-      clazz.name.to_s =~ /([A-Za-z0-9_]+)$/
-      $1.to_sym
+      /([A-Za-z0-9_]+)$/.match(clazz.name.to_s)[1].to_sym
     end
-    
-    #
+
     # Converts an unqualified class or module name to a ruby case method name.
     #
     # Example
     #
     #    ruby_case(:Alf)  -> "alf"
     #    ruby_case(:HelloWorld) -> "hello_world"
-    # 
+    #
+    # @param [String or Symbol] a class or module name
+    # @return [String] the class or module name in ruby_case
     def ruby_case(s)
       s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
     end
-    
+
+    # Returns the first non nil values from arguments.
     #
-    # Returns the first non nil values from arguments
+    # When no non-nil value can be found, the block is yield if present. 
+    # Otherwise, nil is returned.
     #
-    # Example
+    # Example:
     #
-    #   coalesce(nil, 1, "abc") -> 1
+    #   coalesce(nil, 1, "abc")         # -> 1
+    #   coalesce(nil, nil){ "hello" }   # -> "hello"
+    #   coalesce(nil, nil)              # -> nil
     #
+    # @param [Array] args a list of values
+    # @return [Object] the first non-nil value in `args`; the result of the 
+    #         block or nil if no non-nil value can be found.
     def coalesce(*args)
-      found = args.find{|x| !x.nil?}
-      found.nil? ? (block_given? ? yield : nil) : found
+      if found = args.find{|x| !x.nil?}
+        found
+      elsif block_given?
+        yield
+      end
     end
-    
+
     #
     # Iterates over enum and yields the block on each element. 
     # Collect block results as key/value pairs returns them as 
