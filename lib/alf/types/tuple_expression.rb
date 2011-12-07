@@ -125,13 +125,21 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        if source.nil?
-          raise NotImplementedError, "No known ruby source for this expression"
-        else
-          "Alf::TupleExpression[#{Tools.to_ruby_literal(source)}]"
-        end
+        "Alf::#{Tools.class_name(self.class)}[#{Tools.to_ruby_literal(has_source_code!)}]"
       end
       alias :inspect :to_ruby_literal
+
+      # Asserts that this expression known its source code or raises a 
+      # NotImplementedError.
+      #
+      # @return [String] the source code when known
+      def has_source_code!
+        if source.nil?
+          raise NotImplementedError, "No known source code for this expression"
+        else
+          source
+        end
+      end
 
     end # class TupleExpression
   end # module Types

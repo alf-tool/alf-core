@@ -52,6 +52,7 @@ module Alf
             raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
           end
         end
+        alias :[] :coerce
 
         # Convert commandline arguments to a tuple predicate
         #
@@ -66,18 +67,6 @@ module Alf
         end
 
       end # class << self
-
-      # Returns a ruby literal for this predicate
-      #
-      # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
-      def to_ruby_literal
-        if source.nil?
-          raise NotImplementedError, "No known ruby source for this predicate"
-        else
-          "Alf::TuplePredicate[#{Tools.to_ruby_literal(source)}]"
-        end
-      end
-      alias :inspect :to_ruby_literal
 
     end # class TuplePredicate
   end # module Types

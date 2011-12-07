@@ -17,7 +17,9 @@ module Alf
 
     describe "coerce" do
 
-      subject{ TuplePredicate.coerce(arg).evaluate(handle) }
+      let(:pred){ TuplePredicate.coerce(arg) }
+      before{ pred.should be_a(TuplePredicate) }
+      subject{ pred.evaluate(handle) }
 
       describe "from TuplePredicate" do
         let(:arg){ TuplePredicate.new(lambda{ status == 10 }) }
@@ -86,6 +88,21 @@ module Alf
       end
 
     end # from_argv
+
+    describe 'to_ruby_literal' do
+
+      it 'should work when code is known' do
+        expr = TuplePredicate["status > 10"]
+        expr.should be_a(TuplePredicate)
+        expr.to_ruby_literal.should eq('Alf::TuplePredicate["status > 10"]')
+      end
+
+      it 'should raise a NotImplementedError if no source code' do
+        expr = TuplePredicate[lambda{status > 10}]
+        lambda{ expr.to_ruby_literal }.should raise_error(NotImplementedError)
+      end
+
+    end # to_ruby_literal
 
   end # TuplePredicate
 end # Alf
