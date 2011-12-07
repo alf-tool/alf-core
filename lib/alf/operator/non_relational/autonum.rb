@@ -1,24 +1,16 @@
 module Alf
   module Operator::NonRelational
     class Autonum < Alf::Operator()
-      include Operator::NonRelational, Operator::Transform
-    
+      include NonRelational, Unary
+
       signature do |s|
         s.argument :as, AttrName, :autonum
       end
-          
-      protected
-        
-      # (see Operator#_prepare)
-      def _prepare
-        @autonum = -1
+
+      def each(&block)
+        Engine::Autonum.new(input, as).each(&block)
       end
-      
-      # (see Operator::Transform#_tuple2tuple)
-      def _tuple2tuple(tuple)
-        tuple.merge(@as => (@autonum += 1))
-      end
-    
+
     end # class Autonum
   end # module Operator::NonRelational
 end # module Alf
