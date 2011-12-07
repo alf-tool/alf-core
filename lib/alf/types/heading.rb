@@ -4,6 +4,7 @@ module Alf
     # Defines a Heading, that is, a set of attribute (name,domain) pairs.
     #
     class Heading
+      include Enumerable
 
       # @return [Hash] a (freezed) hash of (name, type) pairs
       attr_reader :attributes
@@ -61,7 +62,12 @@ module Alf
         end
 
       end # class << self
-      
+
+      # Yields each (name,domain) pair in turn.
+      def each(&block)
+        attributes.each(&block)
+      end
+
       # Returns heading's cardinality, i.e. the number of (name,type) pairs.
       #
       # @return [Integer] the number of pairs

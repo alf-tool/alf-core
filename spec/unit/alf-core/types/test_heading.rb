@@ -18,6 +18,10 @@ module Alf
     let(:h1){ Heading.new(:name => String) }
     let(:h2){ Heading.new(:name => String, :price => Float) }
 
+    it 'should be Enumerable' do
+      h2.map{|k,v| [k,v]}.should eq([[:name, String], [:price, Float]])
+    end
+
     describe "coerce" do
 
       it "should work with a heading" do
