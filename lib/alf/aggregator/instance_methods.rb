@@ -92,6 +92,17 @@ module Alf
         end
       end
 
+      # Checks equality with another aggregator
+      #
+      # @param [Aggregator] other another aggregator
+      # @return [Boolean] true is self and other are equal, false otherwise
+      def ==(other)
+        return false unless other.is_a?(Aggregator)
+        has_source_code! == other.has_source_code!
+      rescue NotImplementedError
+        super
+      end
+
       protected
 
       # @see happens.
