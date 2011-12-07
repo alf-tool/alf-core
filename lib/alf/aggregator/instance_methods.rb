@@ -80,6 +80,18 @@ module Alf
         finalize(enum.inject(least){|m,t| happens(m, t)})
       end
 
+      # Asserts that this aggregator knows its source code or raises a 
+      # NotImplementedError.
+      #
+      # @return [String] the source code when known
+      def has_source_code!
+        if source.nil?
+          raise NotImplementedError, "No known source code for this aggregator"
+        else
+          source
+        end
+      end
+
       protected
 
       # @see happens.

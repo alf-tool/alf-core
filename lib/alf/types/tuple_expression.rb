@@ -129,7 +129,7 @@ module Alf
       end
       alias :inspect :to_ruby_literal
 
-      # Asserts that this expression known its source code or raises a 
+      # Asserts that this expression knows its source code or raises a 
       # NotImplementedError.
       #
       # @return [String] the source code when known

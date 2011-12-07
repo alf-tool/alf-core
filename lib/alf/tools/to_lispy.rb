@@ -53,18 +53,7 @@ module Alf
 
       # TupleExpression -> ->(){ ... }
       r.upon(Types::TupleExpression) do |v, rd|
-        unless src = v.source
-          raise NotImplementedError, "TupleExpression #{v} has no source"
-        end
-        "->(){ #{src} }"
-      end
-
-      # TuplePredicate -> ->(){ ... }
-      r.upon(Types::TuplePredicate) do |v, rd|
-        unless src = v.source
-          raise NotImplementedError, "TuplePredicate #{v} has no source"
-        end
-        "->(){ #{src} }"
+        "->(){ #{v.has_source_code!} }"
       end
 
       # TupleComputation -> { :big => -(){ ... }, ... }
@@ -76,10 +65,7 @@ module Alf
 
       # Aggregator -> agg.source
       r.upon(lambda{|v,_| Aggregator === v}) do |v, rd|
-        unless src = v.source
-          raise NotImplementedError, "Aggregator #{v} has no source"
-        end
-        src
+        v.has_source_code!
       end
 
       # Summarization -> { :total => ->(){ ... } }
