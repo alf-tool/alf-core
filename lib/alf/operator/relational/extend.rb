@@ -1,24 +1,16 @@
 module Alf
   module Operator::Relational
     class Extend < Alf::Operator()
-      include Operator::Relational, Operator::Transform
-  
+      include Relational, Unary
+
       signature do |s|
         s.argument :ext, TupleComputation, {}
       end
-      
-      protected 
-    
-      # (see Operator#_prepare)
-      def _prepare
-        @handle = TupleHandle.new
+
+      def each(&block)
+        Engine::SetAttr.new(input, ext).each(&block)
       end
-  
-      # (see Operator::Transform#_tuple2tuple)
-      def _tuple2tuple(tuple)
-        tuple.merge @ext.evaluate(@handle.set(tuple))
-      end
-  
+
     end # class Extend
   end # module Operator::Relational
 end # module Alf
