@@ -42,6 +42,18 @@ module Alf
 
     end # coerce
 
+    describe "[]" do
+
+      it 'should allow an empty list' do
+        AttrList[].should eq(AttrList.new([]))
+      end
+
+      it 'should allow an non-empty list' do
+        AttrList[:name, :city].should eq(AttrList.new([:name, :city]))
+      end
+
+    end # []
+
     describe "from_argv" do
 
       subject{ AttrList.from_argv(argv) }

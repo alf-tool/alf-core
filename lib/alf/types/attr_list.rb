@@ -44,7 +44,14 @@ module Alf
             raise ArgumentError, "Unable to coerce #{arg} to a projection key"
           end
         end
-        alias :[] :coerce
+
+        # Coerces a list of names to an AttrList.
+        #
+        # @param [Array] args a list of names (Symbol or String)
+        # @return [AttrList] an attribute list
+        def [](*args)
+          coerce(args)
+        end
 
         # Builds an AttrList from commandline arguments.
         #
@@ -133,7 +140,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::AttrList[#{Tools.to_ruby_literal(attributes)}]"
+        "Alf::AttrList#{Tools.to_ruby_literal(attributes)}"
       end
       alias :inspect :to_ruby_literal
 
