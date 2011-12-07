@@ -9,7 +9,7 @@ module Alf
       end
 
       def each(&block)
-        Engine::Generator.new(size, as, 1).each(&block)
+        Engine::Generator.new(as, 1, 1, size).each(&block)
       end
 
     end # class Generator

@@ -3,29 +3,21 @@ module Alf
   module Engine
     describe Generator do
 
-      it 'should generate n tuples, from 0' do
+      it 'should generate tuples from 0' do
         exp = [
           {:id => 0},
           {:id => 1}
         ]
-        Generator.new(2, :id).to_a.should eq(exp)
+        Generator.new(:id, 0, 1, 2).to_a.should eq(exp)
       end
 
-      it 'should allow specifying an offset' do
-        exp = [
-          {:id => 10},
-          {:id => 11}
-        ]
-        Generator.new(2, :id, 10).to_a.should eq(exp)
-      end
-
-      it 'should allow specifying a step' do
+      it 'should allow specifying an offset, step and count' do
         exp = [
           {:id => 10},
           {:id => 15},
           {:id => 20}
         ]
-        Generator.new(3, :id, 10, 5).to_a.should eq(exp)
+        Generator.new(:id, 10, 5, 3).to_a.should eq(exp)
       end
 
     end

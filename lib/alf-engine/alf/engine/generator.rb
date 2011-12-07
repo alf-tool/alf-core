@@ -15,9 +15,6 @@ module Alf
     #
     class Generator < Cog
 
-      # @return [Integer] Number of tuples to generate
-      attr_reader :number
-
       # @return [Symbol] Name of the autonum attribute
       attr_reader :as
 
@@ -27,18 +24,21 @@ module Alf
       # @return [Integer] Generation step
       attr_reader :step
 
+      # @return [Integer] Count number of tuples to generate
+      attr_reader :count
+
       # Creates an Generator instance
-      def initialize(number, as, offset = 0, step = 1)
-        @number = number
+      def initialize(as, offset, step, count)
         @as = as
         @offset = offset
         @step = step
+        @count = count
       end
 
       # (see Cog#each)
       def each
         cur = offset
-        number.times do |i|
+        count.times do |i|
           yield(@as => cur)
           cur += step
         end
