@@ -78,7 +78,6 @@ module Alf
   class Environment
     require 'alf/environment/class_methods'
     require 'alf/environment/instance_methods'
-    require 'alf/environment/explicit'
     require 'alf/environment/folder'
 
   end # class Environment

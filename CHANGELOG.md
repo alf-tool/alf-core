@@ -3,6 +3,7 @@
 ## Broken APIs (private sections)
 
 * Alf::Environment::Base -> Alf::Environment::InstanceMethods
+* Alf::Environment::Explicit has been removed as well as associated tools.
 * Alf::Aggregator::Base -> Alf::Aggregator::InstanceMethods
 * Ordering#order_of has been removed
 * Ordering#order_by has been removed

@@ -20,17 +20,6 @@ module Alf
       end
       undef :dataset
 
-      # Branches this environment and puts some additional explicit 
-      # definitions.
-      #
-      # This method is not intended to be be overriden by subclasses.
-      #
-      # @param [Hash] a set of (name, Iterator) pairs.
-      # @return [Environment] an environment instance with new definitions set
-      def branch(defs)
-        Explicit.new(defs, self)
-      end
-
     end # module InstanceMethods
     include(InstanceMethods)
   end # class Environment
