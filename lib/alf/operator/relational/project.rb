@@ -1,22 +1,19 @@
 module Alf
   module Operator::Relational
     class Project < Alf::Operator()
-      include Operator::Relational, Operator::Shortcut, Operator::Unary
-    
+      include Relational, Unary
+
       signature do |s|
         s.argument :attributes, AttrList, []
         s.option   :allbut,     Boolean,  false, 'Project all but specified attributes?'
       end
-      
-      protected 
-    
-      # (see Operator::Shortcut#longexpr)
-      def longexpr
-        chain Operator::NonRelational::Compact.new,
-              Operator::NonRelational::Clip.new(@attributes, {:allbut => @allbut}),
-              datasets
+
+      def each(&block)
+        op = Engine::Clip.new(input, attributes, allbut)
+        op = Engine::Compact.new(op)
+        op.each(&block)
       end
-    
+
     end # class Project
   end # module Operator::Relational
 end # module Alf
