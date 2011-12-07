@@ -1,19 +1,16 @@
 module Alf
   module Operator::Relational
     class Rename < Alf::Operator()
-      include Operator::Relational, Operator::Transform
-  
+      include Relational, Unary
+
       signature do |s|
         s.argument :renaming, Renaming, {}
       end
-      
-      protected 
-    
-      # (see Operator::Transform#_tuple2tuple)
-      def _tuple2tuple(tuple)
-        @renaming.rename_tuple(tuple)
+
+      def each(&block)
+        Engine::Rename.new(input, renaming).each(&block)
       end
-  
+
     end # class Rename
   end # module Operator::Relational
 end # module Alf
