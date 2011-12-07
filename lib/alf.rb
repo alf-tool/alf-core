@@ -13,28 +13,7 @@ require 'myrrha/coerce'
 # Classy data-manipulation dressed in a DSL (+ commandline)
 #
 module Alf
-
-  #
-  # Encapsulates all types
-  #
-  module Types
-    require 'alf/types/class_methods'
-    require 'alf/types/attr_name'
-    require 'alf/types/boolean'
-    require 'alf/types/heading'
-    require 'alf/types/ordering'
-    require 'alf/types/attr_list'
-    require 'alf/types/renaming'
-    require 'alf/types/tuple_expression'
-    require 'alf/types/tuple_predicate'
-    require 'alf/types/summarization'
-    require 'alf/types/tuple_computation'
-
-    # Install all types on Alf now
-    constants.each do |s|
-      Alf.const_set(s, const_get(s))
-    end
-  end
+  require 'alf/types'
 
   #
   # Provides tooling methods that are used here and there in Alf.
