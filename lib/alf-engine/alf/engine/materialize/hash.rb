@@ -77,9 +77,7 @@ module Alf
       # @param [Boolean] project project `key_tuple` on key first?
       # @return [Cog] the tuples from operand that match `key_tuple`
       def [](key_tuple, project = false)
-        if project
-          key_tuple = @key.project_tuple(key_tuple, @allbut) 
-        end
+        key_tuple = key_for(key_tuple) if project
         m = materialized
         m.has_key?(key_tuple) ? m[key_tuple] : []
       end
@@ -91,8 +89,7 @@ module Alf
         @materialized ||= begin
           h = ::Hash.new{|h,k| h[k] = []}
           operand.each do |tuple|
-            k = @key.project_tuple(tuple, @allbut)
-            h[k] << tuple
+            h[key_for(tuple)] << tuple
           end
           h
         end
@@ -105,7 +102,12 @@ module Alf
         @materialized = nil
       end
 
-      private 
+      private
+
+      # Projects `tuple` to get the indexing key
+      def key_for(tuple)
+        @key.project_tuple(tuple, @allbut)
+      end
 
       # @return [Hash] the materialized hash
       def materialized
