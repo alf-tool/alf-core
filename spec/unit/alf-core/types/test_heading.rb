@@ -119,10 +119,10 @@ module Alf
 
     end # union
 
-    it "should implement a to_hash method" do
-      h0.to_hash.should eq({})
-      h1.to_hash.should eq(:name => String)
-      h2.to_hash.should eq(:name => String, :price => Float)
+    it "should implement a to_h method" do
+      h0.to_h.should eq({})
+      h1.to_h.should eq(:name => String)
+      h2.to_h.should eq(:name => String, :price => Float)
     end
 
     describe "EMPTY" do

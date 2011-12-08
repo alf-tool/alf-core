@@ -115,7 +115,7 @@ module Alf
       # Converts this heading to a Hash of (name,type) pairs
       #
       # @return [Hash] this heading as a Hash of (name, type) pairs
-      def to_hash
+      def to_h
         attributes.dup
       end
 
