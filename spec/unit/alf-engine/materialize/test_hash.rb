@@ -14,16 +14,9 @@ module Alf
         op.to_set.should eq(operand.to_set)
       end
 
-      it 'should allow indexed access' do
-        op = Materialize::Hash.new(operand, AttrList[:name])
-        op[{:name => "Jones"}].to_a.should eq([
-          {:name => "Jones", :city => "Paris"},
-        ])
-        op[{:name => "Smith"}].to_a.should eq([
-          {:name => "Smith", :city => "London"},
-          {:name => "Smith", :city => "Athens"},
-        ])
-        op[{:name => "NoSuchOne"}].to_a.should eq([])
+      it 'should allow allbut hashing' do
+        op = Materialize::Hash.new(operand, AttrList[:city], true)
+        op.to_set.should eq(operand.to_set)
       end
 
       it 'should have a each_pair method' do
@@ -38,9 +31,36 @@ module Alf
         ].to_set)
       end
 
-      it 'should allow allbut hashing' do
-        op = Materialize::Hash.new(operand, AttrList[:city], true)
-        op.to_set.should eq(operand.to_set)
+      describe "the indexed access" do
+
+        it 'should return the expected tuples' do
+          op = Materialize::Hash.new(operand, AttrList[:name])
+          op[{:name => "Jones"}].to_a.should eq([
+            {:name => "Jones", :city => "Paris"},
+          ])
+          op[{:name => "Smith"}].to_a.should eq([
+            {:name => "Smith", :city => "London"},
+            {:name => "Smith", :city => "Athens"},
+          ])
+          op[{:name => "NoSuchOne"}].to_a.should eq([])
+        end
+
+        it 'should allow late projection' do
+          op = Materialize::Hash.new(operand, AttrList[:name])
+          op[{:name => "Smith", :city => "London"}, true].to_a.should eq([
+            {:name => "Smith", :city => "London"},
+            {:name => "Smith", :city => "Athens"},
+          ])
+        end
+
+        it 'late projection should work with allbut indexing' do
+          op = Materialize::Hash.new(operand, AttrList[:city], true)
+          op[{:name => "Smith", :city => "London"}, true].to_a.should eq([
+            {:name => "Smith", :city => "London"},
+            {:name => "Smith", :city => "Athens"},
+          ])
+        end
+
       end
 
     end

@@ -73,11 +73,15 @@ module Alf
       # This method returns a Cog instance in all case. En empty Cog is 
       # returned if no tuples match the key.
       #
-      # @param [Tuple] key a tuple key
-      # @return [Cog] the tuples from operand that match `key`
-      def [](key)
+      # @param [Tuple] key_tuple a key tuple
+      # @param [Boolean] project project `key_tuple` on key first?
+      # @return [Cog] the tuples from operand that match `key_tuple`
+      def [](key_tuple, project = false)
+        if project
+          key_tuple = @key.project_tuple(key_tuple, @allbut) 
+        end
         m = materialized
-        m.has_key?(key) ? m[key] : []
+        m.has_key?(key_tuple) ? m[key_tuple] : []
       end
 
       # (see Cog#prepare)
