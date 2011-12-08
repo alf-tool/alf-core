@@ -12,3 +12,5 @@ require 'alf/engine/concat'
 require 'alf/engine/aggregate'
 require 'alf/engine/rename'
 require 'alf/engine/materialize'
+require 'alf/engine/group'
+
