@@ -1,6 +1,41 @@
 module Alf
   module Engine
     module Materialize
+      #
+      # Provides in-memory materialization through a ruby Hash.
+      #
+      # This class acts as a Cog, that it, it is an enumerable of tuples. No 
+      # particular ordering is guaranteed. In addition, the class provides 
+      # indexed access through the `[]` method. Lazy materialization happens 
+      # at first invocation of `each` or `[]'.
+      #
+      # Example:
+      #
+      #     rel = [
+      #       {:name => "Jones", :city => "London"},
+      #       {:name => "Smith", :city => "Paris"},
+      #       {:name => "Blake", :city => "London"}
+      #     ]
+      #     op = Materialize::Hash.new(rel, AttrList[:city])
+      #
+      #     op.to_a 
+      #     # => same as rel, no ordering guaranteed
+      #
+      #     op[:city => "London"].to_a
+      #     # => [
+      #            {:name => "Jones", :city => "London"},
+      #            {:name => "Blake", :city => "London"}
+      #          ]
+      #
+      #     op[:city => "London"].to_a
+      #     # => [
+      #            {:name => "Jones", :city => "London"},
+      #            {:name => "Blake", :city => "London"}
+      #          ]
+      #
+      #     op[:city => "Athens"].to_a
+      #     # => []
+      #
       class Hash < Cog
 
         # @return [Enumerable] The operand
