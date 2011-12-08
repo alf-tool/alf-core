@@ -19,7 +19,6 @@ module Alf
     require 'alf/operator/unary'
     require 'alf/operator/binary'
     require 'alf/operator/cesure'
-    require 'alf/operator/transform'
     require 'alf/operator/shortcut'
     require 'alf/operator/experimental'
 
