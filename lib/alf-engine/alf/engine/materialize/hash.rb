@@ -93,6 +93,7 @@ module Alf
           end
           h
         end
+        self
       end
 
       # (see Cog#free)
