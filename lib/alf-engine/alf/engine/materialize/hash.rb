@@ -106,6 +106,7 @@ module Alf
 
       # Projects `tuple` to get the indexing key
       def key_for(tuple)
+        @key = @key.call(tuple) unless @key.is_a?(AttrList)
         @key.project_tuple(tuple, @allbut)
       end
 

@@ -19,6 +19,14 @@ module Alf
         op.to_set.should eq(operand.to_set)
       end
 
+      it 'should allow lazy projection attributes' do
+        op = Materialize::Hash.new(operand, lambda{|tuple| 
+          tuple.should eq({:name => "Smith", :city => "London"})
+          AttrList[:name]
+         })
+        op.to_set.should eq(operand.to_set)
+      end
+
       it 'should have a each_pair method' do
         op = Materialize::Hash.new(operand, AttrList[:name])
         seen = []
