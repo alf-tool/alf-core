@@ -63,6 +63,11 @@ module Alf
         end
       end
 
+      # Yields indexed (key, tuples) pairs in turn.
+      def each_pair(&block)
+        materialized.each_pair(&block)
+      end
+
       # Returns tuples that match a given key.
       #
       # This method returns a Cog instance in all case. En empty Cog is 

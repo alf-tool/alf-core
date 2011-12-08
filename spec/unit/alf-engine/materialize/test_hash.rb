@@ -26,6 +26,18 @@ module Alf
         op[{:name => "NoSuchOne"}].to_a.should eq([])
       end
 
+      it 'should have a each_pair method' do
+        op = Materialize::Hash.new(operand, AttrList[:name])
+        seen = []
+        op.each_pair do |k,v|
+          seen << [k,v]
+        end
+        seen.to_set.should eq([
+          [{:name => "Smith"}, operand.select{|t| t[:name] == "Smith"}],
+          [{:name => "Jones"}, operand.select{|t| t[:name] == "Jones"}]
+        ].to_set)
+      end
+
       it 'should allow allbut hashing' do
         op = Materialize::Hash.new(operand, AttrList[:city], true)
         op.to_set.should eq(operand.to_set)
