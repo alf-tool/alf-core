@@ -35,7 +35,7 @@ module Alf
       # @return [Ordering] Ordering to ensure (optional)
       attr_reader :ordering
 
-      # Creates a Hash instance
+      # Creates a Materialize::Array instance
       def initialize(operand, ordering = nil)
         @operand = operand
         @ordering = ordering
@@ -73,6 +73,6 @@ module Alf
         @materialized
       end
 
-    end # class Array
+    end # class Materialize::Array
   end # module Engine
 end # module Alf

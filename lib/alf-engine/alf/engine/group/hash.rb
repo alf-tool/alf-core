@@ -17,7 +17,7 @@ module Alf
       # @return [Boolean] Group all but specified attributes?
       attr_reader :allbut
 
-      # Creates a Hash instance
+      # Creates a Group::Hash instance
       def initialize(operand, attributes, as, allbut)
         @operand = operand
         @attributes = attributes
@@ -35,6 +35,6 @@ module Alf
         end
       end
 
-    end # class Hash
+    end # class Group::Hash
   end # module Engine
 end # module Alf

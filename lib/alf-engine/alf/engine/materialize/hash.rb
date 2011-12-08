@@ -48,7 +48,7 @@ module Alf
       # @return [Boolean] Hash on all but specified attributes?
       attr_reader :allbut
 
-      # Creates a Hash instance
+      # Creates a Materialize::Hash instance
       def initialize(operand, key, allbut = false)
         @operand = operand
         @key = key
@@ -109,6 +109,6 @@ module Alf
         @materialized
       end
 
-    end # class Hash
+    end # class Materialize::Hash
   end # module Engine
 end # module Alf
