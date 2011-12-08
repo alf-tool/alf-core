@@ -15,4 +15,5 @@ require 'alf/engine/materialize'
 require 'alf/engine/group'
 require 'alf/engine/join'
 require 'alf/engine/semi'
+require 'alf/engine/wrap'
 

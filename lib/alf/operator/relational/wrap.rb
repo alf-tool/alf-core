@@ -1,22 +1,17 @@
 module Alf
   module Operator::Relational
     class Wrap < Alf::Operator()
-      include Operator::Relational, Operator::Transform
-  
+      include Relational, Unary
+
       signature do |s|
         s.argument :attributes, AttrList, []
         s.argument :as, AttrName, :wrapped
       end
-      
-      protected 
-  
-      # (see Operator::Transform#_tuple2tuple)
-      def _tuple2tuple(tuple)
-        wrapped, others = @attributes.split_tuple(tuple)
-        others[@as] = wrapped
-        others
+
+      def each(&block)
+        Engine::Wrap.new(input, attributes, as, false).each(&block)
       end
-  
+
     end # class Wrap
   end # module Operator::Relational
 end # module Alf
