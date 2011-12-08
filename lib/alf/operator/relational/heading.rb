@@ -10,7 +10,7 @@ module Alf
       def each
         yield(input.inject(Alf::Heading::EMPTY){|h,t|
           h + Tools.tuple_heading(t)
-        }.attributes)
+        }.to_h)
       end
 
     end # class Project

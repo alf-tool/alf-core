@@ -33,7 +33,7 @@ module Alf
 
       # Heading -> {:sid => String, ...}
       r.upon(Types::Heading) do |v, rd|
-        Tools.to_ruby_literal(v.attributes)
+        Tools.to_ruby_literal(v.to_h)
       end
 
       # Ordering -> [[:sid, :asc], ...]
