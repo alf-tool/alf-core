@@ -26,6 +26,11 @@ module Alf
         op[{:name => "NoSuchOne"}].to_a.should eq([])
       end
 
+      it 'should allow allbut hashing' do
+        op = Materialize::Hash.new(operand, AttrList[:city], true)
+        op.to_set.should eq(operand.to_set)
+      end
+
     end
   end # module Engine
 end # module Alf

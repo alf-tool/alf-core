@@ -45,10 +45,14 @@ module Alf
       # @return [AttrList] Attributes for the hash key
       attr_reader :key
 
+      # @return [Boolean] Hash on all but specified attributes?
+      attr_reader :allbut
+
       # Creates a Hash instance
-      def initialize(operand, key)
+      def initialize(operand, key, allbut = false)
         @operand = operand
         @key = key
+        @allbut = allbut
         @materialized = nil
       end
 
@@ -78,7 +82,7 @@ module Alf
         @materialized ||= begin
           h = ::Hash.new{|h,k| h[k] = []}
           operand.each do |tuple|
-            k = @key.project_tuple(tuple)
+            k = @key.project_tuple(tuple, @allbut)
             h[k] << tuple
           end
           h
