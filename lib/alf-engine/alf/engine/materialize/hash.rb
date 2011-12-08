@@ -6,8 +6,10 @@ module Alf
       #
       # This class acts as a Cog, that it, it is an enumerable of tuples. No 
       # particular ordering is guaranteed. In addition, the class provides 
-      # indexed access through the `[]` method. Lazy materialization happens 
-      # at first invocation of `each` or `[]'.
+      # indexed access through the `[]` method. 
+      # 
+      # Materialization occurs at prepare time, with auto-prepare on first 
+      # access.
       #
       # Example:
       #
@@ -53,7 +55,7 @@ module Alf
 
         # (see Cog#each)
         def each(&block)
-          materialize.each_value do |rel|
+          materialized.each_value do |rel|
             rel.each(&block)
           end
         end
@@ -66,14 +68,14 @@ module Alf
         # @param [Tuple] key a tuple key
         # @return [Cog] the tuples from operand that match `key`
         def [](key)
-          m = materialize
+          m = materialized
           m.has_key?(key) ? m[key] : []
         end
 
-        private
-
-        # Materializes the operand as a hash
-        def materialize
+        # (see Cog#prepare)
+        #
+        # Prepare through materialization of the operand as a hash
+        def prepare
           @materialized ||= begin
             h = ::Hash.new{|h,k| h[k] = []}
             operand.each do |tuple|
@@ -82,6 +84,21 @@ module Alf
             end
             h
           end
+        end
+
+        # (see Cog#free)
+        #
+        # Frees the materizalied hash
+        def clean
+          @materialized = nil
+        end
+
+        private 
+
+        # @return [Hash] the materialized hash
+        def materialized
+          prepare
+          @materialized
         end
 
       end # class Hash
