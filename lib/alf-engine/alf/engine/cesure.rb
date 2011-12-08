@@ -4,6 +4,13 @@ module Alf
 
       # (see Cog#each)
       def each(&receiver)
+        dup._each(&receiver)
+      end
+
+      protected
+
+      # (see Cog#each)
+      def _each(&receiver)
         prev_key = nil
         operand.each do |tuple|
           cur_key = project(tuple)
@@ -16,8 +23,6 @@ module Alf
         end
         flush_cesure(prev_key, receiver) if prev_key
       end
-
-      protected
 
       # Projects a given tuple and returns it's cesure projection
       def project(tuple)
