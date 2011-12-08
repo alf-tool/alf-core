@@ -1,4 +1,5 @@
 require 'alf/engine/cog'
+require 'alf/engine/cesure'
 require 'alf/engine/autonum'
 require 'alf/engine/clip'
 require 'alf/engine/coerce'
@@ -17,4 +18,5 @@ require 'alf/engine/join'
 require 'alf/engine/semi'
 require 'alf/engine/wrap'
 require 'alf/engine/unwrap'
+require 'alf/engine/summarize'
 
