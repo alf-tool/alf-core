@@ -9,9 +9,9 @@ module Alf
         s.option   :allbut,     Boolean,  false, 'Group all but specified attributes?'
       end
 
-      # (see Operator#each)
-      def each(&block)
-        Engine::Group::Hash.new(input, attributes, as, allbut).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Group::Hash.new(operand, attributes, as, allbut)
       end
   
     end # class Group

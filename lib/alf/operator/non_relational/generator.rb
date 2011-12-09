@@ -8,8 +8,9 @@ module Alf
         s.argument :as,   AttrName, :num
       end
 
-      def each(&block)
-        Engine::Generator.new(as, 1, 1, size).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Generator.new(as, 1, 1, size)
       end
 
     end # class Generator

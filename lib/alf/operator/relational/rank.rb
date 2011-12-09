@@ -9,10 +9,10 @@ module Alf
       end
 
       # (see Operator#each)
-      def each(&block)
-        op = Engine::Sort.new(input, order)
+      def compile
+        op = Engine::Sort.new(operand, order)
         op = Engine::Rank::Cesure.new(op, order, as)
-        op.each(&block)
+        op
       end 
 
     end # class Rank

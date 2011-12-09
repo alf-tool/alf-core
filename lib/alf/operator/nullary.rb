@@ -6,7 +6,7 @@ module Alf
     module Nullary
       include Operator 
       
-      # 
+      #
       # Sets the operator input
       #
       def pipe(input, env = environment)

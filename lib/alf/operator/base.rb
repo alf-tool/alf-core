@@ -29,10 +29,9 @@ module Alf
       end
 
       # Yields each tuple in turn 
-      #
-      def each
+      def each(&block)
+        compile.each(&block)
       end
-      undef :each
 
       private :datasets=, :environment=
     end # module Base

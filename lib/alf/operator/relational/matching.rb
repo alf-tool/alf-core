@@ -6,8 +6,9 @@ module Alf
       signature do |s|
       end
 
-      def each(&block)
-        Engine::Semi::Hash.new(left, right, true).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Semi::Hash.new(left, right, true)
       end
 
     end # class Matching

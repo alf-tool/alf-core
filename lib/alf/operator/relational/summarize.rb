@@ -9,15 +9,14 @@ module Alf
         s.option   :allbut,        Boolean, false, "Summarize on all but specified attributes?"
       end
 
-      # (see Operator#each)
-      def each(&block)
+      # (see Operator#compile)
+      def compile
         if @allbut
-          op = Engine::Summarize::Hash.new(input, by, summarization, allbut)
-          op.each(&block)
+          Engine::Summarize::Hash.new(operand, by, summarization, allbut)
         else
-          op = Engine::Sort.new(input, by.to_ordering)
+          op = Engine::Sort.new(operand, by.to_ordering)
           op = Engine::Summarize::Cesure.new(op, by, summarization, allbut)
-          op.each(&block)
+          op
         end
       end
   

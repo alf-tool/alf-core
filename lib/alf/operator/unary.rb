@@ -5,7 +5,7 @@ module Alf
     #
     module Unary
       include Operator 
-      
+
       # 
       # Sets the operator input
       #
@@ -16,14 +16,15 @@ module Alf
       end
 
       protected
-    
+
       #
       # Simply returns the first dataset
       #
       def input
         Iterator.coerce(datasets.first, environment)
       end
-      
+      alias :operand :input
+
       # 
       # Yields the block with each input tuple.
       #
@@ -32,7 +33,7 @@ module Alf
       def each_input_tuple
         input.each(&Proc.new)
       end
-      
+
     end # module Unary
   end # module Operator
 end # module Alf

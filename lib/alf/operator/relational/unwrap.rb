@@ -7,9 +7,9 @@ module Alf
         s.argument :attribute, AttrName, :wrapped
       end
 
-      # (see Operator#each)
-      def each(&block)
-        Engine::Unwrap.new(input, attribute).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Unwrap.new(operand, attribute)
       end
 
     end # class Unwrap

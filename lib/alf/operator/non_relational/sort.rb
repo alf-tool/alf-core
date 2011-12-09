@@ -7,8 +7,9 @@ module Alf
         s.argument :ordering, Ordering, []
       end
 
-      def each(&block)
-        Engine::Sort.new(input, ordering).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Sort.new(input, ordering)
       end
 
     end # class Sort

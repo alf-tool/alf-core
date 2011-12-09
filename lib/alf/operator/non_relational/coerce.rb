@@ -7,8 +7,9 @@ module Alf
         s.argument :heading, Heading, {}
       end
 
-      def each(&block)
-        Engine::Coerce.new(input, heading).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Coerce.new(input, heading)
       end
 
     end # class Coerce

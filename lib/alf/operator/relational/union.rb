@@ -6,10 +6,11 @@ module Alf
       signature do |s|
       end
 
-      def each(&block)
+      # (see Operator#compile)
+      def compile
         op = Engine::Concat.new([left, right])
         op = Engine::Compact.new(op)
-        op.each(&block)
+        op
       end
 
     end # class Union

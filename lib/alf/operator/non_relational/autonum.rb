@@ -7,8 +7,9 @@ module Alf
         s.argument :as, AttrName, :autonum
       end
 
-      def each(&block)
-        Engine::Autonum.new(input, as).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Autonum.new(operand, as)
       end
 
     end # class Autonum

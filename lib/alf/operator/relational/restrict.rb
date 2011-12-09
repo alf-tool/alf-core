@@ -7,8 +7,8 @@ module Alf
         s.argument :predicate, TuplePredicate, "true"
       end
 
-      def each(&block)
-        Engine::Filter.new(input, predicate).each(&block)
+      def compile
+        Engine::Filter.new(operand, predicate)
       end
 
     end # class Restrict

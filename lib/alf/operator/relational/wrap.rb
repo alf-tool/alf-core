@@ -8,8 +8,9 @@ module Alf
         s.argument :as, AttrName, :wrapped
       end
 
-      def each(&block)
-        Engine::Wrap.new(input, attributes, as, false).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Wrap.new(operand, attributes, as, false)
       end
 
     end # class Wrap

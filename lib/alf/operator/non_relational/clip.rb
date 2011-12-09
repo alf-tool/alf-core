@@ -8,8 +8,9 @@ module Alf
         s.option   :allbut,     Boolean, false, "Apply an allbut clipping?"
       end
 
-      def each(&block)
-        Engine::Clip.new(input, attributes, allbut).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Clip.new(input, attributes, allbut)
       end
 
     end # class Clip

@@ -8,10 +8,11 @@ module Alf
         s.option   :strict,   Boolean, false, "Restrict to default attributes only?"
       end
 
-      def each(&block)
+      # (see Operator#compile)
+      def compile
         op = Engine::Defaults.new(input, defaults)
         op = Engine::Clip.new(op, defaults.to_attr_list, false) if strict
-        op.each(&block)
+        op
       end
 
     end # class Defaults

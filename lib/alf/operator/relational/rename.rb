@@ -7,8 +7,8 @@ module Alf
         s.argument :renaming, Renaming, {}
       end
 
-      def each(&block)
-        Engine::Rename.new(input, renaming).each(&block)
+      def compile
+        Engine::Rename.new(operand, renaming)
       end
 
     end # class Rename

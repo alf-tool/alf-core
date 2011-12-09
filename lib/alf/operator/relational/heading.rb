@@ -8,7 +8,7 @@ module Alf
       
       # (see Operator#each)
       def each
-        yield(input.inject(Alf::Heading::EMPTY){|h,t|
+        yield(operand.inject(Alf::Heading::EMPTY){|h,t|
           h + Tools.tuple_heading(t)
         }.to_h)
       end

@@ -7,9 +7,9 @@ module Alf
         s.argument :attribute, AttrName, :grouped
       end
 
-      # (see Operator#each)
-      def each(&block)
-        Engine::Ungroup.new(input, attribute).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Ungroup.new(operand, attribute)
       end
 
     end # class Ungroup

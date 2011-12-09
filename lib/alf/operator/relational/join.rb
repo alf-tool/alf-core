@@ -6,9 +6,9 @@ module Alf
       signature do |s|
       end
 
-      # (see Operator#each)
-      def each(&block)
-        Engine::Join::Hash.new(left, right).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Join::Hash.new(left, right)
       end
 
     end # class Join

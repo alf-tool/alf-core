@@ -7,8 +7,9 @@ module Alf
         s.argument :ext, TupleComputation, {}
       end
 
-      def each(&block)
-        Engine::SetAttr.new(input, ext).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::SetAttr.new(operand, ext)
       end
 
     end # class Extend

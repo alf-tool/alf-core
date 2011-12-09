@@ -6,8 +6,9 @@ module Alf
       signature do |s|
       end
 
-      def each(&block)
-        Engine::Compact.new(input).each(&block)
+      # (see Operator#compile)
+      def compile
+        Engine::Compact.new(input)
       end
 
     end # class Compact

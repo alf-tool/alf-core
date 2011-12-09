@@ -8,10 +8,11 @@ module Alf
         s.option   :allbut,     Boolean,  false, 'Project all but specified attributes?'
       end
 
-      def each(&block)
-        op = Engine::Clip.new(input, attributes, allbut)
+      # (see Operator#compile)
+      def compile
+        op = Engine::Clip.new(operand, attributes, allbut)
         op = Engine::Compact.new(op)
-        op.each(&block)
+        op
       end
 
     end # class Project

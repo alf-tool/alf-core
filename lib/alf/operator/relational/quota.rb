@@ -9,11 +9,11 @@ module Alf
         s.argument :summarization, Summarization, {}
       end
 
-      # (see Operator#each)
-      def each(&block)
-        op = Engine::Sort.new(input, @by.to_ordering + @order)
+      # (see Operator#compile)
+      def compile
+        op = Engine::Sort.new(operand, @by.to_ordering + @order)
         op = Engine::Quota::Cesure.new(op, @by, summarization)
-        op.each(&block)
+        op
       end
 
     end # class Quota
