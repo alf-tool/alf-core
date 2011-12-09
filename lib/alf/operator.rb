@@ -18,8 +18,6 @@ module Alf
     require 'alf/operator/nullary'
     require 'alf/operator/unary'
     require 'alf/operator/binary'
-    require 'alf/operator/cesure'
-    require 'alf/operator/shortcut'
     require 'alf/operator/experimental'
 
     # Namespace for non relational operators
