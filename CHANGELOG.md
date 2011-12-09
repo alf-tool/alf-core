@@ -20,6 +20,7 @@
 
 * Bumped ruby.noe to 1.6.0
 * Bumped rspec to 1.7.0
+* Bumped sequel to 3.30.0
 
 # 0.10.1 / 2011-08-31
 
