@@ -8,7 +8,7 @@ module Alf
     # state-less reader (that is, tuples are not all loaded in memory at once).
     #
     class Rash < Reader
-  
+
       # (see Reader#line2tuple)
       def line2tuple(line)
         begin
@@ -21,8 +21,8 @@ module Alf
           return h
         end
       end
-  
-      Reader.register(:rash, [".rash"], self)  
+
+      Reader.register(:rash, [".rash"], self)
     end # class Rash
   end # class Reader
 end # module Alf
