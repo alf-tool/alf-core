@@ -32,7 +32,7 @@ module Alf
       # @param [Object] req an optional requester, typically a super command
       # @return [Iterator] an Iterator with query result
       def run(argv, req = nil)
-        inst, operands = from_argv(argv)
+        operands, args, options = signature.argv2args(argv)
 
         # find standard input reader
         stdin_reader = if req && req.respond_to?(:stdin_reader)
@@ -49,13 +49,13 @@ module Alf
         operands = if nullary?
           []
         elsif unary?
-          operands.last
+          [operands.last]
         elsif binary?
           operands[-2..-1]
         end
 
-        inst.pipe(operands, req && req.environment)
-        inst
+        init_args = [operands] + args + [options]
+        new(*init_args)
       end
 
       # @return true if this operator is a zero-ary operator, false otherwise
@@ -84,13 +84,6 @@ module Alf
         else
           @signature ||= Signature.new(self)
         end
-      end
-
-      private
-
-      # Factors an operator instance from commandline arguments
-      def from_argv(argv)
-        new signature.argv2args(argv)
       end
 
     end # module ClassMethods

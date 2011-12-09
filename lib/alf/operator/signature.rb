@@ -133,7 +133,7 @@ module Alf
       end
 
       # Converts commandline arguments to operator constructor arguments
-      def argv2args(argv, environment = nil)
+      def argv2args(argv)
         # First split over --
         argv = Quickl.split_commandline_args(argv)
 
@@ -144,9 +144,6 @@ module Alf
 
         # Operands are what rest in argv[0] now
         oper = argv.shift
-        if environment
-          oper = oper.map{|op| Iterator.coerce(op, environment)}
-        end
 
         # Parse the rest
         args = []

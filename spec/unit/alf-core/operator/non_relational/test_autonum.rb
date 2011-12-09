@@ -28,8 +28,7 @@ module Alf
         end
 
         describe "When factored from commandline args" do
-          let(:operator){ Autonum.run([]) }
-          before{ operator.pipe(input) }
+          let(:operator){ Autonum.run([input]) }
           it{ should == expected }
         end
 
@@ -49,8 +48,7 @@ module Alf
         end
 
         describe "When factored from commandline args" do
-          let(:operator){ Autonum.run(["--", "unique"]) }
-          before{ operator.pipe(input) }
+          let(:operator){ Autonum.run([input, "--", "unique"]) }
           it{ should == expected }
         end
 
