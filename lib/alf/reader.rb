@@ -30,7 +30,7 @@ module Alf
     include Iterator
 
     require 'alf/reader/class_methods'
-    require 'alf/reader/base'
+    require 'alf/reader/instance_methods'
     require 'alf/reader/rash'
     require 'alf/reader/alf_file'
   end # class Reader
