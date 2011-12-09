@@ -11,12 +11,7 @@ module Alf
       # @return [Environment] Environment to use (optional)
       attr_accessor :environment
 
-      # Create an operator instance
-      def initialize(*args)
-        signature.parse_args(args, self)
-      end
-
-      # 
+      #
       # Sets the operator input
       #
       def pipe(input, env = environment)

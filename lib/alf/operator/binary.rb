@@ -5,8 +5,13 @@ module Alf
     #
     module Binary
       include Operator 
-      
-      # 
+
+      # Create an operator instance
+      def initialize(*args)
+        signature.parse_args(args, self)
+      end
+
+      #
       # Sets the operator input
       #
       def pipe(input, env = environment)
@@ -16,17 +21,17 @@ module Alf
       end
 
       protected
-      
+
       # Returns the left operand
       def left
         Iterator.coerce(datasets.first, environment)
       end
-      
+
       # Returns the right operand
       def right
         Iterator.coerce(datasets.last, environment)
       end
-      
+
     end # module Binary
   end # module Operator
 end # module Alf

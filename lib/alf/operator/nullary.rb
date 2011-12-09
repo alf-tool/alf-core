@@ -5,7 +5,12 @@ module Alf
     #
     module Nullary
       include Operator 
-      
+
+      # Create an operator instance
+      def initialize(*args)
+        signature.parse_args(args, self)
+      end
+
       #
       # Sets the operator input
       #
