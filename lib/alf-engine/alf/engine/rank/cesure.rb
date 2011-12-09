@@ -6,7 +6,7 @@ module Alf
       # @return [Enumerable] The operand
       attr_reader :operand
 
-      # @return [Ordering] List of attributes that form the cesure key
+      # @return [AttrList] List of attributes that form the operand ordering
       attr_reader :by
 
       # @return [AttrName] Name of the introduced attribute
