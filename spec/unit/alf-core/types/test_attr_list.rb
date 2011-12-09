@@ -30,7 +30,10 @@ module Alf
 
       describe "when passed a TupleComputation" do
         let(:arg){ TupleComputation[:a => 12, :b => "Smith"] }
-        it{ should eq(AttrList.new([:a, :b])) }
+        specify{ 
+          subject.should be_a(AttrList) 
+          subject.to_a.to_set.should eq([:a, :b].to_set)
+        }
       end
 
       describe "when passed an array" do
