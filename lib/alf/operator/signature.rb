@@ -5,16 +5,16 @@ module Alf
 
       # @return [Class] the operator class to which this signature belongs
       attr_reader :operator
-      
+
       # @return [Array] signature arguments
       attr_reader :arguments
 
       # @return [Array] signature options
       attr_reader :options
 
+      # Creates an empty signature instance
       #
-      # Creates a signature instance
-      #
+      # @param [Class] the operator class to which this signature belongs
       def initialize(operator)
         @operator = operator
         @arguments = []
@@ -22,45 +22,37 @@ module Alf
         yield(self) if block_given?
       end
 
-      #
       # Adds an argument to the signature
       #
       # @param [Symbol] name argument name
       # @param [Class] domain argument domain
       # @param [Object] default (optional) default value
-      #
       def argument(name, domain, default = nil, descr = nil)
         arguments << [name, domain, default, descr]
       end
 
-      #
       # Adds an option to the signature
       # 
       # @param [Symbol] name argument name
       # @param [Class] domain argument domain
       # @param [Object] default (optional) default value
-      #
       def option(name, domain, default = nil, descr = nil)
         options << [name, domain, default, descr]
       end
 
-      #
       # Returns default options as a Hash
       #
       # @return [Hash] the default options
-      #
       def default_options
         @default_options ||=
           Hash[options.select{|opt| !opt[2].nil? }.
-                       collect{|opt| [opt[0], opt[2]]}]
+                       map{|opt| [opt[0], opt[2]]}]
       end
 
-      #
       # Fills an OptionParser instance according to signature options.
       #
-      # @param [OptionParser] opt an parser instance, to fill with parse options
+      # @param [OptionParser] opt the parser to fill with options
       # @return [OptionParser] `opt`
-      #
       def fill_option_parser(opt, receiver)
         options.each do |option|
           name, dom, defa, descr = option
@@ -71,24 +63,20 @@ module Alf
         opt
       end
 
-      #
       # Returns an option parser instance bound to a given `receiver` object
       #
       # @return [OptionParser] an parser instance, ready to parse options and
       #         install them on `receiver` 
-      #
       def option_parser(receiver)
         fill_option_parser(OptionParser.new, receiver)
       end
-      
-      #
+
       # Installs the signature on the operator class
       #
       # This method installs an attr reader and an attr writer for each
       # signature argument and each signature option.
       #
       # @return [Hash] the default options to use
-      #
       def install
         clazz = operator
         code = (arguments + options).each{|siginfo|
@@ -101,14 +89,12 @@ module Alf
         }
         default_options
       end
-      
-      #
+
       # Parses arguments `args` passed to the operator `initialize` and 
       # sets attributes accordingly on `receiver`.
       #
       # @param [Array] args an array of initialize arguments
       # @param [Operator] receiver an operator instance
-      #
       def parse_args(args, receiver)
         invalid_args!(args) if args.size > (1+arguments.size)
 
@@ -129,14 +115,12 @@ module Alf
           receiver.send(:"#{name}=", val)
         end
       end
-      
-      #
-      # Parses arguments `args` used to create an operator initialize from
+
+      # Parses arguments `argv` used to create an operator initialize from
       # commandline arguments and sets attributes accordingly on `receiver`.
       #
       # @param [Array] argv an array of commandline arguments
       # @param [Operator] receiver an operator instance
-      #
       def parse_argv(argv, receiver)
         # First split over --
         argv = Quickl.split_commandline_args(argv)
@@ -158,7 +142,6 @@ module Alf
         operands
       end
 
-      #
       # Collects signature values on a given operator.
       #
       # This methods returns a triple `[datasets, arguments, options]` with
@@ -168,26 +151,22 @@ module Alf
       #                   `self.operator`
       # @return [Array] a triple [datasets, arguments, options] with operands, 
       #                 then signature values
-      #
       def collect_on(op)
-        oper = op.datasets
-        oper = [oper] unless oper.is_a?(Array)
-        args = arguments.collect{|name,_| op.send(name) }
-        opts = Hash[options.collect{|name,dom,defa,_| 
+        oper = op.operands
+        args = arguments.map{|name,_| op.send(name) }
+        opts = Hash[options.map{|name,dom,defa,_| 
           val = op.send(name)
           (val == defa) ? nil : [name, val]
         }.compact]
         [oper, args, opts]
       end
 
-      #
       # Returns a lispy synopsis for this signature
       #
       # Example:
       #
       #     Alf::Operator::Relational::Project.signature.to_shell
       #     # => "(project operand, attributes:AttrList, {allbut: Boolean})"
-      #
       def to_lispy
         cmd  = operator.command_name.to_s.gsub('-', '_')
         oper = operator.nullary? ? "" :
@@ -209,14 +188,12 @@ module Alf
         "(#{cmd} #{argopt}".strip + ")"
       end
 
-      #
       # Returns a shell synopsis for this signature.
       #
       # Example:
       #
       #     Alf::Operator::Relational::Project.signature.to_shell
       #     # => "alf project [--allbut] [OPERAND] -- ATTRIBUTES"
-      #
       def to_shell
         oper = operator.nullary? ? "" :
               (operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT")
@@ -236,14 +213,14 @@ module Alf
       def parse_xxx(args, coercer)
         arguments.zip(args).collect do |sigpart,subargs|
           name, dom, default = sigpart
-          
+
           # coercion
           val = if Array(subargs).empty?
             Tools.coerce(default, dom)
           else
             dom.send(coercer, subargs)
           end
-          
+
           # check and yield
           if val.nil?
             raise ArgumentError, "Invalid `#{subargs.inspect}` for #{sigpart.inspect}"
@@ -252,7 +229,7 @@ module Alf
           end
         end
       end
-      
+
       def invalid_args!(args)
         raise ArgumentError, "Invalid `#{args.inspect}` for #{self}"
       end
