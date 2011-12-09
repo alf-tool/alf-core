@@ -162,6 +162,11 @@ module Alf
 
     end # project
 
+    it 'should to_a' do
+      AttrList[:a, :b].to_a.should eq([:a, :b])
+      AttrList[].to_a.should eq([])
+    end
+
     it "should define a value" do
       l1 = AttrList.new [:a, :b]
       l2 = AttrList.new [:a, :b]

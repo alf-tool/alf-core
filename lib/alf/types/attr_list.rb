@@ -133,6 +133,13 @@ module Alf
         attributes.hash
       end
 
+      # Converts to an array of attribute names.
+      #
+      # @return [Array<AttrName>] and array of attribute names
+      def to_a
+        attributes.dup
+      end
+
       # Converts to an attribute list.
       #
       # @return [AttrList] return self
