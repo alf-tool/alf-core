@@ -6,25 +6,9 @@ module Alf
     module Unary
       include Operator 
 
-      # Create an operator instance
-      def initialize(*args)
-        signature.parse_args(args, self)
-      end
-
-      # 
-      # Sets the operator input
-      #
-      def pipe(input, env = environment)
-        self.environment = env
-        self.datasets = [ input ]
-        self
-      end
-
-      protected
-
-      # Simply returns the first dataset
+      # Simply returns the first operand
       def operand
-        Iterator.coerce(datasets.first, environment)
+        operands.first
       end
 
     end # module Unary
