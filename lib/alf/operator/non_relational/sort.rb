@@ -9,7 +9,7 @@ module Alf
 
       # (see Operator#compile)
       def compile
-        Engine::Sort.new(input, ordering)
+        Engine::Sort.new(operand, ordering)
       end
 
     end # class Sort

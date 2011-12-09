@@ -9,7 +9,7 @@ module Alf
 
       # (see Operator#compile)
       def compile
-        Engine::Coerce.new(input, heading)
+        Engine::Coerce.new(operand, heading)
       end
 
     end # class Coerce

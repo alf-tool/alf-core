@@ -8,7 +8,7 @@ module Alf
 
       # (see Operator#compile)
       def compile
-        Engine::Compact.new(input)
+        Engine::Compact.new(operand)
       end
 
     end # class Compact

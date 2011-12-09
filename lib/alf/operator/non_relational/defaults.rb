@@ -10,7 +10,7 @@ module Alf
 
       # (see Operator#compile)
       def compile
-        op = Engine::Defaults.new(input, defaults)
+        op = Engine::Defaults.new(operand, defaults)
         op = Engine::Clip.new(op, defaults.to_attr_list, false) if strict
         op
       end
