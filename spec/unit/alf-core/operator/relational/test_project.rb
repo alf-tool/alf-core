@@ -2,74 +2,71 @@ require 'spec_helper'
 module Alf
   module Operator::Relational
     describe Project do
-        
+
       let(:operator_class){ Project }
       it_should_behave_like("An operator class")
-        
+
       let(:input) {[
         {:a => "a", :b => "b"},
         {:a => "a", :b => "b"},
       ]}
-  
+
       subject{ operator.to_a }
-  
-      describe "when used without --allbut" do
+
+      context "--no-allbut" do
         let(:expected){[{:a => "a"}]}
-  
-        describe "and factored with commandline args" do
-          let(:operator){ Project.run(["--", 'a']) }
-          before{ operator.pipe(input) }
-          it { should == expected } 
+
+        context "with .run" do
+          let(:operator){ Project.run([input, "--", 'a']) }
+          it { should eq(expected) } 
         end
-  
-        describe "and factored with Lispy" do
+
+        context "with Lispy" do
           let(:operator){ Lispy.project(input, [:a]) }
-          it { should == expected } 
+          it { should eq(expected) } 
         end
-  
       end # --no-allbut
-  
-      describe "when used with --allbut" do
+
+      context "--allbut" do
         let(:expected){[{:b => "b"}]}
-  
-        describe "and factored with commandline args" do
-          let(:operator){ Project.run(['--allbut', '--', 'a']) }
-          before{ operator.pipe(input) }
-          it { should == expected } 
+
+        context "and factored with commandline args" do
+          let(:operator){ Project.run([input, '--allbut', '--', 'a']) }
+          it { should eq(expected) } 
         end
-  
-        describe "and factored with Lispy#project" do
+
+        context "and factored with Lispy#project" do
           let(:operator){ Lispy.project(input, [:a], :allbut => true) }
-          it { should == expected } 
+          it { should eq(expected) } 
         end
-  
-        describe "and factored with Lispy#allbut" do
+
+        context "and factored with Lispy#allbut" do
           let(:operator){ Lispy.allbut(input, [:a]) }
-          it { should == expected } 
+          it { should eq(expected) } 
         end
-  
+
       end # --allbut
-      
-      describe "when all is projected" do
+
+      context "when all is projected" do
         let(:expected){[{}]}
-        
-        describe "when input is not empty" do
+
+        context "with empty attributes" do
           let(:operator){ Lispy.project(input, []) }
-          it { should == expected } 
+          it { should eq(expected) } 
         end
-        
-        describe "when input is empty" do
+
+        context "when empty attributes and input" do
           let(:operator){ Lispy.project([], []) }
           it { should == [] } 
         end
-        
-        describe "when allbut is used" do
+
+        context "--allbut" do
           let(:operator){ Lispy.project(input, [:a, :b], :allbut => true) }
-          it { should == expected } 
+          it { should eq(expected) } 
         end
-        
+
       end # all attributes projected
-  
+
     end 
   end
 end
