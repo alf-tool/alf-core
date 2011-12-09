@@ -1,11 +1,11 @@
 module Alf
   module Lispy
-    
+
     alias :ruby_extend :extend
-    
+
     # The environment
     attr_accessor :environment
-    
+
     #
     # Compiles a query expression given by a String or a block and returns
     # the result (typically a tuple iterator)
@@ -31,7 +31,7 @@ module Alf
         (path ? Kernel.eval(expr, b, path) : Kernel.eval(expr, b))
       end
     end
-  
+
     #
     # Evaluates a query expression given by a String or a block and returns
     # the result as an in-memory relation (Alf::Relation)
@@ -55,7 +55,7 @@ module Alf
         compiled
       end
     end
-    
+
     #
     # Coerces `h` to a valid tuple.
     #
@@ -68,7 +68,7 @@ module Alf
       end
       h
     end
-    
+
     #
     # Coerces `args` to a valid relation.
     #
@@ -94,16 +94,16 @@ module Alf
       if op_class.unary?
         define_method(meth_name) do |child, *args|
           child = Iterator.coerce(child, environment)
-          op_class.new(*args).pipe(child, environment)
+          op_class.new([child], *args)
         end
       elsif op_class.binary?
         define_method(meth_name) do |left, right, *args|
-          operands = [left, right].collect{|x| Iterator.coerce(x, environment)}
-          op_class.new(*args).pipe(operands, environment)
+          operands = [left, right].map{|x| Iterator.coerce(x, environment)}
+          op_class.new(operands, *args)
         end
       elsif op_class.nullary?
         define_method(meth_name) do |*args|
-          op_class.new(*args).pipe(nil, environment)
+          op_class.new([], *args)
         end
       else
         raise "Unexpected operator #{op_class}"
@@ -127,7 +127,7 @@ module Alf
     def allbut(child, attributes)
       (project child, attributes, :allbut => true)
     end
-  
+
     # 
     # Runs a command as in shell.
     #
@@ -148,10 +148,10 @@ module Alf
     end
 
     private 
-    
+
     def _clean_binding
       binding
     end
-  
+
   end # module Lispy
 end # module Alf
