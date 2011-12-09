@@ -19,7 +19,7 @@ module Alf
     let(:h2){ Heading.new(:name => String, :price => Float) }
 
     it 'should be Enumerable' do
-      h2.map{|k,v| [k,v]}.should eq([[:name, String], [:price, Float]])
+      h2.map{|k,v| [k,v]}.to_set.should eq([[:name, String], [:price, Float]].to_set)
     end
 
     describe "coerce" do
