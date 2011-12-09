@@ -19,4 +19,5 @@ require 'alf/engine/semi'
 require 'alf/engine/wrap'
 require 'alf/engine/unwrap'
 require 'alf/engine/summarize'
+require 'alf/engine/rank'
 
