@@ -1,10 +1,16 @@
 # 0.10.2 / FIX ME
 
-## Possibly broken APIs (mostly private sections)
+## Possibly broken APIs (private APIs)
 
+* All pipe() methods have been removed and replaced by arguments taken at
+  construction time. This affects the implementation of operators and may
+  require changes to contributed readers and renderers.
+* Alf::Operator::Base    -> Alf::Operator::InstanceMethods
+* Alf::Reader::Base      -> Alf::Reader::InstanceMethods
+* Alf::Rendered::Base    -> Alf::Rendered::InstanceMethods
 * Alf::Environment::Base -> Alf::Environment::InstanceMethods
+* Alf::Aggregator::Base  -> Alf::Aggregator::InstanceMethods
 * Alf::Environment::Explicit has been removed as well as associated tools.
-* Alf::Aggregator::Base -> Alf::Aggregator::InstanceMethods
 * Ordering#order_of has been removed
 * Ordering#order_by has been removed
 * Alf::Tools.coerce now raise a Alf::CoercionError instead of a Myrrha::Error
