@@ -13,8 +13,15 @@ module Alf
   module Iterator
     include Enumerable
 
+    # Converts this iterator to an in-memory Relation.
+    #
+    # @return [Relation] a relation instance, as the set of tuples
+    #         that would be yield by this iterator.
+    def to_rel
+      Relation::coerce(self)
+    end
+
     require 'alf/iterator/class_methods'
-    require 'alf/iterator/base'
     require 'alf/iterator/proxy'
   end # module Iterator
 end # module Alf
