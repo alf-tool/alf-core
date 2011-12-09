@@ -25,7 +25,7 @@ module Alf
         let(:op){ 
           Relational::Project.new([:suppliers], [:name, :city], :allbut => true) 
         }
-        it{ should eq([[:suppliers], [AttrList[:name, :city]], :allbut => true]) }
+        it{ should eq([[:suppliers], [AttrList[:name, :city]], {:allbut => true}]) }
       end
 
       describe "on a dyadic op" do
