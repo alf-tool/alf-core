@@ -57,7 +57,11 @@ module Alf
         options.each do |option|
           name, dom, defa, descr = option
           opt.on(option_name(option), descr || "") do |val|
-            receiver.send(:"#{name}=", val)
+            if receiver.is_a?(Hash)
+              receiver[name] = val
+            else
+              receiver.send(:"#{name}=", val)
+            end
           end
         end
         opt
@@ -128,30 +132,29 @@ module Alf
         receiver
       end
 
-      # Parses arguments `argv` used to create an operator initialize from
-      # commandline arguments and sets attributes accordingly on `receiver`.
-      #
-      # @param [Array] argv an array of commandline arguments
-      # @param [Operator] receiver an operator instance
-      def parse_argv(argv, receiver)
+      # Converts commandline arguments to operator constructor arguments
+      def argv2args(argv, environment = nil)
         # First split over --
         argv = Quickl.split_commandline_args(argv)
 
-        # Set default options then parse those in first group
-        default_options.each_pair do |name,val|
-          receiver.send(:"#{name}=", val)
-        end
-        argv[0] = option_parser(receiver).parse!(argv[0])
+        # Build the options
+        opts = {}
+        argv[0] = option_parser(opts).parse!(argv[0])
+        opts = default_options.merge(opts)
 
-        # Remove operands
-        operands = argv.shift
+        # Operands are what rest in argv[0] now
+        oper = argv.shift
+        if environment
+          oper = oper.map{|op| Iterator.coerce(op, environment)}
+        end
 
         # Parse the rest
+        args = []
         parse_xxx(argv, :from_argv) do |name,val|
-          receiver.send(:"#{name}=", val)
+          args << val
         end
 
-        operands
+        [oper, args, opts]
       end
 
       # Collects signature values on a given operator.
@@ -245,7 +248,7 @@ module Alf
       def invalid_args!(args)
         raise ArgumentError, "Invalid `#{args.inspect}` for #{self}", caller
       end
-      
+
     end # class Signature
   end # module Operator
 end # module Alf

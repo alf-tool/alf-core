@@ -6,41 +6,31 @@ module Alf
     # 
     module ClassMethods
 
-      #
-      # Returns false
-      #
+      # @return false
       def command?
         false
       end
-    
-      #
-      # Returns true
-      #
+
+      # @return true
       def operator?
         true
       end
 
-      #
-      # Returns true if this is a relational operator, false otherwise
-      #
+      # @return true if this is a relational operator, false otherwise
       def relational?
         ancestors.include?(Relational)
       end
-    
-      #
-      # Returns true if this is a non relational operator, false otherwise
-      #
+
+      # @return true if this is a non relational operator, false otherwise
       def non_relational?
         ancestors.include?(NonRelational)
       end
-    
-      #
-      # Runs the command on commandline arguments
+
+      # Runs the command on commandline arguments `argv`
       #
       # @param [Array] argv an array of commandline arguments, typically ARGV
       # @param [Object] req an optional requester, typically a super command
       # @return [Iterator] an Iterator with query result
-      #
       def run(argv, req = nil)
         inst, operands = from_argv(argv)
 
@@ -68,30 +58,22 @@ module Alf
         inst
       end
 
-      #
-      # Returns true if this operator is a zero-ary operator, false otherwise
-      #
+      # @return true if this operator is a zero-ary operator, false otherwise
       def nullary?
         ancestors.include?(Operator::Nullary)
       end
 
-      #
-      # Returns true if this operator is an unary operator, false otherwise
-      #
+      # @return true if this operator is an unary operator, false otherwise
       def unary?
         ancestors.include?(Operator::Unary)
       end
 
-      #
-      # Returns true if this operator is a binary operator, false otherwise
-      #
+      # @return true if this operator is a binary operator, false otherwise
       def binary?
         ancestors.include?(Operator::Binary)
       end
 
-      #
       # Installs or set the operator signature
-      #
       def signature
         if block_given?
           @signature = Signature.new(self, &Proc.new) 
@@ -103,30 +85,26 @@ module Alf
           @signature ||= Signature.new(self)
         end
       end
-      
-      private 
+
+      private
 
       # Factors an operator instance from commandline arguments
       def from_argv(argv)
-        inst = new
-        operands = inst.signature.parse_argv(argv, inst)
-        [inst, operands]
+        new signature.argv2args(argv)
       end
 
     end # module ClassMethods
 
-    #
     # Yields non-relational then relational operators, in turn.
-    #
     def self.each
       Operator::NonRelational.each{|x| yield(x)}
       Operator::Relational.each{|x| yield(x)}
     end
-    
+
     # Ensures that the Introspection module is set on real operators
     def self.included(mod)
       mod.extend(ClassMethods) if mod.is_a?(Class)
     end
-      
+
   end # module Operator
 end # module Alf
