@@ -48,7 +48,7 @@ module Alf
 
       # Iterator::Proxy -> :suppliers
       r.upon(lambda{|v,rd| Iterator::Proxy === v}) do |v, rd|
-        Tools.to_ruby_literal(v.dataset)
+        Tools.to_ruby_literal(v.name)
       end
 
       # TupleExpression -> ->(){ ... }

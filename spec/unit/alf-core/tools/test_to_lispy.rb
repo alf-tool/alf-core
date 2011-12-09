@@ -12,7 +12,7 @@ module Alf
     subject{ Tools.to_lispy(value) } 
 
     describe "on a Proxy" do
-      let(:value){ Iterator::Proxy.new(nil, :suppliers) }
+      let(:value){ Iterator::Proxy.new(Environment.examples, :suppliers) }
       it { should eq(":suppliers") }
     end
 
