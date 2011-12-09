@@ -22,37 +22,34 @@ module Alf
           {:a => "a", :autonum => 2},
         ]}
 
-        describe "When factored with Lispy" do 
+        context "with Lispy" do 
           let(:operator){ Lispy.autonum(input) }
           it{ should == expected }
         end
 
-        describe "When factored from commandline args" do
+        context "with .run" do
           let(:operator){ Autonum.run([input]) }
           it{ should == expected }
         end
+      end # default attribute name
 
-      end
-
-      context "when providing an attribute name" do
-
+      context "with explicit attribute name" do
         let(:expected){[
           {:a => "a", :unique => 0},
           {:a => "b", :unique => 1},
           {:a => "a", :unique => 2},
         ]}
 
-        describe "When factored with Lispy" do 
+        context "with Lispy" do 
           let(:operator){ Lispy.autonum(input, :unique) }
           it{ should == expected }
         end
 
-        describe "When factored from commandline args" do
+        context "with .run" do
           let(:operator){ Autonum.run([input, "--", "unique"]) }
           it{ should == expected }
         end
-
-      end
+      end # explicit attribute name
 
     end
   end

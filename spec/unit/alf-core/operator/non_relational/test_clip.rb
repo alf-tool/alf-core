@@ -12,29 +12,29 @@ module Alf
 
       subject{ operator.to_a }
 
-      describe "When used without --allbut" do
+      context "--no-allbut" do
         let(:expected){[{:a => "a"}]}
 
-        describe "when factored with Lispy" do
+        context "with Lispy" do
           let(:operator){ Lispy.clip(input, [:a]) }
           it { should == expected } 
         end
 
-        describe "when factored from commandline" do
+        context "with .run" do
           let(:operator){ Clip.run([input] + %w{-- a}) }
           it { should == expected } 
         end
       end # --no-allbut
 
-      describe "When used with --allbut" do
+      context "--allbut" do
         let(:expected){[{:b => "b"}]}
 
-        describe "when factored with Lispy" do
+        context "with Lispy" do
           let(:operator){ Lispy.clip(input, [:a], :allbut => true) }
           it { should == expected } 
         end
 
-        describe "when factored with commandline args" do
+        context "with .run" do
           let(:operator){ Clip.run([input] + %w{--allbut -- a}) }
           it { should == expected } 
         end
