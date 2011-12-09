@@ -9,10 +9,6 @@ shared_examples_for "An operator class" do
     operator_class.public_method_defined?(:run).should be_true
   end
   
-  it "should have a public pipe method" do
-    operator_class.public_method_defined?(:pipe).should be_true
-  end
-
   it "should have a public each method" do
     operator_class.public_method_defined?(:each).should be_true
   end
