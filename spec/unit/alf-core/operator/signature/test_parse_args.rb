@@ -2,55 +2,102 @@ require 'spec_helper'
 module Alf
   module Operator
     describe Signature, "#parse_args" do
-      
-      let(:clazz){ Class.new(Object) }
-      let(:receiver){ clazz.new }
+
+      class FakeOp
+        attr_accessor :operands
+      end
+      let(:receiver){ FakeOp.new }
+
       before{ 
         signature.install
       }
       subject{
         signature.parse_args(args, receiver)
-        receiver
       }
-        
-      describe "on a singleton signature with a AttrList" do
+
+      context "on a signature with arguments only" do
         let(:signature){ 
-          Signature.new(clazz) do |s|
+          Signature.new(FakeOp) do |s|
             s.argument :proj, AttrList
           end
         }
-        let(:args){ [%w{hello world}] }
-        specify{
-          subject.proj.should eq(AttrList.new([:hello, :world])) 
-        }
-      end
-      
-      describe "on a singleton signature with a default" do
+        let(:args){ [ [:operand], ["hello", "world"] ] }
+
+        it 'should return the receiver' do
+          subject.should eq(receiver)
+        end
+
+        it "should set the operands" do
+          subject.operands.should eq([:operand])
+        end
+
+        it 'should set the arguments' do
+          subject.proj.should eq(AttrList[:hello, :world]) 
+        end
+      end # arguments only
+
+      context "with default values for arguments" do
         let(:signature){ 
-          Signature.new(clazz) do |s|
+          Signature.new(FakeOp) do |s|
             s.argument :attrname, AttrName, :autonum
           end
         }
-        let(:args){ [] }
-        specify{
-          subject.attrname.should eq(:autonum) 
-        }
-      end
-      
-      describe "on a signature with options" do
+
+        context 'and passed' do
+          let(:args){ [[:operand], "hello"] }
+
+          it 'should not use the default value' do
+            subject.attrname.should eq(:hello) 
+          end
+        end
+
+        context 'and not passed' do
+          let(:args){ [[:operand]] }
+
+          it 'should use the default value' do
+            subject.attrname.should eq(:autonum) 
+          end
+        end
+      end # default values for arguments
+
+      context "on a signature with options" do
         let(:signature){
-          Signature.new(clazz) do |s|
+          Signature.new(FakeOp) do |s|
             s.argument :key, AttrList, []
             s.option   :allbut, Boolean, false
           end
         }
 
-        describe "when no option is provided" do
-          let(:args){ [[:hello, :world]] }
-          specify{
-            subject.key.should eql(AttrList.new([:hello, :world]))
+        context "when no option is provided" do
+          let(:args){ [[:operand], [:hello, :world]] }
+
+          it "should set the operands" do
+            subject.operands.should eq([:operand])
+          end
+
+          it 'should set the arguments' do
+            subject.key.should eq(AttrList[:hello, :world]) 
+          end
+
+          it 'should use the default values for options' do
             subject.allbut.should eql(false)
-          }
+          end
+        end
+
+        context "when option is provided" do
+          let(:args){ [[:operand], [:hello, :world], {:allbut => true}] }
+
+          it "should set the operands" do
+            subject.operands.should eq([:operand])
+          end
+
+          it 'should set the arguments' do
+            subject.key.should eq(AttrList[:hello, :world]) 
+          end
+
+          it 'should not use the default values for options' do
+            subject.allbut.should eql(true)
+          end
         end
 
       end

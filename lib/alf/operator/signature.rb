@@ -95,8 +95,18 @@ module Alf
       #
       # @param [Array] args an array of initialize arguments
       # @param [Operator] receiver an operator instance
+      # @return [Operator] installed `receiver`
       def parse_args(args, receiver)
-        invalid_args!(args) if args.size > (1+arguments.size)
+        # 1) check and set operands
+        unless args.first.is_a?(Array)
+          invalid_args!(args)
+        end
+        receiver.operands = args.shift
+
+        # 2) check and set options
+        if args.size > (1+arguments.size)
+          invalid_args!(args)
+        end
 
         # Merge default and provided options
         optargs = default_options
@@ -110,10 +120,12 @@ module Alf
           receiver.send(:"#{name}=", val)
         end
         
-        # Parse other arguments now
+        # 3) Parse other arguments now
         parse_xxx(args, :coerce) do |name,val|
           receiver.send(:"#{name}=", val)
         end
+
+        receiver
       end
 
       # Parses arguments `argv` used to create an operator initialize from
@@ -231,7 +243,7 @@ module Alf
       end
 
       def invalid_args!(args)
-        raise ArgumentError, "Invalid `#{args.inspect}` for #{self}"
+        raise ArgumentError, "Invalid `#{args.inspect}` for #{self}", caller
       end
       
     end # class Signature

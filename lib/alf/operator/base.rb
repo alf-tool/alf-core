@@ -9,8 +9,7 @@ module Alf
       attr_accessor :operands
 
       # Create an operator instance
-      def initialize(operands, *args)
-        @operands = operands
+      def initialize(*args)
         signature.parse_args(args, self)
       end
 
