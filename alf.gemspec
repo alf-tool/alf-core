@@ -124,17 +124,17 @@ Gem::Specification.new do |s|
   # for each development dependency. These gems are required for developers
   #
   s.add_development_dependency("rake", "~> 0.9.2")
-  s.add_development_dependency("rspec", "~> 2.6.0")
+  s.add_development_dependency("rspec", "~> 2.7.0")
   s.add_development_dependency("wlang", "~> 0.10.2")
   s.add_development_dependency("yard", "~> 0.7.2")
-  s.add_development_dependency("bluecloth", "~> 2.1.0")
+  s.add_development_dependency("bluecloth", "~> 2.2.0")
   s.add_development_dependency("redcarpet", "~> 1.17.2")
   s.add_development_dependency("fastercsv", "~> 1.5.4")
   s.add_development_dependency("request-log-analyzer", "~> 1.11.0")
   s.add_development_dependency("sequel", "~> 3.25.0")
   s.add_development_dependency("sqlite3", "~> 1.3.0")
   s.add_development_dependency("highline", "~> 1.6.2")
-  s.add_dependency("quickl", "~> 0.4.1")
+  s.add_dependency("quickl", "~> 0.4.2")
   s.add_dependency("myrrha", "~> 1.2.1")
 
   # The version of ruby required by this gem

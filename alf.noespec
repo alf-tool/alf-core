@@ -1,6 +1,6 @@
 template-info:
   name: "ruby"
-  version: 1.5.1
+  version: 1.6.0
   manifest:
     tasks/spec_test.rake:
       ignore: true
@@ -16,7 +16,7 @@ variables:
   upper:
     Alf
   version:
-    0.10.1
+    0.11.0
   summary: |-
     Relational Algebra at your fingertips
   description: |-
@@ -33,14 +33,14 @@ variables:
     - http://rubygems.org/gems/alf
     - http://rubydoc.info/gems/alf
   dependencies: 
-    - {name: quickl,       version: "~> 0.4.1",  groups: [runtime      ]}
+    - {name: quickl,       version: "~> 0.4.2",  groups: [runtime      ]}
     - {name: myrrha,       version: "~> 1.2.1",  groups: [runtime      ]}
     - {name: rake,         version: "~> 0.9.2",  groups: [test, release]}
-    - {name: rspec,        version: "~> 2.6.0",  groups: [test, release]}
+    - {name: rspec,        version: "~> 2.7.0",  groups: [test, release]}
     - {name: wlang,        version: "~> 0.10.2", groups: [release      ]}
     #- {name: rcov,         version: "~> 0.9.9",  groups: [doc          ]}
     - {name: yard,         version: "~> 0.7.2",  groups: [doc          ]}
-    - {name: bluecloth,    version: "~> 2.1.0",  groups: [doc          ]}
+    - {name: bluecloth,    version: "~> 2.2.0",  groups: [doc          ]}
     - {name: redcarpet,    version: "~> 1.17.2", groups: [doc          ]}
     - {name: fastercsv,    version: "~> 1.5.4",  groups: [extra        ]}
     - {name: request-log-analyzer, version: "~> 1.11.0", groups: [extra]}
