@@ -2,16 +2,16 @@ require 'spec_helper'
 module Alf
   module Operator::Relational
     describe Join do
-        
+
       let(:suppliers){Relation.coerce [
         {:sid => 'S1', :city => 'London'},
         {:sid => 'S2', :city => 'Paris'},
         {:sid => 'S3', :city => 'Paris'},
         {:sid => 'S4', :city => 'London'},
         {:sid => 'S5', :city => 'Athens'},
-      ]} 
-      
-      describe "when applied to sub-relations" do
+      ]}
+
+      context "when applied to sub-relations" do
         let(:suppliers_by_city){Relation.coerce( 
           Lispy.group(suppliers, [:sid], :suppliers)
         )}
@@ -28,9 +28,9 @@ module Alf
         subject{Relation.coerce(
           Lispy.join(suppliers_by_city, right)
         )}
-        it{ should == expected }
+        it{ should eq(expected) }
       end
-      
+
     end
   end
 end
