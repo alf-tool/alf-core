@@ -61,6 +61,28 @@ module Alf
 
     end # from argv
 
+    describe "least" do
+
+      it 'should invoke least on each aggregator' do
+        sum = Summarization.coerce(["s", "avg{ qty }", "m", "max{ size }"])
+        sum.least.should eq({:s => [0.0, 0.0], :m => nil})
+      end
+
+    end # least
+
+    describe "summarize" do
+
+      it 'should summarize as expected' do
+        rel = [
+          {:qty => 10, :size => 12},
+          {:qty => 5,  :size => 5}
+        ]
+        sum = Summarization.coerce(["s", "avg{ qty }", "m", "max{ size }"])
+        sum.summarize(rel).should eq({:s => 7.5, :m => 12})
+      end
+
+    end # describe 
+
     specify "least -> happens -> finalize" do
       summ = Summarization.coerce(["s", "sum{ qty }", "m", "max{ size }"])
       (x = summ.least).should eql(:s => 0, :m => nil)

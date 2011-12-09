@@ -85,6 +85,14 @@ module Alf
         }]
       end
 
+      # Summarizes an enumeration of tuples.
+      #
+      # @param [Enumerable] enum an enumeration of tuples
+      # @returns [Tuple] The summarization of `enum`
+      def summarize(enum)
+        finalize(enum.inject(least){|m,t| happens(m,t)})
+      end
+
       # Returns a hash code.
       #
       # @return [Integer] a hash code for this expression
