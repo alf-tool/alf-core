@@ -21,4 +21,5 @@ require 'alf/engine/unwrap'
 require 'alf/engine/summarize'
 require 'alf/engine/rank'
 require 'alf/engine/quota'
+require 'alf/engine/ungroup'
 

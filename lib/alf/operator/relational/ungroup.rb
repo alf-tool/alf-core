@@ -1,25 +1,17 @@
 module Alf
   module Operator::Relational
     class Ungroup < Alf::Operator()
-      include Operator::Relational, Operator::Unary
-      
+      include Relational, Unary
+
       signature do |s|
-        s.argument :attr, AttrName, :grouped
+        s.argument :attribute, AttrName, :grouped
       end
-      
-      protected 
-  
-      # See Operator#_each
-      def _each
-        each_input_tuple do |tuple|
-          tuple = tuple.dup
-          subrel = tuple.delete(@attr)
-          subrel.each do |subtuple|
-            yield(tuple.merge(subtuple))
-          end
-        end
+
+      # (see Operator#each)
+      def each(&block)
+        Engine::Ungroup.new(input, attribute).each(&block)
       end
-  
+
     end # class Ungroup
   end # module Operator::Relational
 end # module Alf
