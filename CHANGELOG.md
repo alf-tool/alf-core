@@ -1,6 +1,6 @@
 # 0.11.0 / FIX ME
 
-## Possibly broken APIs (private APIs)
+## Broken APIs (private sections only)
 
 * All pipe() methods have been removed and replaced by arguments taken at
   construction time. This affects the implementation of operators and may
@@ -10,6 +10,7 @@
 * Alf::Rendered::Base    -> Alf::Rendered::InstanceMethods
 * Alf::Environment::Base -> Alf::Environment::InstanceMethods
 * Alf::Aggregator::Base  -> Alf::Aggregator::InstanceMethods
+* Alf::Buffer has been removed as well as the Sorted specialization.
 * Alf::Environment::Explicit has been removed as well as associated tools.
 * Ordering#order_of has been removed
 * Ordering#order_by has been removed

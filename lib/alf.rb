@@ -26,7 +26,6 @@ module Alf
   require 'alf/command'
   require 'alf/operator'
   require 'alf/aggregator'
-  require 'alf/buffer'
   require 'alf/relation'
   require 'alf/lispy'
 
