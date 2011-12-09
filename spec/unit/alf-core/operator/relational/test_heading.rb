@@ -17,14 +17,13 @@ module Alf
 
       subject{ operator.to_a }
 
-      describe "When factored with Lispy" do 
+      context "with Lispy" do 
         let(:operator){ Lispy.heading(input) }
         it{ should == expected }
       end
 
-      describe "When factored from commandline args" do
-        let(:operator){ Heading.run([]) }
-        before{ operator.pipe(input) }
+      context "with .run" do
+        let(:operator){ Heading.run([input]) }
         it{ should == expected }
       end
 
