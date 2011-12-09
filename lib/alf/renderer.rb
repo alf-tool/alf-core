@@ -3,8 +3,8 @@ module Alf
   # Renders a relation (given by any Iterator) in a specific format.
   #
   # A renderer takes an Iterator instance as input and renders it on an output
-  # stream. Renderers are **not** iterators themselves, even if they mimic the
-  # {#pipe} method. Their usage is made via the {#execute} method.
+  # stream. Renderers are **not** iterators themselves. Their usage is made 
+  # via their {#execute} method.
   #
   # Similarly to the {Reader} class, this one provides a registration mechanism
   # for specific output formats. The common scenario is as follows:
@@ -24,7 +24,7 @@ module Alf
   #
   class Renderer
     require 'alf/renderer/class_methods'
-    require 'alf/renderer/base'
+    require 'alf/renderer/instance_methods'
     require 'alf/renderer/rash'
     require 'alf/renderer/text'
 
