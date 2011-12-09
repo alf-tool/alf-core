@@ -2,14 +2,13 @@ require 'spec_helper'
 module Alf
   module Operator::NonRelational
     describe Generator do
-        
+
       let(:operator_class){ Generator }
       it_should_behave_like("An operator class")
-        
+
       subject{ operator.to_rel }
-  
-      describe "without providing anything" do
-        
+
+      context "empty args" do
         let(:expected){Relation[
           {:num => 1},
           {:num => 2},
@@ -22,57 +21,52 @@ module Alf
           {:num => 9},
           {:num => 10},
         ]}
-    
-        describe "When factored with Lispy" do 
+
+        context "with Lispy" do 
           let(:operator){ Lispy.generator() }
           it{ should == expected }
         end
-    
-        describe "When factored from commandline args" do
-          let(:operator){ Generator.run(%w{}) }
+
+        context "with .run" do
+          let(:operator){ Generator.run([]) }
           it{ should == expected }
         end
-  
-      end
-      
-      describe "when providing an size" do
-        
+      end # empty args
+
+      context "with a size" do
         let(:expected){Relation[
           {:num => 1},
           {:num => 2},
         ]}
-    
-        describe "When factored with Lispy" do 
+
+        context "When factored with Lispy" do 
           let(:operator){ Lispy.generator(2) }
           it{ should == expected }
         end
-    
-        describe "When factored from commandline args" do
+
+        context "When factored from commandline args" do
           let(:operator){ Generator.run(["--", "2"]) }
           it{ should == expected }
         end
-  
-      end
-      
-      describe "when providing a size and a name" do
-        
+      end # with a size
+
+      context "when providing a size and a name" do
         let(:expected){Relation[
           {:id => 1},
           {:id => 2},
         ]}
-    
-        describe "When factored with Lispy" do 
+
+        context "When factored with Lispy" do 
           let(:operator){ Lispy.generator(2, :id) }
           it{ should == expected }
         end
-    
-        describe "When factored from commandline args" do
+
+        context "When factored from commandline args" do
           let(:operator){ Generator.run(["--", "2", "--", "id"]) }
           it{ should == expected }
         end
-  
-      end
-      
+      end # size and name
+
     end 
   end
 end
