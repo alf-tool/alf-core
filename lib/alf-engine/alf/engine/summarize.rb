@@ -5,3 +5,4 @@ module Alf
   end # module Engine
 end # module Alf
 require 'alf/engine/summarize/cesure'
+require 'alf/engine/summarize/hash'
