@@ -1,4 +1,4 @@
-# 0.10.2 / FIX ME
+# 0.11.0 / FIX ME
 
 ## Possibly broken APIs (private APIs)
 
@@ -15,6 +15,11 @@
 * Ordering#order_by has been removed
 * Alf::Tools.coerce now raise a Alf::CoercionError instead of a Myrrha::Error
   in case of coercion failure
+
+## On the development side
+
+* Bumped ruby.noe to 1.6.0
+* Bumped rspec to 1.7.0
 
 # 0.10.1 / 2011-08-31
 
