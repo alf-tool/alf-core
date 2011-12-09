@@ -14,7 +14,7 @@ module Alf
 
     require 'alf/operator/class_methods'
     require 'alf/operator/signature'
-    require 'alf/operator/base'
+    require 'alf/operator/instance_methods'
     require 'alf/operator/nullary'
     require 'alf/operator/unary'
     require 'alf/operator/binary'

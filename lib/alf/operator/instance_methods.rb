@@ -3,7 +3,7 @@ module Alf
     #
     # Contains all methods for operator instances
     #
-    module Base
+    module InstanceMethods
 
       # @param [Array] operands Operator operands
       attr_accessor :operands
@@ -23,7 +23,7 @@ module Alf
         compile.each(&block)
       end
 
-    end # module Base
-    include Base
+    end # module InstanceMethods
+    include InstanceMethods
   end # module Operator
 end # module Alf
