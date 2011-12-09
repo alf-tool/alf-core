@@ -16,11 +16,6 @@ module Alf
         @dataset.each(&Proc.new)
       end
 
-      # (see Alf::Iterator#pipe)
-      def pipe(input, env = nil)
-        self
-      end
-
     end # class Iterator
   end # module Sequel
 end # module Alf
