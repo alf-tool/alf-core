@@ -139,13 +139,14 @@ module Alf
         else
           super
         end
-        
+        operator = Iterator.coerce(operator, environment) if operator
+
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
-          renderer_class = self.renderer_class ||= Renderer::Rash
-          renderer = renderer_class.new(rendering_options)
-          renderer.pipe(operator, environment).execute($stdout)
+          renderer_class = (self.renderer_class ||= Renderer::Rash)
+          renderer = renderer_class.new(operator, rendering_options)
+          renderer.execute($stdout)
         else
           operator
         end

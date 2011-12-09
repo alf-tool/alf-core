@@ -39,12 +39,11 @@ module Alf
         # normalize args
         args = argv.first
         args = [ stdin_reader ] if args.empty?
-        chain = args.first
+        chain = Iterator.coerce(args.first, requester && requester.environment)
 
         # put a sorter
         if argv[1]
-          sorter = Alf::Operator::NonRelational::Sort.new(argv[1])
-          chain  = sorter.pipe(chain, requester.environment)
+          chain = Alf::Operator::NonRelational::Sort.new([chain], argv[1])
         end
 
         chain
