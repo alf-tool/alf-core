@@ -28,7 +28,7 @@ module Alf
       end
 
       context "when a total ordering is used" do
-        let(:expected) {Alf::Relation[
+        let(:expected) {[
           {:pid => 'P1', :weight => 12.0, :rank => 0},
           {:pid => 'P5', :weight => 12.0, :rank => 1},
           {:pid => 'P4', :weight => 14.0, :rank => 2},
