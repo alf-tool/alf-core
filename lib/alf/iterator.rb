@@ -10,10 +10,6 @@ module Alf
   # operator implementation) should be marked with this module. This is the case
   # for all Readers and Operators defined in Alf.
   #
-  # Moreover, an Iterator should always define a {#pipe} method, which is the
-  # natural way to define the input and execution environment of operators and 
-  # readers.
-  #
   module Iterator
     include Enumerable
 
