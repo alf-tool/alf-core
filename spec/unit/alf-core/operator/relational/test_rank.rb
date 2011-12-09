@@ -2,11 +2,11 @@ require 'spec_helper'
 module Alf
   module Operator::Relational
     describe Rank do
-        
+
       let(:operator_class){ Rank }
       it_should_behave_like("An operator class")
-        
-      let(:input) {Alf::Relation[
+
+      let(:input) {[
         {:pid => 'P1', :weight => 12.0},
         {:pid => 'P2', :weight => 17.0},
         {:pid => 'P3', :weight => 17.0},
@@ -14,10 +14,10 @@ module Alf
         {:pid => 'P5', :weight => 12.0},
         {:pid => 'P6', :weight => 19.0}
       ]}
-  
+
       subject{ operator.to_rel }
 
-      describe "when a partial ordering is used" do
+      context "with partial ordering" do
         let(:expected) {Alf::Relation[
           {:pid => 'P1', :weight => 12.0, :rank => 0},
           {:pid => 'P5', :weight => 12.0, :rank => 0},
@@ -26,12 +26,11 @@ module Alf
           {:pid => 'P3', :weight => 17.0, :rank => 3},
           {:pid => 'P6', :weight => 19.0, :rank => 5}
         ]}
-        let(:operator){ Rank.new([:weight]) }
-        before{ operator.pipe(input) }
+        let(:operator){ Rank.run([input] + %w{-- weight}) }
         it{ should eq(expected) }
-      end
-    
-      describe "when a total ordering is used" do
+      end # partial ordering
+
+      describe "with total ordering" do
         let(:expected) {Alf::Relation[
           {:pid => 'P1', :weight => 12.0, :rank => 0},
           {:pid => 'P5', :weight => 12.0, :rank => 1},
@@ -40,11 +39,10 @@ module Alf
           {:pid => 'P3', :weight => 17.0, :rank => 4},
           {:pid => 'P6', :weight => 19.0, :rank => 5}
         ]}
-        let(:operator){ Rank.new([:weight, :pid]) }
-        before{ operator.pipe(input) }
+        let(:operator){ Rank.run([input] + %w{-- weight pid}) }
         it{ should eq(expected) }
-      end
-          
+      end # total ordering
+
     end
   end
 end

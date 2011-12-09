@@ -2,9 +2,7 @@ module Alf
   module Iterator
     module ClassMethods
 
-      # 
       # Coerces something to an iterator
-      #
       def coerce(arg, environment = nil)
         case arg
         when Iterator, Array
