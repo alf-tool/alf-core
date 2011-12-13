@@ -41,11 +41,7 @@ module Alf
       def reader(filepath, *args)
         if looks_a_path?(filepath)
           ext = File.extname(filepath.to_s)
-          if registered = readers.find{|r| r[1].include?(ext)}
-            registered[2].new(filepath.to_s, *args)
-          else
-            raise ArgumentError, "No registered reader for #{ext} (#{filepath})"
-          end
+          has_reader_for_ext!(ext).new(filepath.to_s, *args)
         elsif args.empty?
           coerce(filepath)
         else
@@ -73,12 +69,20 @@ module Alf
         end
       end
 
-      private 
+      private
 
       # Checks if `path` looks like a usable path
       def looks_a_path?(path)
         return false if path.is_a?(StringIO) 
         path.respond_to?(:to_str) or path.respond_to?(:to_path)
+      end
+
+      # @return [Class] the reader class to use for `ext` file extension.
+      # @raise [ArgumentError] if no such reader class can be found
+      def has_reader_for_ext!(ext)
+        entry = readers.find{|r| r[1].include?(ext)}
+        return entry[2] if entry
+        raise ArgumentError, "No registered reader for #{ext}"
       end
 
     end # module ClassMethods
