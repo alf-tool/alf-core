@@ -1,7 +1,6 @@
 module Alf
   module Shell
     class Show < Shell::Command()
-      include Command
     
       options do |opt|
         @renderer_class = nil

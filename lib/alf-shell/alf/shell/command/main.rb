@@ -1,7 +1,6 @@
 module Alf
   module Shell
     class Main < Shell::Delegator()
-      include Command
     
       # Environment instance to use to get base iterators
       attr_accessor :environment

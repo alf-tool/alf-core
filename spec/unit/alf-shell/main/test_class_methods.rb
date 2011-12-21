@@ -8,6 +8,7 @@ module Alf
         Shell::Main.relational_operators.each do |cmd|
           cmd.should_not be_command
           cmd.should be_operator
+          cmd.should respond_to(:run)
         end
       end
 
@@ -16,6 +17,7 @@ module Alf
         Shell::Main.experimental_operators.each do |cmd|
           cmd.should_not be_command
           cmd.should be_operator
+          cmd.should respond_to(:run)
         end
       end
 
@@ -24,6 +26,7 @@ module Alf
         Shell::Main.non_relational_operators.each do |cmd|
           cmd.should_not be_command
           cmd.should be_operator
+          cmd.should respond_to(:run)
         end
       end
 
@@ -32,6 +35,7 @@ module Alf
         Shell::Main.other_non_relational_commands.each do |cmd|
           cmd.should be_command
           cmd.should_not be_operator
+          cmd.should respond_to(:run)
         end
       end
         

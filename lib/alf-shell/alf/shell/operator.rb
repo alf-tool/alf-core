@@ -29,6 +29,9 @@ module Alf
         def experimental?
           operator_class.experimental?
         end
+        
+        def run(argv, req = nil)
+        end
 
       end # module ClassMethods
 
@@ -39,7 +42,7 @@ module Alf
             cmd.operator_class = clazz
           end
         end
-        Class.new(superclass)
+        Operator.const_set(Tools.class_name(clazz), Class.new(superclass)) 
       end
     
       Alf::Operator::Relational.each do |op_class|

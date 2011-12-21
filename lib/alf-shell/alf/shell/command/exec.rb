@@ -1,7 +1,6 @@
 module Alf
   module Shell
     class Exec < Shell::Command()
-      include Command
       
       def execute(args)
         Reader.alf(args.first || $stdin, requester.environment)

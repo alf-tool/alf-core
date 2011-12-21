@@ -1,7 +1,6 @@
 module Alf
   module Shell
     class Help < Shell::Command()
-      include Command
       
       # Let NoSuchCommandError be passed to higher stage
       no_react_to Quickl::NoSuchCommand
