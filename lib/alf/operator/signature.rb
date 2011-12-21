@@ -92,32 +92,31 @@ module Alf
       # @param [Operator] receiver an operator instance
       # @return [Operator] installed `receiver`
       def parse_args(args, receiver)
-        # 1) check and set operands
-        unless args.first.is_a?(Array)
-          invalid_args!(args)
-        end
+
+        # 1) Check and set operands, passed as an array as first argument
+        invalid_args!(args) unless args.first.is_a?(Array)
         receiver.operands = args.shift
 
-        # 2) check and set options
-        if args.size > (1+arguments.size)
+        # 2) Extract options if provided
+        optargs = default_options
+        if args.size == (1+arguments.size)
+          # options are passed as last argument
+          invalid_args!(args) unless args.last.is_a?(Hash)
+          optargs = optargs.merge(args.pop)
+        elsif args.size > arguments.size
+          # too many arguments here
           invalid_args!(args)
         end
 
-        # Merge default and provided options
-        optargs = default_options
-        if args.size == (1+arguments.size)
-          invalid_args!(args) unless args.last.is_a?(Hash)
-          optargs = optargs.merge(args.pop)
-        end
-
-        # Set options
+        # 3) Set options now, including default ones
         optargs.each_pair do |name,val|
           receiver.send(:"#{name}=", val)
         end
         
-        # 3) Parse other arguments now
-        parse_xxx(args, :coerce) do |name,val|
-          receiver.send(:"#{name}=", val)
+        # 4) Parse other arguments now
+        with_each_arg(args) do |name,dom,value|
+          invalid_args!(args) if value.nil?
+          receiver.send(:"#{name}=", value)
         end
 
         receiver
@@ -128,18 +127,19 @@ module Alf
         # First split over --
         argv = Quickl.split_commandline_args(argv)
 
-        # Build the options
+        # Parse the options and replace argv[0] by remaining arguments
         opts = {}
         argv[0] = option_parser(opts).parse!(argv[0])
         opts = default_options.merge(opts)
 
-        # Operands are what rest in argv[0] now
+        # Operands are argv[0], and can be removed
         oper = argv.shift
 
-        # Parse the rest
+        # Coerce each remaining argument according to the signature
         args = []
-        parse_xxx(argv, :from_argv) do |name,val|
-          args << val
+        with_each_arg(argv) do |name,dom,value|
+          invalid_args!(args) if value.nil?
+          args << dom.from_argv(Array(value))
         end
 
         [oper, args, opts]
@@ -221,28 +221,17 @@ module Alf
         domain == Boolean ? "--#{name}" : "--#{name}=#{name.to_s.upcase}"
       end
 
-      def parse_xxx(args, coercer)
+      # Yields `(name,dom,value)` triples for each argument value
+      def with_each_arg(args)
         arguments.zip(args).collect do |sigpart,subargs|
           name, dom, default = sigpart
-
-          # coercion
-          val = if Array(subargs).empty?
-            Tools.coerce(default, dom)
-          else
-            dom.send(coercer, subargs)
-          end
-
-          # check and yield
-          if val.nil?
-            raise ArgumentError, "Invalid `#{subargs.inspect}` for #{sigpart.inspect}"
-          else
-            yield(name, val)
-          end
+          val = Array(subargs).empty? ? default : subargs
+          yield(name, dom, val)
         end
       end
 
-      def invalid_args!(args)
-        raise ArgumentError, "Invalid `#{args.inspect}` for #{self}", caller
+      def invalid_args!(args, msg = "Invalid `#{args.inspect}` for #{self}")
+        raise ArgumentError, msg, caller
       end
 
     end # class Signature
