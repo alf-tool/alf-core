@@ -1,4 +1,3 @@
-require 'alf/shell/command'
 require 'alf/shell/doc_manager'
 module Alf
   module Shell
@@ -25,8 +24,5 @@ module Alf
 
   end # module Shell
 end # module Alf
-require 'alf/shell/main'
-require 'alf/shell/exec'
-require 'alf/shell/help'
-require 'alf/shell/show'
-require 'alf/shell/operators'
+require 'alf/shell/command'
+require 'alf/shell/operator'

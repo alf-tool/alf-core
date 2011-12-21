@@ -134,4 +134,4 @@ module Alf
     end # class Main
   end # module Shell
 end # module Alf
-require 'alf/shell/main/class_methods'
+require 'alf/shell/command/main/class_methods'
