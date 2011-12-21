@@ -1,4 +1,4 @@
-[ "alf-csv", "alf-sequel", "alf-logs", "alf-yaml", "alf-engine" ].each do |contrib|
+[ "alf-engine", "alf-shell", "alf-csv", "alf-sequel", "alf-logs", "alf-yaml" ].each do |contrib|
   $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), contrib))
 end
 

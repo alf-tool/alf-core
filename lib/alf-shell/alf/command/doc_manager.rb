@@ -3,7 +3,7 @@ module Alf
     class DocManager
 
       # Main documentation folder
-      DOC_FOLDER = File.expand_path('../../../../doc/', __FILE__)
+      DOC_FOLDER = File.expand_path('../../../../../doc/', __FILE__)
 
       #
       # Called by Quickl when it's time to generate documentation of `cmd`.
