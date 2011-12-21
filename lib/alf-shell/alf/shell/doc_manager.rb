@@ -1,5 +1,5 @@
 module Alf
-  module Command
+  module Shell
     class DocManager
 
       # Main documentation folder
@@ -68,5 +68,5 @@ module Alf
       end
 
     end # class DocManager
-  end # module Command
+  end # module Shell
 end # module Alf

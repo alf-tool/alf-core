@@ -1,6 +1,6 @@
 module Alf
-  module Command
-    class Show < Alf::Command()
+  module Shell
+    class Show < Shell::Command()
       include Command
     
       options do |opt|
@@ -60,5 +60,5 @@ module Alf
       end
 
     end # class Show
-  end # module Command
+  end # module Shell
 end # module Alf

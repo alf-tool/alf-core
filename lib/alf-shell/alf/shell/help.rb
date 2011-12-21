@@ -1,6 +1,6 @@
 module Alf
-  module Command
-    class Help < Alf::Command()
+  module Shell
+    class Help < Shell::Command()
       include Command
       
       # Let NoSuchCommandError be passed to higher stage
@@ -27,5 +27,5 @@ module Alf
       end
       
     end # class Help
-  end # module Command
+  end # module Shell
 end # module Alf

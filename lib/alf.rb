@@ -23,7 +23,7 @@ module Alf
   require 'alf/iterator'
   require 'alf/reader'
   require 'alf/renderer'
-  require 'alf/command'
+  require 'alf/shell'
   require 'alf/operator'
   require 'alf/aggregator'
   require 'alf/relation'

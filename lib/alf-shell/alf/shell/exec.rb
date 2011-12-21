@@ -1,6 +1,6 @@
 module Alf
-  module Command
-    class Exec < Alf::Command()
+  module Shell
+    class Exec < Shell::Command()
       include Command
       
       def execute(args)
@@ -8,5 +8,5 @@ module Alf
       end
       
     end # class Exec
-  end # module Command
+  end # module Shell
 end # module Alf

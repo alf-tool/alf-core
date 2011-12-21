@@ -1,6 +1,6 @@
 module Alf
-  module Command
-    class Main < Alf::Delegator()
+  module Shell
+    class Main < Shell::Delegator()
       include Command
     
       module ClassMethods
@@ -175,5 +175,5 @@ module Alf
       end
       
     end # class Main
-  end # module Command
+  end # module Shell
 end # module Alf
