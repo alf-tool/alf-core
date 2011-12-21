@@ -18,10 +18,6 @@ module Alf
       end
     
     end # module ClassMethods
-
-    def self.included(mod)
-      mod.extend(ClassMethods)
-    end
   end # module Command
 end # module Alf
 require 'alf/shell/command/main'

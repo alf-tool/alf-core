@@ -18,6 +18,17 @@ module Alf
       Quickl::Command(){|builder|
         builder.command_parent = Alf::Shell::Main
         builder.doc_extractor  = DOC_EXTRACTOR
+        builder.class_module Command::ClassMethods
+        yield(builder) if block_given?
+      }
+    end
+
+    # Operator factory
+    def self.Operator() 
+      Quickl::Command(){|builder|
+        builder.command_parent = Alf::Shell::Main
+        builder.doc_extractor  = DOC_EXTRACTOR
+        builder.class_module Operator::ClassMethods
         yield(builder) if block_given?
       }
     end
