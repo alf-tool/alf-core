@@ -54,9 +54,7 @@ module Alf
           @signature ||= Signature.new(self)
         end
       end
-      
-      ############################################################ Quickl's run
-      
+
       # Runs the command on commandline arguments `argv`
       #
       # @param [Array] argv an array of commandline arguments, typically ARGV

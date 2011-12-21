@@ -20,19 +20,13 @@ module Alf
           true
         end
 
-        # @return true if the underlying operator is relational
-        def relational?
-          operator_class.relational?
-        end
-
-        # @return true if the underlying operator is experimental
-        def experimental?
-          operator_class.experimental?
+        # delegation to the class        
+        [ :relational?, :experimental?, :signature, :run ].each do |meth|
+          define_method(meth) do |*args, &block|
+            operator_class.send(meth, *args, &block)
+          end
         end
         
-        def run(argv, req = nil)
-        end
-
       end # module ClassMethods
 
       # Defines a command for `clazz`
