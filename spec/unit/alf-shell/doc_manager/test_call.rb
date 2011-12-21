@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
-  module Command
+  module Shell
     describe DocManager, ".call" do
 
       let(:dm){ @dm ||= DocManager.new }
-      let(:cmd){ Alf::Command::Show }
+      let(:cmd){ Alf::Shell::Show }
       subject{ 
         dm.call(cmd, opts) 
       }
@@ -42,7 +42,6 @@ module Alf
         end
 
       end
-
 
     end
   end

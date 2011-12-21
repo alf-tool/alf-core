@@ -28,12 +28,12 @@ describe "Alf's alf command / " do
       specify{
         begin 
           dir = File.expand_path('../__database__', __FILE__)
-          main = Alf::Command::Main.new
+          main = Alf::Shell::Main.new
           main.environment = Alf::Environment.folder(dir)
           main.run(argv, __FILE__)
         rescue => ex
           begin
-            Alf::Command::Main.handle_error(ex, main)
+            Alf::Shell::Main.handle_error(ex, main)
           rescue SystemExit
             $stdout << "SystemExit" << "\n"
           end

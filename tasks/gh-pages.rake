@@ -25,7 +25,7 @@ task :"gh-pages" do
   context = {
     :version => Alf::VERSION,
     :outdir  => outdir,
-    :main    => Alf::Command::Main
+    :main    => Alf::Shell::Main
   }
 
   static = lambda{|entry|
@@ -48,7 +48,7 @@ task :"gh-pages" do
   end
 
   ["shell", "ruby"].each do |entry|
-    Alf::Command::Main.subcommands.each do |sub| 
+    Alf::Shell::Main.subcommands.each do |sub| 
       ctx    = context.merge(:prefix  => "..", :entry => entry.to_sym)
       target = File.join(outdir, entry, "#{sub.command_name}.html")
       File.open(target, "w") do |io|
