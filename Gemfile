@@ -1,8 +1,7 @@
 source 'http://rubygems.org'
 
 group :runtime do
-#  gem "quickl", "~> 0.4.2"
-  gem "quickl", :path => "../quickl"
+  gem "quickl", "~> 0.4.2"
   gem "myrrha", "~> 1.2.1"
 end
 
