@@ -78,10 +78,10 @@ module Alf
       # Command and Operator -> (operator operands, args, options)
       cmd = lambda{|v,_| (Command === v) || (Operator === v)}
       r.upon(cmd) do |v,rd|
-        cmdname  = v.class.command_name.to_s.gsub('-', '_')
+        cmdname  = v.class.rubycase_name
         oper, args, opts = v.class.signature.collect_on(v)
         args = opts.empty? ? (oper + args) : (oper + args + [ opts ])
-        args = args.collect{|arg| r.coerce(arg)}
+        args = args.map{|arg| r.coerce(arg)}
         "(#{cmdname} #{args.join(', ')})"
       end
 

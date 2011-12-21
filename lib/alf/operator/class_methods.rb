@@ -6,6 +6,11 @@ module Alf
     # 
     module ClassMethods
 
+      # Returns the ruby case name of this operator
+      def rubycase_name 
+        Tools.ruby_case(Tools.class_name(self))
+      end
+
       ########################################################### Query methods
 
       # @return true if this is a relational operator, false otherwise

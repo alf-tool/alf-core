@@ -5,8 +5,8 @@ shared_examples_for "An operator class" do
     operator_class.public_method_defined?(:_prepare).should be_false
   end
 
-  it "should have a public run method" do
-    operator_class.public_method_defined?(:run).should be_true
+  it "should have a public rubycase_name method" do
+    operator_class.should respond_to(:rubycase_name)
   end
   
   it "should have a public each method" do

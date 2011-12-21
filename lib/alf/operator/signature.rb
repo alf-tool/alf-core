@@ -165,7 +165,7 @@ module Alf
       #     Alf::Operator::Relational::Project.signature.to_shell
       #     # => "(project operand, attributes:AttrList, {allbut: Boolean})"
       def to_lispy
-        cmd  = operator.command_name.to_s.gsub('-', '_')
+        cmd  = operator.rubycase_name
         oper = operator.nullary? ? "" :
               (operator.unary? ? "operand" : "left, right")
 
@@ -197,7 +197,7 @@ module Alf
         opts =   options.collect{|opt|   "[#{option_name(opt)}]" }.join(" ")
         args = arguments.collect{|arg,_| "#{arg.to_s.upcase}"    }.join(" -- ")
         optargs = "#{opts} #{oper} " + (args.empty? ? "" : "-- #{args}")
-        "alf #{operator.command_name} #{optargs.strip}".strip
+        "alf #{operator.rubycase_name} #{optargs.strip}".strip
       end
 
       private

@@ -122,22 +122,22 @@ module Alf
     end # Summarization
 
     describe "on an nullary operator" do
-      let(:value){ Alf.lispy.run(%w{generator -- 10 -- id}) } 
+      let(:value){ Alf::Operator::NonRelational::Generator.new([], 10, :id) } 
       it { should eq("(generator 10, :id)") }
     end
 
     describe "on an monadic operator with an option" do
-      let(:value){ Alf.lispy.run(%w{project --allbut suppliers -- city}) } 
+      let(:value){ Alf::Operator::Relational::Project.new([:suppliers], [:city], :allbut => true) } 
       it { should eq("(project :suppliers, [:city], {:allbut => true})") }
     end
 
     describe "on an monadic operator with default values for options" do
-      let(:value){ Alf.lispy.run(%w{project suppliers -- city}) } 
+      let(:value){ Alf::Operator::Relational::Project.new([:suppliers], [:city]) } 
       it { should eq("(project :suppliers, [:city])") }
     end
 
     describe "on an dyadic operator without no args nor any option" do
-      let(:value){ Alf.lispy.run(%w{join suppliers cities}) } 
+      let(:value){ Alf::Operator::Relational::Join.new([:suppliers, :cities]) } 
       it { should eq("(join :suppliers, :cities)") }
     end
 
