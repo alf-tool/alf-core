@@ -10,9 +10,8 @@ task :"gh-pages" do
   outdir = File.expand_path('../../doc/deploy-gh-pages', __FILE__)
 
   # Remove everything
-  Dir[File.join(outdir, '*')].each do |f|
-    FileUtils.rm_rf f
-  end
+  FileUtils.rm_rf outdir
+  FileUtils.mkdir_p outdir
 
   # copy assets
   FileUtils.cp_r  File.join(indir, "no-analytics.html"), outdir
