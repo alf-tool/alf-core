@@ -2,26 +2,21 @@ module Alf
   module Command
     module ClassMethods
 
-      #
-      # Returns true
-      #
+      # @return true
       def command?
         true
       end
     
-      #
-      # Returns false
-      #
+      # @return false
       def operator?
         false
       end
     
-    end
+    end # module ClassMethods
 
     def self.included(mod)
       mod.extend(ClassMethods)
     end
-
   end # module Command
 end # module Alf
 

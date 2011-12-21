@@ -1,16 +1,18 @@
 module Alf
-  module Operator::Relational
-    class Matching < Alf::Operator()
-      include Relational, Binary
+  module Operator
+    module Relational
+      class Matching
+        include Relational, Binary
 
-      signature do |s|
-      end
+        signature do |s|
+        end
 
-      # (see Operator#compile)
-      def compile
-        Engine::Semi::Hash.new(left, right, true)
-      end
+        # (see Operator#compile)
+        def compile
+          Engine::Semi::Hash.new(left, right, true)
+        end
 
-    end # class Matching
-  end # module Operator::Relational
+      end # class Matching
+    end # module Relational
+  end # module Operator
 end # module Alf

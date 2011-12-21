@@ -1,18 +1,20 @@
 module Alf
-  module Operator::Relational
-    class Heading < Alf::Operator()
-      include Relational, Experimental, Unary
+  module Operator
+    module Relational
+      class Heading
+        include Relational, Unary, Experimental
 
-      signature do |s|
-      end
+        signature do |s|
+        end
       
-      # (see Operator#each)
-      def each
-        yield(operand.inject(Alf::Heading::EMPTY){|h,t|
-          h + Tools.tuple_heading(t)
-        }.to_h)
-      end
+        # (see Operator#each)
+        def each
+          yield(operand.inject(Alf::Heading::EMPTY){|h,t|
+            h + Tools.tuple_heading(t)
+          }.to_h)
+        end
 
-    end # class Project
-  end # module Operator::Relational
+      end # class Project
+    end # module Relational
+  end # module Operator
 end # module Alf

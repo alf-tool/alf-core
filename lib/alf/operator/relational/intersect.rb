@@ -1,16 +1,18 @@
 module Alf
-  module Operator::Relational
-    class Intersect < Alf::Operator()
-      include Relational, Binary
+  module Operator
+    module Relational
+      class Intersect
+        include Relational, Binary
 
-      signature do |s|
-      end
+        signature do |s|
+        end
 
-      # (see Operator#compile)
-      def compile
-        Engine::Join::Hash.new(left, right)
-      end
+        # (see Operator#compile)
+        def compile
+          Engine::Join::Hash.new(left, right)
+        end
 
-    end # class Intersect
-  end # module Operator::Relational
+      end # class Intersect
+    end # module Relational
+  end # module Operator
 end # module Alf

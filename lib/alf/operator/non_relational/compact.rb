@@ -1,16 +1,18 @@
 module Alf
-  module Operator::NonRelational
-    class Compact < Alf::Operator()
-      include NonRelational, Unary
+  module Operator
+    module NonRelational
+      class Compact
+        include NonRelational, Unary
 
-      signature do |s|
-      end
+        signature do |s|
+        end
 
-      # (see Operator#compile)
-      def compile
-        Engine::Compact.new(operand)
-      end
+        # (see Operator#compile)
+        def compile
+          Engine::Compact.new(operand)
+        end
 
-    end # class Compact
-  end # module Operator::NonRelational
+      end # class Compact
+    end # module NonRelational
+  end # module Operator
 end # module Alf

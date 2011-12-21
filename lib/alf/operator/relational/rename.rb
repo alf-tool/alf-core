@@ -1,16 +1,18 @@
 module Alf
-  module Operator::Relational
-    class Rename < Alf::Operator()
-      include Relational, Unary
+  module Operator
+    module Relational
+      class Rename
+        include Relational, Unary
 
-      signature do |s|
-        s.argument :renaming, Renaming, {}
-      end
+        signature do |s|
+          s.argument :renaming, Renaming, {}
+        end
 
-      def compile
-        Engine::Rename.new(operand, renaming)
-      end
+        def compile
+          Engine::Rename.new(operand, renaming)
+        end
 
-    end # class Rename
-  end # module Operator::Relational
+      end # class Rename
+    end # module Relational
+  end # module Operator
 end # module Alf

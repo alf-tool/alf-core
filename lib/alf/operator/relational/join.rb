@@ -1,16 +1,18 @@
 module Alf
-  module Operator::Relational
-    class Join < Alf::Operator()
-      include Relational, Binary
+  module Operator
+    module Relational
+      class Join
+        include Relational, Binary
 
-      signature do |s|
-      end
+        signature do |s|
+        end
 
-      # (see Operator#compile)
-      def compile
-        Engine::Join::Hash.new(left, right)
-      end
+        # (see Operator#compile)
+        def compile
+          Engine::Join::Hash.new(left, right)
+        end
 
-    end # class Join
-  end # module Operator::Relational
+      end # class Join
+    end # module Relational
+  end # module Operator
 end # module Alf

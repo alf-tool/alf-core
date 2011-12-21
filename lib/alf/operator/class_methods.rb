@@ -8,16 +8,6 @@ module Alf
 
       ########################################################### Query methods
 
-      # @return false
-      def command?
-        false
-      end
-
-      # @return true
-      def operator?
-        true
-      end
-
       # @return true if this is a relational operator, false otherwise
       def relational?
         ancestors.include?(Relational)
@@ -50,9 +40,6 @@ module Alf
         if block_given?
           @signature = Signature.new(self, &Proc.new) 
           @signature.install
-          options do |opt|
-            signature.option_parser(self, opt)
-          end
         else
           @signature ||= Signature.new(self)
         end
@@ -100,10 +87,20 @@ module Alf
       Operator::Relational.each{|x| yield(x)}
     end
 
-    # Ensures that the Introspection module is set on real operators
-    def self.included(mod)
-      mod.extend(ClassMethods) if mod.is_a?(Class)
-    end
+    # Let submodules and classes have required methods
+    module Installer
 
+      # Ensures that the Introspection module is set on real operators
+      def included(mod)
+        if mod.is_a?(Class)
+          mod.extend(ClassMethods) 
+        else
+          mod.extend(Installer)
+        end
+      end
+
+    end # module Installer
+    extend(Installer)
+    
   end # module Operator
 end # module Alf

@@ -5,13 +5,6 @@ module Alf
   module Operator
     include Iterator, Tools
 
-    # Operator factory
-    def Alf.Operator()
-      Alf.Command() do |b|
-        b.instance_module Alf::Operator
-      end
-    end
-
     require 'alf/operator/class_methods'
     require 'alf/operator/signature'
     require 'alf/operator/instance_methods'

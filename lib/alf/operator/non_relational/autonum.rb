@@ -1,17 +1,19 @@
 module Alf
-  module Operator::NonRelational
-    class Autonum < Alf::Operator()
-      include NonRelational, Unary
+  module Operator
+    module NonRelational
+      class Autonum
+        include NonRelational, Unary
 
-      signature do |s|
-        s.argument :as, AttrName, :autonum
-      end
+        signature do |s|
+          s.argument :as, AttrName, :autonum
+        end
 
-      # (see Operator#compile)
-      def compile
-        Engine::Autonum.new(operand, as)
-      end
+        # (see Operator#compile)
+        def compile
+          Engine::Autonum.new(operand, as)
+        end
 
-    end # class Autonum
-  end # module Operator::NonRelational
+      end # class Autonum
+    end # module NonRelational
+  end # module Operator
 end # module Alf
