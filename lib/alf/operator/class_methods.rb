@@ -6,6 +6,8 @@ module Alf
     # 
     module ClassMethods
 
+      ########################################################### Query methods
+
       # @return false
       def command?
         false
@@ -26,6 +28,38 @@ module Alf
         ancestors.include?(NonRelational)
       end
 
+      # @return true if this operator is a zero-ary operator, false otherwise
+      def nullary?
+        ancestors.include?(Operator::Nullary)
+      end
+
+      # @return true if this operator is an unary operator, false otherwise
+      def unary?
+        ancestors.include?(Operator::Unary)
+      end
+
+      # @return true if this operator is a binary operator, false otherwise
+      def binary?
+        ancestors.include?(Operator::Binary)
+      end
+
+      ################################################################# Factory
+      
+      # Installs or set the operator signature
+      def signature
+        if block_given?
+          @signature = Signature.new(self, &Proc.new) 
+          @signature.install
+          options do |opt|
+            signature.fill_option_parser(opt, self)
+          end
+        else
+          @signature ||= Signature.new(self)
+        end
+      end
+      
+      ############################################################ Quickl's run
+      
       # Runs the command on commandline arguments `argv`
       #
       # @param [Array] argv an array of commandline arguments, typically ARGV
@@ -43,7 +77,7 @@ module Alf
 
         # normalize operands
         operands = [ stdin_reader ] + Array(operands)
-        operands = operands.collect{|op| 
+        operands = operands.map{|op| 
           Iterator.coerce(op, req && req.environment)
         }
         operands = if nullary?
@@ -56,34 +90,6 @@ module Alf
 
         init_args = [operands] + args + [options]
         new(*init_args)
-      end
-
-      # @return true if this operator is a zero-ary operator, false otherwise
-      def nullary?
-        ancestors.include?(Operator::Nullary)
-      end
-
-      # @return true if this operator is an unary operator, false otherwise
-      def unary?
-        ancestors.include?(Operator::Unary)
-      end
-
-      # @return true if this operator is a binary operator, false otherwise
-      def binary?
-        ancestors.include?(Operator::Binary)
-      end
-
-      # Installs or set the operator signature
-      def signature
-        if block_given?
-          @signature = Signature.new(self, &Proc.new) 
-          @signature.install
-          options do |opt|
-            signature.fill_option_parser(opt, self)
-          end
-        else
-          @signature ||= Signature.new(self)
-        end
       end
 
     end # module ClassMethods

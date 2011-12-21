@@ -40,15 +40,6 @@ module Alf
         options << [name, domain, default, descr]
       end
 
-      # Returns default options as a Hash
-      #
-      # @return [Hash] the default options
-      def default_options
-        @default_options ||=
-          Hash[options.select{|opt| !opt[2].nil? }.
-                       map{|opt| [opt[0], opt[2]]}]
-      end
-
       # Fills an OptionParser instance according to signature options.
       #
       # @param [OptionParser] opt the parser to fill with options
@@ -217,6 +208,14 @@ module Alf
 
       private
 
+      # @return the default options as a Hash
+      def default_options
+        @default_options ||=
+          Hash[options.select{|opt| !opt[2].nil? }.
+                       map{|opt| [opt[0], opt[2]]}]
+      end
+
+      # @return the name to use in shell for `option`
       def option_name(option)
         name, domain, defa, = option
         domain == Boolean ? "--#{name}" : "--#{name}=#{name.to_s.upcase}"
