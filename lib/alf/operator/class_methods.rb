@@ -51,7 +51,7 @@ module Alf
           @signature = Signature.new(self, &Proc.new) 
           @signature.install
           options do |opt|
-            signature.fill_option_parser(opt, self)
+            signature.option_parser(self, opt)
           end
         else
           @signature ||= Signature.new(self)

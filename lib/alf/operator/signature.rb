@@ -40,11 +40,13 @@ module Alf
         options << [name, domain, default, descr]
       end
 
-      # Fills an OptionParser instance according to signature options.
+      # Builds an option parser instance `opt` prepared for installing options on
+      # `receiver`.
       #
+      # @param [Hash|Operator] a receiver for option values
       # @param [OptionParser] opt the parser to fill with options
       # @return [OptionParser] `opt`
-      def fill_option_parser(opt, receiver)
+      def option_parser(receiver, opt = OptionParser.new)
         options.each do |option|
           name, dom, defa, descr = option
           opt.on(option_name(option), descr || "") do |val|
@@ -56,14 +58,6 @@ module Alf
           end
         end
         opt
-      end
-
-      # Returns an option parser instance bound to a given `receiver` object
-      #
-      # @return [OptionParser] an parser instance, ready to parse options and
-      #         install them on `receiver` 
-      def option_parser(receiver)
-        fill_option_parser(OptionParser.new, receiver)
       end
 
       # Installs the signature on the operator class
