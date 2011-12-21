@@ -31,13 +31,15 @@ module Alf
         end
 
         unless RUBY_VERSION < "1.9"
-          describe "on an example file" do
-            before{ 
-              def dm.find_file(cmd); 
-                File.expand_path('../example.md', __FILE__)
-              end 
-            }
-            it { should eq(File.read(File.expand_path('../example_1.txt', __FILE__))) }
+          pending do
+            describe "on an example file" do
+              before{ 
+                def dm.find_file(cmd); 
+                  File.expand_path('../example.md', __FILE__)
+                end 
+              }
+              it { should eq(File.read(File.expand_path('../example_1.txt', __FILE__))) }
+            end
           end
         end
 
