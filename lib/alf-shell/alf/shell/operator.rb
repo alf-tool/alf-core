@@ -22,12 +22,12 @@ module Alf
 
         # @return true if the underlying operator is relational
         def relational?
-          operator_class.include?(Alf::Operator::Relational)
+          operator_class.relational?
         end
 
         # @return true if the underlying operator is experimental
         def experimental?
-          operator_class.include?(Alf::Operator::Experimental)
+          operator_class.experimental?
         end
 
       end # module ClassMethods

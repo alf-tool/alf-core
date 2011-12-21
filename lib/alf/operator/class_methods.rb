@@ -18,6 +18,11 @@ module Alf
         ancestors.include?(Relational)
       end
 
+      # @return true if this is an experimental operator, false otherwise
+      def experimental?
+        ancestors.include?(Experimental)
+      end
+
       # @return true if this is a non relational operator, false otherwise
       def non_relational?
         ancestors.include?(NonRelational)
