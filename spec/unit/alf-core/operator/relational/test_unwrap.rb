@@ -16,11 +16,6 @@ module Alf
 
       subject{ operator.to_a }
 
-      context "with .run" do
-        let(:operator){ Unwrap.run([input] + %w{-- wrapped}) }
-        it { should eq(expected) }
-      end
-
       context "when factored with Lispy" do
         let(:operator){ Lispy.unwrap(input, :wrapped) }
         it { should eq(expected) }

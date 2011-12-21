@@ -1,1 +1,1 @@
-alf --text clip              suppliers -- name city
+alf --text clip suppliers -- name city

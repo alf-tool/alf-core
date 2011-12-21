@@ -25,11 +25,6 @@ module Alf
         it{ should eq(expected) }
       end
 
-      context "with .run" do
-        let(:operator){ Sort.run([input, "--", "first", "asc", "second", "asc"]) }
-        it{ should eq(expected) }
-      end
-
       context "with one arg" do 
         let(:operator){ Lispy.sort(input, [[:second, :asc]]) }
         let(:expected){[

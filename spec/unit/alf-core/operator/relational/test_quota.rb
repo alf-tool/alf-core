@@ -24,12 +24,6 @@ module Alf
 
       subject{ operator.to_a }
 
-      context "with .run" do
-        let(:aggs){ ["--", "a", "--", "time", "--", "time_sum", "sum{ time }", "time_max", "max{ time }"] }
-        let(:operator){ Quota.run([input] + aggs) }
-        it { should == expected }
-      end
-
       context "with Lispy" do
         let(:aggs){{:time_sum => Aggregator.sum{ time },
                     :time_max => Aggregator.max{ time }}} 

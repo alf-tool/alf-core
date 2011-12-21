@@ -22,11 +22,6 @@ module Alf
         it{ should == expected }
       end
 
-      context "with .run" do
-        let(:operator){ Heading.run([input]) }
-        it{ should == expected }
-      end
-
     end 
   end
 end

@@ -16,11 +16,6 @@ module Alf
       context "--no-allbut" do
         let(:expected){[{:a => "a"}]}
 
-        context "with .run" do
-          let(:operator){ Project.run([input, "--", 'a']) }
-          it { should eq(expected) } 
-        end
-
         context "with Lispy" do
           let(:operator){ Lispy.project(input, [:a]) }
           it { should eq(expected) } 
@@ -29,11 +24,6 @@ module Alf
 
       context "--allbut" do
         let(:expected){[{:b => "b"}]}
-
-        context "and factored with commandline args" do
-          let(:operator){ Project.run([input, '--allbut', '--', 'a']) }
-          it { should eq(expected) } 
-        end
 
         context "and factored with Lispy#project" do
           let(:operator){ Lispy.project(input, [:a], :allbut => true) }

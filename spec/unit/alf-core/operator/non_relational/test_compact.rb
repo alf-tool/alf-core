@@ -27,11 +27,6 @@ module Alf
         it { should == expected }
       end
 
-      context "with .run" do
-        let(:operator){ Compact.run([input]) }
-        it { should == expected }
-      end
-
     end
   end
 end

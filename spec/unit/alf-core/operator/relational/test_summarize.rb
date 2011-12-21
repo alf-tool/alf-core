@@ -26,12 +26,6 @@ module Alf
       subject{ operator.to_a.sort{|t1,t2| t1[:a] <=> t2[:a]} }
 
       context "--no-allbut" do
-        context "with .run" do
-          let(:aggs){ ["--", "a", "--", "time_sum", "sum{ time }", "time_max", "max{ time }", "time_avg", "avg{ time }"] }
-          let(:operator){ Summarize.run([input] + aggs) }
-          it { should eq(expected) }
-        end
-
         context "with Lispy" do
           let(:operator){ Lispy.summarize(input, [:a], aggs) }
           it { should eq(expected) }
@@ -39,12 +33,6 @@ module Alf
       end # --no-allbut
 
       context "--allbut" do
-        context "with .run" do
-          let(:aggs){ ["--allbut", "--", "time", "--", "time_sum", "sum{ time }", "time_max", "max{ time }", "time_avg", "avg{ time }"] }
-          let(:operator){ Summarize.run([input] + aggs) }
-          it { should eq(expected) }
-        end
-
         context "with Lispy" do
           let(:operator){ Lispy.summarize(input, [:time], aggs, :allbut => true) }
           it { should eq(expected) }

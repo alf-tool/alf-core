@@ -21,12 +21,46 @@ module Alf
         end
 
         # delegation to the class        
-        [ :relational?, :experimental?, :signature, :run ].each do |meth|
+        [ :signature, 
+          :relational?, :experimental?,
+          :nullary?, :unary?, :binary? ].each do |meth|
           define_method(meth) do |*args, &block|
             operator_class.send(meth, *args, &block)
           end
         end
         
+        # Runs the command on commandline arguments `argv`
+        #
+        # @param [Array] argv an array of commandline arguments, typically ARGV
+        # @param [Object] req an optional requester, typically a super command
+        # @return [Iterator] an Iterator with query result
+        def run(argv, req = nil)
+          operands, args, options = signature.argv2args(argv)
+
+          # find standard input reader
+          stdin_reader = if req && req.respond_to?(:stdin_reader)
+            req.stdin_reader
+          else 
+            Reader.coerce($stdin)
+          end
+
+          # normalize operands
+          operands = [ stdin_reader ] + Array(operands)
+          operands = operands.map{|op| 
+            Iterator.coerce(op, req && req.environment)
+          }
+          operands = if nullary?
+            []
+          elsif unary?
+            [operands.last]
+          elsif binary?
+            operands[-2..-1]
+          end
+
+          init_args = [operands] + args + [options]
+          operator_class.new(*init_args)
+        end
+
       end # module ClassMethods
 
       # Defines a command for `clazz`

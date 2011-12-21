@@ -21,11 +21,6 @@ module Alf
       subject{ operator.to_a.sort{|k1,k2| k1[:a] <=> k2[:a]} }
 
       context "--no-allbut" do
-        context "with .run" do
-          let(:operator){ Group.run([input, "--", "time", "b", "--", "as"]) }
-          it { should == expected }
-        end
-
         context "with Lispy" do
           let(:operator){ Lispy.group(input, [:time, :b], :as) }
           it { should == expected }
@@ -33,11 +28,6 @@ module Alf
       end # --no-allbut
   
       context "--allbut" do
-        context "with .run" do
-          let(:operator){ Group.run([input, "--allbut", "--","a", "--", "as"]) }
-          it { should == expected }
-        end
-
         context "with Lispy" do
           let(:operator){ Lispy.group(input, [:a], :as, :allbut => true) }
           it { should == expected }

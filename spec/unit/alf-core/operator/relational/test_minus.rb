@@ -22,7 +22,7 @@ module Alf
         {:sid => 'S5', :city => 'Bruxelles'},
       ]}
 
-      let(:operator){ Minus.run(args) }
+      let(:operator){ Lispy.minus(*args) }
       subject{ operator.to_a }
 
       context "when applied on the same operand twice" do

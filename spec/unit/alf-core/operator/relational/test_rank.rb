@@ -26,20 +26,20 @@ module Alf
           {:pid => 'P3', :weight => 17.0, :rank => 3},
           {:pid => 'P6', :weight => 19.0, :rank => 5}
         ]}
-        let(:operator){ Rank.run([input] + %w{-- weight}) }
+        let(:operator){ Lispy.rank(input, [:weight]) }
         it{ should eq(expected) }
       end # partial ordering
 
       describe "with total ordering" do
         let(:expected) {Alf::Relation[
-          {:pid => 'P1', :weight => 12.0, :rank => 0},
-          {:pid => 'P5', :weight => 12.0, :rank => 1},
-          {:pid => 'P4', :weight => 14.0, :rank => 2},
-          {:pid => 'P2', :weight => 17.0, :rank => 3},
-          {:pid => 'P3', :weight => 17.0, :rank => 4},
-          {:pid => 'P6', :weight => 19.0, :rank => 5}
+          {:pid => 'P1', :weight => 12.0, :newname => 0},
+          {:pid => 'P5', :weight => 12.0, :newname => 1},
+          {:pid => 'P4', :weight => 14.0, :newname => 2},
+          {:pid => 'P2', :weight => 17.0, :newname => 3},
+          {:pid => 'P3', :weight => 17.0, :newname => 4},
+          {:pid => 'P6', :weight => 19.0, :newname => 5}
         ]}
-        let(:operator){ Rank.run([input] + %w{-- weight pid}) }
+        let(:operator){ Lispy.rank(input, [:weight, :pid], :newname) }
         it{ should eq(expected) }
       end # total ordering
 

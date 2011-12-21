@@ -19,11 +19,6 @@ module Alf
 
       subject{ operator.to_a.sort{|k1,k2| k1[:time] <=> k2[:time]} } 
 
-      context "with .run" do
-        let(:operator) { Ungroup.run([input] + %w{-- as}) } 
-        it { should == expected }
-      end
-
       context "with Lispy" do
         let(:operator) { Lispy.ungroup(input, :as) } 
         it { should == expected }

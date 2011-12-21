@@ -21,10 +21,6 @@ module Alf
           it{ should == expected }
         end
 
-        context "with .run" do
-          let(:operator){ Defaults.run([input] +%w{-- a 1 c 'blue'}) }
-          it{ should == expected }
-        end
       end # --no-strict
 
       describe "--strict" do
@@ -37,10 +33,6 @@ module Alf
           {:a => 1, :b => "b"},
         ]}
 
-        context "with Lispy" do 
-          let(:operator){ Lispy.defaults(input, {:a => 1, :b => "b"}, :strict => true) }
-          it{ should == expected }
-        end
       end # --strict
 
       context "with tuple expressions" do

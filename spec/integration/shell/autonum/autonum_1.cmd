@@ -1,1 +1,1 @@
-alf --text autonum           suppliers -- unique_id
+alf --text autonum suppliers -- unique_id

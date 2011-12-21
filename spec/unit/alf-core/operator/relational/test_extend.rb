@@ -23,11 +23,6 @@ module Alf
         it{ should == expected }
       end
 
-      context "with .run" do
-        let(:operator){ Extend.run([input] + %w{-- big} + ["tested > 10"]) }
-        it{ should == expected }
-      end
-
     end 
   end
 end

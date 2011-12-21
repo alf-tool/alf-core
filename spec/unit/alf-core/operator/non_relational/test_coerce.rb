@@ -22,10 +22,6 @@ module Alf
           it { should == expected }
         end
 
-        context "with .run" do
-          let(:operator){ Coerce.run([input] + %w{-- a Integer b Float}) }
-          it { should == expected } 
-        end
       end # --no-strict
 
     end 

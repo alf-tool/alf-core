@@ -19,11 +19,6 @@ module Alf
           let(:operator){ Lispy.clip(input, [:a]) }
           it { should == expected } 
         end
-
-        context "with .run" do
-          let(:operator){ Clip.run([input] + %w{-- a}) }
-          it { should == expected } 
-        end
       end # --no-allbut
 
       context "--allbut" do
@@ -31,11 +26,6 @@ module Alf
 
         context "with Lispy" do
           let(:operator){ Lispy.clip(input, [:a], :allbut => true) }
-          it { should == expected } 
-        end
-
-        context "with .run" do
-          let(:operator){ Clip.run([input] + %w{--allbut -- a}) }
           it { should == expected } 
         end
       end # --allbut

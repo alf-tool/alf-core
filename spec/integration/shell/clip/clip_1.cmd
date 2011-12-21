@@ -1,1 +1,1 @@
-alf --text clip              suppliers --allbut -- name city
+alf --text clip suppliers --allbut -- name city

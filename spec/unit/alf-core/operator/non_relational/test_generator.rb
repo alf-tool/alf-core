@@ -27,10 +27,6 @@ module Alf
           it{ should == expected }
         end
 
-        context "with .run" do
-          let(:operator){ Generator.run([]) }
-          it{ should == expected }
-        end
       end # empty args
 
       context "with a size" do
@@ -44,10 +40,6 @@ module Alf
           it{ should == expected }
         end
 
-        context "When factored from commandline args" do
-          let(:operator){ Generator.run(["--", "2"]) }
-          it{ should == expected }
-        end
       end # with a size
 
       context "when providing a size and a name" do
@@ -61,10 +53,6 @@ module Alf
           it{ should == expected }
         end
 
-        context "When factored from commandline args" do
-          let(:operator){ Generator.run(["--", "2", "--", "id"]) }
-          it{ should == expected }
-        end
       end # size and name
 
     end 

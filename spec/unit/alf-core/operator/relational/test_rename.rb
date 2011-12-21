@@ -21,11 +21,6 @@ module Alf
         it{ should == expected }
       end
 
-      context "with .run" do
-        let(:operator){ Rename.run([input, '--', 'a', 'z']) }
-        it{ should == expected }
-      end
-
     end 
   end
 end

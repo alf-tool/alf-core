@@ -27,10 +27,6 @@ module Alf
           it{ should == expected }
         end
 
-        context "with .run" do
-          let(:operator){ Autonum.run([input]) }
-          it{ should == expected }
-        end
       end # default attribute name
 
       context "with explicit attribute name" do
@@ -45,10 +41,6 @@ module Alf
           it{ should == expected }
         end
 
-        context "with .run" do
-          let(:operator){ Autonum.run([input, "--", "unique"]) }
-          it{ should == expected }
-        end
       end # explicit attribute name
 
     end

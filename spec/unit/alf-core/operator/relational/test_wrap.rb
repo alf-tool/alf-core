@@ -16,11 +16,6 @@ module Alf
 
       subject{ operator.to_a }
 
-      context "with .run" do
-        let(:operator){ Wrap.run([input, "--", "a", "b", "--", "wraped"]) }
-        it { should eq(expected) }
-      end
-
       context "with Lispy" do
         let(:operator){ Lispy.wrap(input, [:a, :b], :wraped) }
         it { should eq(expected) }
