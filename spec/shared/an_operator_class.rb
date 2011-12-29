@@ -25,6 +25,11 @@ shared_examples_for "An operator class" do
     operator_class.should respond_to(:nullary?)
   end
   
+  it "should have relational? and non_relational? methods" do
+    operator_class.should respond_to(:relational?)
+    operator_class.should respond_to(:non_relational?)
+  end
+  
   it "should implement unary? and binary? accurately" do
     op = operator_class
     (op.nullary? || op.unary? || op.binary?).should be_true
