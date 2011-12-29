@@ -29,23 +29,33 @@ module Alf
         tuples.size
       end
       alias :size :cardinality
-      alias :count :cardinality
 
       # Returns true if this relation is empty
       def empty?
         cardinality == 0
       end
 
-      # Install the DSL through iteration over defined operators
+      # Install the algebra DSL through iteration over defined operators
       include Lang::Algebra
       Lang::Algebra.instance_methods.each do |meth|
-        define_method(meth) do |*args|
-          Relation.coerce super(*args.unshift(self))
+        define_method(meth) do |*args, &block|
+          Relation.coerce super(*args.unshift(self), &block)
         end
       end # Operators::each
-
       alias :+ :union
       alias :- :minus
+
+      # Install the DSL through iteration over defined aggregators
+      Aggregator.each do |agg_class|
+        agg_name = Tools.ruby_case(Tools.class_name(agg_class)).to_sym
+        if method_defined?(agg_name)
+          raise "Unexpected method clash on Relation##{agg_name}"
+        end
+
+        define_method(agg_name) do |*args, &block|
+          agg_class.new(*args, &block).aggregate(self)
+        end
+      end
 
       # (see Object#hash)
       def hash
