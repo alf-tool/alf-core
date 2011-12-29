@@ -17,7 +17,7 @@ module Alf
 
       # (see Algebra#project)
       def allbut(child, attributes)
-        (project child, attributes, :allbut => true)
+        Operator::Relational::Project.new [child], attributes, :allbut => true
       end
 
       private
