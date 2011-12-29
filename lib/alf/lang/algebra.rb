@@ -15,6 +15,11 @@ module Alf
 
       end # Operators::each
 
+      # (see Algebra#project)
+      def allbut(child, attributes)
+        (project child, attributes, :allbut => true)
+      end
+
       private
 
       def _environment

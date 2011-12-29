@@ -59,10 +59,6 @@ module Alf
       end
     end
 
-    def allbut(child, attributes)
-      (project child, attributes, :allbut => true)
-    end
-
     # 
     # Runs a command as in shell.
     #
