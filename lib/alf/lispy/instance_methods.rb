@@ -9,7 +9,6 @@ module Alf
     include Alf::Lang::Aggregation
     include Alf::Lang::Literals
 
-    #
     # Compiles a query expression given by a String or a block and returns
     # the result (typically a tuple iterator)
     #
@@ -25,7 +24,6 @@ module Alf
     #
     # @param [String] expr a Lispy expression to compile
     # @return [Iterator] the iterator resulting from compilation
-    #
     def compile(expr = nil, path = nil, &block)
       if expr.nil? 
         instance_eval(&block)
@@ -35,7 +33,6 @@ module Alf
       end
     end
 
-    #
     # Evaluates a query expression given by a String or a block and returns
     # the result as an in-memory relation (Alf::Relation)
     #
@@ -48,7 +45,6 @@ module Alf
     #   rel = evaluate {
     #     (restrict :suppliers, lambda{ city == 'London' })
     #   }
-    #
     def evaluate(expr = nil, path = nil, &block)
       compiled = compile(expr, path, &block)
       case compiled
@@ -59,14 +55,12 @@ module Alf
       end
     end
 
-    # 
     # Runs a command as in shell.
     #
     # Example:
     #
     #     lispy = Alf.lispy(Alf::Environment.examples)
     #     op = lispy.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
-    #
     def run(argv, requester = nil)
       argv = Quickl.parse_commandline_args(argv) if argv.is_a?(String)
       argv = Quickl.split_commandline_args(argv, '|')
