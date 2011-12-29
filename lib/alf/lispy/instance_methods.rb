@@ -86,28 +86,17 @@ module Alf
       end
     end
 
-    # 
     # Install the DSL through iteration over defined operators
-    #
     Operator.each do |op_class|
-      meth_name = Tools.ruby_case(Tools.class_name(op_class)).to_sym
-      if op_class.unary?
-        define_method(meth_name) do |child, *args|
-          child = Iterator.coerce(child, environment)
-          op_class.new([child], *args)
-        end
-      elsif op_class.binary?
-        define_method(meth_name) do |left, right, *args|
-          operands = [left, right].map{|x| Iterator.coerce(x, environment)}
-          op_class.new(operands, *args)
-        end
-      elsif op_class.nullary?
-        define_method(meth_name) do |*args|
-          op_class.new([], *args)
-        end
-      else
-        raise "Unexpected operator #{op_class}"
+
+      define_method(op_class.rubycase_name.to_sym) do |*args|
+        operands  = args[0...op_class.arity].map{|x| 
+          Iterator.coerce(x, environment)
+        }
+        arguments = args[op_class.arity..-1]
+        op_class.new(operands, *arguments)
       end
+
     end # Operators::each
 
     # 
