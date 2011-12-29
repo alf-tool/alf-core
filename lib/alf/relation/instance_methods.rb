@@ -37,27 +37,15 @@ module Alf
       end
 
       # Install the DSL through iteration over defined operators
-      Operator.each do |op_class|
-
-        define_method(op_class.rubycase_name.to_sym) do |*args|
-          args = args.unshift(self)
-          operands  = args[0...op_class.arity].map{|x| 
-            Iterator.coerce(x)
-          }
-          arguments = args[op_class.arity..-1]
-          op = op_class.new(operands, *arguments)
-          Relation.coerce(op)
+      include Lang::Algebra
+      Lang::Algebra.instance_methods.each do |meth|
+        define_method(meth) do |*args|
+          Relation.coerce super(*args.unshift(self))
         end
-
       end # Operators::each
 
       alias :+ :union
       alias :- :minus
-
-      # Shortcut for project(attributes, :allbut => true)
-      def allbut(attributes)
-        project(attributes, :allbut => true)
-      end
 
       # (see Object#hash)
       def hash
