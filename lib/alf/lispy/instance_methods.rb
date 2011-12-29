@@ -6,6 +6,7 @@ module Alf
     attr_accessor :environment
 
     include Alf::Lang::Algebra
+    include Alf::Lang::Aggregation
 
     #
     # Compiles a query expression given by a String or a block and returns
@@ -84,20 +85,6 @@ module Alf
         end
       else
         Alf::Relation[*args.unshift(first)] 
-      end
-    end
-
-    # 
-    # Install the DSL through iteration over defined aggregators
-    #
-    Aggregator.each do |agg_class|
-      agg_name = Tools.ruby_case(Tools.class_name(agg_class)).to_sym
-      if method_defined?(agg_name)
-        raise "Unexpected method clash on Lispy: #{agg_name}"
-      else
-        define_method(agg_name) do |*args, &block|
-          agg_class.new(*args, &block)
-        end
       end
     end
 
