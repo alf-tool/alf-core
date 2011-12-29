@@ -13,6 +13,10 @@ shared_examples_for "An operator class" do
     operator_class.public_method_defined?(:each).should be_true
   end
   
+  it "should have an arity class method" do
+    operator_class.should respond_to(:arity)
+  end
+
   it "should have a unary? class method" do
     operator_class.should respond_to(:unary?)
   end
@@ -30,7 +34,20 @@ shared_examples_for "An operator class" do
     operator_class.should respond_to(:non_relational?)
   end
   
-  it "should implement unary? and binary? accurately" do
+  it "arity should be consistent with nullary?, unary?, binary?" do
+    case operator_class.arity
+    when 0
+      operator_class.should be_nullary
+    when 1
+      operator_class.should be_unary
+    when 2
+      operator_class.should be_binary
+    else
+      raise "Unexpected arity #{operator_class.arity} (#{operator_class})"
+    end
+  end
+
+  it "should implement unary? and binary? consistently" do
     op = operator_class
     (op.nullary? || op.unary? || op.binary?).should be_true
     (op.nullary? && op.unary?).should be_false

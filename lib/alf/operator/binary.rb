@@ -6,6 +6,21 @@ module Alf
     module Binary
       include Operator 
 
+      # Class-level methods 
+      module ClassMethods
+
+        # (see Operator::ClassMethods#arity)
+        def arity
+          2
+        end
+
+      end # module ClassMethods
+
+      def self.included(mod)
+        super
+        mod.extend(ClassMethods)
+      end
+
       # Returns the left operand
       def left
         operands.first
