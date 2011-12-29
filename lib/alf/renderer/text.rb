@@ -67,7 +67,7 @@ module Alf
         
         def array_rendering(value)
           if looks_a_relation?(value) 
-            Text.render(value, "")
+            Text::Renderer.render(value, "")
           elsif value.empty?
             "[]"
           else
