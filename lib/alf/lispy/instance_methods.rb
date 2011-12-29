@@ -1,10 +1,11 @@
 module Alf
   module Lispy
-
     alias :ruby_extend :extend
 
     # The environment
     attr_accessor :environment
+
+    include Alf::Lang::Algebra
 
     #
     # Compiles a query expression given by a String or a block and returns
@@ -85,19 +86,6 @@ module Alf
         Alf::Relation[*args.unshift(first)] 
       end
     end
-
-    # Install the DSL through iteration over defined operators
-    Operator.each do |op_class|
-
-      define_method(op_class.rubycase_name.to_sym) do |*args|
-        operands  = args[0...op_class.arity].map{|x| 
-          Iterator.coerce(x, environment)
-        }
-        arguments = args[op_class.arity..-1]
-        op_class.new(operands, *arguments)
-      end
-
-    end # Operators::each
 
     # 
     # Install the DSL through iteration over defined aggregators
