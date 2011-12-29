@@ -38,7 +38,7 @@ module Alf
 
       # Install the DSL through iteration over defined operators
       Operator::each do |op_class|
-        meth_name = Tools.ruby_case(Tools.class_name(op_class)).to_sym
+        meth_name = op_class.rubycase_name.to_sym
         if op_class.unary?
           define_method(meth_name) do |*args|
             op = op_class.new(*args.unshift([self]))

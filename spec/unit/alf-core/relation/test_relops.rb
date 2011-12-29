@@ -13,6 +13,12 @@ module Alf
       {:sid => 'S2'}
     ]}
 
+    it 'should have all relational operators installed' do
+      Alf::Operator.each do |op|
+        rel1.should respond_to(op.rubycase_name)
+      end
+    end
+
     specify "project" do
       rel1.project([]).should eq(Alf::Relation[{}])
       rel1.project([:sid], :allbut => true).should eq(Alf::Relation[{}])
