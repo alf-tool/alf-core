@@ -37,26 +37,16 @@ module Alf
       end
 
       # Install the DSL through iteration over defined operators
-      Operator::each do |op_class|
-        meth_name = op_class.rubycase_name.to_sym
-        if op_class.unary?
-          define_method(meth_name) do |*args|
-            op = op_class.new(*args.unshift([self]))
-            Relation.coerce(op)
-          end
-        elsif op_class.binary?
-          define_method(meth_name) do |right, *args|
-            op = op_class.new(*args.unshift([self, Iterator.coerce(right)]))
-            Relation.coerce(op)
-          end
-        elsif op_class.nullary?
-          define_method(meth_name) do |*args|
-            op = op_class.new(*args)
-            Relation.coerce(op)
-          end
-        else
-          raise "Unexpected operator #{op_class}"
+      Operator.each do |op_class|
+
+        define_method(op_class.rubycase_name.to_sym) do |*args|
+          args = args.unshift(self)
+          operands  = args[0...op_class.arity].map{|x| Iterator.coerce(x)}
+          arguments = args[op_class.arity..-1]
+          op = op_class.new(*([operands] + arguments))
+          Relation.coerce(op)
         end
+
       end # Operators::each
 
       alias :+ :union
