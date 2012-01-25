@@ -13,10 +13,9 @@ module Alf
         # a valid database uri, false otherwise
         def recognizes?(args)
           require 'uri'
-          return false unless (args.size == 1) && args.first.is_a?(String)
-          uri = URI::parse(args.first)
-          if uri.scheme || looks_a_sqlite_file?(args.first)
-            true
+          if args.size == 1 and args.first.is_a?(String)
+            uri = URI::parse(args.first)
+            !!uri.scheme or looks_a_sqlite_file?(args.first)
           else
             false
           end
@@ -26,7 +25,7 @@ module Alf
 
         # Returns trus if `f` looks like a sqlite file
         def looks_a_sqlite_file?(f)
-          (File.file?(f) && File.extname(f).==(".db"))
+          File.file?(f) and File.extname(f) == ".db"
         end
 
       end # class << self

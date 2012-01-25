@@ -45,13 +45,14 @@ module Alf
       # @return [Environment] an environment instance
       # @raise [ArgumentError] when no registered class recognizes the arguments
       def autodetect(*args)
-        if (args.size == 1) && args.first.is_a?(Environment)
+        if (args.size == 1) and args.first.is_a?(Environment)
           return args.first
         else
           name, clazz = environments.find{|nc| nc.last.recognizes?(args)}
           return clazz.new(*args) if clazz
         end
-        raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect}"
+        envs = environments.map{|r| r.last.name}.join(', ')
+        raise ArgumentError, "Unable to auto-detect Environment with #{args.inspect} [#{envs}]"
       end
       alias :coerce :autodetect
 
