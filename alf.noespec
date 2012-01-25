@@ -1,6 +1,6 @@
 template-info:
   name: "ruby"
-  version: 1.6.0
+  version: 1.7.0
   manifest:
     tasks/spec_test.rake:
       ignore: true
