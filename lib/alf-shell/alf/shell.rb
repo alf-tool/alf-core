@@ -9,6 +9,7 @@ module Alf
     def self.Delegator() 
       Quickl::Delegator(){|builder|
         builder.doc_extractor = DOC_EXTRACTOR
+        builder.class_module Command::ClassMethods
         yield(builder) if block_given?
       }
     end
