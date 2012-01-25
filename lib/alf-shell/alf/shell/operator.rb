@@ -22,7 +22,7 @@ module Alf
 
         # delegation to the class        
         [ :signature, 
-          :relational?, :experimental?,
+          :relational?, :non_relational?, :experimental?,
           :nullary?, :unary?, :binary? ].each do |meth|
           define_method(meth) do |*args, &block|
             operator_class.send(meth, *args, &block)
