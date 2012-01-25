@@ -10,3 +10,4 @@ doc/deploy-gh-pages
 examples/bench.txt
 *.rbc
 coverage
+.rbx
