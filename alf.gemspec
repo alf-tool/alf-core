@@ -128,7 +128,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("wlang", "~> 0.10.2")
   s.add_development_dependency("yard", "~> 0.7.2")
   s.add_development_dependency("bluecloth", "~> 2.2.0")
-  s.add_development_dependency("redcarpet", "~> 1.17.2")
+  s.add_development_dependency("redcarpet", "~> 2.1.0")
   s.add_development_dependency("fastercsv", "~> 1.5.4")
   s.add_development_dependency("request-log-analyzer", "~> 1.11.0")
   s.add_development_dependency("sequel", "~> 3.30")

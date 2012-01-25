@@ -43,7 +43,7 @@ variables:
     - {name: wlang,        version: "~> 0.10.2", groups: [release      ]}
     - {name: yard,         version: "~> 0.7.2",  groups: [doc          ]}
     - {name: bluecloth,    version: "~> 2.2.0",  groups: [doc          ]}
-    - {name: redcarpet,    version: "~> 1.17.2", groups: [doc          ]}
+    - {name: redcarpet,    version: "~> 2.1.0",  groups: [doc          ]}
     - {name: fastercsv,    version: "~> 1.5.4",  groups: [extra        ]}
     - {name: request-log-analyzer, version: "~> 1.11.0", groups: [extra]}
     - {name: sequel,       version: "~> 3.30",   groups: [extra        ]}

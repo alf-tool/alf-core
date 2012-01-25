@@ -20,7 +20,7 @@ end
 group :doc do
   gem "yard", "~> 0.7.2"
   gem "bluecloth", "~> 2.2.0"
-  gem "redcarpet", "~> 1.17.2"
+  gem "redcarpet", "~> 2.1.0"
 end
 
 group :extra do

@@ -2,7 +2,7 @@
 ?{knows?(:text)}{+{text}}
 ?{knows?(:operator)}{
 <h2>${operator.command_name.upcase}</h2>
-+{Redcarpet.new(operator.documentation(:method => :lispy)).to_html}
++{::Alf.markdown(operator.documentation(:method => :lispy))}
 }
 </div>
 

@@ -1,4 +1,4 @@
 ## !{op}
 
-+{Redcarpet.new(op.documentation).to_html}
++{::Alf.markdown(op.documentation)}
 

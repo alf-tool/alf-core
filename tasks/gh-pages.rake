@@ -1,3 +1,9 @@
+module Alf
+  def self.markdown(md)
+    Redcarpet::Markdown.new(Redcarpet::Render::HTML).render(md)
+  end
+end
+
 task :"gh-pages" do
   require 'fileutils'
   require 'wlang'
@@ -34,7 +40,7 @@ task :"gh-pages" do
     Dir[File.join(indir, entry, '*.md')].each do |file|
       md     = File.read(file)
       title  = md.split("\n").first[3..-1].gsub("&mdash;", "-")
-      text   = Redcarpet.new(md).to_html
+      text   = Alf.markdown(md)
       target = File.join(outdir, entry, "#{File.basename(file, ".md")}.html")
       File.open(target, "w") do |io|
         ctx2 = ctx.merge(:text => text, :title => title)
