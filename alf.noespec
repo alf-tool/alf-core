@@ -10,6 +10,8 @@ template-info:
       safe-override: false
     tasks/debug_mail.txt:
       safe-override: false
+    lib/__lower__/loader.rb:
+      ignore: true
 variables:
   lower: 
     alf
