@@ -21,6 +21,6 @@ module Alf
     end # class Compact
   end # module Engine
 end # module Alf
-require 'alf/engine/compact/uniq'
-require 'alf/engine/compact/set'
+require_relative 'compact/uniq'
+require_relative 'compact/set'
 

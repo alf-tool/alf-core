@@ -1,3 +1,3 @@
-require 'alf/csv/commons'
-require 'alf/csv/reader'
-require 'alf/csv/renderer'
+require_relative 'csv/commons'
+require_relative 'csv/reader'
+require_relative 'csv/renderer'

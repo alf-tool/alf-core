@@ -4,4 +4,4 @@ module Alf
     end # module Semi
   end # module Engine
 end # module Alf
-require 'alf/engine/semi/hash'
+require_relative 'semi/hash'

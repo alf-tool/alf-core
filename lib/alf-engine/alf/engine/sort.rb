@@ -25,4 +25,4 @@ module Alf
     end # class Sort
   end # module Engine
 end # module Alf
-require 'alf/engine/sort/in_memory'
+require_relative 'sort/in_memory'

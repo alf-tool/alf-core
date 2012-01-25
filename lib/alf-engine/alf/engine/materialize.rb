@@ -4,5 +4,5 @@ module Alf
     end # module Materialize
   end # module Engine
 end # module Alf
-require 'alf/engine/materialize/hash'
-require 'alf/engine/materialize/array'
+require_relative 'materialize/hash'
+require_relative 'materialize/array'

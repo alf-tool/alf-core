@@ -4,4 +4,4 @@ module Alf
     end # module Group
   end # module Engine
 end # module Alf
-require 'alf/engine/group/hash'
+require_relative 'group/hash'

@@ -1,1 +1,1 @@
-require 'alf/yaml/renderer'
+require_relative 'yaml/renderer'

@@ -133,4 +133,4 @@ module Alf
     end # class Main
   end # module Shell
 end # module Alf
-require 'alf/shell/command/main/class_methods'
+require_relative 'main/class_methods'

@@ -4,4 +4,4 @@ module Alf
     end # module Rank
   end # module Engine
 end # module Alf
-require 'alf/engine/rank/cesure'
+require_relative 'rank/cesure'

@@ -1,1 +1,1 @@
-require 'alf/logs/reader'
+require_relative 'logs/reader'

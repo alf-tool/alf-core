@@ -20,7 +20,7 @@ module Alf
     end # module ClassMethods
   end # module Command
 end # module Alf
-require 'alf/shell/command/main'
-require 'alf/shell/command/exec'
-require 'alf/shell/command/help'
-require 'alf/shell/command/show'
+require_relative 'command/main'
+require_relative 'command/exec'
+require_relative 'command/help'
+require_relative 'command/show'

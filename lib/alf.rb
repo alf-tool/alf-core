@@ -1,7 +1,3 @@
-[ "alf-engine", "alf-shell", "alf-csv", "alf-sequel", "alf-logs", "alf-yaml" ].each do |contrib|
-  $LOAD_PATH.unshift(File.join(File.dirname(__FILE__), contrib))
-end
-
 require "alf/version"
 require "alf/loader"
 require "alf/errors"
@@ -24,7 +20,7 @@ module Alf
   require 'alf/reader'
   require 'alf/renderer'
   require 'alf/operator'
-  require 'alf/shell'
+  require 'alf-shell/alf/shell'
   require 'alf/aggregator'
   require 'alf/relation'
   require 'alf/lispy'
@@ -52,8 +48,9 @@ module Alf
   end
   
 end # module Alf
-require "alf/engine"
-require "alf/sequel"
-require 'alf/yaml'
-require 'alf/csv'
-require 'alf/logs'
+
+require_relative "alf-engine/alf/engine"
+require_relative "alf-sequel/alf/sequel"
+require_relative 'alf-yaml/alf/yaml'
+require_relative 'alf-csv/alf/csv'
+require_relative 'alf-logs/alf/logs'

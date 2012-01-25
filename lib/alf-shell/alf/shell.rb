@@ -1,4 +1,4 @@
-require 'alf/shell/doc_manager'
+require_relative 'shell/doc_manager'
 module Alf
   module Shell
 
@@ -35,5 +35,5 @@ module Alf
 
   end # module Shell
 end # module Alf
-require 'alf/shell/command'
-require 'alf/shell/operator'
+require_relative 'shell/command'
+require_relative 'shell/operator'

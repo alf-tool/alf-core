@@ -4,4 +4,4 @@ module Alf
     end # module Quota
   end # module Engine
 end # module Alf
-require 'alf/engine/quota/cesure'
+require_relative 'quota/cesure'

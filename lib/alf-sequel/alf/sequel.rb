@@ -1,2 +1,2 @@
-require 'alf/sequel/environment'
-require 'alf/sequel/iterator'
+require_relative 'sequel/environment'
+require_relative 'sequel/iterator'

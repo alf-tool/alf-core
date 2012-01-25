@@ -4,4 +4,4 @@ module Alf
     end # module Join
   end # module Engine
 end # module Alf
-require 'alf/engine/join/hash'
+require_relative 'join/hash'
