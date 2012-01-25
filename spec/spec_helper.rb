@@ -15,3 +15,10 @@ end
 require 'shared/an_operator_class'
 require 'shared/a_valid_type_implementation'
 require 'shared/a_value'
+
+RSpec.configure do |config|
+  config.treat_symbols_as_metadata_keys_with_true_values = true
+  config.filter_run :hash_ordering => lambda{|val|
+    not(val) or (RUBY_VERSION >= "1.9")
+  }
+end
