@@ -127,7 +127,13 @@ module Alf
       def to_ruby_literal
         "Alf::#{Tools.class_name(self.class)}[#{Tools.to_ruby_literal(has_source_code!)}]"
       end
-      alias :inspect :to_ruby_literal
+      
+      # Returns a string representation of this expression
+      def inspect
+        to_ruby_literal
+      rescue NotImplementedError
+        super
+      end
 
       # Asserts that this expression knows its source code or raises a 
       # NotImplementedError.

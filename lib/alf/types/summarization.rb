@@ -125,7 +125,13 @@ module Alf
         }]
         "Alf::Summarization[#{Tools.to_ruby_literal(map)}]"
       end
-      alias :inspect :to_ruby_literal
+
+      # Returns a string representation of this expression
+      def inspect
+        to_ruby_literal
+      rescue NotImplementedError
+        super
+      end
 
     end # class Summarization
   end # module Types
