@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe "Alf's alf command / " do
 
-  Dir[_('command/**/*.cmd', __FILE__)].each do |input|
+  Dir[_('shell/**/*.cmd', __FILE__)].each do |input|
     cmd = wlang(File.readlines(input).first, binding)
     specify{ cmd.should =~ /^alf / }
   
