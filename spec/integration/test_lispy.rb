@@ -23,5 +23,9 @@ module Alf
       sum{ qty }.should be_a(Aggregator::Sum)
     end
 
+    it "should have stddev aggregator" do
+      stddev{ qty }.should be_a(Aggregator::Stddev)
+    end
+
   end
 end

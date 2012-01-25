@@ -1,4 +1,10 @@
-# 0.11.0 / FIX ME
+# 0.11.1 / 2012-01-25
+
+## Bugfixes
+
+* Fix Aggregator.stddev and Lispy.stddev that were missing
+
+# 0.11.0 / 2012-01-25
 
 ## Broken APIs (private sections only)
 

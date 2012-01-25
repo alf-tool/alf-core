@@ -38,10 +38,12 @@ module Alf
       #
       # @param [Class] clazz a class that extends Aggregator
       def inherited(clazz)
-        aggregators << clazz
         basename = Tools.ruby_case(Tools.class_name(clazz))
-        instance_eval <<-EOF
-          def Aggregator.#{basename}(*args, &block)
+        Aggregator.module_eval do
+          aggregators << clazz
+        end
+        Aggregator.module_eval <<-EOF
+          def self.#{basename}(*args, &block)
             #{clazz}.new(*args, &block)
           end
         EOF
