@@ -24,6 +24,7 @@ module Alf
   require 'alf/aggregator'
   require 'alf/relation'
   require 'alf/lispy'
+  require 'alf/ext'
 
   #
   # Builds and returns a lispy engine on a specific environment.
