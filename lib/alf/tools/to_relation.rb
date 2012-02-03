@@ -25,6 +25,16 @@ module Alf
         v.to_relation
       end
 
+      # to_relation(:name => ["...", "..."])
+      list_of_values = lambda{|v,_|
+        v.is_a?(Hash) and v.size == 1 and v.values.first.is_a?(Array)
+      }
+      r.upon(list_of_values) do |v,_|
+        key, values = v.to_a.first
+        tuples      = values.map{|value| {key => value}}.to_set
+        Relation.new(tuples)
+      end
+
       # Tuple to singleton Relation
       r.upon(Hash) do |v,_|
         Relation.new(Set.new << v)

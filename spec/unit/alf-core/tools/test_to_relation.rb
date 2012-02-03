@@ -24,6 +24,12 @@ module Alf
       to_rel(tuple).should eq(expected)
     end
 
+    it 'converts a list of names values to a Relation' do
+      tuple    = {:name => ["Alf", "Myrrha"]}
+      expected = Relation.new(Set.new << {:name => "Alf"} << {:name => "Myrrha"})
+      to_rel(tuple).should eq(expected)
+    end
+
     it 'converts an array of tuples' do
       to_rel(expected.to_a).should eq(expected)
     end
