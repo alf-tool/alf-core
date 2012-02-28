@@ -22,7 +22,7 @@ Alf implements a Domain Specific Language (DSL), for writing and executing relat
 
 * Ala "ruby -e", for shortest expressions (see also [Using Alf in Shell](shell/index))
 
-<pre><code class="terminal">$ alf -e "(restrict :suppliers, ->(){ city == 'London' })"</code></pre>
+<pre><code class="terminal">$ alf -e "(restrict :suppliers, ->{ city == 'London' })"</code></pre>
 
 * Through .alf files that contain them
 
@@ -32,7 +32,7 @@ Alf implements a Domain Specific Language (DSL), for writing and executing relat
 
 <pre><code class="ruby">require 'alf'
 Alf.lispy.evaluate{
-  (restrict :suppliers, ->(){ city == 'London' })
+  (restrict :suppliers, ->{ city == 'London' })
 }
 </code></pre>
 
@@ -41,7 +41,7 @@ Alf.lispy.evaluate{
 * Alf is not limited to the use of simple scalar types. Attribute can be any ruby class/object implementing a type/value in a consistent way. You also have full Ruby power in expressions:
 
 <pre><code class="ruby">Alf.lispy.evaluate{
-  (restrict :suppliers, ->(){ city =~ /^P/ })
+  (restrict :suppliers, ->{ city =~ /^P/ })
 }</code></pre>
 
 * Alf automatically resolves relation names according to an environment of use. By default, the latter is bound to the examples bundled with Alf. This way, you can learn Alf without worrying about where data come from, or even get it as plain ruby objects:
@@ -70,6 +70,6 @@ puts rel.to_a
 
 * While not idomatic and not recommended, you can also use Alf with an object-oriented style thanks to `Relation`:
 
-<pre><code class="ruby">cities.extend(:bigname => ->(){ city.upcase })</code></pre>
+<pre><code class="ruby">cities.extend(:bigname => ->{ city.upcase })</code></pre>
 
 

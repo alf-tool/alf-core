@@ -118,8 +118,8 @@ Relational algebra is similar, but applies to relations. For example:
 #  What are red or heavy parts ?
 #
 (union 
-  (restrict :parts, ->(){ color == Color('red') }),
-  (restrict :parts, ->(){ heavy == true         }))
+  (restrict :parts, ->{ color == Color('red') }),
+  (restrict :parts, ->{ heavy == true         }))
 </code></pre>
 
 Can be rephrased/rewritten as
@@ -127,6 +127,6 @@ Can be rephrased/rewritten as
 <pre class="theory"><code class="ruby">#
 #  What parts are either red or heavy ?
 #
-(restrict :parts, ->(){ (color == Color('red')) or (heavy == true) })
+(restrict :parts, ->{ (color == Color('red')) or (heavy == true) })
 </code></pre>
 
