@@ -57,7 +57,7 @@ module Alf
   #   # x.to_relation if it exists
   #
   #   Alf::Relation(:attr => [val1, ..., valn])
-  #   # Relation([{:attr => val1}, ..., {:someattr => valn}])
+  #   # Relation([{:attr => val1}, ..., {:attr => valn}])
   #
   #   Alf::Relation(:attr1 => val1, ..., :attrn => valn)
   #   # Relation([{:attr1 => val1, ..., :attrn => valn}])
