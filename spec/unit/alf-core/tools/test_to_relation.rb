@@ -7,7 +7,7 @@ module Alf
     }
 
     def to_rel(x)
-      Tools.to_relation(x)
+      Relation(x) # Relation(...) -> Alf::Relation(...) -> Tools.to_relation(...)
     end
 
     it 'delegates to to_relation if it exists' do
@@ -17,6 +17,7 @@ module Alf
 
     it 'works on Relation' do
       to_rel(expected).should eq(expected)
+      to_rel(expected).object_id.should eq(expected.object_id)
     end
 
     it 'converts a single Hash as a singleton relation' do

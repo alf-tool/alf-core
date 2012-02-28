@@ -1,3 +1,14 @@
+# 0.12.1 / FIX ME
+
+## Enhancements
+
+* Add `Alf::Relation()`, with the same semantics as the main `Relation()` function
+  added in 0.12.0.
+
+## Bugfixes
+
+* Ensure that `Relation()` reads a reader/operator only once.
+
 # 0.12.0 / 2012-02-09
 
 * Add a Relation() toplevel method that mimics Array(), Integer(), and so on.

@@ -15,11 +15,12 @@ module Alf
 
     # Converts this iterator to an in-memory Relation.
     #
-    # @return [Relation] a relation instance, as the set of tuples
-    #         that would be yield by this iterator.
-    def to_rel
-      Relation::coerce(self)
+    # @return [Relation] a relation instance, as the set of tuples that would be yield by
+    # this iterator.
+    def to_relation
+      Relation::new(self.to_set)
     end
+    alias :to_rel :to_relation
 
     require 'alf/iterator/class_methods'
     require 'alf/iterator/proxy'

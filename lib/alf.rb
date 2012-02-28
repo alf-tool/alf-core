@@ -47,6 +47,27 @@ module Alf
     lispy.environment = Environment.coerce(env)
     lispy
   end
+
+  #
+  # Coerces some arguments to a relation.
+  #
+  # The following coercions are supported:
+  #
+  #   Alf::Relation(x)
+  #   # x.to_relation if it exists
+  #
+  #   Alf::Relation(:attr => [val1, ..., valn])
+  #   # Relation([{:attr => val1}, ..., {:someattr => valn}])
+  #
+  #   Alf::Relation(:attr1 => val1, ..., :attrn => valn)
+  #   # Relation([{:attr1 => val1, ..., :attrn => valn}])
+  #
+  #   Alf::Relation([ {...}, ..., {...} ])
+  #   # the common coercion from an array of tuples
+  #
+  def self.Relation(*args)
+    Alf::Tools.to_relation(*args)
+  end
   
 end # module Alf
 

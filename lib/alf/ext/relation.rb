@@ -1,4 +1,4 @@
-def Relation(x)
-  Alf::Tools.to_relation(x)
+def Relation(*args)
+  Alf::Relation(*args)
 end
 
