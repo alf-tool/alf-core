@@ -1,4 +1,4 @@
-# 0.12.0 / FIX ME
+# 0.12.0 / 2012-02-09
 
 * Add a Relation() toplevel method that mimics Array(), Integer(), and so on.
   That method uses Tools::ToRelation which is a set of Myrrha coercion rules.
