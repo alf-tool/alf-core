@@ -51,12 +51,12 @@ module Alf
         Tools.to_ruby_literal(v.name)
       end
 
-      # TupleExpression -> ->(){ ... }
+      # TupleExpression -> ->{ ... }
       r.upon(Types::TupleExpression) do |v, rd|
-        "->(){ #{v.has_source_code!} }"
+        "->{ #{v.has_source_code!} }"
       end
 
-      # TupleComputation -> { :big => -(){ ... }, ... }
+      # TupleComputation -> { :big => ->{ ... }, ... }
       r.upon(Types::TupleComputation) do |v, rd|
         "{" + v.computation.map{|name,compu|
           [name.inspect, r.coerce(compu)].join(" => ")
@@ -68,7 +68,7 @@ module Alf
         v.has_source_code!
       end
 
-      # Summarization -> { :total => ->(){ ... } }
+      # Summarization -> { :total => ->{ ... } }
       r.upon(Types::Summarization) do |v, rd|
         "{" + v.aggregations.map{|name,compu|
           [name.inspect, r.coerce(compu)].join(" => ")
