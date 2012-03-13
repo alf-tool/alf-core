@@ -14,6 +14,11 @@ module Alf
 
     let(:file){ _("alf.db", __FILE__) }
 
+    def uri
+      protocol = defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"
+      "#{protocol}://#{file}"
+    end
+
     before(:all){
       unless File.exists?(file) 
         FileUtils.rm_rf file
@@ -37,7 +42,7 @@ module Alf
 
       it "should recognize database uris" do
         Sequel::Environment.recognizes?(["postgres://localhost/database"]).should be_true
-        Sequel::Environment.recognizes?(["sqlite://#{file}"]).should be_true
+        Sequel::Environment.recognizes?([uri]).should be_true
       end
 
       it "should not be too permissive" do

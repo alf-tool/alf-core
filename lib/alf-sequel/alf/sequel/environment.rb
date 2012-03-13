@@ -32,8 +32,12 @@ module Alf
 
       # Creates an Environment instance
       def initialize(uri, options = {})
-        @uri = self.class.looks_a_sqlite_file?(uri) ? "sqlite://#{uri}" : uri
+        @uri = self.class.looks_a_sqlite_file?(uri) ? "#{sqlite_protocol}://#{uri}" : uri
         @options = options
+      end
+
+      def sqlite_protocol
+        defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"
       end
 
       # (see Alf::Environment#dataset)

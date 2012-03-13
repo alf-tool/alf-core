@@ -27,6 +27,16 @@ group :extra do
   gem "fastercsv", "~> 1.5.4"
   gem "request-log-analyzer", "~> 1.11.0"
   gem "sequel", "~> 3.30"
-  gem "sqlite3", "~> 1.3.0"
   gem "highline", "~> 1.6.2"
+end
+
+platform 'jruby' do
+  group :extra do
+    gem "jdbc-sqlite3", "~> 3.7"
+  end
+end
+platform 'mri' do
+  group :extra do
+    gem "sqlite3", "~> 1.3"
+  end
 end
