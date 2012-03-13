@@ -1,11 +1,3 @@
-begin
-  gem "bundler", "~> 1.0"
-  require "bundler/setup"
-rescue LoadError => ex
-  puts ex.message
-  abort "Bundler failed to load, (did you run 'gem install bundler' ?)"
-end
-
 # Dynamically load the gem spec
 $gemspec_file = File.expand_path('../alf.gemspec', __FILE__)
 $gemspec      = Kernel.eval(File.read($gemspec_file))
