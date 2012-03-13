@@ -1,4 +1,4 @@
-# 0.12.1 / FIX ME
+# 0.12.1 / 2012-03-13
 
 ## Enhancements
 
@@ -8,6 +8,8 @@
 ## Bugfixes
 
 * Ensure that `Relation()` reads a reader/operator only once.
+* The Sequel environment now correctly uses the jdbc driver when attempting to connect
+  to a sqlite database/file.
 
 # 0.12.0 / 2012-02-09
 
