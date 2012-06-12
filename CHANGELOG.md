@@ -1,3 +1,7 @@
+# 0.12.2 / 2012-06-12
+
+* Bumped and weakened backports dependency to '~> 2.6'
+
 # 0.12.1 / 2012-03-13
 
 ## Enhancements
