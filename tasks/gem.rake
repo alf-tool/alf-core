@@ -25,13 +25,18 @@
 #
 begin
   require 'rubygems/package_task'
-  Gem::PackageTask.new($gemspec) do |t|
+
+  # Dynamically load the gem spec
+  gemspec_file = File.expand_path('../../alf.gemspec', __FILE__)
+  gemspec      = Kernel.eval(File.read(gemspec_file))
+
+  Gem::PackageTask.new(gemspec) do |t|
 
     # Name of the package
-    t.name = $gemspec.name
+    t.name = gemspec.name
 
     # Version of the package
-    t.version = $gemspec.version
+    t.version = gemspec.version
 
     # Directory used to store the package files
     t.package_dir = "pkg"
@@ -49,7 +54,7 @@ begin
     t.need_zip = false
 
     # List of files to be included in the package.
-    t.package_files = $gemspec.files
+    t.package_files = gemspec.files
 
     # Tar command for gzipped or bzip2ed archives.
     t.tar_command = "tar"

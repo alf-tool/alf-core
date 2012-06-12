@@ -136,7 +136,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency("highline", "~> 1.6.2")
   s.add_dependency("quickl", "~> 0.4.2")
   s.add_dependency("myrrha", "~> 1.2.1")
-  s.add_dependency("backports", "~> 2.3.0")
+  s.add_dependency("backports", "~> 2.6")
 
   # The version of ruby required by this gem
   #
