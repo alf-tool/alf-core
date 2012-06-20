@@ -1,4 +1,4 @@
 unless defined?(ALF_NO_CORE_EXTENSIONS)
-  require 'alf/ext/relation'
+  require_relative 'ext/relation'
 end
 
