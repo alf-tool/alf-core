@@ -34,7 +34,7 @@ module Alf
         end
       end
       
-      describe "with options", :hash_ordering => true do
+      describe "with options", :ruby19 => true do
         let(:input){ 
           [{:size => 10, :name => "blambeau"}, {:size => 20, :name => "mmathieu"}]
         }
