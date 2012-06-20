@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Reader::AlfFile do
     
-    class TestEnv < Alf::Environment
+    class TestEnv < Alf::Database
       def dataset(name)
         [{:status => 10},{:status => 30}]
       end

@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'fileutils'
 require "sequel"
 module Alf
-  describe Sequel::Environment do
+  describe Sequel::Database do
     
     let(:rel) {Alf::Relation[
       {:sid => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
@@ -37,35 +37,35 @@ module Alf
     describe "recognizes?" do
 
       it "should recognize sqlite files" do
-        Sequel::Environment.recognizes?([file]).should be_true
+        Sequel::Database.recognizes?([file]).should be_true
       end
 
       it "should recognize database uris" do
-        Sequel::Environment.recognizes?(["postgres://localhost/database"]).should be_true
-        Sequel::Environment.recognizes?([uri]).should be_true
+        Sequel::Database.recognizes?(["postgres://localhost/database"]).should be_true
+        Sequel::Database.recognizes?([uri]).should be_true
       end
 
       it "should not be too permissive" do
-        Sequel::Environment.recognizes?(["nosuchone.db"]).should be_false
-        Sequel::Environment.recognizes?([nil]).should be_false
+        Sequel::Database.recognizes?(["nosuchone.db"]).should be_false
+        Sequel::Database.recognizes?([nil]).should be_false
       end
 
     end # recognizes?
 
-    it "should let Environment autodetect sqlite files" do
-      Environment.autodetect(file).should be_a(Sequel::Environment)
+    it "should let Database autodetect sqlite files" do
+      Database.autodetect(file).should be_a(Sequel::Database)
     end
 
     describe "dataset" do
 
-      let(:env) { Sequel::Environment.new(file) }
+      let(:db) { Sequel::Database.new(file) }
 
       it "should serve iterators" do
-        env.dataset(:suppliers).should be_a(Alf::Iterator)
+        db.dataset(:suppliers).should be_a(Alf::Iterator)
       end
 
       it "should be the correct relation" do
-        env.dataset(:suppliers).to_rel.should eq(rel)
+        db.dataset(:suppliers).to_rel.should eq(rel)
       end
 
     end # dataset

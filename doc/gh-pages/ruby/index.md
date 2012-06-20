@@ -44,7 +44,7 @@ Alf.lispy.evaluate{
   (restrict :suppliers, ->{ city =~ /^P/ })
 }</code></pre>
 
-* Alf automatically resolves relation names according to an environment of use. By default, the latter is bound to the examples bundled with Alf. This way, you can learn Alf without worrying about where data come from, or even get it as plain ruby objects:
+* Alf automatically resolves relation names according to an database of use. By default, the latter is bound to the examples bundled with Alf. This way, you can learn Alf without worrying about where data come from, or even get it as plain ruby objects:
 
 <pre><code class="ruby">rel = Alf.lispy.evaluate{
   (join :suppliers, :cities)

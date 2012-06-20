@@ -2,7 +2,7 @@
 
 ## Enhancements
 
-* The default environment is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --env=.' everytime you want to use .csv or .rash files as base relations when using alf in shell. A --examples option allows setting the embedded database as default environment easily.
+* The default database is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --db=.' everytime you want to use .csv or .rash files as base relations when using alf in shell. A --examples option allows easily setting the embedded database as default one.
 
 * When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
 
@@ -23,6 +23,8 @@
 * Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
 
 ## Broken stuff
+
+* The Environment concept as been properly renamed as Database (including `environment` readers and writers here and there). Accordingly, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
 
 * You now have to explicitely use 'alf show --text > ...' or 'alf --text ... > ' if you don't want ruby hashes to be outputted to output files. This is a consequence of tty detection that ensures a better shell experience.
 

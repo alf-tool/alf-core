@@ -4,8 +4,8 @@ describe "Alf's semantics tests" do
   module Helpers
     
     def rel_equal(x, y)
-      x = Alf::Environment.examples.dataset(x) if x.is_a?(Symbol)
-      y = Alf::Environment.examples.dataset(y) if y.is_a?(Symbol)
+      x = Alf::Database.examples.dataset(x) if x.is_a?(Symbol)
+      y = Alf::Database.examples.dataset(y) if y.is_a?(Symbol)
       x.to_rel == y.to_rel
     end
     
@@ -19,7 +19,7 @@ describe "Alf's semantics tests" do
     
     let(:lispy){
       dir = File.expand_path('../__database__', __FILE__)
-      lispy = Alf.lispy(Alf::Environment.folder(dir))
+      lispy = Alf.lispy(Alf::Database.folder(dir))
       lispy.ruby_extend(Helpers)
     }
 

@@ -3,7 +3,7 @@ alf - Relational algebra at your fingertips
 
 SYNOPSIS
 
-    alf [--version] [--help] 
+    alf [--version] [--help]
     alf -e '(lispy command)'
     alf [FILE.alf]
     alf [alf opts] OPERATOR [operator opts] ARGS ...

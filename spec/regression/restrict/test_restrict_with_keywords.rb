@@ -8,7 +8,7 @@ module Alf
     end
     
     it "should support using a keyword on Lispy" do
-      Alf.lispy(Environment.examples).evaluate do
+      Alf.lispy(Database.examples).evaluate do
         (restrict (extend :suppliers, {:when => lambda{"notnow"}}), {:when => "now"})
       end.should eq(Relation::DUM)
     end

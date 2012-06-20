@@ -1,19 +1,19 @@
 require 'spec_helper'
 module Alf
-  class Environment
+  class Database
     describe Folder do
 
       it 'should be registered' do
-        Environment.environments.find{|n,c| c == Folder}.should_not be_nil
+        Database.databases.find{|n,c| c == Folder}.should_not be_nil
       end
 
-      it 'should lead to an Environment.folder method' do
-        Environment.should respond_to(:folder)
-        Environment.folder(File.dirname(__FILE__)).should be_a(Folder)
+      it 'should lead to an Database.folder method' do
+        Database.should respond_to(:folder)
+        Database.folder(File.dirname(__FILE__)).should be_a(Folder)
       end
 
       let(:path){ File.expand_path('../examples', __FILE__) }
-      let(:env){ Folder.new(path) }
+      let(:db){ Folder.new(path) }
 
       describe "recognizes?" do
 
@@ -29,7 +29,7 @@ module Alf
 
       describe "dataset" do
 
-        subject{ env.dataset(name) }
+        subject{ db.dataset(name) }
 
         describe "when called on explicit file" do
           let(:name){ "suppliers.rash" }

@@ -1,16 +1,21 @@
 #!/usr/bin/env ruby
-from, to = ARGV
-raise if from.nil? or to.nil?
 
-rx = Regexp.compile(from)
-
-dir = File.dirname(File.dirname(__FILE__))
-Dir["#{dir}/**/*.md"].each do |file|
-  before = File.read(file)
-  if before =~ rx
-    puts "Rewriting #{file}"
-    File.open(file, 'w') do |io|
-      io << before.gsub(rx, to)
+def rewrite(pattern, rx, to)
+  Dir["**/#{pattern}"].each do |file|
+    before = File.read(file)
+    if before =~ rx
+      puts "Rewriting #{file}"
+      File.open(file, 'w') do |io|
+        io << before.gsub(rx, to)
+      end
     end
   end
 end
+
+from, to = ARGV
+raise if from.nil? or to.nil?
+rx = Regexp.compile(from)
+
+rewrite('*.md', rx, to)
+rewrite('*.rb', rx, to)
+rewrite('*.stdout', rx, to)

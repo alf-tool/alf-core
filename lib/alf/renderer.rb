@@ -84,8 +84,8 @@ module Alf
     # Renderer input (typically an Iterator)
     attr_accessor :input
 
-    # @return [Environment] Optional wired environment
-    attr_accessor :environment
+    # @return [Database] Optional wired database
+    attr_accessor :database
 
     # @return [Hash] Renderer's options
     attr_accessor :options
@@ -93,14 +93,14 @@ module Alf
     # Creates a reader instance.
     #
     # @param [Iterator] iterator an Iterator of tuples to render
-    # @param [Environment] environment wired environment, serving this reader
+    # @param [Database] database wired database, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(*args)
-      @input, @environment, @options = case args.first
+      @input, @database, @options = case args.first
       when Array
-        Tools.varargs(args, [Array, Environment, Hash])
+        Tools.varargs(args, [Array, Database, Hash])
       else
-        Tools.varargs(args, [Iterator, Environment, Hash])
+        Tools.varargs(args, [Iterator, Database, Hash])
       end
       @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
     end
@@ -111,7 +111,7 @@ module Alf
     # The default implementation simply coerces the input as an Iterator and
     # delegates the call to {#render}.
     def execute(output = $stdout)
-      render(Iterator.coerce(input, environment), output)
+      render(Iterator.coerce(input, database), output)
     end
 
     protected

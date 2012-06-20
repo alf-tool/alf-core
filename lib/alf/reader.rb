@@ -38,7 +38,7 @@ module Alf
       # Registers a reader class associated with specific file extensions.
       #
       # Registered class must provide a constructor with the following signature
-      # `new(path_or_io, environment = nil, options = {})`. The registration
+      # `new(path_or_io, database = nil, options = {})`. The registration
       # name must be a symbol which can safely be used as a ruby method name.
       # A factory method of that name and signature is automatically installed
       # on the Reader class.
@@ -72,21 +72,21 @@ module Alf
         end
       end
 
-      # Coerces `arg` to a Reader instance, using an optional environment to
+      # Coerces `arg` to a Reader instance, using an optional database to
       # convert named datasets.
       #
       # This method automatically provides readers for Strings and Symbols
-      # through `environment` (**not** through the reader factory) and for IO
+      # through `database` (**not** through the reader factory) and for IO
       # objects through a Rash reader.
       #
       # @param [Object] arg any value to coerce to a Reader instance
-      # @param [Environment] environment to resolved named datasets (optional)
-      def coerce(arg, environment = nil)
+      # @param [Database] database to resolved named datasets (optional)
+      def coerce(arg, database = nil)
         case arg
         when Reader
           arg
         when IO, StringIO
-          rash(arg, environment)
+          rash(arg, database)
         else
           raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
         end
@@ -107,8 +107,8 @@ module Alf
     # Default reader options
     DEFAULT_OPTIONS = {}
 
-    # @return [Environment] Wired environment
-    attr_accessor :environment
+    # @return [Database] Wired database
+    attr_accessor :database
 
     # @return [String, IO, ...] Input as initially provided to initialize
     attr_accessor :input
@@ -122,10 +122,10 @@ module Alf
     # Creates a reader instance.
     #
     # @param [String or IO] path to a file or IO object for input
-    # @param [Environment] environment wired environment, serving this reader
+    # @param [Database] database wired database, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(*args)
-      @input, @environment, @options = Tools.varargs(args, [args.first.class, Environment, Hash])
+      @input, @database, @options = Tools.varargs(args, [args.first.class, Database, Hash])
       @path = Tools.to_path(@input)
       @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
     end

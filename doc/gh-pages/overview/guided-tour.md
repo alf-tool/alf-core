@@ -85,7 +85,7 @@ Now that types are properly recognized, you may manipulate your data with the co
 
 Alf is also able to connect to SQL servers and SQLite files (provided that you install the `sequel` ruby library, as well as specific adapters: `pg`, `sqlite3`, and so on.). For example, suppose that you have a SQLite `northwind.db` file. Try this:
 
-<pre class="theory"><code class="ruby">$ alf --env=northwind.db --text project customers -- Country
+<pre class="theory"><code class="ruby">$ alf --db=northwind.db --text project customers -- Country
 +-------------+
 | :Country    |
 +-------------+
@@ -103,7 +103,7 @@ In the example above, the returned relation will never contain duplicate country
 
 Now, maybe you use a PostgreSQL database, or MySQL, etc.? No problem! Every DBMS supported by `sequel`, is supported by Alf (with credits to Jeremy Evans for such awesomeness):
 
-<pre class="theory"><code class="ruby">$ alf --env=postgres://user:password@localhost:port/database --text project customers -- Country
+<pre class="theory"><code class="ruby">$ alf --db=postgres://user:password@localhost:port/database --text project customers -- Country
 +-------------+
 | :Country    |
 +-------------+

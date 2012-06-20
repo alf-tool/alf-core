@@ -47,7 +47,7 @@ module Alf
           # normalize operands
           operands = [ stdin_reader ] + Array(operands)
           operands = operands.map{|op| 
-            Iterator.coerce(op, req && req.environment)
+            Iterator.coerce(op, req && req.database)
           }[(operands.size - operator_class.arity)..-1]
 
           init_args = [operands] + args + [options]

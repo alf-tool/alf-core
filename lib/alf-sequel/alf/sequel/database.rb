@@ -1,13 +1,13 @@
 module Alf
   module Sequel
     #
-    # Specialization of Alf::Environment to distribute Sequel datasets
+    # Specialization of Alf::Database to distribute Sequel datasets
     #
-    class Environment < ::Alf::Environment
+    class Database < ::Alf::Database
 
       class << self
 
-        # (see Alf::Environment.recognizes?)
+        # (see Alf::Database.recognizes?)
         #
         # @return true if args contains one String that can be interpreted as
         # a valid database uri, false otherwise
@@ -30,7 +30,7 @@ module Alf
 
       end # class << self
 
-      # Creates an Environment instance
+      # Creates an Database instance
       def initialize(uri, options = {})
         @uri = self.class.looks_a_sqlite_file?(uri) ? "#{sqlite_protocol}://#{uri}" : uri
         @options = options
@@ -40,7 +40,7 @@ module Alf
         defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"
       end
 
-      # (see Alf::Environment#dataset)
+      # (see Alf::Database#dataset)
       def dataset(name)
         Iterator.new(connect[name])
       end
@@ -55,7 +55,7 @@ module Alf
         end
       end
 
-      Alf::Environment.register(:sequel, self)
-    end # class Environment
+      Alf::Database.register(:sequel, self)
+    end # class Database
   end # module Sequel
 end # module Alf

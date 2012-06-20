@@ -3,23 +3,23 @@ module Alf
     class Proxy
       include Iterator
 
-      # @return [Symbol] name of the dataset to request to environment
+      # @return [Symbol] name of the dataset to request to database
       attr_reader :name
 
       # Creates a proxy instance.
       #
-      # @param [Environment] env the environment serving iterator instances
+      # @param [Database] db the database serving iterator instances
       # @param [Symbol] dataset named dataset to rely on
-      def initialize(env, name)
-        unless env.respond_to?(:dataset)
-          raise ArgumentError, "Invalid environment #{env.inspect}"
+      def initialize(db, name)
+        unless db.respond_to?(:dataset)
+          raise ArgumentError, "Invalid database `#{db.inspect}`"
         end
-        @environment, @name = env, name
+        @database, @name = db, name
       end
 
       # (see Iterator#each)
       def each(&block)
-        @environment.dataset(@name).each(&block)
+        @database.dataset(@name).each(&block)
       end
 
     end # class Proxy

@@ -42,8 +42,8 @@ module Alf
 
       end # class << self
 
-      # Environment instance to use to get base iterators
-      attr_accessor :environment
+      # Database instance to use to get base iterators
+      attr_accessor :database
 
       # The reader to use when stdin is used as operand
       attr_accessor :stdin_reader
@@ -55,8 +55,8 @@ module Alf
       attr_reader :rendering_options
 
       # Creates a command instance
-      def initialize(env = Environment.default)
-        @environment = env
+      def initialize(db = Database.default)
+        @database = db
         @rendering_options = {}
       end
 
@@ -74,13 +74,13 @@ module Alf
           }
         end
 
-        opt.on('--examples', "Use the example database for environment") do
-          @environment = Environment.examples
+        opt.on('--examples', "Use the example database for database") do
+          @database = Database.examples
         end
 
-        opt.on('--env=ENV',
-               "Set the environment to use") do |value|
-          @environment = Environment.autodetect(value)
+        opt.on('--db=DB',
+               "Set the database to use") do |value|
+          @database = Database.autodetect(value)
         end
 
         @input_reader = :rash
@@ -135,11 +135,11 @@ module Alf
 
         # 2) build the operator according to -e option
         operator = if @execute
-          Alf.lispy(environment).compile(argv.first)
+          Alf.lispy(database).compile(argv.first)
         else
           super
         end
-        operator = Iterator.coerce(operator, environment) if operator
+        operator = Iterator.coerce(operator, database) if operator
 
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator

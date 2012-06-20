@@ -17,7 +17,7 @@ module Alf
       def Relation(first, *args)
         if args.empty?
           if first.is_a?(Symbol)
-            _environment.dataset(first).to_rel
+            _database.dataset(first).to_rel
           elsif first.is_a?(Hash)
             Alf::Relation[first]
           else

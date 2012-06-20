@@ -11,7 +11,7 @@ require 'myrrha/coerce'
 
 require_relative 'alf/types'
 require_relative 'alf/tools'
-require_relative 'alf/environment'
+require_relative 'alf/database'
 require_relative 'alf/iterator'
 require_relative 'alf/reader'
 require_relative 'alf/renderer'
@@ -52,24 +52,24 @@ module Alf
   end
 
   #
-  # Builds and returns a lispy engine on a specific environment.
+  # Builds and returns a lispy engine on a specific database.
   #
   # Example(s):
   #
-  #   # Returns a lispy instance on the default environment
+  #   # Returns a lispy instance on the default database
   #   lispy = Alf.lispy
   #
-  #   # Returns a lispy instance on the examples' environment
-  #   lispy = Alf.lispy(Alf::Environment.examples)
+  #   # Returns a lispy instance on the examples' database
+  #   lispy = Alf.lispy(Alf::Database.examples)
   #
-  #   # Returns a lispy instance on a folder environment of your choice
-  #   lispy = Alf.lispy(Alf::Environment.folder('path/to/a/folder'))
+  #   # Returns a lispy instance on a folder database of your choice
+  #   lispy = Alf.lispy(Alf::Database.folder('path/to/a/folder'))
   #
-  # @see Alf::Environment about available environments and their contract
+  # @see Alf::Database about available databases and their contract
   #
-  def self.lispy(env = Environment.default)
+  def self.lispy(env = Database.default)
     lispy = Object.new.extend(Lispy)
-    lispy.environment = Environment.coerce(env)
+    lispy.database = Database.coerce(env)
     lispy
   end
 

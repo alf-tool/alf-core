@@ -6,11 +6,11 @@ module Alf
     
     describe "with full args" do
       let(:args){[
-        [], Environment.examples, {:opts => true}
+        [], Database.examples, {:opts => true}
       ]}
       specify {
         subject.input.should eq([])
-        subject.environment.should be_a(Environment)
+        subject.database.should be_a(Database)
         subject.options.should eq(:opts => true)
       }
     end
@@ -21,7 +21,7 @@ module Alf
       ]}
       specify {
         subject.input.should be_nil
-        subject.environment.should be_nil
+        subject.database.should be_nil
         subject.options.should eq(:opts => true)
       }
     end
@@ -38,7 +38,7 @@ module Alf
         ]}
         specify {
           subject.input.should be_nil
-          subject.environment.should be_nil
+          subject.database.should be_nil
           subject.options.should eq(:opts => true, :from => :subclass)
         }
       end
@@ -49,7 +49,7 @@ module Alf
         ]}
         specify {
           subject.input.should be_nil
-          subject.environment.should be_nil
+          subject.database.should be_nil
           subject.options.should eq(:opts => true, :from => :overrided)
         }
       end

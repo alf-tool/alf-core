@@ -36,7 +36,7 @@ module Alf
         # normalize args
         args = argv.first
         args = [ stdin_reader ] if args.empty?
-        chain = Iterator.coerce(args.first, requester && requester.environment)
+        chain = Iterator.coerce(args.first, requester && requester.database)
 
         # put a sorter
         if argv[1]

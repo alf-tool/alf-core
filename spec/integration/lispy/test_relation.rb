@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Lispy, "Relation(...)" do
 
-    let(:lispy){ Alf.lispy(Environment.examples) }
+    let(:lispy){ Alf.lispy(Database.examples) }
 
     subject{ lispy.Relation(*args) }
 
@@ -18,8 +18,8 @@ module Alf
 
     describe 'on a Symbol' do
       let(:args){ [:suppliers] }
-      specify{ 
-        subject.should eq(lispy.environment.dataset(:suppliers).to_rel) 
+      specify{
+        subject.should eq(lispy.database.dataset(:suppliers).to_rel)
       }
     end
 
@@ -30,7 +30,7 @@ module Alf
             Tuple(:pid => 'P1', :name => 'Nut',   :color => 'red',   :heavy => true ),
             Tuple(:pid => 'P2', :name => 'Bolt',  :color => 'green', :heavy => false),
             Tuple(:pid => 'P3', :name => 'Screw', :color => 'blue',  :heavy => false)
-          )      
+          )
         }.should be_a(Relation)
       }
     end

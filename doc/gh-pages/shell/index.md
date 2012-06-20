@@ -1,14 +1,14 @@
 ## Using Alf in shell
 
-Alf comes with a set of operators and commands to evaluate relational queries (see the menu at left). 
+Alf comes with a set of operators and commands to evaluate relational queries (see the menu at left).
 
-* Operators always take relations (often one) as input and output a relation. 
+* Operators always take relations (often one) as input and output a relation.
 * Input relations may come from .rash files (ruby hashes), .csv files, SQL tables, log files, and so on.
 * Alf is read-only: it never modifies the files or SQL tables where the data come from!
 
 Here is an example:
 
-<pre><code class="bash"># What is the total weight of supplied products, 
+<pre><code class="bash"># What is the total weight of supplied products,
 # by city, then by product id?
 
 $ alf join parts supplies | \
@@ -36,7 +36,7 @@ Refer to the menu at left to learn about available operators.
 
 <pre><code class="terminal">$ alf restrict suppliers -- "city =~ /^P/"</code></pre>
 
-* Alf automatically resolves relation names according to an environment of use. By default, the latter is bound to the examples bundled with Alf. This way, you can learn Alf without worrying about where data come from, or even get it:
+* Alf automatically resolves relation names according to an database of use. By default, the latter is bound to the examples bundled with Alf. This way, you can learn Alf without worrying about where data come from, or even get it:
 
 <pre><code class="terminal">$ alf show suppliers
 $ alf --csv show suppliers > suppliers.csv</code></pre>
@@ -51,13 +51,13 @@ $ alf --csv show suppliers > suppliers.csv</code></pre>
 
 * Of course, you can connect Alf to other datasources
 
-<pre><code class="terminal">$ alf --env=path/to/csv/files/ join bills clients
-$ alf --env='postgres://tom@localhost/myerp' join bills clients
+<pre><code class="terminal">$ alf --db=path/to/csv/files/ join bills clients
+$ alf --db='postgres://tom@localhost/myerp' join bills clients
 </code></pre>
 
 * Alf supports `ALF_OPTS` global options. It also mimics Ruby `-Idirectory` and `-rlibrary` options.
 
-<pre><code class="terminal">$ export ALF_OPTS=--env='postgres://tom@localhost/myerp' 
+<pre><code class="terminal">$ export ALF_OPTS=--db='postgres://tom@localhost/myerp'
 $ alf join bills clients
 </code></pre>
 

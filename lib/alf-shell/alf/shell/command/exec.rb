@@ -3,7 +3,7 @@ module Alf
     class Exec < Shell::Command()
       
       def execute(args)
-        Reader.alf(args.first || $stdin, requester.environment)
+        Reader.alf(args.first || $stdin, requester.database)
       end
       
     end # class Exec

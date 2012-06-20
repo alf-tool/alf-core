@@ -7,7 +7,7 @@ module Alf
 
         define_method(op_class.rubycase_name.to_sym) do |*args|
           operands  = args[0...op_class.arity].map{|x| 
-            Iterator.coerce(x, _environment)
+            Iterator.coerce(x, _database)
           }
           arguments = args[op_class.arity..-1]
           op_class.new(operands, *arguments)
@@ -22,8 +22,8 @@ module Alf
 
       private
 
-      def _environment
-        respond_to?(:environment) ? environment : nil
+      def _database
+        respond_to?(:database) ? database : nil
       end
 
     end # module Algebra

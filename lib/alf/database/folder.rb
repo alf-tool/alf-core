@@ -1,37 +1,36 @@
 module Alf
-  class Environment
+  class Database
     #
-    # Specialization of Environment to work on files of a given folder.
+    # Specialization of Database to work on files of a given folder.
     #
-    # This kind of environment resolves datasets by simply looking at 
-    # recognized files in a specific folder. "Recognized" files are simply
-    # those for which a Reader subclass has been previously registered.
-    # This environment then serves reader instances.
+    # This kind of database resolves datasets by simply looking at recognized files in a
+    # specific folder. "Recognized" files are simply those for which a Reader subclass has
+    # been previously registered. This database then serves reader instances.
     #
-    class Folder < Environment
+    class Folder < Database
 
       class << self
 
-        # (see Environment.recognizes?)
+        # (see Database.recognizes?)
         #
-        # @return [Boolean] true if args contains one String only, which denotes 
+        # @return [Boolean] true if args contains one String only, which denotes
         #         an existing folder; false otherwise
         def recognizes?(args)
-          (args.size == 1) && 
-          args.first.is_a?(String) && 
+          (args.size == 1) &&
+          args.first.is_a?(String) &&
           File.directory?(args.first.to_s)
         end
 
       end # class << self
 
-      # Creates an environment instance, wired to the specified folder.
+      # Creates an database instance, wired to the specified folder.
       #
       # @param [String] folder path to the folder to use as dataset source.
       def initialize(folder)
         @folder = folder
       end
 
-      # (see Environment#dataset)
+      # (see Database#dataset)
       def dataset(name)
         if file = find_file(name)
           Reader.reader(file, self)
@@ -54,7 +53,7 @@ module Alf
         end
       end
 
-      Environment.register(:folder, self)
+      Database.register(:folder, self)
     end # class Folder
-  end # class Environment
+  end # class Database
 end # module Alf

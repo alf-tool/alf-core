@@ -111,7 +111,7 @@ as my own wish list, while I would love hearing yours instead.
   include the semantically wrong way of applying joins on sub-relations, the
   impossibility to use Lispy expressions on sub-relations in extend, and the error
   management which is unspecific and unfriendly so far.
-- I also would like starting collecting  Reader, Renderer and Environment
+- I also would like starting collecting  Reader, Renderer and Database
   contributions for common data sources (SQL, NoSQL, CSV, LOGS) and output
   formats (HTML, XML, JSON). Contributions could be either developped as different
   gem projects or distributed with Alf's gem and source code, I still need to

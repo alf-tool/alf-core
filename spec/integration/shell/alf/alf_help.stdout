@@ -3,7 +3,7 @@ alf - Relational algebra at your fingertips
 
 SYNOPSIS
 
-    alf [--version] [--help] 
+    alf [--version] [--help]
     alf -e '(lispy command)'
     alf [FILE.alf]
     alf [alf opts] OPERATOR [operator opts] ARGS ...
@@ -16,8 +16,8 @@ OPTIONS
     --text                       Render output as a text table
     --yaml                       Render output as a yaml output
     --csv                        Render output as a csv file
-    --examples                   Use the example database for environment
-    --env=ENV                    Set the environment to use
+    --examples                   Use the example database for database
+    --db=DB                      Set the database to use
     --input-reader=READER        Specify the kind of reader when reading on $stdin (rash,alf,csv,logs)
     -Idirectory                      Specify $LOAD_PATH directory (may be used more than once)
     -rlibrary                        Require the library, before executing alf
@@ -61,7 +61,7 @@ NON-RELATIONAL OPERATORS
 
 OTHER NON-RELATIONAL COMMANDS
 
-    exec     Executes an .alf file on current environment
+    exec     Executes an .alf file on current database
     help     Show help about a specific command
     show     Output input tuples through a specific renderer (text, yaml, ...)
 

@@ -13,14 +13,14 @@ module Alf
     include Enumerable
 
     # Coerces something to an iterator
-    def self.coerce(arg, environment = nil)
+    def self.coerce(arg, database = nil)
       case arg
       when Iterator, Array
         arg
       when String, Symbol
-        Proxy.new(environment, arg.to_sym)
+        Proxy.new(database, arg.to_sym)
       else
-        Reader.coerce(arg, environment)
+        Reader.coerce(arg, database)
       end
     end
 

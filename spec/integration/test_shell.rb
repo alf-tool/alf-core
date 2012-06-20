@@ -29,7 +29,7 @@ describe "Alf's alf command / " do
         begin 
           dir = File.expand_path('../__database__', __FILE__)
           main = Alf::Shell::Main.new
-          main.environment = Alf::Environment.folder(dir)
+          main.database = Alf::Database.folder(dir)
           main.run(argv, __FILE__)
         rescue => ex
           begin

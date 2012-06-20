@@ -4,7 +4,7 @@
 #
 # Use the following invocation to have them sorted by hit number:
 # 
-#   alf --text --env=examples/logs sort hits -- hits asc
+#   alf --text --db=examples/logs sort hits -- hits asc
 #
 (summarize \
   (restrict :combined, 

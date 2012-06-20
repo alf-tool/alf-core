@@ -2,7 +2,7 @@
 
 * Licensing?
 
->> Alf is distributed under a MIT licence. 
+>> Alf is distributed under a MIT licence.
 
 * Does Alf modify .csv files of SQL tables taken as input?
 
@@ -14,8 +14,8 @@
 
 * Does Alf optimize queries?
 
->> Not yet. We plan to implement basic optimization strategies in the middle term. 
+>> Not yet. We plan to implement basic optimization strategies in the middle term.
 
 * How to recognize other data sources and file formats than .csv files and SQL tables?
 
->> Subclass `Alf::Reader` for new file formats. Subclass `Alf::Environment` for implementing a resolver for named datasources. 
+>> Subclass `Alf::Reader` for new file formats. Subclass `Alf::Database` for implementing a resolver for named datasources.

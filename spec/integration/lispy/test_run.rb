@@ -8,7 +8,7 @@ module Alf
       {:city => "Athens"}
     ]}
 
-    let(:lispy){ Alf.lispy(Environment.examples) }
+    let(:lispy){ Alf.lispy(Database.examples) }
     subject{ lispy.run(args).to_rel }
 
     describe "without any pipe, on a String" do
