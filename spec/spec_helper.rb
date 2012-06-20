@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
 require 'alf'
 require "rspec"
+require 'epath'
 
 Alf::Lispy.extend(Alf::Lispy)
 

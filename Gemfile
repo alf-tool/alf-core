@@ -4,6 +4,7 @@ group :runtime do
   gem "quickl", "~> 0.4.3"
   gem "myrrha", "~> 1.2.2"
   gem "backports", "~> 2.6"
+  gem "epath", "~> 0.3.0"
 end
 
 group :test do

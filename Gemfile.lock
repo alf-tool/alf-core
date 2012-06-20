@@ -4,6 +4,7 @@ GEM
     backports (2.6.1)
     bluecloth (2.2.0)
     diff-lcs (1.1.3)
+    epath (0.3.0)
     fastercsv (1.5.5)
     highline (1.6.13)
     myrrha (1.2.2)
@@ -30,6 +31,7 @@ PLATFORMS
 DEPENDENCIES
   backports (~> 2.6)
   bluecloth (~> 2.2.0)
+  epath (~> 0.3.0)
   fastercsv (~> 1.5)
   highline (~> 1.6)
   jdbc-sqlite3 (~> 3.7)
