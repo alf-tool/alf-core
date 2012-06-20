@@ -5,10 +5,10 @@
 
 ## Links
 
-* http://blambeau.github.com/alf
-* http://rubydoc.info/gems/alf
-* http://github.com/blambeau/alf
-* http://rubygems.org/gems/alf
+* [Official documentation](http://blambeau.github.com/alf)
+* [Yard API on rubydoc](http://rubydoc.info/gems/alf)
+* [Source and Issues](http://github.com/blambeau/alf)
+* [Relational basics as needed](http://www.revision-zero.org/relational-basics-2)
 
 ## What & Why
 
@@ -74,21 +74,20 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
 
 ## Related Work & Tools
 
-- You should certainly have a look at the Third Manifesto website: {http://www.thethirdmanifesto.com/}
-- Why not reading the {http://www.dcs.warwick.ac.uk/~hugh/TTM/DBE-Chapter01.pdf
-  third manifesto paper} itself?
-- Also have a look at {http://www.dcs.warwick.ac.uk/~hugh/TTM/Projects.html other
-  implementation projects}, especially {http://dbappbuilder.sourceforge.net/Rel.php Rel}
-  which provides an implementation of the **Tutorial D** language.
-- {https://github.com/dkubb/veritas Dan Kubb's Veritas} project is worth considering
+- You should certainly have a look at the
+  [Third Manifesto website](http://www.thethirdmanifesto.com/):
+- Why not reading the
+  [third manifesto](http://www.dcs.warwick.ac.uk/~hugh/TTM/DBE-Chapter01.pdf) ?
+- Also have a look at
+  [other implementation projects](http://www.dcs.warwick.ac.uk/~hugh/TTM/Projects.html)
+  especially [Rel](http://dbappbuilder.sourceforge.net/Rel.php) which provides an
+  implementation of the **Tutorial D** language.
+- [Dan Kubb's Veritas](https://github.com/dkubb/veritas) project is worth considering
   also in the Ruby community. While very similar to Alf in providing a pure ruby
   algebra implementation, Veritas mostly provides a framework for manipulating
   and statically analyzing algebra expressions so as to be able to
-  {https://github.com/dkubb/veritas-optimizer optimize them} and
-  {https://github.com/dkubb/veritas-sql-generator compile them to SQL}. We are
-  working together with Dan Kubb to see how Alf and Veritas could be closer from
-  each other in the future, if not in their codebase, at least in using the very
-  same terminology for the same concepts.
+  [optimize them](https://github.com/dkubb/veritas-optimizer) and
+  [compile them to SQL](https://github.com/dkubb/veritas-sql-generator).
 
 ## Contributing
 
@@ -129,7 +128,7 @@ as my own wish list, while I would love hearing yours instead.
 
 ## Versioning policy
 
-Alf respects {http://semver.org/ semantic versioning}, which means that it has
+Alf respects [semantic versioning](http://semver.org/), which means that it has
 a X.Y.Z version number and follows a few rules.
 
 - The public API is made of the commandline tool, the Lispy dialect and the
