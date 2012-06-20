@@ -169,13 +169,13 @@ module Alf
         oper = operator.nullary? ? "" :
               (operator.unary? ? "operand" : "left, right")
 
-        args = arguments.collect{|name,dom,_| 
+        args = arguments.map{|name,dom,_| 
           dom.to_s =~ /::([A-Za-z]+)$/
           "#{name}:#{$1}" 
         }.join(", ")
         args = (args.empty? ? "#{oper}" : "#{oper}, #{args}").strip
 
-        opts = options.collect{|name,dom,_|
+        opts = options.map{|name,dom,_|
           dom.to_s =~ /::([A-Za-z]+)$/
           "#{name}: #{$1}" 
         }.join(', ')
@@ -194,8 +194,8 @@ module Alf
       def to_shell
         oper = operator.nullary? ? "" :
               (operator.unary? ? "[OPERAND]" : "[LEFT] RIGHT")
-        opts =   options.collect{|opt|   "[#{option_name(opt)}]" }.join(" ")
-        args = arguments.collect{|arg,_| "#{arg.to_s.upcase}"    }.join(" -- ")
+        opts =   options.map{|opt|   "[#{option_name(opt)}]" }.join(" ")
+        args = arguments.map{|arg,_| "#{arg.to_s.upcase}"    }.join(" -- ")
         optargs = "#{opts} #{oper} " + (args.empty? ? "" : "-- #{args}")
         "alf #{operator.rubycase_name} #{optargs.strip}".strip
       end
@@ -217,7 +217,7 @@ module Alf
 
       # Yields `(name,dom,value)` triples for each argument value
       def with_each_arg(args)
-        arguments.zip(args).collect do |sigpart,subargs|
+        arguments.zip(args).map do |sigpart,subargs|
           name, dom, default = sigpart
           val = Array(subargs).empty? ? default : subargs
           yield(name, dom, val)

@@ -29,42 +29,32 @@ module Alf
         tuples.size
       end
       alias :size :cardinality
-      alias :count :cardinality
 
       # Returns true if this relation is empty
       def empty?
         cardinality == 0
       end
 
-      # Install the DSL through iteration over defined operators
-      Operator::each do |op_class|
-        meth_name = Tools.ruby_case(Tools.class_name(op_class)).to_sym
-        if op_class.unary?
-          define_method(meth_name) do |*args|
-            op = op_class.new(*args.unshift([self]))
-            Relation.coerce(op)
-          end
-        elsif op_class.binary?
-          define_method(meth_name) do |right, *args|
-            op = op_class.new(*args.unshift([self, Iterator.coerce(right)]))
-            Relation.coerce(op)
-          end
-        elsif op_class.nullary?
-          define_method(meth_name) do |*args|
-            op = op_class.new(*args)
-            Relation.coerce(op)
-          end
-        else
-          raise "Unexpected operator #{op_class}"
+      # Install the algebra DSL through iteration over defined operators
+      include Lang::Algebra
+      Lang::Algebra.instance_methods.each do |meth|
+        define_method(meth) do |*args, &block|
+          Relation.coerce super(*args.unshift(self), &block)
         end
       end # Operators::each
-
       alias :+ :union
       alias :- :minus
 
-      # Shortcut for project(attributes, :allbut => true)
-      def allbut(attributes)
-        project(attributes, :allbut => true)
+      # Install the DSL through iteration over defined aggregators
+      Aggregator.each do |agg_class|
+        agg_name = Tools.ruby_case(Tools.class_name(agg_class)).to_sym
+        if method_defined?(agg_name)
+          raise "Unexpected method clash on Relation##{agg_name}"
+        end
+
+        define_method(agg_name) do |*args, &block|
+          agg_class.new(*args, &block).aggregate(self)
+        end
       end
 
       # (see Object#hash)

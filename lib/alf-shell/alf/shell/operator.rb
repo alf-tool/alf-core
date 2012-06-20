@@ -48,14 +48,7 @@ module Alf
           operands = [ stdin_reader ] + Array(operands)
           operands = operands.map{|op| 
             Iterator.coerce(op, req && req.environment)
-          }
-          operands = if nullary?
-            []
-          elsif unary?
-            [operands.last]
-          elsif binary?
-            operands[-2..-1]
-          end
+          }[(operands.size - operator_class.arity)..-1]
 
           init_args = [operands] + args + [options]
           operator_class.new(*init_args)

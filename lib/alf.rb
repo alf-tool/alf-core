@@ -22,6 +22,7 @@ module Alf
   require 'alf/operator'
   require 'alf-shell/alf/shell'
   require 'alf/aggregator'
+  require 'alf/lang'
   require 'alf/relation'
   require 'alf/lispy'
   require 'alf/ext'

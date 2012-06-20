@@ -28,19 +28,24 @@ module Alf
         ancestors.include?(NonRelational)
       end
 
+      # @returns [Integer] operator arity, i.e. the number of relation operands
+      def arity
+      end
+      undef :arity
+
       # @return true if this operator is a zero-ary operator, false otherwise
       def nullary?
-        ancestors.include?(Operator::Nullary)
+        arity == 0
       end
 
       # @return true if this operator is an unary operator, false otherwise
       def unary?
-        ancestors.include?(Operator::Unary)
+        arity == 1
       end
 
       # @return true if this operator is a binary operator, false otherwise
       def binary?
-        ancestors.include?(Operator::Binary)
+        arity == 2
       end
 
       ################################################################# Factory
