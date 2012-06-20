@@ -1,6 +1,6 @@
-require "alf/version"
-require "alf/loader"
-require "alf/errors"
+require_relative "alf/version"
+require_relative "alf/loader"
+require_relative "alf/errors"
 
 require "enumerator"
 require "stringio"
@@ -9,23 +9,23 @@ require "set"
 require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'
 
+require_relative 'alf/types'
+require_relative 'alf/tools'
+require_relative 'alf/environment'
+require_relative 'alf/iterator'
+require_relative 'alf/reader'
+require_relative 'alf/renderer'
+require_relative 'alf/operator'
+require_relative 'alf/aggregator'
+require_relative 'alf/lang'
+require_relative 'alf/relation'
+require_relative 'alf/lispy'
+require_relative 'alf/ext'
+
 #
 # Classy data-manipulation dressed in a DSL (+ commandline)
 #
 module Alf
-  require 'alf/types'
-  require 'alf/tools'
-  require 'alf/environment'
-  require 'alf/iterator'
-  require 'alf/reader'
-  require 'alf/renderer'
-  require 'alf/operator'
-  require 'alf-shell/alf/shell'
-  require 'alf/aggregator'
-  require 'alf/lang'
-  require 'alf/relation'
-  require 'alf/lispy'
-  require 'alf/ext'
 
   #
   # Builds and returns a lispy engine on a specific environment.
@@ -72,6 +72,7 @@ module Alf
   
 end # module Alf
 
+require_relative 'alf-shell/alf/shell'
 require_relative "alf-engine/alf/engine"
 require_relative "alf-sequel/alf/sequel"
 require_relative 'alf-yaml/alf/yaml'
