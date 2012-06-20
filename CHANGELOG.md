@@ -1,3 +1,15 @@
+# 0.13.0 / FIX ME
+
+## Enhancements
+
+* Alf::Relation now respond to aggregation functions with an object-oriented syntax:
+
+      Relation(...).sum{ qty }
+
+## Bug fixes
+
+* The backports gem is no longer required on ruby =1.9
+
 # 0.12.2 / 2012-06-12
 
 * Bumped and weakened backports dependency to '~> 2.6'
