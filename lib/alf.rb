@@ -1,6 +1,6 @@
-require_relative "alf/version"
-require_relative "alf/loader"
-require_relative "alf/errors"
+require "alf/version"
+require "alf/loader"
+require "alf/errors"
 
 require "enumerator"
 require "stringio"
