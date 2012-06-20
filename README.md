@@ -1,4 +1,4 @@
-# Alf - Relational Algebra at your fingertips (version 0.10.0)
+# Alf - Relational Algebra at your fingertips (version 0.13.0)
 
 [![Build Status](https://secure.travis-ci.org/blambeau/alf.png)](http://travis-ci.org/blambeau/alf)
 [![Dependency Status](https://gemnasium.com/blambeau/alf.png)](https://gemnasium.com/blambeau/alf)
