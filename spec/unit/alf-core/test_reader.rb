@@ -14,7 +14,7 @@ module Alf
       
       specify "when associated" do
         r = Reader.reader('suppliers.rash')
-        r.should  be_a(Reader::Rash)
+        r.should be_a(Reader::Rash)
       end
       
       specify "when not associated" do

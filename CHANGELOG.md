@@ -6,6 +6,8 @@
 
       Relation(...).sum{ qty }
 
+* Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
+
 ## Bug fixes
 
 * The backports gem is no longer required on ruby =1.9

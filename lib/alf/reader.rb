@@ -55,25 +55,20 @@ module Alf
           end
       end
 
-      # When filepath looks like a String or a path, returns a reader instance
-      # for the source it denotes. Otherwise, delegates the call to
-      # `coerce(filepath)`.
+      # Returns a Reader on `source` denoting a physical representation of a relation.
       #
-      # @param [:to_str|:to_path] filepath path to a file for which extension
-      #        is recognized
-      # @param [Array] args optional additional arguments that must be passed at
-      #        reader's class new method.
+      # @param [...]     source a String, a Path or an IO denoting a relation physical source.
+      # @param [Array]   args optional reader arguments
       # @return [Reader] a reader instance built from arguments
-      # @raise [ArgumentError] if `filepath` is not recognized or no reader can
-      #        be found for this extension.
-      def reader(filepath, *args)
-        if looks_a_path?(filepath)
-          ext = File.extname(filepath.to_s)
-          has_reader_for_ext!(ext).new(filepath.to_s, *args)
+      # @raise [ArgumentError] if `source` is not recognized or no reader can be found.
+      #
+      def reader(source, *args)
+        if Tools.pathable?(source)
+          has_reader_for_ext!(Tools.to_path(source).extname).new(source, *args)
         elsif args.empty?
-          coerce(filepath)
+          coerce(source)
         else
-          raise ArgumentError, "Unable to return a reader for #{filepath} and #{args}"
+          raise ArgumentError, "Unable to return a reader for `#{source}`"
         end
       end
 
@@ -99,18 +94,12 @@ module Alf
 
       private
 
-      # Checks if `path` looks like a usable path
-      def looks_a_path?(path)
-        return false if path.is_a?(StringIO)
-        path.respond_to?(:to_str) or path.respond_to?(:to_path)
-      end
-
       # @return [Class] the reader class to use for `ext` file extension.
       # @raise [ArgumentError] if no such reader class can be found
       def has_reader_for_ext!(ext)
         entry = readers.find{|r| r[1].include?(ext)}
         return entry[2] if entry
-        raise ArgumentError, "No registered reader for #{ext}"
+        raise ArgumentError, "No registered reader for `#{ext}`"
       end
 
     end # class << self
@@ -121,8 +110,11 @@ module Alf
     # @return [Environment] Wired environment
     attr_accessor :environment
 
-    # @return [String or IO] Input IO, or file name
+    # @return [String, IO, ...] Input as initially provided to initialize
     attr_accessor :input
+
+    # @returns [Path] a Path instance if input can be localized
+    attr_reader :path
 
     # @return [Hash] Reader's options
     attr_accessor :options
@@ -133,12 +125,8 @@ module Alf
     # @param [Environment] environment wired environment, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(*args)
-      @input, @environment, @options = case args.first
-      when String, IO, StringIO
-        Tools.varargs(args, [args.first.class, Environment, Hash])
-      else
-        Tools.varargs(args, [String, Environment, Hash])
-      end
+      @input, @environment, @options = Tools.varargs(args, [args.first.class, Environment, Hash])
+      @path = Tools.to_path(@input)
       @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
     end
 
@@ -159,19 +147,19 @@ module Alf
     # @return the input file path, or nil if this Reader is bound to an IO
     # directly.
     def input_path
-      input.is_a?(String) ? input : nil
+      path && path.to_s
     end
 
     # Coerces the input object to an IO and yields the block with it.
     #
     # StringIO and IO input are yield directly while file paths are first
     # opened in read mode and then yield.
-    def with_input_io
+    def with_input_io(&bl)
       case input
       when IO, StringIO
         yield input
-      when String
-        File.open(input, 'r'){|io| yield io}
+      when String, Path
+        Path(input).open('r', &bl)
       else
         raise "Unable to convert #{input} to an IO object"
       end

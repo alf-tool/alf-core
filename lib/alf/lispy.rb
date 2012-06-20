@@ -45,7 +45,7 @@ module Alf
         instance_eval(&block)
       else
         b = _clean_binding
-        (path ? Kernel.eval(expr, b, path) : Kernel.eval(expr, b))
+        (path ? Kernel.eval(expr, b, path.to_s) : Kernel.eval(expr, b))
       end
     end
 
@@ -62,7 +62,7 @@ module Alf
     #     (restrict :suppliers, lambda{ city == 'London' })
     #   }
     def evaluate(expr = nil, path = nil, &block)
-      compiled = compile(expr, path, &block)
+      compiled = compile(expr, path && path.to_s, &block)
       case compiled
       when Iterator
         compiled.to_rel
