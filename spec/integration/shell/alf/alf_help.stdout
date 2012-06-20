@@ -16,6 +16,7 @@ OPTIONS
     --text                       Render output as a text table
     --yaml                       Render output as a yaml output
     --csv                        Render output as a csv file
+    --examples                   Use the example database for environment
     --env=ENV                    Set the environment to use
     --input-reader=READER        Specify the kind of reader when reading on $stdin (rash,alf,csv,logs)
     -Idirectory                      Specify $LOAD_PATH directory (may be used more than once)

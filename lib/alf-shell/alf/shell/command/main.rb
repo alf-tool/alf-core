@@ -74,6 +74,10 @@ module Alf
           }
         end
 
+        opt.on('--examples', "Use the example database for environment") do
+          @environment = Environment.examples
+        end
+
         opt.on('--env=ENV',
                "Set the environment to use") do |value|
           @environment = Environment.autodetect(value)

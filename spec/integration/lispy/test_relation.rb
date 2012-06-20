@@ -1,7 +1,9 @@
 require 'spec_helper'
 module Alf
   describe Lispy, "Relation(...)" do
-    let(:lispy){ Alf.lispy }
+
+    let(:lispy){ Alf.lispy(Environment.examples) }
+
     subject{ lispy.Relation(*args) }
 
     describe 'on a single tuple' do

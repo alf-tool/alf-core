@@ -2,6 +2,8 @@
 
 ## Enhancements
 
+* The default environment is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --env=.' everytime you want to use .csv or .rash files as base relations when using alf in shell. A --examples option allows setting the embedded database as default environment easily.
+
 * When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
 
 * Alf::Relation now respond to aggregation functions with an object-oriented syntax:

@@ -103,7 +103,7 @@ module Alf
       #
       # @return [Environment] the default environment instance.
       def default
-        examples
+        folder '.'
       end
 
       # Returns an environment on Alf's examples
