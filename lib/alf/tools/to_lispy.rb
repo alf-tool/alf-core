@@ -5,7 +5,7 @@ module Alf
     #
     # Example:
     #
-    #     expr = Alf.lispy.compile{ 
+    #     expr = Alf.lispy.compile{
     #       (project :suppliers, [:name])
     #     }
     #     Tools.to_lispy(expr)

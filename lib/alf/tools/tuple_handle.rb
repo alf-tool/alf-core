@@ -34,7 +34,7 @@ module Alf
       end
 
       # Evaluates a tuple expression on the current tuple.
-      # 
+      #
       # @param [Object] expr a tuple expression (coercions apply)
       # @return [Object] the result of evaluting `expr` on self
       def evaluate(expr)
@@ -45,7 +45,7 @@ module Alf
 
       # Builds this handle with a tuple.
       #
-      # This method should be called only once and installs instance methods on 
+      # This method should be called only once and installs instance methods on
       # the handle with keys of _tuple_.
       def build(tuple)
         tuple.keys.each do |k|

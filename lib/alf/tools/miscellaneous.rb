@@ -1,7 +1,7 @@
 module Alf
   module Tools
 
-    # Helper to define methods with multiple signatures. 
+    # Helper to define methods with multiple signatures.
     #
     # Example:
     #
@@ -68,7 +68,7 @@ module Alf
 
     # Returns the first non nil values from arguments.
     #
-    # When no non-nil value can be found, the block is yield if present. 
+    # When no non-nil value can be found, the block is yield if present.
     # Otherwise, nil is returned.
     #
     # Example:
@@ -78,7 +78,7 @@ module Alf
     #   coalesce(nil, nil)              # -> nil
     #
     # @param [Array] args a list of values
-    # @return [Object] the first non-nil value in `args`; the result of the 
+    # @return [Object] the first non-nil value in `args`; the result of the
     #         block or nil if no non-nil value can be found.
     def coalesce(*args)
       if found = args.find{|x| !x.nil?}
@@ -89,8 +89,8 @@ module Alf
     end
 
     # Builds a tuple through enumeration.
-    # 
-    # Iterates over enum and yields the block on each element. Collect block 
+    #
+    # Iterates over enum and yields the block on each element. Collect block
     # results as key/value pairs returns them as a Hash.
     #
     # @param [Enumerable] enum any enumerable

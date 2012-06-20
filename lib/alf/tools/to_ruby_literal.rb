@@ -10,7 +10,7 @@ module Alf
     #     eval(to_ruby_literal(value)) == value
     #
     # This contract is ensured by Myrrha::ToRubyLiteral for various ruby values.
-    # Myrrha delegates the job to `value.to_ruby_literal` provided this method 
+    # Myrrha delegates the job to `value.to_ruby_literal` provided this method
     # exists. In such case, the implementation must be such that the invariant
     # above is met.
     #
