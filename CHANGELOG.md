@@ -6,6 +6,11 @@
 
       Relation(...).sum{ qty }
 
+* Added Alf.reader as a convenient shortcut for Alf::Reader.reader.
+
+      Alf.reader("path/to/a/suppliers.csv")
+      # => #<Alf::CSV::Reader:0x007fd554058440 ...>
+
 * Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
 
 ## Bug fixes

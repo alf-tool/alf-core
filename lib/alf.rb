@@ -27,6 +27,19 @@ require_relative 'alf/ext'
 #
 module Alf
 
+  # Returns a Reader on `source` denoting a physical representation of a relation.
+  #
+  # @param [...]     source a String, a Path or an IO denoting a relation physical source.
+  # @param [Array]   args optional reader arguments
+  # @return [Reader] a reader instance built from arguments
+  # @raise [ArgumentError] if `source` is not recognized or no reader can be found.
+  #
+  # @see Alf::Reader for more about readers.
+  #
+  def self.reader(source, *args)
+    Alf::Reader.reader(source, *args)
+  end
+
   #
   # Builds and returns a lispy engine on a specific environment.
   #
@@ -69,7 +82,7 @@ module Alf
   def self.Relation(*args)
     Alf::Tools.to_relation(*args)
   end
-  
+
 end # module Alf
 
 require_relative 'alf-shell/alf/shell'
