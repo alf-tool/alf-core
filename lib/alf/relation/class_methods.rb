@@ -12,18 +12,9 @@ module Alf
       # @raise [ArgumentError] when `val` is not recognized
       #
       def coerce(val)
-        case val
-        when Relation
-          val
-        when Set
-          Relation.new(val)
-        when Array
-          Relation.new val.to_set
-        when Iterator
-          Relation.new val.to_set
-        else
-          raise ArgumentError, "Unable to coerce #{val} to a Relation"
-        end
+        Alf::Tools.to_relation(val)
+      rescue Myrrha::Error
+        raise ArgumentError, "Unable to coerce `#{val}` to a Relation"
       end
       
       # (see Relation.coerce)

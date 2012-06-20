@@ -98,6 +98,11 @@ module Alf
       end
       alias :inspect :to_ruby_literal
 
+      # Returns self
+      def to_relation
+        self
+      end
+
     end # module InstanceMethods
     include(InstanceMethods)
   end # class Relation

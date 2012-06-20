@@ -1,3 +1,19 @@
+# 0.12.0 / FIX ME
+
+* Add a Relation() toplevel method that mimics Array(), Integer(), and so on.
+  That method uses Tools::ToRelation which is a set of Myrrha coercion rules.
+  The Relation() method helps building relation "literals" (say) for common 
+  cases, such as the following:
+
+      Relation(:name => "Alf")  
+      # => (Relation (Tuple :name => "Alf"))
+
+      Relation([{:name => "Alf"}, {:name => "Myrrha"}])
+      # => (Relation (Tuple :name => "Alf"), (Tuple :name => "Myrrha"))
+
+      Relation(:name => ["Alf", "Myrrha"])
+      # => (Relation (Tuple :name => "Alf"), (Tuple :name => "Myrrha"))
+
 # 0.11.1 / 2012-01-25
 
 ## Bugfixes

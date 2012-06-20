@@ -6,6 +6,7 @@ module Alf
     require 'alf/tools/coerce'
     require 'alf/tools/to_ruby_literal'
     require 'alf/tools/to_lispy'
+    require 'alf/tools/to_relation'
     require 'alf/tools/tuple_handle'
     require 'alf/tools/miscellaneous'
 
