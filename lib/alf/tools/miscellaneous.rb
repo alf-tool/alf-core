@@ -11,6 +11,7 @@ module Alf
     #   pathable?(12)           -> nil
     #
     def pathable?(arg)
+      return nil if arg.is_a?(StringIO) # fix for ruby 1.8.x that defines :path
       [:path, :to_path, :to_str].find{|m| arg.respond_to?(m)}
     end
 
