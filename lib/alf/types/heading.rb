@@ -34,12 +34,12 @@ module Alf
             arg
           when Array
             Heading.new Hash[arg.each_slice(2).map{|k,v|
-              [ Tools.coerce(k, Symbol), 
+              [ Tools.coerce(k, Symbol),
                 Tools.coerce(v, Module) ]
             }]
           when Hash
             Heading.new Hash[arg.map{|k,v|
-              [ Tools.coerce(k, Symbol), 
+              [ Tools.coerce(k, Symbol),
                 Tools.coerce(v, Module) ]
             }]
           else
@@ -50,7 +50,7 @@ module Alf
 
         # Coerces commandline arguments to a Heading.
         #
-        # This method simply reuses `coerce(Array)` and therefore shares its 
+        # This method simply reuses `coerce(Array)` and therefore shares its
         # spec.
         #
         # @param [Array] argv commandline arguments
@@ -79,7 +79,7 @@ module Alf
 
       # Computes the union of this heading with `other`.
       #
-      # When self and other have no common attribute names, compute the 
+      # When self and other have no common attribute names, compute the
       # classical set union on pairs. Otherwise, the type of a common attribute
       # is returned as the common super type (see `Types.common_super_type`).
       #
@@ -108,10 +108,10 @@ module Alf
       # @return [Boolean] true if other is the same heading than self, false
       #         otherwise
       def ==(other)
-        other.is_a?(Heading) && (attributes == other.attributes) 
+        other.is_a?(Heading) && (attributes == other.attributes)
       end
       alias :eql? :==
-      
+
       # Converts this heading to a Hash of (name,type) pairs
       #
       # @return [Hash] this heading as a Hash of (name, type) pairs

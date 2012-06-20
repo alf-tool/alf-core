@@ -1,25 +1,13 @@
 module Alf
   #
-  # This module defines a namespace for useful datatypes as well as a few 
-  # typing tools. Defined types are automatically defined as constants on the 
-  # Alf module itself.
+  # This module defines a namespace for useful datatypes as well as a few typing tools.
+  # Defined types are automatically defined as constants on the Alf module itself.
   #
   module Types
-    require 'alf/types/boolean'
-    require 'alf/types/size'
-    require 'alf/types/attr_name'
-    require 'alf/types/attr_list'
-    require 'alf/types/heading'
-    require 'alf/types/ordering'
-    require 'alf/types/renaming'
-    require 'alf/types/summarization'
-    require 'alf/types/tuple_expression'
-    require 'alf/types/tuple_predicate'
-    require 'alf/types/tuple_computation'
 
     # Returns the (least) common super type of c1 and c2.
     #
-    # The least common super type is defined as the lowest ancestor shared 
+    # The least common super type is defined as the lowest ancestor shared
     # between c1 and c2.
     #
     # Examples:
@@ -33,12 +21,24 @@ module Alf
     # @return [Class] the least common super type of c1 and c2
     def common_super_type(c1, c2)
       return c1 if c1 == c2
-      ancestors = [c1, c2].map{|c| 
+      ancestors = [c1, c2].map{|c|
         c.ancestors.select{|a| a.is_a?(Class)}
       }
       (ancestors[0] & ancestors[1]).first
     end
     module_function :common_super_type
+
+    require_relative 'types/boolean'
+    require_relative 'types/size'
+    require_relative 'types/attr_name'
+    require_relative 'types/attr_list'
+    require_relative 'types/heading'
+    require_relative 'types/ordering'
+    require_relative 'types/renaming'
+    require_relative 'types/summarization'
+    require_relative 'types/tuple_expression'
+    require_relative 'types/tuple_predicate'
+    require_relative 'types/tuple_computation'
 
     # Install all types on Alf now
     constants.each do |s|

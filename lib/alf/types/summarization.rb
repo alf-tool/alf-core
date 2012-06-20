@@ -23,7 +23,7 @@ module Alf
         # - Summarization        -> self
         # - [attr1, agg1, ...]   -> {AttrName(attr1) -> Aggregator(agg1), ...}
         # - {attr1 => agg1, ...} -> {AttrName(attr1) -> Aggregator(agg1), ...}
-        # 
+        #
         # @param [Object] arg any ruby object to coerce to an Summarization
         # @return [Summarization] the coerced summarization
         # @raise [ArgumentError] is the coercion fails
@@ -35,7 +35,7 @@ module Alf
             coerce(Hash[*arg])
           when Hash
             Summarization.new Hash[arg.map{|k,v|
-              [ Tools.coerce(k, AttrName), 
+              [ Tools.coerce(k, AttrName),
                 Tools.coerce(v, Aggregator) ]
             }]
           else
@@ -62,7 +62,7 @@ module Alf
       #
       # @return [Tuple] a tuple with least values for each attribute
       def least
-        Hash[@aggregations.map{|k,v| 
+        Hash[@aggregations.map{|k,v|
           [k, v.least]
         }]
       end
@@ -120,7 +120,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        map = Hash[aggregations.map{|k,v| 
+        map = Hash[aggregations.map{|k,v|
           [k.to_s, "#{v.has_source_code!}"]
         }]
         "Alf::Summarization[#{Tools.to_ruby_literal(map)}]"

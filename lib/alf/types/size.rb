@@ -28,7 +28,7 @@ module Alf
           if self === res
             res
           else
-            raise ArgumentError, "Invalid value `#{arg}` for Size()" 
+            raise ArgumentError, "Invalid value `#{arg}` for Size()"
           end
         rescue Alf::CoercionError
           raise ArgumentError, "Invalid value `#{arg}` for Size()"
@@ -45,7 +45,7 @@ module Alf
         # @raise [ArgumentError] if the size cannot be coerced from argv
         def from_argv(argv, opts = {:default => 0})
           if argv.size > 1
-            raise ArgumentError, "Invalid value #{argv.inspect} for Size()" 
+            raise ArgumentError, "Invalid value #{argv.inspect} for Size()"
           end
           coerce(argv.first || opts[:default])
         end

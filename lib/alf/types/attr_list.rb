@@ -1,8 +1,7 @@
 module Alf
   module Types
     #
-    # An attribute list is an ordered collection of attribute names (see 
-    # AttrName).
+    # An attribute list is an ordered collection of attribute names (see AttrName).
     #
     # Example:
     #
@@ -98,7 +97,7 @@ module Alf
       end
 
       # Projects `tuple` on known (or unknown) attributes.
-      # 
+      #
       # Example:
       #   list = AttrList.new([:name])
       #   tuple = {:name => "Jones", :city => "London"}

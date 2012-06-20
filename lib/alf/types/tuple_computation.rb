@@ -1,6 +1,6 @@
 module Alf
   module Types
-    # 
+    #
     # Defines the computation of a tuple from expressions mapped to names.
     #
     # Example:
@@ -44,9 +44,9 @@ module Alf
             TupleComputation.new Hash[arg.map{|k,v|
               if AttrName === k
                 v = TupleExpression.coerce(v) if v.is_a?(Proc)
-                [k, v] 
+                [k, v]
               else
-                [ Tools.coerce(k, AttrName), 
+                [ Tools.coerce(k, AttrName),
                   Tools.coerce(v, TupleExpression) ]
               end
             }]
@@ -77,8 +77,8 @@ module Alf
       # This is a convenient method for the following, longer expression:
       #
       #     evaluate(TupleHandle.new.set(tuple))
-      # 
-      # Note, however, using a Handle as in the example above is much more 
+      #
+      # Note, however, using a Handle as in the example above is much more
       # efficient when evaluating the same computation on multiple tuples
       # in sequence.
       #
@@ -89,13 +89,13 @@ module Alf
       end
       alias :[] :call
 
-      # Computes the resulting tuple when expressions are evaluated in the 
+      # Computes the resulting tuple when expressions are evaluated in the
       # context of `handle`
       #
       # @param [TupleHandle] handle a tuple handle instance.
       # @return [Hash] the resulting tuple
       def evaluate(handle = nil)
-        Tools.tuple_collect(@computation){|k,v| 
+        Tools.tuple_collect(@computation){|k,v|
           [k, v.is_a?(TupleExpression) ? v.evaluate(handle) : v]
         }
       end

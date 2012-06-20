@@ -1,6 +1,6 @@
 module Alf
   module Types
-    # 
+    #
     # Specialization of TupleExpression to boolean expressions.
     #
     class TuplePredicate < TupleExpression
@@ -37,7 +37,7 @@ module Alf
             TuplePredicate.new eval("lambda{ #{arg} }"), arg
           when Hash
             h = Hash[arg.map{|k,v|
-              (AttrName === k) ? 
+              (AttrName === k) ?
                 [k,v] : [Tools.coerce(k, AttrName), Kernel.eval(v)]
             }]
             source = h.map{|k,v|

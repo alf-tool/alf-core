@@ -1,7 +1,7 @@
 module Alf
   module Types
     #
-    # A tuple expression is a Ruby expression whose evaluates in the scope of a 
+    # A tuple expression is a Ruby expression whose evaluates in the scope of a
     # specific tuple handle.
     #
     # Example:
@@ -19,7 +19,7 @@ module Alf
 
       # Creates a tuple expression from a Proc object
       #
-      # @param [Proc] expr a Proc for the expression 
+      # @param [Proc] expr a Proc for the expression
       # @param [String] source the source code of the expression (optional)
       def initialize(expr, source = nil)
         @expr_lambda = expr
@@ -88,8 +88,8 @@ module Alf
       # This is a convenient method for the following, longer expression:
       #
       #     evaluate(TupleHandle.new.set(tuple))
-      # 
-      # Note, however, using a Handle as in the example above is much more 
+      #
+      # Note, however, using a Handle as in the example above is much more
       # efficient when evaluating the same expression on multiple tuples
       # in sequence.
       #
@@ -127,7 +127,7 @@ module Alf
       def to_ruby_literal
         "Alf::#{Tools.class_name(self.class)}[#{Tools.to_ruby_literal(has_source_code!)}]"
       end
-      
+
       # Returns a string representation of this expression
       def inspect
         to_ruby_literal
@@ -135,7 +135,7 @@ module Alf
         super
       end
 
-      # Asserts that this expression knows its source code or raises a 
+      # Asserts that this expression knows its source code or raises a
       # NotImplementedError.
       #
       # @return [String] the source code when known

@@ -3,8 +3,7 @@ module Alf
     #
     # Attribute name.
     #
-    # Attribute names are ruby symbols that match the following regular 
-    # expression:
+    # Attribute names are ruby symbols that match the following regular expression:
     #
     #     /^[a-zA-Z0-9_]+[?!]?$/
     #
@@ -39,7 +38,7 @@ module Alf
         def coerce(arg)
           if arg.respond_to?(:to_sym)
             sym = arg.to_sym
-            return sym if self.===(sym) 
+            return sym if self.===(sym)
           end
           raise ArgumentError, "Unable to coerce `#{arg.inspect}` to AttrName"
         end
@@ -56,7 +55,7 @@ module Alf
         # @raise [ArgumentError] is the coercion fails
         def from_argv(argv, opts = {})
           raise ArgumentError if argv.size > 1
-          coerce(argv.first || opts[:default]) 
+          coerce(argv.first || opts[:default])
         end
 
       end

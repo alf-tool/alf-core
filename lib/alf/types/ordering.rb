@@ -8,7 +8,7 @@ module Alf
       # @return [Array] underlying ordering as an array `[[attr1, dir1], ...]`
       attr_reader :ordering
 
-      # @return [Proc] a Proc object that sorts tuples according to this 
+      # @return [Proc] a Proc object that sorts tuples according to this
       #         ordering.
       attr_reader :sorter
 
@@ -44,7 +44,7 @@ module Alf
               Ordering.new(arg)
             else
               symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
-              sliced = symbolized.each_slice(2) 
+              sliced = symbolized.each_slice(2)
               if sliced.all?{|a,o| [:asc,:desc].include?(o)}
                 Ordering.new sliced.to_a
               else
@@ -59,7 +59,7 @@ module Alf
 
         # Converts commandline arguments to an ordering.
         #
-        # This method reuses the `coerce(Array)` coercion heuristics and 
+        # This method reuses the `coerce(Array)` coercion heuristics and
         # therefore shares its spec.
         #
         # @param [Array] argv commandline arguments
@@ -86,7 +86,7 @@ module Alf
       #
       # @param [Tuple] t1 a tuple
       # @param [Tuple] t2 another tuple
-      # @return [-1, 0 or 1] according to the classical ruby semantics of 
+      # @return [-1, 0 or 1] according to the classical ruby semantics of
       #         `(t1 <=> t2)`
       def compare(t1,t2)
         ordering.each do |atr, dir|
@@ -118,7 +118,7 @@ module Alf
 
       # Checks equality with another ordering.
       #
-      # @param [Ordering] other another Ordering instance 
+      # @param [Ordering] other another Ordering instance
       # @return [Boolean] true if both orderings are the same, false otherwise
       def ==(other)
         other.is_a?(Ordering) && (other.ordering == ordering)
@@ -127,7 +127,7 @@ module Alf
 
       # Converts to an attribute list.
       #
-      # @return [AttrList] a list of attribute names that participate to the 
+      # @return [AttrList] a list of attribute names that participate to the
       #         ordering
       def to_attr_list
         AttrList.new(attributes)

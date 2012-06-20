@@ -1,7 +1,7 @@
 module Alf
   module Types
     #
-    # Encapsulates a Renaming information 
+    # Encapsulates a Renaming information
     #
     class Renaming
 
@@ -10,10 +10,10 @@ module Alf
 
       # Creates a renaming instance
       #
-      # @param [Hash] a renaming mapping as AttrName -> AttrName 
+      # @param [Hash] a renaming mapping as AttrName -> AttrName
       def initialize(renaming)
         @renaming = renaming
-      end 
+      end
 
       class << self
 
@@ -31,7 +31,7 @@ module Alf
             arg
           when Hash
             Renaming.new Hash[arg.map{|k,v|
-              [ Tools.coerce(k, AttrName), 
+              [ Tools.coerce(k, AttrName),
                 Tools.coerce(v, AttrName) ]
             }]
           when Array
@@ -44,7 +44,7 @@ module Alf
 
         # Converts commandline arguments to a renaming.
         #
-        # This method reuses the `coerce(Array)` coercion heuristics and 
+        # This method reuses the `coerce(Array)` coercion heuristics and
         # therefore shares its spec.
         #
         # @param [Array] argv commandline arguments
