@@ -1,7 +1,47 @@
 module Alf
   module Shell
     class Main < Shell::Delegator()
-    
+
+      class << self
+
+        def relational_operators(sort_by_name = false)
+          ops = subcommands.select{|cmd|
+             cmd.operator? and cmd.relational? and !cmd.experimental?
+          }
+          sort_operators(ops, sort_by_name)
+        end
+
+        def experimental_operators(sort_by_name = false)
+          ops = subcommands.select{|cmd|
+            cmd.operator? and cmd.relational? and cmd.experimental?
+          }
+          sort_operators(ops, sort_by_name)
+        end
+
+        def non_relational_operators(sort_by_name = false)
+          ops = subcommands.select{|cmd|
+            cmd.operator? and !cmd.relational?
+          }
+          sort_operators(ops, sort_by_name)
+        end
+
+        def other_non_relational_commands(sort_by_name = false)
+          ops = subcommands.select{|cmd|
+            cmd.command?
+          }
+          sort_operators(ops, sort_by_name)
+        end
+
+        private
+
+        def sort_operators(ops, sort_by_name)
+          sort_by_name ? ops.sort{|op1,op2|
+            op1.command_name.to_s <=> op2.command_name.to_s
+          } : ops
+        end
+
+      end # class << self
+
       # Environment instance to use to get base iterators
       attr_accessor :environment
 
@@ -19,22 +59,22 @@ module Alf
         @environment = env
         @rendering_options = {}
       end
-      
+
       # Install options
       options do |opt|
         @execute = false
-        opt.on("-e", "--execute", "Execute one line of script (Lispy API)") do 
+        opt.on("-e", "--execute", "Execute one line of script (Lispy API)") do
           @execute = true
         end
-        
+
         @renderer_class = nil
         Renderer.each_renderer do |name,descr,clazz|
-          opt.on("--#{name}", "Render output #{descr}"){ 
+          opt.on("--#{name}", "Render output #{descr}"){
             @renderer_class = clazz
           }
         end
-        
-        opt.on('--env=ENV', 
+
+        opt.on('--env=ENV',
                "Set the environment to use") do |value|
           @environment = Environment.autodetect(value)
         end
@@ -46,18 +86,18 @@ module Alf
                "(#{readers.join(',')})") do |value|
           @input_reader = value.to_sym
         end
-        
-        opt.on("-Idirectory", 
+
+        opt.on("-Idirectory",
                "Specify $LOAD_PATH directory (may be used more than once)") do |val|
           $LOAD_PATH.unshift val
         end
 
-        opt.on('-rlibrary', 
+        opt.on('-rlibrary',
                "Require the library, before executing alf") do |value|
           require(value)
         end
-        
-        opt.on("--[no-]pretty", 
+
+        opt.on("--[no-]pretty",
                "Enable/disable pretty print best effort") do |val|
           self.pretty = val
         end
@@ -65,15 +105,15 @@ module Alf
         opt.on_tail('-h', "--help", "Show help") do
           raise Quickl::Help
         end
-        
+
         opt.on_tail('-v', "--version", "Show version") do
           raise Quickl::Exit, "alf #{Alf::VERSION}"\
                               " (c) 2011, Bernard Lambeau"
         end
       end # Alf's options
 
-      # 
-      # Returns the $stdin Reader to use, according to the 
+      #
+      # Returns the $stdin Reader to use, according to the
       # --input-reader= option
       #
       def stdin_reader
@@ -122,15 +162,14 @@ module Alf
 
       #
       # Returns a highline instance
-      # 
+      #
       def highline
         require 'highline'
         HighLine.new($stdin, $stdout)
       rescue LoadError => ex
         nil
       end
-      
+
     end # class Main
   end # module Shell
 end # module Alf
-require_relative 'main/class_methods'

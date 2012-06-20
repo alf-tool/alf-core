@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   module Shell
-    describe Main::ClassMethods do
+    describe Main, "class methods for doc" do
 
       specify "relational_operators" do
         Shell::Main.relational_operators.should_not be_empty
@@ -39,6 +39,6 @@ module Alf
         end
       end
         
-    end # Main::ClassMethods
+    end # class methods for doc
   end # module Shell
 end # module Alf
