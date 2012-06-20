@@ -40,6 +40,17 @@ module Alf
     Alf::Reader.reader(source, *args)
   end
 
+  # Loads `source` as an in-memory Relation instance.
+  #
+  # @param [...] source a String, a Path or an IO denoting a relation physical source.
+  # @param [Array] args optional reader arguments
+  # @return [Relation] a relation instance loaded from `source`
+  # @raise [ArgumentError] if `source` is not recognized or no reader can be found.
+  #
+  def self.load(source, *args)
+    reader(source, *args).to_relation
+  end
+
   #
   # Builds and returns a lispy engine on a specific environment.
   #

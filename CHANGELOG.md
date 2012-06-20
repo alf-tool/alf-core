@@ -6,6 +6,11 @@
 
       Relation(...).sum{ qty }
 
+* Added Alf.load for loading in-memory relations the easiest possible way:
+
+      Alf.load("path/to/a/suppliers.csv")
+      # => Alf::Relation[...]
+
 * Added Alf.reader as a convenient shortcut for Alf::Reader.reader.
 
       Alf.reader("path/to/a/suppliers.csv")
