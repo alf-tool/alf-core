@@ -1,12 +1,12 @@
 module Alf
   module Operator
-    # 
+    #
     # Specialization of Operator for operators that work on a binary input
     #
     module Binary
-      include Operator 
+      include Operator
 
-      # Class-level methods 
+      # Class-level methods
       module ClassMethods
 
         # (see Operator::ClassMethods#arity)

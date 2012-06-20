@@ -1,13 +1,13 @@
 module Alf
   module Operator
-    # 
+    #
     # Encapsulates method that allows making operator introspection, that is,
     # knowing operator cardinality and similar stuff.
-    # 
+    #
     module ClassMethods
 
       # Returns the ruby case name of this operator
-      def rubycase_name 
+      def rubycase_name
         Tools.ruby_case(Tools.class_name(self))
       end
 
@@ -49,11 +49,11 @@ module Alf
       end
 
       ################################################################# Factory
-      
+
       # Installs or set the operator signature
       def signature
         if block_given?
-          @signature = Signature.new(self, &Proc.new) 
+          @signature = Signature.new(self, &Proc.new)
           @signature.install
         else
           @signature ||= Signature.new(self)
@@ -62,26 +62,16 @@ module Alf
 
     end # module ClassMethods
 
-    # Yields non-relational then relational operators, in turn.
-    def self.each
-      Operator::NonRelational.each{|x| yield(x)}
-      Operator::Relational.each{|x| yield(x)}
-    end
-
     # Let submodules and classes have required methods
     module Installer
 
       # Ensures that the Introspection module is set on real operators
       def included(mod)
-        if mod.is_a?(Class)
-          mod.extend(ClassMethods) 
-        else
-          mod.extend(Installer)
-        end
+        mod.extend(mod.is_a?(Class) ? ClassMethods : Installer)
       end
 
     end # module Installer
     extend(Installer)
-    
+
   end # module Operator
 end # module Alf

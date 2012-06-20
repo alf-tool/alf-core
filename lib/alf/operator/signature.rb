@@ -32,7 +32,7 @@ module Alf
       end
 
       # Adds an option to the signature
-      # 
+      #
       # @param [Symbol] name argument name
       # @param [Class] domain argument domain
       # @param [Object] default (optional) default value
@@ -79,7 +79,7 @@ module Alf
         default_options
       end
 
-      # Parses arguments `args` passed to the operator `initialize` and 
+      # Parses arguments `args` passed to the operator `initialize` and
       # sets attributes accordingly on `receiver`.
       #
       # @param [Array] args an array of initialize arguments
@@ -106,7 +106,7 @@ module Alf
         optargs.each_pair do |name,val|
           receiver.send(:"#{name}=", val)
         end
-        
+
         # 4) Parse other arguments now
         with_each_arg(args) do |name,dom,value|
           invalid_args!(args) if value.nil?
@@ -144,14 +144,14 @@ module Alf
       # This methods returns a triple `[datasets, arguments, options]` with
       # the respective values collected on `op`.
       #
-      # @param [Operator] op an operator, which should be an instance of 
+      # @param [Operator] op an operator, which should be an instance of
       #                   `self.operator`
-      # @return [Array] a triple [datasets, arguments, options] with operands, 
+      # @return [Array] a triple [datasets, arguments, options] with operands,
       #                 then signature values
       def collect_on(op)
         oper = op.operands
         args = arguments.map{|name,_| op.send(name) }
-        opts = Hash[options.map{|name,dom,defa,_| 
+        opts = Hash[options.map{|name,dom,defa,_|
           val = op.send(name)
           (val == defa) ? nil : [name, val]
         }.compact]
@@ -169,15 +169,15 @@ module Alf
         oper = operator.nullary? ? "" :
               (operator.unary? ? "operand" : "left, right")
 
-        args = arguments.map{|name,dom,_| 
+        args = arguments.map{|name,dom,_|
           dom.to_s =~ /::([A-Za-z]+)$/
-          "#{name}:#{$1}" 
+          "#{name}:#{$1}"
         }.join(", ")
         args = (args.empty? ? "#{oper}" : "#{oper}, #{args}").strip
 
         opts = options.map{|name,dom,_|
           dom.to_s =~ /::([A-Za-z]+)$/
-          "#{name}: #{$1}" 
+          "#{name}: #{$1}"
         }.join(', ')
         opts = opts.empty? ? "" : "{#{opts}}"
 
