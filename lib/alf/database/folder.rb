@@ -16,9 +16,8 @@ module Alf
         # @return [Boolean] true if args contains one String only, which denotes
         #         an existing folder; false otherwise
         def recognizes?(args)
-          (args.size == 1) &&
-          args.first.is_a?(String) &&
-          File.directory?(args.first.to_s)
+          return false unless (args.size == 1)
+          Tools.pathable?(args.first) && Tools.to_path(args.first).directory?
         end
 
       end # class << self
@@ -27,7 +26,7 @@ module Alf
       #
       # @param [String] folder path to the folder to use as dataset source.
       def initialize(folder)
-        @folder = folder
+        @folder = Tools.to_path(folder)
       end
 
       # (see Database#dataset)
@@ -44,12 +43,12 @@ module Alf
       # Finds a specific file by name
       #
       # @param [String] name the name of a dataset
-      # @return [String] path to an existing file if it exists, nil otherwise.
+      # @return [Path] path to an existing file if it exists, nil otherwise.
       def find_file(name)
-        if File.file?(explicit = File.join(@folder, name.to_s))
+        if (explicit = @folder/name.to_s).file?
           explicit
         else
-          Dir[File.join(@folder, "#{name}.*")].find{|f| File.file?(f)}
+          @folder.glob("#{name}.*").find{|f| f.file?}
         end
       end
 
