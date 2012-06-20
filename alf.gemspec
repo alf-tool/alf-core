@@ -124,18 +124,18 @@ Gem::Specification.new do |s|
   # for each development dependency. These gems are required for developers
   #
   s.add_development_dependency("rake", "~> 0.9.2")
-  s.add_development_dependency("rspec", "~> 2.8.0")
+  s.add_development_dependency("rspec", "~> 2.10")
   s.add_development_dependency("wlang", "~> 0.10.2")
-  s.add_development_dependency("yard", "~> 0.7.2")
+  s.add_development_dependency("yard", "~> 0.8.2")
   s.add_development_dependency("bluecloth", "~> 2.2.0")
   s.add_development_dependency("redcarpet", "~> 2.1.0")
-  s.add_development_dependency("fastercsv", "~> 1.5.4")
-  s.add_development_dependency("request-log-analyzer", "~> 1.11.0")
-  s.add_development_dependency("sequel", "~> 3.30")
-  s.add_development_dependency("sqlite3", "~> 1.3.0")
-  s.add_development_dependency("highline", "~> 1.6.2")
-  s.add_dependency("quickl", "~> 0.4.2")
-  s.add_dependency("myrrha", "~> 1.2.1")
+  s.add_development_dependency("fastercsv", "~> 1.5")
+  s.add_development_dependency("request-log-analyzer", "~> 1.12.2")
+  s.add_development_dependency("sequel", "~> 3.36")
+  s.add_development_dependency("sqlite3", "~> 1.3")
+  s.add_development_dependency("highline", "~> 1.6")
+  s.add_dependency("quickl", "~> 0.4.3")
+  s.add_dependency("myrrha", "~> 1.2.2")
   s.add_dependency("backports", "~> 2.6")
 
   # The version of ruby required by this gem
