@@ -31,9 +31,7 @@ module Alf
         # Set options on the requester
         requester.pretty = @pretty unless @pretty.nil?
         requester.rendering_options[:float_format] = @ff unless @ff.nil?
-        requester.renderer_class = (@renderer_class || 
-                                    requester.renderer_class || 
-                                    Text::Renderer)
+        requester.renderer_class = (@renderer_class || requester.renderer_class)
 
         # normalize args
         args = argv.first

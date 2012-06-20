@@ -2,6 +2,8 @@
 
 ## Enhancements
 
+* When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
+
 * Alf::Relation now respond to aggregation functions with an object-oriented syntax:
 
       Relation(...).sum{ qty }
@@ -17,6 +19,10 @@
       # => #<Alf::CSV::Reader:0x007fd554058440 ...>
 
 * Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
+
+## Broken stuff
+
+* You now have to explicitely use 'alf show --text > ...' or 'alf --text ... > ' if you don't want ruby hashes to be outputted to output files. This is a consequence of tty detection that ensures a better shell experience.
 
 ## Bug fixes
 

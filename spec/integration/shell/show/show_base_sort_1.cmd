@@ -1,1 +1,1 @@
-alf show suppliers -- city asc
+alf show --text suppliers -- city asc

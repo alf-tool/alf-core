@@ -1,1 +1,1 @@
-alf show parts --ff=%.6f
+alf show --text parts --ff=%.6f

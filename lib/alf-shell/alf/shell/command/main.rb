@@ -140,7 +140,7 @@ module Alf
         # 3) if there is a requester, then we do the job (assuming bin/alf)
         # with the renderer to use. Otherwise, we simply return built operator
         if operator && requester
-          renderer_class = (self.renderer_class ||= Renderer::Rash)
+          renderer_class = self.renderer_class || default_renderer_class
           renderer = renderer_class.new(operator, rendering_options)
           renderer.execute($stdout)
         else
@@ -168,6 +168,12 @@ module Alf
         HighLine.new($stdin, $stdout)
       rescue LoadError => ex
         nil
+      end
+
+    private
+
+      def default_renderer_class
+        $stdout.tty? ? Text::Renderer : Renderer::Rash
       end
 
     end # class Main

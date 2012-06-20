@@ -1,1 +1,1 @@
-alf --env=$(_("shell/alf",__FILE__)) show rel
+alf --env=$(_("shell/alf",__FILE__)) show --text rel
