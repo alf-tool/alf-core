@@ -3,9 +3,9 @@ module Alf
     #
     # Specialization of the Reader contract for .rash files.
     #
-    # A .rash file/stream contains one ruby hash literal on each line. This 
-    # reader simply decodes each of them in turn with Kernel.eval, providing a 
-    # state-less reader (that is, tuples are not all loaded in memory at once).
+    # A .rash file/stream contains one ruby hash literal on each line. This reader simply
+    # decodes each of them in turn with Kernel.eval, providing a state-less reader (that
+    # is, tuples are not all loaded in memory at once).
     #
     class Rash < Reader
 
