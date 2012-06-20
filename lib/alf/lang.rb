@@ -1,8 +1,7 @@
 module Alf
   module Lang
-    require 'alf/lang/algebra'
-    require 'alf/lang/aggregation'
-    require 'alf/lang/literals'
-
   end # module Lang
 end # module Alf
+require_relative 'lang/algebra'
+require_relative 'lang/aggregation'
+require_relative 'lang/literals'
