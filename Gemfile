@@ -29,15 +29,6 @@ group :extra do
   gem "request-log-analyzer", "~> 1.12.2"
   gem "sequel", "~> 3.36"
   gem "highline", "~> 1.6"
-end
-
-platform 'jruby' do
-  group :extra do
-    gem "jdbc-sqlite3", "~> 3.7"
-  end
-end
-platform 'mri' do
-  group :extra do
-    gem "sqlite3", "~> 1.3"
-  end
+  gem "sqlite3", "~> 1.3", :platforms => ['mri', 'rbx']
+  gem "jdbc-sqlite3", "~> 3.7", :platforms => ['jruby']
 end
