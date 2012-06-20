@@ -90,6 +90,10 @@ module Alf
   #   Alf::Relation([ {...}, ..., {...} ])
   #   # the common coercion from an array of tuples
   #
+  #   Alf::Relation(Path)
+  #   Alf::Relation(IO)
+  #   # loaded through available readers
+  #
   def self.Relation(*args)
     Alf::Tools.to_relation(*args)
   end

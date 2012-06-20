@@ -40,12 +40,23 @@ module Alf
         Relation.new(Set.new << v)
       end
 
+      # path able
+      r.upon(IO) do |v,_|
+        Alf.reader(v).to_relation
+      end
+
       # From enumerable of tuples to Relation
       enum_of_tuples = lambda{|v,_|
         v.is_a?(Enumerable) and v.all?{|t| t.is_a?(Hash)}
       }
       r.upon(enum_of_tuples) do |v,_|
         Relation.new(v.to_set)
+      end
+
+      # path able
+      pathable = lambda{|v,_| !Tools.pathable?(v).nil? }
+      r.upon(pathable) do |v,_|
+        Alf.reader(v).to_relation
       end
 
     end # ToRelation

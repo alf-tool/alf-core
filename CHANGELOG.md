@@ -10,6 +10,8 @@
 
       Relation(...).sum{ qty }
 
+* Relation(...) now recognize IO objects and Path.like instances and load them with available readers.
+
 * Added Alf.load for loading in-memory relations the easiest possible way:
 
       Alf.load("path/to/a/suppliers.csv")

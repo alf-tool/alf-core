@@ -35,5 +35,23 @@ module Alf
       to_rel(expected.to_a).should eq(expected)
     end
 
+    context 'when based on files' do
+      let(:path){ Path.dir/'to_relation.rash' }
+      before do
+        path.write("{:name => 'Alf'}")
+      end
+      after do
+        path.unlink rescue nil
+      end
+      it 'loads a Path object' do
+        to_rel(path).should eq(expected)
+      end
+      it 'loads an IO' do
+        path.open('r') do |io|
+          to_rel(io).should eq(expected)
+        end
+      end
+    end
+
   end
 end
