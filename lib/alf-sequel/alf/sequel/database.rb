@@ -12,20 +12,23 @@ module Alf
         # @return true if args contains one String that can be interpreted as
         # a valid database uri, false otherwise
         def recognizes?(args)
+          return false unless args.size == 1
           require 'uri'
-          if args.size == 1 and args.first.is_a?(String)
-            uri = URI::parse(args.first)
-            !!uri.scheme or looks_a_sqlite_file?(args.first)
-          else
-            false
+          if (arg = args.first).is_a?(String)
+            uri = URI::parse(arg)
+            !!uri.scheme
+            return true if !!uri.scheme
           end
+          looks_a_sqlite_file?(arg)
         rescue ::URI::Error
           false
         end
 
         # Returns trus if `f` looks like a sqlite file
         def looks_a_sqlite_file?(f)
-          File.file?(f) and File.extname(f) == ".db"
+          return false unless Tools.pathable?(f)
+          path = Tools.to_path(f)
+          path.file? and ['db', 'sqlite', 'sqlite3'].include?(path.ext)
         end
 
       end # class << self
@@ -45,7 +48,12 @@ module Alf
         Iterator.new(connect[name])
       end
 
-      private 
+      def ping
+        connect
+        @db.test_connection
+      end
+
+      private
 
       # Creates a database connection
       def connect
