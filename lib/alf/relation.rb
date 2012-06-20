@@ -83,7 +83,12 @@ module Alf
       end
     end # Operators::each
     alias :+ :union
+    alias :| :union
     alias :- :minus
+    alias :* :join
+    alias :& :intersect
+    alias :=~ :matching
+    alias :'!~' :not_matching
 
     # Install the DSL through iteration over defined aggregators
     Aggregator.each do |agg_class|

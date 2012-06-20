@@ -35,9 +35,10 @@ module Alf
         {:sid => 'S3', :x => 's3'}
       ]
     end
-      
+
     specify "union" do
       (rel1 + rel1).should == rel1
+      (rel1 | rel1).should == rel1
       (rel1 + rel2).should == Alf::Relation[
         {:sid => 'S1'},
         {:sid => 'S3'},
@@ -45,7 +46,7 @@ module Alf
         {:sid => 'S5'}
       ]
     end # coerce
-      
+
     specify "difference" do
       (rel1 - rel1).should == Alf::Relation[]
       (rel1 - rel2).should == Alf::Relation[
@@ -56,6 +57,24 @@ module Alf
         {:sid => 'S5'}
       ]
     end # coerce
-    
+
+    specify "join" do
+      (rel1 * rel2).should == Alf::Relation[ {:sid => 'S2'} ]
+      (rel2 * rel1).should == Alf::Relation[ {:sid => 'S2'} ]
+    end # join
+
+    specify "intersect" do
+      (rel1 & rel2).should == Alf::Relation[ {:sid => 'S2'} ]
+      (rel2 & rel1).should == Alf::Relation[ {:sid => 'S2'} ]
+    end # intersect
+
+    specify "matching" do
+      (rel1 =~ rel2).should == Alf::Relation[ {:sid => 'S2'} ]
+    end # intersect
+
+    specify "not matching", :ruby19 => true do
+      (rel1 !~ rel2).should == Alf::Relation[ {:sid => 'S1'}, {:sid => 'S3'} ]
+    end # intersect
+
   end
 end
