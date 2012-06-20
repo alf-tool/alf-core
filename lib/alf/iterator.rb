@@ -2,16 +2,27 @@ module Alf
   #
   # Marker module for all elements implementing tuple iterators.
   #
-  # At first glance, an iterator is nothing else than an Enumerable that serves
-  # tuples (represented by ruby hashes). However, this module helps Alf's
-  # internal classes to recognize enumerables that may safely be considered as
-  # tuple iterators from other enumerables. For this reason, all elements that
-  # would like to participate to an iteration chain (that is, an logical
-  # operator implementation) should be marked with this module. This is the case
-  # for all Readers and Operators defined in Alf.
+  # At first glance, an iterator is nothing else than an Enumerable that serves tuples
+  # (represented by ruby hashes). However, this module helps Alf's internal classes to
+  # recognize enumerables that may safely be considered as tuple iterators from other
+  # enumerables. For this reason, all elements that would like to participate to an
+  # iteration chain (that is, an logical operator implementation) should be marked with
+  # this module. This is the case for all Readers and Operators defined in Alf.
   #
   module Iterator
     include Enumerable
+
+    # Coerces something to an iterator
+    def self.coerce(arg, environment = nil)
+      case arg
+      when Iterator, Array
+        arg
+      when String, Symbol
+        Proxy.new(environment, arg.to_sym)
+      else
+        Reader.coerce(arg, environment)
+      end
+    end
 
     # Converts this iterator to an in-memory Relation.
     #
@@ -22,7 +33,6 @@ module Alf
     end
     alias :to_rel :to_relation
 
-    require 'alf/iterator/class_methods'
-    require 'alf/iterator/proxy'
   end # module Iterator
 end # module Alf
+require_relative 'iterator/proxy'
