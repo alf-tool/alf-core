@@ -2,6 +2,11 @@
 
 ## Enhancements
 
+* Added Alf.database for obtaining Database instances in the easiest possible way:
+
+      Alf.database "somewhere/to/a/folder"
+      Alf.database "database.sqlite3"
+
 * The default database is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --db=.' everytime you want to use .csv or .rash files as base relations when using alf in shell. A --examples option allows easily setting the embedded database as default one.
 
 * When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
