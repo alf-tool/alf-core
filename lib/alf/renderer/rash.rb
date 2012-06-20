@@ -4,13 +4,13 @@ module Alf
     # Implements the Renderer contract through inspect
     #
     class Rash < Renderer
-  
+
       # (see Renderer#render)
       def render(input, output)
         if options[:pretty]
           input.each do |tuple|
-            output << "{\n" << tuple.collect{|k,v| 
-              "  #{lit(k)} => #{lit(v)}" 
+            output << "{\n" << tuple.collect{|k,v|
+              "  #{lit(k)} => #{lit(v)}"
             }.join(",\n") << "\n}\n"
           end
         else
@@ -21,12 +21,12 @@ module Alf
         output
       end
 
-      private 
+      private
 
       def lit(x)
         Tools.to_ruby_literal(x)
       end
-  
+
       Renderer.register(:rash, "as ruby hashes", self)
     end # class Rash
   end # class Renderer
