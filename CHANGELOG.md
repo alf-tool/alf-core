@@ -1,23 +1,26 @@
 # 0.13.0 / FIX ME
 
-## Enhancements
+## Enhancements in the shell interface
+
+* When used in shell, the default database is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --db=.' everytime you want to use .csv or .rash files as base relations. An --examples option allows easily setting the embedded database as default one.
+
+* When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
+
+## Enhancements in the ruby interface
 
 * Added Alf.database for obtaining Database instances in the easiest possible way:
 
       Alf.database "somewhere/to/a/folder"
       Alf.database "database.sqlite3"
-
-* The default database is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --db=.' everytime you want to use .csv or .rash files as base relations when using alf in shell. A --examples option allows easily setting the embedded database as default one.
-
-* When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
+      Alf.database "postgres://user:password@host/database"
 
 * Alf::Relation now respond to aggregation functions with an object-oriented syntax:
 
       Relation(...).sum{ qty }
 
-* Alf::Relation(...) now recognize IO objects and Path.like instances and load them with available readers. It is also aliased as Alf.relation(...) for loading relations in the easiest possible way:
+* Alf::Relation(...) (aliased as Alf.relation) now recognize IO objects and Path.like instances and load them with available readers in the easiest possible way:
 
-      Alf.relation("path/to/a/suppliers.csv")
+      Alf::Relation("path/to/a/suppliers.csv")
       # => Alf::Relation[...]
 
 * Added Alf.reader as a convenient shortcut for Alf::Reader.reader.
