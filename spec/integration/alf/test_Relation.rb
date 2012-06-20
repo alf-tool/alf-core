@@ -28,5 +28,17 @@ module Alf
       Alf::Relation(op).should eq(expected)
     end
 
+    it 'supports a Path to a recognized file' do
+      Alf::Relation(Path.dir/'example.rash').should eq(expected)
+    end
+
+    it 'supports a String to a recognized file' do
+      Alf::Relation(File.expand_path('../example.rash', __FILE__)).should eq(expected)
+    end
+
+    it 'is aliased as relation' do
+      Alf.relation(:name => "Jones").should eq(expected)
+    end
+
   end
 end

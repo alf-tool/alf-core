@@ -10,11 +10,9 @@
 
       Relation(...).sum{ qty }
 
-* Relation(...) now recognize IO objects and Path.like instances and load them with available readers.
+* Alf::Relation(...) now recognize IO objects and Path.like instances and load them with available readers. It is also aliased as Alf.relation(...) for loading relations in the easiest possible way:
 
-* Added Alf.load for loading in-memory relations the easiest possible way:
-
-      Alf.load("path/to/a/suppliers.csv")
+      Alf.relation("path/to/a/suppliers.csv")
       # => Alf::Relation[...]
 
 * Added Alf.reader as a convenient shortcut for Alf::Reader.reader.
