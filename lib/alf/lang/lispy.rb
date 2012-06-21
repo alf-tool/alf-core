@@ -35,12 +35,12 @@ module Alf
       #
       # @see Database.compile
       #
-      def compile(expr = nil, path = nil, &block)
+      def compile(expr = nil, path = nil, line = nil, &block)
         if expr.nil?
           instance_eval(&block)
         else
-          b = _clean_binding
-          (path ? Kernel.eval(expr, b, path.to_s) : Kernel.eval(expr, b))
+          path = path.to_s if path
+          Kernel.eval expr, *[_clean_binding, path, line].compact, &block
         end
       end
 

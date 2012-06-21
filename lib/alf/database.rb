@@ -68,8 +68,8 @@ module Alf
     #
     # @param [String] expr a Lispy expression to compile
     # @return [Iterator] the iterator resulting from compilation
-    def compile(expr = nil, path = nil, &block)
-      lispy.compile(expr, path, &block)
+    def compile(expr = nil, path = nil, line = nil, &block)
+      lispy.compile(expr, path, line, &block)
     end
 
     # Evaluates a query expression given by a String or a block and returns
@@ -84,8 +84,8 @@ module Alf
     #   rel = evaluate {
     #     (restrict :suppliers, lambda{ city == 'London' })
     #   }
-    def evaluate(expr = nil, path = nil, &block)
-      c = compile(expr, path && path.to_s, &block)
+    def evaluate(expr = nil, path = nil, line = nil, &block)
+      c = compile(expr, path, line, &block)
       c.respond_to?(:to_relation) ? c.to_relation : c
     end
 
