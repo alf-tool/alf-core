@@ -96,7 +96,7 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
     # Now observe that the same result can also be expressed as follows (and can be
     # optimized more easily)
     db.evaluate{
-      summary = summarize(:suppliers, [ :city ], how_many: count, avgstatus: avg{ status })
+      summary = summarize(:suppliers, [ :city ], how_many: count, avg_status: avg{ status })
       join(grouped, summary)
     }
 
