@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  class Database
+  class Adapter
     describe Folder, 'dataset' do
 
       let(:db){ Folder.new(Path.dir/'../examples') }

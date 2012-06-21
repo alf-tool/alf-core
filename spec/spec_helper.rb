@@ -13,6 +13,10 @@ def wlang(str, binding)
   str.gsub(/\$\(([\S]+)\)/){ Kernel.eval($1, binding) }
 end
 
+def examples_path
+  @examples_path ||= Path.backfind('examples/operators')
+end
+
 require 'shared/an_operator_class'
 require 'shared/a_valid_type_implementation'
 require 'shared/a_value'

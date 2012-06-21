@@ -5,10 +5,10 @@ module Alf
     subject{ Reader.new(*args) }
 
     let(:input){ nil }
-    let(:database){ nil }
+    let(:adapter){ nil }
     let(:options){ nil }
 
-    let(:args){ [input, database, options].compact }
+    let(:args){ [input, adapter, options].compact }
 
     before do
       subject.should be_a(Reader)
@@ -16,7 +16,7 @@ module Alf
 
     after do
       subject.input.should eq(input)
-      subject.database.should eq(database)
+      subject.adapter.should eq(adapter)
     end
 
     context 'with empty default options' do
@@ -49,7 +49,7 @@ module Alf
 
       describe "with full args" do
         let(:input){ "suppliers" }
-        let(:database){ Database.examples }
+        let(:adapter){ Adapter.folder Path.backfind('examples/operators') }
         let(:options){ {:opts => true} }
         it 'should set the path correctly' do
           subject.path.should eq(Path("suppliers"))

@@ -11,10 +11,11 @@ require 'myrrha/coerce'
 
 require_relative 'alf/types'
 require_relative 'alf/tools'
-require_relative 'alf/database'
+require_relative 'alf/adapter'
 require_relative 'alf/iterator'
 require_relative 'alf/reader'
 require_relative 'alf/renderer'
+require_relative 'alf/database'
 require_relative 'alf/operator'
 require_relative 'alf/aggregator'
 require_relative 'alf/lang'
@@ -73,7 +74,7 @@ module Alf
   #
   def self.lispy(env = Database.default)
     lispy = Object.new.extend(Lispy)
-    lispy.database = Database.coerce(env)
+    lispy.database = database(env)
     lispy
   end
 

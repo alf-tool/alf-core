@@ -32,7 +32,7 @@
 
 ## Broken stuff
 
-* The Environment concept as been properly renamed as Database (including `environment` readers and writers here and there). Accordingly, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
+* The Environment concept as been removed and split as two different abstractions, namely Adapter and Database. That also means that `environment` readers and writers here have been replaced by `database` or `adapter` according to cases. Also, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
 
 * You now have to explicitely use 'alf show --text > ...' or 'alf --text ... > ' if you don't want ruby hashes to be outputted to output files. This is a consequence of tty detection that ensures a better shell experience.
 

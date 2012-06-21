@@ -38,10 +38,9 @@ module Alf
       # Registers a reader class associated with specific file extensions.
       #
       # Registered class must provide a constructor with the following signature
-      # `new(path_or_io, database = nil, options = {})`. The registration
-      # name must be a symbol which can safely be used as a ruby method name.
-      # A factory method of that name and signature is automatically installed
-      # on the Reader class.
+      # `new(path_or_io, adapter = nil, options = {})`. The registration name must be a
+      # symbol which can safely be used as a ruby method name. A factory method of that
+      # name and signature is automatically installed on the Reader class.
       #
       # @param [Symbol] name a name for the kind of data decoded
       # @param [Array] extensions file extensions mapped to the registered reader
@@ -72,21 +71,20 @@ module Alf
         end
       end
 
-      # Coerces `arg` to a Reader instance, using an optional database to
-      # convert named datasets.
+      # Coerces `arg` to a Reader instance, using an optional adapter to convert named
+      # datasets.
       #
-      # This method automatically provides readers for Strings and Symbols
-      # through `database` (**not** through the reader factory) and for IO
-      # objects through a Rash reader.
+      # This method automatically provides readers for Strings and Symbols through `adapter`
+      # (**not** through the reader factory) and for IO objects through a Rash reader.
       #
       # @param [Object] arg any value to coerce to a Reader instance
-      # @param [Database] database to resolved named datasets (optional)
-      def coerce(arg, database = nil)
+      # @param [Adapter] adapter to resolved named datasets (optional)
+      def coerce(arg, adapter = nil)
         case arg
         when Reader
           arg
         when IO, StringIO
-          rash(arg, database)
+          rash(arg, adapter)
         else
           raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
         end
@@ -107,8 +105,8 @@ module Alf
     # Default reader options
     DEFAULT_OPTIONS = {}
 
-    # @return [Database] Wired database
-    attr_accessor :database
+    # @return [Adapter] Wired adapter
+    attr_accessor :adapter
 
     # @return [String, IO, ...] Input as initially provided to initialize
     attr_accessor :input
@@ -122,10 +120,17 @@ module Alf
     # Creates a reader instance.
     #
     # @param [String or IO] path to a file or IO object for input
-    # @param [Database] database wired database, serving this reader
+    # @param [Adapter] adapter wired adapter, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(*args)
-      @input, @database, @options = Tools.varargs(args, [args.first.class, Database, Hash])
+      args.each do |arg|
+        case arg
+          when Adapter, Database then @adapter = arg
+          when Hash              then @options = arg
+          else
+            @input = arg if arg
+        end
+      end
       @path = Tools.to_path(@input)
       @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
     end

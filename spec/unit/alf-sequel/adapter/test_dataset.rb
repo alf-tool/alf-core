@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'fileutils'
 require "sequel"
 module Alf
-  describe Sequel::Database, 'dataset' do
+  describe Sequel::Adapter, 'dataset' do
     
     let(:rel) {Alf::Relation[
       {:sid => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
@@ -13,7 +13,7 @@ module Alf
     ]}
 
     let(:file){ _("../alf.db", __FILE__) }
-    let(:db) { Sequel::Database.new(file) }
+    let(:db) { Sequel::Adapter.new(file) }
 
     def uri
       protocol = defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"

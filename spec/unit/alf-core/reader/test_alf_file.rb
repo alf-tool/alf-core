@@ -2,14 +2,14 @@ require 'spec_helper'
 module Alf
   describe Reader::AlfFile do
     
-    class TestEnv < Alf::Database
+    class TestAdapter < Alf::Adapter
       def dataset(name)
         [{:status => 10},{:status => 30}]
       end
     end
     
     let(:io){ StringIO.new(expr) }
-    subject{ Reader::AlfFile.new(io, TestEnv.new).to_a }
+    subject{ Reader::AlfFile.new(io, TestAdapter.new).to_a }
 
     describe "on pure functional expressions" do
       let(:expr){ "(restrict :suppliers, lambda{status > 20})" }

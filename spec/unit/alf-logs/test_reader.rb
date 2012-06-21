@@ -35,7 +35,7 @@ module Alf
     end
 
     describe "the auto-detect feature" do
-      let(:reader){ ::Alf::Logs::Reader.new(file,nil,:file_format => nil) }
+      let(:reader){ ::Alf::Logs::Reader.new(file, :file_format => nil) }
       let(:relation){ reader.to_rel }
 
       context "on postgresql.log" do
