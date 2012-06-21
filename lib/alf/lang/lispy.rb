@@ -46,12 +46,10 @@ module Alf
 
       private
 
-      def _clean_binding
-        binding
-      end
+        def _clean_binding
+          binding
+        end
 
-      DUM = Relation::DUM
-      DEE = Relation::DEE
     end # class Lispy
   end # module Lang
 end # module Alf

@@ -84,6 +84,8 @@ module Alf
     alias :relation :Relation
   end
 
+  DUM = Relation::DUM
+  DEE = Relation::DEE
 end # module Alf
 
 require_relative 'alf-shell/alf/shell'

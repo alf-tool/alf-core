@@ -20,6 +20,18 @@ module Alf
       }.should eq(:pid => 'P1', :name => 'Nut', :color => 'red', :heavy => true)
     end
 
+    it 'recognize aggregators' do
+      db.evaluate{
+        sum{ qty }
+      }.should be_a(Aggregator)
+    end
+
+    it 'resolves DUM and DEE constants' do
+      db.evaluate{ DUM }.should be_a(Relation)
+      db.evaluate{ DEE }.should be_a(Relation)
+      db.evaluate('DUM').should be_a(Relation)
+      db.evaluate('DEE').should be_a(Relation)
+    end
 
   end
 end
