@@ -38,6 +38,10 @@
 
 * Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
 
+## Bug fixes
+
+* The Aggregator class, Summarization type and Summarize operator have been made thread-safe through #happens that now takes a TupleHandle instead of a tuple.
+
 ## Broken stuff
 
 * Alf.lispy has been removed from the public API. Please use a Database instance instead:

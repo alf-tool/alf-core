@@ -40,7 +40,7 @@ module Alf
     # Subclasses of Aggregator are automatically tracked so as to add
     # factory methods on the Aggregator class itself. Example:
     #
-    #   class Sum < Aggregate   # will give a method Aggregator.sum
+    #   class Sum < Aggregator   # will give a method Aggregator.sum
     #     ...
     #   end
     #   Aggregator.sum{ size }
@@ -121,7 +121,6 @@ module Alf
     #   Aggregator.new{ size * price }
     #
     def initialize(options = {}, &block)
-      @handle = Tools::TupleHandle.new
       @options = default_options.merge(options)
       @functor = Tools.coerce(block, TupleExpression)
     end
@@ -152,10 +151,11 @@ module Alf
     # and delegates to _happens.
     #
     # @param [Object] memo the current aggregation value
-    # @param [Hash] tuple the current iterated tuple
+    # @param [Tools::TupleHandle] a tuple handle bound to the current tuple
     # @return [Object] updated memo value
-    def happens(memo, tuple)
-      _happens(memo, @functor.evaluate(@handle.set(tuple)))
+    def happens(memo, handle)
+      raise unless handle.is_a?(Tools::TupleHandle)
+      _happens(memo, @functor.evaluate(handle))
     end
 
     # This method finalizes an aggregation.
@@ -176,7 +176,8 @@ module Alf
     # @param [Enumerable<Tuple>] an enumerable of tuples
     # @return [Object] the computed aggregation value
     def aggregate(enum)
-      finalize(enum.inject(least){|m,t| happens(m, t)})
+      handle = Tools::TupleHandle.new
+      finalize(enum.inject(least){|m,t| happens(m, handle.set(t))})
     end
 
     # Asserts that this aggregator knows its source code or raises a

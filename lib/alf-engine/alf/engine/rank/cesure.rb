@@ -12,7 +12,7 @@ module Alf
       # @return [AttrName] Name of the introduced attribute
       attr_reader :as
 
-      # Creates an Aggregate instance
+      # Creates an Rank::Cesure instance
       def initialize(operand, by, as)
         @operand = operand
         @by = by.to_attr_list

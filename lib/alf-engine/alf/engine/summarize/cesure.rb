@@ -15,12 +15,13 @@ module Alf
       # @return [Boolean] Make an allbut summarization?
       attr_reader :allbut
 
-      # Creates an Aggregate instance
+      # Creates an Summarize::Cesure instance
       def initialize(operand, by, summarization, allbut)
         @operand = operand
         @by = by
         @summarization = summarization
         @allbut = allbut
+        @handle = Tools::TupleHandle.new
       end
 
       protected
@@ -37,7 +38,7 @@ module Alf
 
       # (see Cesure#accumulate_cesure)
       def accumulate_cesure(tuple, receiver)
-        @aggs = @summarization.happens(@aggs, tuple)
+        @aggs = @summarization.happens(@aggs, @handle.set(tuple))
       end
 
       # (see Cesure#flush_cesure)

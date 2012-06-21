@@ -12,11 +12,12 @@ module Alf
       # @return [Summarization] Quota computations as a summarization
       attr_reader :summarization
 
-      # Creates an Aggregate instance
+      # Creates an Quota::Cesure instance
       def initialize(operand, by, summarization)
         @operand = operand
         @by = by.to_attr_list
         @summarization = summarization
+        @handle = Tools::TupleHandle.new
       end
 
       protected
@@ -33,7 +34,7 @@ module Alf
 
       # (see Operator::Cesure#accumulate_cesure)
       def accumulate_cesure(tuple, receiver)
-        @aggs = @summarization.happens(@aggs, tuple)
+        @aggs = @summarization.happens(@aggs, @handle.set(tuple))
         receiver.call tuple.merge(@summarization.finalize(@aggs))
       end
 

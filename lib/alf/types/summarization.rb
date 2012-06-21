@@ -69,10 +69,10 @@ module Alf
 
       # Computes the resulting aggregation from aggs if tuple happens.
       #
-      # @return [Tuple] the new aggregated tuple
-      def happens(aggs, tuple)
+      # @return [Tools::TupleHandle] a handle bound to the current tuple
+      def happens(aggs, handle)
         Hash[@aggregations.map{|k,v|
-          [k, v.happens(aggs[k], tuple)]
+          [k, v.happens(aggs[k], handle)]
         }]
       end
 
@@ -90,7 +90,8 @@ module Alf
       # @param [Enumerable] enum an enumeration of tuples
       # @returns [Tuple] The summarization of `enum`
       def summarize(enum)
-        finalize(enum.inject(least){|m,t| happens(m,t)})
+        handle = Tools::TupleHandle.new
+        finalize(enum.inject(least){|m,t| happens(m, handle.set(t))})
       end
 
       # Returns a hash code.

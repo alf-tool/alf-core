@@ -14,7 +14,7 @@ module Alf
       # @return [Boolean] Make an allbut summarization?
       attr_reader :allbut
 
-      # Creates an Aggregate instance
+      # Creates an Summarize::Hash instance
       def initialize(operand, by, summarization, allbut)
         @operand = operand
         @by = by
