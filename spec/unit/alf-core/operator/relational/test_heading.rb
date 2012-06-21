@@ -18,7 +18,7 @@ module Alf
       subject{ operator.to_a }
 
       context "with Lispy" do 
-        let(:operator){ Lispy.heading(input) }
+        let(:operator){ a_lispy.heading(input) }
         it{ should == expected }
       end
 

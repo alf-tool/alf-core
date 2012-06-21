@@ -17,7 +17,7 @@ module Alf
       subject{ operator.to_a }
 
       context "with Lispy" do
-        let(:operator){ Lispy.wrap(input, [:a, :b], :wraped) }
+        let(:operator){ a_lispy.wrap(input, [:a, :b], :wraped) }
         it { should eq(expected) }
       end
 

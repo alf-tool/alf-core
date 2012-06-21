@@ -23,7 +23,7 @@ module Alf
         ]}
 
         context "with Lispy" do 
-          let(:operator){ Lispy.generator() }
+          let(:operator){ a_lispy.generator() }
           it{ should == expected }
         end
 
@@ -36,7 +36,7 @@ module Alf
         ]}
 
         context "When factored with Lispy" do 
-          let(:operator){ Lispy.generator(2) }
+          let(:operator){ a_lispy.generator(2) }
           it{ should == expected }
         end
 
@@ -49,7 +49,7 @@ module Alf
         ]}
 
         context "When factored with Lispy" do 
-          let(:operator){ Lispy.generator(2, :id) }
+          let(:operator){ a_lispy.generator(2, :id) }
           it{ should == expected }
         end
 

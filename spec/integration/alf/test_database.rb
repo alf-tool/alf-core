@@ -2,7 +2,7 @@ require 'spec_helper'
 describe Alf, '.database' do
 
   it "should support an Database instance" do
-    db = Alf::Database.examples
+    db = examples_database
     Alf.database(db).should eq(db)
   end
 

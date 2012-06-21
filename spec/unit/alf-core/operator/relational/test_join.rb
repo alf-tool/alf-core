@@ -13,7 +13,7 @@ module Alf
 
       context "when applied to sub-relations" do
         let(:suppliers_by_city){Relation.coerce( 
-          Lispy.group(suppliers, [:sid], :suppliers)
+          a_lispy.group(suppliers, [:sid], :suppliers)
         )}
         let(:s2_s3){Relation.coerce([
           {:sid => 'S3'},
@@ -26,7 +26,7 @@ module Alf
           {:suppliers => s2_s3, :hello => "world", :city => 'Paris'}
         ])}
         subject{Relation.coerce(
-          Lispy.join(suppliers_by_city, right)
+          a_lispy.join(suppliers_by_city, right)
         )}
         it{ should eq(expected) }
       end

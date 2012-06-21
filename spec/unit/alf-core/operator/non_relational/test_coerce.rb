@@ -18,7 +18,7 @@ module Alf
         ]}
 
         context "with Lispy" do
-          let(:operator){ Lispy.coerce(input, :a => Integer, :b => Float) }
+          let(:operator){ a_lispy.coerce(input, :a => Integer, :b => Float) }
           it { should == expected }
         end
 

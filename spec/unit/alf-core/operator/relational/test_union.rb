@@ -17,7 +17,7 @@ module Alf
         {:city => 'Paris'}
       ]}
 
-      let(:operator){ Lispy.union(*args) }
+      let(:operator){ a_lispy.union(*args) }
       subject{ operator.to_a }
 
       context "when applied on non disjoint sets" do

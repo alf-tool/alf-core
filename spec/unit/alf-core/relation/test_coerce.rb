@@ -33,7 +33,7 @@ module Alf
       end
       
       describe "with an iterator" do
-        let(:arg){ Lispy.restrict(tuples_by_name, lambda{ true }) }
+        let(:arg){ a_lispy.restrict(tuples_by_name, lambda{ true }) }
         it{ should be_a(Relation) }
         it{ should == rel }
       end

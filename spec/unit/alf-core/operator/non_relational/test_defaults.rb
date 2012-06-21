@@ -17,7 +17,7 @@ module Alf
         ]}
 
         context "with Lispy" do 
-          let(:operator){ Lispy.defaults(input, :a => 1, :c => "blue") }
+          let(:operator){ a_lispy.defaults(input, :a => 1, :c => "blue") }
           it{ should == expected }
         end
 
@@ -43,7 +43,7 @@ module Alf
           {:a => "b", :b => "b"},
         ]}
         let(:operator){ 
-          Lispy.defaults(input, {:a => TupleExpression.coerce("b")}) 
+          a_lispy.defaults(input, {:a => TupleExpression.coerce("b")}) 
         }
         it{ should == expected }
       end # tuple expressions

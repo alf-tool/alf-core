@@ -22,14 +22,14 @@ module Alf
 
       context "--no-allbut" do
         context "with Lispy" do
-          let(:operator){ Lispy.group(input, [:time, :b], :as) }
+          let(:operator){ a_lispy.group(input, [:time, :b], :as) }
           it { should == expected }
         end
       end # --no-allbut
   
       context "--allbut" do
         context "with Lispy" do
-          let(:operator){ Lispy.group(input, [:a], :as, :allbut => true) }
+          let(:operator){ a_lispy.group(input, [:a], :as, :allbut => true) }
           it { should == expected }
         end
       end # --allbut

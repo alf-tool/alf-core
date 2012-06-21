@@ -20,7 +20,7 @@ require_relative 'alf/operator'
 require_relative 'alf/aggregator'
 require_relative 'alf/lang'
 require_relative 'alf/relation'
-require_relative 'alf/lispy'
+require_relative 'alf/lang/lispy'
 require_relative 'alf/ext'
 
 #
@@ -56,29 +56,6 @@ module Alf
     Alf::Reader.reader(source, *args)
   end
 
-  #
-  # Builds and returns a lispy engine on a specific database.
-  #
-  # Example(s):
-  #
-  #   # Returns a lispy instance on the default database
-  #   lispy = Alf.lispy
-  #
-  #   # Returns a lispy instance on the examples' database
-  #   lispy = Alf.lispy(Alf::Database.examples)
-  #
-  #   # Returns a lispy instance on a folder database of your choice
-  #   lispy = Alf.lispy(Alf::Database.folder('path/to/a/folder'))
-  #
-  # @see Alf::Database about available databases and their contract
-  #
-  def self.lispy(env = Database.default)
-    lispy = Object.new.extend(Lispy)
-    lispy.database = database(env)
-    lispy
-  end
-
-  #
   # Coerces some arguments to a relation.
   #
   # The following coercions are supported:

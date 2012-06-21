@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  describe Lispy, ".run" do
+  describe Database, "run" do
 
     let(:cities){Relation[
       {:city => "London"},
@@ -8,8 +8,9 @@ module Alf
       {:city => "Athens"}
     ]}
 
-    let(:lispy){ Alf.lispy(Database.examples) }
-    subject{ lispy.run(args).to_rel }
+    let(:database){ Database.examples }
+
+    subject{ database.run(args).to_rel }
 
     describe "without any pipe, on a String" do
       let(:args){ "project suppliers -- city" }

@@ -23,7 +23,7 @@ module Alf
         ]}
 
         context "with Lispy" do 
-          let(:operator){ Lispy.autonum(input) }
+          let(:operator){ a_lispy.autonum(input) }
           it{ should == expected }
         end
 
@@ -37,7 +37,7 @@ module Alf
         ]}
 
         context "with Lispy" do 
-          let(:operator){ Lispy.autonum(input, :unique) }
+          let(:operator){ a_lispy.autonum(input, :unique) }
           it{ should == expected }
         end
 

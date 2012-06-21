@@ -53,5 +53,67 @@ module Alf
       @lower_stage.dataset(name)
     end
 
+    # Compiles a query expression given by a String or a block and returns the result 
+    # (typically a tuple iterator)
+    #
+    # Example
+    #
+    #   # with a string
+    #   op = db.compile "(restrict :suppliers, lambda{ city == 'London' })"
+    #
+    #   # or with a block
+    #   op = db.compile {
+    #     (restrict :suppliers, lambda{ city == 'London' })
+    #   }
+    #
+    # @param [String] expr a Lispy expression to compile
+    # @return [Iterator] the iterator resulting from compilation
+    def compile(expr = nil, path = nil, &block)
+      lispy.compile(expr, path, &block)
+    end
+
+    # Evaluates a query expression given by a String or a block and returns
+    # the result as an in-memory relation (Alf::Relation)
+    #
+    # Example:
+    #
+    #   # with a string
+    #   rel = evaluate "(restrict :suppliers, lambda{ city == 'London' })"
+    #
+    #   # or with a block
+    #   rel = evaluate {
+    #     (restrict :suppliers, lambda{ city == 'London' })
+    #   }
+    def evaluate(expr = nil, path = nil, &block)
+      case compiled = compile(expr, path && path.to_s, &block)
+        when Iterator then compiled.to_rel
+        else
+        compiled
+      end
+    end
+
+    # Runs a command as in shell.
+    #
+    # Example:
+    #
+    #     Alf::Database.examples.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
+    #
+    def run(argv, requester = nil)
+      argv = Quickl.parse_commandline_args(argv) if argv.is_a?(String)
+      argv = Quickl.split_commandline_args(argv, '|')
+      argv.inject(nil) do |cmd,arr|
+        arr.shift if arr.first == "alf"
+        main = Alf::Shell::Main.new(self)
+        main.stdin_reader = cmd unless cmd.nil?
+        main.run(arr, requester)
+      end
+    end
+
+    private
+
+      def lispy
+        Lang::Lispy.new(self)
+      end
+
   end # module Database
 end # module Alf

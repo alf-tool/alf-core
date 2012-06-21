@@ -3,7 +3,7 @@ module Alf
   describe Tools, ".to_lispy" do
 
     it "should have a valid example" do
-      expr = Alf.lispy.compile{ 
+      expr = examples_database.compile{ 
        (project :suppliers, [:name])
       }
       Tools.to_lispy(expr).should eq("(project :suppliers, [:name])")

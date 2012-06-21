@@ -7,7 +7,7 @@ Dir["#{File.expand_path('../../../examples', __FILE__)}/**/*.alf"].each do |file
     let(:example_db) { Alf::Database.folder(example_dir) }
 
     it "should run without error" do
-      Alf.lispy(example_db).compile(File.read(example_path), example_path).to_rel
+      example_db.compile(File.read(example_path), example_path).to_rel
     end
 
   end

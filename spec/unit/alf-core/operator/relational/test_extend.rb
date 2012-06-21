@@ -19,7 +19,7 @@ module Alf
       subject{ operator.to_a }
 
       context "with Lispy" do 
-        let(:operator){ Lispy.extend(input, :big => lambda{ tested > 10 }) }
+        let(:operator){ a_lispy.extend(input, :big => lambda{ tested > 10 }) }
         it{ should == expected }
       end
 

@@ -22,7 +22,7 @@ module Alf
         {:sid => 'S5', :city => 'Bruxelles'},
       ]}
 
-      let(:operator){ Lispy.intersect(*args) }
+      let(:operator){ a_lispy.intersect(*args) }
       subject{ operator.to_a }
 
       context "with same operand twice" do
@@ -45,7 +45,7 @@ module Alf
       end
 
       context "with Lispy" do
-        let(:operator){ Lispy.intersect(left, right) }
+        let(:operator){ a_lispy.intersect(left, right) }
         let(:expected) {[
           {:sid => 'S1', :city => 'London'},
           {:sid => 'S2', :city => 'Paris'},

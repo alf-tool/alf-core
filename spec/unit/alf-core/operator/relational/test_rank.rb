@@ -26,7 +26,7 @@ module Alf
           {:pid => 'P3', :weight => 17.0, :rank => 3},
           {:pid => 'P6', :weight => 19.0, :rank => 5}
         ]}
-        let(:operator){ Lispy.rank(input, [:weight]) }
+        let(:operator){ a_lispy.rank(input, [:weight]) }
         it{ should eq(expected) }
       end # partial ordering
 
@@ -39,7 +39,7 @@ module Alf
           {:pid => 'P3', :weight => 17.0, :newname => 4},
           {:pid => 'P6', :weight => 19.0, :newname => 5}
         ]}
-        let(:operator){ Lispy.rank(input, [:weight, :pid], :newname) }
+        let(:operator){ a_lispy.rank(input, [:weight, :pid], :newname) }
         it{ should eq(expected) }
       end # total ordering
 

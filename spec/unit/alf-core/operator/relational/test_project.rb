@@ -17,7 +17,7 @@ module Alf
         let(:expected){[{:a => "a"}]}
 
         context "with Lispy" do
-          let(:operator){ Lispy.project(input, [:a]) }
+          let(:operator){ a_lispy.project(input, [:a]) }
           it { should eq(expected) } 
         end
       end # --no-allbut
@@ -26,12 +26,12 @@ module Alf
         let(:expected){[{:b => "b"}]}
 
         context "and factored with Lispy#project" do
-          let(:operator){ Lispy.project(input, [:a], :allbut => true) }
+          let(:operator){ a_lispy.project(input, [:a], :allbut => true) }
           it { should eq(expected) } 
         end
 
         context "and factored with Lispy#allbut" do
-          let(:operator){ Lispy.allbut(input, [:a]) }
+          let(:operator){ a_lispy.allbut(input, [:a]) }
           it { should eq(expected) } 
         end
 
@@ -41,17 +41,17 @@ module Alf
         let(:expected){[{}]}
 
         context "with empty attributes" do
-          let(:operator){ Lispy.project(input, []) }
+          let(:operator){ a_lispy.project(input, []) }
           it { should eq(expected) } 
         end
 
         context "when empty attributes and input" do
-          let(:operator){ Lispy.project([], []) }
+          let(:operator){ a_lispy.project([], []) }
           it { should == [] } 
         end
 
         context "--allbut" do
-          let(:operator){ Lispy.project(input, [:a, :b], :allbut => true) }
+          let(:operator){ a_lispy.project(input, [:a, :b], :allbut => true) }
           it { should eq(expected) } 
         end
 

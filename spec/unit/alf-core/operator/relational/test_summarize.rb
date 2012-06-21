@@ -27,14 +27,14 @@ module Alf
 
       context "--no-allbut" do
         context "with Lispy" do
-          let(:operator){ Lispy.summarize(input, [:a], aggs) }
+          let(:operator){ a_lispy.summarize(input, [:a], aggs) }
           it { should eq(expected) }
         end
       end # --no-allbut
 
       context "--allbut" do
         context "with Lispy" do
-          let(:operator){ Lispy.summarize(input, [:time], aggs, :allbut => true) }
+          let(:operator){ a_lispy.summarize(input, [:time], aggs, :allbut => true) }
           it { should eq(expected) }
         end
       end # --allbut

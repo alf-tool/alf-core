@@ -135,7 +135,7 @@ module Alf
 
         # 2) build the operator according to -e option
         operator = if @execute
-          Alf.lispy(database).compile(argv.first)
+          Database.autodetect(database).compile(argv.first)
         else
           super
         end

@@ -1,18 +1,22 @@
 # 0.13.0 / FIX ME
 
-## Enhancements in the shell interface
+## Enhancements of the shell interface
 
 * When used in shell, the default database is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --db=.' everytime you want to use .csv or .rash files as base relations. An --examples option allows easily setting the embedded database as default one.
 
 * When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
 
-## Enhancements in the ruby interface
+## Enhancements of the ruby interface
 
 * Added Alf.database for obtaining Database instances in the easiest possible way:
 
       Alf.database "somewhere/to/a/folder"
       Alf.database "database.sqlite3"
       Alf.database "postgres://user:password@host/database"
+
+* Compilation and evaluation of queries are now sent to a database specifically:
+
+      Alf.database(...).compile{ (restrict :suppliers, ->{ status > 10 } )}
 
 * Alf::Relation now respond to aggregation functions with an object-oriented syntax:
 
@@ -31,6 +35,10 @@
 * Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
 
 ## Broken stuff
+
+* Alf.lispy has been removed from the public API. Please use a Database instance instead:
+
+      Alf.lipsy(db_params).compile{ ... } -> Alf.database(db_params).compile{ ... }
 
 * The Environment concept as been removed and split as two different abstractions, namely Adapter and Database. That also means that `environment` readers and writers here have been replaced by `database` or `adapter` according to cases. Also, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
 

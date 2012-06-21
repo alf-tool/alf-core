@@ -22,7 +22,7 @@ module Alf
         {:sid => 'S5', :city => 'Bruxelles'},
       ]}
 
-      let(:operator){ Lispy.minus(*args) }
+      let(:operator){ a_lispy.minus(*args) }
       subject{ operator.to_a }
 
       context "when applied on the same operand twice" do
@@ -44,7 +44,7 @@ module Alf
       end
 
       context "when factored with Lispy" do
-        let(:operator){ Lispy.minus(left, right) }
+        let(:operator){ a_lispy.minus(left, right) }
         let(:expected) {[
           {:sid => 'S3', :city => 'Paris'}
         ]}

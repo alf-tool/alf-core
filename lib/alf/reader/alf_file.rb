@@ -13,7 +13,7 @@ module Alf
 
       # (see Reader#each)
       def each
-        op = Alf.lispy(adapter).compile(input_text, input_path)
+        op = Database.autodetect(adapter).compile(input_text, input_path)
         op.each(&Proc.new)
       end
 

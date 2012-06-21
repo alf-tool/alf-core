@@ -1,10 +1,10 @@
 require 'spec_helper'
 describe "path attributes in log" do
   
-  let(:db){ Alf::Database.folder(File.dirname(__FILE__)) }
+  let(:db){ Alf::Database.folder(Path.dir) }
     
   subject{ 
-    Alf.lispy(db).evaluate <<-EOF
+    db.evaluate <<-EOF
       (restrict :apache_combined, lambda{ path =~ /install.txt/ })
     EOF
   }

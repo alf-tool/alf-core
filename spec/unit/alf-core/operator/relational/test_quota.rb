@@ -27,7 +27,7 @@ module Alf
       context "with Lispy" do
         let(:aggs){{:time_sum => Aggregator.sum{ time },
                     :time_max => Aggregator.max{ time }}} 
-        let(:operator){ Lispy.quota(input, [:a], [:time], aggs) }
+        let(:operator){ a_lispy.quota(input, [:a], [:time], aggs) }
         it { should == expected }
       end
 

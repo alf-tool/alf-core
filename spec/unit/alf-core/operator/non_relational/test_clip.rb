@@ -16,7 +16,7 @@ module Alf
         let(:expected){[{:a => "a"}]}
 
         context "with Lispy" do
-          let(:operator){ Lispy.clip(input, [:a]) }
+          let(:operator){ a_lispy.clip(input, [:a]) }
           it { should == expected } 
         end
       end # --no-allbut
@@ -25,7 +25,7 @@ module Alf
         let(:expected){[{:b => "b"}]}
 
         context "with Lispy" do
-          let(:operator){ Lispy.clip(input, [:a], :allbut => true) }
+          let(:operator){ a_lispy.clip(input, [:a], :allbut => true) }
           it { should == expected } 
         end
       end # --allbut

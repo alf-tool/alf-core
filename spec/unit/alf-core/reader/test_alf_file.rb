@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   describe Reader::AlfFile do
-    
+
     class TestAdapter < Alf::Adapter
       def dataset(name)
         [{:status => 10},{:status => 30}]

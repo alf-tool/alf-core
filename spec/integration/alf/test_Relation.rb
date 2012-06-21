@@ -17,7 +17,7 @@ module Alf
     end
 
     it 'works as expected on an Operator' do
-      op = Alf.lispy.compile{
+      op = examples_database.compile{
         extend(Relation::DEE, :name => lambda{ "Jones" })
       }
       def op.each(*args, &bl)

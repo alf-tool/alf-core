@@ -17,7 +17,7 @@ module Alf
       subject{ operator.to_a }
 
       context "with Lispy" do 
-        let(:operator){ Lispy.rename(input, {:a => :z}) }
+        let(:operator){ a_lispy.rename(input, {:a => :z}) }
         it{ should == expected }
       end
 

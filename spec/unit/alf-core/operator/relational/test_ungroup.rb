@@ -20,7 +20,7 @@ module Alf
       subject{ operator.to_a.sort{|k1,k2| k1[:time] <=> k2[:time]} } 
 
       context "with Lispy" do
-        let(:operator) { Lispy.ungroup(input, :as) } 
+        let(:operator) { a_lispy.ungroup(input, :as) } 
         it { should == expected }
       end
 

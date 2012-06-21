@@ -21,12 +21,12 @@ module Alf
       subject{ operator.to_a }
 
       context "with Lispy" do 
-        let(:operator){ Lispy.sort(input, [[:first, :asc], [:second, :asc]]) }
+        let(:operator){ a_lispy.sort(input, [[:first, :asc], [:second, :asc]]) }
         it{ should eq(expected) }
       end
 
       context "with one arg" do 
-        let(:operator){ Lispy.sort(input, [[:second, :asc]]) }
+        let(:operator){ a_lispy.sort(input, [[:second, :asc]]) }
         let(:expected){[
           {:first => "a", :second => 1,  :third => true},
           {:first => "b", :second => 10, :third => false},
@@ -36,7 +36,7 @@ module Alf
       end
 
       context "with two args" do 
-        let(:operator){ Lispy.sort(input, [[:second, :asc], [:first, :asc]]) }
+        let(:operator){ a_lispy.sort(input, [[:second, :asc], [:first, :asc]]) }
         let(:expected){[
           {:first => "a", :second => 1,  :third => true},
           {:first => "b", :second => 10, :third => false},
@@ -46,7 +46,7 @@ module Alf
       end
 
       context "in descending order" do 
-        let(:operator){ Lispy.sort(input, [[:second, :desc]]) }
+        let(:operator){ a_lispy.sort(input, [[:second, :desc]]) }
         let(:expected){[
           {:first => "a", :second => 20, :third => true},
           {:first => "b", :second => 10, :third => false},

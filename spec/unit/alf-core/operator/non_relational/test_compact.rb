@@ -23,7 +23,7 @@ module Alf
       subject{ operator.to_a }
 
       context "with Lispy" do
-        let(:operator){ Lispy.compact(input) }
+        let(:operator){ a_lispy.compact(input) }
         it { should == expected }
       end
 
