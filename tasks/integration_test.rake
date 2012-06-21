@@ -1,7 +1,7 @@
 begin
   require "rspec/core/rake_task"
   desc "Run RSpec code examples"
-  RSpec::Core::RakeTask.new(:integration_test) do |t|
+  RSpec::Core::RakeTask.new(:integration_test => :unit_test) do |t|
     # Glob pattern to match files.
     t.pattern = "spec/integration/**/test_*.rb"
 
