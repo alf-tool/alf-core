@@ -5,12 +5,12 @@ module Alf
     #
     class Summarization
 
-      # @return [Hash] the hash of aggregations, AttrName -> Aggregators
+      # @return [Hash] the hash of aggregations, AttrName -> Aggregator
       attr_reader :aggregations
 
       # Creates a Summarization instance
       #
-      # @param [Hash] aggs, aggregations as a mapping AttrName -> Aggregators
+      # @param [Hash] aggs, aggregations as a mapping AttrName -> Aggregator
       def initialize(aggs)
         @aggregations = aggs
       end
