@@ -204,13 +204,13 @@ module Alf
 
     protected
 
-    # @see happens.
-    #
-    # This method is intended to be overriden and returns _value_
-    # by default, making this aggregator a "Last(...)" aggregator.
-    def _happens(memo, value)
-      value
-    end
+      # @see happens.
+      #
+      # This method is intended to be overriden and returns _value_
+      # by default, making this aggregator a "Last(...)" aggregator.
+      def _happens(memo, value)
+        value
+      end
 
   end # class Aggregator
 end # module Alf
