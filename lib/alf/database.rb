@@ -85,11 +85,8 @@ module Alf
     #     (restrict :suppliers, lambda{ city == 'London' })
     #   }
     def evaluate(expr = nil, path = nil, &block)
-      case compiled = compile(expr, path && path.to_s, &block)
-        when Iterator then compiled.to_rel
-        else
-        compiled
-      end
+      c = compile(expr, path && path.to_s, &block)
+      c.respond_to?(:to_relation) ? c.to_relation : c
     end
 
     # Runs a command as in shell.
