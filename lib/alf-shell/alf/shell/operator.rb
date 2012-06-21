@@ -44,14 +44,17 @@ module Alf
             Reader.coerce($stdin)
           end
 
+          # find database
+          database = req && req.database
+
           # normalize operands
           operands = [ stdin_reader ] + Array(operands)
           operands = operands.map{|op| 
-            Iterator.coerce(op, req && req.database)
+            Iterator.coerce(op, database)
           }[(operands.size - operator_class.arity)..-1]
 
           init_args = [operands] + args + [options]
-          operator_class.new(*init_args)
+          operator_class.new(database, *init_args)
         end
 
       end # module ClassMethods

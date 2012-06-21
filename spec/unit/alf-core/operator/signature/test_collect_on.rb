@@ -5,32 +5,33 @@ module Alf
 
       subject{ op.class.signature.collect_on(op) }
 
+      let(:suppliers){ [{:sid => 'S1'}]      }
+      let(:cities)   { [{:name => "London"}] }
+
       let(:operands)  { subject[0] }
       let(:arguments) { subject[1] }
       let(:options)   { subject[2] }
 
       describe "on a nullary op" do
-        let(:op){ NonRelational::Generator.new([], 10, :id) } 
-        specify { 
-          subject.should eq([[], [10, :id], {}]) 
+        let(:op){ a_lispy.generator(10, :id) }
+        specify {
+          subject.should eq([[], [10, :id], {}])
         }
       end
 
       describe "on a monadic op, with one arg" do
-        let(:op){ NonRelational::Autonum.new([:suppliers], :id) } 
-        it{ should eq([ [:suppliers], [:id], {} ]) }
+        let(:op){ a_lispy.autonum(suppliers, :id) }
+        it{ should eq([ [suppliers], [:id], {} ]) }
       end
 
       describe "on a monadic op, with one arg and an option" do
-        let(:op){ 
-          Relational::Project.new([:suppliers], [:name, :city], :allbut => true) 
-        }
-        it{ should eq([[:suppliers], [AttrList[:name, :city]], {:allbut => true}]) }
+        let(:op){ a_lispy.project(suppliers, [:name, :city], :allbut => true) }
+        it{ should eq([[suppliers], [AttrList[:name, :city]], {:allbut => true}]) }
       end
 
       describe "on a dyadic op" do
-        let(:op){ Relational::Join.new([:suppliers, :cities]) }
-        it{ should eq([[:suppliers, :cities], [], {}]) }
+        let(:op){ a_lispy.join(suppliers, cities) }
+        it{ should eq([[suppliers, cities], [], {}]) }
       end
 
     end

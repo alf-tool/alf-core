@@ -18,6 +18,10 @@
 
       Alf.database(...).compile{ (restrict :suppliers, ->{ status > 10 } )}
 
+* Compilation results, that is Operators, know the database that built them:
+
+      db.compile{ ... }.database == db
+
 * Alf::Relation now respond to aggregation functions with an object-oriented syntax:
 
       Relation(...).sum{ qty }

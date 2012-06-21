@@ -11,11 +11,16 @@ module Alf
       Operator::Relational.each{|x| yield(x)}
     end
 
+    # Database that constructed this operator expression
+    attr_accessor :database
+
     # @param [Array] operands Operator operands
     attr_accessor :operands
 
     # Create an operator instance
-    def initialize(*args)
+    def initialize(db, *args)
+      raise ArgumentError, "Database expected, got `#{db}`" unless db.nil? or db.is_a?(Database)
+      @database = db
       signature.parse_args(args, self)
     end
 

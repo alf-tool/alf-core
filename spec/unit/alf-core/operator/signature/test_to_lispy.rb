@@ -14,7 +14,7 @@ module Alf
         end
 
         describe "on an option-only signature" do
-          let(:signature){ 
+          let(:signature){
             Signature.new(clazz) do |s|
               s.option :allbut, Boolean
             end
@@ -33,7 +33,7 @@ module Alf
         end
 
         describe "on an option-only signature" do
-          let(:signature){ 
+          let(:signature){
             Signature.new(clazz) do |s|
               s.option :allbut, Boolean
             end
@@ -42,7 +42,7 @@ module Alf
         end
 
         describe "on an option-only signature with multiple options" do
-          let(:signature){ 
+          let(:signature){
             Signature.new(clazz) do |s|
               s.option :allbut, Boolean
               s.option :newname, AttrName
@@ -52,7 +52,7 @@ module Alf
         end
 
         describe "on a signature with one argument only" do
-          let(:signature){ 
+          let(:signature){
             Signature.new(clazz) do |s|
               s.argument :by, AttrList
             end
@@ -61,7 +61,7 @@ module Alf
         end
 
         describe "on a signature with multiple arguments" do
-          let(:signature){ 
+          let(:signature){
             Signature.new(clazz) do |s|
               s.argument :by, AttrList
               s.argument :order, Ordering
@@ -71,7 +71,7 @@ module Alf
         end
 
         describe "on a full signature" do
-          let(:signature){ 
+          let(:signature){
             Signature.new(clazz) do |s|
               s.argument :by, AttrList
               s.argument :order, Ordering
@@ -87,7 +87,7 @@ module Alf
         let(:clazz){ Operator::Relational::Join }
 
         describe "on an option-only signature" do
-          let(:signature){ 
+          let(:signature){
             Signature.new(clazz) do |s|
               s.option :allbut, Boolean
             end
