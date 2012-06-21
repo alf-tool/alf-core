@@ -17,20 +17,9 @@ manipulating any relation-like data source should be as straightforward as a one
 In Ruby, because I've never understood why programming languages provide data structures
 like arrays, hashes, sets, trees and graphs but not _relations_...
 
-## Ruby Example
-
-    # Load from .csv file
-    r = Alf.load "suppliers.csv"
-
-    # Those suppliers that live in london
-    r.restrict :city => 'London'
-
-    # Which suppliers by city?
-    r.group([:sid, :name, :status], :suppliers)
-
 ## Shell Example
 
-    % alf show suppliers.csv
+    % alf --examples show suppliers
 
     +------+-------+---------+--------+
     | :sid | :name | :status | :city  |
@@ -42,10 +31,10 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
     | S5   | Adams |      30 | Athens |
     +------+-------+---------+--------+
 
-    % alf group --allbut suppliers.csv -- city -- suppliers
+    % alf --examples group suppliers -- size name status -- in_that_city
 
     +--------+----------------------------+
-    | :city  | :suppliers                 |
+    | :city  | :in_that_city              |
     +--------+----------------------------+
     | London | +------+-------+---------+ |
     |        | | :sid | :name | :status | |
@@ -59,6 +48,19 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
     |        | | S2   | Jones |      10 | |
     | ...    | ...                        |
     +--------+----------------------------+
+
+## Ruby Example
+
+    # Suppose the same database above (Alf::Database.examples), but in a sqlite3 file
+    db  = Alf.database("suppliers-and-parts.sqlite3")
+
+    # Group suppliers by city, we use the allbut variant here
+    rel = db.evaluate{
+      group(:suppliers, [:city], :in_that_city, :allbut => true)
+    }
+
+    rel.class
+    # => Alf::Relation
 
 ## Install, bundler, require
 
