@@ -46,7 +46,13 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
     |        | | :sid | :name | :status | |
     |        | +------+-------+---------+ |
     |        | | S2   | Jones |      10 | |
-    | ...    | ...                        |
+    |        | | S3   | Blake |      30 | |
+    |        | +------+-------+---------+ |
+    | Athens | +------+-------+---------+ |
+    |        | | :sid | :name | :status | |
+    |        | +------+-------+---------+ |
+    |        | | S5   | Adams |      30 | |
+    |        | +------+-------+---------+ |
     +--------+----------------------------+
 
 ## Ruby Example
@@ -54,13 +60,45 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
     # Suppose the same database above (Alf::Database.examples), but in a sqlite3 file
     db  = Alf.database("suppliers-and-parts.sqlite3")
 
-    # Group suppliers by city, we use the allbut variant here
-    rel = db.evaluate{
-      group(:suppliers, [:city], :in_that_city, :allbut => true)
+    # Group suppliers by city
+    grouped = db.evaluate{
+      group(:suppliers, [:sid, :name, :status], :in_that_city)
     }
+    # => same result as in shell
 
-    rel.class
-    # => Alf::Relation
+    # Let make some computations on the sub-relations
+    db.evaluate{
+      extend(grouped, how_many:   ->{ in_that_city.count },
+                      avg_status: ->{ in_that_city.avg{ status } })
+    }
+    +--------+----------------------------+-----------+-------------+
+    | :city  | :in_that_city              | :how_many | :avg_status |
+    +--------+----------------------------+-----------+-------------+
+    | London | +------+-------+---------+ |         2 |      20.000 |
+    |        | | :sid | :name | :status | |           |             |
+    |        | +------+-------+---------+ |           |             |
+    |        | | S1   | Smith |      20 | |           |             |
+    |        | | S4   | Clark |      20 | |           |             |
+    |        | +------+-------+---------+ |           |             |
+    | Paris  | +------+-------+---------+ |         2 |      20.000 |
+    |        | | :sid | :name | :status | |           |             |
+    |        | +------+-------+---------+ |           |             |
+    |        | | S2   | Jones |      10 | |           |             |
+    |        | | S3   | Blake |      30 | |           |             |
+    |        | +------+-------+---------+ |           |             |
+    | Athens | +------+-------+---------+ |         1 |      30.000 |
+    |        | | :sid | :name | :status | |           |             |
+    |        | +------+-------+---------+ |           |             |
+    |        | | S5   | Adams |      30 | |           |             |
+    |        | +------+-------+---------+ |           |             |
+    +--------+----------------------------+-----------+-------------+
+
+    # Now observe that the same result can also be expressed as follows (and can be
+    # optimized more easily)
+    db.evaluate{
+      summary = summarize(:suppliers, [ :city ], how_many: count, avgstatus: avg{ status })
+      join(grouped, summary)
+    }
 
 ## Install, bundler, require
 
