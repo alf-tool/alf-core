@@ -57,8 +57,8 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
 
 ## Ruby Example
 
-    # Suppose the same database above (Alf::Database.examples), but in a sqlite3 file
-    db  = Alf.database("suppliers-and-parts.sqlite3")
+    # Let get the same database in ruby
+    db  = Alf::Database.examples
 
     # Group suppliers by city
     grouped = db.evaluate{
@@ -71,34 +71,39 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
       extend(grouped, how_many:   ->{ in_that_city.count },
                       avg_status: ->{ in_that_city.avg{ status } })
     }
-    +--------+----------------------------+-----------+-------------+
-    | :city  | :in_that_city              | :how_many | :avg_status |
-    +--------+----------------------------+-----------+-------------+
-    | London | +------+-------+---------+ |         2 |      20.000 |
-    |        | | :sid | :name | :status | |           |             |
-    |        | +------+-------+---------+ |           |             |
-    |        | | S1   | Smith |      20 | |           |             |
-    |        | | S4   | Clark |      20 | |           |             |
-    |        | +------+-------+---------+ |           |             |
-    | Paris  | +------+-------+---------+ |         2 |      20.000 |
-    |        | | :sid | :name | :status | |           |             |
-    |        | +------+-------+---------+ |           |             |
-    |        | | S2   | Jones |      10 | |           |             |
-    |        | | S3   | Blake |      30 | |           |             |
-    |        | +------+-------+---------+ |           |             |
-    | Athens | +------+-------+---------+ |         1 |      30.000 |
-    |        | | :sid | :name | :status | |           |             |
-    |        | +------+-------+---------+ |           |             |
-    |        | | S5   | Adams |      30 | |           |             |
-    |        | +------+-------+---------+ |           |             |
-    +--------+----------------------------+-----------+-------------+
+    # +--------+----------------------------+-----------+-------------+
+    # | :city  | :in_that_city              | :how_many | :avg_status |
+    # +--------+----------------------------+-----------+-------------+
+    # | London | +------+-------+---------+ |         2 |      20.000 |
+    # |        | | :sid | :name | :status | |           |             |
+    # |        | +------+-------+---------+ |           |             |
+    # |        | | S1   | Smith |      20 | |           |             |
+    # |        | | S4   | Clark |      20 | |           |             |
+    # |        | +------+-------+---------+ |           |             |
+    # | Paris  | +------+-------+---------+ |         2 |      20.000 |
+    # |        | | :sid | :name | :status | |           |             |
+    # |        | +------+-------+---------+ |           |             |
+    # |        | | S2   | Jones |      10 | |           |             |
+    # |        | | S3   | Blake |      30 | |           |             |
+    # |        | +------+-------+---------+ |           |             |
+    # | Athens | +------+-------+---------+ |         1 |      30.000 |
+    # |        | | :sid | :name | :status | |           |             |
+    # |        | +------+-------+---------+ |           |             |
+    # |        | | S5   | Adams |      30 | |           |             |
+    # |        | +------+-------+---------+ |           |             |
+    # +--------+----------------------------+-----------+-------------+
 
     # Now observe that the same result can also be expressed as follows (and can be
     # optimized more easily)
-    db.evaluate{
+    summarized = db.evaluate{
       summary = summarize(:suppliers, [ :city ], how_many: count, avg_status: avg{ status })
       join(grouped, summary)
     }
+
+    # Oh, and of course...
+    require 'json'
+    puts summarized.to_json
+    # [{"city":"London","in_that_city":[{"sid":"S1","name":"Smith","status":20},{"sid":"S4"...
 
 ## Install, bundler, require
 
