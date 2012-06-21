@@ -23,7 +23,7 @@ describe "Alf's semantics tests" do
     }
 
     it "should work when executed with a Alf" do
-      lispy.compile(File.read(subject))
+      lispy._compile(Path(subject).read)
     end
     
   end # An example

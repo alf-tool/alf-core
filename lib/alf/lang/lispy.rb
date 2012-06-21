@@ -35,7 +35,7 @@ module Alf
       #
       # @see Database.compile
       #
-      def compile(expr = nil, path = nil, line = nil, &block)
+      def _compile(expr = nil, path = nil, line = nil, &block)
         if expr.nil?
           instance_eval(&block)
         else
