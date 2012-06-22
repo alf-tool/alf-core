@@ -19,7 +19,7 @@ module Alf
             scope.evaluate("no_such_one", "a file", 65)
             raise "Should not pass here"
           rescue NameError => ex
-            ex.backtrace[1].should =~ /a file:65/
+            ex.backtrace.any?{|l| l =~ /a file:65/}.should be_true
           end
         end
       end
