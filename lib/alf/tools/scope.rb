@@ -24,6 +24,7 @@ module Alf
           return true if BasicObject.instance_methods.include?(name)
           false
         end
+        def respond_to_missing?(*args); false; end
 
         # Delegated to ::Kernel
         def lambda(*args, &block)
