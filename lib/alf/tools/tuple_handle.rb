@@ -52,9 +52,7 @@ module Alf
       end # module OwnMethods
 
       # Creates a handle instance
-      def initialize(*args)
-        tuple      = args.find  {|arg| arg.is_a?(::Hash)   }
-        extensions = args.select{|arg| arg.is_a?(::Module) }
+      def initialize(tuple = nil, extensions = [])
         super [ OwnMethods ] + extensions
         __build(@tuple = tuple) if tuple
       end

@@ -3,15 +3,7 @@ module Alf
   module Tools
     describe Scope, "evaluate" do
 
-      let(:helper){ 
-        Module.new{
-          def hello(who); "Hello #{who}!"; end
-          def world; "world"; end
-        }
-      }
-      let(:scope) {
-        Scope.new([helper])
-      }
+      let(:scope) { Scope.new [ HelpersInScope ] }
 
       it 'has available helpers in scope' do
         scope.evaluate{ hello(world) }.should eq("Hello world!")

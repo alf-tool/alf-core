@@ -14,6 +14,7 @@ end
 require 'shared/an_operator_class'
 require 'shared/a_valid_type_implementation'
 require 'shared/a_value'
+require 'shared/a_scope'
 
 module Helpers
 
@@ -29,6 +30,11 @@ module Helpers
     Alf::Database.examples
   end
 
+end
+
+module HelpersInScope
+  def hello(who); "Hello #{who}!"; end
+  def world; "world"; end
 end
 
 RSpec.configure do |c|

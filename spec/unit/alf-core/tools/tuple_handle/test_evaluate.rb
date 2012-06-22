@@ -16,11 +16,10 @@ module Alf
       end
 
       context 'when scopes are added at construction' do
-        let(:helpers){ Module.new{ def upcase(who); who.upcase; end } }
-        let(:handle) { TupleHandle.new({:who => "world"}, helpers)    }
+        let(:handle) { TupleHandle.new({:who => "world"}, [ HelpersInScope ]) }
 
         it 'has available helpers in scope' do
-          handle.evaluate{ upcase(who) }.should eq("WORLD")
+          handle.evaluate{ hello(who) }.should eq("Hello world!")
         end
       end
 

@@ -17,15 +17,6 @@ module Alf
 
       module OwnMethods
 
-        # Returns true if the decorated tuple has `name` as key.
-        def respond_to?(name)
-          name = name.to_s if ::RUBY_VERSION < "1.9"
-          return true if @extensions.any?{|m| m.instance_methods.include?(name) }
-          return true if BasicObject.instance_methods.include?(name)
-          false
-        end
-        def respond_to_missing?(*args); false; end
-
         # Delegated to ::Kernel
         def lambda(*args, &block)
           ::Kernel.lambda(*args, &block)
@@ -40,12 +31,23 @@ module Alf
           ::Kernel.eval expr, __eval_binding, *[path, line].compact
         end
 
-        # Returns the binding to use for an evaluation
-        #
-        # @return [Binding] a binding object that captures this scope.
-        def __eval_binding
-          RUBY_VERSION < "1.9" ? binding : ::Kernel.binding
-        end
+        ### private section ###
+
+          # Returns true if the decorated tuple has `name` as key.
+          def respond_to?(name)
+            name = name.to_s if ::RUBY_VERSION < "1.9"
+            return true if @extensions.any?{|m| m.instance_methods.include?(name) }
+            return true if BasicObject.instance_methods.include?(name)
+            false
+          end
+          def respond_to_missing?(*args); false; end
+
+          # Returns the binding to use for an evaluation
+          #
+          # @return [Binding] a binding object that captures this scope.
+          def __eval_binding
+            RUBY_VERSION < "1.9" ? binding : ::Kernel.binding
+          end
 
       end # module OwnMethods
 
