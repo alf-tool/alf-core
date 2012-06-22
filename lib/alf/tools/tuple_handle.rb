@@ -52,8 +52,8 @@ module Alf
       end # module OwnMethods
 
       # Creates a handle instance
-      def initialize(tuple = nil, extensions = [])
-        super [ OwnMethods ] + extensions
+      def initialize(tuple = nil, extensions = [], parent = nil)
+        super [ OwnMethods ] + extensions, parent
         __build(@tuple = tuple) if tuple
       end
 

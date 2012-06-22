@@ -38,9 +38,16 @@ module Alf
             name = name.to_s if ::RUBY_VERSION < "1.9"
             return true if @extensions.any?{|m| m.instance_methods.include?(name) }
             return true if BasicObject.instance_methods.include?(name)
-            false
+            @parent && @parent.respond_to?(name)
           end
-          def respond_to_missing?(*args); false; end
+
+          # Returns true.
+          def respond_to_missing?(*args); true; end
+
+          # Delegated to parent if any.
+          def method_missing(name, *args, &bl)
+            @parent ? @parent.__send__(name, *args, &bl) : super
+          end
 
           # Returns the binding to use for an evaluation
           #
@@ -52,11 +59,12 @@ module Alf
       end # module OwnMethods
 
       # Creates a handle instance
-      def initialize(extensions = [])
+      def initialize(extensions = [], parent = nil)
         @extensions = [ OwnMethods ] + extensions
         @extensions.each do |ext|
           ext.send(:extend_object, self)
         end
+        @parent = parent
       end
 
     end # class Scope

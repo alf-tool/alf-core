@@ -11,6 +11,10 @@ module Alf
         lambda{ Scope.new([ Helpers ]) }.should_not raise_error
       end
 
+      it 'supports a parent scope' do
+        lambda{ Scope.new([ Helpers ], Scope.new) }.should_not raise_error
+      end
+
     end
   end
 end

@@ -18,6 +18,16 @@ module Alf
         end
       end
 
+      context 'on a Scope that has a parent scope' do
+        subject{ Scope.new [ ], Scope.new([ HelpersInScope ]) }
+
+        it_behaves_like "A scope"
+
+        it "responds to parent scope methods" do
+          subject.respond_to?(:world).should be_true
+        end
+      end
+
     end
   end
 end

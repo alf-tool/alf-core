@@ -16,10 +16,19 @@ module Alf
       end
 
       context 'when scopes are added at construction' do
-        let(:handle) { TupleHandle.new({:who => "world"}, [ HelpersInScope ]) }
+        let(:handle){ TupleHandle.new({:who => "world"}, [ HelpersInScope ]) }
 
         it 'has available helpers in scope' do
           handle.evaluate{ hello(who) }.should eq("Hello world!")
+        end
+      end
+
+      context 'when scope has a parent' do
+        let(:parent){ Scope.new [ HelpersInScope ] }
+        let(:handle){ TupleHandle.new({:here => "here"}, [  ], parent) }
+
+        it 'has parent helpers in scope' do
+          handle.evaluate{ hello(here) }.should eq("Hello here!")
         end
       end
 
