@@ -1,4 +1,7 @@
 require "quickl"
 require "myrrha"
 require "epath"
-require "backports" if RUBY_VERSION < "1.9"
+if RUBY_VERSION < "1.9"
+  require "backports"
+  require "backports/basic_object"
+end

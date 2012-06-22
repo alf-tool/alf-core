@@ -7,8 +7,8 @@ module Alf
 
       it "should install methods properly" do
         handle.set(:hello => "a", :world => "b")
-        handle.should respond_to(:hello)
-        handle.should respond_to(:world)
+        handle.respond_to?(:hello).should be_true
+        handle.respond_to?(:world).should be_true
       end
 
       it "should behave correctly" do
@@ -22,30 +22,13 @@ module Alf
 
       it "should allow instance evaluating on exprs" do
         handle.set(:tested => 1)
-        handle.instance_eval{ tested < 1 }.should be_false
+        handle.evaluate{ tested < 1 }.should be_false
       end
 
       it "should support an attribute called :path" do
         handle.set(:path => 1)
-        handle.instance_eval{ path < 1 }.should be_false
+        handle.evaluate{ path < 1 }.should be_false
       end
-
-      describe "evaluate" do
-        before{ handle.set(:a => 1, :b => 2) }
-
-        it "should allow a String" do
-          handle.evaluate("a").should == 1
-        end
-
-        it "should allow a Symbol" do
-          handle.evaluate(:a).should == 1
-        end
-
-        it "should allow a Proc" do
-          handle.evaluate(lambda{ a }).should == 1
-        end
-
-      end # evaluate
 
     end
   end

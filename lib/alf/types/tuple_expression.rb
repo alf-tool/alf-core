@@ -76,11 +76,7 @@ module Alf
       # @return [Object] the result of evaluating the expression in the context
       #         of `handle`
       def evaluate(handle = nil)
-        if RUBY_VERSION < "1.9"
-          handle.instance_eval(&@expr_lambda)
-        else
-          handle.instance_exec(&@expr_lambda)
-        end
+        handle.instance_exec(&@expr_lambda)
       end
 
       # Evaluates the expression on a tuple

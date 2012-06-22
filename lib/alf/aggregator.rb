@@ -154,7 +154,7 @@ module Alf
     # @param [Tools::TupleHandle] a tuple handle bound to the current tuple
     # @return [Object] updated memo value
     def happens(memo, handle)
-      raise unless handle.is_a?(Tools::TupleHandle)
+      raise unless Tools::TupleHandle===handle
       _happens(memo, @functor.evaluate(handle))
     end
 
