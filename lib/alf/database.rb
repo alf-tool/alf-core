@@ -69,7 +69,7 @@ module Alf
     # @param [String] expr a Lispy expression to compile
     # @return [Iterator] the iterator resulting from compilation
     def compile(expr = nil, path = nil, line = nil, &block)
-      lispy._compile(expr, path, line, &block)
+      lispy.evaluate(expr, path, line, &block)
     end
 
     # Evaluates a query expression given by a String or a block and returns

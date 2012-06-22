@@ -38,7 +38,7 @@
 
 * Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
 
-* All tuple expressions (in restrictions, extensions, etc.) are now evaluated in a cleaner scope through a BasicObject. It allows you to define attribute names without worrying about name clashes with Kernel's methods. That also means that Kernel's functions are no longer accessible in such expression (you should not rely on them, however, as your expression captures a database query that should not have any side effect).
+* All queries as well as tuple expressions (in restrictions, extensions, etc.) are now evaluated in a cleaner scope through a BasicObject. It allows you to define attribute names without worrying about name clashes with Kernel's methods. That also means that Kernel's functions are no longer accessible in those queries and expressions (you should not rely on them, however, as your expression captures a database query that should not have any kind of side effect).
 
 * In sync with the previous point, Relation (the class), DUM and DEE are now defined globally (unless you define `ALF_NO_CORE_EXTENSIONS` before loading Alf). Those constants can thus be safely used in query expressions without experiencing a NameError.
 

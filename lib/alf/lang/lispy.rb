@@ -15,40 +15,21 @@ module Alf
     # itself, thus not considered as part of the public API, and may therefore evolve
     # at any time. In other words, this class is not intended to be directly outside Alf.
     #
-    class Lispy
-      alias :ruby_extend :extend
+    class Lispy < Tools::Scope
 
-      # The underlying database
-      attr_accessor :database
+      module OwnMethods
 
-      include Alf::Lang::Algebra
-      include Alf::Lang::Aggregation
-      include Alf::Lang::Literals
+        def database
+          @database
+        end
+
+      end # OwnMethods
 
       # Creates a language instance
       def initialize(database)
+        super [ Algebra, Aggregation, Literals, OwnMethods ]
         @database = database
       end
-
-      # Compiles a query expression given by a String or a block and returns the result
-      # (typically a tuple iterator).
-      #
-      # @see Database.compile
-      #
-      def _compile(expr = nil, path = nil, line = nil, &block)
-        if expr.nil?
-          instance_eval(&block)
-        else
-          path = path.to_s if path
-          Kernel.eval expr, *[_clean_binding, path, line].compact, &block
-        end
-      end
-
-      private
-
-        def _clean_binding
-          binding
-        end
 
     end # class Lispy
   end # module Lang

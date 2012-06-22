@@ -9,7 +9,10 @@ module Alf
     end
     
     let(:io){ StringIO.new(expr) }
-    subject{ Reader::AlfFile.new(io, TestAdapter.new).to_a }
+
+    subject{
+      Reader::AlfFile.new(io, TestAdapter.new).to_a
+    }
 
     describe "on pure functional expressions" do
       let(:expr){ "(restrict :suppliers, lambda{status > 20})" }

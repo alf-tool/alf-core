@@ -6,9 +6,8 @@ module Alf
       #
       # @param [Hash] h, a hash mapping symbols to values
       def Tuple(h)
-        unless h.keys.all?{|k| k.is_a?(Symbol)} &&
-               h.values.all?{|v| !v.nil?}
-          raise ArgumentError, "Invalid tuple literal #{h.inspect}"
+        unless h.keys.all?{|k| k.is_a?(::Symbol) } && h.values.all?{|v| !v.nil? }
+          ::Kernel.raise ArgumentError, "Invalid tuple literal #{h.inspect}"
         end
         h
       end
@@ -16,15 +15,14 @@ module Alf
       # Coerces `args` to a valid relation.
       def Relation(first, *args)
         if args.empty?
-          if first.is_a?(Symbol)
-            _database.dataset(first).to_rel
-          elsif first.is_a?(Hash)
-            Alf::Relation[first]
+          case first
+          when ::Symbol then _database.dataset(first).to_rel
+          when ::Hash   then ::Alf::Relation[first]
           else
-            raise ArgumentError, "Unable to coerce `#{first.inspect}` to a relation"
+            ::Kernel.raise ::ArgumentError, "Unable to coerce `#{first.inspect}` to a relation"
           end
         else
-          Alf::Relation[*args.unshift(first)] 
+          ::Alf::Relation[*args.unshift(first)]
         end
       end
 

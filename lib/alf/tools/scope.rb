@@ -25,6 +25,11 @@ module Alf
           false
         end
 
+        # Delegated to ::Kernel
+        def lambda(*args, &block)
+          ::Kernel.lambda(*args, &block)
+        end
+
         # Evaluates an expression in the scope.
         #
         # @param [Proc] bl an expression to evaluate as a Proc.

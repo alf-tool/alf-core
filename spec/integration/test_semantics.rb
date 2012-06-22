@@ -19,11 +19,12 @@ describe "Alf's semantics tests" do
     
     let(:lispy){
       lispy = Alf::Database.folder(Path.dir/'__database__').send(:lispy)
-      lispy.ruby_extend(Helpers)
+      Helpers.send(:extend_object, lispy)
+      lispy
     }
 
     it "should work when executed with a Alf" do
-      lispy._compile(Path(subject).read)
+      lispy.evaluate(Path(subject).read)
     end
     
   end # An example
