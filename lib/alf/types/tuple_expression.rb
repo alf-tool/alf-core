@@ -1,8 +1,8 @@
 module Alf
   module Types
     #
-    # A tuple expression is a Ruby expression whose evaluates in the scope of a
-    # specific tuple handle.
+    # A tuple expression is a Ruby expression whose evaluates in the scope of a specific
+    # tuple.
     #
     # Example:
     #   expr = TupleExpression["status * 10"]
@@ -70,29 +70,29 @@ module Alf
 
       end # class << self
 
-      # Evaluates the expression in the context of a TupleHandle
+      # Evaluates the expression in the context of a TupleScope
       #
-      # @param [TupleHandle] handle a tuple handle instance.
+      # @param [TupleScope] scope a tuple scope instance.
       # @return [Object] the result of evaluating the expression in the context
-      #         of `handle`
-      def evaluate(handle = nil)
-        handle.instance_exec(&@expr_lambda)
+      #         of `scope`
+      def evaluate(scope = nil)
+        scope.instance_exec(&@expr_lambda)
       end
 
       # Evaluates the expression on a tuple
       #
       # This is a convenient method for the following, longer expression:
       #
-      #     evaluate(TupleHandle.new.set(tuple))
+      #     evaluate(TupleScope.new(tuple))
       #
-      # Note, however, using a Handle as in the example above is much more
+      # Note, however, using a scope as in the example above is much more
       # efficient when evaluating the same expression on multiple tuples
       # in sequence.
       #
       # @param [Hash] tuple a Tuple instance
       # @return [Object] the result of evaluating the expression on `tuple`
       def call(tuple)
-        evaluate(Tools::TupleHandle.new(tuple))
+        evaluate(Tools::TupleScope.new(tuple))
       end
       alias :[] :call
 

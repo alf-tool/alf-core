@@ -151,11 +151,11 @@ module Alf
     # and delegates to _happens.
     #
     # @param [Object] memo the current aggregation value
-    # @param [Tools::TupleHandle] a tuple handle bound to the current tuple
+    # @param [Tools::TupleScope] a tuple scope bound to the current tuple
     # @return [Object] updated memo value
-    def happens(memo, handle)
-      raise unless Tools::TupleHandle===handle
-      _happens(memo, @functor.evaluate(handle))
+    def happens(memo, scope)
+      raise unless Tools::TupleScope===scope
+      _happens(memo, @functor.evaluate(scope))
     end
 
     # This method finalizes an aggregation.
@@ -176,8 +176,8 @@ module Alf
     # @param [Enumerable<Tuple>] an enumerable of tuples
     # @return [Object] the computed aggregation value
     def aggregate(enum)
-      handle = Tools::TupleHandle.new
-      finalize(enum.inject(least){|m,t| happens(m, handle.__set_tuple(t))})
+      scope = Tools::TupleScope.new
+      finalize(enum.inject(least){|m,t| happens(m, scope.__set_tuple(t))})
     end
 
     # Asserts that this aggregator knows its source code or raises a

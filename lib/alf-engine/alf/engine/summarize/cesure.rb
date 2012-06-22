@@ -21,7 +21,7 @@ module Alf
         @by = by
         @summarization = summarization
         @allbut = allbut
-        @handle = Tools::TupleHandle.new
+        @scope = Tools::TupleScope.new
       end
 
       protected
@@ -38,7 +38,7 @@ module Alf
 
       # (see Cesure#accumulate_cesure)
       def accumulate_cesure(tuple, receiver)
-        @aggs = @summarization.happens(@aggs, @handle.__set_tuple(tuple))
+        @aggs = @summarization.happens(@aggs, @scope.__set_tuple(tuple))
       end
 
       # (see Cesure#flush_cesure)

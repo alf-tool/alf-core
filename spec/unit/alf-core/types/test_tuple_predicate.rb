@@ -13,13 +13,13 @@ module Alf
       it_should_behave_like 'A valid type implementation'
     end
 
-    let(:handle){ Tools::TupleHandle.new(:status => 10) }
+    let(:scope){ Tools::TupleScope.new(:status => 10) }
 
     describe "coerce" do
 
       let(:pred){ TuplePredicate.coerce(arg) }
       before{ pred.should be_a(TuplePredicate) }
-      subject{ pred.evaluate(handle) }
+      subject{ pred.evaluate(scope) }
 
       describe "from TuplePredicate" do
         let(:arg){ TuplePredicate.new(lambda{ status == 10 }) }
@@ -75,7 +75,7 @@ module Alf
 
     describe "from_argv" do
 
-      subject{ TuplePredicate.from_argv(argv).evaluate(handle) }
+      subject{ TuplePredicate.from_argv(argv).evaluate(scope) }
       
       describe "from a singleton Array" do
         let(:argv){ ["status == 10"] }

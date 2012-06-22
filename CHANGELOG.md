@@ -44,7 +44,7 @@
 
 ## Bug fixes
 
-* The Aggregator class, Summarization type and Summarize operator have been made thread-safe through #happens that now takes a TupleHandle instead of a tuple.
+* The Aggregator class, Summarization type and Summarize operator have been made thread-safe through #happens that now takes a TupleScope instead of a tuple.
 
 ## Broken stuff
 

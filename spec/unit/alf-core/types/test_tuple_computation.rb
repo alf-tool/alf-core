@@ -22,11 +22,11 @@ module Alf
       res.should eq(:big? => false, :who => "Bill Jones")
     end
 
-    let(:handle){ Tools::TupleHandle.new(:who => "alf") }
+    let(:scope){ Tools::TupleScope.new(:who => "alf") }
 
     describe "coerce" do
 
-      subject{ TupleComputation.coerce(arg).evaluate(handle) }
+      subject{ TupleComputation.coerce(arg).evaluate(scope) }
 
       describe "from a TupleComputation" do
         let(:arg){ TupleComputation.new :hello => TupleExpression.coerce(:who) } 
@@ -67,7 +67,7 @@ module Alf
 
     describe "from_argv" do
 
-      subject{ TupleComputation.from_argv(argv).evaluate(handle) }
+      subject{ TupleComputation.from_argv(argv).evaluate(scope) }
 
       describe "from an Array with coercions" do
         let(:argv){ ["hello", "who", "hello2", "2"] }

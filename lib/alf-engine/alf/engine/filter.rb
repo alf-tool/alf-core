@@ -30,9 +30,9 @@ module Alf
 
       # (see Cog#each)
       def each
-        handle = Tools::TupleHandle.new
+        scope = Tools::TupleScope.new
         operand.each do |tuple|
-          yield(tuple) if @predicate.evaluate(handle.__set_tuple(tuple))
+          yield(tuple) if @predicate.evaluate(scope.__set_tuple(tuple))
         end
       end
 

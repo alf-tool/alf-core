@@ -17,7 +17,7 @@ module Alf
         @operand = operand
         @by = by.to_attr_list
         @summarization = summarization
-        @handle = Tools::TupleHandle.new
+        @scope = Tools::TupleScope.new
       end
 
       protected
@@ -34,7 +34,7 @@ module Alf
 
       # (see Operator::Cesure#accumulate_cesure)
       def accumulate_cesure(tuple, receiver)
-        @aggs = @summarization.happens(@aggs, @handle.__set_tuple(tuple))
+        @aggs = @summarization.happens(@aggs, @scope.__set_tuple(tuple))
         receiver.call tuple.merge(@summarization.finalize(@aggs))
       end
 

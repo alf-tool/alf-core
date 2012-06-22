@@ -59,7 +59,7 @@ module Alf
           # Branches this scope with `arg`, returning a child scope of this one.
           def __branch(arg)
             case arg
-            when ::Hash then TupleHandle.new(arg, [], self)
+            when ::Hash then TupleScope.new(arg, [], self)
             else
               Kernel::raise NotImplementedError, "Unable to branch with `#{arg}`"
             end
@@ -67,7 +67,7 @@ module Alf
 
       end # module OwnMethods
 
-      # Creates a handle instance
+      # Creates a scope instance
       def initialize(extensions = [], parent = nil)
         @extensions = [ OwnMethods ] + extensions
         @extensions.each do |ext|

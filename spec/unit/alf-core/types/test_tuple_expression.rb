@@ -18,8 +18,8 @@ module Alf
       expr.call(:status => 20).should eq(200)
     end
 
-    let(:handle) {
-      Tools::TupleHandle.new(:status => 10)
+    let(:scope) {
+      Tools::TupleScope.new(:status => 10)
     }
 
     describe "coerce" do
@@ -34,8 +34,8 @@ module Alf
       describe "with a String" do
         let(:arg){ "true" }
         it { should be_a(TupleExpression) }
-        specify{ 
-          subject.evaluate(handle).should eql(true) 
+        specify{
+          subject.evaluate(scope).should eql(true)
           subject.source.should eq("true")
         }
       end
@@ -43,8 +43,8 @@ module Alf
       describe "with a Symbol" do
         let(:arg){ :status }
         it { should be_a(TupleExpression) }
-        specify{ 
-          subject.evaluate(handle).should eql(10) 
+        specify{
+          subject.evaluate(scope).should eql(10)
           subject.source.should eq(:status)
         }
       end
@@ -52,8 +52,8 @@ module Alf
       describe "with a Proc" do
         let(:arg){ lambda{ :hello } }
         it { should be_a(TupleExpression) }
-        specify{ 
-          subject.evaluate(handle).should eql(:hello) 
+        specify{
+          subject.evaluate(scope).should eql(:hello)
           subject.source.should be_nil
         }
       end
@@ -67,8 +67,8 @@ module Alf
       describe "with a String (1)" do
         let(:argv){ %w{true} }
         it { should be_a(TupleExpression) }
-        specify{ 
-          subject.evaluate(handle).should eql(true) 
+        specify{
+          subject.evaluate(scope).should eql(true)
           subject.source.should eq("true")
         }
       end
@@ -76,8 +76,8 @@ module Alf
       describe "with a String (2)" do
         let(:argv){ ["status > 10"] }
         it { should be_a(TupleExpression) }
-        specify{ 
-          subject.evaluate(handle).should eql(false) 
+        specify{
+          subject.evaluate(scope).should eql(false)
           subject.source.should eq("status > 10")
         }
       end
@@ -92,7 +92,7 @@ module Alf
     describe 'call' do
       let(:expr){ TupleExpression["status > 10"] }
 
-      it 'should build its handle correctly' do
+      it 'should build its scope correctly' do
         expr.call(:status => 20).should be_true
         expr.call(:status => 5).should be_false
       end

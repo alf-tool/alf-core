@@ -76,27 +76,27 @@ module Alf
       #
       # This is a convenient method for the following, longer expression:
       #
-      #     evaluate(TupleHandle.new.set(tuple))
+      #     evaluate(TupleScope.new(tuple))
       #
-      # Note, however, using a Handle as in the example above is much more
+      # Note, however, using a scope as in the example above is much more
       # efficient when evaluating the same computation on multiple tuples
       # in sequence.
       #
       # @param [Hash] tuple a Tuple instance
       # @return [Object] the resulting tuple
       def call(tuple)
-        evaluate(Tools::TupleHandle.new(tuple))
+        evaluate(Tools::TupleScope.new(tuple))
       end
       alias :[] :call
 
       # Computes the resulting tuple when expressions are evaluated in the
-      # context of `handle`
+      # context of `scope`
       #
-      # @param [TupleHandle] handle a tuple handle instance.
+      # @param [TupleScope] scope a tuple scope instance.
       # @return [Hash] the resulting tuple
-      def evaluate(handle = nil)
+      def evaluate(scope = nil)
         Tools.tuple_collect(@computation){|k,v|
-          [k, v.is_a?(TupleExpression) ? v.evaluate(handle) : v]
+          [k, v.is_a?(TupleExpression) ? v.evaluate(scope) : v]
         }
       end
 

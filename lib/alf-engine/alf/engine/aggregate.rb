@@ -29,13 +29,13 @@ module Alf
       def initialize(operand, summarization)
         @operand = operand
         @summarization = summarization
-        @handle = Tools::TupleHandle.new
+        @scope = Tools::TupleScope.new
       end
 
       # (see Cog#each)
       def each
         agg = operand.inject(@summarization.least) do |memo,tuple|
-          @summarization.happens(memo, @handle.__set_tuple(tuple))
+          @summarization.happens(memo, @scope.__set_tuple(tuple))
         end
         yield @summarization.finalize(agg)
       end
