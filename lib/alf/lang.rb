@@ -5,3 +5,4 @@ end # module Alf
 require_relative 'lang/algebra'
 require_relative 'lang/aggregation'
 require_relative 'lang/literals'
+require_relative 'lang/lispy'
