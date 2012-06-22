@@ -17,14 +17,27 @@ module Alf
     class TupleHandle < BasicObject
 
       # Creates a handle instance
-      def initialize(tuple = nil)
-        __build(tuple) if tuple
-        @tuple = tuple
+      def initialize(*args)
+        @tuple      = nil
+        @extensions = []
+        args.each do |arg|
+          case arg
+            when ::Hash   then __build(@tuple = arg)
+            when ::Module then __extend(arg)
+            else
+              raise ArgumentError, "Unable to use `#{arg}` for scoping"
+          end
+        end
       end
 
       # Returns true if the decorated tuple has `name` as key.
       def respond_to?(name)
-        @tuple && @tuple.has_key?(name)
+        return true if @tuple && @tuple.has_key?(name)
+        return true if [:__set_tuple, :__build, :__extend].include?(name)
+        name = name.to_s if ::RUBY_VERSION < "1.9"
+        return true if BasicObject.instance_methods.include?(name)
+        return true if @extensions.any?{|m| m.instance_methods.include?(name) }
+        false
       end
 
       # Evaluates a tuple expression on the current tuple.
@@ -59,8 +72,19 @@ module Alf
               @tuple[k]
             end
           end
+          self
         end
         private :__build
+
+        # Extends this handle with a module.
+        #
+        # Instance methods of `mod` will be accessible in this handle scope. `respond_to?`
+        # also support the new added methods
+        def __extend(mod)
+          mod.send(:extend_object, self)
+          @extensions << mod
+          self
+        end
 
     end # class TupleHandle
   end # module Tools
