@@ -10,9 +10,9 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          op = Engine::Clip.new(operand, attributes, allbut)
-          op = Engine::Compact.new(op)
+        def compile(context)
+          op = Engine::Clip.new(operand, attributes, allbut, context)
+          op = Engine::Compact.new(op, context)
           op
         end
 

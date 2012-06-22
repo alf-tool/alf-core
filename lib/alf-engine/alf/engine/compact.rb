@@ -9,13 +9,14 @@ module Alf
       attr_reader :operand
 
       # Creates a Compact instance
-      def initialize(operand)
+      def initialize(operand, context=nil)
+        super(context)
         @operand = operand
       end
 
       # (see Cog#each)
       def each(&block)
-        Compact::Uniq.new(operand).each(&block)
+        Compact::Uniq.new(operand, context).each(&block)
       end
 
     end # class Compact

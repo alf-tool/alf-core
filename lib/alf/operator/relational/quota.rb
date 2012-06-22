@@ -11,9 +11,9 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          op = Engine::Sort.new(operand, @by.to_ordering + @order)
-          op = Engine::Quota::Cesure.new(op, @by, summarization)
+        def compile(context)
+          op = Engine::Sort.new(operand, @by.to_ordering + @order, context)
+          op = Engine::Quota::Cesure.new(op, @by, summarization, context)
           op
         end
 

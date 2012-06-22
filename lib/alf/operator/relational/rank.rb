@@ -10,9 +10,9 @@ module Alf
         end
 
         # (see Operator#each)
-        def compile
-          op = Engine::Sort.new(operand, order)
-          op = Engine::Rank::Cesure.new(op, order, as)
+        def compile(context)
+          op = Engine::Sort.new(operand, order, context)
+          op = Engine::Rank::Cesure.new(op, order, as, context)
           op
         end 
 

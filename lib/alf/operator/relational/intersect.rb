@@ -8,8 +8,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Join::Hash.new(left, right)
+        def compile(context)
+          Engine::Join::Hash.new(left, right, context)
         end
 
       end # class Intersect

@@ -9,8 +9,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Coerce.new(operand, heading)
+        def compile(context)
+          Engine::Coerce.new(operand, heading, context)
         end
 
       end # class Coerce

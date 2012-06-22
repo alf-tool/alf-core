@@ -10,8 +10,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Wrap.new(operand, attributes, as, false)
+        def compile(context)
+          Engine::Wrap.new(operand, attributes, as, false, context)
         end
 
       end # class Wrap

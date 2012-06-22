@@ -9,7 +9,8 @@ module Alf
       attr_reader :attribute
 
       # Creates a Ungroup instance
-      def initialize(operand, attribute)
+      def initialize(operand, attribute, context=nil)
+        super(context)
         @operand = operand
         @attribute = attribute
       end

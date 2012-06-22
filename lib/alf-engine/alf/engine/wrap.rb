@@ -18,7 +18,8 @@ module Alf
       attr_reader :allbut
 
       # Creates a SetAttr instance
-      def initialize(operand, attributes, as, allbut)
+      def initialize(operand, attributes, as, allbut, context=nil)
+        super(context)
         @operand = operand
         @attributes = attributes
         @as = as

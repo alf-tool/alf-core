@@ -9,8 +9,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::SetAttr.new(operand, ext)
+        def compile(context)
+          Engine::SetAttr.new(operand, ext, context)
         end
 
       end # class Extend

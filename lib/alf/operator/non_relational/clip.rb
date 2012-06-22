@@ -10,8 +10,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Clip.new(operand, attributes, allbut)
+        def compile(context)
+          Engine::Clip.new(operand, attributes, allbut, context)
         end
 
       end # class Clip

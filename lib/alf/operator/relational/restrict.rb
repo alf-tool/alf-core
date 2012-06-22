@@ -8,8 +8,8 @@ module Alf
           s.argument :predicate, TuplePredicate, "true"
         end
 
-        def compile
-          Engine::Filter.new(operand, predicate)
+        def compile(context)
+          Engine::Filter.new(operand, predicate, context)
         end
 
       end # class Restrict

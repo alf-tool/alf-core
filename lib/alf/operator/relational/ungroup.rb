@@ -9,8 +9,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Ungroup.new(operand, attribute)
+        def compile(context)
+          Engine::Ungroup.new(operand, attribute, context)
         end
 
       end # class Ungroup

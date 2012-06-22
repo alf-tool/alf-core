@@ -8,9 +8,9 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          op = Engine::Concat.new([left, right])
-          op = Engine::Compact.new(op)
+        def compile(context)
+          op = Engine::Concat.new([left, right], context)
+          op = Engine::Compact.new(op, context)
           op
         end
 

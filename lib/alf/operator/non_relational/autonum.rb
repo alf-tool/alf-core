@@ -9,8 +9,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Autonum.new(operand, as)
+        def compile(context)
+          Engine::Autonum.new(operand, as, context)
         end
 
       end # class Autonum

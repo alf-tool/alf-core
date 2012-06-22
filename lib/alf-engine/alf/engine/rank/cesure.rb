@@ -13,7 +13,8 @@ module Alf
       attr_reader :as
 
       # Creates an Rank::Cesure instance
-      def initialize(operand, by, as)
+      def initialize(operand, by, as, context=nil)
+        super(context)
         @operand = operand
         @by = by.to_attr_list
         @as = as

@@ -8,8 +8,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Semi::Hash.new(left, right, true)
+        def compile(context)
+          Engine::Semi::Hash.new(left, right, true, context)
         end
 
       end # class Matching

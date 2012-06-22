@@ -26,7 +26,8 @@ module Alf
       attr_reader :heading
 
       # Creates an Coerce instance
-      def initialize(operand, heading)
+      def initialize(operand, heading, context=nil)
+        super(context)
         @operand = operand
         @heading = heading
       end

@@ -11,12 +11,12 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
+        def compile(context)
           if @allbut
-            Engine::Summarize::Hash.new(operand, by, summarization, allbut)
+            Engine::Summarize::Hash.new(operand, by, summarization, allbut, context)
           else
-            op = Engine::Sort.new(operand, by.to_ordering)
-            op = Engine::Summarize::Cesure.new(op, by, summarization, allbut)
+            op = Engine::Sort.new(operand, by.to_ordering, context)
+            op = Engine::Summarize::Cesure.new(op, by, summarization, allbut, context)
             op
           end
         end

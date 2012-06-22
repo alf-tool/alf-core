@@ -31,7 +31,7 @@ module Alf
 
     # Yields each tuple in turn
     def each(&block)
-      compile.each(&block)
+      compile(database).each(&block)
     end
 
   end # module Operator

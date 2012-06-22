@@ -8,8 +8,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Compact.new(operand)
+        def compile(context)
+          Engine::Compact.new(operand, context)
         end
 
       end # class Compact

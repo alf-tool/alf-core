@@ -11,8 +11,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Group::Hash.new(operand, attributes, as, allbut)
+        def compile(context)
+          Engine::Group::Hash.new(operand, attributes, as, allbut, context)
         end
   
       end # class Group

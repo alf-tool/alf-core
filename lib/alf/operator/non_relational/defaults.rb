@@ -10,9 +10,9 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          op = Engine::Defaults.new(operand, defaults)
-          op = Engine::Clip.new(op, defaults.to_attr_list, false) if strict
+        def compile(context)
+          op = Engine::Defaults.new(operand, defaults, context)
+          op = Engine::Clip.new(op, defaults.to_attr_list, false, context) if strict
           op
         end
 

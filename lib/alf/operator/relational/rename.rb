@@ -8,8 +8,8 @@ module Alf
           s.argument :renaming, Renaming, {}
         end
 
-        def compile
-          Engine::Rename.new(operand, renaming)
+        def compile(context)
+          Engine::Rename.new(operand, renaming, context)
         end
 
       end # class Rename

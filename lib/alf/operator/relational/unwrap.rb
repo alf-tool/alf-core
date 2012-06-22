@@ -9,8 +9,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Unwrap.new(operand, attribute)
+        def compile(context)
+          Engine::Unwrap.new(operand, attribute, context)
         end
 
       end # class Unwrap

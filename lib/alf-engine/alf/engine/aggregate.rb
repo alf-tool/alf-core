@@ -26,7 +26,8 @@ module Alf
       attr_reader :summarization
 
       # Creates an Aggregate instance
-      def initialize(operand, summarization)
+      def initialize(operand, summarization, context=nil)
+        super(context)
         @operand = operand
         @summarization = summarization
         @scope = Tools::TupleScope.new

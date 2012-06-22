@@ -10,8 +10,8 @@ module Alf
         end
 
         # (see Operator#compile)
-        def compile
-          Engine::Generator.new(as, 1, 1, size)
+        def compile(context)
+          Engine::Generator.new(as, 1, 1, size, context)
         end
 
       end # class Generator
