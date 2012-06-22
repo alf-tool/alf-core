@@ -91,7 +91,7 @@ module Alf
       # @returns [Tuple] The summarization of `enum`
       def summarize(enum)
         handle = Tools::TupleHandle.new
-        finalize(enum.inject(least){|m,t| happens(m, handle.set(t))})
+        finalize(enum.inject(least){|m,t| happens(m, handle.__set_tuple(t))})
       end
 
       # Returns a hash code.

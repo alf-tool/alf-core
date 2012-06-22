@@ -35,7 +35,7 @@ module Alf
       # (see Cog#each)
       def each
         agg = operand.inject(@summarization.least) do |memo,tuple|
-          @summarization.happens(memo, @handle.set(tuple))
+          @summarization.happens(memo, @handle.__set_tuple(tuple))
         end
         yield @summarization.finalize(agg)
       end

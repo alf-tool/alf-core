@@ -32,7 +32,7 @@ module Alf
       def each
         handle = Tools::TupleHandle.new
         operand.each do |tuple|
-          yield(tuple) if @predicate.evaluate(handle.set(tuple))
+          yield(tuple) if @predicate.evaluate(handle.__set_tuple(tuple))
         end
       end
 

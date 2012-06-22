@@ -177,7 +177,7 @@ module Alf
     # @return [Object] the computed aggregation value
     def aggregate(enum)
       handle = Tools::TupleHandle.new
-      finalize(enum.inject(least){|m,t| happens(m, handle.set(t))})
+      finalize(enum.inject(least){|m,t| happens(m, handle.__set_tuple(t))})
     end
 
     # Asserts that this aggregator knows its source code or raises a

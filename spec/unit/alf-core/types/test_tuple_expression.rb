@@ -19,7 +19,7 @@ module Alf
     end
 
     let(:handle) {
-      Tools::TupleHandle.new.set(:status => 10)
+      Tools::TupleHandle.new(:status => 10)
     }
 
     describe "coerce" do

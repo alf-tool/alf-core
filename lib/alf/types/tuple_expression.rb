@@ -92,7 +92,7 @@ module Alf
       # @param [Hash] tuple a Tuple instance
       # @return [Object] the result of evaluating the expression on `tuple`
       def call(tuple)
-        evaluate(Tools::TupleHandle.new.set(tuple))
+        evaluate(Tools::TupleHandle.new(tuple))
       end
       alias :[] :call
 

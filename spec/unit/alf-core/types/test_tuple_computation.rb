@@ -22,7 +22,7 @@ module Alf
       res.should eq(:big? => false, :who => "Bill Jones")
     end
 
-    let(:handle){ Tools::TupleHandle.new.set(:who => "alf") }
+    let(:handle){ Tools::TupleHandle.new(:who => "alf") }
 
     describe "coerce" do
 

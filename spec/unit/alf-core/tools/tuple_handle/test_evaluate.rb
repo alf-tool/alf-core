@@ -5,7 +5,7 @@ module Alf
 
       let(:handle){ TupleHandle.new }
 
-      before{ handle.set(:a => 1, :b => 2) }
+      before{ handle.__set_tuple(:a => 1, :b => 2) }
 
       it "should allow a String" do
         handle.evaluate("a").should == 1

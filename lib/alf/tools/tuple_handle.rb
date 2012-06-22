@@ -17,25 +17,14 @@ module Alf
     class TupleHandle < BasicObject
 
       # Creates a handle instance
-      def initialize
-        @tuple = nil
+      def initialize(tuple = nil)
+        __build(tuple) if tuple
+        @tuple = tuple
       end
 
       # Returns true if the decorated tuple has `name` as key.
       def respond_to?(name)
         @tuple && @tuple.has_key?(name)
-      end
-
-      # Sets the next tuple to use.
-      #
-      # On first call, this method installs the handle as a side effect.
-      #
-      # @param [Tuple] tuple the current iterated tuple
-      # @return [TupleHandle] self
-      def set(tuple)
-        _build(tuple) if @tuple.nil?
-        @tuple = tuple
-        self
       end
 
       # Evaluates a tuple expression on the current tuple.
@@ -46,19 +35,32 @@ module Alf
         TupleExpression.coerce(expr || bl).evaluate(self)
       end
 
-      private
+      ### private section ###
+
+        # Sets the next tuple to use.
+        #
+        # On first call, this method installs the handle as a side effect.
+        #
+        # @param [Tuple] tuple the current iterated tuple
+        # @return [TupleHandle] self
+        def __set_tuple(tuple)
+          __build(tuple) if @tuple.nil?
+          @tuple = tuple
+          self
+        end
 
         # Builds this handle with a tuple.
         #
         # This method should be called only once and installs instance methods on
         # the handle with keys of _tuple_.
-        def _build(tuple)
+        def __build(tuple)
           tuple.keys.each do |k|
             (class << self; self; end).send(:define_method, k) do
               @tuple[k]
             end
           end
         end
+        private :__build
 
     end # class TupleHandle
   end # module Tools

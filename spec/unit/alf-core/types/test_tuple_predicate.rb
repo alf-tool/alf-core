@@ -13,7 +13,7 @@ module Alf
       it_should_behave_like 'A valid type implementation'
     end
 
-    let(:handle){ Tools::TupleHandle.new.set(:status => 10) }
+    let(:handle){ Tools::TupleHandle.new(:status => 10) }
 
     describe "coerce" do
 

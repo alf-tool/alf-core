@@ -33,7 +33,7 @@ module Alf
       def each
         handle = Tools::TupleHandle.new
         operand.each do |tuple|
-          defs = @defaults.evaluate(handle.set(tuple))
+          defs = @defaults.evaluate(handle.__set_tuple(tuple))
           yield tuple.merge(defs){|k,v1,v2| (v1.nil? ? v2 : v1)}
         end
       end

@@ -38,7 +38,7 @@ module Alf
 
       # (see Cesure#accumulate_cesure)
       def accumulate_cesure(tuple, receiver)
-        @aggs = @summarization.happens(@aggs, @handle.set(tuple))
+        @aggs = @summarization.happens(@aggs, @handle.__set_tuple(tuple))
       end
 
       # (see Cesure#flush_cesure)
