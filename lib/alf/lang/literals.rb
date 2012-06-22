@@ -15,12 +15,7 @@ module Alf
       # Coerces `args` to a valid relation.
       def Relation(first, *args)
         if args.empty?
-          case first
-          when ::Symbol then _database.dataset(first).to_rel
-          when ::Hash   then ::Alf::Relation[first]
-          else
-            ::Kernel.raise ::ArgumentError, "Unable to coerce `#{first.inspect}` to a relation"
-          end
+          first.is_a?(::Symbol) ? _database.dataset(first).to_rel : Alf::Relation(first)
         else
           ::Alf::Relation[*args.unshift(first)]
         end
