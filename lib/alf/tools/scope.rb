@@ -56,6 +56,15 @@ module Alf
             RUBY_VERSION < "1.9" ? binding : ::Kernel.binding
           end
 
+          # Branches this scope with `arg`, returning a child scope of this one.
+          def __branch(arg)
+            case arg
+            when ::Hash then TupleHandle.new(arg, [], self)
+            else
+              Kernel::raise NotImplementedError, "Unable to branch with `#{arg}`"
+            end
+          end
+
       end # module OwnMethods
 
       # Creates a handle instance
