@@ -3,7 +3,7 @@ module Alf
   module Lang
     describe Lispy, "Tuple(...)" do
 
-      let(:lispy){ Database.examples.send(:lispy) }
+      let(:lispy){ Database.examples.lispy }
 
       subject{ lispy.Tuple(h) }
 

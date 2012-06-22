@@ -23,7 +23,7 @@ module Helpers
   end
 
   def a_lispy
-    Alf::Lang::Lispy.new(nil)
+    Alf::Lang::Lispy.new
   end
 
   def examples_database

@@ -26,8 +26,8 @@ module Alf
       end # OwnMethods
 
       # Creates a language instance
-      def initialize(database)
-        super [ Algebra, Aggregation, Literals, OwnMethods ]
+      def initialize(database = nil, helpers = [ Lang::Algebra, Lang::Aggregation, Lang::Literals ])
+        super [ OwnMethods ] + helpers
         @database = database
       end
 

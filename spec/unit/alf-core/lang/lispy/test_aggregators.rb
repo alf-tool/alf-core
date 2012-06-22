@@ -3,7 +3,7 @@ module Alf
   module Lang
     describe Lispy, "the aggregator functions" do
 
-      let(:lispy){ Database.examples.send(:lispy) }
+      let(:lispy){ Database.examples.lispy }
 
       let(:input){[
         {:tested => 1,  :other => "b"},

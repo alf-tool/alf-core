@@ -18,7 +18,7 @@ describe "Alf's semantics tests" do
   shared_examples_for "A semantics spec file" do
     
     let(:lispy){
-      lispy = Alf::Database.folder(Path.dir/'__database__').send(:lispy)
+      lispy = Alf::Database.folder(Path.dir/'__database__').lispy
       Helpers.send(:extend_object, lispy)
       lispy
     }

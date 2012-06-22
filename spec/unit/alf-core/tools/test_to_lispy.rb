@@ -121,7 +121,7 @@ module Alf
 
     end # Summarization
 
-    let(:lispy){ examples_database.send(:lispy) }
+    let(:lispy){ examples_database.lispy }
 
 
     describe "on an nullary operator" do

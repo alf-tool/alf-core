@@ -32,7 +32,19 @@ module Alf
       def examples
         Database.new(Adapter.folder Path.backfind('examples/operators'))
       end
+
+      # Returns the array of helper modules to use for defining the evaluation
+      # scope.
+      #
+      # @return [Array<Module>] helper modules for evaluation scope.
+      def helpers(*helpers, &inline)
+        @helpers ||= (superclass.helpers.dup rescue [])
+        @helpers << Module.new(&inline) if inline
+        @helpers += helpers
+      end
     end
+
+    helpers Lang::Algebra, Lang::Aggregation, Lang::Literals
 
     attr_reader :lower_stage
 
@@ -106,11 +118,10 @@ module Alf
       end
     end
 
-    private
-
-      def lispy
-        Lang::Lispy.new(self)
-      end
+    def lispy
+      Lang::Lispy.new(self, self.class.helpers)
+    end
+    alias :scope :lispy
 
   end # module Database
 end # module Alf
