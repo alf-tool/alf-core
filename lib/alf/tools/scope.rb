@@ -34,7 +34,7 @@ module Alf
         ### private section ###
 
           # Returns true if the decorated tuple has `name` as key.
-          def respond_to?(name)
+          def respond_to?(name, include_private = false)
             name = name.to_s if ::RUBY_VERSION < "1.9"
             return true if @extensions.any?{|m| m.instance_methods.include?(name) }
             return true if BasicObject.instance_methods.include?(name)
@@ -42,7 +42,9 @@ module Alf
           end
 
           # Returns true.
-          def respond_to_missing?(*args); true; end
+          def respond_to_missing?(symbol, include_private = false)
+            @parent && @parent.respond_to?(symbol, include_private)
+          end
 
           # Delegated to parent if any.
           def method_missing(name, *args, &bl)
