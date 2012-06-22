@@ -74,7 +74,7 @@ module Alf
 
     specify "not matching", :ruby19 => true do
       l = lambda{ (rel1 !~ rel2).should == Alf::Relation[ {:sid => 'S1'}, {:sid => 'S3'} ] }
-      if defined?(JRUBY_VERSION)
+      if defined?(JRUBY_VERSION) and JRUBY_VERSION < "1.7"
         pending("jruby does not implement !~ overloading properly"){ l.call }
       else
         l.call
