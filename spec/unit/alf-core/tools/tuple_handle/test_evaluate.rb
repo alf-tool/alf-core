@@ -21,6 +21,10 @@ module Alf
         it "should allow a block" do
           handle.evaluate{ a }.should == 1
         end
+
+        it 'should resolve DUM and DEE correctly' do
+          handle.evaluate{ DUM }.should be_a(Relation)
+        end
       end
 
       context 'when scopes are added at construction' do

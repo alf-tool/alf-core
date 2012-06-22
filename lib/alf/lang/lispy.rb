@@ -30,8 +30,8 @@ module Alf
         @database = database
       end
 
-      # Compiles a query expression given by a String or a block and returns
-      # the result (typically a tuple iterator).
+      # Compiles a query expression given by a String or a block and returns the result
+      # (typically a tuple iterator).
       #
       # @see Database.compile
       #

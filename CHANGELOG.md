@@ -38,6 +38,10 @@
 
 * Added Alf::Reader#path that always returns a Path instance, unless the reader operates on an IO/StringIO. Use Alf::Reader#input to get the source passed at construction.
 
+* All tuple expressions (in restrictions, extensions, etc.) are now evaluated in a cleaner scope through a BasicObject. It allows you to define attribute names without worrying about name clashes with Kernel's methods. That also means that Kernel's functions are no longer accessible in such expression (you should not rely on them, however, as your expression captures a database query that should not have any side effect).
+
+* In sync with the previous point, Relation (the class), DUM and DEE are now defined globally (unless you define `ALF_NO_CORE_EXTENSIONS` before loading Alf). Those constants can thus be safely used in query expressions without experiencing a NameError.
+
 ## Bug fixes
 
 * The Aggregator class, Summarization type and Summarize operator have been made thread-safe through #happens that now takes a TupleHandle instead of a tuple.
@@ -51,6 +55,8 @@
 * The Environment concept as been removed and split as two different abstractions, namely Adapter and Database. That also means that `environment` readers and writers here have been replaced by `database` or `adapter` according to cases. Also, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
 
 * You now have to explicitely use 'alf show --text > ...' or 'alf --text ... > ' if you don't want ruby hashes to be outputted to output files. This is a consequence of tty detection that ensures a better shell experience.
+
+* Kernel's functions are no longer accessible in tuple expressions that are executed within a BasicObject's scope.
 
 ## Bug fixes
 
