@@ -26,8 +26,12 @@ module Helpers
     Alf::Lang::Lispy.new
   end
 
-  def examples_database
-    Alf::Database.examples
+  def examples_database(&bl)
+    if bl
+      Class.new(Alf::Database, &bl).new(examples_path)
+    else
+      Alf::Database.examples
+    end
   end
 
 end

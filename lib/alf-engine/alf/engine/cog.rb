@@ -10,6 +10,12 @@ module Alf
         @context = context
       end
 
+    private
+
+      def tuple_scope(tuple = nil)
+        Tools::TupleScope.new tuple, [], context && context.scope
+      end
+
     end # module Cog
   end # module Engine
 end # module Alf

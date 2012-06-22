@@ -18,7 +18,6 @@ module Alf
         @operand = operand
         @by = by.to_attr_list
         @summarization = summarization
-        @scope = Tools::TupleScope.new
       end
 
       protected
@@ -30,7 +29,8 @@ module Alf
 
       # (see Operator::Cesure#start_cesure)
       def start_cesure(key, receiver)
-        @aggs = @summarization.least
+        @scope = tuple_scope unless @scope
+        @aggs  = @summarization.least
       end
 
       # (see Operator::Cesure#accumulate_cesure)
@@ -41,6 +41,7 @@ module Alf
 
       # (see Cesure#flush_cesure)
       def flush_cesure(key, receiver)
+        @scope = nil
       end
 
     end # class Quota::Cesure

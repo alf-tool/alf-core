@@ -31,7 +31,7 @@ module Alf
 
       # (see Cog#each)
       def each
-        scope = Tools::TupleScope.new
+        scope = tuple_scope
         operand.each do |tuple|
           yield(tuple) if @predicate.evaluate(scope.__set_tuple(tuple))
         end

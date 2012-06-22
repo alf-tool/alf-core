@@ -31,6 +31,12 @@ module Alf
       to_rel(tuple).should eq(expected)
     end
 
+    it 'converts a list of quantities to a Relation' do
+      tuple    = {:qty => [10, 20]}
+      expected = Relation.new(Set.new << {:qty => 10} << {:qty => 20})
+      to_rel(tuple).should eq(expected)
+    end
+
     it 'converts an array of tuples' do
       to_rel(expected.to_a).should eq(expected)
     end

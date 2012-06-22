@@ -32,7 +32,7 @@ module Alf
 
       # (see Cog#each)
       def each
-        scope = Tools::TupleScope.new
+        scope = tuple_scope
         operand.each do |tuple|
           defs = @defaults.evaluate(scope.__set_tuple(tuple))
           yield tuple.merge(defs){|k,v1,v2| (v1.nil? ? v2 : v1)}

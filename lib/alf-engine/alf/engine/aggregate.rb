@@ -30,13 +30,13 @@ module Alf
         super(context)
         @operand = operand
         @summarization = summarization
-        @scope = Tools::TupleScope.new
       end
 
       # (see Cog#each)
       def each
+        scope = tuple_scope
         agg = operand.inject(@summarization.least) do |memo,tuple|
-          @summarization.happens(memo, @scope.__set_tuple(tuple))
+          @summarization.happens(memo, scope.__set_tuple(tuple))
         end
         yield @summarization.finalize(agg)
       end

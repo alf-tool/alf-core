@@ -35,7 +35,7 @@ module Alf
 
       # (see Cog#each)
       def each
-        scope = Tools::TupleScope.new
+        scope = tuple_scope
         operand.each do |tuple|
           computed = @computation.evaluate(scope.__set_tuple(tuple))
           yield tuple.merge(computed){|k,v1,v2| v2}

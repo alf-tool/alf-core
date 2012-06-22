@@ -22,7 +22,6 @@ module Alf
         @by = by
         @summarization = summarization
         @allbut = allbut
-        @scope = Tools::TupleScope.new
       end
 
       protected
@@ -34,7 +33,8 @@ module Alf
       
       # (see Cesure#start_cesure)
       def start_cesure(key, receiver)
-        @aggs = @summarization.least
+        @scope = tuple_scope unless @scope
+        @aggs  = @summarization.least
       end
 
       # (see Cesure#accumulate_cesure)
@@ -45,7 +45,9 @@ module Alf
       # (see Cesure#flush_cesure)
       def flush_cesure(key, receiver)
         @aggs = @summarization.finalize(@aggs)
-        receiver.call key.merge(@aggs)
+        result = receiver.call key.merge(@aggs)
+        @scope = nil
+        result
       end
 
     end # class Summarize::Cesure
