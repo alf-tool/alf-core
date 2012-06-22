@@ -4,28 +4,28 @@ module Alf
 
       class << self
 
-        def relational_operators(sort_by_name = false)
+        def relational_operators(sort_by_name = true)
           ops = subcommands.select{|cmd|
              cmd.operator? and cmd.relational? and !cmd.experimental?
           }
           sort_operators(ops, sort_by_name)
         end
 
-        def experimental_operators(sort_by_name = false)
+        def experimental_operators(sort_by_name = true)
           ops = subcommands.select{|cmd|
             cmd.operator? and cmd.relational? and cmd.experimental?
           }
           sort_operators(ops, sort_by_name)
         end
 
-        def non_relational_operators(sort_by_name = false)
+        def non_relational_operators(sort_by_name = true)
           ops = subcommands.select{|cmd|
             cmd.operator? and !cmd.relational?
           }
           sort_operators(ops, sort_by_name)
         end
 
-        def other_non_relational_commands(sort_by_name = false)
+        def other_non_relational_commands(sort_by_name = true)
           ops = subcommands.select{|cmd|
             cmd.command?
           }

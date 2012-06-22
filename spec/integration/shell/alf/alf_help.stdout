@@ -28,36 +28,36 @@ OPTIONS
 RELATIONAL OPERATORS
 
     extend           Relational extension (additional, computed attributes)
-    project          Relational projection (clip + compact)
-    restrict         Relational restriction (aka where, predicate filtering)
-    rename           Relational renaming (rename some attributes)
-    union            Relational union
-    minus            Relational minus (aka difference)
+    group            Relational grouping (relation-valued attributes)
     intersect        Relational intersection (aka a logical and)
     join             Relational join (and cartesian product)
     matching         Relational matching (join + project back on left)
+    minus            Relational minus (aka difference)
     not-matching     Relational not matching (inverse of matching)
-    wrap             Relational wrapping (tuple-valued attributes)
-    unwrap           Relational un-wrapping (inverse of wrap)
-    group            Relational grouping (relation-valued attributes)
-    ungroup          Relational un-grouping (inverse of group)
-    summarize        Relational summarization (group-by + aggregate ops)
+    project          Relational projection (clip + compact)
     rank             Relational ranking (explicit tuple positions)
+    rename           Relational renaming (rename some attributes)
+    restrict         Relational restriction (aka where, predicate filtering)
+    summarize        Relational summarization (group-by + aggregate ops)
+    ungroup          Relational un-grouping (inverse of group)
+    union            Relational union
+    unwrap           Relational un-wrapping (inverse of wrap)
+    wrap             Relational wrapping (tuple-valued attributes)
 
 EXPERIMENTAL RELATIONAL OPERATORS
 
-    quota       Generalized quota-queries (position, sum progression, etc.)
     heading     Relational heading (print the relation type)
+    quota       Generalized quota-queries (position, sum progression, etc.)
 
 NON-RELATIONAL OPERATORS
 
     autonum       Extend its operand with an unique autonumber attribute
-    defaults      Force default values on missing/nil attributes
-    compact       Remove tuple duplicates
-    sort          Sort input tuples according to an order relation
     clip          Clip input tuples to a subset of attributes
     coerce        Force attribute coercion according to a heading
+    compact       Remove tuple duplicates
+    defaults      Force default values on missing/nil attributes
     generator     Generate a relation with an auto-numbered attribute
+    sort          Sort input tuples according to an order relation
 
 OTHER NON-RELATIONAL COMMANDS
 
