@@ -101,23 +101,6 @@ module Alf
       c.respond_to?(:to_relation) ? c.to_relation : c
     end
 
-    # Runs a command as in shell.
-    #
-    # Example:
-    #
-    #     Alf::Database.examples.run(['restrict', 'suppliers', '--', "city == 'Paris'"])
-    #
-    def run(argv, requester = nil)
-      argv = Quickl.parse_commandline_args(argv) if argv.is_a?(String)
-      argv = Quickl.split_commandline_args(argv, '|')
-      argv.inject(nil) do |cmd,arr|
-        arr.shift if arr.first == "alf"
-        main = Alf::Shell::Main.new(self)
-        main.stdin_reader = cmd unless cmd.nil?
-        main.run(arr, requester)
-      end
-    end
-
     def lispy
       Lang::Lispy.new(self, self.class.helpers)
     end

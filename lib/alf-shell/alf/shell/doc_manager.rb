@@ -33,7 +33,7 @@ module Alf
           text = text.gsub(/^([ \t]*)!\(([^\)]+)\)/){|match| 
             spacing, invocation  = $1, $2
             args = Quickl.parse_commandline_args(invocation)[1..-1]
-            op   = Alf::Database.examples.run(args)
+            op   = run_alf_command(args)
             res  = op.to_rel.to_s
             res  = realign(res, spacing, false)[0...-1]
             if options[:method] == :lispy
@@ -47,7 +47,18 @@ module Alf
         end
       end
 
-      private 
+    private
+
+      def run_alf_command(argv, requester = nil)
+        argv = Quickl.parse_commandline_args(argv) if argv.is_a?(String)
+        argv = Quickl.split_commandline_args(argv, '|')
+        argv.inject(nil) do |cmd,arr|
+          arr.shift if arr.first == "alf"
+          main = Alf::Shell::Main.new(Database.examples)
+          main.stdin_reader = cmd unless cmd.nil?
+          main.run(arr, requester)
+        end
+      end
 
       def realign(txt, spacing, strip)
         rx = strip ? /^[ \t]*/ : /^/
