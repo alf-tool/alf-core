@@ -13,8 +13,8 @@ describe Alf::Database, "compile" do
     restriction = db.compile{
       (restrict (project :suppliers, [:status]), lambda{ status > 10 })
     }
-    restriction.database.should eq(db)
-    restriction.operand.database.should eq(db)
+    restriction.context.should eq(db)
+    restriction.operand.context.should eq(db)
   end
 
 end

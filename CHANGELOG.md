@@ -8,19 +8,15 @@
 
 ## Enhancements of the ruby interface
 
-* Added Alf.database for obtaining Database instances in the easiest possible way:
+* Added Alf.connect for connecting to databases in the easiest possible way:
 
-      Alf.database "somewhere/to/a/folder"
-      Alf.database "database.sqlite3"
-      Alf.database "postgres://user:password@host/database"
+      Alf.connect "somewhere/to/a/folder"
+      Alf.connect "database.sqlite3"
+      Alf.connect "postgres://user:password@host/database"
 
-* Compilation and evaluation of queries are now sent to a database specifically:
+* Compilation and evaluation of queries are now sent to a connection specifically:
 
-      Alf.database(...).compile{ (restrict :suppliers, ->{ status > 10 } )}
-
-* Compilation results, that is Operators, know the database that built them:
-
-      db.compile{ ... }.database == db
+      Alf.connect(...).compile{ (restrict :suppliers, ->{ status > 10 } )}
 
 * Alf::Relation now respond to aggregation functions with an object-oriented syntax:
 
@@ -51,11 +47,11 @@
 
 ## Broken stuff
 
-* Alf.lispy has been removed from the public API. Please use a Database instance instead:
+* Alf.lispy has been removed from the public API. Please use a Connection instead:
 
-      Alf.lipsy(db_params).compile{ ... } -> Alf.database(db_params).compile{ ... }
+      Alf.lipsy(db_params).compile{ ... } -> Alf.connect(db_params).compile{ ... }
 
-* The Environment concept as been removed and split as two different abstractions, namely Adapter and Database. That also means that `environment` readers and writers here have been replaced by `database` or `adapter` according to cases. Also, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
+* The Environment concept as been removed and split as different abstractions, namely Adapter, Database and Connection. That also means that `environment` readers and writers here have been replaced according to cases. Also, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
 
 * You now have to explicitely use 'alf show --text > ...' or 'alf --text ... > ' if you don't want ruby hashes to be outputted to output files. This is a consequence of tty detection that ensures a better shell experience.
 

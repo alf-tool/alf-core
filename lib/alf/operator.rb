@@ -11,16 +11,15 @@ module Alf
       Operator::Relational.each{|x| yield(x)}
     end
 
-    # Database that constructed this operator expression
-    attr_accessor :database
+    # The context in which this operator has been constructed
+    attr_accessor :context
 
     # @param [Array] operands Operator operands
     attr_accessor :operands
 
     # Create an operator instance
-    def initialize(db, *args)
-      raise ArgumentError, "Database expected, got `#{db}`" unless db.nil? or db.is_a?(Connection)
-      @database = db
+    def initialize(context, *args)
+      @context = context
       signature.parse_args(args, self)
     end
 
@@ -31,7 +30,7 @@ module Alf
 
     # Yields each tuple in turn
     def each(&block)
-      compile(database).each(&block)
+      compile(context).each(&block)
     end
 
   end # module Operator

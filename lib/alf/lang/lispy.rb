@@ -6,7 +6,7 @@ module Alf
     # The lispy dialect is the functional one used in .alf files and in compiled expressions
     # as below:
     #
-    #   Alf.database(...).compile do
+    #   Alf.connect(...).query do
     #     (restrict :suppliers, lambda{ city == 'London' })
     #   end
     #
@@ -19,16 +19,16 @@ module Alf
 
       module OwnMethods
 
-        def database
-          @database
+        def context
+          @context
         end
 
       end # OwnMethods
 
       # Creates a language instance
-      def initialize(database = nil, helpers = [ Lang::Algebra, Lang::Aggregation, Lang::Literals ])
+      def initialize(context = nil, helpers = [ Lang::Algebra, Lang::Aggregation, Lang::Literals ])
         super [ OwnMethods ] + helpers
-        @database = database
+        @context = context
       end
 
     end # class Lispy

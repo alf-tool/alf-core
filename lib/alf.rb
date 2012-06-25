@@ -35,12 +35,12 @@ module Alf
   # handler to use.
   #
   # @param [Array] args arguments for the Database constructor
-  # @return [Database] a database instance
+  # @return [Connection] a connection instance
   # @raise [ArgumentError] when no registered class recognizes the arguments
   #
   # @see Database.connect for more about recognized formats.
   #
-  def self.database(*args)
+  def self.connect(*args)
     Database.connect(*args)
   end
 
