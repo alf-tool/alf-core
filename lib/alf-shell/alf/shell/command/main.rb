@@ -80,7 +80,7 @@ module Alf
 
         opt.on('--db=DB',
                "Set the database to use") do |value|
-          @database = Database.autodetect(value)
+          @database = Database.connect(value)
         end
 
         @input_reader = :rash
@@ -135,7 +135,7 @@ module Alf
 
         # 2) build the operator according to -e option
         operator = if @execute
-          Database.autodetect(database).compile(argv.first)
+          Database.connect(database).compile(argv.first)
         else
           super
         end

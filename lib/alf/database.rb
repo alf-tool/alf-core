@@ -2,7 +2,7 @@ module Alf
   class Database
 
     class << self
-      # Auto-detect the database to use for specific arguments.
+      # Connects to a database, auto-detecting the adapter to use.
       #
       # This method returns a database instance bound to an autodetected Adapter. It
       # raises an ArgumentError if no such adapter can be found.
@@ -10,9 +10,10 @@ module Alf
       # @param [Array] args arguments for the Adapter constructor
       # @return [Database] an database instance
       # @raise [ArgumentError] when no registered adapter recognizes the arguments
-      def autodetect(*args)
+      def connect(*args)
+        return self.new   if args.empty?
         return args.first if args.size==1 && args.first.is_a?(Database)
-        Database.new(Adapter.autodetect *args)
+        return self.new(Adapter.autodetect *args)
       end
 
       def folder(*args)
@@ -46,9 +47,12 @@ module Alf
 
     helpers Lang::Algebra, Lang::Aggregation, Lang::Literals
 
+    # Logical adapter on lower stage
     attr_reader :lower_stage
 
-    def initialize(lower_stage)
+    # Creates a database instance, using `lower_stage` as logical
+    # adapter.
+    def initialize(lower_stage = nil)
       @lower_stage = lower_stage
     end
 

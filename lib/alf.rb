@@ -28,19 +28,19 @@ require_relative 'alf/ext'
 #
 module Alf
 
-  # Creates a database instance from `args`.
+  # Connects to a database instance from `args`.
   #
-  # Alf::Database's autodetection system is used here to choose which database handler to
-  # use.
+  # Alf::Database's autodetection system is used here to choose which database
+  # handler to use.
   #
   # @param [Array] args arguments for the Database constructor
   # @return [Database] a database instance
   # @raise [ArgumentError] when no registered class recognizes the arguments
   #
-  # @see Database.autodetect for more about recognized formats.
+  # @see Database.connect for more about recognized formats.
   #
   def self.database(*args)
-    Database.autodetect(*args)
+    Database.connect(*args)
   end
 
   # Returns a Reader on `source` denoting a physical representation of a relation.
