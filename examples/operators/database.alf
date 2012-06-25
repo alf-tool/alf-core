@@ -1,5 +1,0 @@
-Relation({
-  :suppliers => (Relation :suppliers),
-  :parts     => (Relation :parts),
-  :supplies  => (Relation :supplies),
-})

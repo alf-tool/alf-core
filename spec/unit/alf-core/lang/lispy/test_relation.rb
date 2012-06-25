@@ -17,13 +17,6 @@ module Alf
         it{ should eq(Relation[*args]) }
       end
 
-      describe 'on a Symbol' do
-        let(:args){ [:suppliers] }
-        specify{
-          subject.should eq(lispy.database.dataset(:suppliers).to_rel)
-        }
-      end
-
     end
   end
 end

@@ -61,6 +61,8 @@
 
 * Kernel's functions are no longer accessible in tuple expressions that are executed within a BasicObject's scope.
 
+* The syntax (Relation :relvar_name) is no longer supported as it does not denote a relation literal at all.
+
 ## Bug fixes
 
 * The backports gem is no longer required on ruby =1.9

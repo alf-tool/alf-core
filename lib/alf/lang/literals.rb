@@ -15,9 +15,10 @@ module Alf
       # Coerces `args` to a valid relation.
       def Relation(first, *args)
         if args.empty?
-          first.is_a?(::Symbol) ? _database.dataset(first).to_rel : Alf::Relation(first)
+          ::Kernel.raise "(Relation :relvar_name) is no longer supported." if first.is_a?(::Symbol)
+          Alf::Relation(first)
         else
-          ::Alf::Relation[*args.unshift(first)]
+          Alf::Relation[*args.unshift(first)]
         end
       end
 
