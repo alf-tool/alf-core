@@ -19,7 +19,7 @@ module Alf
 
     # Create an operator instance
     def initialize(db, *args)
-      raise ArgumentError, "Database expected, got `#{db}`" unless db.nil? or db.is_a?(Database)
+      raise ArgumentError, "Database expected, got `#{db}`" unless db.nil? or db.is_a?(Connection)
       @database = db
       signature.parse_args(args, self)
     end

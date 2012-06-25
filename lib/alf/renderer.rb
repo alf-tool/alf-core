@@ -84,7 +84,7 @@ module Alf
     # Renderer input (typically an Iterator)
     attr_accessor :input
 
-    # @return [Database] Optional wired database
+    # @return [Connection] Optional wired database
     attr_accessor :database
 
     # @return [Hash] Renderer's options
@@ -93,14 +93,14 @@ module Alf
     # Creates a reader instance.
     #
     # @param [Iterator] iterator an Iterator of tuples to render
-    # @param [Database] database wired database, serving this reader
+    # @param [Connection] database wired database, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(*args)
       @input, @database, @options = case args.first
       when Array
-        Tools.varargs(args, [Array, Database, Hash])
+        Tools.varargs(args, [Array, Connection, Hash])
       else
-        Tools.varargs(args, [Iterator, Database, Hash])
+        Tools.varargs(args, [Iterator, Connection, Hash])
       end
       @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
     end

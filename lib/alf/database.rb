@@ -13,9 +13,9 @@ module Alf
       # @return [Database] an database instance
       # @raise [ArgumentError] when no registered adapter recognizes the arguments
       def connect(*args)
-        return new if args.empty?
-        return args.first if args.size==1 && args.first.is_a?(Database)
-        return new(Adapter.autodetect *args)
+        return args.first if args.size==1 && args.first.is_a?(Connection)
+        return Connection.new(nil, helpers) if args.empty?
+        return Connection.new(Adapter.autodetect(*args), helpers)
       end
 
       def folder(*args)
@@ -48,70 +48,6 @@ module Alf
     end
 
     helpers Lang::Algebra, Lang::Aggregation, Lang::Literals
-
-    # Logical adapter on lower stage
-    attr_reader :lower_stage
-
-    # Creates a database instance, using `lower_stage` as logical
-    # adapter.
-    def initialize(lower_stage = nil)
-      @lower_stage = lower_stage
-    end
-
-    # Returns a dataset whose name is provided.
-    #
-    # This method resolves named datasets to tuple enumerables by passing the request to 
-    # the lower stage. When the dataset exists, this method must return an Iterator. 
-    # Otherwise, it throws a NoSuchDatasetError.
-    #
-    # @param [Symbol] name the name of a dataset
-    # @return [Iterator] an iterator
-    # @raise [NoSuchDatasetError] when the dataset does not exists
-    def dataset(name)
-      @lower_stage.dataset(name)
-    end
-
-    # Compiles a query expression given by a String or a block and returns the result 
-    # (typically a tuple iterator)
-    #
-    # Example
-    #
-    #   # with a string
-    #   op = db.compile "(restrict :suppliers, lambda{ city == 'London' })"
-    #
-    #   # or with a block
-    #   op = db.compile {
-    #     (restrict :suppliers, lambda{ city == 'London' })
-    #   }
-    #
-    # @param [String] expr a Lispy expression to compile
-    # @return [Iterator] the iterator resulting from compilation
-    def compile(expr = nil, path = nil, line = nil, &block)
-      lispy.evaluate(expr, path, line, &block)
-    end
-
-    # Evaluates a query expression given by a String or a block and returns
-    # the result as an in-memory relation (Alf::Relation)
-    #
-    # Example:
-    #
-    #   # with a string
-    #   rel = evaluate "(restrict :suppliers, lambda{ city == 'London' })"
-    #
-    #   # or with a block
-    #   rel = evaluate {
-    #     (restrict :suppliers, lambda{ city == 'London' })
-    #   }
-    def evaluate(expr = nil, path = nil, line = nil, &block)
-      c = compile(expr, path, line, &block)
-      c.respond_to?(:to_relation) ? c.to_relation : c
-    end
-    alias :query :evaluate
-
-    def lispy
-      Lang::Lispy.new(self, self.class.helpers)
-    end
-    alias :scope :lispy
 
   end # module Database
 end # module Alf

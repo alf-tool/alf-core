@@ -10,7 +10,7 @@ module Alf
       ]}
       specify {
         subject.input.should eq([])
-        subject.database.should be_a(Database)
+        subject.database.should be_a(Connection)
         subject.options.should eq(:opts => true)
       }
     end
