@@ -18,10 +18,6 @@ class Database < Alf::Database
       )
     end
 
-    def eval(fn, scope)
-      Alf::Types::TupleExpression.coerce(fn).evaluate(scope)
-    end
-
   end
 
 end
@@ -34,7 +30,7 @@ rel = connection.query do
   allbut(
     extend( 
       join(orders, discount_rules), 
-      discount: ->{ eval(rule, self) } ),
+      discount: ->{ instance_exec(&rule) } ),
     [:rule]
   )
 end
