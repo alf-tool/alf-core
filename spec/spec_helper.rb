@@ -28,7 +28,7 @@ module Helpers
 
   def examples_database(&bl)
     if bl
-      Class.new(Alf::Database, &bl).new(examples_path)
+      Class.new(Alf::Database, &bl).connect(examples_path)
     else
       Alf::Database.examples
     end

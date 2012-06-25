@@ -2,6 +2,8 @@ module Alf
   class Database
 
     class << self
+      private :new
+
       # Connects to a database, auto-detecting the adapter to use.
       #
       # This method returns a database instance bound to an autodetected Adapter. It
@@ -11,27 +13,27 @@ module Alf
       # @return [Database] an database instance
       # @raise [ArgumentError] when no registered adapter recognizes the arguments
       def connect(*args)
-        return self.new   if args.empty?
+        return new if args.empty?
         return args.first if args.size==1 && args.first.is_a?(Database)
-        return self.new(Adapter.autodetect *args)
+        return new(Adapter.autodetect *args)
       end
 
       def folder(*args)
-        Database.new(Adapter.folder *args)
+        connect(Adapter.folder *args)
       end
 
       # Returns Alf's default database
       #
       # @return [Database] the default database instance.
       def default
-        Database.new(Adapter.folder '.')
+        connect(Adapter.folder '.')
       end
 
       # Returns a database instance on Alf's examples
       #
       # @return [Database] a database instance on Alf's examples.
       def examples
-        Database.new(Adapter.folder Path.backfind('examples/operators'))
+        connect(Adapter.folder Path.backfind('examples/operators'))
       end
 
       # Returns the array of helper modules to use for defining the evaluation
