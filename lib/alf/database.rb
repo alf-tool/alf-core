@@ -104,6 +104,7 @@ module Alf
       c = compile(expr, path, line, &block)
       c.respond_to?(:to_relation) ? c.to_relation : c
     end
+    alias :query :evaluate
 
     def lispy
       Lang::Lispy.new(self, self.class.helpers)
