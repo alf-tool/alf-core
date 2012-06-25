@@ -46,11 +46,6 @@ module Alf
         Tools.to_ruby_literal(v.renaming)
       end
 
-      # Iterator::Proxy -> :suppliers
-      r.upon(lambda{|v,rd| Iterator::Proxy === v}) do |v, rd|
-        Tools.to_ruby_literal(v.name)
-      end
-
       # TupleExpression -> ->{ ... }
       r.upon(Types::TupleExpression) do |v, rd|
         "->{ #{v.has_source_code!} }"
@@ -63,16 +58,26 @@ module Alf
         }.join(', ') + "}"
       end
 
-      # Aggregator -> agg.source
-      r.upon(lambda{|v,_| Aggregator === v}) do |v, rd|
-        v.has_source_code!
-      end
-
       # Summarization -> { :total => ->{ ... } }
       r.upon(Types::Summarization) do |v, rd|
         "{" + v.aggregations.map{|name,compu|
           [name.inspect, r.coerce(compu)].join(" => ")
         }.join(', ') + "}"
+      end
+
+      # Relvar::Base -> its name
+      r.upon(lambda{|v,rd| Relvar::Base === v}) do |v, rd|
+        Tools.to_ruby_literal(v.name)
+      end
+
+      # Relvar::Virtual -> its expression
+      r.upon(lambda{|v,rd| Relvar::Virtual === v}) do |v, rd|
+        Tools.to_lispy(v.expression)
+      end
+
+      # Aggregator -> agg.source
+      r.upon(lambda{|v,_| Aggregator === v}) do |v, rd|
+        v.has_source_code!
       end
 
       # Command and Operator -> (operator operands, args, options)

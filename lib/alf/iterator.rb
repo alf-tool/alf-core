@@ -18,7 +18,7 @@ module Alf
       when Iterator, Array
         arg
       when String, Symbol
-        Proxy.new(database, arg.to_sym)
+        Relvar::Base.new(database, arg.to_sym)
       else
         Reader.coerce(arg, database)
       end
@@ -35,4 +35,3 @@ module Alf
 
   end # module Iterator
 end # module Alf
-require_relative 'iterator/proxy'

@@ -11,9 +11,16 @@ module Alf
 
     subject{ Tools.to_lispy(value) } 
 
-    describe "on a Proxy" do
-      let(:value){ Iterator::Proxy.new(Database.examples, :suppliers) }
+    describe "on a Relvar::Base" do
+      let(:value){ Relvar::Base.new(examples_database, :suppliers) }
       it { should eq(":suppliers") }
+    end
+
+    describe "on a Relvar::Virtual" do
+      let(:value){ Relvar::Virtual.new(examples_database){
+        (project :suppliers, [:name])
+      }}
+      it { should eq("(project :suppliers, [:name])") }
     end
 
     describe "on an AttrName" do
