@@ -28,11 +28,6 @@ module Alf
         ancestors.include?(NonRelational)
       end
 
-      # @returns [Integer] operator arity, i.e. the number of relation operands
-      def arity
-      end
-      undef :arity
-
       # @return true if this operator is a zero-ary operator, false otherwise
       def nullary?
         arity == 0
@@ -61,17 +56,5 @@ module Alf
       end
 
     end # module ClassMethods
-
-    # Let submodules and classes have required methods
-    module Installer
-
-      # Ensures that the Introspection module is set on real operators
-      def included(mod)
-        mod.extend(mod.is_a?(Class) ? ClassMethods : Installer)
-      end
-
-    end # module Installer
-    extend(Installer)
-
   end # module Operator
 end # module Alf

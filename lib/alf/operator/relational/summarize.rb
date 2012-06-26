@@ -2,7 +2,7 @@ module Alf
   module Operator
     module Relational
       class Summarize
-        include Relational, Unary
+        include Operator, Relational, Unary
 
         signature do |s|
           s.argument :by,            AttrList, []
@@ -20,7 +20,7 @@ module Alf
             op
           end
         end
-  
+
       end # class Summarize
     end # module Relational
   end # module Operator

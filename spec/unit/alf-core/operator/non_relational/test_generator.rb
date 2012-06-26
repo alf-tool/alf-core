@@ -4,6 +4,7 @@ module Alf
     describe Generator do
 
       let(:operator_class){ Generator }
+
       it_should_behave_like("An operator class")
 
       subject{ operator.to_relation }

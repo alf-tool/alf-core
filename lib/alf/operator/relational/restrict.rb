@@ -2,7 +2,7 @@ module Alf
   module Operator
     module Relational
       class Restrict
-        include Relational, Unary
+        include Operator, Relational, Unary
 
         signature do |s|
           s.argument :predicate, TuplePredicate, "true"

@@ -2,7 +2,7 @@ module Alf
   module Operator
     module Relational
       class Group
-        include Relational, Unary
+        include Operator, Relational, Unary
 
         signature do |s|
           s.argument :attributes, AttrList, []
@@ -14,7 +14,7 @@ module Alf
         def compile(context)
           Engine::Group::Hash.new(operand, attributes, as, allbut, context)
         end
-  
+
       end # class Group
     end # module Relational
   end # module Operator

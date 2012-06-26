@@ -5,11 +5,19 @@ module Alf
   module Operator
     include Iterator, Tools
 
-    # Yields non-relational then relational operators, in turn.
-    def self.each
-      Operator::NonRelational.each{|x| yield(x)}
-      Operator::Relational.each{|x| yield(x)}
-    end
+    class << self
+      # Installs the class methods needed on all operators
+      def included(mod)
+        super
+        mod.extend(ClassMethods)
+      end
+
+      # Yields non-relational then relational operators, in turn.
+      def each
+        Operator::NonRelational.each{|x| yield(x)}
+        Operator::Relational.each{|x| yield(x)}
+      end
+    end # class << self
 
     # The context in which this operator has been constructed
     attr_accessor :context

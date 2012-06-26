@@ -2,7 +2,7 @@ module Alf
   module Operator
     module NonRelational
       class Sort
-        include NonRelational, Unary
+        include Operator, NonRelational, Unary
 
         signature do |s|
           s.argument :ordering, Ordering, []

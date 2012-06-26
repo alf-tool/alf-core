@@ -4,7 +4,6 @@ module Alf
     # Specialization of Operator for operators without operands
     #
     module Nullary
-      include Operator
 
       # Class-level methods
       module ClassMethods

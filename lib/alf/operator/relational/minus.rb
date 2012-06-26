@@ -2,7 +2,7 @@ module Alf
   module Operator
     module Relational
       class Minus
-        include Relational, Binary
+        include Operator, Relational, Binary
 
         signature do |s|
         end

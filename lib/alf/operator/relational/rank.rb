@@ -2,7 +2,7 @@ module Alf
   module Operator
     module Relational
       class Rank
-        include Relational, Unary
+        include Operator, Relational, Unary
 
         signature do |s|
           s.argument :order, Ordering, []
@@ -14,7 +14,7 @@ module Alf
           op = Engine::Sort.new(operand, order, context)
           op = Engine::Rank::Cesure.new(op, order, as, context)
           op
-        end 
+        end
 
       end # class Rank
     end # module Relational

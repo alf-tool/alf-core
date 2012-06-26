@@ -4,7 +4,6 @@ module Alf
     # Specialization of Operator for operators that work on a binary input
     #
     module Binary
-      include Operator
 
       # Class-level methods
       module ClassMethods

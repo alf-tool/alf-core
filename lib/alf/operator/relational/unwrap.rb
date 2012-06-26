@@ -2,7 +2,7 @@ module Alf
   module Operator
     module Relational
       class Unwrap
-        include Relational, Unary
+        include Operator, Relational, Unary
 
         signature do |s|
           s.argument :attribute, AttrName, :wrapped

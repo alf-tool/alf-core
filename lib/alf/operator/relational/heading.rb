@@ -2,11 +2,11 @@ module Alf
   module Operator
     module Relational
       class Heading
-        include Relational, Unary, Experimental
+        include Operator, Relational, Unary, Experimental
 
         signature do |s|
         end
-      
+
         # (see Operator#each)
         def each
           yield(operand.inject(Alf::Heading::EMPTY){|h,t|
