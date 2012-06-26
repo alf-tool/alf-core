@@ -26,7 +26,7 @@ module Alf
       end # OwnMethods
 
       # Creates a language instance
-      def initialize(context = nil, helpers = [ Lang ])
+      def initialize(context = nil, helpers = [ Lang::Functional ])
         super [ OwnMethods ] + helpers
         @context = context
       end

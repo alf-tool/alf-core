@@ -47,7 +47,7 @@ module Alf
       end
     end
 
-    helpers Lang
+    helpers Lang::Functional
 
   end # module Database
 end # module Alf

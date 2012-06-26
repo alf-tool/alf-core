@@ -1,8 +1,8 @@
 require 'spec_helper'
 module Alf
   module Lang
-    describe Literals, "Tuple(...)" do
-      include Literals
+    describe "Tuple(...) literal" do
+      include Functional
 
       subject{ Tuple(h) }
 

@@ -17,6 +17,7 @@ module Alf
   #
   class Relation
     include Iterator
+    include Lang::ObjectOriented
 
     class << self
 
@@ -75,47 +76,6 @@ module Alf
       cardinality == 0
     end
 
-    Operator.listen do |op_name, op_class|
-      define_method(op_name) do |*args|
-        args.unshift(self)
-        operands  = args[0...op_class.arity].map{|x| Iterator.coerce(x) }
-        arguments = args[op_class.arity..-1]
-        op_class.new(nil, operands, *arguments).to_relation
-      end
-    end
-
-    def allbut(attributes)
-      project(attributes, :allbut => true)
-    end
-
-    def +(other)
-      union(other)
-    end
-    alias :| :+
-
-    def -(other)
-      minus(other)
-    end
-
-    def *(other)
-      join(other)
-    end
-
-    def &(other)
-      intersect(other)
-    end
-
-    def =~(other)
-      matching(other)
-    end
-
-    # Install the DSL through iteration over defined aggregators
-    Aggregator.listen do |agg_name, agg_class|
-      define_method(agg_name) do |*args, &block|
-        agg_class.new(*args, &block).aggregate(self)
-      end
-    end
-
     # (see Object#hash)
     def hash
       @tuples.hash
@@ -164,5 +124,12 @@ module Alf
 
     DEE = Relation.coerce([{}])
     DUM = Relation.coerce([])
+
+  private
+
+    def _operator_output(op)
+      op.to_relation
+    end
+
   end # class Relation
 end # module Alf

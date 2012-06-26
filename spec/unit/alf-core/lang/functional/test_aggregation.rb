@@ -1,8 +1,8 @@
 require 'spec_helper'
 module Alf
   module Lang
-    describe Aggregation do
-      include Aggregation
+    describe "Aggregation methods" do
+      include Functional
 
       let(:input){[
         {:tested => 1,  :other => "b"},

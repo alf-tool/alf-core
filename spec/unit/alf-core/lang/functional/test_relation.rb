@@ -1,8 +1,8 @@
 require 'spec_helper'
 module Alf
   module Lang
-    describe Literals, "Relation(...)" do
-      include Literals
+    describe "Relation(...) literal" do
+      include Functional
 
       subject{ Relation(*args) }
 
