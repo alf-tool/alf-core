@@ -65,6 +65,8 @@
 
 * `Iterator#to_rel` has been removed. Use `Iterator#to_relation` instead.
 
+* Renderers are no longer able to coerce their input from a Symbol.
+
 ## Bug fixes
 
 * The backports gem is no longer required on ruby =1.9

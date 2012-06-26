@@ -62,8 +62,8 @@ module Alf
       #         provided
       #
       def renderer(name, *args)
-        if r = renderers.find{|triple| triple[0] == name}
-          r[2].new(*args)
+        if r = renderers.find{|triple| triple.first == name}
+          r.last.new(*args)
         else
           raise "No renderer registered for #{name}"
         end
@@ -84,25 +84,16 @@ module Alf
     # Renderer input (typically an Iterator)
     attr_accessor :input
 
-    # @return [Connection] Optional wired database
-    attr_accessor :database
-
     # @return [Hash] Renderer's options
     attr_accessor :options
 
     # Creates a reader instance.
     #
     # @param [Iterator] iterator an Iterator of tuples to render
-    # @param [Connection] database wired database, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
-    def initialize(*args)
-      @input, @database, @options = case args.first
-      when Array
-        Tools.varargs(args, [Array, Connection, Hash])
-      else
-        Tools.varargs(args, [Iterator, Connection, Hash])
-      end
-      @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
+    def initialize(input, options = {})
+      @input   = input
+      @options = self.class.const_get(:DEFAULT_OPTIONS).merge(options || {})
     end
 
     # Executes the rendering, outputting the resulting tuples on the provided
@@ -111,7 +102,7 @@ module Alf
     # The default implementation simply coerces the input as an Iterator and
     # delegates the call to {#render}.
     def execute(output = $stdout)
-      render(Iterator.coerce(input, database), output)
+      render(Iterator.coerce(input), output)
     end
 
     protected

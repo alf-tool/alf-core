@@ -1,27 +1,13 @@
 require 'spec_helper'
 module Alf
   describe "Renderer#initialize" do
-    
+
     subject{ Renderer.new(*args) }
-    
+
     describe "with full args" do
-      let(:args){[
-        [], Database.examples, {:opts => true}
-      ]}
+      let(:args){[ [], {:opts => true} ]}
       specify {
         subject.input.should eq([])
-        subject.database.should be_a(Connection)
-        subject.options.should eq(:opts => true)
-      }
-    end
-    
-    describe "with only options" do
-      let(:args){[
-        {:opts => true}
-      ]}
-      specify {
-        subject.input.should be_nil
-        subject.database.should be_nil
         subject.options.should eq(:opts => true)
       }
     end
@@ -31,30 +17,24 @@ module Alf
         DEFAULT_OPTIONS = {:from => :subclass}
       end
       subject{ FooRenderer.new(*args) }
-        
+
       describe "without option overriding" do
-        let(:args){[
-          {:opts => true}
-        ]}
+        let(:args){[ [], {:opts => true} ]}
         specify {
-          subject.input.should be_nil
-          subject.database.should be_nil
+          subject.input.should eq([])
           subject.options.should eq(:opts => true, :from => :subclass)
         }
       end
-      
+
       describe "with option overriding" do
-        let(:args){[
-          {:opts => true, :from => :overrided}
-        ]}
+        let(:args){[ [], {:opts => true, :from => :overrided} ]}
         specify {
-          subject.input.should be_nil
-          subject.database.should be_nil
+          subject.input.should eq([])
           subject.options.should eq(:opts => true, :from => :overrided)
         }
       end
-      
+
     end
-    
+
   end
 end
