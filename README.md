@@ -61,13 +61,13 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
     db  = Alf::Database.examples
 
     # Group suppliers by city
-    grouped = db.evaluate{
+    grouped = db.query{
       group(:suppliers, [:sid, :name, :status], :in_that_city)
     }
     # => same result as in shell
 
     # Let make some computations on the sub-relations
-    db.evaluate{
+    db.query{
       extend(grouped, how_many:   ->{ in_that_city.count },
                       avg_status: ->{ in_that_city.avg{ status } })
     }
@@ -95,7 +95,7 @@ like arrays, hashes, sets, trees and graphs but not _relations_...
 
     # Now observe that the same result can also be expressed as follows (and can be
     # optimized more easily)
-    summarized = db.evaluate{
+    summarized = db.query{
       summary = summarize(:suppliers, [ :city ], how_many: count, avg_status: avg{ status })
       join(grouped, summary)
     }
