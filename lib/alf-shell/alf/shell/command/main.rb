@@ -68,7 +68,7 @@ module Alf
         end
 
         @renderer_class = nil
-        Renderer.each_renderer do |name,descr,clazz|
+        Renderer.each do |name,descr,clazz|
           opt.on("--#{name}", "Render output #{descr}"){
             @renderer_class = clazz
           }
@@ -84,7 +84,7 @@ module Alf
         end
 
         @input_reader = :rash
-        readers = Reader.readers.collect{|r| r.first}
+        readers = Reader.all.map{|r| r.first}
         opt.on('--input-reader=READER', readers,
                "Specify the kind of reader when reading on $stdin "\
                "(#{readers.join(',')})") do |value|

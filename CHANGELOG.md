@@ -67,6 +67,12 @@
 
 * Renderers are no longer able to coerce their input from a Symbol.
 
+* Renderer.renderers and Renderer.each_renderer have been removed. Use Renderer.all and Renderer.each instead, respectively.
+
+* Reader.readers has been removed. Use Reader.all or Reader.each instead.
+
+* Aggregator.aggregators has been removed. Use Aggregator.all or Aggregator.each instead.
+
 ## Bug fixes
 
 * The backports gem is no longer required on ruby =1.9

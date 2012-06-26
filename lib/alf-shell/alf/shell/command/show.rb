@@ -1,28 +1,28 @@
 module Alf
   module Shell
     class Show < Shell::Command()
-    
+
       options do |opt|
         @renderer_class = nil
-        Renderer.each_renderer do |name,descr,clazz|
-          opt.on("--#{name}", "Render output #{descr}"){ 
+        Renderer.each do |name,descr,clazz|
+          opt.on("--#{name}", "Render output #{descr}"){
             @renderer_class = clazz
           }
         end
-        
+
         @pretty = nil
-        opt.on("--[no-]pretty", 
+        opt.on("--[no-]pretty",
                "Enable/disable pretty print best effort") do |val|
           @pretty = val
         end
 
         @ff = nil
-        opt.on("--ff=FORMAT", 
+        opt.on("--ff=FORMAT",
                "Specify the floating point format") do |val|
           @ff = val
         end
       end
-        
+
       def run(argv, requester)
         # set requester and parse options
         @requester = requester
@@ -47,8 +47,8 @@ module Alf
 
         chain
       end
-    
-      private 
+
+      private
 
         def stdin_reader
           if requester && requester.respond_to?(:stdin_reader)

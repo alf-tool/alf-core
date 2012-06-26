@@ -29,11 +29,7 @@ module Alf
     include Iterator
 
     class << self
-
-      # @return [Array<Reader>] registered readers
-      def readers
-        @readers ||= []
-      end
+      include Tools::Registry
 
       # Registers a reader class associated with specific file extensions.
       #
@@ -47,11 +43,7 @@ module Alf
       #                class (should include the '.', e.g. '.foo')
       # @param [Class] class Reader subclass used to decode this kind of files
       def register(name, extensions, clazz)
-        readers << [name, extensions, clazz]
-        (class << self; self; end).
-          send(:define_method, name) do |*args|
-            clazz.new(*args)
-          end
+        super([name, extensions, clazz], Reader)
       end
 
       # Returns a Reader on `source` denoting a physical representation of a relation.
@@ -95,7 +87,7 @@ module Alf
       # @return [Class] the reader class to use for `ext` file extension.
       # @raise [ArgumentError] if no such reader class can be found
       def has_reader_for_ext!(ext)
-        entry = readers.find{|r| r[1].include?(ext)}
+        entry = registered.find{|r| r[1].include?(ext)}
         return entry[2] if entry
         raise ArgumentError, "No registered reader for `#{ext}`"
       end

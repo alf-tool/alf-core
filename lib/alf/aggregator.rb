@@ -55,30 +55,13 @@ module Alf
     #   end
     #
     class << self
-
-      # Returns registered aggregators as an Array of classes
-      #
-      # @return [Array<Class>] The list of registered aggregator classes
-      def aggregators
-        @aggregators ||= []
-      end
-
-      # Yields each aggregator class in turn
-      def each
-        aggregators.each(&Proc.new)
-      end
+      include Tools::Registry
 
       # Automatically installs factory methods for inherited classes.
       #
       # @param [Class] clazz a class that extends Aggregator
       def inherited(clazz)
-        basename = Tools.ruby_case(Tools.class_name(clazz))
-        Aggregator.module_eval{ aggregators << clazz }
-        Aggregator.module_eval <<-EOF
-          def self.#{basename}(*args, &block)
-            #{clazz}.new(*args, &block)
-          end
-        EOF
+        register(clazz, Aggregator)
       end
 
       # Coerces `arg` to an Aggregator

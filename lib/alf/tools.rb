@@ -7,6 +7,7 @@ module Alf
     extend Tools
   end # module Tools
 end # module Alf
+require_relative 'tools/registry'
 require_relative 'tools/coerce'
 require_relative 'tools/to_ruby_literal'
 require_relative 'tools/to_lispy'

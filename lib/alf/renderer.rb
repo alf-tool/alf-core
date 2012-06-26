@@ -25,13 +25,7 @@ module Alf
   class Renderer
 
     class << self
-
-      #
-      # Returns registered renderers
-      #
-      def renderers
-        @renderers ||= []
-      end
+      include Tools::Registry
 
       #
       # Register a renderering class with a given name and description.
@@ -46,11 +40,7 @@ module Alf
       # @param [Class] clazz Renderer subclass used to render in this format
       #
       def register(name, description, clazz)
-        renderers << [name, description, clazz]
-        (class << self; self; end).
-          send(:define_method, name) do |*args|
-            clazz.new(*args)
-          end
+        super([name, description, clazz], Renderer)
       end
 
       #
@@ -62,18 +52,11 @@ module Alf
       #         provided
       #
       def renderer(name, *args)
-        if r = renderers.find{|triple| triple.first == name}
+        if r = registered.find{|triple| triple.first == name}
           r.last.new(*args)
         else
           raise "No renderer registered for #{name}"
         end
-      end
-
-      #
-      # Yields each (name,description,clazz) previously registered in turn
-      #
-      def each_renderer
-        renderers.each(&Proc.new)
       end
 
     end # class << self
