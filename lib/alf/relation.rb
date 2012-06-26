@@ -91,8 +91,7 @@ module Alf
     alias :'!~' :not_matching
 
     # Install the DSL through iteration over defined aggregators
-    Aggregator.each do |agg_class|
-      agg_name = Tools.ruby_case(Tools.class_name(agg_class)).to_sym
+    Aggregator.listen do |agg_name, agg_class|
       define_method(agg_name) do |*args, &block|
         agg_class.new(*args, &block).aggregate(self)
       end
