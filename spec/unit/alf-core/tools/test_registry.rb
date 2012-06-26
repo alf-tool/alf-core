@@ -4,6 +4,11 @@ module Alf
     describe Registry do
 
       let(:clazz){ Class.new.extend(Registry) }
+      let(:seen) { [] }
+
+      before do
+        clazz.listen{|n,c| seen << [n,c] }
+      end
 
       describe 'when used with classes' do
         before do
@@ -18,6 +23,10 @@ module Alf
           clazz.registered.should eq([Integer])
           clazz.all.should eq([Integer])
         end
+
+        it 'calls the listeners' do
+          seen.should eq([[:integer, Integer]])
+        end
       end
 
       describe 'when used with an array and arguments' do
@@ -31,6 +40,10 @@ module Alf
 
         it 'maintain the registered elements' do
           clazz.registered.should eq([[:hello, Integer]])
+        end
+
+        it 'calls the listeners' do
+          seen.should eq([[:hello, Integer]])
         end
       end
 
