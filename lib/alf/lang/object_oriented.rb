@@ -57,6 +57,16 @@ module Alf
         Tools.to_relation(self)
       end
 
+      def to_array(options = {})
+        _with_ordering(options) do |o|
+          Alf::Engine::ToArray.new(self, o).to_a
+        end
+      end
+
+      def to_a(options = nil)
+        options.nil? ? super() : to_array(options)
+      end
+
     end # module ObjectOriented
   end # module Lang
 end # module Alf

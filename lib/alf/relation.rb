@@ -93,18 +93,6 @@ module Alf
       Alf::Renderer.text(self).execute("")
     end
 
-    # Returns an array with all tuples in this relation.
-    #
-    # @param [Tools::Ordering] an optional ordering key (any argument
-    #        recognized by Ordering.coerce is supported here).
-    # @return [Array] an array of hashes, in requested order (if specified)
-    def to_a(okey = nil)
-      okey = Tools.coerce(okey, Ordering) if okey
-      ary = tuples.to_a
-      ary.sort!(&okey.sorter) if okey
-      ary
-    end
-
     # Returns a json representation of this Relation.
     def to_json(*args)
       to_a.to_json(*args)
