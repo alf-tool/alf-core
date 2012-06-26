@@ -72,14 +72,5 @@ module Alf
       (rel1 =~ rel2).should == Alf::Relation[ {:sid => 'S2'} ]
     end # intersect
 
-    specify "not matching", :ruby19 => true do
-      l = lambda{ (rel1 !~ rel2).should == Alf::Relation[ {:sid => 'S1'}, {:sid => 'S3'} ] }
-      if defined?(JRUBY_VERSION) and JRUBY_VERSION < "1.7"
-        pending("jruby does not implement !~ overloading properly"){ l.call }
-      else
-        l.call
-      end
-    end # intersect
-
   end
 end

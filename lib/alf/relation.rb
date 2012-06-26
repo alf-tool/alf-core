@@ -109,10 +109,6 @@ module Alf
       matching(other)
     end
 
-    def !~(other)
-      not_matching(other)
-    end
-
     # Install the DSL through iteration over defined aggregators
     Aggregator.listen do |agg_name, agg_class|
       define_method(agg_name) do |*args, &block|
