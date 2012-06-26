@@ -1,11 +1,11 @@
 module Alf
-  module YAML
+  class Renderer
     #
     # Implements Alf::Renderer contract for outputing YAML files.
     #
-    class Renderer < ::Alf::Renderer
+    class YAML < ::Alf::Renderer
 
-      protected 
+    protected
 
       # (see Alf::Renderer#render)
       def render(input, output)
@@ -17,6 +17,6 @@ module Alf
       end
 
       Alf::Renderer.register(:yaml, "as a yaml output",  self)
-    end # class Renderer
-  end # module YAML
+    end # class YAML
+  end # class Renderer
 end # module Alf
