@@ -1,10 +1,10 @@
 require 'spec_helper'
-describe Alf::Database, "evaluate" do
+describe Alf::Connection, "evaluate" do
 
-  let(:db){ examples_database }
+  let(:conn){ examples_database }
 
   it 'should recognize Relation literals' do
-    db.evaluate {
+    conn.evaluate {
       Relation(
         Tuple(:pid => 'P1', :name => 'Nut',   :color => 'red',   :heavy => true ),
         Tuple(:pid => 'P2', :name => 'Bolt',  :color => 'green', :heavy => false),
@@ -14,22 +14,22 @@ describe Alf::Database, "evaluate" do
   end
 
   it "recognizes Tuple literals" do
-    db.evaluate{
+    conn.evaluate{
       Tuple(:pid => 'P1', :name => 'Nut', :color => 'red', :heavy => true)
     }.should eq(:pid => 'P1', :name => 'Nut', :color => 'red', :heavy => true)
   end
 
   it 'recognize aggregators' do
-    db.evaluate{
+    conn.evaluate{
       sum{ qty }
     }.should be_a(Alf::Aggregator)
   end
 
   it 'resolves DUM and DEE constants' do
-    db.evaluate{ DUM }.should be_a(Alf::Relation)
-    db.evaluate{ DEE }.should be_a(Alf::Relation)
-    db.evaluate('DUM').should be_a(Alf::Relation)
-    db.evaluate('DEE').should be_a(Alf::Relation)
+    conn.evaluate{ DUM }.should be_a(Alf::Relation)
+    conn.evaluate{ DEE }.should be_a(Alf::Relation)
+    conn.evaluate('DUM').should be_a(Alf::Relation)
+    conn.evaluate('DEE').should be_a(Alf::Relation)
   end
 
 end

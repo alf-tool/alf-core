@@ -7,10 +7,10 @@ module Alf
 
       # Creates a relvar instance.
       #
-      # @param [Database] database the database to which this relvar belongs.
+      # @param [Object] context the context that served this relvar.
       # @param [Symbol] name name of the relation variable.
-      def initialize(database, name)
-        super(database, name)
+      def initialize(context, name)
+        super(context, name)
       end
 
     protected

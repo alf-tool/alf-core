@@ -10,11 +10,11 @@ module Alf
 
       # Creates a relvar instance.
       #
-      # @param [Database] database the database to which this relvar belongs.
+      # @param [Object] context the context that served this relvar.
       # @param [Symbol] name name of the relation variable.
-      def initialize(database, name = nil, expression=nil, &defn)
-        super(database, name)
-        @expression = expression || database.compile(&defn)
+      def initialize(context, name = nil, expression=nil, &defn)
+        super(context, name)
+        @expression = expression || context.compile(&defn)
       end
 
     protected

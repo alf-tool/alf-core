@@ -5,31 +5,31 @@ module Alf
   class Relvar
     include Iterator
 
-  	# The database that served this relvar.
-  	attr_reader :database
+    # The context under which this relvar was served.
+    attr_reader :context
 
-  	# Name of the relvar
-  	attr_reader :name
+    # Name of the relvar
+    attr_reader :name
 
-  	# Creates a relvar instance.
-  	#
-  	# @param [Database] database the database to which this relvar belongs.
+    # Creates a relvar instance.
+    #
+    # @param [Object] context the context that served this relvar.
     # @param [Symbol] name the relvar name inside the database.
-  	def initialize(database, name)
-  		@database = database
+    def initialize(context, name)
+      @context = context
       @name = name
-  	end
+    end
 
-    # Delegates to the dataset served by the database.
+    # Delegates to the context.
     def each(&bl)
-      compile(database).each(&bl)
+      compile(context).each(&bl)
     end
 
     # Returns the relation value that this variable currently holds.
     #
     # @return [Relation] a relation value. 
     def value
-      Tools.to_relation compile(database)
+      Tools.to_relation compile(context)
     end
 
     # Affects the current value of this relation variable.

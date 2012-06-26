@@ -1,11 +1,11 @@
 require 'spec_helper'
 module Alf
-  describe Database, 'query' do
+  describe Connection, 'query' do
 
-    let(:db){ examples_database }
+    let(:conn){ examples_database }
 
     it 'returns a Relation' do
-      db.query{
+      conn.query{
         project(:suppliers, [:sid])
       }.should be_a(Relation)
     end
