@@ -31,6 +31,16 @@ module Alf
         @context = context
       end
 
+      # Resolve DUM and DEE in ruby 1.9.2 context
+      def self.const_missing(name)
+        case name.to_s
+        when 'DEE' then ::Alf::Relation::DEE
+        when 'DUM' then ::Alf::Relation::DUM
+        else
+          super
+        end
+      end
+
     end # class Lispy
   end # module Lang
 end # module Alf
