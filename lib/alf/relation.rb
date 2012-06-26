@@ -113,14 +113,9 @@ module Alf
     # Returns a  literal representation of this relation
     def to_ruby_literal
       "Alf::Relation[" +
-        tuples.collect{|t| Tools.to_ruby_literal(t)}.join(', ') + "]"
+        tuples.map{|t| Tools.to_ruby_literal(t)}.join(', ') + "]"
     end
     alias :inspect :to_ruby_literal
-
-    # Returns self
-    def to_relation
-      self
-    end
 
     DEE = Relation.coerce([{}])
     DUM = Relation.coerce([])

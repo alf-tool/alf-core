@@ -18,9 +18,6 @@ module Alf
         end
       end
 
-      # Coerces `h` to a valid tuple.
-      #
-      # @param [Hash] h, a hash mapping symbols to values
       def Tuple(h)
         unless h.keys.all?{|k| k.is_a?(::Symbol) } && h.values.all?{|v| !v.nil? }
           ::Kernel.raise ArgumentError, "Invalid tuple literal #{h.inspect}"
@@ -28,7 +25,6 @@ module Alf
         h
       end
 
-      # Coerces `args` to a valid relation.
       def Relation(first, *args)
         if args.empty?
           ::Kernel.raise "(Relation :relvar_name) is no longer supported." if first.is_a?(::Symbol)
@@ -46,9 +42,12 @@ module Alf
         def_operator_method(name, clazz)
       end
 
-      # (see #project)
-      def allbut(child, attributes)
-        project(child, attributes, :allbut => true)
+      def allbut(operand, attributes)
+        project(operand, attributes, :allbut => true)
+      end
+
+      def to_relation(operand)
+        Tools.to_relation(operand)
       end
 
     private

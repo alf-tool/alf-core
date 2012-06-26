@@ -27,7 +27,6 @@ module Alf
         def_operator_method(name, clazz)
       end
 
-      # (see #project)
       def allbut(attributes)
         project(attributes, :allbut => true)
       end
@@ -51,6 +50,10 @@ module Alf
 
       def =~(other)
         matching(other)
+      end
+
+      def to_relation
+        Tools.to_relation(self)
       end
 
     private
