@@ -47,7 +47,7 @@ module Alf
       end
     end
 
-    helpers Lang::Algebra, Lang::Aggregation, Lang::Literals
+    helpers Lang
 
   end # module Database
 end # module Alf
