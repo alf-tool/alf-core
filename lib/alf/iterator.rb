@@ -31,7 +31,6 @@ module Alf
     def to_relation
       Relation::new(self.to_set)
     end
-    alias :to_rel :to_relation
 
   end # module Iterator
 end # module Alf

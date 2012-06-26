@@ -6,7 +6,7 @@ module Alf
       let(:operator_class){ Generator }
       it_should_behave_like("An operator class")
 
-      subject{ operator.to_rel }
+      subject{ operator.to_relation }
 
       context "empty args" do
         let(:expected){Relation[
@@ -22,7 +22,7 @@ module Alf
           {:num => 10},
         ]}
 
-        context "with Lispy" do 
+        context "with Lispy" do
           let(:operator){ a_lispy.generator() }
           it{ should == expected }
         end
@@ -35,7 +35,7 @@ module Alf
           {:num => 2},
         ]}
 
-        context "When factored with Lispy" do 
+        context "When factored with Lispy" do
           let(:operator){ a_lispy.generator(2) }
           it{ should == expected }
         end
@@ -48,13 +48,13 @@ module Alf
           {:id => 2},
         ]}
 
-        context "When factored with Lispy" do 
+        context "When factored with Lispy" do
           let(:operator){ a_lispy.generator(2, :id) }
           it{ should == expected }
         end
 
       end # size and name
 
-    end 
+    end
   end
 end

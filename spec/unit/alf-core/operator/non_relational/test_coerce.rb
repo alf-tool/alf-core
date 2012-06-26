@@ -10,7 +10,7 @@ module Alf
         {:a => "12", :b => "14.0"},
       ]}
 
-      subject{ operator.to_rel }
+      subject{ operator.to_relation }
 
       context "--no-strict" do
         let(:expected){Alf::Relation[
@@ -24,6 +24,6 @@ module Alf
 
       end # --no-strict
 
-    end 
+    end
   end
 end

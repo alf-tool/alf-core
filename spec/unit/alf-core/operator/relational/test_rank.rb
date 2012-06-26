@@ -15,7 +15,7 @@ module Alf
         {:pid => 'P6', :weight => 19.0}
       ]}
 
-      subject{ operator.to_rel }
+      subject{ operator.to_relation }
 
       context "with partial ordering" do
         let(:expected) {Alf::Relation[

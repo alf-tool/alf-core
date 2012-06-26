@@ -47,7 +47,7 @@
 
 ## Broken stuff
 
-* Alf.lispy has been removed from the public API. Please use a Connection instead:
+* `Alf.lispy` has been removed from the public API. Please use `connect` instead:
 
       Alf.lipsy(db_params).query{ ... } -> Alf.connect(db_params).query{ ... }
 
@@ -58,6 +58,8 @@
 * Kernel's functions are no longer accessible in tuple expressions that are executed within a BasicObject's scope.
 
 * The syntax (Relation :relvar_name) is no longer supported as it does not denote a relation literal at all.
+
+* `Iterator#to_rel` has been removed. Use `Iterator#to_relation` instead.
 
 ## Bug fixes
 

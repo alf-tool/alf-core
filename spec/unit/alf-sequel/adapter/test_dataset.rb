@@ -3,7 +3,7 @@ require 'fileutils'
 require "sequel"
 module Alf
   describe Sequel::Adapter, 'dataset' do
-    
+
     let(:rel) {Alf::Relation[
       {:sid => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
       {:sid => 'S2', :name => 'Jones', :status => 10, :city => 'Paris'},
@@ -25,7 +25,7 @@ module Alf
     end
 
     it "should be the correct relation" do
-      db.dataset(:suppliers).to_rel.should eq(rel)
+      db.dataset(:suppliers).to_relation.should eq(rel)
     end
 
   end

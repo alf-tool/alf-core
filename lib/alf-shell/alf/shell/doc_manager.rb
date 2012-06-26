@@ -7,7 +7,7 @@ module Alf
 
       #
       # Called by Quickl when it's time to generate documentation of `cmd`.
-      # 
+      #
       def call(cmd, options = {})
         if File.exists?(file = find_file(cmd))
           text = File.read(file)
@@ -18,23 +18,23 @@ module Alf
           text = text.gsub('#(signature)', '#(signature.to_' + method + ')')
 
           # Replace occurences of #{...} on single lines
-          text = text.gsub(/^([ \t]*)#\(([^\)]+)\)/){|match| 
+          text = text.gsub(/^([ \t]*)#\(([^\)]+)\)/){|match|
             spacing, invocation  = $1, $2
             res = cmd.instance_eval(invocation).to_s
             realign(res, spacing, true)
           }
 
           # Replace occurences of #{...} in other places
-          text = text.gsub(/#\(([^\)]+)\)/){|match| 
+          text = text.gsub(/#\(([^\)]+)\)/){|match|
             cmd.instance_eval($1).to_s
           }
 
           # Replace occurences of !{...} by the execution of the example
-          text = text.gsub(/^([ \t]*)!\(([^\)]+)\)/){|match| 
+          text = text.gsub(/^([ \t]*)!\(([^\)]+)\)/){|match|
             spacing, invocation  = $1, $2
             args = Quickl.parse_commandline_args(invocation)[1..-1]
             op   = run_alf_command(args)
-            res  = op.to_rel.to_s
+            res  = op.to_relation.to_s
             res  = realign(res, spacing, false)[0...-1]
             if options[:method] == :lispy
               invocation = Tools.to_lispy(op)
@@ -72,7 +72,7 @@ module Alf
           File.join("operators", "relational")
         elsif cmd.operator? && cmd.non_relational?
           File.join("operators", "non_relational")
-        else 
+        else
           raise "Unexpected command #{cmd}"
         end
         File.join(DOC_FOLDER, where, "#{cmd.command_name}.md")
