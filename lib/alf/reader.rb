@@ -191,5 +191,3 @@ module Alf
 
   end # class Reader
 end # module Alf
-require_relative 'reader/rash'
-require_relative 'reader/alf_file'

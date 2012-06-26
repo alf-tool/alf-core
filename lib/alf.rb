@@ -11,17 +11,20 @@ require 'myrrha/coerce'
 
 require_relative 'alf/types'
 require_relative 'alf/tools'
-require_relative 'alf/adapter'
 require_relative 'alf/iterator'
 require_relative 'alf/reader'
 require_relative 'alf/renderer'
 require_relative 'alf/operator'
 require_relative 'alf/aggregator'
 require_relative 'alf/lang'
+
 require_relative 'alf/relation'
 require_relative 'alf/relvar'
+
+require_relative 'alf/adapter'
 require_relative 'alf/database'
 require_relative 'alf/connection'
+
 require_relative 'alf/ext'
 
 #
