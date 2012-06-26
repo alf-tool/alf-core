@@ -6,6 +6,8 @@
 
 * When used in shell, the default rendering format is set to --text if the standard output is detected to be a tty. This saves you from having to use 'alf ... | alf show' too many times. The behavior of alf in shell, 'alf show' in particular, might be broken for you (see below). Thanks go to @eregontp for this suggestion!
 
+* Added --json output format.
+
 ## Enhancements of the ruby interface
 
 * Added Alf.connect for connecting to databases in the easiest possible way:
@@ -40,6 +42,8 @@
   * Kernel's functions are no longer accessible whithout prefixing with ::Kernel.
 
 * In sync with the previous point, Relation (the class), DUM and DEE are now defined globally (unless you define `ALF_NO_CORE_EXTENSIONS` before loading Alf). Those constants can thus be safely used in query expressions without experiencing a NameError.
+
+* Added a JSON renderer.
 
 ## Bug fixes
 

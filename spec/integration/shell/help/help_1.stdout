@@ -9,8 +9,9 @@ OPTIONS
 
     --rash                       Render output as ruby hashes
     --text                       Render output as a text table
-    --yaml                       Render output as a yaml output
-    --csv                        Render output as a csv file
+    --yaml                       Render output in YAML
+    --json                       Render output in JSON
+    --csv                        Render output in CSV
     --[no-]pretty                Enable/disable pretty print best effort
     --ff=FORMAT                  Specify the floating point format
 

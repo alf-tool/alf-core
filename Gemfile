@@ -31,4 +31,5 @@ group :extra do
   gem "highline", "~> 1.6"
   gem "sqlite3", "~> 1.3", :platforms => ['mri', 'rbx']
   gem "jdbc-sqlite3", "~> 3.7", :platforms => ['jruby']
+  gem 'json', :platforms => [:ruby_18, :jruby, :mingw_18]
 end

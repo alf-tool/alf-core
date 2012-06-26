@@ -1,22 +1,22 @@
 module Alf
   class Renderer
     #
-    # Implements Alf::Renderer contract for outputing YAML files.
+    # Implements Alf::Renderer contract for outputing JSON.
     #
-    class YAML < ::Alf::Renderer
+    class JSON < ::Alf::Renderer
 
     protected
 
       # (see Alf::Renderer#render)
       def render(input, output)
-         require "yaml"
+        require "json"
         # TODO: refactor this to avoid loading all tuples
         # in memory
-        output << input.to_a.to_yaml << "\n"
+        output << input.to_a.to_json << "\n"
         output
       end
 
-      Alf::Renderer.register(:yaml, "in YAML",  self)
-    end # class YAML
+      Alf::Renderer.register(:json, "in JSON",  self)
+    end # class JSON
   end # class Renderer
 end # module Alf

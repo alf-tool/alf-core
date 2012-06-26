@@ -8,6 +8,7 @@ GEM
     fastercsv (1.5.5)
     highline (1.6.13)
     jdbc-sqlite3 (3.7.2)
+    json (1.7.3)
     myrrha (1.2.2)
     quickl (0.4.3)
     rake (0.9.2.2)
@@ -37,6 +38,7 @@ DEPENDENCIES
   fastercsv (~> 1.5)
   highline (~> 1.6)
   jdbc-sqlite3 (~> 3.7)
+  json
   myrrha (~> 1.2.2)
   quickl (~> 0.4.3)
   rake (~> 0.9.2)

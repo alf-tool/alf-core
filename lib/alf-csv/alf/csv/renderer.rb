@@ -1,7 +1,7 @@
 module Alf
   module CSV
     #
-    # Implements Alf::Renderer contract for outputting CSV files. 
+    # Implements Alf::Renderer contract for outputting CSV files.
     #
     class Renderer < Alf::Renderer
       include CSV::Commons
@@ -13,7 +13,7 @@ module Alf
         csv = get_csv(output)
         header = nil
         input.each do |tuple|
-          unless header 
+          unless header
             header = extract_header(tuple)
             csv << header.collect{|k| k.to_s}
           end
@@ -32,7 +32,7 @@ module Alf
         header.collect{|k| tuple[k]}
       end
 
-      Alf::Renderer.register(:csv, "as a csv file", self)
+      Alf::Renderer.register(:csv, "in CSV", self)
     end # class Renderer
   end # module CSV
 end # module Alf

@@ -14,8 +14,9 @@ OPTIONS
     -e, --execute                    Execute one line of script (Lispy API)
     --rash                       Render output as ruby hashes
     --text                       Render output as a text table
-    --yaml                       Render output as a yaml output
-    --csv                        Render output as a csv file
+    --yaml                       Render output in YAML
+    --json                       Render output in JSON
+    --csv                        Render output in CSV
     --examples                   Use the example database for database
     --db=DB                      Set the database to use
     --input-reader=READER        Specify the kind of reader when reading on $stdin (rash,alf,csv,logs)
