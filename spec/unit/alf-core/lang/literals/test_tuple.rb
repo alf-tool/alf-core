@@ -1,11 +1,10 @@
 require 'spec_helper'
 module Alf
   module Lang
-    describe Lispy, "Tuple(...)" do
+    describe Literals, "Tuple(...)" do
+      include Literals
 
-      let(:lispy){ Database.examples.lispy }
-
-      subject{ lispy.Tuple(h) }
+      subject{ Tuple(h) }
 
       describe 'on an empty tuple' do
         let(:h){ {} }

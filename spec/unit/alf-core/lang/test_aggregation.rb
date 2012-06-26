@@ -1,9 +1,8 @@
 require 'spec_helper'
 module Alf
   module Lang
-    describe Lispy, "the aggregator functions" do
-
-      let(:lispy){ Database.examples.lispy }
+    describe Aggregation do
+      include Aggregation
 
       let(:input){[
         {:tested => 1,  :other => "b"},
@@ -15,11 +14,11 @@ module Alf
       ]}
 
       it "should have sum" do
-        lispy.sum{ qty }.should be_a(Aggregator::Sum)
+        sum{ qty }.should be_a(Aggregator::Sum)
       end
 
       it "should have stddev aggregator" do
-        lispy.stddev{ qty }.should be_a(Aggregator::Stddev)
+        stddev{ qty }.should be_a(Aggregator::Stddev)
       end
 
     end

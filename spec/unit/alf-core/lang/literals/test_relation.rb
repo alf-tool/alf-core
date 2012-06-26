@@ -1,11 +1,10 @@
 require 'spec_helper'
 module Alf
   module Lang
-    describe Lispy, "Relation(...)" do
+    describe Literals, "Relation(...)" do
+      include Literals
 
-      let(:lispy){ Database.examples.lispy }
-
-      subject{ lispy.Relation(*args) }
+      subject{ Relation(*args) }
 
       describe 'on a single tuple' do
         let(:args){ [{:name => "Alf"}] }

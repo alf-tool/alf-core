@@ -3,13 +3,13 @@ module Alf
   describe Tools, ".to_lispy" do
 
     it "should have a valid example" do
-      expr = examples_database.compile{ 
+      expr = examples_database.compile{
        (project :suppliers, [:name])
       }
       Tools.to_lispy(expr).should eq("(project :suppliers, [:name])")
     end
 
-    subject{ Tools.to_lispy(value) } 
+    subject{ Tools.to_lispy(value) }
 
     describe "on a Relvar::Base" do
       let(:value){ Relvar::Base.new(examples_database, :suppliers) }
@@ -128,26 +128,33 @@ module Alf
 
     end # Summarization
 
-    let(:lispy){ examples_database.lispy }
-
+    let(:conn){ examples_database }
 
     describe "on an nullary operator" do
-      let(:value){ lispy.generator(10, :id) } 
+      let(:value){
+        conn.compile{ generator(10, :id) }
+      }
       it { should eq("(generator 10, :id)") }
     end
 
     describe "on an monadic operator with an option" do
-      let(:value){ lispy.project(:suppliers, [:city], :allbut => true) } 
+      let(:value){
+        conn.compile{ project(:suppliers, [:city], :allbut => true) }
+      }
       it { should eq("(project :suppliers, [:city], {:allbut => true})") }
     end
 
     describe "on an monadic operator with default values for options" do
-      let(:value){ lispy.project(:suppliers, [:city]) } 
+      let(:value){
+        conn.compile{ project(:suppliers, [:city]) }
+      }
       it { should eq("(project :suppliers, [:city])") }
     end
 
     describe "on an dyadic operator without no args nor any option" do
-      let(:value){ lispy.join(:suppliers, :cities) } 
+      let(:value){
+        conn.compile{ join(:suppliers, :cities) }
+      }
       it { should eq("(join :suppliers, :cities)") }
     end
 

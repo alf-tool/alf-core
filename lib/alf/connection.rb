@@ -65,8 +65,8 @@ module Alf
 
     # Returns a dataset whose name is provided.
     #
-    # This method resolves named datasets to tuple enumerables by passing the request to 
-    # the lower stage. When the dataset exists, this method must return an Iterator. 
+    # This method resolves named datasets to tuple enumerables by passing the request to
+    # the lower stage. When the dataset exists, this method must return an Iterator.
     # Otherwise, it throws a NoSuchDatasetError.
     #
     # @param [Symbol] name the name of a dataset
@@ -76,7 +76,7 @@ module Alf
       @adapter.dataset(name)
     end
 
-    # Compiles a query expression given by a String or a block and returns the result 
+    # Compiles a query expression given by a String or a block and returns the result
     # (typically a tuple iterator)
     #
     # Example
@@ -92,16 +92,15 @@ module Alf
     # @param [String] expr a Lispy expression to compile
     # @return [Iterator] the iterator resulting from compilation
     def compile(expr = nil, path = nil, line = nil, &block)
-      lispy.evaluate(expr, path, line, &block)
+      scope.evaluate(expr, path, line, &block)
     end
 
     # Returns an evaluation scope.
     #
     # @return [Scope] a scope instance on the global variables of the underlying database.
-    def lispy
+    def scope
       Lang::Lispy.new(self, helpers)
     end
-    alias :scope :lispy
 
   end # class Connection
 end # module Alf
