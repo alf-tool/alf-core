@@ -1,6 +1,7 @@
 module Alf
   module Lang
     module ObjectOriented
+      include Support
 
       class << self
         def def_aggregator_method(name, clazz)
@@ -54,16 +55,6 @@ module Alf
 
       def to_relation
         Tools.to_relation(self)
-      end
-
-    private
-
-      def _context
-        respond_to?(:context) ? context : nil
-      end
-
-      def _operator_output(op)
-        op
       end
 
     end # module ObjectOriented

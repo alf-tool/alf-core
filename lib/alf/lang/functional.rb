@@ -1,6 +1,7 @@
 module Alf
   module Lang
     module Functional
+      include Support
 
       class << self
         def def_aggregator_method(name, clazz)
@@ -13,7 +14,7 @@ module Alf
           define_method(name) do |*args|
             operands  = args[0...clazz.arity].map{|x| Iterator.coerce(x, _context) }
             arguments = args[clazz.arity..-1]
-            clazz.new(_context, operands, *arguments)
+            _operator_output clazz.new(_context, operands, *arguments)
           end
         end
       end
@@ -48,12 +49,6 @@ module Alf
 
       def to_relation(operand)
         Tools.to_relation(operand)
-      end
-
-    private
-
-      def _context
-        respond_to?(:context) ? context : nil
       end
 
     end
