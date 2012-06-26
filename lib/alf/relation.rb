@@ -75,20 +75,43 @@ module Alf
       cardinality == 0
     end
 
-    # Install the algebra DSL through iteration over defined operators
-    include Lang::Algebra
-    Lang::Algebra.instance_methods.each do |meth|
-      define_method(meth) do |*args, &block|
-        Relation.coerce super(*args.unshift(self), &block)
+    Operator.listen do |op_name, op_class|
+      define_method(op_name) do |*args|
+        args.unshift(self)
+        operands  = args[0...op_class.arity].map{|x| Iterator.coerce(x) }
+        arguments = args[op_class.arity..-1]
+        op_class.new(nil, operands, *arguments).to_relation
       end
-    end # Operators::each
-    alias :+ :union
-    alias :| :union
-    alias :- :minus
-    alias :* :join
-    alias :& :intersect
-    alias :=~ :matching
-    alias :'!~' :not_matching
+    end
+
+    def allbut(attributes)
+      project(attributes, :allbut => true)
+    end
+
+    def +(other)
+      union(other)
+    end
+    alias :| :+
+
+    def -(other)
+      minus(other)
+    end
+
+    def *(other)
+      join(other)
+    end
+
+    def &(other)
+      intersect(other)
+    end
+
+    def =~(other)
+      matching(other)
+    end
+
+    def !~(other)
+      not_matching(other)
+    end
 
     # Install the DSL through iteration over defined aggregators
     Aggregator.listen do |agg_name, agg_class|

@@ -2,11 +2,12 @@ module Alf
   module Operator
     module Relational
 
-      # Yields the block with each operator module in turn
-      def self.each
-        constants.each do |c|
-          val = const_get(c)
-          yield(val) if val.ancestors.include?(Operator::Relational)
+      class << self
+        include Tools::Registry
+
+        def included(mod)
+          super
+          register(mod, Relational)
         end
       end
 

@@ -7,3 +7,6 @@ require_relative 'aggregator/variance'
 require_relative 'aggregator/stddev'
 require_relative 'aggregator/collect'
 require_relative 'aggregator/concat'
+
+require_relative 'operator/non_relational'
+require_relative 'operator/relational'

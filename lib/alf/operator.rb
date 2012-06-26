@@ -6,16 +6,13 @@ module Alf
     include Iterator, Tools
 
     class << self
+      include Tools::Registry
+
       # Installs the class methods needed on all operators
       def included(mod)
         super
         mod.extend(ClassMethods)
-      end
-
-      # Yields non-relational then relational operators, in turn.
-      def each
-        Operator::NonRelational.each{|x| yield(x)}
-        Operator::Relational.each{|x| yield(x)}
+        register(mod, Operator)
       end
     end # class << self
 
@@ -50,6 +47,3 @@ require_relative 'operator/nullary'
 require_relative 'operator/unary'
 require_relative 'operator/binary'
 require_relative 'operator/experimental'
-
-require_relative 'operator/non_relational'
-require_relative 'operator/relational'

@@ -6,10 +6,10 @@ module Alf
         attr_accessor :operator_class
 
         # Returns the ruby case name of this operator
-        def rubycase_name 
+        def rubycase_name
           Tools.ruby_case(Tools.class_name(self))
         end
-        
+
         # @return false
         def command?
           false
@@ -20,15 +20,15 @@ module Alf
           true
         end
 
-        # delegation to the class        
-        [ :signature, 
+        # delegation to the class
+        [ :signature,
           :relational?, :non_relational?, :experimental?,
           :nullary?, :unary?, :binary? ].each do |meth|
           define_method(meth) do |*args, &block|
             operator_class.send(meth, *args, &block)
           end
         end
-        
+
         # Runs the command on commandline arguments `argv`
         #
         # @param [Array] argv an array of commandline arguments, typically ARGV
@@ -40,7 +40,7 @@ module Alf
           # find standard input reader
           stdin_reader = if req && req.respond_to?(:stdin_reader)
             req.stdin_reader
-          else 
+          else
             Reader.coerce($stdin)
           end
 
@@ -49,7 +49,7 @@ module Alf
 
           # normalize operands
           operands = [ stdin_reader ] + Array(operands)
-          operands = operands.map{|op| 
+          operands = operands.map{|op|
             Iterator.coerce(op, database)
           }[(operands.size - operator_class.arity)..-1]
 
@@ -60,23 +60,19 @@ module Alf
       end # module ClassMethods
 
       # Defines a command for `clazz`
-      def self.define_operator(clazz)
+      def self.define_operator(op_name, op_class)
         superclass = Shell::Operator() do |b|
           b.callback do |cmd|
-            cmd.operator_class = clazz
+            cmd.operator_class = op_class
           end
         end
-        Operator.const_set(Tools.class_name(clazz), Class.new(superclass)) 
+        Operator.const_set(Tools.class_name(op_class), Class.new(superclass))
       end
-    
-      Alf::Operator::Relational.each do |op_class|
-        define_operator(op_class)
+
+      Alf::Operator.listen do |op_name, op_class|
+        define_operator(op_name, op_class)
       end
-    
-      Alf::Operator::NonRelational.each do |op_class|
-        define_operator(op_class)
-      end
-    
+
     end
   end
 end

@@ -4,6 +4,16 @@ module Alf
     # Marker for experimental operators
     #
     module Experimental
+
+      class << self
+        include Tools::Registry
+
+        def included(mod)
+          super
+          register(mod, Experimental)
+        end
+      end
+
     end # module Experimental
   end # module Operator
 end # module Alf
