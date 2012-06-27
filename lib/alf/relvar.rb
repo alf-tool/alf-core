@@ -56,3 +56,4 @@ module Alf
 end # module Alf
 require_relative 'relvar/base'
 require_relative 'relvar/virtual'
+require_relative 'relvar/memory'
