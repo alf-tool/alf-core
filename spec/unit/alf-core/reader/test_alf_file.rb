@@ -3,11 +3,11 @@ module Alf
   describe Reader::AlfFile do
 
     class TestAdapter < Alf::Adapter
-      def dataset(name)
+      def relvar(name)
         [{:status => 10},{:status => 30}]
       end
     end
-    
+
     let(:io){ StringIO.new(expr) }
 
     subject{
@@ -28,6 +28,6 @@ module Alf
       }
       it{ should == [{:status => 30, :rev => -30}]}
     end
-      
+
   end
 end

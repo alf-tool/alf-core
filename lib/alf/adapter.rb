@@ -4,7 +4,7 @@ module Alf
   # for named datasets.
   #
   # You can implement your own adapter by subclassing this class and implementing the
-  # {#dataset} method. As additional support is implemented in the base class, Adapter
+  # {#relvar} method. As additional support is implemented in the base class, Adapter
   # should never be mimiced.
   #
   # This class provides an extension point allowing to participate to auto detection and
@@ -73,18 +73,14 @@ module Alf
       end
     end # class << self
 
-    # Returns a dataset whose name is provided.
+    # Returns a relvar whose name is provided.
     #
-    # This method resolves named datasets to tuple enumerables. When the dataset exists,
-    # this method must return an Iterator, typically a Reader instance. Otherwise, it must
-    # throw a NoSuchDatasetError.
-    #
-    # @param [Symbol] name the name of a dataset
-    # @return [Iterator] an iterator, typically a Reader instance
-    # @raise [NoSuchDatasetError] when the dataset does not exists
-    def dataset(name)
+    # @arg    [Symbol] name the name of a relation variable.
+    # @return [Relvar] a relation variable.
+    # @raise  [NoSuchRelvarError] when the variable does not exist.
+    def relvar(name)
+      raise NotImplementedError
     end
-    undef :dataset
 
   end # class Adapter
 end # module Alf

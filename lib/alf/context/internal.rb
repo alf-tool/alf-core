@@ -17,19 +17,6 @@ module Alf
         @helpers = helpers
       end
 
-      # Returns a dataset whose name is provided.
-      #
-      # This method resolves named datasets to tuple enumerables by passing the request to
-      # the lower stage. When the dataset exists, this method must return an Iterator.
-      # Otherwise, it throws a NoSuchDatasetError.
-      #
-      # @param [Symbol] name the name of a dataset
-      # @return [Iterator] an iterator
-      # @raise [NoSuchDatasetError] when the dataset does not exists
-      def dataset(name)
-        adapter.dataset(name)
-      end
-
       # Compiles a query expression given by a String or a block and returns the result
       # (typically a tuple iterator)
       #

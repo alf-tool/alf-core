@@ -25,12 +25,12 @@ module Alf
         @folder = Tools.to_path(folder)
       end
 
-      # (see Adapter#dataset)
-      def dataset(name)
+      # (see Adapter#relvar)
+      def relvar(name)
         if file = find_file(name)
-          Reader.reader(file, self)
+          Relvar::Base.new(self, name){ Reader.reader(file, self) }
         else
-          raise NoSuchDatasetError, "No such dataset #{name} (#{@folder})"
+          raise NoSuchRelvarError, "No such relvar #{name} (#{@folder})"
         end
       end
 

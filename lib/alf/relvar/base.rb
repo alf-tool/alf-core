@@ -9,15 +9,16 @@ module Alf
       #
       # @param [Object] context the context that served this relvar.
       # @param [Symbol] name name of the relation variable.
-      def initialize(context, name)
+      def initialize(context, name, &builder)
         super(context, name)
+        @builder = builder
       end
 
     protected
 
-      # Request a reader through Database#dataset
+      # Request a reader through the builder
       def compile(context)
-        context.dataset(name)
+        @builder.call(context)
       end
 
     end # class Base

@@ -43,19 +43,26 @@ module Alf
         defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"
       end
 
-      # (see Alf::Adapter#dataset)
-      def dataset(name)
-        conn = connect
-        raise NoSuchDatasetError, "No such table `#{name}`" unless conn.table_exists?(name)
-        Iterator.new(conn[name])
+      # (see Alf::Adapter#relvar)
+      def relvar(name)
+        with_connection do |c|
+          raise NoSuchRelvarError,
+                "No such table `#{name}`" unless c.table_exists?(name)
+        end
+        Relvar::Base.new(self, name) do |ctx|
+          with_connection{|c| Iterator.new(c[name]) }
+        end
       end
 
       def ping
-        connect
-        @db.test_connection
+        connect.test_connection
       end
 
-      private
+    private
+
+      def with_connection
+        yield(connect)
+      end
 
       # Creates a database connection
       def connect

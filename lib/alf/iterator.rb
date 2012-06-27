@@ -18,7 +18,10 @@ module Alf
       when Iterator, Array
         arg
       when String, Symbol
-        Relvar::Base.new(database, arg.to_sym)
+        unless database
+          raise "No database provided to resolve named datasets."
+        end
+        database.relvar(arg.to_sym)
       else
         Reader.coerce(arg, database)
       end

@@ -3,7 +3,7 @@ module Alf
     #
     # A Relvar whose value simply fits as a Relation in memory.
     #
-    class Memory < Base
+    class Memory < Relvar
 
       # Creates a memory relvar instance.
       #

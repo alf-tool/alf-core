@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'fileutils'
 require "sequel"
 module Alf
-  describe Sequel::Adapter, 'dataset' do
+  describe Sequel::Adapter, 'relvar' do
 
     let(:rel) {Alf::Relation[
       {:sid => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
@@ -20,16 +20,18 @@ module Alf
       "#{protocol}://#{file}"
     end
 
-    it "should serve iterators" do
-      db.dataset(:suppliers).should be_a(Alf::Iterator)
+    it "should serve relvars" do
+      db.relvar(:suppliers).should be_a(Relvar::Base)
     end
 
     it "should be the correct relation" do
-      db.dataset(:suppliers).to_relation.should eq(rel)
+      db.relvar(:suppliers).value.should eq(rel)
     end
 
-    it 'raises a NoSuchDatasetError if not found' do
-      lambda{ db.dataset(:nosuchone) }.should raise_error(NoSuchDatasetError)
+    it 'raises a NoSuchRelvarError if not found' do
+      lambda{
+        db.relvar(:nosuchone)
+      }.should raise_error(NoSuchRelvarError)
     end
 
   end

@@ -11,7 +11,6 @@ module Alf
       end
       it 'is correctly bound' do
         subject.name.should eq(:suppliers)
-        subject.context.should eq(conn)
       end
     end
 
@@ -22,7 +21,6 @@ module Alf
       end
       it 'is correctly bound' do
         subject.expression.should be_a(Operator::Relational::Project)
-        subject.context.should eq(conn)
       end
     end
 
@@ -33,7 +31,6 @@ module Alf
       end
       it 'is correctly bound' do
         subject.expression.should be_a(Operator::Relational::Project)
-        subject.context.should eq(conn)
       end
     end
 

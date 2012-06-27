@@ -30,7 +30,7 @@ module Alf
           expr = compile(expr, path, line)
           Relvar::Virtual.new(context, nil, expr)
         elsif expr.is_a?(Symbol)
-          Relvar::Base.new(context, expr)
+          adapter.relvar(expr)
         else
           raise ArgumentError, "Invalid relvar name `#{expr}`"
         end

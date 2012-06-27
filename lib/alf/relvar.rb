@@ -27,7 +27,7 @@ module Alf
 
     # Returns the relation value that this variable currently holds.
     #
-    # @return [Relation] a relation value. 
+    # @return [Relation] a relation value.
     def value
       Tools.to_relation compile(context)
     end
