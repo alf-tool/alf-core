@@ -84,6 +84,20 @@ module Alf
     Alf::Tools.to_relation(*args)
   end
 
+  # Coerces some arguments to a tuple.
+  #
+  # The following coercions are supported:
+  #
+  #   Alf::Tuple(:attr1 => val1, ..., :attrn => valn)
+  #   # the same Hash
+  #
+  #   Alf::Tuple('attr1' => val1, ..., 'attrn' => valn)
+  #   # the same Hash with symbolized keys
+  #
+  def self.Tuple(*args)
+    Alf::Tools.to_tuple(*args)
+  end
+
   class << self
     alias :relation :Relation
   end

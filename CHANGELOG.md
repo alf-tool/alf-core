@@ -31,6 +31,8 @@
 
 * Alf::Relation(...) ensures that attribute names are Symbols and symbolize them if needed.
 
+* Added Alf::Tuple(...) that behaves similarly to Alf::Relation(...) but for tuples.
+
 * Added Alf.reader as a convenient shortcut for Alf::Reader.reader.
 
       Alf.reader("path/to/a/suppliers.csv")

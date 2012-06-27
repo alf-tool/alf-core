@@ -23,7 +23,7 @@ module Alf
         unless h.keys.all?{|k| k.is_a?(::Symbol) } && h.values.all?{|v| !v.nil? }
           ::Kernel.raise ArgumentError, "Invalid tuple literal #{h.inspect}"
         end
-        h
+        Alf::Tuple(h)
       end
 
       def Relation(first, *args)
@@ -49,6 +49,10 @@ module Alf
 
       def to_relation(operand)
         Tools.to_relation(operand)
+      end
+
+      def to_tuple(operand)
+        Tools.to_tuple(operand)
       end
 
     end
