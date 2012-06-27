@@ -28,5 +28,9 @@ module Alf
       db.dataset(:suppliers).to_relation.should eq(rel)
     end
 
+    it 'raises a NoSuchDatasetError if not found' do
+      lambda{ db.dataset(:nosuchone) }.should raise_error(NoSuchDatasetError)
+    end
+
   end
 end

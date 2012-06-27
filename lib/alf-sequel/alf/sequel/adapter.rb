@@ -45,7 +45,9 @@ module Alf
 
       # (see Alf::Adapter#dataset)
       def dataset(name)
-        Iterator.new(connect[name])
+        conn = connect
+        raise NoSuchDatasetError, "No such table `#{name}`" unless conn.table_exists?(name)
+        Iterator.new(conn[name])
       end
 
       def ping

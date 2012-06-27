@@ -49,6 +49,8 @@
 
 * The Aggregator class, Summarization type and Summarize operator have been made thread-safe through #happens that now takes a TupleScope instead of a tuple.
 
+* Sequel::Adapter#dataset correctly raises a NoSuchDatasetError if no table can be found.
+
 ## Broken stuff
 
 * `Alf.lispy` has been removed from the public API. Please use `connect` instead:
