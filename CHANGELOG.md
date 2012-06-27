@@ -79,6 +79,8 @@
 
 * Aggregator.aggregators has been removed. Use Aggregator.all or Aggregator.each instead.
 
+* Adapter.adapters has been removed. Use Adapter.all or Adapter.each instead.
+
 ## Bug fixes
 
 * The backports gem is no longer required on ruby =1.9

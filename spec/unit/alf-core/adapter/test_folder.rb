@@ -4,7 +4,7 @@ module Alf
     describe Folder do
 
       it 'should be registered' do
-        Adapter.adapters.find{|n,c| c == Folder}.should_not be_nil
+        Adapter.all.find{|n,c| c == Folder}.should_not be_nil
       end
 
       it 'should lead to an Adapter.folder method' do

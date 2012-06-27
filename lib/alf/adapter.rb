@@ -3,7 +3,7 @@ module Alf
   # An adapter encapsulates the interface with the outside world, providing base iterators
   # for named datasets.
   #
-  # You can implement your own adapter by subclassing this class and implementing the 
+  # You can implement your own adapter by subclassing this class and implementing the
   # {#dataset} method. As additional support is implemented in the base class, Adapter
   # should never be mimiced.
   #
@@ -14,12 +14,7 @@ module Alf
   class Adapter
 
     class << self
-      # Returns registered adapters
-      #
-      # @return [Array<Adapter>] registered adapters.
-      def adapters
-        @adapters ||= []
-      end
+      include Tools::Registry
 
       # Register an adapter class under a specific name.
       #
@@ -37,11 +32,7 @@ module Alf
       # @param [Symbol] name name of the adapter kind
       # @param [Class] clazz class that implemented the adapter
       def register(name, clazz)
-        adapters << [name, clazz]
-        (class << self; self; end).
-          send(:define_method, name) do |*args|
-            clazz.new(*args)
-          end
+        super([name, clazz], Adapter)
       end
 
       # Auto-detect the adapter to use for specific arguments.
@@ -57,10 +48,9 @@ module Alf
         if (args.size == 1) and args.first.is_a?(Adapter)
           return args.first
         else
-          name, clazz = adapters.find{|nc| nc.last.recognizes?(args)}
+          name, clazz = registered.find{|nc| nc.last.recognizes?(args)}
           return clazz.new(*args) if clazz
         end
-        dbs = adapters.map{|r| r.last.name}.join(', ')
         raise ArgumentError, "Unable to auto-detect Adapter with (#{args.map(&:inspect).join(', ')})"
       end
       alias :coerce :autodetect
