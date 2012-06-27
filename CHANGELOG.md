@@ -29,6 +29,8 @@
       Alf::Relation("path/to/a/suppliers.csv")
       # => Alf::Relation[...]
 
+* Alf::Relation(...) ensures that attribute names are Symbols and symbolize them if needed.
+
 * Added Alf.reader as a convenient shortcut for Alf::Reader.reader.
 
       Alf.reader("path/to/a/suppliers.csv")

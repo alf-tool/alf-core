@@ -141,5 +141,13 @@ module Alf
       Heading[Hash[tuple.map{|k,v| [k, v.class]}]]
     end
 
+    # Symbolizes all keys of `tuple`
+    #
+    # @param  [Hash]  tuple a tuple, represented by a Hash
+    # @return [Tuple] the same tuple, with all keys as Symbols
+    def symbolize_keys(tuple)
+      tuple_collect(tuple){|k,v| [k.to_sym, v] }
+    end
+
   end # module Tools
 end # module Alf

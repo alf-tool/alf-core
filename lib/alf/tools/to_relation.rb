@@ -31,13 +31,13 @@ module Alf
       }
       r.upon(list_of_values) do |v,_|
         key, values = v.to_a.first
-        tuples      = values.map{|value| {key => value}}.to_set
+        tuples      = values.map{|value| {key.to_sym => value}}.to_set
         Relation.new(tuples)
       end
 
       # Tuple to singleton Relation
       r.upon(Hash) do |v,_|
-        Relation.new(Set.new << v)
+        Relation.new(Set.new << Tools.symbolize_keys(v))
       end
 
       # path able
@@ -50,7 +50,7 @@ module Alf
         v.is_a?(Enumerable) and v.all?{|t| t.is_a?(Hash)}
       }
       r.upon(enum_of_tuples) do |v,_|
-        Relation.new(v.to_set)
+        Relation.new(v.map{|t| Tools.symbolize_keys(t)}.to_set)
       end
 
       # path able

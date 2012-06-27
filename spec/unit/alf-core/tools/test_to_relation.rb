@@ -41,6 +41,22 @@ module Alf
       to_rel(expected.to_a).should eq(expected)
     end
 
+    it 'symbolize keys on a single Hash' do
+      tuple = {"name" => "Alf"}
+      to_rel(tuple).should eq(expected)
+    end
+
+    it 'symbolize keys on a list of values' do
+      tuple    = {"name" => ["Alf", "Myrrha"]}
+      expected = Relation.new(Set.new << {:name => "Alf"} << {:name => "Myrrha"})
+      to_rel(tuple).should eq(expected)
+    end
+
+    it 'symbolize keys on an array of hashes' do
+      tuples = [{"name" => "Alf"}]
+      to_rel(tuples).should eq(expected)
+    end
+
     context 'when based on files' do
       let(:path){ Path.dir/'to_relation.rash' }
       before do
