@@ -6,16 +6,31 @@ module Alf
       class << self
         def def_aggregator_method(name, clazz)
           define_method(name) do |*args, &block|
-            clazz.new(*args, &block).aggregate(self)
+            clazz.new(*args, &block).aggregate(_self_operand)
           end
         end
 
         def def_operator_method(name, clazz)
           define_method(name) do |*args|
-            args.unshift(self)
+            args.unshift(_self_operand)
             operands  = args[0...clazz.arity].map{|x| Iterator.coerce(x, _context) }
             arguments = args[clazz.arity..-1]
             _operator_output clazz.new(_context, operands, *arguments)
+          end
+        end
+
+        def def_renderer_method(name, clazz)
+          define_method(:"to_#{name}") do |*args|
+            options, io = nil
+            args.each do |arg|
+              options ||= arg if arg.is_a?(Hash)
+              io      ||= arg if arg.respond_to?(:<<)
+            end
+            to_array(options || {}) do |arr|
+              io ||= ""
+              clazz.new(arr, options).execute(io)
+              io
+            end
           end
         end
       end
@@ -54,17 +69,28 @@ module Alf
       end
 
       def to_relation
-        Tools.to_relation(self)
+        Tools.to_relation(_self_operand)
       end
 
       def to_array(options = {})
         _with_ordering(options) do |o|
-          Alf::Engine::ToArray.new(self, o).to_a
+          op = Alf::Engine::ToArray.new(_self_operand, o)
+          block_given? ? yield(op) : op.to_a
         end
       end
 
       def to_a(options = nil)
         options.nil? ? super() : to_array(options)
+      end
+
+      Renderer.listen do |name,clazz|
+        def_renderer_method(name, clazz)
+      end
+
+    private
+
+      def _self_operand
+        self
       end
 
     end # module ObjectOriented

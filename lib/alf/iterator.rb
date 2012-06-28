@@ -15,7 +15,7 @@ module Alf
     # Coerces something to an iterator
     def self.coerce(arg, database = nil)
       case arg
-      when Iterator, Array
+      when Iterator, Array, Alf::Engine::Cog
         arg
       when String, Symbol
         unless database

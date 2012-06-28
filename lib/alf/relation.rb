@@ -90,12 +90,7 @@ module Alf
 
     # Returns a textual representation of this relation
     def to_s
-      Alf::Renderer.text(self).execute("")
-    end
-
-    # Returns a json representation of this Relation.
-    def to_json(*args)
-      to_a.to_json(*args)
+      to_text
     end
 
     # Returns a  literal representation of this relation
