@@ -43,8 +43,8 @@ module Alf
   #
   # @see Database.connect for more about recognized formats.
   #
-  def self.connect(*args)
-    Database.connect(*args)
+  def self.connect(*args, &block)
+    Database.connect(*args, &block)
   end
 
   # Returns a Reader on `source` denoting a physical representation of a relation.

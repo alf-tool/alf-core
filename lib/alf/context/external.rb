@@ -6,6 +6,13 @@ module Alf
     #
     module External
 
+      # Closes the connection, freeing unnecessary resources
+      #
+      # @return [undefined]
+      def close
+        adapter.close(self) if adapter
+      end
+
       # Returns a relation variable either by name or a virtual relvar
       # corresponding to a query expression in `query`.
       #

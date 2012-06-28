@@ -13,27 +13,33 @@ module Alf
       # @return [Database] an database instance
       # @raise [ArgumentError] when no registered adapter recognizes the arguments
       def connect(*args)
-        return args.first if args.size==1 && args.first.is_a?(Connection)
-        return Connection.new(nil, helpers) if args.empty?
-        return Connection.new(Adapter.autodetect(*args), helpers)
+        conn   = args.first if args.size==1 && args.first.is_a?(Connection)
+        conn ||= Connection.new(nil, helpers) if args.empty?
+        conn ||= Connection.new(Adapter.autodetect(*args), helpers)
+        return conn unless block_given?
+        begin
+          yield(conn)
+        ensure
+          conn.close if conn
+        end
       end
 
-      def folder(*args)
-        connect(Adapter.folder *args)
+      def folder(*args, &bl)
+        connect(Adapter.folder(*args), &bl)
       end
 
       # Returns Alf's default database
       #
       # @return [Database] the default database instance.
-      def default
-        connect(Adapter.folder '.')
+      def default(&bl)
+        connect(Adapter.folder('.'), &bl)
       end
 
       # Returns a database instance on Alf's examples
       #
       # @return [Database] a database instance on Alf's examples.
-      def examples
-        connect(Adapter.folder Path.backfind('examples/operators'))
+      def examples(&bl)
+        connect(Adapter.folder Path.backfind('examples/operators'), &bl)
       end
 
       # Returns the array of helper modules to use for defining the evaluation

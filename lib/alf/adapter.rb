@@ -75,6 +75,12 @@ module Alf
       end
     end # class << self
 
+    # Closes a given connection, freeing resources if needed.
+    #
+    # @param [Connection] connection a connection previously obtained.
+    def close(connection)
+    end
+
     # Returns a relvar whose name is provided.
     #
     # @arg    [Symbol] name the name of a relation variable.
