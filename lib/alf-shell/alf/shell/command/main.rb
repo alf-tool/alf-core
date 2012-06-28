@@ -135,7 +135,7 @@ module Alf
 
         # 2) build the operator according to -e option
         operator = if @execute
-          Database.connect(database).compile(argv.first)
+          database.compile(argv.first)
         else
           super
         end

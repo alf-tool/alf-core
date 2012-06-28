@@ -1,11 +1,6 @@
 require 'spec_helper'
 describe Alf, '.connect' do
 
-  it "supports a Database instance" do
-    db = examples_database
-    Alf.connect(db).should eq(db)
-  end
-
   it "recognizes an existing folder" do
     db = Alf.connect(File.dirname(__FILE__))
     db.should be_a(Alf::Connection)

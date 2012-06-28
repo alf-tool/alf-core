@@ -15,11 +15,6 @@ module Alf
       db.adapter.should eq(ad)
     end
 
-    it 'recognizes a Database' do
-      db = Database.connect examples_path
-      Database.connect(db).should eq(db)
-    end
-
     it 'supports no argument at all' do
       Database.connect.should be_a(Connection)
     end

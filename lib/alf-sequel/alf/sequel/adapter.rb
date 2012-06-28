@@ -49,6 +49,12 @@ module Alf
         @options = options
       end
 
+      def connect(options = {}, helpers = [])
+        with_connection(options) do |db|
+          super
+        end
+      end
+
       # (see Alf::Adapter#relvar)
       def relvar(name)
         with_connection(:transaction => false) do |c|

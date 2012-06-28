@@ -45,14 +45,10 @@ module Alf
       # @return [Adapter] an adapter instance
       # @raise [ArgumentError] when no registered class recognizes the arguments
       def autodetect(*args)
-        if (args.size == 1) and args.first.is_a?(Adapter)
-          return args.first
-        else
-          name, clazz = registered.find{|nc|
-            nc.last.recognizes?(args)
-          }
-          return clazz.new(*args) if clazz
-        end
+        return Adapter.new if args.empty?
+        return args.first  if args.size==1 && args.first.is_a?(Adapter)
+        name, clazz = registered.find{|nc| nc.last.recognizes?(args) }
+        return clazz.new(*args) if clazz
         raise ArgumentError, "Unable to auto-detect Adapter with (#{args.map(&:inspect).join(', ')})"
       end
       alias :coerce :autodetect
@@ -74,6 +70,17 @@ module Alf
         false
       end
     end # class << self
+
+    # Creates a connection to the underlying database.
+    def connect(options = {}, helpers = [])
+      conn = Connection.new(self, helpers)
+      return conn unless block_given?
+      begin
+        yield(conn)
+      ensure
+        conn.close if conn
+      end
+    end
 
     # Closes a given connection, freeing resources if needed.
     #

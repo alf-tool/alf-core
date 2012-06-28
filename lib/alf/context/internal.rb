@@ -6,17 +6,6 @@ module Alf
     #
     module Internal
 
-      # Logical adapter
-      attr_reader :adapter
-
-      # Creates a database instance, using `adapter` as logical
-      # adapter.
-      def initialize(adapter = nil, helpers = [])
-        super()
-        @adapter = adapter
-        @helpers = helpers
-      end
-
       # Compiles a query expression given by a String or a block and returns the result
       # (typically a tuple iterator)
       #

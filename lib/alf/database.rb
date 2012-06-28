@@ -12,16 +12,10 @@ module Alf
       # @param [Array] args arguments for the Adapter constructor
       # @return [Database] an database instance
       # @raise [ArgumentError] when no registered adapter recognizes the arguments
-      def connect(*args)
-        conn   = args.first if args.size==1 && args.first.is_a?(Connection)
-        conn ||= Connection.new(nil, helpers) if args.empty?
-        conn ||= Connection.new(Adapter.autodetect(*args), helpers)
-        return conn unless block_given?
-        begin
-          yield(conn)
-        ensure
-          conn.close if conn
-        end
+      def connect(uri = nil, options = {}, &block)
+        raise if uri.is_a?(Connection)
+        adapter = Adapter.autodetect(*[uri].compact)
+        adapter.connect(options, helpers, &block)
       end
 
       def folder(*args, &bl)

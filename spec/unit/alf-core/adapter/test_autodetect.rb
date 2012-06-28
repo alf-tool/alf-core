@@ -4,6 +4,10 @@ module Alf
 
     let(:examples_path){ Path.backfind('examples/operators') }
 
+    it 'returns a default adapter if no args' do
+      Adapter.autodetect.should be_a(Adapter)
+    end
+
     it "should support an Adapter instance" do
       db = Adapter.folder(examples_path)
       Adapter.autodetect(db).should eq(db)

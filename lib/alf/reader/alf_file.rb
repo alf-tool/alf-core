@@ -13,7 +13,8 @@ module Alf
 
       # (see Reader#each)
       def each
-        op = Database.connect(adapter).compile(input_text, input_path)
+        conn = adapter.is_a?(Connection) ? adapter : adapter.connect({}, [Lang::Functional])
+        op = conn.compile(input_text, input_path)
         op.each(&Proc.new)
       end
 
