@@ -33,16 +33,20 @@ module Alf
           path.file? and ['db', 'sqlite', 'sqlite3'].include?(path.ext)
         end
 
+        def sqlite_protocol
+          defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"
+        end
+
       end # class << self
 
       # Creates an Adapter instance
       def initialize(uri, options = {})
-        @uri = self.class.looks_a_sqlite_file?(uri) ? "#{sqlite_protocol}://#{uri}" : uri
+        @uri = if self.class.looks_a_sqlite_file?(uri)
+          "#{self.class.sqlite_protocol}://#{uri}"
+        else
+          uri
+        end
         @options = options
-      end
-
-      def sqlite_protocol
-        defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"
       end
 
       # (see Alf::Adapter#relvar)

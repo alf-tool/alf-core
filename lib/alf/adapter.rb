@@ -48,7 +48,9 @@ module Alf
         if (args.size == 1) and args.first.is_a?(Adapter)
           return args.first
         else
-          name, clazz = registered.find{|nc| nc.last.recognizes?(args)}
+          name, clazz = registered.find{|nc|
+            nc.last.recognizes?(args)
+          }
           return clazz.new(*args) if clazz
         end
         raise ArgumentError, "Unable to auto-detect Adapter with (#{args.map(&:inspect).join(', ')})"

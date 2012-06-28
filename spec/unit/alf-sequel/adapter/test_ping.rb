@@ -1,33 +1,27 @@
-require 'spec_helper'
-require 'fileutils'
-require "sequel"
+require File.expand_path('../../sequel_helper', __FILE__)
 module Alf
-  describe Sequel::Adapter, "ping" do
-    
-    let(:path){ Path.dir/"../alf.db" }
+  module Sequel
+    describe Adapter, "ping" do
+      include TestHelper
 
-    def uri
-      protocol = defined?(JRUBY_VERSION) ? "jdbc:sqlite" : "sqlite"
-      "#{protocol}://#{path.to_s}"
+      it "returns true on a file" do
+        Adapter.new("#{sequel_database_path}").ping.should be_true
+      end
+
+      it "returns true on an uri" do
+        Adapter.new(sequel_database_uri).ping.should be_true
+      end
+
+      it "returns true on a Path" do
+        Adapter.new(sequel_database_path).ping.should be_true
+      end
+
+      it "raises on non existing" do
+        lambda {
+          Adapter.new("postgres://non-existing.sqlite3").ping
+        }.should raise_error
+      end
+
     end
-
-    it "returns true on a file" do
-      Sequel::Adapter.new(path.to_s).ping.should be_true
-    end
-
-    it "returns true on an uri" do
-      Sequel::Adapter.new(uri).ping.should be_true
-    end
-
-    it "returns true on a Path" do
-      Sequel::Adapter.new(path).ping.should be_true
-    end
-
-    it "raises on non existing" do
-      lambda {
-        Sequel::Adapter.new("postgres://non-existing.sqlite3").ping
-      }.should raise_error
-    end
-
   end
 end
