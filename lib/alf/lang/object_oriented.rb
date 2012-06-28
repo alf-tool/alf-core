@@ -97,6 +97,18 @@ module Alf
         def_renderer_method(name, clazz)
       end
 
+      def tuple_extract
+        tuple = nil
+        each do |t|
+          raise NoSuchTupleError if tuple
+          tuple = t
+        end
+        tuple ||= yield if block_given?
+        raise NoSuchTupleError unless tuple or block_given?
+        tuple
+      end
+      alias :'tuple!' :tuple_extract
+
     private
 
       def _self_operand

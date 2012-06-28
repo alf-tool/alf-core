@@ -32,6 +32,8 @@
 
 * Alf::Relation(...) ensures that attribute names are Symbols and symbolize them if needed.
 
+* Added Relation#tuple_extract, aliased as Relation#tuple! that returns the only tuple of the relation, or raises a NoSuchTupleError if no tuple or more than one.
+
 * Added Alf::Tuple(...) that behaves similarly to Alf::Relation(...) but for tuples.
 
 * Added Alf.reader as a convenient shortcut for Alf::Reader.reader.
