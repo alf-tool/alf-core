@@ -26,7 +26,7 @@ module Alf
           end
         end
 
-        # Returns trus if `f` looks like a sqlite file
+        # Returns true if `f` looks like a sqlite file
         def looks_a_sqlite_file?(f)
           return false unless Tools.pathable?(f)
           path = Tools.to_path(f)
@@ -51,7 +51,7 @@ module Alf
 
       # (see Alf::Adapter#relvar)
       def relvar(name)
-        with_connection do |c|
+        with_connection(:transaction => false) do |c|
           raise NoSuchRelvarError,
                 "No such table `#{name}`" unless c.table_exists?(name)
         end
@@ -59,21 +59,32 @@ module Alf
       end
 
       def ping
-        connect.test_connection
+        with_connection(:transaction => false) do |db|
+          db.test_connection
+        end
       end
 
-      def with_connection
-        yield(connect)
+      def with_connection(options = {})
+        options = @options.merge(options)
+        auto_t  = auto_transaction?(options)
+        sequel_db do |db|
+          auto_t ? db.transaction{ yield(db) } : yield(db)
+        end
       end
 
     private
 
-      # Creates a database connection
-      def connect
-        @db ||= begin
-          Alf::Tools::friendly_require('sequel')
+      def auto_transaction?(opts)
+        not(opts.has_key?(:transaction)) or opts.delete(:transaction)
+      end
+
+      # Yields a Sequel::Database object
+      def sequel_db
+        @sequel_db ||= begin
+          Alf::Tools::friendly_require('sequel') unless defined?(::Sequel)
           ::Sequel.connect(@uri, @options)
         end
+        block_given? ? yield(@sequel_db) : @sequel_db
       end
 
       Alf::Adapter.register(:sequel, self)
