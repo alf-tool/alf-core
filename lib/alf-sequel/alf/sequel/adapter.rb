@@ -13,15 +13,17 @@ module Alf
         # a valid database uri, false otherwise
         def recognizes?(args)
           return false unless args.size == 1
-          require 'uri'
-          if (arg = args.first).is_a?(String)
-            uri = URI::parse(arg)
-            !!uri.scheme
-            return true if !!uri.scheme
+          case arg = args.first
+            when String
+              require 'uri'
+              uri = URI::parse(arg) rescue nil
+              (uri && uri.scheme) or looks_a_sqlite_file?(arg)
+            when Hash
+              arg = Tools.symbolize_keys(arg)
+              arg[:adapter] && arg[:database]
+            else
+              looks_a_sqlite_file?(arg)
           end
-          looks_a_sqlite_file?(arg)
-        rescue ::URI::Error
-          false
         end
 
         # Returns trus if `f` looks like a sqlite file

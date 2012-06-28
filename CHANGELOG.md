@@ -15,6 +15,7 @@
       Alf.connect "somewhere/to/a/folder"
       Alf.connect "database.sqlite3"
       Alf.connect "postgres://user:password@host/database"
+      Alf.connect adapter: "sqlite", database: "test.sqlite3"
 
 * Evaluation of queries are now sent to a connection specifically:
 
