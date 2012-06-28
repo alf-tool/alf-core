@@ -4,6 +4,7 @@ module Alf
   #
   class Relvar
     include Iterator
+    include Lang::ObjectOriented
 
     # The context under which this relvar was served.
     attr_reader :context
@@ -31,6 +32,7 @@ module Alf
     def value
       Tools.to_relation compile(context)
     end
+    alias :to_relation :value
 
     # Affects the current value of this relation variable.
     def affect(value)
@@ -50,6 +52,16 @@ module Alf
     # Delete all tuples of this relation variable.
     def delete
       raise NotImplementedError
+    end
+
+  private
+
+    def _operator_output(op)
+      Relvar::Virtual.new(context, nil, op)
+    end
+
+    def _self_operand
+      self
     end
 
   end # class Relvar

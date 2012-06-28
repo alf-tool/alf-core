@@ -24,6 +24,16 @@ module Alf
         expression.compile(context)
       end
 
+    private
+
+      def _operator_output(op)
+        Relvar::Virtual.new(context, nil, op)
+      end
+
+      def _self_operand
+        expression
+      end
+
     end # class Virtual
   end # class Relvar
 end # module Alf

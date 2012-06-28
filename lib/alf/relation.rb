@@ -109,5 +109,9 @@ module Alf
       op.to_relation
     end
 
+    def _self_operand
+      self
+    end
+
   end # class Relation
 end # module Alf
