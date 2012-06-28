@@ -9,7 +9,8 @@ module Alf
         describe "#to_#{name}" do
           subject{ :"to_#{name}" }
           it 'should exist' do
-            ObjectOriented.instance_methods.should include(subject)
+            meths = ObjectOriented.instance_methods.map(&:to_sym)
+            meths.should include(subject)
           end
 
           it 'returns a string by default' do
