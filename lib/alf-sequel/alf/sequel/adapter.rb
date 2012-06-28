@@ -49,20 +49,18 @@ module Alf
           raise NoSuchRelvarError,
                 "No such table `#{name}`" unless c.table_exists?(name)
         end
-        Relvar::Base.new(self, name) do |ctx|
-          with_connection{|c| Iterator.new(c[name]) }
-        end
+        Relvar.new(self, name)
       end
 
       def ping
         connect.test_connection
       end
 
-    private
-
       def with_connection
         yield(connect)
       end
+
+    private
 
       # Creates a database connection
       def connect

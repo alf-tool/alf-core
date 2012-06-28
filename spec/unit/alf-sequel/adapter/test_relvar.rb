@@ -21,7 +21,7 @@ module Alf
     end
 
     it "should serve relvars" do
-      db.relvar(:suppliers).should be_a(Relvar::Base)
+      db.relvar(:suppliers).should be_a(Alf::Relvar)
     end
 
     it "should be the correct relation" do
