@@ -3,6 +3,16 @@ module Alf
     module ObjectOriented
       include Support
 
+      def self.new(self_operand)
+        Module.new{
+          include ObjectOriented
+          define_method(:_self_operand) do
+            self_operand
+          end
+          private :_self_operand
+        }
+      end
+
       class << self
         def def_aggregator_method(name, clazz)
           define_method(name) do |*args, &block|

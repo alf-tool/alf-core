@@ -2,11 +2,7 @@ require 'spec_helper'
 module Alf
   module Lang
     describe ObjectOriented do
-      include ObjectOriented
-
-      def _self_operand
-        Relation(:name => ["Jones", "Smith", "Zurth"])
-      end
+      include ObjectOriented.new(supplier_names_relation)
 
       Renderer.each do |name,_,clazz|
 
@@ -21,7 +17,7 @@ module Alf
           end
 
           it 'renders the values at first glance' do
-            send(subject).should =~ /Zurth/
+            send(subject).should =~ /Adams/
           end
 
           it 'returns the passed IO if any' do

@@ -18,12 +18,22 @@ require 'shared/a_scope'
 
 module Helpers
 
+  SUPPLIER_NAMES = ["Smith", "Clark", "Jones", "Blake", "Adams"]
+
   def examples_path
     @examples_path ||= Path.backfind('examples/operators')
   end
 
   def a_lispy
     Alf::Lang::Lispy.new
+  end
+
+  def supplier_names
+    SUPPLIER_NAMES
+  end
+
+  def supplier_names_relation
+    Relation(:name => supplier_names)
   end
 
   def examples_database(&bl)
@@ -43,5 +53,6 @@ end
 
 RSpec.configure do |c|
   c.include Helpers
+  c.extend  Helpers
   c.filter_run_excluding :ruby19 => (RUBY_VERSION < "1.9")
 end

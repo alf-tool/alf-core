@@ -2,11 +2,8 @@ require 'spec_helper'
 module Alf
   module Lang
     describe ObjectOriented, 'to_rash' do
-      include ObjectOriented
 
-      def _self_operand
-        Relation(:name => ["Jones", "Smith", "Zurth"])
-      end
+      include ObjectOriented.new(supplier_names_relation)
 
       subject{
         to_rash(options).each_line.map do |line|
@@ -27,7 +24,7 @@ module Alf
         let(:ordering){ [[:name, :desc]] }
         let(:options){ {:sort => ordering} }
         it 'respects it' do
-          expected = ["Jones", "Smith", "Zurth"].reverse
+          expected = supplier_names.sort.reverse
           subject.map{|t| t[:name]}.should eq(expected)
         end
       end

@@ -2,11 +2,7 @@ require 'spec_helper'
 module Alf
   module Lang
     describe ObjectOriented, 'to_array' do
-      include ObjectOriented
-
-      def _self_operand
-        Relation(:name => ["Jones", "Smith", "Zurth"])
-      end
+      include ObjectOriented.new(supplier_names_relation)
 
       let(:ordering){ Ordering.coerce([[:name, :desc]]) }
 
@@ -34,11 +30,11 @@ module Alf
         end
 
         it 'respect the specified ordering' do
-          expected = ["Jones", "Smith", "Zurth"].sort.reverse
+          expected = supplier_names.sort.reverse
           got      = to_array(:sort => ordering).map{|t| t[:name]}
           got.should eq(expected)
 
-          expected = ["Jones", "Smith", "Zurth"].sort
+          expected = supplier_names.sort
           got      = to_array(:sort => [:name]).map{|t| t[:name]}
           got.should eq(expected)
         end
