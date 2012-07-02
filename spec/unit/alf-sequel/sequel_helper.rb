@@ -26,6 +26,7 @@ module Alf
 
       def create_names_schema(adapter, values = true)
         adapter.with_connection do |c|
+          c.drop_table(:names) if c.table_exists?(:names)
           c.create_table(:names) do
             primary_key :id
             String :name
