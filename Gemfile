@@ -27,9 +27,6 @@ end
 group :extra do
   gem "fastercsv", "~> 1.5"
   gem "request-log-analyzer", "~> 1.12.2"
-  gem "sequel", "~> 3.36"
   gem "highline", "~> 1.6"
-  gem "sqlite3", "~> 1.3", :platforms => ['mri', 'rbx']
-  gem "jdbc-sqlite3", "~> 3.7", :platforms => ['jruby']
   gem 'json', :platforms => [:ruby_18, :jruby, :mingw_18]
 end

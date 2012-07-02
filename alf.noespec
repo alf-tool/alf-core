@@ -49,7 +49,5 @@ variables:
     - {name: redcarpet,    version: "~> 2.1.0",  groups: [doc          ]}
     - {name: fastercsv,    version: "~> 1.5",    groups: [extra        ]}
     - {name: request-log-analyzer, version: "~> 1.12.2", groups: [extra]}
-    - {name: sequel,       version: "~> 3.36",   groups: [extra        ]}
-    - {name: sqlite3,      version: "~> 1.3",    groups: [extra        ]}
     - {name: highline,     version: "~> 1.6",    groups: [extra        ]}
 

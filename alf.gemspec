@@ -131,8 +131,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("redcarpet", "~> 2.1.0")
   s.add_development_dependency("fastercsv", "~> 1.5")
   s.add_development_dependency("request-log-analyzer", "~> 1.12.2")
-  s.add_development_dependency("sequel", "~> 3.36")
-  s.add_development_dependency("sqlite3", "~> 1.3")
   s.add_development_dependency("highline", "~> 1.6")
   s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("myrrha", "~> 1.2.2")

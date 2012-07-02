@@ -1,1 +1,0 @@
-alf --db=$(_("shell/alf/alf.db",__FILE__)) show --text suppliers
