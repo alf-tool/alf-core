@@ -1,7 +1,0 @@
-#
-# Give all paths (together with http method and version) for which a 404 not 
-# found has been responded by the server.
-#
-(project \
-  (restrict :combined, lambda{ http_status == 404 }),
-  [:path, :http_method, :http_version])
