@@ -47,7 +47,5 @@ variables:
     - {name: yard,         version: "~> 0.8.2",  groups: [doc          ]}
     - {name: bluecloth,    version: "~> 2.2.0",  groups: [doc          ]}
     - {name: redcarpet,    version: "~> 2.1.0",  groups: [doc          ]}
-    - {name: fastercsv,    version: "~> 1.5",    groups: [extra        ]}
-    - {name: request-log-analyzer, version: "~> 1.12.2", groups: [extra]}
     - {name: highline,     version: "~> 1.6",    groups: [extra        ]}
 

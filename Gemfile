@@ -25,8 +25,6 @@ group :doc do
 end
 
 group :extra do
-  gem "fastercsv", "~> 1.5"
-  gem "request-log-analyzer", "~> 1.12.2"
   gem "highline", "~> 1.6"
   gem 'json', :platforms => [:ruby_18, :jruby, :mingw_18]
 end
