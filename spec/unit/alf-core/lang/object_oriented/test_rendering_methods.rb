@@ -22,12 +22,12 @@ module Alf
           end
 
           it 'returns the passed IO if any' do
-            io = []
+            io = StringIO.new
             send(subject, io).should eq(io)
           end
 
           it 'supports options' do
-            io = []
+            io = StringIO.new
             send(subject, {:sort => [:name]}, io).should eq(io)
           end
         end
