@@ -35,9 +35,8 @@ module Alf
 
           # Returns true if the decorated tuple has `name` as key.
           def respond_to?(name, include_private = false)
-            name = name.to_s if ::RUBY_VERSION < "1.9"
-            return true if @extensions.any?{|m| m.instance_methods.include?(name) }
-            return true if BasicObject.instance_methods.include?(name)
+            return true if @extensions.any?{|m| m.method_defined?(name) }
+            return true if BasicObject.method_defined?(name)
             @parent && @parent.respond_to?(name)
           end
 
