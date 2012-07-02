@@ -108,9 +108,7 @@ end # module Alf
 
 require_relative 'alf-shell/alf/shell'
 require_relative "alf-engine/alf/engine"
-
 require_relative 'alf/platform'
 
-require_relative 'alf-csv/alf/csv'
 require_relative 'alf-logs/alf/logs'
 
