@@ -1,9 +1,10 @@
 require 'spec_helper'
 describe "Alf's semantics tests" do
 
-  module Helpers
+  module SemanticsHelpers
 
     def rel_equal(x, y)
+      examples_database = Alf::Database.examples
       x = examples_database.relvar(x).value if x.is_a?(Symbol)
       y = examples_database.relvar(y).value if y.is_a?(Symbol)
       x.to_relation == y.to_relation
@@ -19,7 +20,7 @@ describe "Alf's semantics tests" do
 
     let(:conn){
       Class.new(Alf::Database){
-        helpers Helpers
+        helpers SemanticsHelpers
       }.connect(Path.dir/'__database__')
     }
 
