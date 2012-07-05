@@ -54,8 +54,7 @@ module Alf
       end
 
       # path able
-      pathable = lambda{|v,_| !Tools.pathable?(v).nil? }
-      r.upon(pathable) do |v,_|
+      r.upon(Path.like) do |v,_|
         Alf.reader(v).to_relation
       end
 

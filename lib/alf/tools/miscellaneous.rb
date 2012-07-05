@@ -1,40 +1,6 @@
 module Alf
   module Tools
 
-    # If `arg` can been coerced to a meaningful Path object, return the method to use on
-    # it; return nil otherwise.
-    #
-    # Example:
-    #
-    #   pathable?('/somewhere') -> :to_str
-    #   pathable?(File.new ...) -> :path
-    #   pathable?(12)           -> nil
-    #
-    def pathable?(arg)
-      return nil if arg.is_a?(StringIO) # fix for ruby 1.8.x that defines :path
-      [:path, :to_path, :to_str].find{|m| arg.respond_to?(m)}
-    end
-
-    # Coerces `arg` to a Path instance. If `arg` cannot be coerced, yields the block or
-    # returns nil.
-    #
-    # Example:
-    #
-    #   to_path('hello')     -> Path('hello')
-    #   to_path(File.new...) -> Path(...)
-    #   to_path(12)          -> nil
-    #   to_path(12){ raise } -> raise
-    #
-    def to_path(arg)
-      if m = pathable?(arg)
-        Path(arg.send(m))
-      elsif block_given?
-        yield(arg)
-      else
-        nil
-      end
-    end
-
     # Helper to define methods with multiple signatures.
     #
     # Example:

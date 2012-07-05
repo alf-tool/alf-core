@@ -15,14 +15,14 @@ module Alf
       #         an existing folder; false otherwise
       def self.recognizes?(args)
         return false unless (args.size == 1)
-        Tools.pathable?(args.first) && Tools.to_path(args.first).directory?
+        Path.like?(args.first) && Path(args.first).directory?
       end
 
       # Creates an adapter instance, wired to the specified folder.
       #
       # @param [String] folder path to the folder to use as dataset source.
       def initialize(folder)
-        @folder = Tools.to_path(folder)
+        @folder = Path(folder)
       end
 
       # (see Adapter#relvar)

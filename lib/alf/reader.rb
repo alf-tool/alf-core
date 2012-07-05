@@ -54,8 +54,8 @@ module Alf
       # @raise [ArgumentError] if `source` is not recognized or no reader can be found.
       #
       def reader(source, *args)
-        if Tools.pathable?(source)
-          has_reader_for_ext!(Tools.to_path(source).extname).new(source, *args)
+        if Path.like?(source)
+          has_reader_for_ext!(Path(source).extname).new(source, *args)
         elsif args.empty?
           coerce(source)
         else
@@ -123,7 +123,7 @@ module Alf
             @input = arg if arg
         end
       end
-      @path = Tools.to_path(@input)
+      @path = Path(@input)
       @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
     end
 
