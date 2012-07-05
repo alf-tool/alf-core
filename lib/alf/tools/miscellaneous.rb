@@ -1,32 +1,6 @@
 module Alf
   module Tools
 
-    # Attempts to require `who` the most friendly way as possible.
-    #
-    # This method allows loading weak dependencies in a friendly way. It takes
-    # care of ensuring the dependency requirement `req` through rubygems. The
-    # latter is loaded if required.
-    #
-    # Example:
-    #
-    #     Tools.friendly_require('sequel', '~> 3.0')
-    #
-    # @param [String] who the name of a gem
-    # @param [String] req optional requirements on the gem version
-    # @param [Boolean] retried (private parameter)
-    def friendly_require(who, req = nil, retried = false)
-      gem(who, req) if req && defined?(Gem)
-      require who
-    rescue LoadError => ex
-      if retried
-        raise "Unable to require #{who}, which is now needed\n"\
-              "Try 'gem install #{who}'"
-      else
-        require 'rubygems' unless defined?(Gem)
-        friendly_require(who, req, true)
-      end
-    end
-
     # Returns the unqualified name of a ruby class or module.
     #
     # Example
