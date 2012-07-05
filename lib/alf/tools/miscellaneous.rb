@@ -52,28 +52,6 @@ module Alf
       s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
     end
 
-    # Returns the first non nil values from arguments.
-    #
-    # When no non-nil value can be found, the block is yield if present.
-    # Otherwise, nil is returned.
-    #
-    # Example:
-    #
-    #   coalesce(nil, 1, "abc")         # -> 1
-    #   coalesce(nil, nil){ "hello" }   # -> "hello"
-    #   coalesce(nil, nil)              # -> nil
-    #
-    # @param [Array] args a list of values
-    # @return [Object] the first non-nil value in `args`; the result of the
-    #         block or nil if no non-nil value can be found.
-    def coalesce(*args)
-      if found = args.find{|x| !x.nil?}
-        found
-      elsif block_given?
-        yield
-      end
-    end
-
     # Builds a tuple through enumeration.
     #
     # Iterates over enum and yields the block on each element. Collect block
