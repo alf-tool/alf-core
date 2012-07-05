@@ -1,20 +1,6 @@
 module Alf
   module Tools
 
-    # Helper to define methods with multiple signatures.
-    #
-    # Example:
-    #
-    #   varargs([1, "hello"], [Integer, String]) # => [1, "hello"]
-    #   varargs(["hello"],    [Integer, String]) # => [nil, "hello"]
-    #
-    # @param [Array] args some arguments passed to a method
-    # @param [Array<===>] some expected types
-    # @return [Array] an array with one value for each type
-    def varargs(args, types)
-      types.map{|t| t===args.first ? args.shift : nil}
-    end
-
     # Attempts to require `who` the most friendly way as possible.
     #
     # This method allows loading weak dependencies in a friendly way. It takes
