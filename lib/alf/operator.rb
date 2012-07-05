@@ -3,7 +3,7 @@ module Alf
   # Namespace for all operators, relational and non-relational ones.
   #
   module Operator
-    include Iterator, Tools
+    include Iterator
 
     class << self
       include Tools::Registry
