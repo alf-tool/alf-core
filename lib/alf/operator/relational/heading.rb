@@ -9,9 +9,14 @@ module Alf
 
         # (see Operator#each)
         def each
-          yield(operand.inject(Alf::Heading::EMPTY){|h,t|
-            h + Tools.tuple_heading(t)
-          }.to_h)
+          heading = operand.inject(Alf::Heading::EMPTY){|h,t| h + heading(t) }
+          yield(heading.to_h)
+        end
+
+      private
+
+        def heading(tuple)
+          Types::Heading[Hash[tuple.map{|k,v| [k, v.class]}]]
         end
 
       end # class Project

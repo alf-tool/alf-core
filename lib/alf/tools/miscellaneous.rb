@@ -52,14 +52,6 @@ module Alf
       s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
     end
 
-    # Infers the heading from a tuple
-    #
-    # @param [Tuple] tuple a tuple, represented by a Hash
-    # @param [Heading] the heading of the tuple
-    def tuple_heading(tuple)
-      Heading[Hash[tuple.map{|k,v| [k, v.class]}]]
-    end
-
     # Symbolizes all keys of `tuple`
     #
     # @param  [Hash]  tuple a tuple, represented by a Hash
