@@ -52,17 +52,6 @@ module Alf
       s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
     end
 
-    # Builds a tuple through enumeration.
-    #
-    # Iterates over enum and yields the block on each element. Collect block
-    # results as key/value pairs returns them as a Hash.
-    #
-    # @param [Enumerable] enum any enumerable
-    # @return [Tuple] a tuple built from yield results
-    def tuple_collect(enum)
-      Hash[enum.map{|elm| yield(elm)}]
-    end
-
     # Infers the heading from a tuple
     #
     # @param [Tuple] tuple a tuple, represented by a Hash
@@ -76,7 +65,7 @@ module Alf
     # @param  [Hash]  tuple a tuple, represented by a Hash
     # @return [Tuple] the same tuple, with all keys as Symbols
     def symbolize_keys(tuple)
-      tuple_collect(tuple){|k,v| [k.to_sym, v] }
+      Hash[tuple.map{|k,v| [k.to_sym, v] }]
     end
 
   end # module Tools

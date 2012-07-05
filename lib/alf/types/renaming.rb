@@ -65,7 +65,7 @@ module Alf
       # @param [Hash] tuple a tuple to rename
       # @return [Hash] the renamed tuple
       def rename_tuple(tuple)
-        Tools.tuple_collect(tuple){|k,v| [@renaming[k] || k, v]}
+        Hash[tuple.map{|k,v| [@renaming[k] || k, v]}]
       end
 
       # Returns the ordering hash code.

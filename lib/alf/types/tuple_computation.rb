@@ -95,9 +95,9 @@ module Alf
       # @param [TupleScope] scope a tuple scope instance.
       # @return [Hash] the resulting tuple
       def evaluate(scope = nil)
-        Tools.tuple_collect(@computation){|k,v|
+        Hash[ @computation.map{|k,v|
           [k, v.is_a?(TupleExpression) ? v.evaluate(scope) : v]
-        }
+        }]
       end
 
       # Returns a hash code.
