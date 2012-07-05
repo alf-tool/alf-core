@@ -13,7 +13,6 @@ module Alf
       # @return [Database] an database instance
       # @raise [ArgumentError] when no registered adapter recognizes the arguments
       def connect(uri = nil, options = {}, &block)
-        raise if uri.is_a?(Connection)
         adapter = Adapter.autodetect(*[uri].compact)
         adapter.connect(options, helpers, &block)
       end
