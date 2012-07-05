@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   #
   # The description should be more detailed than the summary.  For example,
   # you might wish to copy the entire README into the description.
-  s.description = "Alf brings the relational algebra both in Shell and in Ruby. In Shell, because \nmanipulating any relation-like data source should be as straightforward as a \none-liner. In Ruby, because I've never understood why programming languages \nprovide data structures like arrays, hashes, sets, trees and graphs but not \n_relations_... Let's stop the segregation ;-)"
+  s.description = "Alf brings the relational algebra both in Shell and in Ruby. In Shell, because\nmanipulating any relation-like data source should be as straightforward as a\none-liner. In Ruby, because I've never understood why programming languages\nprovide data structures like arrays, hashes, sets, trees and graphs but not\n_relations_... Let's stop the segregation ;-)"
 
   # The URL of this gem home page (optional)
   s.homepage = "http://blambeau.github.com/alf"
@@ -133,7 +133,7 @@ Gem::Specification.new do |s|
   s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("myrrha", "~> 1.2.2")
   s.add_dependency("backports", "~> 2.6")
-  s.add_dependency("epath", "~> 0.3.0")
+  s.add_dependency("epath", "~> 0.4")
 
   # The version of ruby required by this gem
   #

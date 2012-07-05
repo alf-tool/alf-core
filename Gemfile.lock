@@ -4,7 +4,7 @@ GEM
     backports (2.6.1)
     bluecloth (2.2.0)
     diff-lcs (1.1.3)
-    epath (0.3.0)
+    epath (0.4.0)
     highline (1.6.13)
     json (1.7.3)
     json (1.7.3-java)
@@ -30,7 +30,7 @@ PLATFORMS
 DEPENDENCIES
   backports (~> 2.6)
   bluecloth (~> 2.2.0)
-  epath (~> 0.3.0)
+  epath (~> 0.4)
   highline (~> 1.6)
   json
   myrrha (~> 1.2.2)
