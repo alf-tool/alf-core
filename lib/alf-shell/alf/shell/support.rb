@@ -6,21 +6,18 @@ module Alf
         requester && requester.database
       end
 
-      def operand(op)
-        Iterator.coerce(op, database)
+      def compiler
+        @compiler ||= Engine::Compiler.new(database)
       end
 
       def operands(argv, size = nil)
-        operands = [ stdin_reader ] + Array(argv).map{|arg| operand(arg)}
-        size ? operands[(operands.size - size)..-1] : operands
+        operands = [ stdin_operand ] + Array(argv)
+        operands = operands[(operands.size - size)..-1] if size
+        operands = operands.map{|arg| compiler.compile(arg) }
       end
 
-      def stdin_reader
-        if requester && requester.respond_to?(:stdin_reader)
-          requester.stdin_reader
-        else
-          Reader.coerce($stdin)
-        end
+      def stdin_operand
+        requester.stdin_operand rescue $stdin
       end
 
     end # module Support

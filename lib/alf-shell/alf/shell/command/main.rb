@@ -46,7 +46,7 @@ module Alf
       attr_accessor :database
 
       # The reader to use when stdin is used as operand
-      attr_accessor :stdin_reader
+      attr_accessor :stdin_operand
 
       # Output renderer
       attr_accessor :renderer_class
@@ -116,8 +116,8 @@ module Alf
         end
       end # Alf's options
 
-      def stdin_reader
-        @stdin_reader || Reader.send(@input_reader, $stdin)
+      def stdin_operand
+        @stdin_operand || Reader.send(@input_reader, $stdin)
       end
 
       def execute(argv)

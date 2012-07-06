@@ -37,12 +37,9 @@ module Alf
       end
 
       def compile(argv)
-        operands = operands(argv.shift, 1)
-        if argv.empty?
-          operands.last
-        else
-          Alf::Operator::NonRelational::Sort.new(database, operands, argv.shift)
-        end
+        operand = operands(argv.shift, 1).last
+        operand = Engine::Sort.new(operand, Ordering.from_argv(argv.first), database) unless argv.empty?
+        operand
       end
 
     end # class Show
