@@ -5,6 +5,7 @@ module Alf
 end
 
 task :"gh-pages" do
+  $:.unshift File.expand_path('../../lib', __FILE__)
   require 'fileutils'
   require 'wlang'
   require 'wlang/ext/hash_methodize'

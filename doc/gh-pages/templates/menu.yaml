@@ -1,11 +1,11 @@
-- id: overview
+- eid: overview
   name: Overview
-- id: shell
+- eid: shell
   name: Alf in Shell
-- id: ruby
+- eid: ruby
   name: Alf in Ruby
-- id: devel
+- eid: devel
   name: Development
-- id: use-cases
+- eid: use-cases
   name: Use cases
 

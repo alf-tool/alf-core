@@ -17,9 +17,9 @@
 <<={menu.yaml as entries}
 <div id="menu">
 *{entries as e}{
-<div class="menu-entry" id="menu-!{e.id}">
-<div class="head"><a href="javascript:open('{e.id}');">${e.name}</a></div>
-<div class="content" ?{e.id.to_sym == entry}{}{style="display:none;"}><<+{menu/!{e.id}.wtpl share all}</div>
+<div class="menu-entry" id="menu-!{e.eid}">
+<div class="head"><a href="javascript:open('{e.eid}');">${e.name}</a></div>
+<div class="content" ?{e.eid.to_sym == entry}{}{style="display:none;"}><<+{menu/!{e.eid}.wtpl share all}</div>
 </div>
 }
 </div>
