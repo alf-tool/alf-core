@@ -33,30 +33,17 @@ module Alf
         requester.rendering_options[:float_format] = @ff unless @ff.nil?
         requester.renderer_class = (@renderer_class || requester.renderer_class)
 
-        database = requester && requester.database
-
-        # normalize args
-        args = argv.first
-        args = [ stdin_reader ] if args.empty?
-        chain = Iterator.coerce(args.first, database)
-
-        # put a sorter
-        if argv[1]
-          chain = Alf::Operator::NonRelational::Sort.new(database, [chain], argv[1])
-        end
-
-        chain
+        compile(argv)
       end
 
-      private
-
-        def stdin_reader
-          if requester && requester.respond_to?(:stdin_reader)
-            requester.stdin_reader
-          else
-            Reader.coerce($stdin)
-          end
+      def compile(argv)
+        operands = operands(argv.shift, 1)
+        if argv.empty?
+          operands.last
+        else
+          Alf::Operator::NonRelational::Sort.new(database, operands, argv.shift)
         end
+      end
 
     end # class Show
   end # module Shell

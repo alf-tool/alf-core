@@ -116,45 +116,22 @@ module Alf
         end
       end # Alf's options
 
-      #
-      # Returns the $stdin Reader to use, according to the
-      # --input-reader= option
-      #
       def stdin_reader
         @stdin_reader || Reader.send(@input_reader, $stdin)
       end
 
-      #
-      # Executes the command on an array of arguments.
-      #
       def execute(argv)
-        # 1) special case where a .alf file is provided
-        if argv.empty? or (argv.size == 1 && File.exists?(argv.first))
+        # special case where a .alf file is provided
+        if argv.empty? or (argv.size == 1 && Path(argv.first).exist?)
           argv.unshift("exec")
         end
 
-        # 2) build the operator according to -e option
-        operator = if @execute
-          database.compile(argv.first)
-        else
-          super
-        end
-        operator = Iterator.coerce(operator, database) if operator
-
-        # 3) if there is a requester, then we do the job (assuming bin/alf)
-        # with the renderer to use. Otherwise, we simply return built operator
-        if operator && requester
-          renderer_class = self.renderer_class || default_renderer_class
-          renderer = renderer_class.new(operator, rendering_options)
-          renderer.execute($stdout)
-        else
-          operator
+        # compile the operator, render and returns it
+        compile(argv){ super }.tap do |op|
+          render(op) if op && requester
         end
       end
 
-      #
-      # Returns rendering options
-      #
       def pretty=(val)
         @rendering_options[:pretty] = val
         if val && (hl = highline)
@@ -164,17 +141,24 @@ module Alf
         val
       end
 
-      #
-      # Returns a highline instance
-      #
+    private
+
+      def compile(argv)
+        @execute ? database.compile(argv.first) : yield
+      end
+
+      def render(operator, out = $stdout)
+        renderer_class = self.renderer_class || default_renderer_class
+        renderer = renderer_class.new(operator, rendering_options)
+        renderer.execute(out)
+      end
+
       def highline
         require 'highline'
         HighLine.new($stdin, $stdout)
       rescue LoadError => ex
         nil
       end
-
-    private
 
       def default_renderer_class
         $stdout.tty? ? Text::Renderer : Renderer::Rash

@@ -1,63 +1,7 @@
+require 'forwardable'
 module Alf
   module Shell
     module Operator
-      module ClassMethods
-
-        attr_accessor :operator_class
-
-        # Returns the ruby case name of this operator
-        def rubycase_name
-          Tools.ruby_case(Tools.class_name(self))
-        end
-
-        # @return false
-        def command?
-          false
-        end
-
-        # @return true
-        def operator?
-          true
-        end
-
-        # delegation to the class
-        [ :signature,
-          :relational?, :non_relational?, :experimental?,
-          :nullary?, :unary?, :binary? ].each do |meth|
-          define_method(meth) do |*args, &block|
-            operator_class.send(meth, *args, &block)
-          end
-        end
-
-        # Runs the command on commandline arguments `argv`
-        #
-        # @param [Array] argv an array of commandline arguments, typically ARGV
-        # @param [Object] req an optional requester, typically a super command
-        # @return [Iterator] an Iterator with query result
-        def run(argv, req = nil)
-          operands, args, options = signature.argv2args(argv)
-
-          # find standard input reader
-          stdin_reader = if req && req.respond_to?(:stdin_reader)
-            req.stdin_reader
-          else
-            Reader.coerce($stdin)
-          end
-
-          # find database
-          database = req && req.database
-
-          # normalize operands
-          operands = [ stdin_reader ] + Array(operands)
-          operands = operands.map{|op|
-            Iterator.coerce(op, database)
-          }[(operands.size - operator_class.arity)..-1]
-
-          init_args = [operands] + args + [options]
-          operator_class.new(database, *init_args)
-        end
-
-      end # module ClassMethods
 
       # Defines a command for `clazz`
       def self.define_operator(op_name, op_class)
@@ -73,6 +17,46 @@ module Alf
         define_operator(op_name, op_class)
       end
 
-    end
-  end
-end
+      module ClassMethods
+        extend Forwardable
+
+        attr_accessor  :operator_class
+        def_delegators :operator_class, :signature,
+                                        :relational?,
+                                        :non_relational?,
+                                        :experimental?,
+                                        :nullary?,
+                                        :unary?,
+                                        :binary?
+
+        def command?
+          false
+        end
+
+        def operator?
+          true
+        end
+      end
+
+      module InstanceMethods
+        extend Forwardable
+
+        def_delegators :"self.class", :signature, :operator_class
+
+        def run(argv, req = nil)
+          @requester = req
+          compile(argv)
+        end
+
+        def compile(argv)
+          operands, args, options = signature.argv2args(argv)
+          operands  = operands(operands, operator_class.arity)
+          init_args = [operands] + args + [options]
+          operator_class.new(database, *init_args)
+        end
+
+      end # module InstanceMethods
+
+    end # module Operator
+  end # module Shell
+end # module Alf

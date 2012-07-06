@@ -81,7 +81,7 @@ module Alf
       end
 
       # Command and Operator -> (operator operands, args, options)
-      cmd = lambda{|v,_| (Command === v) || (Operator === v)}
+      cmd = lambda{|v,_| (Operator === v)}
       r.upon(cmd) do |v,rd|
         cmdname  = v.class.rubycase_name
         oper, args, opts = v.class.signature.collect_on(v)

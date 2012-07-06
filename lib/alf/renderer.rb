@@ -85,7 +85,7 @@ module Alf
     # The default implementation simply coerces the input as an Iterator and
     # delegates the call to {#render}.
     def execute(output = $stdout)
-      render(Iterator.coerce(input), output)
+      render(input, output)
     end
 
     protected
