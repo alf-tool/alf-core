@@ -3,7 +3,6 @@ module Alf
   # Namespace for all operators, relational and non-relational ones.
   #
   module Operator
-    include Iterator
 
     class << self
       include Tools::Registry
@@ -31,15 +30,6 @@ module Alf
     # @return [Signature] the operator signature.
     def signature
       self.class.signature
-    end
-
-    # Yields each tuple in turn
-    def each(&block)
-      compile(context).each(&block)
-    end
-
-    def compile(context)
-      Engine::Compiler.new(context).compile(self)
     end
 
   end # module Operator

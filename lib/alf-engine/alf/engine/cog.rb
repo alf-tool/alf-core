@@ -10,6 +10,10 @@ module Alf
         @context = context
       end
 
+      def to_relation
+        Relation.new(to_set)
+      end
+
     private
 
       def tuple_scope(tuple = nil)
