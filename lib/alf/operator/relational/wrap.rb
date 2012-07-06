@@ -9,11 +9,6 @@ module Alf
           s.argument :as, AttrName, :wrapped
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          Engine::Wrap.new(operand, attributes, as, false, context)
-        end
-
       end # class Wrap
     end # module Relational
   end # module Operator

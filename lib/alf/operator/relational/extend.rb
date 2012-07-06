@@ -8,11 +8,6 @@ module Alf
           s.argument :ext, TupleComputation, {}
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          Engine::SetAttr.new(operand, ext, context)
-        end
-
       end # class Extend
     end # module Relational
   end # module Operator

@@ -9,13 +9,6 @@ module Alf
           s.argument :as, AttrName, :rank
         end
 
-        # (see Operator#each)
-        def compile(context)
-          op = Engine::Sort.new(operand, order, context)
-          op = Engine::Rank::Cesure.new(op, order, as, context)
-          op
-        end
-
       end # class Rank
     end # module Relational
   end # module Operator

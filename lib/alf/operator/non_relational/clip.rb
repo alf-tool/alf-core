@@ -9,11 +9,6 @@ module Alf
           s.option   :allbut,     Boolean, false, "Apply an allbut clipping?"
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          Engine::Clip.new(operand, attributes, allbut, context)
-        end
-
       end # class Clip
     end # module NonRelational
   end # module Operator

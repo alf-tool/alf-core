@@ -38,6 +38,10 @@ module Alf
       compile(context).each(&block)
     end
 
+    def compile(context)
+      Engine::Compiler.new(context).compile(self)
+    end
+
   end # module Operator
 end # module Alf
 require_relative 'operator/class_methods'

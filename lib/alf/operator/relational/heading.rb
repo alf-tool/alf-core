@@ -7,11 +7,6 @@ module Alf
         signature do |s|
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          Engine::InferHeading.new(operand, context)
-        end
-
       end # class Project
     end # module Relational
   end # module Operator

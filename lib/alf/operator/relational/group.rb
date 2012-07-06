@@ -10,11 +10,6 @@ module Alf
           s.option   :allbut,     Boolean,  false, 'Group all but specified attributes?'
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          Engine::Group::Hash.new(operand, attributes, as, allbut, context)
-        end
-
       end # class Group
     end # module Relational
   end # module Operator

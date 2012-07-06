@@ -8,11 +8,6 @@ module Alf
           s.argument :attribute, AttrName, :grouped
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          Engine::Ungroup.new(operand, attribute, context)
-        end
-
       end # class Ungroup
     end # module Relational
   end # module Operator

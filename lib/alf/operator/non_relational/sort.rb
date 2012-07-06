@@ -8,11 +8,6 @@ module Alf
           s.argument :ordering, Ordering, []
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          Engine::Sort.new(operand, ordering, context)
-        end
-
       end # class Sort
     end # module NonRelational
   end # module Operator

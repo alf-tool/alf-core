@@ -9,13 +9,6 @@ module Alf
           s.option   :allbut,     Boolean,  false, 'Project all but specified attributes?'
         end
 
-        # (see Operator#compile)
-        def compile(context)
-          op = Engine::Clip.new(operand, attributes, allbut, context)
-          op = Engine::Compact.new(op, context)
-          op
-        end
-
       end # class Project
     end # module Relational
   end # module Operator
