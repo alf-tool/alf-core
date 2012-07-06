@@ -7,16 +7,9 @@ module Alf
         signature do |s|
         end
 
-        # (see Operator#each)
-        def each
-          heading = operand.inject(Alf::Heading::EMPTY){|h,t| h + heading(t) }
-          yield(heading.to_h)
-        end
-
-      private
-
-        def heading(tuple)
-          Types::Heading[Hash[tuple.map{|k,v| [k, v.class]}]]
+        # (see Operator#compile)
+        def compile(context)
+          Engine::InferHeading.new(operand, context)
         end
 
       end # class Project

@@ -22,5 +22,5 @@ require_relative 'engine/summarize'
 require_relative 'engine/rank'
 require_relative 'engine/quota'
 require_relative 'engine/ungroup'
+require_relative 'engine/infer_heading'
 require_relative 'engine/to_array'
-
