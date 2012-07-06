@@ -12,8 +12,7 @@ module Alf
 
         def def_operator_method(name, clazz)
           define_method(name) do |*args|
-            operands  = args[0...clazz.arity].map{|x| Iterator.coerce(x, _context) }
-            arguments = args[clazz.arity..-1]
+            operands, arguments = args[0...clazz.arity], args[clazz.arity..-1]
             _operator_output clazz.new(_context, operands, *arguments)
           end
         end

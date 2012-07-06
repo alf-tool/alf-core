@@ -12,21 +12,6 @@ module Alf
   module Iterator
     include Enumerable
 
-    # Coerces something to an iterator
-    def self.coerce(arg, database = nil)
-      case arg
-      when Iterator, Array, Alf::Engine::Cog
-        arg
-      when String, Symbol
-        unless database
-          raise "No database provided to resolve named datasets."
-        end
-        database.relvar(arg.to_sym)
-      else
-        Reader.coerce(arg, database)
-      end
-    end
-
     # Converts this iterator to an in-memory Relation.
     #
     # @return [Relation] a relation instance, as the set of tuples that would be yield by
