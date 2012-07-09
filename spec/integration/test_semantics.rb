@@ -25,7 +25,7 @@ describe "/spec/integration/semantics/" do
     }
 
     it "works without error" do
-      conn.evaluate(Path(subject).read)
+      conn.scope.evaluate(Path(subject).read)
     end
   end # An example
 
