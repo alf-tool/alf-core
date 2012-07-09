@@ -4,57 +4,13 @@ module Alf
     describe Sort do
 
       let(:operator_class){ Sort }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:first => "a", :second => 20,  :third => true},
-        {:first => "b", :second => 10, :third => false},
-        {:first => "a", :second => 1,  :third => true},
-      ]}
+      subject{ a_lispy.sort([], [[:first, :asc], [:second, :asc]]) }
 
-      let(:expected){[
-        {:first => "a", :second => 1,  :third => true},
-        {:first => "a", :second => 20, :third => true},
-        {:first => "b", :second => 10, :third => false},
-      ]}
+      it{ should be_a(Sort) }
 
-      subject{ operator.to_a }
-
-      context "with Lispy" do 
-        let(:operator){ a_lispy.sort(input, [[:first, :asc], [:second, :asc]]) }
-        it{ should eq(expected) }
-      end
-
-      context "with one arg" do 
-        let(:operator){ a_lispy.sort(input, [[:second, :asc]]) }
-        let(:expected){[
-          {:first => "a", :second => 1,  :third => true},
-          {:first => "b", :second => 10, :third => false},
-          {:first => "a", :second => 20, :third => true},
-        ]}
-        it{ should eq(expected) }
-      end
-
-      context "with two args" do 
-        let(:operator){ a_lispy.sort(input, [[:second, :asc], [:first, :asc]]) }
-        let(:expected){[
-          {:first => "a", :second => 1,  :third => true},
-          {:first => "b", :second => 10, :third => false},
-          {:first => "a", :second => 20, :third => true},
-        ]}
-        it{ should eq(expected) }
-      end
-
-      context "in descending order" do 
-        let(:operator){ a_lispy.sort(input, [[:second, :desc]]) }
-        let(:expected){[
-          {:first => "a", :second => 20, :third => true},
-          {:first => "b", :second => 10, :third => false},
-          {:first => "a", :second => 1,  :third => true},
-        ]}
-        it{ should eq(expected) }
-      end
-
-    end 
+    end
   end
 end

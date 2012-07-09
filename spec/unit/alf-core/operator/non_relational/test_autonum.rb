@@ -4,43 +4,27 @@ module Alf
     describe Autonum do
 
       let(:operator_class){ Autonum }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:a => "a"},
-        {:a => "b"},
-        {:a => "a"},
-      ]}
-
-      subject{ operator.to_a }
-
       context "with default attribute name" do
+        subject{ a_lispy.autonum([]) }
 
-        let(:expected){[
-          {:a => "a", :autonum => 0},
-          {:a => "b", :autonum => 1},
-          {:a => "a", :autonum => 2},
-        ]}
+        it{ should be_a(Autonum) }
 
-        context "with Lispy" do 
-          let(:operator){ a_lispy.autonum(input) }
-          it{ should == expected }
+        it 'has :autonum as attribute name' do
+          subject.as.should eq(:autonum)
         end
-
       end # default attribute name
 
       context "with explicit attribute name" do
-        let(:expected){[
-          {:a => "a", :unique => 0},
-          {:a => "b", :unique => 1},
-          {:a => "a", :unique => 2},
-        ]}
+        subject{ a_lispy.autonum([], :unique) }
 
-        context "with Lispy" do 
-          let(:operator){ a_lispy.autonum(input, :unique) }
-          it{ should == expected }
+        it{ should be_a(Autonum) }
+
+        it 'has :unique as attribute name' do
+          subject.as.should eq(:unique)
         end
-
       end # explicit attribute name
 
     end

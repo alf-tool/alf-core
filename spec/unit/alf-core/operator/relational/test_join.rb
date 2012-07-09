@@ -3,33 +3,13 @@ module Alf
   module Operator::Relational
     describe Join do
 
-      let(:suppliers){Relation.coerce [
-        {:sid => 'S1', :city => 'London'},
-        {:sid => 'S2', :city => 'Paris'},
-        {:sid => 'S3', :city => 'Paris'},
-        {:sid => 'S4', :city => 'London'},
-        {:sid => 'S5', :city => 'Athens'},
-      ]}
+      let(:operator_class){ Join }
 
-      context "when applied to sub-relations" do
-        let(:suppliers_by_city){Relation.coerce( 
-          a_lispy.group(suppliers, [:sid], :suppliers)
-        )}
-        let(:s2_s3){Relation.coerce([
-          {:sid => 'S3'},
-          {:sid => 'S2'}
-        ])} 
-        let(:right){Relation.coerce([
-          {:suppliers => s2_s3, :hello => "world"}
-        ])}
-        let(:expected){Relation.coerce([
-          {:suppliers => s2_s3, :hello => "world", :city => 'Paris'}
-        ])}
-        subject{Relation.coerce(
-          a_lispy.join(suppliers_by_city, right)
-        )}
-        it{ should eq(expected) }
-      end
+      it_should_behave_like("An operator class")
+
+      subject{ a_lispy.join([], []) }
+
+      it { should be_a(Join) }
 
     end
   end

@@ -4,32 +4,13 @@ module Alf
     describe Union do
 
       let(:operator_class){ Union }
+
       it_should_behave_like("An operator class")
 
-      let(:left) {[
-        {:city => 'London'},
-        {:city => 'Paris'},
-        {:city => 'Paris'}
-      ]}
+      subject{ a_lispy.union([], []) }
 
-      let(:right) {[
-        {:city => 'Oslo'},
-        {:city => 'Paris'}
-      ]}
+      it { should be_a(Union) }
 
-      let(:operator){ a_lispy.union(*args) }
-      subject{ operator.to_a }
-
-      context "when applied on non disjoint sets" do
-        let(:args){ [left, right] }
-        let(:expected){[
-          {:city => 'London'},
-          {:city => 'Paris'},
-          {:city => 'Oslo'}
-        ]}
-        it { should eq(expected) }
-      end
-
-    end 
+    end
   end
 end

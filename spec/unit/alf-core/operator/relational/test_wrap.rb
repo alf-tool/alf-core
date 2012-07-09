@@ -4,22 +4,12 @@ module Alf
     describe Wrap do
 
       let(:operator_class){ Wrap }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:a => "a", :b => "b", :c => "c"},
-      ]}
+      subject{ a_lispy.wrap([], [:a, :b], :wraped) }
 
-      let(:expected) {[
-        {:wraped => {:a => "a", :b => "b"}, :c => "c"}
-      ]}
-
-      subject{ operator.to_a }
-
-      context "with Lispy" do
-        let(:operator){ a_lispy.wrap(input, [:a, :b], :wraped) }
-        it { should eq(expected) }
-      end
+      it { should be_a(Wrap) }
 
     end
   end

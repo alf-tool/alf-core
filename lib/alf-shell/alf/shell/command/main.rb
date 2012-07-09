@@ -144,7 +144,8 @@ module Alf
     private
 
       def compile(argv)
-        @execute ? database.compile(argv.first) : yield
+        op = @execute ? database.compile(argv.first) : yield
+        Engine::Compiler.new(database).compile(op) if op
       end
 
       def render(operator, out = $stdout)

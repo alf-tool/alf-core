@@ -1,18 +1,9 @@
 shared_examples_for "An operator class" do
 
-  it "should not have public _each and _prepare methods" do
-    operator_class.public_method_defined?(:_each).should be_false
-    operator_class.public_method_defined?(:_prepare).should be_false
-  end
-
   it "should have a public rubycase_name method" do
     operator_class.should respond_to(:rubycase_name)
   end
-  
-  it "should have a public each method" do
-    operator_class.public_method_defined?(:each).should be_true
-  end
-  
+
   it "should have an arity class method" do
     operator_class.should respond_to(:arity)
   end
@@ -24,16 +15,16 @@ shared_examples_for "An operator class" do
   it "should have a binary? class method" do
     operator_class.should respond_to(:binary?)
   end
-  
+
   it "should have a nullary? class method" do
     operator_class.should respond_to(:nullary?)
   end
-  
+
   it "should have relational? and non_relational? methods" do
     operator_class.should respond_to(:relational?)
     operator_class.should respond_to(:non_relational?)
   end
-  
+
   it "arity should be consistent with nullary?, unary?, binary?" do
     case operator_class.arity
     when 0

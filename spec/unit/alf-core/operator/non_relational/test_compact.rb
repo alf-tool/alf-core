@@ -4,28 +4,12 @@ module Alf
     describe Compact do
 
       let(:operator_class){ Compact }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:a => "via_method", :time => 1, :b => "b"},
-        {:a => "via_reader", :time => 3, :b => "b"},
-        {:a => "via_method", :time => 2, :b => "b"},
-        {:a => "via_reader", :time => 3, :b => "b"},
-        {:a => "via_method", :time => 1, :b => "b"},
-      ]}
+      subject{ a_lispy.compact([]) }
 
-      let(:expected) {[
-        {:a => "via_method", :time => 1, :b => "b"},
-        {:a => "via_reader", :time => 3, :b => "b"},
-        {:a => "via_method", :time => 2, :b => "b"},
-      ]}
-
-      subject{ operator.to_a }
-
-      context "with Lispy" do
-        let(:operator){ a_lispy.compact(input) }
-        it { should == expected }
-      end
+      it { should be_a(Compact) }
 
     end
   end

@@ -4,24 +4,13 @@ module Alf
     describe Heading do
 
       let(:operator_class){ Heading }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:tested => 1,    :other => "b"},
-        {:tested => 10.0, :other => "a"},
-      ]}
+      subject{ a_lispy.heading([]) }
 
-      let(:expected){[
-        {:tested => Numeric, :other => String},
-      ]}
+      it{ should be_a(Heading) }
 
-      subject{ operator.to_a }
-
-      context "with Lispy" do 
-        let(:operator){ a_lispy.heading(input) }
-        it{ should == expected }
-      end
-
-    end 
+    end
   end
 end

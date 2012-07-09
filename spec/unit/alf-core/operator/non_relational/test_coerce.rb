@@ -4,25 +4,12 @@ module Alf
     describe Coerce do
 
       let(:operator_class){ Coerce }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {Alf::Relation[
-        {:a => "12", :b => "14.0"},
-      ]}
+      subject{ a_lispy.coerce([], :a => Integer, :b => Float) }
 
-      subject{ operator.to_relation }
-
-      context "--no-strict" do
-        let(:expected){Alf::Relation[
-          {:a => 12, :b => 14.0}
-        ]}
-
-        context "with Lispy" do
-          let(:operator){ a_lispy.coerce(input, :a => Integer, :b => Float) }
-          it { should == expected }
-        end
-
-      end # --no-strict
+      it { should be_a(Coerce) }
 
     end
   end

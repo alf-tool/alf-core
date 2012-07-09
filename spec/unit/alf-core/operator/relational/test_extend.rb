@@ -4,25 +4,13 @@ module Alf
     describe Extend do
 
       let(:operator_class){ Extend }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:tested => 1,  :other => "b"},
-        {:tested => 30, :other => "a"},
-      ]}
+      subject{ a_lispy.extend([], :big => lambda{ tested > 10 }) }
 
-      let(:expected){[
-        {:tested => 1,  :other => "b", :big => false},
-        {:tested => 30, :other => "a", :big => true},
-      ]}
+      it{ should be_a(Extend) }
 
-      subject{ operator.to_a }
-
-      context "with Lispy" do 
-        let(:operator){ a_lispy.extend(input, :big => lambda{ tested > 10 }) }
-        it{ should == expected }
-      end
-
-    end 
+    end
   end
 end

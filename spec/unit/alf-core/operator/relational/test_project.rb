@@ -4,59 +4,29 @@ module Alf
     describe Project do
 
       let(:operator_class){ Project }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:a => "a", :b => "b"},
-        {:a => "a", :b => "b"},
-      ]}
-
-      subject{ operator.to_a }
-
       context "--no-allbut" do
-        let(:expected){[{:a => "a"}]}
+        subject{ a_lispy.project([], [:a]) }
 
-        context "with Lispy" do
-          let(:operator){ a_lispy.project(input, [:a]) }
-          it { should eq(expected) } 
+        it { should be_a(Project) }
+
+        it 'is !allbut by default' do
+          subject.allbut.should be_false
         end
       end # --no-allbut
 
       context "--allbut" do
-        let(:expected){[{:b => "b"}]}
+        subject{ a_lispy.project([], [:a], :allbut => true) }
 
-        context "and factored with Lispy#project" do
-          let(:operator){ a_lispy.project(input, [:a], :allbut => true) }
-          it { should eq(expected) } 
+        it { should be_a(Project) }
+
+        it 'is allbut' do
+          subject.allbut.should be_true
         end
-
-        context "and factored with Lispy#allbut" do
-          let(:operator){ a_lispy.allbut(input, [:a]) }
-          it { should eq(expected) } 
-        end
-
       end # --allbut
 
-      context "when all is projected" do
-        let(:expected){[{}]}
-
-        context "with empty attributes" do
-          let(:operator){ a_lispy.project(input, []) }
-          it { should eq(expected) } 
-        end
-
-        context "when empty attributes and input" do
-          let(:operator){ a_lispy.project([], []) }
-          it { should == [] } 
-        end
-
-        context "--allbut" do
-          let(:operator){ a_lispy.project(input, [:a, :b], :allbut => true) }
-          it { should eq(expected) } 
-        end
-
-      end # all attributes projected
-
-    end 
+    end
   end
 end

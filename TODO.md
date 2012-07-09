@@ -1,8 +1,10 @@
+* Rework AlfFile that loads its operand in memory.
+
 * RENAME: add prefix, suffix and lambda renaming
-  
+
         (rename :suppliers, [:name, :city], :prefix => "supplier_")
         (rename :suppliers, [:name, :city], :suffix => "_sup")
-        (rename :suppliers, [:name, :city], lambda{|name| name.upcase}) 
+        (rename :suppliers, [:name, :city], lambda{|name| name.upcase})
 
 * WRAP: provide a multi-wrapping ability?
 
@@ -15,7 +17,7 @@
 * GROUP: provide a multi-grouping ability?
 
     Similar to wrap, with same limitation.
-  
+
 * Add PIVOT and UNPIVOT operators
 
-* Find a way to complete the description of Quota...  
+* Find a way to complete the description of Quota...

@@ -4,32 +4,29 @@ module Alf
     describe Clip do
 
       let(:operator_class){ Clip }
+
       it_should_behave_like("An operator class")
 
-      let(:input) {[
-        {:a => "a", :b => "b"},
-      ]}
-
-      subject{ operator.to_a }
-
       context "--no-allbut" do
-        let(:expected){[{:a => "a"}]}
+        subject{ a_lispy.clip([], [:a]) }
 
-        context "with Lispy" do
-          let(:operator){ a_lispy.clip(input, [:a]) }
-          it { should == expected } 
+        it { should be_a(Clip) }
+
+        it 'is !allbut by default' do
+          subject.allbut.should be_false
         end
       end # --no-allbut
 
       context "--allbut" do
-        let(:expected){[{:b => "b"}]}
+        subject{ a_lispy.clip([], [:a], :allbut => true) }
 
-        context "with Lispy" do
-          let(:operator){ a_lispy.clip(input, [:a], :allbut => true) }
-          it { should == expected } 
+        it { should be_a(Clip) }
+
+        it 'is allbut' do
+          subject.allbut.should be_true
         end
       end # --allbut
-  
-    end 
+
+    end
   end
 end

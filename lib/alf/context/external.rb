@@ -60,7 +60,25 @@ module Alf
         c = compile(expr, path, line, &block)
         c.respond_to?(:to_relation) ? c.to_relation : c
       end
-      alias :query :evaluate
+
+      # Evaluates a query expression given by a String or a block and returns
+      # the result as an in-memory relation (Alf::Relation)
+      #
+      # Example:
+      #
+      #   # with a string
+      #   rel = conn.evaluate "(restrict :suppliers, lambda{ city == 'London' })"
+      #
+      #   # or with a block
+      #   rel = conn.evaluate {
+      #     (restrict :suppliers, lambda{ city == 'London' })
+      #   }
+      #
+      def query(expr = nil, path = nil, line = nil, &block)
+        c = compile(expr, path, line, &block)
+        c = Engine::Compiler.new(self).compile(c)
+        Tools.to_relation(c)
+      end
 
     end # module External
   end # module Context

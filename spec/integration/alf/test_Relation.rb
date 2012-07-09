@@ -16,18 +16,6 @@ module Alf
       end
     end
 
-    it 'works as expected on an Operator' do
-      op = examples_database.compile{
-        extend(Relation::DEE, :name => lambda{ "Jones" })
-      }
-      def op.each(*args, &bl)
-        raise if defined?(@already_called)
-        @already_called = true
-        super
-      end
-      Alf::Relation(op).should eq(expected)
-    end
-
     it 'supports a Path to a recognized file' do
       Alf::Relation(Path.dir/'example.rash').should eq(expected)
     end

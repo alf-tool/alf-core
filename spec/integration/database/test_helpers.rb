@@ -1,7 +1,7 @@
 require 'spec_helper'
 describe Alf::Database, 'helpers' do
 
-  let(:db){ 
+  let(:db){
     examples_database do
       helpers HelpersInScope
       helpers do
@@ -20,7 +20,7 @@ describe Alf::Database, 'helpers' do
 
   it 'are available in extensions' do
     expected = Relation(:name => "John", :hello => "Hello John!")
-    observed = db.evaluate{
+    observed = db.query{
       extend(suppliers, :hello => lambda{ hello(name) })
     }
     observed.should eq(expected)
@@ -28,7 +28,7 @@ describe Alf::Database, 'helpers' do
 
   it 'are available in restrictions' do
     expected = Relation(:name => "John")
-    observed = db.evaluate{
+    observed = db.query{
       restrict(suppliers, lambda{ hello(name) == "Hello John!" })
     }
     observed.should eq(expected)
@@ -36,7 +36,7 @@ describe Alf::Database, 'helpers' do
 
   it 'are available in defaults' do
     expected = Relation(:name => "John", :hello => "Hello John!")
-    observed = db.evaluate{
+    observed = db.query{
       defaults(suppliers, :hello => lambda{ hello(name) })
     }
     observed.should eq(expected)
@@ -44,7 +44,7 @@ describe Alf::Database, 'helpers' do
 
   it 'are available in summarizations' do
     expected = Relation(:total => (12+20+37)*13)
-    observed = db.evaluate{
+    observed = db.query{
       summarize(quantities, [], :total => sum{ qty * tax })
     }
     observed.should eq(expected)
