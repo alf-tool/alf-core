@@ -80,8 +80,8 @@ module Alf
   #   Alf::Relation(IO)
   #   # loaded through available readers
   #
-  def self.Relation(*args)
-    Alf::Tools.to_relation(*args)
+  def self.Relation(*args, &bl)
+    Alf::Tools.to_relation(*args, &bl)
   end
 
   # Coerces some arguments to a tuple.
@@ -94,8 +94,8 @@ module Alf
   #   Alf::Tuple('attr1' => val1, ..., 'attrn' => valn)
   #   # the same Hash with symbolized keys
   #
-  def self.Tuple(*args)
-    Alf::Tools.to_tuple(*args)
+  def self.Tuple(*args, &bl)
+    Alf::Tools.to_tuple(*args, &bl)
   end
 
   class << self

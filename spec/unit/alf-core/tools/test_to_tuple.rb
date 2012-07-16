@@ -6,8 +6,8 @@ module Alf
       {:name => "Alf"}
     }
 
-    def to_tuple(x)
-      Tuple(x) # Tuple(...) -> Alf::Tuple(...) -> Tools.to_tuple(...)
+    def to_tuple(x, &bl)
+      Tuple(x, &bl) # Tuple(...) -> Alf::Tuple(...) -> Tools.to_tuple(...)
     end
 
     it 'returns a tuple already' do
@@ -16,6 +16,13 @@ module Alf
 
     it 'symbolizes keys' do
       to_tuple('name' => "Alf").should eq(expected)
+    end
+
+    it 'supports a block' do
+      to_tuple('name' => "alf", 'version' => "foo"){|k,v|
+        k.should be_a(Symbol)
+        [k, v.upcase]
+      }.should eq(:name => "ALF", :version => "FOO")
     end
 
   end

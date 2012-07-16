@@ -10,8 +10,10 @@ module Alf
     #
     # @param [Object] expr any ruby object to convert to a Tuple
     # @return [Hash] a tuple as a Hash for `expr`
-    def to_tuple(expr)
-      ToTuple.apply(expr)
+    def to_tuple(expr, &bl)
+      tuple = ToTuple.apply(expr)
+      tuple = Hash[tuple.map(&bl)] if bl
+      tuple
     end
 
     # Myrrha rules for converting objects to relations
