@@ -140,6 +140,13 @@ module Alf
       end
       alias :eql? :==
 
+      # Converts this heading to an attribute list.
+      #
+      # @return [AttrList] heading's attributes as an attribute list
+      def to_attr_list
+        AttrList.new attributes.keys
+      end
+
       # Converts this heading to a Hash of (name,type) pairs
       #
       # @return [Hash] this heading as a Hash of (name, type) pairs

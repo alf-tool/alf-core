@@ -125,6 +125,11 @@ module Alf
         AttrList.new(allbut ? attributes - attrs : attributes & attrs)
       end
 
+      # Returns true if this attribute list is empty, false otherwise
+      def empty?
+        attributes.empty?
+      end
+
       # Checks equality with another attribute list.
       #
       # @param [Object] other another attribute list
