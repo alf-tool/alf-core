@@ -3,6 +3,8 @@ require 'alf'
 require "rspec"
 require 'epath'
 
+require_relative 'support/operand_helper'
+
 def _(path, file)
   File.expand_path("../#{path}", file)
 end
@@ -44,12 +46,12 @@ module Helpers
     end
   end
 
-  def operand_with_heading(h)
-    Struct.new(:heading).new(Alf::Heading[h])
+  def an_operand
+    OperandHelper.new
   end
 
-  def operand_with_keys(*keys)
-    Struct.new(:keys).new(keys.map{|k| Alf::AttrList.coerce(k)})
+  def operand_with_heading(h)
+    an_operand.with_heading(h)
   end
 
 end
