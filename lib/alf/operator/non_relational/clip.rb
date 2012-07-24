@@ -9,6 +9,10 @@ module Alf
           s.option   :allbut,     Boolean, false, "Apply an allbut clipping?"
         end
 
+        def heading
+          @heading ||= operand.heading.project(attributes, allbut)
+        end
+
       end # class Clip
     end # module NonRelational
   end # module Operator
