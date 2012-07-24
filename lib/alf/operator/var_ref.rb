@@ -10,8 +10,8 @@ module Alf
         @name = name
       end
 
-      def info
-        context.info(name)
+      def heading
+        @heading ||= context.relvar(name).heading
       end
 
     end # class VarRef
