@@ -7,6 +7,10 @@ module Alf
         signature do |s|
         end
 
+        def heading
+          @heading ||= left.heading + right.heading
+        end
+
       end # class Join
     end # module Relational
   end # module Operator
