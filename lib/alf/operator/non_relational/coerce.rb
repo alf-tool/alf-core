@@ -8,6 +8,10 @@ module Alf
           s.argument :coercions, Heading, {}
         end
 
+        def heading
+          @heading ||= operand.heading.merge(coercions)
+        end
+
       end # class Coerce
     end # module NonRelational
   end # module Operator
