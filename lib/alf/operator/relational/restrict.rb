@@ -8,6 +8,10 @@ module Alf
           s.argument :predicate, TuplePredicate, "true"
         end
 
+        def heading
+          @heading ||= operand.heading
+        end
+
       end # class Restrict
     end # module Relational
   end # module Operator
