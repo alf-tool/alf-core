@@ -8,6 +8,10 @@ module Alf
           s.argument :attribute, AttrName, :grouped
         end
 
+        def heading
+          raise NotSupportedError
+        end
+
       end # class Ungroup
     end # module Relational
   end # module Operator

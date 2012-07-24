@@ -8,6 +8,10 @@ module Alf
           s.argument :attribute, AttrName, :wrapped
         end
 
+        def heading
+          raise NotSupportedError
+        end
+
       end # class Unwrap
     end # module Relational
   end # module Operator
