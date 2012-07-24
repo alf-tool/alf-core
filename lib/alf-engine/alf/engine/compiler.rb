@@ -148,7 +148,7 @@ module Alf
       end
 
       def on_wrap(expr)
-        Wrap.new(compile(expr.operand), expr.attributes, expr.as, false, context)
+        Wrap.new(compile(expr.operand), expr.attributes, expr.as, expr.allbut, context)
       end
 
     end # class Compiler
