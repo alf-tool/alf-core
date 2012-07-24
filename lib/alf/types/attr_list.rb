@@ -115,6 +115,16 @@ module Alf
         split_tuple(tuple, allbut).first
       end
 
+      # Projects this attribute list on a subset of attributes `attrs`.
+      #
+      # @param [AttrList] attrs a subset of these attributes
+      # @param [Boolean] allbut projection?
+      # @return [AttrList] the projection as an attribute list
+      def project(attrs, allbut = false)
+        attrs = AttrList.coerce(attrs).attributes
+        AttrList.new(allbut ? attributes - attrs : attributes & attrs)
+      end
+
       # Checks equality with another attribute list.
       #
       # @param [Object] other another attribute list
