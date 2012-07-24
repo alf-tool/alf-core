@@ -7,6 +7,10 @@ module Alf
         signature do |s|
         end
 
+        def heading
+          raise NotSupportedError
+        end
+
       end # class InferHeading
     end # module Relational
   end # module Operator
