@@ -110,6 +110,14 @@ module Alf
       end
       alias :eql? :==
 
+      # Converts to an Heading.
+      #
+      # @return [Heading] a heading
+      def to_heading
+        h = Hash[aggregations.map{|name,agg| [name, agg.infer_type]}]
+        Heading[h]
+      end
+
       # Converts to an attribute list.
       #
       # @return [AttrList] a list of computed attribute names

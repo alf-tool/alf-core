@@ -163,6 +163,11 @@ module Alf
       finalize(enum.inject(least){|m,t| happens(m, scope.__set_tuple(t))})
     end
 
+    # Infers the resulting type from expression source code
+    def infer_type
+      Object
+    end
+
     # Asserts that this aggregator knows its source code or raises a
     # NotImplementedError.
     #

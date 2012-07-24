@@ -10,6 +10,10 @@ module Alf
           s.argument :summarization, Summarization, {}
         end
 
+        def heading
+          @heading ||= operand.heading.merge(summarization.to_heading)
+        end
+
       end # class Quota
     end # module Relational
   end # module Operator
