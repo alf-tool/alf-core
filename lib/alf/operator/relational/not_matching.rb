@@ -7,6 +7,10 @@ module Alf
         signature do |s|
         end
 
+        def heading
+          @heading ||= left.heading
+        end
+
       end # class NotMatching
     end # module Relational
   end # module Operator
