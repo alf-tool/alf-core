@@ -9,6 +9,10 @@ module Alf
           s.argument :as, AttrName, :rank
         end
 
+        def heading
+          @heading ||= operand.heading.merge(as => Integer)
+        end
+
       end # class Rank
     end # module Relational
   end # module Operator
