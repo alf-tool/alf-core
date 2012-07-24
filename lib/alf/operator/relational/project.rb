@@ -9,6 +9,10 @@ module Alf
           s.option   :allbut,     Boolean,  false, 'Project all but specified attributes?'
         end
 
+        def heading
+          @heading ||= operand.heading.project(attributes, allbut)
+        end
+
       end # class Project
     end # module Relational
   end # module Operator
