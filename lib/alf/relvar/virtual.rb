@@ -17,6 +17,11 @@ module Alf
         @expression = expression || context.parse(&defn)
       end
 
+      # Returns the relvar heading
+      def heading
+        expression.heading
+      end
+
     protected
 
       # Ask the expression to compile itself.

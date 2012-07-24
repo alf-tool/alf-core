@@ -21,6 +21,11 @@ module Alf
       @name = name
     end
 
+    # Returns the relation variable heading
+    def heading
+      raise NotImplementedError
+    end
+
     # Delegates to the context.
     def each(&bl)
       compile(context).each(&bl)

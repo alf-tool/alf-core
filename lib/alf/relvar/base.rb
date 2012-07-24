@@ -14,6 +14,11 @@ module Alf
         @builder = builder
       end
 
+      # Returns the relvar heading
+      def heading
+        context.heading(name)
+      end
+
     protected
 
       # Request a reader through the builder
