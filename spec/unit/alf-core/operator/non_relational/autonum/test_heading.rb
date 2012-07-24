@@ -7,7 +7,7 @@ module Alf
         operand_with_heading(:name => String)
       }
       let(:op){ 
-        parse{ autonum(operand, :auto) }
+        a_lispy.autonum(operand, :auto)
       }
       let(:expected){
         Heading[:auto => Integer, :name => String]

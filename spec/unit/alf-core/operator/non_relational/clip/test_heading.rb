@@ -11,7 +11,7 @@ module Alf
 
       context '-no-allbut' do
         let(:op){ 
-          parse{ clip(operand, [:id]) }
+          a_lispy.clip(operand, [:id])
         }
         let(:expected){
           Heading[:id => Integer]
@@ -22,7 +22,7 @@ module Alf
 
       context '--allbut' do
         let(:op){ 
-          parse{ clip(operand, [:name], :allbut => true) }
+          a_lispy.clip(operand, [:name], :allbut => true)
         }
         let(:expected){
           Heading[:id => Integer]
