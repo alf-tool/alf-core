@@ -1,5 +1,5 @@
 
-Relational heading (print the relation type)
+Relational heading inference (print the relation type)
 
 SYNOPSIS
 
@@ -13,8 +13,8 @@ its operand.
 EXAMPLE
 
     # What is the heading of the `suppliers` relation?
-    !(alf heading suppliers)
+    !(alf infer-heading suppliers)
 
     # What is the heading of the following join?
-    !(alf join suppliers supplies | alf heading)
+    !(alf join suppliers supplies | alf infer-heading)
 

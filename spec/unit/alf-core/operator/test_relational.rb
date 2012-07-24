@@ -8,7 +8,7 @@ module Alf
       x.sort{|m1,m2| m1.name.to_s <=> m2.name.to_s}.should == [
         Alf::Operator::Relational::Extend,
         Alf::Operator::Relational::Group,
-        Alf::Operator::Relational::Heading,
+        Alf::Operator::Relational::InferHeading,
         Alf::Operator::Relational::Intersect,
         Alf::Operator::Relational::Join,
         Alf::Operator::Relational::Matching,

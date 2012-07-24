@@ -60,6 +60,8 @@
 
 ## Broken stuff
 
+* The `heading` operator has been renamed `infer-heading` (Heading -> InferHeading accordingly).
+
 * `Alf.lispy` has been removed from the public API. Please use `connect` instead:
 
       Alf.lipsy(db_params).query{ ... } -> Alf.connect(db_params).query{ ... }

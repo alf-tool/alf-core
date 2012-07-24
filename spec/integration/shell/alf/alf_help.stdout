@@ -46,8 +46,8 @@ RELATIONAL OPERATORS
 
 EXPERIMENTAL RELATIONAL OPERATORS
 
-    heading     Relational heading (print the relation type)
-    quota       Generalized quota-queries (position, sum progression, etc.)
+    infer-heading     Relational heading inference (print the relation type)
+    quota             Generalized quota-queries (position, sum progression, etc.)
 
 NON-RELATIONAL OPERATORS
 

@@ -10,7 +10,7 @@ module Alf
 
       def compile(expr)
         case expr
-        when Operator::VarRef        then compile_reference(expr.name)
+        when Operator::VarRef    then compile_reference(expr.name)
         when Operator            then compile_operator(expr)
         when String, Symbol      then compile_reference(expr)
         when Array, Relation     then expr
@@ -73,7 +73,7 @@ module Alf
         Group::Hash.new(compile(expr.operand), expr.attributes, expr.as, expr.allbut, context)
       end
 
-      def on_heading(expr)
+      def on_infer_heading(expr)
         InferHeading.new(compile(expr.operand), context)
       end
 
