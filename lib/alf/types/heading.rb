@@ -93,6 +93,14 @@ module Alf
       alias :+ :union
       alias :join :union
 
+      # Projects this heading on specified names.
+      #
+      # @param [AttrList] names an enumerable of attribute names.
+      # @param [Boolean] allbut apply a allbut projection?
+      def project(names, allbut = false)
+        Heading[AttrList.coerce(names).project_tuple(attributes, allbut)]
+      end
+
       # Returns heading's hash code
       #
       # @return [Integer] the heading's hash code
