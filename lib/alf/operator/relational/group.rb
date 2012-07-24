@@ -10,6 +10,13 @@ module Alf
           s.option   :allbut,     Boolean,  false, 'Group all but specified attributes?'
         end
 
+        def heading
+          @heading ||= begin
+            h = operand.heading.project(attributes, !allbut)
+            h.merge(as => Relation)
+          end
+        end
+
       end # class Group
     end # module Relational
   end # module Operator

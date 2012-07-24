@@ -102,7 +102,7 @@ module Alf
       # @param [Heading] other another heading
       # @return [Heading] the merge of this heading with `other`
       def merge(other)
-        Heading.new attributes.merge(other.attributes)
+        Heading.new attributes.merge(Heading[other].attributes)
       end
 
       # Projects this heading on specified names.
