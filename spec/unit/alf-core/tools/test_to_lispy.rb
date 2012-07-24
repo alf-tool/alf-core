@@ -3,7 +3,7 @@ module Alf
   describe Tools, ".to_lispy" do
 
     it "should have a valid example" do
-      expr = examples_database.compile{
+      expr = examples_database.parse{
        (project :suppliers, [:name])
       }
       Tools.to_lispy(expr).should eq("(project :suppliers, [:name])")
@@ -132,28 +132,28 @@ module Alf
 
     describe "on an nullary operator" do
       let(:value){
-        conn.compile{ generator(10, :id) }
+        conn.parse{ generator(10, :id) }
       }
       it { should eq("(generator 10, :id)") }
     end
 
     describe "on an monadic operator with an option" do
       let(:value){
-        conn.compile{ project(:suppliers, [:city], :allbut => true) }
+        conn.parse{ project(:suppliers, [:city], :allbut => true) }
       }
       it { should eq("(project :suppliers, [:city], {:allbut => true})") }
     end
 
     describe "on an monadic operator with default values for options" do
       let(:value){
-        conn.compile{ project(:suppliers, [:city]) }
+        conn.parse{ project(:suppliers, [:city]) }
       }
       it { should eq("(project :suppliers, [:city])") }
     end
 
     describe "on an dyadic operator without no args nor any option" do
       let(:value){
-        conn.compile{ join(:suppliers, :cities) }
+        conn.parse{ join(:suppliers, :cities) }
       }
       it { should eq("(join :suppliers, :cities)") }
     end

@@ -7,7 +7,7 @@ module Alf
         examples_database 
       }
       let(:expression) { 
-        database.compile{ project(:suppliers, [:sid]) }
+        database.parse{ project(:suppliers, [:sid]) }
       }
       let(:relvar){ 
         Virtual.new(database, nil, expression) 

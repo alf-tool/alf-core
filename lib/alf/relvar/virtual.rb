@@ -14,7 +14,7 @@ module Alf
       # @param [Symbol] name name of the relation variable.
       def initialize(context, name = nil, expression=nil, &defn)
         super(context, name)
-        @expression = expression || context.compile(&defn)
+        @expression = expression || context.parse(&defn)
       end
 
     protected

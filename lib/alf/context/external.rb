@@ -13,6 +13,25 @@ module Alf
         adapter.close(self) if adapter
       end
 
+      # Parses a query expression given by a String or a block and returns the
+      # resulting AST
+      #
+      # Example
+      #
+      #   # with a string
+      #   op = db.parse "(restrict :suppliers, lambda{ city == 'London' })"
+      #
+      #   # or with a block
+      #   op = db.parse {
+      #     (restrict :suppliers, lambda{ city == 'London' })
+      #   }
+      #
+      # @param [String] expr a Lispy expression to compile
+      # @return [Object] The AST resulting from the parsing
+      def parse(expr = nil, path = nil, line = nil, &block)
+        scope.evaluate(expr, path, line, &block)
+      end
+
       # Returns a relation variable either by name or a virtual relvar
       # corresponding to a query expression in `query`.
       #
@@ -31,10 +50,10 @@ module Alf
       #
       def relvar(expr = nil, path = nil, line = nil, &block)
         if block
-          expr = compile(&block)
+          expr = parse(&block)
           Relvar::Virtual.new(context, nil, expr)
         elsif expr.is_a?(String)
-          expr = compile(expr, path, line)
+          expr = parse(expr, path, line)
           Relvar::Virtual.new(context, nil, expr)
         elsif expr.is_a?(Symbol)
           adapter.relvar(expr)
@@ -57,9 +76,9 @@ module Alf
       #   }
       #
       def query(expr = nil, path = nil, line = nil, &block)
-        c = compile(expr, path, line, &block)
-        c = Engine::Compiler.new(self).compile(c)
-        Tools.to_relation(c)
+        expr = parse(expr, path, line, &block)
+        cog  = Engine::Compiler.new(self).compile(expr)
+        Tools.to_relation(cog)
       end
 
     end # module External
