@@ -19,6 +19,11 @@ module Alf
         context.heading(name)
       end
 
+      # Returns the relvar keys
+      def keys
+        context.keys(name)
+      end
+
     protected
 
       # Request a reader through the builder

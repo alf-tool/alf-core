@@ -22,6 +22,11 @@ module Alf
         expression.heading
       end
 
+      # Returns the relvar keys
+      def keys
+        expression.keys
+      end
+
     protected
 
       # Ask the expression to compile itself.

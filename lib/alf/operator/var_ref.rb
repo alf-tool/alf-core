@@ -11,7 +11,17 @@ module Alf
       end
 
       def heading
-        @heading ||= context.relvar(name).heading
+        @heading ||= relvar.heading
+      end
+
+      def keys
+        @keys ||= relvar.keys
+      end
+
+    private
+
+      def relvar
+        context.relvar(name)
       end
 
     end # class VarRef

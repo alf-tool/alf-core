@@ -26,6 +26,11 @@ module Alf
       raise NotImplementedError
     end
 
+    # Returns the relation variable keys
+    def keys
+      raise NotImplementedError
+    end
+
     # Delegates to the context.
     def each(&bl)
       compile(context).each(&bl)
