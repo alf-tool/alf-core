@@ -8,6 +8,10 @@ module Alf
           s.argument :ordering, Ordering, []
         end
 
+        def heading
+          @heading ||= operand.heading
+        end
+
       end # class Sort
     end # module NonRelational
   end # module Operator
