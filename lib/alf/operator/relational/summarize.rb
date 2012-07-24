@@ -10,6 +10,13 @@ module Alf
           s.option   :allbut,        Boolean, false, "Summarize on all but specified attributes?"
         end
 
+        def heading
+          @heading ||= begin
+            op_h = operand.heading.project(by, allbut)
+            op_h.merge(summarization.to_heading)
+          end
+        end
+
       end # class Summarize
     end # module Relational
   end # module Operator
