@@ -93,6 +93,18 @@ module Alf
       alias :+ :union
       alias :join :union
 
+      # Computes the merge of this heading with `other`.
+      #
+      # When self and other have no common attribute names, compute the
+      # classical set union on pairs. Otherwise, the type of a common attribute
+      # is returned as the one of `other`
+      #
+      # @param [Heading] other another heading
+      # @return [Heading] the merge of this heading with `other`
+      def merge(other)
+        Heading.new attributes.merge(other.attributes)
+      end
+
       # Projects this heading on specified names.
       #
       # @param [AttrList] names an enumerable of attribute names.
