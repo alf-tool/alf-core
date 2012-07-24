@@ -8,6 +8,10 @@ module Alf
           s.argument :renaming, Renaming, {}
         end
 
+        def heading
+          @heading ||= operand.heading.rename(renaming)
+        end
+
       end # class Rename
     end # module Relational
   end # module Operator

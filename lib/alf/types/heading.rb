@@ -105,6 +105,14 @@ module Alf
         Heading.new attributes.merge(Heading[other].attributes)
       end
 
+      # Renames according to a Renaming instance.
+      #
+      # @param [Renaming] a renaming instance
+      # @return [Heading] a renamed heading
+      def rename(renaming)
+        Heading.new renaming.rename_tuple(attributes)
+      end
+
       # Projects this heading on specified names.
       #
       # @param [AttrList] names an enumerable of attribute names.
