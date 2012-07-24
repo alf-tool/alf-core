@@ -9,6 +9,10 @@ module Alf
           s.argument :as,   AttrName, :num
         end
 
+        def heading
+          @heading ||= Heading[as => Integer]
+        end
+
       end # class Generator
     end # module NonRelational
   end # module Operator
