@@ -10,7 +10,10 @@ module Alf
         end
 
         def heading
-          raise NotSupportedError
+          @heading ||= begin
+            defh = defaults.to_heading
+            strict ? defh : operand.heading.merge(defh)
+          end
         end
 
       end # class Defaults

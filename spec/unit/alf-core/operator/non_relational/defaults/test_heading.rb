@@ -11,32 +11,36 @@ module Alf
 
       context '--no-strict' do
         let(:op){ 
-          a_lispy.defaults(operand, {:id => 12})
+          a_lispy.defaults(operand, {:id => lambda{12}})
         }
         let(:expected){
           Heading[:id => String, :name => String]
         }
 
         it {
-          pending "TupleComputation#heading must be implemented first" do
+          pending "type inference on expressions not implemented" do
             should eq(expected)
           end
         }
+
+        it{ should eq(Heading[:id => Object, :name => String]) }
       end
 
       context '--strict' do
         let(:op){ 
-          a_lispy.defaults(operand, {:id => 12}, :strict => true)
+          a_lispy.defaults(operand, {:id => lambda{12}}, :strict => true)
         }
         let(:expected){
           Heading[:id => String]
         }
 
         it {
-          pending "TupleComputation#heading must be implemented first" do
+          pending "type inference on expressions not implemented" do
             should eq(expected)
           end
         }
+
+        it{ should eq(Heading[:id => Object]) }
       end
 
     end
