@@ -9,6 +9,10 @@ module Alf
           s.option   :strict,   Boolean, false, "Restrict to default attributes only?"
         end
 
+        def heading
+          raise NotSupportedError
+        end
+
       end # class Defaults
     end # module NonRelational
   end # module Operator
