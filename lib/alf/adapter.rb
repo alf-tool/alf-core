@@ -97,6 +97,16 @@ module Alf
       raise NotImplementedError
     end
 
+    # Returns the heading of a given base relvar.
+    #
+    # @arg    [Symbol] name the name of a relation variable.
+    # @return [Heading] a heading.
+    # @raise  [NoSuchRelvarError] when the variable does not exist.
+    # @raise  [NotSupportedError] if heading inference is not supported on the adapter
+    def heading(name)
+      raise NotSupportedError, "#{self} does not support heading inference"
+    end
+
   end # class Adapter
 end # module Alf
 require_relative 'adapter/folder'
