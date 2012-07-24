@@ -8,6 +8,10 @@ module Alf
           s.argument :as, AttrName, :autonum
         end
 
+        def heading
+          @heading ||= operand.heading + Heading[as => Integer]
+        end
+
       end # class Autonum
     end # module NonRelational
   end # module Operator

@@ -44,6 +44,15 @@ module Helpers
     end
   end
 
+  def parse(*args, &bl)
+    lispy = Alf::Tools::Scope.new([Alf::Lang::Functional], self)
+    lispy.evaluate(*args, &bl)
+  end
+
+  def operand_with_heading(h)
+    Struct.new(:heading).new(Alf::Heading[h])
+  end
+
 end
 
 module HelpersInScope
