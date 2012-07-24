@@ -7,6 +7,10 @@ module Alf
         signature do |s|
         end
 
+        def heading
+          @heading ||= operand.heading
+        end
+
       end # class Compact
     end # module NonRelational
   end # module Operator
