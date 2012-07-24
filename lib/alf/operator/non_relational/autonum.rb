@@ -12,6 +12,10 @@ module Alf
           @heading ||= operand.heading + Heading[as => Integer]
         end
 
+        def keys
+          @keys ||= (operand.keys.dup << AttrList[as])
+        end
+
       end # class Autonum
     end # module NonRelational
   end # module Operator

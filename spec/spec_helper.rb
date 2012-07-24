@@ -48,6 +48,10 @@ module Helpers
     Struct.new(:heading).new(Alf::Heading[h])
   end
 
+  def operand_with_keys(*keys)
+    Struct.new(:keys).new(keys.map{|k| Alf::AttrList.coerce(k)})
+  end
+
 end
 
 module HelpersInScope
