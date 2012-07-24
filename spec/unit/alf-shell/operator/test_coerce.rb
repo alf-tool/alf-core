@@ -13,7 +13,8 @@ module Alf::Shell::Operator
     context "a typical coercion" do
       let(:argv){ [input] + %w{-- a Integer b Float} }
       specify{
-        subject.heading.should eq(Alf::Heading[:a => Integer, :b => Float])
+        expected = Alf::Heading[:a => Integer, :b => Float]
+        subject.coercions.should eq(expected)
       }
     end
 

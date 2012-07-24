@@ -22,20 +22,20 @@ module Alf
       # @return [Enumerable] The operand
       attr_reader :operand
 
-      # @return [Heading] Heading for coercion
-      attr_reader :heading
+      # @return [Heading] Heading for coercions
+      attr_reader :coercions
 
       # Creates an Coerce instance
-      def initialize(operand, heading, context=nil)
+      def initialize(operand, coercions, context=nil)
         super(context)
         @operand = operand
-        @heading = heading
+        @coercions = coercions
       end
 
       # (see Cog#each)
       def each
         @operand.each do |tuple|
-          yield tuple.merge(Hash[@heading.map{|k,d|
+          yield tuple.merge(Hash[@coercions.map{|k,d|
             [k, Tools.coerce(tuple[k], d)]
           }])
         end

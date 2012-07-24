@@ -5,7 +5,7 @@ module Alf
         include Operator, NonRelational, Unary
 
         signature do |s|
-          s.argument :heading, Heading, {}
+          s.argument :coercions, Heading, {}
         end
 
       end # class Coerce

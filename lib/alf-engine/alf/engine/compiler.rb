@@ -42,7 +42,7 @@ module Alf
       end
 
       def on_coerce(expr)
-        Coerce.new(compile(expr.operand), expr.heading, context)
+        Coerce.new(compile(expr.operand), expr.coercions, context)
       end
 
       def on_compact(expr)
