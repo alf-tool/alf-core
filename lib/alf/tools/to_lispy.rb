@@ -80,6 +80,11 @@ module Alf
         v.has_source_code!
       end
 
+      # VarRef -> var_ref.name (Symbol)
+      r.upon(lambda{|v,_| Operator::VarRef === v}) do |v, rd|
+        v.name.inspect
+      end
+
       # Command and Operator -> (operator operands, args, options)
       cmd = lambda{|v,_| (Operator === v)}
       r.upon(cmd) do |v,rd|

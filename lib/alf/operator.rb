@@ -19,7 +19,7 @@ module Alf
     attr_accessor :context
 
     # @param [Array] operands Operator operands
-    attr_accessor :operands
+    attr_reader :operands
 
     # Create an operator instance
     def initialize(context, *args)
@@ -32,11 +32,23 @@ module Alf
       self.class.signature
     end
 
+    # Sets the operator operands
+    def operands=(operands)
+      @operands = operands.map{|op|
+        if op.is_a?(Symbol) or op.is_a?(String)
+          Operator::VarRef.new(context, op.to_sym)
+        else
+          op
+        end
+      }
+    end
+
   end # module Operator
 end # module Alf
 require_relative 'operator/class_methods'
 require_relative 'operator/signature'
 
+require_relative 'operator/var_ref'
 require_relative 'operator/nullary'
 require_relative 'operator/unary'
 require_relative 'operator/binary'

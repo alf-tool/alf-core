@@ -128,6 +128,12 @@ module Alf
 
     end # Summarization
 
+    describe "on a VarRef" do
+      let(:value){ Operator::VarRef.new(nil, :suppliers) }
+
+      it{ should eq(":suppliers") }
+    end # VarRef
+
     let(:conn){ examples_database }
 
     describe "on an nullary operator" do

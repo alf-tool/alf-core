@@ -10,6 +10,7 @@ module Alf
 
       def compile(expr)
         case expr
+        when Operator::VarRef        then compile_reference(expr.name)
         when Operator            then compile_operator(expr)
         when String, Symbol      then compile_reference(expr)
         when Array, Relation     then expr

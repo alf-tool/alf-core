@@ -29,7 +29,13 @@ module Alf
       # @param [String] expr a Lispy expression to compile
       # @return [Object] The AST resulting from the parsing
       def parse(expr = nil, path = nil, line = nil, &block)
-        scope.evaluate(expr, path, line, &block)
+        if expr && block
+          raise ArgumentError, "Either `expr` or `block` should be specified"
+        elsif block or expr.is_a?(String)
+          expr = scope.evaluate(expr, path, line, &block)
+        end
+        expr = Operator::VarRef.new(self, expr) if expr.is_a?(Symbol)
+        expr
       end
 
       # Returns a relation variable either by name or a virtual relvar
