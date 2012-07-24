@@ -79,6 +79,13 @@ module Alf
         scope.instance_exec(&@expr_lambda)
       end
 
+      # Infers the resulting type.
+      #
+      # @return [Class] the type inferred from expression source code
+      def infer_type
+        Object
+      end
+
       # Evaluates the expression on a tuple
       #
       # This is a convenient method for the following, longer expression:

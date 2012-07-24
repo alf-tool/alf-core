@@ -116,6 +116,16 @@ module Alf
       end
       alias :eql? :==
 
+      # Converts to a heading.
+      #
+      # @return [AttrList] a computed heading from static analysis of expressions
+      def to_heading
+        h = Hash[computation.map{|name,expr|
+          [name, expr.infer_type]
+        }]
+        Heading[h]
+      end
+
       # Converts to an attribute list.
       #
       # @return [AttrList] a list of computed attribute names
