@@ -4,10 +4,10 @@ module Alf
     describe Matching, 'heading' do
 
       let(:left){
-        operand_with_heading(:id => Fixnum, :name => String)
+        an_operand.with_heading(:id => Fixnum, :name => String)
       }
       let(:right){
-        operand_with_heading(:id => Integer, :foo => String)
+        an_operand.with_heading(:id => Integer, :foo => String)
       }
 
       let(:op){ 
