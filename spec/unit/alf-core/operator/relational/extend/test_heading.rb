@@ -4,7 +4,7 @@ module Alf
     describe Extend, 'heading' do
 
       let(:operand){
-        operand_with_heading(:name => String)
+        an_operand.with_heading(:name => String)
       }
       let(:op){ 
         a_lispy.extend(operand, :computed => lambda{ 12 })

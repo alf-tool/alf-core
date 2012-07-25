@@ -12,6 +12,10 @@ module Alf
           @heading ||= operand.heading.merge(ext.to_heading)
         end
 
+        def keys
+          @keys ||= operand.keys.select{|k| (ext.to_attr_list & k).empty?}
+        end
+
       end # class Extend
     end # module Relational
   end # module Operator
