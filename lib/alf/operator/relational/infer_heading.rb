@@ -11,6 +11,10 @@ module Alf
           raise NotSupportedError
         end
 
+        def keys
+          @keys ||= [ AttrList[] ]
+        end
+
       end # class InferHeading
     end # module Relational
   end # module Operator
