@@ -13,6 +13,10 @@ module Alf
           @heading ||= Heading[as => Integer]
         end
 
+        def keys
+          @keys ||= [ AttrList[as] ]
+        end
+
       end # class Generator
     end # module NonRelational
   end # module Operator
