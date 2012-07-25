@@ -16,6 +16,10 @@ module Alf
           end
         end
 
+        def keys
+          @keys ||= operand.keys
+        end
+
       end # class Defaults
     end # module NonRelational
   end # module Operator
