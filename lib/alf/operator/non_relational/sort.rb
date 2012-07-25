@@ -12,6 +12,10 @@ module Alf
           @heading ||= operand.heading
         end
 
+        def keys
+          @keys ||= operand.keys
+        end
+
       end # class Sort
     end # module NonRelational
   end # module Operator
