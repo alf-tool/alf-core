@@ -190,7 +190,7 @@ module Alf
       # @return [Boolean] true if `other` is an attribute list and contains
       #         the same attributes, in the same order
       def ==(other)
-        other.is_a?(AttrList) && (other.attributes == attributes)
+        other.is_a?(AttrList) && (other.attributes.to_set == attributes.to_set)
       end
       alias :eql? :==
 
@@ -198,7 +198,7 @@ module Alf
       #
       # @return [Integer] an hash code for this attribute list
       def hash
-        attributes.hash
+        @hash ||= attributes.to_set.hash
       end
 
       # Converts to an array of attribute names.
