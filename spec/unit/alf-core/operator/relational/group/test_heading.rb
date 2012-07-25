@@ -4,7 +4,7 @@ module Alf
     describe Group, 'heading' do
 
       let(:operand){
-        operand_with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(:id => Integer, :name => String)
       }
       let(:expected){
         Heading[:id => Integer, :names => Relation]

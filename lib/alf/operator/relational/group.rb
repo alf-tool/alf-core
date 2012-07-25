@@ -17,6 +17,13 @@ module Alf
           end
         end
 
+        def keys
+          @keys ||= operand.keys.map{|k|
+            proj = k.project(attributes, !allbut)
+            proj.empty? ? AttrList[as] : proj
+          }
+        end
+
       end # class Group
     end # module Relational
   end # module Operator
