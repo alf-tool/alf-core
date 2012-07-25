@@ -140,6 +140,42 @@ module Alf
         attributes.empty?
       end
 
+      # Compares this attribute list with `other` on a set basis.
+      #
+      # @param [AttrList] other another attribute list
+      # @return [Integer] 0 if same set of attribute names, -1 if self is a subset of
+      # other, 1 if a superset, nil otherwise.
+      def set_compare(other)
+        return nil unless other.is_a?(AttrList)
+        s1, s2 = attributes.to_set, other.attributes.to_set
+        if s1==s2
+          0
+        elsif s1.subset?(s2)
+          -1
+        elsif s1.superset?(s2)
+          1
+        end
+      end
+
+      # Returns true if this attribute list captures the same set of attribute names than
+      # `other`.
+      def sameset?(other)
+        c = set_compare(other)
+        c and (c==0)
+      end
+
+      # Returns true if self is a (proper) superset of `other`
+      def superset?(other, proper = false)
+        c = set_compare(other)
+        c and (c >= (proper ? 1 : 0))
+      end
+
+      # Returns true if self is a (proper) subset of `other`
+      def subset?(other, proper = false)
+        c = set_compare(other)
+        c and (c <= (proper ? -1 : 0))
+      end
+
       # Checks equality with another attribute list.
       #
       # @param [Object] other another attribute list
