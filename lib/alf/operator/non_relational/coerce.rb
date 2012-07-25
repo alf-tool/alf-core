@@ -12,6 +12,10 @@ module Alf
           @heading ||= operand.heading.merge(coercions)
         end
 
+        def keys
+          @keys ||= operand.keys
+        end
+
       end # class Coerce
     end # module NonRelational
   end # module Operator
