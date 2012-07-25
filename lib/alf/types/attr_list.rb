@@ -125,7 +125,17 @@ module Alf
         AttrList.new(allbut ? attributes - attrs : attributes & attrs)
       end
 
+      # Computes an Attrlist as a set intersection with another attribute list.
+      #
+      # @param [AttrList] other another attribute list
+      # @return [AttrList] a list containing attributes common to self and other
+      def &(other)
+        AttrList.new(attributes & AttrList.coerce(other).attributes)
+      end
+
       # Returns true if this attribute list is empty, false otherwise
+      #
+      # @return [Boolean] whether this attribute list is emtpy
       def empty?
         attributes.empty?
       end
