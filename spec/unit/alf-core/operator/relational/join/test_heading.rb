@@ -4,7 +4,7 @@ module Alf
     describe Join, 'heading' do
 
       let(:left){
-        operand_with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(:id => Integer, :name => String)
       }
 
       let(:op){ 
@@ -14,7 +14,7 @@ module Alf
 
       context 'when disjoint headings' do
         let(:right){
-          operand_with_heading(:foo => String)
+          an_operand.with_heading(:foo => String)
         }
         let(:expected){
           Heading[:id => Integer, :name => String, :foo => String]
@@ -25,7 +25,7 @@ module Alf
 
       context 'when non-disjoint headings' do
         let(:right){
-          operand_with_heading(:id => Fixnum, :foo => String)
+          an_operand.with_heading(:id => Fixnum, :foo => String)
         }
         let(:expected){
           Heading[:id => Integer, :name => String, :foo => String]
