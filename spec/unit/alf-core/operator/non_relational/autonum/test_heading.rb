@@ -4,7 +4,7 @@ module Alf
     describe Autonum, 'heading' do
 
       let(:operand){
-        operand_with_heading(:name => String)
+        an_operand.with_heading(:name => String)
       }
       let(:op){ 
         a_lispy.autonum(operand, :auto)

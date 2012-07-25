@@ -4,7 +4,7 @@ module Alf
     describe Clip, 'heading' do
 
       let(:operand){
-        operand_with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(:id => Integer, :name => String)
       }
 
       subject{ op.heading }

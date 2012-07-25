@@ -4,7 +4,7 @@ module Alf
     describe Coerce, 'heading' do
 
       let(:operand){
-        operand_with_heading(:id => String, :name => String)
+        an_operand.with_heading(:id => String, :name => String)
       }
 
       subject{ op.heading }
