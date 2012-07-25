@@ -12,6 +12,10 @@ module Alf
           @heading ||= operand.heading
         end
 
+        def keys
+          @keys ||= operand.keys
+        end
+
       end # class Restrict
     end # module Relational
   end # module Operator
