@@ -11,6 +11,13 @@ module Alf
           @heading ||= operand.heading
         end
 
+        def keys
+          @keys ||= begin
+            op_keys = operand.keys
+            op_keys.empty? ? [ heading.to_attr_list ] : op_keys
+          end
+        end
+
       end # class Compact
     end # module NonRelational
   end # module Operator
