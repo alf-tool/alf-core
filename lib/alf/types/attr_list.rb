@@ -133,6 +133,14 @@ module Alf
         AttrList.new(attributes & AttrList.coerce(other).attributes)
       end
 
+      # Computes an Attrlist as a set union with another attribute list.
+      #
+      # @param [AttrList] other another attribute list
+      # @return [AttrList] a list containing attributes from either self or other
+      def |(other)
+        AttrList.new(attributes | AttrList.coerce(other).attributes)
+      end
+
       # Returns true if this attribute list is empty, false otherwise
       #
       # @return [Boolean] whether this attribute list is emtpy
