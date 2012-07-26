@@ -52,6 +52,12 @@ module Alf
         it{ should be_a(Not) }
       end
 
+      describe "comp" do
+        let(:expr){ [:comp, :eq, {:x => 2}] }
+
+        it{ should be_a(Comp) }
+      end
+
       describe "eq" do
         let(:expr){ [:eq, var_ref, var_ref] }
 
