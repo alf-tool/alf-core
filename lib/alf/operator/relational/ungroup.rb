@@ -12,6 +12,10 @@ module Alf
           raise NotSupportedError
         end
 
+        def keys
+          raise NotSupportedError
+        end
+
       end # class Ungroup
     end # module Relational
   end # module Operator
