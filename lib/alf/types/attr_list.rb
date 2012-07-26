@@ -184,6 +184,11 @@ module Alf
         c and (c <= (proper ? -1 : 0))
       end
 
+      # Returns true if self intersects another attribute list
+      def intersect?(other)
+        !((self & other).empty?) || (empty? && other.empty?)
+      end
+
       # Checks equality with another attribute list.
       #
       # @param [Object] other another attribute list
