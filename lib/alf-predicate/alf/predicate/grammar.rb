@@ -1,5 +1,5 @@
 module Alf
-  module Predicate
+  class Predicate
     Grammar = Sexpr.load Path.relative('grammar.sexp.yml')
     module Grammar
 
@@ -8,12 +8,13 @@ module Alf
       end
 
       def default_tagging_module
-        Predicate
+        Expr
       end
 
     end
-  end # module Predicate
+  end # class Predicate
 end # module Alf
+require_relative 'nodes/expr'
 require_relative 'nodes/tautology'
 require_relative 'nodes/contradiction'
 require_relative 'nodes/var_ref'

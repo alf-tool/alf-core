@@ -1,7 +1,7 @@
 module Alf
-  module Predicate
+  class Predicate
     module Gt
-      include Predicate
+      include Expr
     end
   end
 end

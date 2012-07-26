@@ -1,6 +1,6 @@
 require_relative "shared/a_comparison_factory_method"
 module Alf
-  module Predicate
+  class Predicate
     describe Factory, 'neq' do
       let(:method){ :neq }
       let(:node_class){ Neq }

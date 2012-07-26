@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  module Predicate
+  class Predicate
     describe ProcParser, "parse" do
 
       let(:scope){ Tools::TupleScope.new(:id => 12, :name => "foo") }

@@ -1,7 +1,6 @@
 module Alf
   class Predicate
-    module Or
-      include Expr
+    module Expr
     end
   end
 end

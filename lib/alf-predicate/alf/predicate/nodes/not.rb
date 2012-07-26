@@ -1,7 +1,7 @@
 module Alf
-  module Predicate
+  class Predicate
     module Not
-      include Predicate
+      include Expr
     end
   end
 end

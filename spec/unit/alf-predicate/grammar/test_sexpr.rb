@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  module Predicate
+  class Predicate
     describe Grammar, "sexpr" do
 
       subject{ Grammar.sexpr(expr) }

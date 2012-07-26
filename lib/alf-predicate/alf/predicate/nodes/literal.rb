@@ -1,7 +1,7 @@
 module Alf
-  module Predicate
+  class Predicate
     module Literal
-      include Predicate
+      include Expr
     end
   end
 end

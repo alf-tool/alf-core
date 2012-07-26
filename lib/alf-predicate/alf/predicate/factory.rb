@@ -1,5 +1,5 @@
 module Alf
-  module Predicate
+  class Predicate
     module Factory
 
       def tautology
@@ -89,5 +89,5 @@ module Alf
       end
 
     end # module Factory
-  end # module Predicate
+  end # class Predicate
 end # module Alf

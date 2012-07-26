@@ -1,6 +1,6 @@
 require_relative 'a_predicate_ast_node'
 module Alf
-  module Predicate
+  class Predicate
     shared_examples_for "a comparison factory method" do
       include Factory
 

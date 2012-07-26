@@ -1,6 +1,6 @@
 require_relative 'shared/a_predicate_ast_node'
 module Alf
-  module Predicate
+  class Predicate
     describe Factory, 'and' do
       include Factory
 
