@@ -17,6 +17,15 @@ module Alf
           end
         end
 
+        def keys
+          @keys ||= begin
+            attrs = operand.heading.to_attr_list.project(by, allbut)
+            keys  = operand.keys.select{|k| k.subset?(attrs) }
+            keys  = [ attrs ] if keys.empty?
+            keys
+          end
+        end
+
       end # class Summarize
     end # module Relational
   end # module Operator

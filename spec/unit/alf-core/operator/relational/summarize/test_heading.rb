@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
   module Operator::Relational
-    describe Quota, 'heading' do
+    describe Summarize, 'heading' do
 
       let(:operand){
-        operand_with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(:id => Integer, :name => String)
       }
 
       subject{ op.heading }
