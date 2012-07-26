@@ -13,6 +13,17 @@ module Alf
           @heading ||= operand.heading.merge(as => Integer)
         end
 
+        def keys
+          @keys ||= begin
+            keys, order_attrs = operand.keys, order.to_attr_list
+            if keys.any?{|k| order_attrs.superset?(k)}
+              keys = keys.dup
+              keys << AttrList[ as ]
+            end
+            keys
+          end
+        end
+
       end # class Rank
     end # module Relational
   end # module Operator

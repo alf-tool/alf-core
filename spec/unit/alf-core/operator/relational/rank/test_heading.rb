@@ -4,7 +4,7 @@ module Alf
     describe Rank, 'heading' do
 
       let(:operand){
-        operand_with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(:id => Integer, :name => String)
       }
       let(:op){ 
         a_lispy.rank(operand, [[:name, :asc]], :rank)
