@@ -13,20 +13,12 @@ module Alf
       #
       # @return [Boolean] true if args contains one String only, which denotes
       #         an existing folder; false otherwise
-      def self.recognizes?(args)
-        return false unless (args.size == 1)
-        Path.like?(args.first) && Path(args.first).directory?
-      end
-
-      # Creates an adapter instance, wired to the specified folder.
-      #
-      # @param [String] folder path to the folder to use as dataset source.
-      def initialize(folder)
-        @folder = Path(folder)
+      def self.recognizes?(conn_spec)
+        Path.like?(conn_spec) && Path(conn_spec).directory?
       end
 
       # (see Adapter#relvar)
-      def relvar(name)
+      def base_relvar(name)
         if file = find_file(name)
           Relvar::Base.new(self, name){ Reader.reader(file, self) }
         else
@@ -36,15 +28,20 @@ module Alf
 
       protected
 
+        # Returns the folder on which this adapter works
+        def folder
+          Path(conn_spec)
+        end
+
         # Finds a specific file by name
         #
         # @param [String] name the name of a dataset
         # @return [Path] path to an existing file if it exists, nil otherwise.
         def find_file(name)
-          if (explicit = @folder/name.to_s).file?
+          if (explicit = folder/name.to_s).file?
             explicit
           else
-            @folder.glob("#{name}.*").find{|f| f.file?}
+            folder.glob("#{name}.*").find{|f| f.file?}
           end
         end
 

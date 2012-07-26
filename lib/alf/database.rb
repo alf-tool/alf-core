@@ -6,15 +6,18 @@ module Alf
 
       # Connects to a database, auto-detecting the adapter to use.
       #
-      # This method returns a database instance bound to an autodetected Adapter. It
+      # This method returns an Adapter instance connected to the underlying database. It
       # raises an ArgumentError if no such adapter can be found.
       #
-      # @param [Array] args arguments for the Adapter constructor
-      # @return [Database] an database instance
+      # @param [Object] conn_spec a connection specification
+      # @return [Adapter] an adapter instance
       # @raise [ArgumentError] when no registered adapter recognizes the arguments
-      def connect(uri = nil, options = {}, &block)
-        adapter = Adapter.autodetect(*[uri].compact)
-        adapter.connect(options, helpers, &block)
+      def connect(conn_spec)
+        return conn_spec if conn_spec.is_a?(Adapter)
+        conn = Adapter.autodetect(conn_spec).new(conn_spec, helpers)
+        block_given? ? yield(conn) : conn
+      ensure
+        conn.close if conn and block_given?
       end
 
       def folder(*args, &bl)

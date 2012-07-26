@@ -1,3 +1,5 @@
+require_relative 'adapter/internal'
+require_relative 'adapter/external'
 module Alf
   #
   # An adapter encapsulates the interface with the outside world, providing base iterators
@@ -12,6 +14,8 @@ module Alf
   # Adapter.autodetect and Adapter.recognizes? for details.
   #
   class Adapter
+    include Internal
+    include External
 
     class << self
       include Tools::Registry
@@ -41,17 +45,16 @@ module Alf
       # true to an invocation of recognizes?(args). It raises an ArgumentError if no such
       # class can be found.
       #
-      # @param [Array] args arguments for the Adapter constructor
-      # @return [Adapter] an adapter instance
+      # @param [Object] conn_spec a connection specification
+      # @return [Class] the first registered class that recognizes `conn_spec`
       # @raise [ArgumentError] when no registered class recognizes the arguments
-      def autodetect(*args)
-        return Adapter.new if args.empty?
-        return args.first  if args.size==1 && args.first.is_a?(Adapter)
-        name, clazz = registered.find{|nc| nc.last.recognizes?(args) }
-        return clazz.new(*args) if clazz
-        raise ArgumentError, "Unable to auto-detect Adapter with (#{args.map(&:inspect).join(', ')})"
+      def autodetect(conn_spec)
+        name, clazz = registered.find{|nc| nc.last.recognizes?(conn_spec) }
+        unless clazz
+          raise ArgumentError, "No adapter for `#{conn_spec.inspect}`"
+        end
+        clazz
       end
-      alias :coerce :autodetect
 
       # Returns true _args_ can be used for building an adapter instance,
       # false otherwise.
@@ -70,42 +73,6 @@ module Alf
         false
       end
     end # class << self
-
-    # Creates a connection to the underlying database.
-    def connect(options = {}, helpers = [])
-      conn = Connection.new(self, helpers)
-      return conn unless block_given?
-      begin
-        yield(conn)
-      ensure
-        conn.close if conn
-      end
-    end
-
-    # Closes a given connection, freeing resources if needed.
-    #
-    # @param [Connection] connection a connection previously obtained.
-    def close(connection)
-    end
-
-    # Returns a relvar whose name is provided.
-    #
-    # @arg    [Symbol] name the name of a relation variable.
-    # @return [Relvar] a relation variable.
-    # @raise  [NoSuchRelvarError] when the variable does not exist.
-    def relvar(name)
-      raise NotImplementedError
-    end
-
-    # Returns the heading of a given base relvar.
-    #
-    # @arg    [Symbol] name the name of a relation variable.
-    # @return [Heading] a heading.
-    # @raise  [NoSuchRelvarError] when the variable does not exist.
-    # @raise  [NotSupportedError] if heading inference is not supported on the adapter
-    def heading(name)
-      raise NotSupportedError, "#{self} does not support heading inference"
-    end
 
   end # class Adapter
 end # module Alf

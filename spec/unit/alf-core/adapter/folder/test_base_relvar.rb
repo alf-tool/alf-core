@@ -1,11 +1,11 @@
 require 'spec_helper'
 module Alf
   class Adapter
-    describe Folder, 'relvar' do
+    describe Folder, 'base_relvar' do
 
       let(:db){ Folder.new(Path.dir/'../examples') }
 
-      subject{ db.relvar(name) }
+      subject{ db.base_relvar(name) }
 
       describe "when called on explicit file" do
         let(:name){ "suppliers.rash" }

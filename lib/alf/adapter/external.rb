@@ -1,16 +1,15 @@
 module Alf
-  module Context
+  class Adapter
     #
     # Defines the external, public contract seen by users that obtain database
     # connections.
     #
     module External
 
-      # Closes the connection, freeing unnecessary resources
+      # Closes this connection, freeing resources if needed.
       #
       # @return [undefined]
       def close
-        adapter.close(self) if adapter
       end
 
       # Parses a query expression given by a String or a block and returns the
@@ -19,22 +18,29 @@ module Alf
       # Example
       #
       #   # with a string
-      #   op = db.parse "(restrict :suppliers, lambda{ city == 'London' })"
+      #   op = conn.parse "(restrict :suppliers, lambda{ city == 'London' })"
       #
       #   # or with a block
-      #   op = db.parse {
+      #   op = conn.parse {
       #     (restrict :suppliers, lambda{ city == 'London' })
       #   }
       #
       # @param [String] expr a Lispy expression to compile
       # @return [Object] The AST resulting from the parsing
       def parse(expr = nil, path = nil, line = nil, &block)
-        if expr && block
+        if (expr && block) || (expr.nil? and block.nil?)
           raise ArgumentError, "Either `expr` or `block` should be specified"
-        elsif block or expr.is_a?(String)
+        end
+
+        # parse through a scope unless a Symbol
+        if block or expr.is_a?(String)
           expr = scope.evaluate(expr, path, line, &block)
         end
-        expr = Operator::VarRef.new(self, expr) if expr.is_a?(Symbol)
+
+        # Special VarRef case
+        if expr.is_a?(Symbol)
+          expr = Operator::VarRef.new(self, expr)
+        end
         expr
       end
 
@@ -55,16 +61,9 @@ module Alf
       #   }
       #
       def relvar(expr = nil, path = nil, line = nil, &block)
-        if block
-          expr = parse(&block)
-          Relvar::Virtual.new(context, nil, expr)
-        elsif expr.is_a?(String)
-          expr = parse(expr, path, line)
-          Relvar::Virtual.new(context, nil, expr)
-        elsif expr.is_a?(Symbol)
-          adapter.relvar(expr)
-        else
-          raise ArgumentError, "Invalid relvar name `#{expr}`"
+        case expr = parse(expr, path, line, &block)
+        when Operator::VarRef then base_relvar(expr.name)
+        else Relvar::Virtual.new(self, nil, expr)
         end
       end
 
