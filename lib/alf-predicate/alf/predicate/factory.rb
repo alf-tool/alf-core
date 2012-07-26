@@ -68,8 +68,6 @@ module Alf
         _([:native, proc])
       end
 
-    private
-
       def _(expr)
         case expr
         when Expr       then expr
@@ -83,6 +81,7 @@ module Alf
         end
       end
 
+      extend(self)
     end # module Factory
   end # class Predicate
 end # module Alf
