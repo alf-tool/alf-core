@@ -50,10 +50,6 @@ module Helpers
     OperandHelper.new
   end
 
-  def operand_with_heading(h)
-    an_operand.with_heading(h)
-  end
-
 end
 
 module HelpersInScope
