@@ -11,10 +11,30 @@ module Alf
         end
 
         def heading
-          @heading ||= begin
-            h = operand.heading.project(attributes, !allbut)
-            h.merge(as => Hash)
-          end
+          @heading ||= stay_heading.merge(as => Hash)
+        end
+
+        def keys
+          @keys ||= operand.keys.map{|k|
+            rest = k.project(attributes, !allbut)
+            (rest == k) ? rest : (rest | [ as ])
+          }
+        end
+
+        def wrapped_heading
+          @wrapped_heading ||= operand.heading.project(attributes, allbut)
+        end
+
+        def wrapped_attrs
+          @wrapped_attrs ||= wrapped_heading.to_attr_list
+        end
+
+        def stay_heading
+          @stay_heading ||= operand.heading.project(attributes, !allbut)
+        end
+
+        def stay_attrs
+          @stay_attrs ||= wrapped_heading.to_attr_list
         end
 
       end # class Wrap
