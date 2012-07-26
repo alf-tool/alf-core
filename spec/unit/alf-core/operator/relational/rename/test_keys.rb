@@ -1,19 +1,19 @@
 require 'spec_helper'
 module Alf
   module Operator::Relational
-    describe Rename, 'heading' do
+    describe Rename, 'keys' do
 
       let(:operand){
-        an_operand.with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(:id => Integer, :name => String).with_keys([ :id ], [ :name ])
       }
       let(:op){ 
         a_lispy.rename(operand, :name => :foo)
       }
 
-      subject{ op.heading }
+      subject{ op.keys }
 
       let(:expected){
-        Heading[:id => Integer, :foo => String]
+        [ AttrList[:id], AttrList[:foo] ]
       }
 
       it { should eq(expected) }

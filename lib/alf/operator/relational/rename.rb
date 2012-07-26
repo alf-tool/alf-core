@@ -12,6 +12,10 @@ module Alf
           @heading ||= operand.heading.rename(renaming)
         end
 
+        def keys
+          @keys ||= operand.keys.map{|k| renaming.rename_attr_list(k) }
+        end
+
       end # class Rename
     end # module Relational
   end # module Operator
