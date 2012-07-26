@@ -4,7 +4,7 @@ module Alf
     describe Union, 'heading' do
 
       let(:left){
-        operand_with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(:id => Integer, :name => String)
       }
       let(:expected){
         Heading[:id => Integer, :name => String]
@@ -17,7 +17,7 @@ module Alf
 
       context 'when exactly same heading' do
         let(:right){
-          operand_with_heading(:id => Integer, :name => String)
+          an_operand.with_heading(:id => Integer, :name => String)
         }
 
         it { should eq(expected) }
@@ -25,7 +25,7 @@ module Alf
 
       context 'with some subtypes' do
         let(:right){
-          operand_with_heading(:id => Fixnum, :name => String)
+          an_operand.with_heading(:id => Fixnum, :name => String)
         }
 
         it { should eq(expected) }

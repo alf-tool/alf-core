@@ -11,6 +11,10 @@ module Alf
           @heading ||= left.heading + right.heading
         end
 
+        def keys
+          @keys ||= [ heading.to_attr_list ]
+        end
+
       end # class Union
     end # module Relational
   end # module Operator
