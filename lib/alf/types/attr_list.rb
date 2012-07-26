@@ -37,7 +37,7 @@ module Alf
           when Array
             AttrList.new(arg.collect{|s| Tools.coerce(s, AttrName)})
           else
-            raise ArgumentError, "Unable to coerce #{arg} to a projection key"
+            raise ArgumentError, "Unable to coerce `#{arg.inspect}` to a projection key"
           end
         end
 
