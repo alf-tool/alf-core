@@ -1,5 +1,5 @@
 module Alf
-  class Adapter
+  class Connection
     #
     # Defines the internal, private contract seen by Alf's internals
     # on connections.
@@ -9,7 +9,7 @@ module Alf
       # The connection specification
       attr_reader :conn_spec
 
-      # Creates an adapter instance, wired to the specified folder.
+      # Creates an connection instance, wired to the specified folder.
       #
       # @param [String] folder path to the folder to use as dataset source.
       def initialize(conn_spec, scope_helpers = [ Lang::Functional ])
@@ -25,5 +25,5 @@ module Alf
       end
 
     end # module Internal
-  end # class Adapter
+  end # class Connection
 end # module Alf

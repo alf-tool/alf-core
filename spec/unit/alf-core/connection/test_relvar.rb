@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  describe Adapter, 'relvar' do
+  describe Connection, 'relvar' do
 
     let(:conn){ examples_database }
 

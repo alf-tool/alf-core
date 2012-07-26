@@ -56,7 +56,7 @@
 
 * The Aggregator class, Summarization type and Summarize operator have been made thread-safe through #happens that now takes a TupleScope instead of a tuple.
 
-* Sequel::Adapter#relvar correctly raises a NoSuchRelvarError if no table can be found.
+* Sequel::Connection#relvar correctly raises a NoSuchRelvarError if no table can be found.
 
 ## Broken stuff
 
@@ -66,9 +66,9 @@
 
       Alf.lipsy(db_params).query{ ... } -> Alf.connect(db_params).query{ ... }
 
-* The Environment concept as been removed and split as different abstractions, namely Adapter, Database and Connection. That also means that `environment` readers and writers here have been replaced according to cases. Also, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
+* The Environment concept as been removed and replaced by Connection. That also means that `environment` readers and writers here have been replaced according to cases. Also, the --env option has been renamed to --db in the shell command. This is a major incompatible change of Alf internals that might break existing code that extends Alf::Environment, Alf::Reader or any subclass.
 
-* Adapter#dataset has been replaced to Adapter#relvar and now serves relation variables instead of pure iterators.
+* Connection#dataset has been replaced to Connection#relvar and now serves relation variables instead of pure iterators.
 
 * You now have to explicitely use 'alf show --text > ...' or 'alf --text ... > ' if you don't want ruby hashes to be outputted to output files. This is a consequence of tty detection that ensures a better shell experience.
 
@@ -85,8 +85,6 @@
 * Reader.readers has been removed. Use Reader.all or Reader.each instead.
 
 * Aggregator.aggregators has been removed. Use Aggregator.all or Aggregator.each instead.
-
-* Adapter.adapters has been removed. Use Adapter.all or Adapter.each instead.
 
 ## Bug fixes
 

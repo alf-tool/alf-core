@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  class Adapter
+  class Connection
     describe Folder, 'base_relvar' do
 
       let(:db){ Folder.new(Path.dir/'../examples') }

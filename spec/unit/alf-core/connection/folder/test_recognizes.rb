@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  class Adapter
+  class Connection
     describe Folder, "recognizes?" do
 
       it 'should return true on an existing path' do

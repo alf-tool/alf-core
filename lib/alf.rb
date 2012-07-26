@@ -22,7 +22,7 @@ require_relative 'alf/lang'
 require_relative 'alf/relation'
 require_relative 'alf/relvar'
 
-require_relative 'alf/adapter'
+require_relative 'alf/connection'
 require_relative 'alf/database'
 
 require_relative 'alf/ext'
@@ -38,7 +38,7 @@ module Alf
   # handler to use.
   #
   # @param [Array] args arguments for the Database constructor
-  # @return [Adapter] an adapter instance
+  # @return [Connection] an connection instance
   # @raise [ArgumentError] when no registered class recognizes the arguments
   #
   # @see Database.connect for more about recognized formats.

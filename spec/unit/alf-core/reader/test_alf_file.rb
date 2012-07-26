@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Reader::AlfFile do
 
-    class TestAdapter < Alf::Adapter
+    class TestConnection < Alf::Connection
       def relvar(name)
         [{:status => 10},{:status => 30}]
       end
@@ -11,7 +11,7 @@ module Alf
     let(:io){ StringIO.new(expr) }
 
     subject{
-      Reader::AlfFile.new(io, TestAdapter.new(nil)).to_a
+      Reader::AlfFile.new(io, TestConnection.new(nil)).to_a
     }
 
     describe "on pure functional expressions" do

@@ -3,18 +3,18 @@ describe Alf, '.connect' do
 
   it "recognizes an existing folder" do
     db = Alf.connect(File.dirname(__FILE__))
-    db.should be_a(Alf::Adapter::Folder)
+    db.should be_a(Alf::Connection::Folder)
   end
 
   it "recognizes an existing folder through a Path instance" do
     db = Alf.connect(Path.dir)
-    db.should be_a(Alf::Adapter::Folder)
+    db.should be_a(Alf::Connection::Folder)
   end
 
   it 'yields the connection if a block and returns its result' do
     seen = nil
     res  = Alf.connect(Path.dir) do |conn|
-      conn.should be_a(Alf::Adapter)
+      conn.should be_a(Alf::Connection)
       seen = conn
       12
     end

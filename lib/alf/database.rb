@@ -4,38 +4,38 @@ module Alf
     class << self
       private :new
 
-      # Connects to a database, auto-detecting the adapter to use.
+      # Connects to a database, auto-detecting the connection to use.
       #
-      # This method returns an Adapter instance connected to the underlying database. It
-      # raises an ArgumentError if no such adapter can be found.
+      # This method returns an Connection instance connected to the underlying database. It
+      # raises an ArgumentError if no such connection can be found.
       #
       # @param [Object] conn_spec a connection specification
-      # @return [Adapter] an adapter instance
-      # @raise [ArgumentError] when no registered adapter recognizes the arguments
+      # @return [Connection] an connection instance
+      # @raise [ArgumentError] when no registered connection recognizes the arguments
       def connect(conn_spec)
-        return conn_spec if conn_spec.is_a?(Adapter)
-        conn = Adapter.autodetect(conn_spec).new(conn_spec, helpers)
+        return conn_spec if conn_spec.is_a?(Connection)
+        conn = Connection.autodetect(conn_spec).new(conn_spec, helpers)
         block_given? ? yield(conn) : conn
       ensure
         conn.close if conn and block_given?
       end
 
       def folder(*args, &bl)
-        connect(Adapter.folder(*args), &bl)
+        connect(Connection.folder(*args), &bl)
       end
 
       # Returns Alf's default database
       #
       # @return [Database] the default database instance.
       def default(&bl)
-        connect(Adapter.folder('.'), &bl)
+        connect(Connection.folder('.'), &bl)
       end
 
       # Returns a database instance on Alf's examples
       #
       # @return [Database] a database instance on Alf's examples.
       def examples(&bl)
-        connect(Adapter.folder Path.backfind('examples/operators'), &bl)
+        connect(Connection.folder Path.backfind('examples/operators'), &bl)
       end
 
       # Returns the array of helper modules to use for defining the evaluation

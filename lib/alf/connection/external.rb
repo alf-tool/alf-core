@@ -1,5 +1,5 @@
 module Alf
-  class Adapter
+  class Connection
     #
     # Defines the external, public contract seen by users that obtain database
     # connections.

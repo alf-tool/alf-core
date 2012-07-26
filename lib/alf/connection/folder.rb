@@ -1,15 +1,15 @@
 module Alf
-  class Adapter
+  class Connection
     #
-    # Specialization of Adapter to work on files of a given folder.
+    # Specialization of Connection to work on files of a given folder.
     #
-    # This kind of adapter resolves datasets by simply looking at recognized files in a
+    # This kind of connection resolves datasets by simply looking at recognized files in a
     # specific folder. "Recognized" files are simply those for which a Reader subclass has
-    # been previously registered. This adapter then serves reader instances.
+    # been previously registered. This connection then serves reader instances.
     #
-    class Folder < Adapter
+    class Folder < Connection
 
-      # (see Adapter.recognizes?)
+      # (see Connection.recognizes?)
       #
       # @return [Boolean] true if args contains one String only, which denotes
       #         an existing folder; false otherwise
@@ -17,7 +17,7 @@ module Alf
         Path.like?(conn_spec) && Path(conn_spec).directory?
       end
 
-      # (see Adapter#relvar)
+      # (see Connection#relvar)
       def base_relvar(name)
         if file = find_file(name)
           Relvar::Base.new(self, name){ Reader.reader(file, self) }
@@ -28,7 +28,7 @@ module Alf
 
       protected
 
-        # Returns the folder on which this adapter works
+        # Returns the folder on which this connection works
         def folder
           Path(conn_spec)
         end
@@ -45,7 +45,7 @@ module Alf
           end
         end
 
-      Adapter.register(:folder, self)
+      Connection.register(:folder, self)
     end # class Folder
-  end # class Adapter
+  end # class Connection
 end # module Alf

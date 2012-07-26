@@ -34,7 +34,7 @@ module Alf
       # Registers a reader class associated with specific file extensions.
       #
       # Registered class must provide a constructor with the following signature
-      # `new(path_or_io, adapter = nil, options = {})`. The registration name must be a
+      # `new(path_or_io, connection = nil, options = {})`. The registration name must be a
       # symbol which can safely be used as a ruby method name. A factory method of that
       # name and signature is automatically installed on the Reader class.
       #
@@ -63,20 +63,20 @@ module Alf
         end
       end
 
-      # Coerces `arg` to a Reader instance, using an optional adapter to convert named
+      # Coerces `arg` to a Reader instance, using an optional connection to convert named
       # datasets.
       #
-      # This method automatically provides readers for Strings and Symbols through `adapter`
+      # This method automatically provides readers for Strings and Symbols through `connection`
       # (**not** through the reader factory) and for IO objects through a Rash reader.
       #
       # @param [Object] arg any value to coerce to a Reader instance
-      # @param [Adapter] adapter to resolved named datasets (optional)
-      def coerce(arg, adapter = nil)
+      # @param [Connection] connection to resolved named datasets (optional)
+      def coerce(arg, connection = nil)
         case arg
         when Reader
           arg
         when IO, StringIO
-          rash(arg, adapter)
+          rash(arg, connection)
         else
           raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
         end
@@ -97,8 +97,8 @@ module Alf
     # Default reader options
     DEFAULT_OPTIONS = {}
 
-    # @return [Adapter] Wired adapter
-    attr_accessor :adapter
+    # @return [Connection] Wired connection
+    attr_accessor :connection
 
     # @return [String, IO, ...] Input as initially provided to initialize
     attr_accessor :input
@@ -112,13 +112,13 @@ module Alf
     # Creates a reader instance.
     #
     # @param [String or IO] path to a file or IO object for input
-    # @param [Adapter] adapter wired adapter, serving this reader
+    # @param [Connection] connection wired connection, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(*args)
       args.each do |arg|
         case arg
-          when Adapter then @adapter = arg
-          when Hash    then @options = arg
+          when Connection then @connection = arg
+          when Hash       then @options = arg
           else
             @input = arg if arg
         end
