@@ -17,7 +17,7 @@ module Alf
         }
 
         let(:expected){
-          [ AttrList[:id] ]
+          Keys[ [:id] ]
         }
 
         it { should eq(expected) }
@@ -32,7 +32,7 @@ module Alf
         }
 
         let(:expected){
-          [ AttrList[:name], AttrList[:id] ]
+          Keys[ [:name], [:id] ]
         }
 
         it { should eq(expected) }

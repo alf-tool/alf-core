@@ -13,10 +13,10 @@ module Alf
 
         def keys
           @keys ||= begin
-            k1s, k2s = left.keys.dup, right.keys.dup
-            k2s.reject!{|k| k1s.find{|l| k.superset?(l) } }
-            k1s.reject!{|k| k2s.find{|l| k.superset?(l) } }
-            (k1s + k2s).freeze
+            k1s, k2s = left.keys, right.keys
+            k2s = k2s.reject{|k| k1s.any?{|l| k.superset?(l) } }
+            k1s = k1s.reject{|k| k2s.any?{|l| k.superset?(l) } }
+            k1s + k2s
           end
         end
 

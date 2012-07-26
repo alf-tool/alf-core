@@ -20,9 +20,7 @@ module Alf
         def keys
           @keys ||= begin
             attrs = operand.heading.to_attr_list.project(by, allbut)
-            keys  = operand.keys.select{|k| k.subset?(attrs) }
-            keys  = [ attrs ] if keys.empty?
-            keys.freeze
+            operand.keys.select{|k| k.subset?(attrs) }.if_empty{ Keys[ attrs ] }
           end
         end
 

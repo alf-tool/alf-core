@@ -13,7 +13,7 @@ module Alf
       subject{ op.keys }
 
       let(:expected){
-        [ AttrList[:id], AttrList[:foo] ]
+        Keys[ [:id], [:foo] ]
       }
 
       it { should eq(expected) }

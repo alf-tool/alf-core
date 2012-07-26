@@ -15,7 +15,18 @@ module Alf
           a_lispy.clip(operand, [:id, :status])
         }
         let(:expected){
-          [ AttrList[:id] ]
+          Keys[ [:id] ]
+        }
+
+        it { should eq(expected) }
+      end
+
+      context 'when conserving at least one key (--allbut)' do
+        let(:op){ 
+          a_lispy.clip(operand, [:name], :allbut => true)
+        }
+        let(:expected){
+          Keys[ [:id] ]
         }
 
         it { should eq(expected) }
@@ -26,7 +37,7 @@ module Alf
           a_lispy.clip(operand, [:status])
         }
         let(:expected){
-          [ AttrList[:status] ]
+          Keys[ [:status] ]
         }
 
         it { should eq(expected) }

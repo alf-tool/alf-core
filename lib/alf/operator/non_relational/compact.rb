@@ -12,10 +12,7 @@ module Alf
         end
 
         def keys
-          @keys ||= begin
-            op_keys = operand.keys
-            op_keys.empty? ? [ heading.to_attr_list ].freeze : op_keys
-          end
+          @keys ||= operand.keys.if_empty{ Keys[ heading.to_attr_list ] }
         end
 
       end # class Compact

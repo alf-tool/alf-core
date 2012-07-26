@@ -14,7 +14,7 @@ module Alf
           a_lispy.wrap(operand, [:name], :names)
         }
 
-        it{ should eq([ AttrList[:id] ]) }
+        it{ should eq(Keys[ [:id] ]) }
       end
 
       context 'when no key is wrapped (--allbut)' do
@@ -22,7 +22,7 @@ module Alf
           a_lispy.wrap(operand, [:id], :names, :allbut => true)
         }
 
-        it{ should eq([ AttrList[:id] ]) }
+        it{ should eq(Keys[ [:id] ]) }
       end
 
       context 'when a key is fully wrapped' do
@@ -30,7 +30,7 @@ module Alf
           a_lispy.wrap(operand, [:id, :name], :supplier)
         }
 
-        it{ should eq([ AttrList[:supplier] ]) }
+        it{ should eq(Keys[ [:supplier] ]) }
       end
 
       context 'when a key is partially wrapped' do
@@ -41,7 +41,7 @@ module Alf
           a_lispy.wrap(operand, [:name, :status], :supplier)
         }
 
-        it{ should eq([ AttrList[:id, :supplier] ]) }
+        it{ should eq(Keys[ [:id, :supplier] ]) }
       end
 
     end

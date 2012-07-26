@@ -13,7 +13,7 @@ module Alf
         a_lispy.coerce(operand, :id => Integer)
       }
       let(:expected){
-        [ AttrList[:id] ]
+        Keys[ [:id] ]
       }
 
       it { should eq(expected) }

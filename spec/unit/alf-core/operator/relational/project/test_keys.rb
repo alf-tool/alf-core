@@ -15,7 +15,7 @@ module Alf
           a_lispy.project(operand, [:id, :status])
         }
         let(:expected){
-          [ AttrList[:id] ]
+          Keys[ [:id] ]
         }
 
         it { should eq(expected) }
@@ -26,7 +26,7 @@ module Alf
           a_lispy.project(operand, [:name], :allbut => true)
         }
         let(:expected){
-          [ AttrList[:id] ]
+          Keys[ [:id] ]
         }
 
         it { should eq(expected) }
@@ -37,7 +37,7 @@ module Alf
           a_lispy.project(operand, [:status])
         }
         let(:expected){
-          [ AttrList[:status] ]
+          Keys[ [:status] ]
         }
 
         it { should eq(expected) }
@@ -48,7 +48,7 @@ module Alf
           a_lispy.project(operand, [:id, :name], :allbut => true)
         }
         let(:expected){
-          [ AttrList[:status] ]
+          Keys[ [:status] ]
         }
 
         it { should eq(expected) }

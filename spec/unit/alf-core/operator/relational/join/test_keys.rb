@@ -16,7 +16,7 @@ module Alf
           an_operand.with_heading(:id => Integer, :status => Integer).with_keys([ :id ])
         }
         let(:expected){
-          [ AttrList[ :id ] ]
+          Keys[ [ :id ] ]
         }
 
         it { should eq(expected) }
@@ -30,7 +30,7 @@ module Alf
           an_operand.with_heading(:id => Integer, :status => Integer).with_keys([ :id ], [ :status ])
         }
         let(:expected){
-          [ AttrList[ :id ], AttrList[ :name ], AttrList[ :status ] ]
+          Keys[ [ :id ], [ :name ], [ :status ] ]
         }
 
         it {
@@ -48,7 +48,7 @@ module Alf
           an_operand.with_heading(:pk => Integer, :pid => Integer).with_keys([ :pk ])
         }
         let(:expected){
-          [ AttrList[ :pid, :pk ], AttrList[ :name, :pk ] ]
+          Keys[ [ :pid, :pk ], [ :name, :pk ] ]
         }
 
         it { should eq(expected) }

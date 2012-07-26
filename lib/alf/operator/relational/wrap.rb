@@ -18,7 +18,7 @@ module Alf
           @keys ||= operand.keys.map{|k|
             rest = k.project(attributes, !allbut)
             (rest == k) ? rest : (rest | [ as ])
-          }.freeze
+          }
         end
 
         def wrapped_heading

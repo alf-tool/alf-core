@@ -14,7 +14,7 @@ module Alf
         a_lispy.sort(operand, [:id, :desc])
       }
       let(:expected){
-        [ AttrList[ :id ] ]
+        Keys[ [ :id ] ]
       }
 
       it { should eq(expected) }

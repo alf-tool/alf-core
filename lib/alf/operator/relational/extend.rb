@@ -13,7 +13,10 @@ module Alf
         end
 
         def keys
-          @keys ||= operand.keys.select{|k| (ext.to_attr_list & k).empty? }.freeze
+          @keys ||= begin
+            attrs = ext.to_attr_list
+            operand.keys.reject{|k| k.intersect?(attrs) }
+          end
         end
 
       end # class Extend

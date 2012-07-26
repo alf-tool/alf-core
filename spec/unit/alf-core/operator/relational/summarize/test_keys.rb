@@ -9,23 +9,23 @@ module Alf
 
       subject{ op.keys }
 
-      context 'when the by list does not has a key' do
+      context 'when the by list does not have a key' do
         let(:op){ 
           a_lispy.summarize(operand, [:name], :sum => a_lispy.sum{ id })
         }
         let(:expected){
-          [ AttrList[:name] ]
+          Keys[ [:name] ]
         }
 
         it { should eq(expected) }
       end
 
-      context 'when the by list does not has a key (--allbut)' do
+      context 'when the by list does not have a key (--allbut)' do
         let(:op){ 
           a_lispy.summarize(operand, [:id], {:sum => a_lispy.sum{ id }}, :allbut => true)
         }
         let(:expected){
-          [ AttrList[:name] ]
+          Keys[ [:name] ]
         }
 
         it { should eq(expected) }
@@ -36,7 +36,7 @@ module Alf
           a_lispy.summarize(operand, [:id, :name], :sum => a_lispy.sum{ id })
         }
         let(:expected){
-          [ AttrList[:id] ]
+          Keys[ [:id] ]
         }
 
         it { should eq(expected) }

@@ -9,7 +9,7 @@ class OperandHelper
   end
 
   def with_keys(*keys)
-    dup.set!(:keys => keys.map{|k| Alf::AttrList.coerce(k)})
+    dup.set!(:keys => Alf::Keys.coerce(keys))
   end
 
   def method_missing(name, *args, &bl)

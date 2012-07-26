@@ -14,7 +14,7 @@ module Alf
         end
 
         def keys
-          @keys ||= [ AttrList[as] ].freeze
+          @keys ||= Keys[ [as] ]
         end
 
       end # class Generator

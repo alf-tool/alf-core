@@ -14,13 +14,10 @@ module Alf
         end
 
         def keys
-          @keys ||= begin
-            keys = operand.keys
-            keys = keys.map{|k| k.project(attributes, allbut) }
-            keys = keys.reject!{|k| k.empty? }
-            keys = [ heading.to_attr_list.project(attributes, allbut) ] if keys.empty?
-            keys.freeze
-          end
+          @keys ||= operand.keys.
+                            project(attributes, allbut).
+                            compact.
+                            if_empty{ Keys[ heading.to_attr_list ] }
         end
 
       end # class Clip

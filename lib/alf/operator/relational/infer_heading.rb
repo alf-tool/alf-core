@@ -12,7 +12,7 @@ module Alf
         end
 
         def keys
-          @keys ||= [ AttrList[] ].freeze
+          @keys ||= Keys[ [] ]
         end
 
       end # class InferHeading

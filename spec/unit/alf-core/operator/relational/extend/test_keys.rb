@@ -14,7 +14,7 @@ module Alf
           a_lispy.extend(operand, :computed => lambda{ 12 })
         }
 
-        it { should eq([ AttrList[ :id ], AttrList[ :name ] ]) }
+        it { should eq(Keys[ [ :id ], [ :name ] ]) }
       end
 
       context "when keys are touched by extensions" do
@@ -22,7 +22,7 @@ module Alf
           a_lispy.extend(operand, :name => lambda{ 12 })
         }
 
-        it { should eq([ AttrList[ :id ] ]) }
+        it { should eq(Keys[ [ :id ] ]) }
       end
 
     end

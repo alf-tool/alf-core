@@ -11,7 +11,7 @@ module Alf
         a_lispy.defaults(operand, {:id => lambda{12}})
       }
       let(:expected){
-        [ AttrList[ :id ] ]
+        Keys[ [ :id ] ]
       }
 
       subject{ op.keys }

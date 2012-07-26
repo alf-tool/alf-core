@@ -16,7 +16,7 @@ module Alf
             a_lispy.group(operand, [:name], :names)
           }
 
-          it { should eq([AttrList[ :id ]]) }
+          it { should eq(Keys[ [:id] ]) }
         end
 
         context 'when a key is not part of the group and --allbut' do
@@ -24,7 +24,7 @@ module Alf
             a_lispy.group(operand, [:id], :names, :allbut => true)
           }
 
-          it { should eq([AttrList[ :id ]]) }
+          it { should eq(Keys[ [:id] ]) }
         end
 
         context 'when a whole key is part of the group' do
@@ -32,7 +32,7 @@ module Alf
             a_lispy.group(operand, [:id], :ids)
           }
 
-          it { should eq([AttrList[ :ids ]]) }
+          it { should eq(Keys[ [:ids] ]) }
         end
 
         context 'when a whole key is part of the group and --allbut' do
@@ -40,7 +40,7 @@ module Alf
             a_lispy.group(operand, [:name], :ids, :allbut => true)
           }
 
-          it { should eq([AttrList[ :ids ]]) }
+          it { should eq(Keys[ [:ids] ]) }
         end
       end
 
@@ -55,7 +55,7 @@ module Alf
             a_lispy.group(operand, [:pid, :price], :parts)
           }
 
-          it{ should eq([AttrList[ :sid ]]) }
+          it{ should eq(Keys[ [:sid] ]) }
         end
 
       end

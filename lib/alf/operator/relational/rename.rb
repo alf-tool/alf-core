@@ -13,7 +13,7 @@ module Alf
         end
 
         def keys
-          @keys ||= operand.keys.map{|k| renaming.rename_attr_list(k) }.freeze
+          @keys ||= operand.keys.rename(renaming)
         end
 
       end # class Rename

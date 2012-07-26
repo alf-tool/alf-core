@@ -14,7 +14,7 @@ module Alf
           a_lispy.rank(operand, [[:name, :asc]], :rank)
         }
         let(:expected){
-          [ AttrList[:id] ]
+          Keys[ [:id] ]
         }
 
         it { should eq(expected) }
@@ -25,7 +25,7 @@ module Alf
           a_lispy.rank(operand, [[:name, :asc], [:id, :desc]], :rank)
         }
         let(:expected){
-          [ AttrList[:id], AttrList[:rank] ]
+          Keys[ [:id], [:rank] ]
         }
 
         it { should eq(expected) }

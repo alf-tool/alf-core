@@ -19,7 +19,7 @@ module Alf
           a_lispy.intersect(left, right)
         }
 
-        it { should eq([ AttrList[:id] ]) }
+        it { should eq(Keys[ [:id] ]) }
       end
 
       context 'when exactly same keys but in different order' do
@@ -35,7 +35,7 @@ module Alf
           a_lispy.intersect(left, right)
         }
 
-        it { should eq([ AttrList[:id, :name] ]) }
+        it { should eq(Keys[ [:id, :name] ]) }
       end
 
       context 'when completely different keys' do
@@ -47,7 +47,7 @@ module Alf
           a_lispy.intersect(left, right)
         }
 
-        it { should eq([ AttrList[:id], AttrList[:name] ]) }
+        it { should eq(Keys[ [:id], [:name] ]) }
       end
 
       context 'when overlapping keys' do
@@ -59,7 +59,7 @@ module Alf
           a_lispy.intersect(left, right)
         }
 
-        it { should eq([ AttrList[:id] ]) }
+        it { should eq(Keys[ [:id] ]) }
       end
 
     end

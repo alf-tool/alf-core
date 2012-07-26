@@ -9,7 +9,7 @@ module Alf
         a_lispy.generator(10, :auto)
       }
       let(:expected){
-        [ AttrList[ :auto ] ]
+        Keys[ [ :auto ] ]
       }
 
       it { should eq(expected) }

@@ -15,7 +15,7 @@ module Alf
                      with_keys([ :id ])
         }
         let(:expected){
-          [ AttrList[ :id ] ]
+          Keys[ [ :id ] ]
         }
 
         it { should eq(expected) }
@@ -27,7 +27,7 @@ module Alf
                      with_keys()
         }
         let(:expected){
-          [ AttrList[ :id, :name ] ]
+          Keys[ [ :id, :name ] ]
         }
 
         it { should eq(expected) }

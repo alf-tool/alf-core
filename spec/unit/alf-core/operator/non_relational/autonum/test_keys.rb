@@ -10,7 +10,7 @@ module Alf
         a_lispy.autonum(operand, :auto)
       }
       let(:expected){
-        [AttrList[:name], AttrList[:auto]]
+        Keys[[:name], [:auto]]
       }
 
       subject{ op.keys }
