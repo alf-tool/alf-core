@@ -108,5 +108,6 @@ end # module Alf
 
 require_relative 'alf-shell/alf/shell'
 require_relative "alf-engine/alf/engine"
+require_relative "alf-predicate/alf/predicate"
 require_relative 'alf/platform'
 
