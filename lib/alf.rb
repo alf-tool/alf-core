@@ -5,6 +5,7 @@ require "alf/errors"
 require "enumerator"
 require "stringio"
 require "set"
+require "forwardable"
 
 require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'
