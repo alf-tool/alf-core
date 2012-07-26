@@ -1,5 +1,5 @@
 module Alf
-  class Predicate
+  module Predicate
     class ProcParser
       class Expr < Tools::Scope
 
@@ -62,5 +62,5 @@ module Alf
       end
 
     end # class ProcParser
-  end # class Predicate
+  end # module Predicate
 end # module Alf

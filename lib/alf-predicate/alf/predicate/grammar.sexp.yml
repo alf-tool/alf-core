@@ -1,0 +1,49 @@
+rules:
+  predicate:
+    - tautology
+    - contradiction
+    - var_ref
+    - not
+    - and
+    - or
+    - eq
+    - neq
+    - lt
+    - lte
+    - gt
+    - gte
+    - native
+  tautology:
+    - [ true ]
+  contradiction:
+    - [ false ]
+  var_ref:
+    - [ var_name ]
+  not:
+    - [ predicate ]
+  and:
+    - [ predicate+ ]
+  or:
+    - [ predicate+ ]
+  eq:
+    - [ term, term ]
+  neq:
+    - [ term, term ]
+  lt:
+    - [ term, term ]
+  lte:
+    - [ term, term ]
+  gt:
+    - [ term, term ]
+  gte:
+    - [ term, term ]
+  term:
+    - var_ref
+    - literal
+  native:
+    - [ "::Proc" ]
+  literal:
+    - "::Object"
+  var_name:
+    !ruby/regexp /^[a-zA-Z0-9_]+[?!]?$/
+
