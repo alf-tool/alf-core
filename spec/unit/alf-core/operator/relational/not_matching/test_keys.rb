@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
   module Operator::Relational
-    describe NotMatching, 'heading' do
+    describe NotMatching, 'keys' do
 
       let(:left){
-        an_operand.with_heading(:id => Fixnum, :name => String)
+        an_operand.with_heading(:id => Fixnum, :name => String).with_keys([:id])
       }
       let(:right){
         an_operand.with_heading(:id => Integer, :foo => String)
@@ -13,10 +13,10 @@ module Alf
       let(:op){ 
         a_lispy.not_matching(left, right)
       }
-      subject{ op.heading }
+      subject{ op.keys }
 
       let(:expected){
-        Heading[:id => Fixnum, :name => String]
+        [ AttrList[:id] ]
       }
 
       it { should eq(expected) }
