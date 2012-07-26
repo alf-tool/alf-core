@@ -5,6 +5,7 @@ group :runtime do
   gem "myrrha", "~> 1.2.2"
   gem "backports", "~> 2.6"
   gem "epath", "~> 0.4"
+  gem "sexpr", "~> 0.5.1"
 end
 
 group :test do
