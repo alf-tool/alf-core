@@ -11,6 +11,10 @@ module Alf
           @heading ||= left.heading
         end
 
+        def keys
+          @keys ||= left.keys
+        end
+
       end # class Minus
     end # Relational
   end # module Operator
