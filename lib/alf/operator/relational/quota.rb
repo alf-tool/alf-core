@@ -14,6 +14,10 @@ module Alf
           @heading ||= operand.heading.merge(summarization.to_heading)
         end
 
+        def keys
+          @keys ||= operand.keys
+        end
+
       end # class Quota
     end # module Relational
   end # module Operator
