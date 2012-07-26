@@ -19,7 +19,7 @@ module Alf
                 keys << (k1 | k2)
               end
             end
-            keys.uniq
+            keys.uniq.freeze
           end
         end
 

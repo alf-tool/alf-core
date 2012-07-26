@@ -13,7 +13,7 @@ module Alf
         end
 
         def keys
-          @keys ||= operand.keys.select{|k| (ext.to_attr_list & k).empty?}
+          @keys ||= operand.keys.select{|k| (ext.to_attr_list & k).empty? }.freeze
         end
 
       end # class Extend

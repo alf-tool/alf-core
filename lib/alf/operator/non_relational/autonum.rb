@@ -13,7 +13,7 @@ module Alf
         end
 
         def keys
-          @keys ||= (operand.keys.dup << AttrList[as])
+          @keys ||= (operand.keys.dup << AttrList[as]).freeze
         end
 
       end # class Autonum

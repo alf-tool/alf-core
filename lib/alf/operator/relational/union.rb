@@ -12,7 +12,7 @@ module Alf
         end
 
         def keys
-          @keys ||= [ heading.to_attr_list ]
+          @keys ||= [ heading.to_attr_list ].freeze
         end
 
       end # class Union

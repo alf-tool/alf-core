@@ -16,7 +16,7 @@ module Alf
             k1s, k2s = left.keys.dup, right.keys.dup
             k2s.reject!{|k| k1s.find{|l| k.superset?(l) } }
             k1s.reject!{|k| k2s.find{|l| k.superset?(l) } }
-            k1s + k2s
+            (k1s + k2s).freeze
           end
         end
 

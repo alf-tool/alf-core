@@ -21,7 +21,7 @@ module Alf
           @keys ||= operand.keys.map{|k|
             proj = k.project(attributes, !allbut)
             proj.empty? ? AttrList[as] : proj
-          }
+          }.freeze
         end
 
       end # class Group

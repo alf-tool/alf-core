@@ -12,9 +12,7 @@ module Alf
         end
 
         def keys
-          @keys ||= left.keys + right.keys.select{|k|
-            k.subset?(common_attributes)
-          }
+          @keys ||= (left.keys + right.keys.select{|k| k.subset?(common_attributes) }).freeze
         end
 
         def common_heading

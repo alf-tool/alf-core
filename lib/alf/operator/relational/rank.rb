@@ -17,8 +17,7 @@ module Alf
           @keys ||= begin
             keys, order_attrs = operand.keys, order.to_attr_list
             if keys.any?{|k| order_attrs.superset?(k)}
-              keys = keys.dup
-              keys << AttrList[ as ]
+              keys = (keys.dup << AttrList[as]).freeze
             end
             keys
           end

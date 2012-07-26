@@ -14,7 +14,7 @@ module Alf
         def keys
           @keys ||= begin
             op_keys = operand.keys
-            op_keys.empty? ? [ heading.to_attr_list ] : op_keys
+            op_keys.empty? ? [ heading.to_attr_list ].freeze : op_keys
           end
         end
 

@@ -15,11 +15,9 @@ module Alf
 
         def keys
           @keys ||= begin
-            keys = operand.keys
-            keys = keys.map{|k| k.project(attributes, allbut) }
-            keys = keys.reject!{|k| k.empty? }
+            keys = operand.keys.map{|k| k.project(attributes, allbut) }.reject{|k| k.empty? }
             keys = [ heading.to_attr_list.project(attributes, allbut) ] if keys.empty?
-            keys
+            keys.freeze
           end
         end
 
