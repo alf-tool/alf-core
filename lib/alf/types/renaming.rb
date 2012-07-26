@@ -57,6 +57,15 @@ module Alf
 
       end # class << self
 
+      # Returns the inverse renaming.
+      #
+      # @return [Renaming] the inversed renaming
+      def inverse
+        inversed = {}
+        renaming.each_pair{|k,v| inversed[v] = k}
+        Renaming.new inversed
+      end
+
       # Renames a tuple according to this renaming pairs.
       #
       # The tuple should have all attributes defined in this renaming. Strange
