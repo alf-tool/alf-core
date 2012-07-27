@@ -1,11 +1,7 @@
 module Alf
   class Predicate
     module Or
-      include Expr
-
-      def priority
-        60
-      end
+      include DyadicBool
 
     end
   end
