@@ -3,7 +3,7 @@ module Alf
     shared_examples_for "a pass-through expression for restrict" do
 
       let(:the_predicate){
-        defined?(predicate) ? predicate : Predicate.eq(:x, 12)
+        defined?(predicate) ? predicate : Predicate.native(lambda{})
       }
 
       let(:restriction){
@@ -30,7 +30,7 @@ module Alf
       specify "the restriction has been pushed with same predicate" do
         optimized.operands.each do |operand|
           operand.should be_a(Operator::Relational::Restrict)
-          operand.predicate.should eq(the_predicate)
+          operand.predicate.should eq(restriction.predicate)
         end
       end
 

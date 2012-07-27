@@ -9,6 +9,12 @@ module Alf
         Predicate.comp(:eq, :a_non_split_attribute => 12)
       }
 
+      context 'with a native predicate' do
+        let(:predicate){ Predicate.native(lambda{ true }) }
+
+        it_should_behave_like "an unoptimizable expression for restrict"
+      end
+
       context 'with no split attributes' do
         let(:predicate){ stay_pred }
 
