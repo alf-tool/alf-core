@@ -7,6 +7,10 @@ module Alf
         100
       end
 
+      def var_name
+        self[1]
+      end
+
     end
   end
 end

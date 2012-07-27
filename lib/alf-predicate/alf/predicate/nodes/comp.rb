@@ -18,6 +18,14 @@ module Alf
         end
       end
 
+      def operator
+        self[1]
+      end
+
+      def values
+        self[2]
+      end
+
     end
   end
 end
