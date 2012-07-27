@@ -49,6 +49,12 @@ module Alf
       end
     end
 
+    def ==(other)
+      (other.class == self.class) &&
+      (other.operands == self.operands) &&
+      (other.signature.collect_on(self) == self.signature.collect_on(self))
+    end
+
   end # module Operator
 end # module Alf
 require_relative 'operator/class_methods'
