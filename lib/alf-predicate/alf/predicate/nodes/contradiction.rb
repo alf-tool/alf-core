@@ -19,6 +19,10 @@ module Alf
         @free_variables ||= AttrList::EMPTY
       end
 
+      def and_split(*args)
+        [self, self]
+      end
+
     end
   end
 end

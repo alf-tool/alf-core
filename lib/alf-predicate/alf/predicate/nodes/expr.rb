@@ -32,6 +32,11 @@ module Alf
         sexpr([:or, self, other])
       end
 
+      def and_split(attr_list, reverse = false)
+        res = free_variables.subset?(attr_list) ? [ self, tautology ] : [ tautology, self ]
+        reverse ? res.reverse : res
+      end
+
       def to_ruby_code(options = {})
         ToRubyCode.call(self, options)
       end
