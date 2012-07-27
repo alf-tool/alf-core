@@ -88,6 +88,8 @@
 
 * TupleExpression#call and TupleExpression#[] have been removed.
 
+* TuplePredicate has been replaced by Predicate. The latter is no longer a subclass of TupleExpression.
+
 ## Bug fixes
 
 * The backports gem is no longer required on ruby =1.9
