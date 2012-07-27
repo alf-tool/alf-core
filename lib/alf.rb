@@ -10,6 +10,7 @@ require "forwardable"
 require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'
 
+require_relative "alf-predicate/alf/predicate"
 require_relative 'alf/types'
 require_relative 'alf/tools'
 require_relative 'alf/iterator'
@@ -108,6 +109,5 @@ end # module Alf
 
 require_relative 'alf-shell/alf/shell'
 require_relative "alf-engine/alf/engine"
-require_relative "alf-predicate/alf/predicate"
 require_relative 'alf/platform'
 

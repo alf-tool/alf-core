@@ -68,13 +68,8 @@ module Alf
 
     end # TupleExpression
 
-    describe "on a TuplePredicate" do
-      let(:value){ TuplePredicate.coerce(arg) }
-
-      describe "When built from a TupleExpression" do
-        let(:arg){ TupleExpression.coerce("status > 10") }
-        it{ should eq("->{ status > 10 }")}
-      end
+    describe "on a Predicate" do
+      let(:value){ Predicate.coerce(arg) }
 
       describe "When built from a boolean" do
         let(:arg){ true }
@@ -88,25 +83,10 @@ module Alf
 
       describe "When built from a Hash" do
         let(:arg){ {:status => 10} }
-        it{ should eq("->{ (self.status == 10) }")}
+        it{ should eq("->{ self.status == 10 }")}
       end
 
-      describe "When built with a singleton Array" do
-        let(:arg){ ["status > 10"] }
-        it{ should eq("->{ status > 10 }")}
-      end
-
-      describe "When built with a Hash-Array" do
-        let(:arg){ ["status", "10"] }
-        it{ should eq("->{ (self.status == 10) }")}
-      end
-
-      describe "When built with a Hash-Array without coercion" do
-        let(:arg){ [:status, "10"] }
-        it{ should eq("->{ (self.status == \"10\") }")}
-      end
-
-    end # TuplePredicate
+    end # Predicate
 
     describe "on a TupleComputation" do
       let(:value){ TupleComputation.coerce(arg) }

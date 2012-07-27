@@ -5,7 +5,7 @@ module Alf
         include Operator, Relational, Unary
 
         signature do |s|
-          s.argument :predicate, TuplePredicate, "true"
+          s.argument :predicate, Predicate, Predicate.tautology
         end
 
         def heading

@@ -9,7 +9,7 @@ module Alf
     #       {:name => "Smith"},
     #       {:name => "Jones"}
     #     ]
-    #     Filter.new(rel, TuplePredicate["name =~ /^J/"]).to_a
+    #     Filter.new(rel, Predicate.parse("name =~ /^J/")).to_a
     #     # => [
     #     #      {:name => "Jones"}
     #     #    ]
@@ -19,7 +19,7 @@ module Alf
       # @return [Enumerable] The operand
       attr_reader :operand
 
-      # @return [TuplePredicate] Filtering predicate
+      # @return [Predicate] Filtering predicate
       attr_reader :predicate
 
       # Creates a Filter instance

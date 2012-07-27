@@ -13,21 +13,22 @@ module Alf::Shell::Operator
     context "without arg" do
       let(:argv){ [input] }
       specify{
-        subject.predicate.should eq(Alf::TuplePredicate[true])
+        subject.predicate.should eq(Alf::Predicate.coerce(true))
       }
     end
 
     context "with a single arg" do
       let(:argv){ [ input ] + ["--", "status > 10"] }
       specify{
-        subject.predicate.should eq(Alf::TuplePredicate["status > 10"])
+        subject.predicate.should be_a(Alf::Predicate)
+        subject.predicate.to_ruby_code.should eq("status > 10")
       }
     end
 
     context "with two args" do
       let(:argv){ [ input ] + ["--", "status", "10"] }
       specify{
-        subject.predicate.should eq(Alf::TuplePredicate["(self.status == 10)"])
+        subject.predicate.should eq(Alf::Predicate.comp(:eq, :status => 10))
       }
     end
 

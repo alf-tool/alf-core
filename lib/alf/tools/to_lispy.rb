@@ -46,6 +46,11 @@ module Alf
         Tools.to_ruby_literal(v.renaming)
       end
 
+      # Predicate -> ->{ ... }
+      r.upon(Predicate) do |v, rd|
+        "->{ #{v.to_ruby_code} }"
+      end
+
       # TupleExpression -> ->{ ... }
       r.upon(Types::TupleExpression) do |v, rd|
         "->{ #{v.has_source_code!} }"
