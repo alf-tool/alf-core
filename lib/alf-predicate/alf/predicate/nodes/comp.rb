@@ -4,7 +4,7 @@ module Alf
       include Expr
 
       def priority
-        90
+        50
       end
 
       def to_raw_expr

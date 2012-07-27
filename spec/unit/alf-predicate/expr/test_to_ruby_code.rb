@@ -115,12 +115,28 @@ module Alf
         let(:expr){ f.native(lambda{}) }
 
         specify{
-          lambda{ subject }.should raise_error(NotSupportedError) 
+          lambda{ subject }.should raise_error(NotSupportedError)
         }
       end
 
+      describe "conjunction of two eqs" do
+        let(:expr){
+          f.and(f.eq(:x, 2), f.eq(:y, 3))
+        }
+
+        it{ should eq("(x == 2) && (y == 3)") }
+      end
+
+      describe "conjunction of two comps" do
+        let(:expr){
+          f.and(f.comp(:eq, :x => 2), f.comp(:eq, :y => 3))
+        }
+
+        it{ should eq("(x == 2) && (y == 3)") }
+      end
+
       describe "or and and" do
-        let(:expr){ 
+        let(:expr){
           f.and(f.eq(:x, 2), f.or(true, false))
         }
 
