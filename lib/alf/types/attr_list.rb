@@ -141,6 +141,14 @@ module Alf
         AttrList.new(attributes | AttrList.coerce(other).attributes)
       end
 
+      # Check if `attr_name` is included in this list.
+      #
+      # @param [AttrName] an attribute name
+      # @return [Boolean] true if this attribute is included, false otherwise
+      def include?(attr_name)
+        attributes.include?(attr_name)
+      end
+
       # Returns true if this attribute list is empty, false otherwise
       #
       # @return [Boolean] whether this attribute list is emtpy
