@@ -27,6 +27,7 @@ module Alf
       end
 
       def comp(op, h)
+        return tautology if h.empty?
         _factor([:comp, op, h])
       end
 
