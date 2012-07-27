@@ -13,11 +13,6 @@ module Alf
       it_should_behave_like 'A valid type implementation'
     end
 
-    it "should include a valid example" do
-      expr = TupleExpression["status * 10"]
-      expr.call(:status => 20).should eq(200)
-    end
-
     let(:scope) {
       Tools::TupleScope.new(:status => 10)
     }
@@ -88,21 +83,6 @@ module Alf
       end
 
     end # from_argv
-
-    describe 'call' do
-      let(:expr){ TupleExpression["status > 10"] }
-
-      it 'should build its scope correctly' do
-        expr.call(:status => 20).should be_true
-        expr.call(:status => 5).should be_false
-      end
-
-      it 'should be aliased ad []' do
-        expr[:status => 20].should be_true
-        expr[:status => 5].should be_false
-      end
-
-    end # call
 
     describe 'to_ruby_literal' do
 

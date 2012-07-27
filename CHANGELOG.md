@@ -86,6 +86,8 @@
 
 * Aggregator.aggregators has been removed. Use Aggregator.all or Aggregator.each instead.
 
+* TupleExpression#call and TupleExpression#[] have been removed.
+
 ## Bug fixes
 
 * The backports gem is no longer required on ruby =1.9

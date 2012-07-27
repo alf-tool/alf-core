@@ -86,23 +86,6 @@ module Alf
         Object
       end
 
-      # Evaluates the expression on a tuple
-      #
-      # This is a convenient method for the following, longer expression:
-      #
-      #     evaluate(TupleScope.new(tuple))
-      #
-      # Note, however, using a scope as in the example above is much more
-      # efficient when evaluating the same expression on multiple tuples
-      # in sequence.
-      #
-      # @param [Hash] tuple a Tuple instance
-      # @return [Object] the result of evaluating the expression on `tuple`
-      def call(tuple)
-        evaluate(Tools::TupleScope.new(tuple))
-      end
-      alias :[] :call
-
       # Returns a hash code.
       #
       # @return [Integer] a hash code for this expression
