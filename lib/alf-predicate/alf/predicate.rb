@@ -54,6 +54,10 @@ module Alf
       expr.contradiction?
     end
 
+    def free_variables
+      expr.free_variables
+    end
+
     def &(other)
       Predicate.new(expr & other.expr)
     end
