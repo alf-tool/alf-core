@@ -1,5 +1,7 @@
 # 0.13.0 / FIX ME
 
+* Ruby 1.8.x is no longer supported. Please upgrade.
+
 ## Enhancements of the shell interface
 
 * When used in shell, the default database is set to the current folder instead of the embedded suppliers and parts example database. This saves you from having to use 'alf --db=.' everytime you want to use .csv or .rash files as base relations. An --examples option allows easily setting the embedded database as default one.
