@@ -10,8 +10,8 @@ module Alf
         ToProc.call(self)
       end
 
-      def _(arg)
-        Factory._(arg)
+      def sexpr(arg)
+        Factory.sexpr(arg)
       end
 
     end

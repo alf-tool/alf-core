@@ -1,3 +1,7 @@
+require_relative 'predicate/parser'
+require_relative 'predicate/grammar'
+require_relative 'predicate/factory'
+require_relative 'predicate/processors'
 module Alf
   class Predicate
 
@@ -6,28 +10,39 @@ module Alf
     end
     attr_reader :expr
 
-    def self.coerce(arg)
-      case arg
-      when Predicate  then arg
-      when TrueClass  then Predicate.new(Factory.tautology)
-      when FalseClass then Predicate.new(Factory.contradiction)
-      when Symbol     then Predicate.new(Factory.var_ref(arg))
-      when Proc       then Predicate.new(Factory.native(arg))
-      when String     then Predicate.new(Grammar.parse(arg))
-      when Hash       then Predicate.new(Factory.comp(:eq, arg))
-      else
-        raise ArgumentError, "Unable to coerce `#{arg}` to a predicate"
-      end
-    end
+    class << self
+      include Factory
 
-    def self.from_argv(argv)
-      if argv.size == 1
-        coerce(argv.first)
-      elsif (argv.size % 2) == 0
-        coerce(Hash[argv.each_slice(2).map{|k,v| [k.to_sym, eval(v)] }])
-      else
-        raise ArgumentError, "Unable to coerce from ARGV `#{argv.inspect}`"
+      def coerce(arg)
+        case arg
+        when Predicate  then arg
+        when TrueClass  then tautology
+        when FalseClass then contradiction
+        when Symbol     then var_ref(arg)
+        when Proc       then native(arg)
+        when Hash       then eq(arg)
+        when String     then Predicate.new(Grammar.parse(arg))
+        else
+          raise ArgumentError, "Unable to coerce `#{arg}` to a predicate"
+        end
       end
+
+      def from_argv(argv)
+        if argv.size == 1
+          coerce(argv.first)
+        elsif (argv.size % 2) == 0
+          coerce(Hash[argv.each_slice(2).map{|k,v| [k.to_sym, eval(v)] }])
+        else
+          raise ArgumentError, "Unable to coerce from ARGV `#{argv.inspect}`"
+        end
+      end
+
+    private
+
+      def _factor(arg)
+        Predicate.new Grammar.sexpr(arg)
+      end
+
     end
 
     def &(other)
@@ -68,7 +83,3 @@ module Alf
 
   end # class Predicate
 end # module Alf
-require_relative 'predicate/parser'
-require_relative 'predicate/grammar'
-require_relative 'predicate/factory'
-require_relative 'predicate/processors'

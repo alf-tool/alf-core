@@ -10,10 +10,10 @@ module Alf
       def to_raw_expr
         op, h = sexpr_body
         if h.size == 1
-          _ [op, _(h.keys.first), _(h.values.first)]
+          sexpr [op, sexpr(h.keys.first), sexpr(h.values.first)]
         else
-          _ h.inject([:and]){|expr, pair|
-            expr << ([op] << _(pair.first) << _(pair.last))
+          sexpr h.inject([:and]){|expr, pair|
+            expr << ([op] << sexpr(pair.first) << sexpr(pair.last))
           }
         end
       end
