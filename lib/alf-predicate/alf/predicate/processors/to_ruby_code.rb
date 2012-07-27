@@ -71,6 +71,11 @@ module Alf
       end
 
       def on_native(sexpr)
+        proc = sexpr.to_proc
+        if proc.respond_to?(:to_ruby_literal) &&
+           (proc.to_ruby_literal =~ /^\s*lambda{\s*(.*?)\s*}\s*$/)
+          return $1
+        end
         raise NotSupportedError
       end
 
