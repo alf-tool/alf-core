@@ -10,7 +10,7 @@ module Alf
       it{ should be_a(Predicate) }
 
       specify{
-        subject.to_ruby_code.should eq("!(x == 2)")
+        subject.to_ruby_code.should eq("!(self.x == 2)")
       }
 
     end

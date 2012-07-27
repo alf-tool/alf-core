@@ -11,7 +11,11 @@ module Alf
       end
 
       def on_var_ref(sexpr)
-        sexpr.last.to_s
+        if s = options[:scope]
+          "#{s}.#{sexpr.last.to_s}"
+        else
+          sexpr.last.to_s
+        end
       end
 
       def on_not(sexpr)

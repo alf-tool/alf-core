@@ -8,7 +8,7 @@ module Alf
       describe "on a comp(:eq)" do
         let(:p){ Predicate.coerce(:x => 2) }
 
-        it{ should eq("x == 2") }
+        it{ should eq("self.x == 2") }
       end
       
     end

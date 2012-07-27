@@ -71,11 +71,11 @@ module Alf
     end
 
     def to_ruby_code
-      @ruby_code ||= expr.to_ruby_code
+      @ruby_code ||= expr.to_ruby_code(:scope => "self")
     end
 
     def to_proc
-      @proc ||= expr.to_proc
+      @proc ||= expr.to_proc(:scope => "self")
     end
 
     def to_ruby_literal

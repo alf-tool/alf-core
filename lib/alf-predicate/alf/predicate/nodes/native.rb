@@ -7,7 +7,7 @@ module Alf
         90
       end
 
-      def to_proc
+      def to_proc(options = {})
         self[1]
       end
 
