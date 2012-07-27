@@ -90,7 +90,7 @@ module Alf
       def split_tuple(tuple, allbut = false)
         projection, rest = {}, tuple.dup
         attributes.each do |a|
-          projection[a] = tuple[a]
+          projection[a] = tuple[a] if tuple.has_key?(a)
           rest.delete(a)
         end
         allbut ? [rest, projection] : [projection, rest]
