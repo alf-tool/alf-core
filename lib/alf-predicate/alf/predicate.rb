@@ -42,6 +42,10 @@ module Alf
       Predicate.new(Factory.not(expr))
     end
 
+    def evaluate(scope)
+      scope.instance_exec(&to_proc)
+    end
+
     def ==(other)
       other.is_a?(Predicate) && (other.expr==expr)
     end
