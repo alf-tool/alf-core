@@ -236,6 +236,7 @@ module Alf
       end
       alias :inspect :to_ruby_literal
 
+      EMPTY = AttrList.new([])
     end # class AttrList
   end # module Types
 end # module Alf
