@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   class Predicate
-    describe ToRubyCode do
+    describe Expr, "to_ruby_code" do
 
       let(:f){ Factory }
       let(:options){ {} }
