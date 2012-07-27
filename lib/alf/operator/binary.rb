@@ -30,6 +30,14 @@ module Alf
         operands.last
       end
 
+      def with_left(left)
+        with_operands(left, right)
+      end
+
+      def with_right(right)
+        with_operands(left, right)
+      end
+
     end # module Binary
   end # module Operator
 end # module Alf

@@ -43,6 +43,12 @@ module Alf
       }
     end
 
+    def with_operands(*operands)
+      dup.tap do |copy|
+        copy.operands = operands
+      end
+    end
+
   end # module Operator
 end # module Alf
 require_relative 'operator/class_methods'

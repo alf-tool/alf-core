@@ -25,6 +25,10 @@ module Alf
         operands.first
       end
 
+      def with_operand(operand)
+        with_operands(operand)
+      end
+
     end # module Unary
   end # module Operator
 end # module Alf
