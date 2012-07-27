@@ -26,6 +26,7 @@ module Alf
           raise ArgumentError, "Unable to coerce `#{arg}` to a predicate"
         end
       end
+      alias :parse :coerce
 
       def from_argv(argv)
         if argv.size == 1
