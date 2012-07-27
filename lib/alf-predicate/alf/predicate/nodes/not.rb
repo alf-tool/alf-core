@@ -11,6 +11,10 @@ module Alf
         last
       end
 
+      def free_variables
+        @free_variables ||= last.free_variables
+      end
+
     end
   end
 end

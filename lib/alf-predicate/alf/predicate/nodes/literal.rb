@@ -7,6 +7,10 @@ module Alf
         100
       end
 
+      def free_variables
+        @free_variables ||= AttrList::EMPTY
+      end
+
     end
   end
 end

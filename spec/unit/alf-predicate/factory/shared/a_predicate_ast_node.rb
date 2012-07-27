@@ -15,6 +15,10 @@ module Alf
         (subject.contradiction? == subject.is_a?(Contradiction)).should be_true
       }
 
+      specify{
+        subject.free_variables.should be_a(AttrList) unless subject.is_a?(Native)
+      }
+
     end
   end
 end

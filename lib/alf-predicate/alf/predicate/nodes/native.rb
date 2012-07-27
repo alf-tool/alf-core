@@ -11,6 +11,10 @@ module Alf
         self[1]
       end
 
+      def free_variables
+        raise NotSupportedError
+      end
+
     end
   end
 end

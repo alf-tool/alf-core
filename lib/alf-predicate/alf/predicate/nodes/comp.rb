@@ -30,6 +30,10 @@ module Alf
         self[2]
       end
 
+      def free_variables
+        @free_variables ||= to_raw_expr.free_variables
+      end
+
     end
   end
 end
