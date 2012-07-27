@@ -3,6 +3,10 @@ module Alf
     module Comp
       include Expr
 
+      def priority
+        90
+      end
+
       def to_raw_expr
         op, h = sexpr_body
         if h.size == 1

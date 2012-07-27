@@ -11,22 +11,26 @@ module Alf
       end
 
       def on_var_ref(sexpr)
-        sexpr.last.to_s
+        if s = options[:scope]
+          "#{s}.#{sexpr.last}"
+        else
+          sexpr.last.to_s
+        end
       end
 
       def on_not(sexpr)
-        "!#{apply(sexpr.last)}"
+        "!" << apply(sexpr.last, sexpr)
       end
 
       def on_and(sexpr)
-        sexpr_body.map{|term|
-          "(#{apply(term)})"
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
         }.join(' && ')
       end
 
       def on_or(sexpr)
-        sexpr_body.map{|term|
-          "(#{apply(term)})"
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
         }.join(' || ')
       end
 
@@ -35,27 +39,39 @@ module Alf
       end
 
       def on_eq(sexpr)
-        sexpr_body.map{|term| "#{apply(term)}"}.join("==")
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
+        }.join(" == ")
       end
 
       def on_neq(sexpr)
-        sexpr_body.map{|term| "#{apply(term)}"}.join("!=")
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
+        }.join(" != ")
       end
 
       def on_lt(sexpr)
-        sexpr_body.map{|term| "#{apply(term)}"}.join("<")
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
+        }.join(" < ")
       end
 
       def on_lte(sexpr)
-        sexpr_body.map{|term| "#{apply(term)}"}.join("<=")
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
+        }.join(" <= ")
       end
 
       def on_gt(sexpr)
-        sexpr_body.map{|term| "#{apply(term)}"}.join(">")
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
+        }.join(" > ")
       end
 
       def on_gte(sexpr)
-        sexpr_body.map{|term| "#{apply(term)}"}.join(">=")
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
+        }.join(" >= ")
       end
 
       def on_native(sexpr)
@@ -64,6 +80,16 @@ module Alf
 
       def on_literal(sexpr)
         Tools.to_ruby_literal(sexpr.last)
+      end
+
+    protected
+
+      def apply(sexpr, parent = nil)
+        code = super(sexpr)
+        if parent && (parent.priority >= sexpr.priority)
+          code = "(" << code << ")"
+        end
+        code
       end
 
     end
