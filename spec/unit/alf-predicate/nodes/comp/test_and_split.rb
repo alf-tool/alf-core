@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   class Predicate
-    describe VarRef, "and_split" do
+    describe Comp, "and_split" do
 
       let(:predicate){ Factory.comp(:eq, :x => 2, :y => 3) }
       let(:tautology){ Factory.tautology }

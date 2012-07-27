@@ -7,6 +7,14 @@ module Alf
         50
       end
 
+      def &(other)
+        return super unless other.is_a?(Comp) && (operator==other.operator)
+        comp(operator, values.merge(other.values){|k,v1,v2|
+          return contradiction unless v1 == v2
+          v1
+        })
+      end
+
       def !
         comp(OP_NEGATIONS[operator], values)
       end
