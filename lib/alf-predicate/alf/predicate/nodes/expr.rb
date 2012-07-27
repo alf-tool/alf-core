@@ -2,6 +2,14 @@ module Alf
   class Predicate
     module Expr
 
+      def tautology?
+        false
+      end
+
+      def contradiction?
+        false
+      end
+
       def to_ruby_code(options = {})
         ToRubyCode.call(self, options)
       end

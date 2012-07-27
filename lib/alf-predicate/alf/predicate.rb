@@ -46,6 +46,14 @@ module Alf
 
     end
 
+    def tautology?
+      expr.tautology?
+    end
+
+    def contradiction?
+      expr.contradiction?
+    end
+
     def &(other)
       Predicate.new(Factory.and(expr, other.expr))
     end
