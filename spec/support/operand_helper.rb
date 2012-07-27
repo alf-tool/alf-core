@@ -20,6 +20,10 @@ class OperandHelper
     end
   end
 
+  def to_lispy
+    "an_operand"
+  end
+
 protected
 
   def set!(h)
