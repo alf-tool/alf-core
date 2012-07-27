@@ -4,9 +4,8 @@ module Alf
     describe Expr, "to_ruby_code" do
 
       let(:f){ Factory }
-      let(:options){ {} }
 
-      subject{ expr.to_ruby_code(options) }
+      subject{ expr.to_ruby_code }
 
       after do
         unless expr.is_a?(Native)
@@ -32,13 +31,6 @@ module Alf
         let(:expr){ f.var_ref(:name) }
 
         it{ should eq("name") }
-      end
-
-      describe "var_ref (with scope)" do
-        let(:options){ {:scope => "t"} }
-        let(:expr){ f.var_ref(:name) }
-
-        it{ should eq("t.name") }
       end
 
       describe "and" do

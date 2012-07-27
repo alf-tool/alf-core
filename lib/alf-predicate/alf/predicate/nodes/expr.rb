@@ -11,21 +11,17 @@ module Alf
         alias :inspect :to_ruby_literal
       end
 
-      def to_ruby_code(options = {})
-        ToRubyCode.call(self, options)
+      def to_ruby_code
+        ToRubyCode.call(self)
       end
 
-      def to_proc(options = {})
-        code = to_ruby_code(options)
-        if s = options[:scope]
-          code = "lambda{|#{s}| #{code} }"
-        else
-          code = "lambda{ #{code} }"
-        end
-        Kernel.eval(code).
-               extend(ProcMethods).tap do |proc|
-          proc.source_code = code
-        end
+      def to_proc
+        code = to_ruby_code
+        code = "lambda{ #{code} }"
+        proc = Kernel.eval(code)
+        proc.extend(ProcMethods)
+        proc.source_code = code
+        proc
       end
 
       def _(arg)

@@ -7,6 +7,10 @@ module Alf
         90
       end
 
+      def to_proc
+        self[1]
+      end
+
     end
   end
 end
