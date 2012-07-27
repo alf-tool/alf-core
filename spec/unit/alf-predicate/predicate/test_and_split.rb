@@ -18,6 +18,18 @@ module Alf
         it{ should eq([p.contradiction, p.contradiction]) }
       end
 
+      context "on var_ref (included)" do
+        let(:pred){ p.var_ref(:x) }
+
+        it{ should eq([ pred, p.tautology ]) }
+      end
+
+      context "on var_ref (excluded)" do
+        let(:pred){ p.var_ref(:y) }
+
+        it{ should eq([ p.tautology, pred ]) }
+      end
+
       context "on not (included)" do
         let(:pred){ p.not(:x) }
 

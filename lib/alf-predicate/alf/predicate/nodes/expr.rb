@@ -33,8 +33,7 @@ module Alf
       end
 
       def and_split(attr_list, reverse = false)
-        res = free_variables.subset?(attr_list) ? [ self, tautology ] : [ tautology, self ]
-        reverse ? res.reverse : res
+        reverse ? [ tautology, self ] : [ self, tautology ]
       end
 
       def to_ruby_code(options = {})
