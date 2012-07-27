@@ -7,6 +7,10 @@ module Alf
         true
       end
 
+      def !
+        contradiction
+      end
+
       def priority
         100
       end

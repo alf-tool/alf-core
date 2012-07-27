@@ -7,6 +7,10 @@ module Alf
         50
       end
 
+      def !
+        comp(OP_NEGATIONS[operator], values)
+      end
+
       def to_raw_expr
         op, h = sexpr_body
         if h.size == 1

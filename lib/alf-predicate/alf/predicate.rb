@@ -1,6 +1,6 @@
 require_relative 'predicate/parser'
-require_relative 'predicate/grammar'
 require_relative 'predicate/factory'
+require_relative 'predicate/grammar'
 require_relative 'predicate/processors'
 module Alf
   class Predicate
@@ -55,15 +55,15 @@ module Alf
     end
 
     def &(other)
-      Predicate.new(Factory.and(expr, other.expr))
+      Predicate.new(expr & other.expr)
     end
 
     def |(other)
-      Predicate.new(Factory.or(expr, other.expr))
+      Predicate.new(expr | other.expr)
     end
 
     def !
-      Predicate.new(Factory.not(expr))
+      Predicate.new(!expr)
     end
 
     def evaluate(scope)

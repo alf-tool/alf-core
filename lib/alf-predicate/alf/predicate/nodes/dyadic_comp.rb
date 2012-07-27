@@ -1,14 +1,14 @@
 module Alf
   class Predicate
-    module Not
+    module DyadicComp
       include Expr
 
       def priority
-        90
+        50
       end
 
       def !
-        last
+        Factory.send(OP_NEGATIONS[first], last)
       end
 
     end

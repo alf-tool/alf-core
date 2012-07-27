@@ -1,6 +1,16 @@
 module Alf
   class Predicate
     module Expr
+      include Factory
+
+      OP_NEGATIONS = {
+        :eq  => :neq,
+        :neq => :eq,
+        :lt  => :gte,
+        :lte => :gt,
+        :gt  => :lte,
+        :gte => :lt
+      }
 
       def tautology?
         false
@@ -8,6 +18,18 @@ module Alf
 
       def contradiction?
         false
+      end
+
+      def !
+        sexpr([:not, self])
+      end
+
+      def &(other)
+        sexpr([:and, self, other])
+      end
+
+      def |(other)
+        sexpr([:or, self, other])
       end
 
       def to_ruby_code(options = {})

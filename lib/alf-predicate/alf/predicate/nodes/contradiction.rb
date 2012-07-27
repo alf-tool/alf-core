@@ -7,6 +7,10 @@ module Alf
         true
       end
 
+      def !
+        tautology
+      end
+
       def priority
         100
       end
