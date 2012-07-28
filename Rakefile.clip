@@ -1,0 +1,7 @@
+require "rspec/core/rake_task"
+RSpec::Core::RakeTask.new do |t|
+  t.pattern = "spec/**/test_*.rb"
+  t.ruby_opts = ["-I../alf/lib", "-I../alf/spec"]
+  t.rspec_opts = ["--color", "--backtrace"]
+end
+task :default => :spec
