@@ -1,6 +1,6 @@
 module Alf
   module Engine
-    class Compiler
+    class Compiler < Lang::Compiler
 
       attr_reader :context
 
@@ -8,50 +8,45 @@ module Alf
         @context = context
       end
 
-      def compile(expr)
+      ### to be cleaned
+
+      def on_missing(expr)
         case expr
-        when Operator::VarRef    then compile_reference(expr.name)
-        when Operator            then compile_operator(expr)
-        when String, Symbol      then compile_reference(expr)
+        when String, Symbol      then context.relvar(expr.to_sym)
         when Array, Relation     then expr
         when Reader, Relvar, Cog then expr
         when IO, StringIO        then Reader.coerce(expr)
         else
-          raise ArgumentError, "Unexpected operand `#{expr.class}`"
+          super
         end
       end
-      alias :call :compile
 
-      def compile_operator(expr)
-        name = Tools.ruby_case(Tools.class_name(expr.class))
-        meth = :"on_#{name}"
-        send(meth, expr)
-      end
+      ### VarRef, end of recursion :-)
 
-      def compile_reference(expr)
-        context.relvar(expr.to_sym)
+      def on_var_ref(expr)
+        context.relvar(expr.name.to_sym)
       end
 
       ### non relational
 
       def on_autonum(expr)
-        Autonum.new(compile(expr.operand), expr.as, context)
+        Autonum.new(apply(expr.operand), expr.as, context)
       end
 
       def on_clip(expr)
-        Clip.new(compile(expr.operand), expr.attributes, expr.allbut, context)
+        Clip.new(apply(expr.operand), expr.attributes, expr.allbut, context)
       end
 
       def on_coerce(expr)
-        Coerce.new(compile(expr.operand), expr.coercions, context)
+        Coerce.new(apply(expr.operand), expr.coercions, context)
       end
 
       def on_compact(expr)
-        Compact.new(compile(expr.operand), context)
+        Compact.new(apply(expr.operand), context)
       end
 
       def on_defaults(expr)
-        op = Defaults.new(compile(expr.operand), expr.defaults, context)
+        op = Defaults.new(apply(expr.operand), expr.defaults, context)
         op = Clip.new(op, expr.defaults.to_attr_list, false, context) if expr.strict
         op
       end
@@ -61,95 +56,95 @@ module Alf
       end
 
       def on_sort(expr)
-        Sort.new(compile(expr.operand), expr.ordering, context)
+        Sort.new(apply(expr.operand), expr.ordering, context)
       end
 
       ### relational
 
       def on_extend(expr)
-        SetAttr.new(compile(expr.operand), expr.ext, context)
+        SetAttr.new(apply(expr.operand), expr.ext, context)
       end
 
       def on_group(expr)
-        Group::Hash.new(compile(expr.operand), expr.attributes, expr.as, expr.allbut, context)
+        Group::Hash.new(apply(expr.operand), expr.attributes, expr.as, expr.allbut, context)
       end
 
       def on_infer_heading(expr)
-        InferHeading.new(compile(expr.operand), context)
+        InferHeading.new(apply(expr.operand), context)
       end
 
       def on_intersect(expr)
-        Join::Hash.new(compile(expr.left), compile(expr.right), context)
+        Join::Hash.new(apply(expr.left), apply(expr.right), context)
       end
 
       def on_join(expr)
-        Join::Hash.new(compile(expr.left), compile(expr.right), context)
+        Join::Hash.new(apply(expr.left), apply(expr.right), context)
       end
 
       def on_matching(expr)
-        Semi::Hash.new(compile(expr.left), compile(expr.right), true, context)
+        Semi::Hash.new(apply(expr.left), apply(expr.right), true, context)
       end
 
       def on_minus(expr)
-        Semi::Hash.new(compile(expr.left), compile(expr.right), false, context)
+        Semi::Hash.new(apply(expr.left), apply(expr.right), false, context)
       end
 
       def on_not_matching(expr)
-        Semi::Hash.new(compile(expr.left), compile(expr.right), false, context)
+        Semi::Hash.new(apply(expr.left), apply(expr.right), false, context)
       end
 
       def on_project(expr)
-        op = Clip.new(compile(expr.operand), expr.attributes, expr.allbut, context)
+        op = Clip.new(apply(expr.operand), expr.attributes, expr.allbut, context)
         op = Compact.new(op, context)
         op
       end
 
       def on_quota(expr)
-        op = Sort.new(compile(expr.operand), expr.by.to_ordering + expr.order, context)
+        op = Sort.new(apply(expr.operand), expr.by.to_ordering + expr.order, context)
         op = Quota::Cesure.new(op, expr.by, expr.summarization, context)
         op
       end
 
       def on_rank(expr)
-        op = Sort.new(compile(expr.operand), expr.order, context)
+        op = Sort.new(apply(expr.operand), expr.order, context)
         op = Rank::Cesure.new(op, expr.order, expr.as, context)
         op
       end
 
       def on_rename(expr)
-        Rename.new(compile(expr.operand), expr.renaming, context)
+        Rename.new(apply(expr.operand), expr.renaming, context)
       end
 
       def on_restrict(expr)
-        Filter.new(compile(expr.operand), expr.predicate, context)
+        Filter.new(apply(expr.operand), expr.predicate, context)
       end
 
       def on_summarize(expr)
         if expr.allbut
-          Summarize::Hash.new(compile(expr.operand), expr.by, expr.summarization, expr.allbut, context)
+          Summarize::Hash.new(apply(expr.operand), expr.by, expr.summarization, expr.allbut, context)
         else
-          op = Sort.new(compile(expr.operand), expr.by.to_ordering, context)
+          op = Sort.new(apply(expr.operand), expr.by.to_ordering, context)
           op = Summarize::Cesure.new(op, expr.by, expr.summarization, expr.allbut, context)
           op
         end
       end
 
       def on_ungroup(expr)
-        Ungroup.new(compile(expr.operand), expr.attribute, context)
+        Ungroup.new(apply(expr.operand), expr.attribute, context)
       end
 
       def on_union(expr)
-        op = Concat.new([compile(expr.left), compile(expr.right)], context)
+        op = Concat.new([apply(expr.left), apply(expr.right)], context)
         op = Compact.new(op, context)
         op
       end
 
       def on_unwrap(expr)
-        Unwrap.new(compile(expr.operand), expr.attribute, context)
+        Unwrap.new(apply(expr.operand), expr.attribute, context)
       end
 
       def on_wrap(expr)
-        Wrap.new(compile(expr.operand), expr.attributes, expr.as, expr.allbut, context)
+        Wrap.new(apply(expr.operand), expr.attributes, expr.as, expr.allbut, context)
       end
 
     end # class Compiler

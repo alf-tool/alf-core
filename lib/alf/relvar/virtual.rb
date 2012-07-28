@@ -31,7 +31,7 @@ module Alf
 
       # Ask the expression to compile itself.
       def compile(context)
-        Engine::Compiler.new(context).compile(expression)
+        context.compiler.call(expression)
       end
 
     private

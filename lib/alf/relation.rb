@@ -106,7 +106,7 @@ module Alf
   private
 
     def _operator_output(op)
-      Engine::Compiler.new(nil).compile(op).to_relation
+      Engine::Compiler.new(nil).call(op).to_relation
     end
 
     def _self_operand

@@ -5,9 +5,9 @@ describe "/spec/integration/semantics/" do
 
     def rel_equal(x, y)
       examples_database = Alf::Database.examples
-      compiler = Alf::Engine::Compiler.new(examples_database)
-      x = Alf::Tools.to_relation compiler.compile(x)
-      y = Alf::Tools.to_relation compiler.compile(y)
+      compiler = examples_database.compiler
+      x = Alf::Tools.to_relation compiler.call(x)
+      y = Alf::Tools.to_relation compiler.call(y)
       x == y
     end
 
