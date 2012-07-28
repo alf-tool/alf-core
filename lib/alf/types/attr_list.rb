@@ -63,6 +63,11 @@ module Alf
 
       end # class << self
 
+      # Build a new AttrList through `map`
+      def map(&bl)
+        AttrList.new attributes.map(&bl)
+      end
+
       # Converts this attribute list to an ordering.
       #
       # @param [Symbol] :asc or :desc for ordering direction
