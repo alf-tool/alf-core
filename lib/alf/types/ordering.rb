@@ -7,6 +7,7 @@ module Alf
 
       # @return [Array] underlying ordering as an array `[[attr1, dir1], ...]`
       attr_reader :ordering
+      alias :to_a :ordering
 
       # @return [Proc] a Proc object that sorts tuples according to this
       #         ordering.
