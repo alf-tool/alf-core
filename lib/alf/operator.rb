@@ -32,7 +32,27 @@ module Alf
       self.class.signature
     end
 
-    # Sets the operator operands
+    def ==(other)
+      (other.class == self.class) &&
+      (other.operands == self.operands) &&
+      (other.signature.collect_on(self) == self.signature.collect_on(self))
+    end
+
+  ### rewriting utils (careful to clean state-full information here!)
+
+    def dup
+      super.tap do |copy|
+        yield(copy) if block_given?
+        copy.clean_computed_attributes!
+      end
+    end
+
+    def with_operands(*operands)
+      dup{|copy| copy.operands = operands}
+    end
+
+  protected
+
     def operands=(operands)
       @operands = operands.map{|op|
         if op.is_a?(Symbol) or op.is_a?(String)
@@ -43,16 +63,9 @@ module Alf
       }
     end
 
-    def with_operands(*operands)
-      dup.tap do |copy|
-        copy.operands = operands
-      end
-    end
-
-    def ==(other)
-      (other.class == self.class) &&
-      (other.operands == self.operands) &&
-      (other.signature.collect_on(self) == self.signature.collect_on(self))
+    def clean_computed_attributes!
+      @heading = nil
+      @keys = nil
     end
 
   end # module Operator
