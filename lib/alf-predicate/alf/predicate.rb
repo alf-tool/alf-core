@@ -40,7 +40,7 @@ module Alf
 
     private
 
-      def _factor(arg)
+      def _factor_predicate(arg)
         Predicate.new Grammar.sexpr(arg)
       end
 

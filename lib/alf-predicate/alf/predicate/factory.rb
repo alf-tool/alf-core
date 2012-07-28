@@ -3,70 +3,70 @@ module Alf
     module Factory
 
       def tautology
-        _factor([:tautology, true])
+        _factor_predicate([:tautology, true])
       end
 
       def contradiction
-        _factor([:contradiction, false])
+        _factor_predicate([:contradiction, false])
       end
 
       def var_ref(name)
-        _factor([:var_ref, name])
+        _factor_predicate([:var_ref, name])
       end
 
       def and(left, right = nil)
-        _factor([:and, sexpr(left), sexpr(right)])
+        _factor_predicate([:and, sexpr(left), sexpr(right)])
       end
 
       def or(left, right = nil)
-        _factor([:or, sexpr(left), sexpr(right)])
+        _factor_predicate([:or, sexpr(left), sexpr(right)])
       end
 
       def not(operand)
-        _factor([:not, sexpr(operand)])
+        _factor_predicate([:not, sexpr(operand)])
       end
 
       def comp(op, h)
         return tautology if h.empty?
-        _factor([:comp, op, h])
+        _factor_predicate([:comp, op, h])
       end
 
       def eq(left, right = nil)
         return comp(:eq, left) if left.is_a?(Hash) and right.nil?
-        _factor([:eq, sexpr(left), sexpr(right)])
+        _factor_predicate([:eq, sexpr(left), sexpr(right)])
       end
 
       def neq(left, right = nil)
         return comp(:neq, left) if left.is_a?(Hash) and right.nil?
-        _factor([:neq, sexpr(left), sexpr(right)])
+        _factor_predicate([:neq, sexpr(left), sexpr(right)])
       end
 
       def lt(left, right = nil)
         return comp(:lt, left) if left.is_a?(Hash) and right.nil?
-        _factor([:lt, sexpr(left), sexpr(right)])
+        _factor_predicate([:lt, sexpr(left), sexpr(right)])
       end
 
       def lte(left, right = nil)
         return comp(:lte, left) if left.is_a?(Hash) and right.nil?
-        _factor([:lte, sexpr(left), sexpr(right)])
+        _factor_predicate([:lte, sexpr(left), sexpr(right)])
       end
 
       def gt(left, right = nil)
         return comp(:gt, left) if left.is_a?(Hash) and right.nil?
-        _factor([:gt, sexpr(left), sexpr(right)])
+        _factor_predicate([:gt, sexpr(left), sexpr(right)])
       end
 
       def gte(left, right = nil)
         return comp(:gte, left) if left.is_a?(Hash) and right.nil?
-        _factor([:gte, sexpr(left), sexpr(right)])
+        _factor_predicate([:gte, sexpr(left), sexpr(right)])
       end
 
       def literal(literal)
-        _factor([:literal, literal])
+        _factor_predicate([:literal, literal])
       end
 
       def native(proc)
-        _factor([:native, proc])
+        _factor_predicate([:native, proc])
       end
 
       def sexpr(expr)
@@ -82,7 +82,7 @@ module Alf
         end
       end
 
-      def _factor(arg)
+      def _factor_predicate(arg)
         sexpr(arg)
       end
 

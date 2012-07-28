@@ -1,9 +1,9 @@
 require 'spec_helper'
 module Alf
   class Predicate
-    describe Factory, "_factor" do
+    describe Factory, "_factor_predicate" do
 
-      subject{ Factory._factor(arg) }
+      subject{ Factory._factor_predicate(arg) }
 
       context "on Expr" do
         let(:arg){ Grammar.sexpr([:literal, 12]) }
