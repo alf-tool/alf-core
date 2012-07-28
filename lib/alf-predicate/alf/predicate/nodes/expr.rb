@@ -25,10 +25,14 @@ module Alf
       end
 
       def &(other)
+        return other if other.contradiction?
+        return self  if other.tautology?
         sexpr([:and, self, other])
       end
 
       def |(other)
+        return other if other.tautology?
+        return self  if other.contradiction?
         sexpr([:or, self, other])
       end
 

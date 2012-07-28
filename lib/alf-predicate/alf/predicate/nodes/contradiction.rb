@@ -11,6 +11,14 @@ module Alf
         tautology
       end
 
+      def &(other)
+        self
+      end
+
+      def |(other)
+        other
+      end
+
       def priority
         100
       end

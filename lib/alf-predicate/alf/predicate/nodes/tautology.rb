@@ -11,6 +11,14 @@ module Alf
         contradiction
       end
 
+      def &(other)
+        other
+      end
+
+      def |(other)
+        self
+      end
+
       def priority
         100
       end
