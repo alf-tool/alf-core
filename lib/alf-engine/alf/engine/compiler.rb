@@ -10,7 +10,7 @@ module Alf
 
       ### to be cleaned
 
-      def on_missing(expr)
+      def on_outside(expr)
         case expr
         when String, Symbol      then context.relvar(expr.to_sym)
         when Array, Relation     then expr

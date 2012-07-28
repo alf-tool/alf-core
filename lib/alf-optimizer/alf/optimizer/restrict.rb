@@ -34,6 +34,7 @@ module Alf
       def on_missing(expr, predicate)
         restrict(expr, predicate)
       end
+      alias :on_outside :on_missing
 
       def on_pass_through(expr, predicate)
         expr.with_operands(*expr.operands.map{|op| apply(op, predicate)})
