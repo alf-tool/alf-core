@@ -3,7 +3,7 @@ module Alf
   describe Reader::AlfFile do
 
     class TestConnection < Alf::Connection
-      def relvar(name)
+      def iterator(name)
         [{:status => 10},{:status => 30}]
       end
     end

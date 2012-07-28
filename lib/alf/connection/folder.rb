@@ -26,6 +26,15 @@ module Alf
         end
       end
 
+      # Returns a low-level Iterator for a given named variable
+      def iterator(name)
+        if file = find_file(name)
+          Reader.reader(file, self)
+        else
+          raise NoSuchRelvarError, "No such relvar #{name} (#{@folder})"
+        end
+      end
+
       protected
 
         # Returns the folder on which this connection works

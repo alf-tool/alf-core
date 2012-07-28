@@ -28,6 +28,11 @@ module Alf
         Engine::Compiler.new(self)
       end
 
+      # Returns a low-level Iterator for a given named variable
+      def iterator(name)
+        raise NotImplementedError, "Unable to serve `#{name}` in Connection.iterator"
+      end
+
       # Returns an evaluation scope.
       #
       # @return [Scope] a scope instance on the global variables of the underlying database.

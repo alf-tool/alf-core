@@ -24,7 +24,7 @@ module Alf
       ### VarRef, end of recursion :-)
 
       def on_var_ref(expr)
-        context.relvar(expr.name.to_sym)
+        context.iterator(expr.name.to_sym)
       end
 
       ### non relational
