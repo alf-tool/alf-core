@@ -17,6 +17,12 @@ module Alf
         it{ should eq(AttrList[:x, :y]) }
       end
 
+      context "on a complex attribute comparison" do
+        let(:expr){ Factory.comp(:neq, :x => :y, :z => 2) }
+
+        it{ should eq(AttrList[:x, :y, :z]) }
+      end
+
     end
   end
 end

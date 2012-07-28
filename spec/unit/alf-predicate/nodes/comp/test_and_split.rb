@@ -6,49 +6,45 @@ module Alf
       let(:predicate){ Factory.comp(:eq, :x => 2, :y => 3) }
       let(:tautology){ Factory.tautology }
 
-      subject{ predicate.and_split(list, allbut) }
+      subject{ predicate.and_split(list) }
 
-      context '--no-allbut' do
-        let(:allbut){ false }
+      context 'when full at left' do
+        let(:list){ AttrList[:x, :y] }
 
-        context 'when full at left' do
-          let(:list){ AttrList[:x, :y] }
-
-          it{ should eq([predicate, tautology]) }
-        end
-
-        context 'none at left' do
-          let(:list){ AttrList[] }
-
-          it{ should eq([tautology, predicate]) }
-        end
-
-        context 'none mix' do
-          let(:list){ AttrList[:x] }
-
-          it{ should eq([Factory.comp(:eq, :x => 2), Factory.comp(:eq, :y => 3)]) }
-        end
+        it{ should eq([predicate.to_raw_expr, tautology]) }
       end
 
-      context '--allbut' do
-        let(:allbut){ true }
+      context 'none at left' do
+        let(:list){ AttrList[] }
+
+        it{ should eq([tautology, predicate.to_raw_expr]) }
+      end
+
+      context 'none mix' do
+        let(:list){ AttrList[:x] }
+
+        it{ should eq([Factory.comp(:eq, :x => 2).to_raw_expr, Factory.comp(:eq, :y => 3).to_raw_expr]) }
+      end
+
+      context 'with attributes on both sides' do
+        let(:predicate){ Factory.comp(:eq, :x => :y) }
 
         context 'when full at left' do
           let(:list){ AttrList[:x, :y] }
 
-          it{ should eq([tautology, predicate]) }
+          it{ should eq([predicate.to_raw_expr, tautology]) }
         end
 
         context 'none at left' do
           let(:list){ AttrList[] }
 
-          it{ should eq([predicate, tautology]) }
+          it{ should eq([tautology, predicate.to_raw_expr]) }
         end
 
         context 'none mix' do
-          let(:list){ AttrList[:x] }
+          let(:list){ AttrList[:y] }
 
-          it{ should eq([Factory.comp(:eq, :y => 3), Factory.comp(:eq, :x => 2)]) }
+          it{ should eq([predicate.to_raw_expr, tautology]) }
         end
       end
 

@@ -15,9 +15,8 @@ module Alf
         @free_variables ||= AttrList[ var_name ]
       end
 
-      def and_split(attr_list, reverse = false)
-        res = attr_list.include?(var_name) ? [ self, tautology ] : [ tautology, self ]
-        reverse ? res.reverse : res
+      def and_split(attr_list)
+        (free_variables & attr_list).empty? ? [ tautology, self ] : [ self, tautology ]
       end
 
     end

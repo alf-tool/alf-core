@@ -36,8 +36,8 @@ module Alf
         sexpr([:or, self, other])
       end
 
-      def and_split(attr_list, reverse = false)
-        reverse ? [ tautology, self ] : [ self, tautology ]
+      def and_split(attr_list)
+        [ self, tautology ]
       end
 
       def to_ruby_code(options = {})

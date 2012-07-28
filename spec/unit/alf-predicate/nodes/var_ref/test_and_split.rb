@@ -6,38 +6,18 @@ module Alf
       let(:predicate){ Factory.var_ref(:id) }
       let(:tautology){ Factory.tautology    }
 
-      subject{ predicate.and_split(list, allbut) }
+      subject{ predicate.and_split(list) }
 
-      context '--no-allbut' do
-        let(:allbut){ false }
+      context 'when included' do
+        let(:list){ AttrList[:id, :name] }
 
-        context 'when included' do
-          let(:list){ AttrList[:id, :name] }
-
-          it{ should eq([predicate, tautology]) }
-        end
-
-        context 'when not include' do
-          let(:list){ AttrList[:name] }
-
-          it{ should eq([tautology, predicate]) }
-        end
+        it{ should eq([predicate, tautology]) }
       end
 
-      context '--allbut' do
-        let(:allbut){ true }
+      context 'when not include' do
+        let(:list){ AttrList[:name] }
 
-        context 'when included' do
-          let(:list){ AttrList[:id, :name] }
-
-          it{ should eq([tautology, predicate]) }
-        end
-
-        context 'when not include' do
-          let(:list){ AttrList[:name] }
-
-          it{ should eq([predicate, tautology]) }
-        end
+        it{ should eq([tautology, predicate]) }
       end
 
     end

@@ -42,26 +42,14 @@ module Alf
         it{ should eq([ p.tautology, pred ]) }
       end
 
-      context "on comp (included)" do
-        let(:pred){ p.comp(:eq, :x => 2) }
-
-        it{ should eq([ pred, p.tautology ]) }
-      end
-
-      context "on comp (excluded)" do
-        let(:pred){ p.comp(:eq, :y => 2) }
-
-        it{ should eq([ p.tautology, pred ]) }
-      end
-
       context "on eq (included)" do
-        let(:pred){ p.eq(:x => 2) }
+        let(:pred){ p.eq(:x, 2) }
 
         it{ should eq([ pred, p.tautology ]) }
       end
 
       context "on eq (excluded)" do
-        let(:pred){ p.eq(:y => 2) }
+        let(:pred){ p.eq(:y, 2) }
 
         it{ should eq([ p.tautology, pred ]) }
       end

@@ -74,8 +74,8 @@ module Alf
       scope.instance_exec(&to_proc)
     end
 
-    def and_split(attr_list, reverse = false)
-      expr.and_split(attr_list, reverse).map{|e| Predicate.new(e)}
+    def and_split(attr_list)
+      expr.and_split(attr_list).map{|e| Predicate.new(e)}
     end
 
     def ==(other)

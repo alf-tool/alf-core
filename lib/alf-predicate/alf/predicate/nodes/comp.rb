@@ -42,8 +42,8 @@ module Alf
         @free_variables ||= to_raw_expr.free_variables
       end
 
-      def and_split(attr_list, reverse = false)
-        attr_list.split_tuple(values, reverse).map{|h| comp(operator, h) }
+      def and_split(attr_list)
+        to_raw_expr.and_split(attr_list)
       end
 
     end
