@@ -20,6 +20,10 @@ module Alf
                             if_empty{ Keys[ heading.to_attr_list ] }
         end
 
+        def key_preserving?
+          !(operand.keys & keys).empty?
+        end
+
       end # class Clip
     end # module NonRelational
   end # module Operator
