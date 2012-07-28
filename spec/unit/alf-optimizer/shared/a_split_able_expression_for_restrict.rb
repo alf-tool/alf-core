@@ -3,10 +3,10 @@ module Alf
     shared_examples_for "a split-able expression for restrict" do
 
       let(:split_pred){
-        Predicate.comp(:eq, Hash[split_attributes.attributes.map{|k| [k, 12] }])
+        Predicate.eq(split_attributes.to_a.first, 12)
       }
       let(:stay_pred){
-        Predicate.comp(:eq, :a_non_split_attribute => 12)
+        Predicate.eq(:a_non_split_attribute, 12)
       }
 
       context 'with a native predicate' do
@@ -37,6 +37,12 @@ module Alf
         let(:predicate){ split_pred & stay_pred }
 
         it_should_behave_like "an optimizable expression for restrict"
+      end
+
+      context 'with split and non-split in the same EXPR' do
+        let(:predicate){ Predicate.eq(split_attributes.to_a.first, :a_non_split_attribute) }
+
+        it_should_behave_like "an unoptimizable expression for restrict"
       end
 
     end
