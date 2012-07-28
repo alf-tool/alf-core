@@ -20,11 +20,12 @@ module Alf
       end
 
       context "when not a singleton" do
-        let(:comp){ Factory.comp(:eq, :x => 2, :u => :v) }
+        let(:comp){ Factory.comp(:eq, :x => 2, :u => :v, :y => 3) }
         let(:expected){
           [:and, 
-            [:eq, [:var_ref, :x], [:literal, 2] ],
-            [:eq, [:var_ref, :u], [:var_ref, :v] ]]
+            [:eq, [:var_ref, :x], [:literal, 2]  ],
+            [:eq, [:var_ref, :u], [:var_ref, :v] ],
+            [:eq, [:var_ref, :y], [:literal, 3]  ]]
         }
 
         it{ should eq(expected) }

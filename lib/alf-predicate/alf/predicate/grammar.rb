@@ -20,7 +20,7 @@ module Alf
 end # module Alf
 require_relative 'nodes/expr'
 require_relative 'nodes/dyadic_comp'
-require_relative 'nodes/dyadic_bool'
+require_relative 'nodes/nadic_bool'
 require_relative 'nodes/tautology'
 require_relative 'nodes/contradiction'
 require_relative 'nodes/var_ref'

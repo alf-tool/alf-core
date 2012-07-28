@@ -26,13 +26,19 @@ module Alf
         apply(sexpr.to_raw_expr)
       end
 
+      def on_nadic_bool(sexpr)
+        sexpr.sexpr_body.map{|term|
+          apply(term, sexpr)
+        }.join(" #{sexpr.operator_symbol} ")
+      end
+      alias :on_and :on_nadic_bool
+      alias :on_or  :on_nadic_bool
+
       def on_dyadic(sexpr)
         sexpr.sexpr_body.map{|term|
           apply(term, sexpr)
         }.join(" #{sexpr.operator_symbol} ")
       end
-      alias :on_and :on_dyadic
-      alias :on_or  :on_dyadic
       alias :on_eq  :on_dyadic
       alias :on_neq :on_dyadic
       alias :on_lt  :on_dyadic

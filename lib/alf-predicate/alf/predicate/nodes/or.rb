@@ -1,7 +1,7 @@
 module Alf
   class Predicate
     module Or
-      include DyadicBool
+      include NadicBool
 
       def operator_symbol
         :'||'
