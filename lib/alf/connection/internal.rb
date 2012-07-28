@@ -33,6 +33,16 @@ module Alf
         raise NotImplementedError, "Unable to serve `#{name}` in Connection.iterator"
       end
 
+      # Returns the heading of a given named variable
+      def heading(name)
+        raise NotSupportedError, "Unable to infer heading for `#{name}`"
+      end
+
+      # Returns the keys of a given named variable
+      def keys(name)
+        raise NotSupportedError, "Unable to infer keys for `#{name}`"
+      end
+
       # Returns an evaluation scope.
       #
       # @return [Scope] a scope instance on the global variables of the underlying database.

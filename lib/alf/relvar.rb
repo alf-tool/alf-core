@@ -23,12 +23,12 @@ module Alf
 
     # Returns the relation variable heading
     def heading
-      raise NotImplementedError
+      context.heading(name)
     end
 
     # Returns the relation variable keys
     def keys
-      raise NotImplementedError
+      context.keys(name)
     end
 
     # Delegates to the context.
