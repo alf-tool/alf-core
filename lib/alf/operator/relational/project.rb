@@ -20,6 +20,10 @@ module Alf
                             if_empty{ Keys[ heading.to_attr_list ] }
         end
 
+        def stay_attributes
+          allbut ? heading.to_attr_list : attributes
+        end
+
       end # class Project
     end # module Relational
   end # module Operator

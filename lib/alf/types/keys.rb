@@ -67,6 +67,7 @@ module Alf
         keys.to_set.hash
       end
 
+      EMPTY = Keys.new([])
     end # class Keys
   end # module Types
 end # module Alf

@@ -19,12 +19,13 @@ module Alf
       def each
       end
 
-      def method_missing(name, *args, &bl)
-        if args.empty? and bl.nil?
-          @attributes.fetch(name) rescue super
-        else
-          super
-        end
+      def heading
+        raise NotSupportedError unless @attributes[:heading]
+        @attributes[:heading]
+      end
+
+      def keys
+        @attributes[:keys] || Keys::EMPTY
       end
 
       def to_lispy
