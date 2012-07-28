@@ -3,6 +3,10 @@ module Alf
     module Or
       include DyadicBool
 
+      def operator_symbol
+        :'||'
+      end
+
     end
   end
 end

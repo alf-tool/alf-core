@@ -3,6 +3,10 @@ module Alf
     module Neq
       include DyadicComp
 
+      def operator_symbol
+        :'!='
+      end
+
     end
   end
 end

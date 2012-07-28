@@ -19,60 +19,26 @@ module Alf
       end
 
       def on_not(sexpr)
-        "!" << apply(sexpr.last, sexpr)
-      end
-
-      def on_and(sexpr)
-        sexpr.sexpr_body.map{|term|
-          apply(term, sexpr)
-        }.join(' && ')
-      end
-
-      def on_or(sexpr)
-        sexpr.sexpr_body.map{|term|
-          apply(term, sexpr)
-        }.join(' || ')
+        "#{sexpr.operator_symbol}" << apply(sexpr.last, sexpr)
       end
 
       def on_comp(sexpr)
         apply(sexpr.to_raw_expr)
       end
 
-      def on_eq(sexpr)
+      def on_dyadic(sexpr)
         sexpr.sexpr_body.map{|term|
           apply(term, sexpr)
-        }.join(" == ")
+        }.join(" #{sexpr.operator_symbol} ")
       end
-
-      def on_neq(sexpr)
-        sexpr.sexpr_body.map{|term|
-          apply(term, sexpr)
-        }.join(" != ")
-      end
-
-      def on_lt(sexpr)
-        sexpr.sexpr_body.map{|term|
-          apply(term, sexpr)
-        }.join(" < ")
-      end
-
-      def on_lte(sexpr)
-        sexpr.sexpr_body.map{|term|
-          apply(term, sexpr)
-        }.join(" <= ")
-      end
-
-      def on_gt(sexpr)
-        sexpr.sexpr_body.map{|term|
-          apply(term, sexpr)
-        }.join(" > ")
-      end
-
-      def on_gte(sexpr)
-        sexpr.sexpr_body.map{|term|
-          apply(term, sexpr)
-        }.join(" >= ")
-      end
+      alias :on_and :on_dyadic
+      alias :on_or  :on_dyadic
+      alias :on_eq  :on_dyadic
+      alias :on_neq :on_dyadic
+      alias :on_lt  :on_dyadic
+      alias :on_lte :on_dyadic
+      alias :on_gt  :on_dyadic
+      alias :on_gte :on_dyadic
 
       def on_native(sexpr)
         proc = sexpr.to_proc

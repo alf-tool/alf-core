@@ -11,6 +11,10 @@ module Alf
         @free_variables ||= AttrList::EMPTY
       end
 
+      def value
+        last
+      end
+
     end
   end
 end

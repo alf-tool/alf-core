@@ -3,6 +3,10 @@ module Alf
     module Not
       include Expr
 
+      def operator_symbol
+        :'!'
+      end
+
       def priority
         90
       end
