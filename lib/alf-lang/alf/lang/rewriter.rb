@@ -10,16 +10,6 @@ module Alf
         apply(expr)
       end
 
-    # utilities
-
-      def copy_and_apply(expr)
-        if expr.is_a?(Operator)
-          expr.with_operands(*expr.operands.map{|op| apply(op)})
-        else
-          expr
-        end
-      end
-
     # copy all default implementation
 
       def apply(expr, *args, &bl)
