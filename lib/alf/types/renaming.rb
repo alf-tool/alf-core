@@ -98,6 +98,11 @@ module Alf
         AttrList.new attr_list.attributes.map{|k| renaming[k] || k}
       end
 
+      # Returns this renaming as a Hash
+      def to_hash
+        renaming.dup
+      end
+
       # Returns the ordering hash code.
       #
       # @return [Integer] a hash code for this renaming
