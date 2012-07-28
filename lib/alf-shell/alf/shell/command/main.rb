@@ -144,8 +144,12 @@ module Alf
     private
 
       def compile(argv)
-        op = @execute ? database.parse(argv.first) : yield
-        database.compiler.call(op) if op
+        if @execute
+          database.query(argv.first)
+        else
+          op = yield
+          database.compiler.call(op) if op
+        end
       end
 
       def render(operator, out = $stdout)
