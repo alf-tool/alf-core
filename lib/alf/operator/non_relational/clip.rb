@@ -20,8 +20,8 @@ module Alf
                             if_empty{ Keys[ heading.to_attr_list ] }
         end
 
-        def key_preserving?
-          !(operand.keys & keys).empty?
+        def stay_attributes
+          allbut ? heading.to_attr_list : attributes
         end
 
       end # class Clip
