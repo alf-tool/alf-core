@@ -18,7 +18,7 @@ require_relative 'alf/reader'
 require_relative 'alf/renderer'
 require_relative 'alf/operator'
 require_relative 'alf/aggregator'
-require_relative 'alf/lang'
+require_relative "alf-lang/alf/lang"
 
 require_relative 'alf/relation'
 require_relative 'alf/relvar'
