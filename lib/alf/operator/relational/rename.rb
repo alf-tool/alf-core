@@ -16,6 +16,10 @@ module Alf
           @keys ||= operand.keys.rename(renaming)
         end
 
+        def complete_renaming
+          renaming.complete(operand.heading.to_attr_list)
+        end
+
       end # class Rename
     end # module Relational
   end # module Operator

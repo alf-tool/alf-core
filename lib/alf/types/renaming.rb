@@ -57,6 +57,11 @@ module Alf
 
       end # class << self
 
+      # Returns the renaming of `name`
+      def [](name)
+        renaming[name]
+      end
+
       # Returns the inverse renaming.
       #
       # @return [Renaming] the inversed renaming
@@ -64,6 +69,13 @@ module Alf
         inversed = {}
         renaming.each_pair{|k,v| inversed[v] = k}
         Renaming.new inversed
+      end
+
+      # Returns a completed renaming with at least all attributes in `attr_list`
+      def complete(attr_list)
+        completed = renaming.dup
+        attr_list.to_a.each{|k| completed[k] ||= k}
+        Renaming.new completed
       end
 
       # Renames a tuple according to this renaming pairs.
