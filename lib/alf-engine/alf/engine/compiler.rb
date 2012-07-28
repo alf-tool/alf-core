@@ -20,6 +20,7 @@ module Alf
           raise ArgumentError, "Unexpected operand `#{expr.class}`"
         end
       end
+      alias :call :compile
 
       def compile_operator(expr)
         name = Tools.ruby_case(Tools.class_name(expr.class))

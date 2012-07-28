@@ -17,6 +17,17 @@ module Alf
         @conn_spec     = conn_spec
       end
 
+      # Returns an optimizer instance
+      def optimizer
+        Optimizer.new(self).
+                  register(Optimizer::Restrict.new, Operator::Relational::Restrict)
+      end
+
+      # Returns a compiler instance
+      def compiler
+        Engine::Compiler.new(self)
+      end
+
       # Returns an evaluation scope.
       #
       # @return [Scope] a scope instance on the global variables of the underlying database.

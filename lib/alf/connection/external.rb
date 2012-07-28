@@ -82,7 +82,8 @@ module Alf
       #
       def query(expr = nil, path = nil, line = nil, &block)
         expr = parse(expr, path, line, &block)
-        cog  = Engine::Compiler.new(self).compile(expr)
+        expr = optimizer.call(expr)
+        cog  = compiler.call(expr)
         Tools.to_relation(cog)
       end
 
