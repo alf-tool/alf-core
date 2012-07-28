@@ -3,8 +3,6 @@ require 'alf'
 require "rspec"
 require 'epath'
 
-require_relative 'support/operand_helper'
-
 def _(path, file)
   File.expand_path("../#{path}", file)
 end
@@ -47,7 +45,7 @@ module Helpers
   end
 
   def an_operand
-    OperandHelper.new
+    Alf::Tools::FakeOperand.new
   end
 
 end
