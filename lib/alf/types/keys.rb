@@ -35,6 +35,10 @@ module Alf
         Keys.new (keys + Keys.coerce(other).keys).uniq
       end
 
+      def &(other)
+        Keys.new (keys & Keys.coerce(other).keys)
+      end
+
       [ :select, :reject, :map ].each do |m|
         define_method(m) do |*args, &bl|
           Keys.new keys.send(m, *args, &bl).uniq
