@@ -1,6 +1,6 @@
 module Alf
   class Optimizer
-    class Restrict < Processor
+    class Restrict < Lang::Rewriter
 
       def check_constant(operand, predicate)
         if predicate.tautology?
@@ -12,7 +12,7 @@ module Alf
         end
       end
 
-      def call(restrict)
+      def call(restrict, search = nil)
         apply(restrict.operand, restrict.predicate)
       end
 

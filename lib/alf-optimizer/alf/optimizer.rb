@@ -1,39 +1,40 @@
-require_relative 'optimizer/processor'
 require_relative 'optimizer/restrict'
 module Alf
   class Optimizer
 
     def initialize(context = nil)
-      @context = context
+      @context    = context
+      @processors = []
     end
     attr_reader :context
 
     def call(expr)
-      processors.inject(expr) do |c, (p,k)|
+      @processors.inject(expr) do |c, (p,k)|
         Search.new(p, k).call(c)
       end
     end
 
-    class Search
+    def register(processor, interest)
+      @processors << [processor, interest]
+      self
+    end
 
-      def initialize(processor, kind)
+    class Search < Lang::Rewriter
+
+      def initialize(processor, interest)
         @processor = processor
-        @kind = kind
-      end
-
-      def call(expr)
-        apply(expr)
+        @interest = interest
       end
 
       def apply(expr)
-        if expr.is_a?(@kind)
-          @processor.call(expr)
+        if @interest === expr
+          @processor.call(expr, self)
         else
-          expr.with_operands(*expr.operands.map{|op| apply(op)})
+          super
         end
       end
 
-    end
+    end # class Search
 
   end # class Optimizer
 end # module Alf
