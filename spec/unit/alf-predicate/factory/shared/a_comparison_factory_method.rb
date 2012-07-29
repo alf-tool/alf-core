@@ -12,14 +12,25 @@ module Alf
         it{ should eql([method, tautology, tautology]) }
       end
 
-      context 'with a Hash operand' do
-        subject{ self.send(method, :x => :y, :v => 2) }
+      context 'with a Hash operand (singleton)' do
+        subject{ self.send(method, :x => :y) }
         let(:expected){
-          [:comp, method, {:x => :y, :v => 2}]
+          [method, [:var_ref, :x], [:var_ref, :y]]
         }
 
         it_should_behave_like "a predicate AST node"
-        it{ should be_a(Comp) }
+        it{ should eql(expected) }
+      end
+
+      context 'with a Hash operand' do
+        subject{ self.send(method, :x => :y, :v => 2) }
+        let(:expected){
+          [:and,
+            [method, [:var_ref, :x], [:var_ref, :y]],
+            [method, [:var_ref, :v], [:literal, 2]]]
+        }
+
+        it_should_behave_like "a predicate AST node"
         it{ should eql(expected) }
       end
 

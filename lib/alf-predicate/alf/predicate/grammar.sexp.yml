@@ -6,7 +6,6 @@ rules:
     - not
     - and
     - or
-    - comp
     - eq
     - neq
     - lt

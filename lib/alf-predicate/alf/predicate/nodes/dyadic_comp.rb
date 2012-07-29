@@ -8,7 +8,7 @@ module Alf
       end
 
       def !
-        Factory.send(OP_NEGATIONS[first], last)
+        Factory.send(OP_NEGATIONS[first], self[1], self[2])
       end
 
       def left

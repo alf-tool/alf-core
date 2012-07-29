@@ -18,9 +18,8 @@ module Alf
         let(:argv){ ["status", "10"] }
 
         specify{
-          subject.expr.should be_a(Comp)
-          subject.expr.operator.should eq(:eq)
-          subject.expr.values.should eq(:status => 10)
+          subject.expr.should be_a(Eq)
+          subject.expr.should eq([:eq, [:var_ref, :status], [:literal, 10]])
         }
       end
 

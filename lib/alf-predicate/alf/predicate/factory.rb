@@ -27,8 +27,16 @@ module Alf
       end
 
       def comp(op, h)
-        return tautology if h.empty?
-        _factor_predicate([:comp, op, h])
+        if h.empty?
+          return tautology
+        elsif h.size==1
+          _factor_predicate [op, sexpr(h.keys.first), sexpr(h.values.last)]
+        else
+          terms = h.to_a.inject([:and]) do |anded,pair|
+            anded << ([op] << sexpr(pair.first) << sexpr(pair.last))
+          end
+          _factor_predicate terms
+        end
       end
 
       def eq(left, right = nil)

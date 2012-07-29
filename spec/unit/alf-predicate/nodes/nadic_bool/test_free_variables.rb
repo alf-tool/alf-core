@@ -6,7 +6,7 @@ module Alf
       subject{ expr.free_variables }
 
       context "on a complex attribute comparison" do
-        let(:expr){ Factory.comp(:neq, :x => :y, :z => 2).to_raw_expr }
+        let(:expr){ Factory.comp(:neq, :x => :y, :z => 2) }
 
         it{ should eq(AttrList[:x, :y, :z]) }
       end
