@@ -38,6 +38,14 @@ module Alf
         connect(Connection.folder Path.backfind('examples/operators'), &bl)
       end
 
+      # Create a named schema under the database.
+      def schema(name, &bl)
+        @schemas ||= Hash.new{|h,k| h[k] = Schema.new }
+        @schemas[name].tap do |s|
+          s.define(&bl) if bl
+        end
+      end
+
       # Returns the array of helper modules to use for defining the evaluation
       # scope.
       #
