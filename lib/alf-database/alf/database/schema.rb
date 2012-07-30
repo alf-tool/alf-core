@@ -20,9 +20,8 @@ module Alf
         end
 
         # Special VarRef case
-        if expr.is_a?(Symbol)
-          expr = Operator::VarRef.new(self, expr)
-        end
+        expr = scope.__send__(expr) if expr.is_a?(Symbol)
+
         expr
       end
 
