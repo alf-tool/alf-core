@@ -53,7 +53,9 @@ module Alf
           schemas[name] ||= SchemaDef.new
           schemas[name].define(&bl)
         else
-          schemas[name].tap{|s| raise NoSuchSchemaError unless s}
+          schemas[name].tap{|s|
+            raise NoSuchSchemaError, "No such schema `#{name}`" unless s
+          }
         end
       end
 
@@ -62,9 +64,14 @@ module Alf
         @default_schema = name
       end
 
+      # Returns the name of the default schema to use
+      def default_schema_name
+        @default_schema || :native
+      end
+
       # Returns/define the public schema
       def default_schema(&bl)
-        schema(@default_schema || :native, &bl)
+        schema(default_schema_name, &bl)
       end
 
       extend Forwardable
@@ -92,8 +99,12 @@ module Alf
       Schema.new self, self.class.schema(name)
     end
 
+    def default_schema
+      schema self.class.default_schema_name
+    end
+
     def scope(helpers = [])
-      Lang::Lispy.new(self, self.class.helpers + helpers)
+      Lang::Lispy.new(self.connection, self.class.helpers + helpers)
     end
 
   end # module Database
