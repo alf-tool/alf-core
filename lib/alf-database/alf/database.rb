@@ -6,8 +6,8 @@ module Alf
 
       # Connects to a database, auto-detecting the connection to use.
       #
-      # This method returns an Connection instance connected to the underlying database. It
-      # raises an ArgumentError if no such connection can be found.
+      # This method returns an Connection instance connected to the underlying database.
+      # It raises an ArgumentError if no such connection can be found.
       #
       # @param [Object] conn_spec a connection specification
       # @return [Connection] an connection instance
@@ -45,6 +45,15 @@ module Alf
           s.define(&bl) if bl
         end
       end
+
+      # Returns/define the public schema
+      def public_schema(&bl)
+        schema(:public, &bl)
+      end
+
+      extend Forwardable
+      def_delegators :public_schema, :import_native_relvars,
+                                     :relvar
 
       # Returns the array of helper modules to use for defining the evaluation
       # scope.
