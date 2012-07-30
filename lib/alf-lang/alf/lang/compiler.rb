@@ -5,8 +5,8 @@ module Alf
 
     # public interface
 
-      def call(expr)
-        apply(expr)
+      def call(expr, *args, &bl)
+        apply(expr, *args, &bl)
       end
 
     # copy all default implementation

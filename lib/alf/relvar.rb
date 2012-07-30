@@ -51,25 +51,32 @@ module Alf
 
     # Affects the current value of this relation variable.
     def affect(value)
-      raise NotImplementedError
+      in_transaction do
+        delete
+        insert(value)
+      end
     end
 
     # Inserts some tuples inside this relation variable.
     def insert(tuples)
-      raise NotImplementedError
+      Update::Inserter.new.call(expr, tuples)
     end
 
     # Updates all tuples of this relation variable.
-    def update(values)
-      raise NotImplementedError
+    def update(computation, predicate = Predicate.tautology)
+      Update::Updater.new.call(expr, computation, predicate)
     end
 
     # Delete all tuples of this relation variable.
-    def delete
-      raise NotImplementedError
+    def delete(predicate = Predicate.tautology)
+      Update::Deleter.new.call(expr, predicate)
     end
 
   private
+
+    def in_transaction
+      yield
+    end
 
     def _compile
       context.connection.compiler.call(expr)

@@ -1,12 +1,6 @@
 module Alf
   module Update
-    class Deleter
-
-      def compile(expr, predicate = TuplePredicate.coerce(true))
-        name = Tools.ruby_case(Tools.class_name(expr.class))
-        meth = :"on_#{name}"
-        send(meth, expr, predicate)
-      end
+    class Deleter < Lang::Compiler
 
       ### VarRef, recursion end :-)
 
