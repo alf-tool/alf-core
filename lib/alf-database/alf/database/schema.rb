@@ -20,6 +20,11 @@ module Alf
         self
       end
 
+      def define(&bl)
+        instance_exec(&bl)
+        self
+      end
+
       def relvar(name, &defn)
         defn ||= lambda{ Operator::VarRef.new(context, name) }
         define_method(name, &defn)
