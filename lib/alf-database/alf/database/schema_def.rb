@@ -1,10 +1,10 @@
 module Alf
   class Database
-    class Schema < Module
+    class SchemaDef < Module
 
       # Returns a default, native schema
       def self.native
-        Schema.new{ import_native_relvars }
+        SchemaDef.new{ import_native_relvars }
       end
 
       # Inform the schema to import native relation variables under public module
@@ -20,7 +20,7 @@ module Alf
           # Now, we know that `obj` is a Lispy scope. That scope has a `context` that
           # should be a Connection object. We get the native schema and install it on
           # the original scope, provided it exists :-)
-          if n = obj.context.native_schema
+          if n = obj.context.native_schema_def
             n.send(:extend_object, obj)
           end
         end
@@ -37,6 +37,6 @@ module Alf
         define_method(name, &defn)
       end
 
-    end # class Schema
+    end # class SchemaDef
   end # class Database
 end # module Alf

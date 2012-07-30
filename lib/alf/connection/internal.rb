@@ -47,7 +47,7 @@ module Alf
       end
 
       # Returns a native schema instance
-      def native_schema
+      def native_schema_def
       end
 
     end # module Internal

@@ -25,7 +25,7 @@ module Alf
         }.should_not raise_error(NameError)
       end
 
-      it{ should be_a(Database::Schema) }
+      it{ should be_a(Database::SchemaDef) }
     end
 
     context 'when the schema already exists and no block is given' do

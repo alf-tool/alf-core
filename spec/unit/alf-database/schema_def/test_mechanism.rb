@@ -1,9 +1,9 @@
 require 'spec_helper'
 module Alf
   class Database
-    describe Schema do
+    describe SchemaDef do
 
-      subject{ Schema.new{ relvar :suppliers } }
+      subject{ SchemaDef.new{ relvar :suppliers } }
 
       it{ should be_a(Module) }
 

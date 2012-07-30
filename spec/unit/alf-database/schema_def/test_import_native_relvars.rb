@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
   class Database
-    describe Schema, 'import native relvars' do
+    describe SchemaDef, 'import native relvars' do
 
       let(:schema){
-        Schema.new{
+        SchemaDef.new{
           relvar :suppliers
           import_native_relvars
         }
@@ -15,7 +15,7 @@ module Alf
           def context
             self
           end
-          def native_schema
+          def native_schema_def
             Module.new{ def foo; :foo; end }
           end
         }

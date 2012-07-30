@@ -43,7 +43,7 @@ module Alf
       # Returns the defined schemas (by name in a Hash)
       def schemas
         @schemas ||= begin
-          schemas = superclass.schemas.dup rescue {:native => Schema.native}
+          schemas = superclass.schemas.dup rescue {:native => SchemaDef.native}
           Hash[schemas.map{|name,s| [name, s.dup] }]
         end
       end
@@ -51,7 +51,7 @@ module Alf
       # Create a named schema under the database.
       def schema(name, &bl)
         if bl
-          schemas[name] ||= Schema.new
+          schemas[name] ||= SchemaDef.new
           schemas[name].define(&bl)
         else
           schemas[name].tap{|s| raise NoSuchSchemaError unless s}
@@ -83,4 +83,4 @@ module Alf
 
   end # module Database
 end # module Alf
-require_relative 'database/schema'
+require_relative 'database/schema_def'
