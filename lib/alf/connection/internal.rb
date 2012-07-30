@@ -48,7 +48,6 @@ module Alf
 
       # Returns a native schema instance
       def native_schema
-        raise NotSupportedError, "Unable to infer native schema on `#{self}`"
       end
 
     end # module Internal

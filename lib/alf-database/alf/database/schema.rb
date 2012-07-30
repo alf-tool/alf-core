@@ -14,8 +14,10 @@ module Alf
           super(obj)
           # Now, we know that `obj` is a Lispy scope. That scope has a `context` that
           # should be a Connection object. We get the native schema and install it on
-          # the original scope :-)
-          obj.context.native_schema.send(:extend_object, obj)
+          # the original scope, provided it exists :-)
+          if n = obj.context.native_schema
+            n.send(:extend_object, obj)
+          end
         end
         self
       end
