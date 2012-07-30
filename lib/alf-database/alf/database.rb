@@ -109,7 +109,8 @@ module Alf
 
     extend Forwardable
     def_delegators :default_schema, :parse,
-                                    :query
+                                    :query,
+                                    :relvar
 
     # @api private
     def scope(helpers = [])

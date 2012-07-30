@@ -17,15 +17,6 @@ module Alf
         Path.like?(conn_spec) && Path(conn_spec).directory?
       end
 
-      # (see Connection#relvar)
-      def base_relvar(name)
-        if file = find_file(name)
-          Relvar::Base.new(self, name){ Reader.reader(file, self) }
-        else
-          raise NoSuchRelvarError, "No such relvar #{name} (#{@folder})"
-        end
-      end
-
       # Returns a low-level Iterator for a given named variable
       def iterator(name)
         if file = find_file(name)

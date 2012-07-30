@@ -6,10 +6,10 @@ describe Alf::Database, 'helpers' do
       helpers HelpersInScope
       helpers do
         def suppliers
-          Alf::Relvar::Memory.new self, :suppliers, Relation(:name => "John")
+          Alf::Relvar::Memory.new self, Relation(:name => "John")
         end
         def quantities
-          Alf::Relvar::Memory.new self, :quantities, Relation(:qty => [ 12, 20, 37 ])
+          Alf::Relvar::Memory.new self, Relation(:qty => [ 12, 20, 37 ])
         end
         def tax
           13

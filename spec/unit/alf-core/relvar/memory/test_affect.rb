@@ -5,7 +5,7 @@ module Alf
 
       let(:context){ examples_database }
 
-      let(:relvar){ Relvar::Memory.new(context, :suppliers) }
+      let(:relvar){ Relvar::Memory.new(context) }
 
       subject{
         relvar.affect(arg)

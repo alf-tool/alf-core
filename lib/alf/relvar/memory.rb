@@ -9,8 +9,8 @@ module Alf
       #
       # @param [Object] context the context that served this relvar.
       # @param [Symbol] name name of the relation variable.
-      def initialize(context, name, init_value = Alf::Relation::DUM)
-        super(context, name)
+      def initialize(context, init_value = Alf::Relation::DUM)
+        super(context, nil)
         @value = init_value
       end
 
@@ -33,7 +33,7 @@ module Alf
 
     protected
 
-      def compile(context)
+      def _compile
         @value
       end
 

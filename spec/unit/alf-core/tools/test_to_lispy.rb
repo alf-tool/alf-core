@@ -11,16 +11,9 @@ module Alf
 
     subject{ Tools.to_lispy(value) }
 
-    describe "on a Relvar::Base" do
-      let(:value){ Relvar::Base.new(examples_database, :suppliers) }
-      it { should eq(":suppliers") }
-    end
-
-    describe "on a Relvar::Virtual" do
-      let(:value){ Relvar::Virtual.new(examples_database){
-        (project :suppliers, [:name])
-      }}
-      it { should eq("(project :suppliers, [:name])") }
+    describe "on a Relvar" do
+      let(:value){ examples_database.relvar(:suppliers) }
+      it { should eq("suppliers") }
     end
 
     describe "on an AttrName" do
@@ -111,7 +104,7 @@ module Alf
     describe "on a VarRef" do
       let(:value){ Operator::VarRef.new(nil, :suppliers) }
 
-      it{ should eq(":suppliers") }
+      it{ should eq("suppliers") }
     end # VarRef
 
     let(:conn){ examples_database }

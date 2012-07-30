@@ -9,42 +9,43 @@ module Alf
     # The context under which this relvar was served.
     attr_reader :context
 
-    # Name of the relvar
-    attr_reader :name
+    # Underlying expression
+    attr_reader :expr
 
     # Creates a relvar instance.
     #
     # @param [Object] context the context that served this relvar.
-    # @param [Symbol] name the relvar name inside the database.
-    def initialize(context, name)
+    # @param [Object] expr the underlying expression
+    def initialize(context, expr)
       @context = context
-      @name = name
+      @expr = expr
     end
 
+    # Returns the scope
     def scope
       context
     end
 
     # Returns the relation variable heading
     def heading
-      context.heading(name)
+      expr.heading
     end
 
     # Returns the relation variable keys
     def keys
-      context.keys(name)
+      expr.keys
     end
 
     # Delegates to the context.
     def each(&bl)
-      compile(context).each(&bl)
+      _compile.each(&bl)
     end
 
     # Returns the relation value that this variable currently holds.
     #
     # @return [Relation] a relation value.
     def value
-      Tools.to_relation compile(context)
+      Tools.to_relation _compile
     end
     alias :to_relation :value
 
@@ -70,16 +71,18 @@ module Alf
 
   private
 
+    def _compile
+      context.connection.compiler.call(expr)
+    end
+
     def _operator_output(op)
-      Relvar::Virtual.new(context, nil, op)
+      Relvar.new(context, op)
     end
 
     def _self_operand
-      self
+      expr
     end
 
   end # class Relvar
 end # module Alf
-require_relative 'relvar/base'
-require_relative 'relvar/virtual'
 require_relative 'relvar/memory'

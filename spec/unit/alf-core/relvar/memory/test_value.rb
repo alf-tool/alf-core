@@ -10,14 +10,14 @@ module Alf
       }
 
       describe 'the default one' do
-        let(:relvar){ Relvar::Memory.new(context, :suppliers) }
+        let(:relvar){ Relvar::Memory.new(context) }
 
         it{ should eq(Alf::Relation::DUM) }
       end
 
       describe 'when specified at construction' do
         let(:value){ Relation(:id => 1) }
-        let(:relvar){ Relvar::Memory.new(context, :suppliers, value) }
+        let(:relvar){ Relvar::Memory.new(context, value) }
 
         it{ should eq(value) }
       end

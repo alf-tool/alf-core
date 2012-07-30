@@ -70,14 +70,9 @@ module Alf
         }.join(', ') + "}"
       end
 
-      # Relvar::Base -> its name
-      r.upon(lambda{|v,rd| Relvar::Base === v}) do |v, rd|
-        Tools.to_ruby_literal(v.name)
-      end
-
-      # Relvar::Virtual -> its expression
-      r.upon(lambda{|v,rd| Relvar::Virtual === v}) do |v, rd|
-        Tools.to_lispy(v.expression)
+      # Relvar -> its expression
+      r.upon(lambda{|v,rd| Relvar === v}) do |v, rd|
+        Tools.to_lispy(v.expr)
       end
 
       # Aggregator -> agg.source
@@ -87,7 +82,7 @@ module Alf
 
       # VarRef -> var_ref.name (Symbol)
       r.upon(lambda{|v,_| Operator::VarRef === v}) do |v, rd|
-        v.name.inspect
+        v.name.to_s
       end
 
       # Command and Operator -> (operator operands, args, options)

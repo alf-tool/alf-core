@@ -7,7 +7,7 @@ module Alf
 
       let(:value){ Relation(:id => [1, 2, 3]) }
 
-      let(:relvar){ Relvar::Memory.new(context, :suppliers, value) }
+      let(:relvar){ Relvar::Memory.new(context, value) }
 
       subject{
         relvar.insert(arg)

@@ -35,6 +35,10 @@ module Alf
         end
       end
 
+      def relvar(expr = nil, path = nil, line = nil, &block)
+        Relvar.new @database, parse(expr, path, line, &block)
+      end
+
       # @api private
       def scope
         @database.scope [ definition ]
