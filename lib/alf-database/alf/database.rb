@@ -53,3 +53,4 @@ module Alf
 
   end # module Database
 end # module Alf
+require_relative 'database/schema'
