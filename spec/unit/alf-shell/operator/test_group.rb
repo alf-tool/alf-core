@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Group do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Group.run(argv) }
 
     before do

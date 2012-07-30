@@ -44,6 +44,10 @@ module Helpers
     end
   end
 
+  def suppliers_var_ref
+    Alf::Operator::VarRef.new(examples_database, :suppliers)
+  end
+
   def an_operand
     Alf::Tools::FakeOperand.new
   end

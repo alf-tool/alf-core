@@ -2,8 +2,8 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe NotMatching do
 
-    let(:left) { [{:left  => true}] }
-    let(:right){ [{:right => true}] }
+    let(:left) { suppliers_var_ref }
+    let(:right){ suppliers_var_ref }
     subject{ NotMatching.run(argv) }
 
     context "the default config" do

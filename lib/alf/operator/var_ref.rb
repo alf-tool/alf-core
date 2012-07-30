@@ -1,6 +1,7 @@
 module Alf
   module Operator
     class VarRef
+      include Iterator
 
       attr_reader :context
       attr_reader :name
@@ -16,6 +17,14 @@ module Alf
 
       def keys
         @keys ||= relvar.keys
+      end
+
+      def each(&bl)
+        context.connection.iterator(name).each(&bl)
+      end
+
+      def scope
+        context.scope
       end
 
     private

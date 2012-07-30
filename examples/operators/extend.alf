@@ -1,3 +1,3 @@
 #!/usr/bin/env alf
-(extend :supplies, :sp  => lambda{ sid + "/" + pid },
-                   :big => lambda{ qty > 100 ? true : false }) 
+(extend supplies, :sp  => lambda{ sid + "/" + pid },
+                  :big => lambda{ qty > 100 ? true : false }) 

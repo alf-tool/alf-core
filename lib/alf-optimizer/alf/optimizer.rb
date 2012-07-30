@@ -2,11 +2,9 @@ require_relative 'optimizer/restrict'
 module Alf
   class Optimizer
 
-    def initialize(context = nil)
-      @context    = context
+    def initialize
       @processors = []
     end
-    attr_reader :context
 
     def call(expr)
       @processors.inject(expr) do |c, (p,k)|

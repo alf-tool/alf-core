@@ -24,8 +24,7 @@ module Alf
       attr_reader :ordering
 
       # Creates an Autonum instance
-      def initialize(operand, ordering, context=nil)
-        super(context)
+      def initialize(operand, ordering)
         @operand = operand
         @ordering = ordering
       end

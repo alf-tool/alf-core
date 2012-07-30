@@ -1,2 +1,2 @@
 #!/usr/bin/env alf
-(join :suppliers, :supplies)
+(join suppliers, supplies)

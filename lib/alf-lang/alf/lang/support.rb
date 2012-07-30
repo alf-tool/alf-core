@@ -21,10 +21,6 @@ module Alf
         op
       end
 
-      def _context
-        respond_to?(:context) ? context : nil
-      end
-
     end # module Support
   end # module Lang
 end # module Alf

@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Compact do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Compact.run(argv) }
 
     context "the default config" do

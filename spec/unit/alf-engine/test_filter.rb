@@ -4,11 +4,11 @@ module Alf
     describe Filter do
 
       it 'should work on an empty operand' do
-        Filter.new([], Predicate.coerce(true)).to_a.should eq([])
+        Filter.new(Leaf.new([]), Predicate.coerce(true)).to_a.should eq([])
       end
 
       it 'should filter according to the predicate' do
-        rel = [
+        rel = Leaf.new [
           {:name => "Jones"},
           {:name => "Smith"}
         ]

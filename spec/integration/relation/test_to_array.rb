@@ -3,7 +3,7 @@ describe Alf::Relation, 'to_array' do
 
   let(:rel) {
     examples_database.query do
-      group((project :suppliers, [:city, :name]), [:name], :incity)
+      group((project suppliers, [:city, :name]), [:name], :incity)
     end
   }
 

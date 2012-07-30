@@ -4,11 +4,11 @@ module Alf
     describe SetAttr do
 
       it 'should work on an empty operand' do
-        SetAttr.new([], TupleComputation[{}]).to_a.should eq([])
+        SetAttr.new(Leaf.new([]), TupleComputation[{}]).to_a.should eq([])
       end
 
       it 'should allow implementing UPDATE' do
-        rel = [
+        rel = Leaf.new [
           {:name => "Jones"},
           {:name => "Smith"}
         ]
@@ -21,7 +21,7 @@ module Alf
       end
 
       it 'should allow implementing EXTEND' do
-        rel = [
+        rel = Leaf.new [
           {:name => "Jones"},
           {:name => "Smith"}
         ]

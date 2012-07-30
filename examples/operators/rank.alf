@@ -1,4 +1,4 @@
 #!/usr/bin/env alf
 
 # Get the three heaviest parts
-(allbut (restrict (rank :parts, [[:weight, :desc]], :pos), lambda{ pos < 3 }), [:pos])
+(allbut (restrict (rank parts, [[:weight, :desc]], :pos), lambda{ pos < 3 }), [:pos])

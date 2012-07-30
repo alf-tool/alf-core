@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Rename do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Rename.run(argv) }
 
     before do

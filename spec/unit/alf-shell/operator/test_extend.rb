@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Extend do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Extend.run(argv) }
 
     before do

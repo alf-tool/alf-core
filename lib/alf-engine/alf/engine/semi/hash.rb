@@ -15,8 +15,7 @@ module Alf
       attr_reader :predicate
 
       # Creates a Semi::Hash instance
-      def initialize(left, right, predicate, context=nil)
-        super(context)
+      def initialize(left, right, predicate)
         @left = left
         @right = right
         @predicate = predicate
@@ -28,7 +27,7 @@ module Alf
         left.each do |left_tuple|
           index ||= Materialize::Hash.new(right, lambda{|t|
             AttrList.new(left_tuple.keys & t.keys)
-          }, false, context).prepare
+          }, false).prepare
           if index[left_tuple, true].empty? != predicate
             yield left_tuple 
           end

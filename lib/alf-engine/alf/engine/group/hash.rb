@@ -18,8 +18,7 @@ module Alf
       attr_reader :allbut
 
       # Creates a Group::Hash instance
-      def initialize(operand, attributes, as, allbut, context=nil)
-        super(context)
+      def initialize(operand, attributes, as, allbut)
         @operand = operand
         @attributes = attributes
         @as = as
@@ -29,9 +28,9 @@ module Alf
       # (see Cog#each)
       def each(&block)
         atr, alb = @attributes, @allbut
-        index = Materialize::Hash.new(operand, atr, !alb, context)
+        index = Materialize::Hash.new(operand, atr, !alb)
         index.each_pair do |k,v|
-          grouped = Relation.new(Clip.new(v, atr, alb, context).to_set)
+          grouped = Relation.new(Clip.new(v, atr, alb).to_set)
           yield k.merge(@as => grouped)
         end
       end

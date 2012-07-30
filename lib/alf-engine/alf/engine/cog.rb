@@ -3,21 +3,24 @@ module Alf
     class Cog
       include Enumerable
 
-      # Execution context
-      attr_reader :context
-
-      def initialize(context)
-        @context = context
-      end
-
       def to_relation
         Relation.new(to_set)
       end
 
-    private
+    protected
+
+      def main_scope
+        if respond_to?(:operand)
+          operand.main_scope
+        elsif respond_to?(:left)
+          left.main_scope
+        else
+          raise "Unable to infer scope on `#{self}`"
+        end
+      end
 
       def tuple_scope(tuple = nil)
-        Tools::TupleScope.new tuple, [], context && context.scope
+        Tools::TupleScope.new tuple, [], main_scope
       end
 
     end # module Cog

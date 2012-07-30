@@ -7,13 +7,16 @@ module Alf
       end
 
       def compiler
-        @compiler ||= (database && database.compiler) || Engine::Compiler.new(nil)
+        @compiler ||= (database && database.connection.compiler) || Engine::Compiler.new(nil)
       end
 
       def operands(argv, size = nil)
         operands = [ stdin_operand ] + Array(argv)
         operands = operands[(operands.size - size)..-1] if size
-        operands = operands.map{|arg| compiler.call(arg) }
+        operands = operands.map{|arg|
+          arg = Alf::Operator::VarRef.new(database, arg.to_sym) if arg.is_a?(String)
+          arg
+        }
       end
 
       def stdin_operand

@@ -15,6 +15,9 @@ module Alf
           def context
             self
           end
+          def connection
+            self
+          end
           def native_schema_def
             Module.new{ def foo; :foo; end }
           end

@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Coerce do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Coerce.run(argv) }
 
     before do

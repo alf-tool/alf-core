@@ -36,8 +36,7 @@ module Alf
       attr_reader :ordering
 
       # Creates a Materialize::Array instance
-      def initialize(operand, ordering = nil, context=nil)
-        super(context)
+      def initialize(operand, ordering = nil)
         @operand = operand
         @ordering = ordering
         @materialized = nil

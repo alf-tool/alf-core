@@ -3,14 +3,14 @@ module Alf
   class Relvar
     describe Virtual, 'value' do
 
-      let(:database) { 
-        examples_database 
+      let(:database) {
+        examples_database
       }
-      let(:expression) { 
-        database.parse{ project(:suppliers, [:sid]) }
+      let(:expression) {
+        database.parse{ project(suppliers, [:sid]) }
       }
-      let(:relvar){ 
-        Virtual.new(database, nil, expression) 
+      let(:relvar){
+        Virtual.new(database.connection, nil, expression)
       }
 
       subject{ relvar.value }

@@ -8,8 +8,7 @@ module Alf
       # @return [Enumerable] The operand
       attr_reader :operand
 
-      def initialize(operand, context=nil)
-        super(context)
+      def initialize(operand)
         @operand = operand
       end
 

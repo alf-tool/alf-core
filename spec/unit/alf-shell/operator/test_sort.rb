@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Sort do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Sort.run(argv) }
 
     before do

@@ -1,2 +1,2 @@
 #!/usr/bin/env alf
-(compact (clip :suppliers, [:city]))
+(compact (clip suppliers, [:city]))

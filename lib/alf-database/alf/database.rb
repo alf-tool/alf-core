@@ -12,13 +12,11 @@ module Alf
       # @return [Connection] an connection instance
       # @raise [ArgumentError] when no registered connection recognizes the arguments
       def connect(conn_spec)
-        return conn_spec if conn_spec.is_a?(Connection)
-        conn_class = Connection.autodetect(conn_spec)
-        scoping    = helpers + [ default_schema ]
-        conn       = conn_class.new(conn_spec, scoping)
-        block_given? ? yield(conn) : conn
+        conn_spec = Connection.autodetect(conn_spec).new(conn_spec) unless conn_spec.is_a?(Connection)
+        db        = new(conn_spec)
+        block_given? ? yield(db) : db
       ensure
-        conn.close if conn and block_given?
+        db.disconnect if db and block_given?
       end
 
       def folder(*args, &bl)
@@ -95,6 +93,12 @@ module Alf
       @connection = connection
     end
 
+    def disconnect
+      @connection.close if @connection
+    ensure
+      @connection = nil
+    end
+
     def schema(name)
       Schema.new self, self.class.schema(name)
     end
@@ -103,8 +107,13 @@ module Alf
       schema self.class.default_schema_name
     end
 
+    extend Forwardable
+    def_delegators :default_schema, :parse,
+                                    :query
+
+    # @api private
     def scope(helpers = [])
-      Lang::Lispy.new(self.connection, self.class.helpers + helpers)
+      Lang::Lispy.new(self, helpers + self.class.helpers)
     end
 
   end # module Database

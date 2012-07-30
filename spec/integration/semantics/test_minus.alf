@@ -1,5 +1,0 @@
-(specify \
-  "(minus (restrict ...) ...) should be equivalent to (restict ..., lambda{ not(...) })",
-  (rel_equal \
-    (minus :suppliers, (restrict :suppliers, lambda{ city == 'Paris' })),
-    (restrict :suppliers, lambda{ city != 'Paris' })))

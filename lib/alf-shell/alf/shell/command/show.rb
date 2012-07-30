@@ -38,7 +38,7 @@ module Alf
 
       def compile(argv)
         operand = operands(argv.shift, 1).last
-        operand = Engine::Sort.new(operand, Ordering.from_argv(argv.first), database) unless argv.empty?
+        operand = Engine::Sort.new(operand, Ordering.from_argv(argv.first)) unless argv.empty?
         operand
       end
 

@@ -15,8 +15,7 @@ module Alf
       attr_reader :allbut
 
       # Creates an Summarize::Hash instance
-      def initialize(operand, by, summarization, allbut, context=nil)
-        super(context)
+      def initialize(operand, by, summarization, allbut)
         @operand = operand
         @by = by
         @summarization = summarization
@@ -25,7 +24,7 @@ module Alf
 
       # (see Cog#each)
       def each
-        index = Materialize::Hash.new(operand, by, allbut, context)
+        index = Materialize::Hash.new(operand, by, allbut)
         index.each_pair do |k, v|
           yield k.merge(summarization.summarize(v))
         end

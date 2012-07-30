@@ -4,11 +4,11 @@ module Alf
     describe Aggregate do
 
       it 'should work on an empty operand' do
-        Autonum.new([], Summarization[{}]).to_a.should eq([])
+        Autonum.new(Leaf.new([]), Summarization[{}]).to_a.should eq([])
       end
 
       it 'should work on a non empty operand' do
-        rel = [
+        rel = Leaf.new [
           {:name => "Jones", :price => 12.0, :id => 1},
           {:name => "Smith", :price => 10.0, :id => 2}
         ]

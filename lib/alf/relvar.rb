@@ -21,6 +21,10 @@ module Alf
       @name = name
     end
 
+    def scope
+      context
+    end
+
     # Returns the relation variable heading
     def heading
       context.heading(name)

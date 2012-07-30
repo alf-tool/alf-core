@@ -3,7 +3,7 @@ module Alf
   module Engine
     describe Summarize::Cesure do
 
-      let(:input) {[
+      let(:input) {Leaf.new [
         {:a => "via_method", :time => 1},
         {:a => "via_method", :time => 1},
         {:a => "via_method", :time => 2},

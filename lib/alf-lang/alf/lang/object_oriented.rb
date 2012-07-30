@@ -24,7 +24,7 @@ module Alf
           define_method(name) do |*args|
             args.unshift(_self_operand)
             operands, arguments = args[0...clazz.arity], args[clazz.arity..-1]
-            _operator_output clazz.new(_context, operands, *arguments)
+            _operator_output clazz.new(operands, *arguments)
           end
         end
 

@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Defaults do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Defaults.run(argv) }
 
     before do

@@ -13,7 +13,7 @@ module Alf
       }
       let(:db){ db_class.new(Connection.folder('.')) }
 
-      subject{ db.schema(:public).scope }
+      subject{ db.schema(:public).send(:scope) }
 
       it 'has algebra methods' do
         subject.respond_to?(:matching).should be_true

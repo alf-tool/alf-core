@@ -1,1 +1,1 @@
-alf -e "(restrict :suppliers, lambda{ status > 10})"
+alf -e "(restrict suppliers, lambda{ status > 10})"

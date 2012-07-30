@@ -2,8 +2,8 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Matching do
 
-    let(:left) { [{:left  => true}] }
-    let(:right){ [{:right => true}] }
+    let(:left) { suppliers_var_ref }
+    let(:right){ suppliers_var_ref }
     subject{ Matching.run(argv) }
 
     context "the default config" do

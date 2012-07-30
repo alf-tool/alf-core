@@ -9,8 +9,7 @@ module Alf
       attr_reader :operands
 
       # Creates a Concat instance
-      def initialize(operands, context=nil)
-        super(context)
+      def initialize(operands)
         @operands = operands
       end
 

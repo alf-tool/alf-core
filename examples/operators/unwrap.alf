@@ -1,4 +1,4 @@
 #!/usr/bin/env alf 
 (unwrap \
-  (wrap :suppliers, [:city, :status], :loc_and_status), 
+  (wrap suppliers, [:city, :status], :loc_and_status), 
   :loc_and_status)

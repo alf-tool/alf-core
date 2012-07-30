@@ -24,8 +24,8 @@ module Alf
           :time_sum => Aggregator.sum{ time },
           :time_max => Aggregator.max{ time }
         ]
-        by    = AttrList[:a]
-        op = Engine::Quota::Cesure.new(input, by, sums)
+        by = AttrList[:a]
+        op = Engine::Quota::Cesure.new(Leaf.new(input), by, sums)
         op.to_a.should eq(expected)
       end
 

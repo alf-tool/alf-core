@@ -2,31 +2,37 @@ require 'spec_helper'
 module Alf
   describe Reader::AlfFile do
 
-    class TestConnection < Alf::Connection
-      def iterator(name)
-        [{:status => 10},{:status => 30}]
-      end
-    end
-
     let(:io){ StringIO.new(expr) }
 
     subject{
-      Reader::AlfFile.new(io, TestConnection.new(nil)).to_a
+      Reader::AlfFile.new(io, examples_database).to_set
     }
 
     describe "on pure functional expressions" do
-      let(:expr){ "(restrict :suppliers, lambda{status > 20})" }
-      it{ should == [{:status => 30}]}
+      let(:expr){ 
+        "(restrict suppliers, lambda{status > 20})"
+      }
+      let(:expected){
+        [{:sid=>"S3", :name=>"Blake", :status=>30, :city=>"Paris"},
+         {:sid=>"S5", :name=>"Adams", :status=>30, :city=>"Athens"}]        
+      }
+
+      it{ should eq(expected.to_set) }
     end
 
     describe "on impure functional expressions" do
       let(:expr){
-      <<-EOF
-        xxx = (restrict :suppliers, lambda{status > 20})
-        (extend xxx, :rev => lambda{ -status })
-      EOF
+        <<-EOF
+          xxx = (restrict suppliers, lambda{status > 20})
+          (extend xxx, :rev => lambda{ -status })
+        EOF
       }
-      it{ should == [{:status => 30, :rev => -30}]}
+      let(:expected){
+        [{:sid=>"S3", :name=>"Blake", :status=>30, :city=>"Paris", :rev=>-30},
+         {:sid=>"S5", :name=>"Adams", :status=>30, :city=>"Athens", :rev=>-30}]        
+      }
+
+      it{ should eq(expected.to_set) }
     end
 
   end

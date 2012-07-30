@@ -52,7 +52,7 @@ module Alf
           operands, args, options = signature.argv2args(argv)
           operands  = operands(operands, operator_class.arity)
           init_args = [operands] + args + [options]
-          operator_class.new(database, *init_args)
+          operator_class.new(*init_args)
         end
 
       end # module InstanceMethods

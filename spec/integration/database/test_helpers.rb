@@ -6,10 +6,10 @@ describe Alf::Database, 'helpers' do
       helpers HelpersInScope
       helpers do
         def suppliers
-          Relation(:name => "John")
+          Alf::Relvar::Memory.new self, :suppliers, Relation(:name => "John")
         end
         def quantities
-          Relation(:qty => [ 12, 20, 37 ])
+          Alf::Relvar::Memory.new self, :quantities, Relation(:qty => [ 12, 20, 37 ])
         end
         def tax
           13
@@ -33,7 +33,7 @@ describe Alf::Database, 'helpers' do
     }
     observed.should eq(expected)
   end
-
+  
   it 'are available in defaults' do
     expected = Relation(:name => "John", :hello => "Hello John!")
     observed = db.query{
@@ -41,7 +41,7 @@ describe Alf::Database, 'helpers' do
     }
     observed.should eq(expected)
   end
-
+  
   it 'are available in summarizations' do
     expected = Relation(:total => (12+20+37)*13)
     observed = db.query{

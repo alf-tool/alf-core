@@ -15,15 +15,11 @@ module Alf
       end
     end # class << self
 
-    # The context in which this operator has been constructed
-    attr_accessor :context
-
     # @param [Array] operands Operator operands
-    attr_reader :operands
+    attr_accessor :operands
 
     # Create an operator instance
-    def initialize(context, *args)
-      @context = context
+    def initialize(*args)
       signature.parse_args(args, self)
     end
 
@@ -52,16 +48,6 @@ module Alf
     end
 
   protected
-
-    def operands=(operands)
-      @operands = operands.map{|op|
-        if op.is_a?(Symbol) or op.is_a?(String)
-          Operator::VarRef.new(context, op.to_sym)
-        else
-          op
-        end
-      }
-    end
 
     def clean_computed_attributes!
       @heading = nil

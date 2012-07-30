@@ -35,6 +35,16 @@ module Alf
         end
       end
 
+      def native_schema_def
+        s = Database::SchemaDef.new
+        Path(folder).glob('*').each do |file|
+          if f = find_file(file.basename)
+            s.relvar f.basename.rm_ext.to_sym
+          end
+        end
+        s
+      end
+
       protected
 
         # Returns the folder on which this connection works

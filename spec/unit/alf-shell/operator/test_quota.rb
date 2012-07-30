@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Quota do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Quota.run(argv) }
 
     before do

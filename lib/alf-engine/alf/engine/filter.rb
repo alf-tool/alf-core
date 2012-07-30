@@ -23,8 +23,7 @@ module Alf
       attr_reader :predicate
 
       # Creates a Filter instance
-      def initialize(operand, predicate, context=nil)
-        super(context)
+      def initialize(operand, predicate)
         @operand = operand
         @predicate = predicate
       end

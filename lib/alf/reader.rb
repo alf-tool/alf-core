@@ -97,8 +97,8 @@ module Alf
     # Default reader options
     DEFAULT_OPTIONS = {}
 
-    # @return [Connection] Wired connection
-    attr_accessor :connection
+    # @return [Object] Wired context
+    attr_accessor :context
 
     # @return [String, IO, ...] Input as initially provided to initialize
     attr_accessor :input
@@ -117,8 +117,8 @@ module Alf
     def initialize(*args)
       args.each do |arg|
         case arg
-          when Connection then @connection = arg
-          when Hash       then @options = arg
+          when Connection, Database then @context = arg
+          when Hash                 then @options = arg
           else
             @input = arg if arg
         end

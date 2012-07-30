@@ -148,7 +148,7 @@ module Alf
           database.query(argv.first)
         else
           op = yield
-          database.compiler.call(op) if op
+          database.connection.compiler.call(op) if op
         end
       end
 

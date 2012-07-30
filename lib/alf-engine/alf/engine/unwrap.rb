@@ -12,8 +12,7 @@ module Alf
       attr_reader :attribute
 
       # Creates a SetAttr instance
-      def initialize(operand, attribute, context=nil)
-        super(context)
+      def initialize(operand, attribute)
         @operand = operand
         @attribute = attribute
       end

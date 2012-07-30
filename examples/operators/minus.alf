@@ -1,8 +1,8 @@
 #!/usr/bin/env alf
 # Give all suppliers, except those living in Paris
-(minus :suppliers, 
-       (restrict :suppliers, lambda{ city == 'Paris' }))
+(minus suppliers, 
+       (restrict suppliers, lambda{ city == 'Paris' }))
 
 # This is a contrived example for illustrating minus, as the
 # following is equivalent
-(restrict :suppliers, lambda{ city != 'Paris' })
+(restrict suppliers, lambda{ city != 'Paris' })

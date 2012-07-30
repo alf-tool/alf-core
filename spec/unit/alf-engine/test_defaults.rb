@@ -4,11 +4,11 @@ module Alf
     describe Defaults do
 
       it 'should work on an empty operand' do
-        Defaults.new([], TupleComputation[:id => 1]).to_a.should eq([])
+        Defaults.new(Leaf.new([]), TupleComputation[:id => 1]).to_a.should eq([])
       end
 
       it 'should replace nil by the default value' do
-        rel = [
+        rel = Leaf.new [
           {:name => "Jones"},
           {:name => nil}
         ]
@@ -20,7 +20,7 @@ module Alf
       end
 
       it 'should add missing attributes and allow computations' do
-        rel = [
+        rel = Leaf.new [
           {:name => "Jones"},
           {:name => "Smith"}
         ]

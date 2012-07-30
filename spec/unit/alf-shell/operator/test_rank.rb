@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Rank do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Rank.run(argv) }
 
     before do

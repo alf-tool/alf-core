@@ -12,8 +12,7 @@ module Alf
       attr_reader :right
 
       # Creates a Join::Hash instance
-      def initialize(left, right, context=nil)
-        super(context)
+      def initialize(left, right)
         @left = left
         @right = right
       end
@@ -24,7 +23,7 @@ module Alf
         left.each do |left_tuple|
           index ||= Materialize::Hash.new(right, lambda{|t|
             AttrList.new(left_tuple.keys & t.keys)
-          }, false, context).prepare
+          }, false).prepare
           index[left_tuple, true].each do |right_tuple|
             yield left_tuple.merge(right_tuple)
           end

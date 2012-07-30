@@ -1,2 +1,2 @@
 #!/usr/bin/env alf
-(not_matching :suppliers, :supplies)
+(not_matching suppliers, supplies)

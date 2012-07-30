@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Wrap do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Wrap.run(argv) }
 
     before do

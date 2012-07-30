@@ -1,5 +1,3 @@
-require_relative 'connection/internal'
-require_relative 'connection/external'
 module Alf
   #
   # A connection encapsulates the interface with the outside world, providing base iterators
@@ -14,8 +12,6 @@ module Alf
   # Connection.autodetect and Connection.recognizes? for details.
   #
   class Connection
-    include Internal
-    include External
 
     class << self
       include Tools::Registry
@@ -73,6 +69,55 @@ module Alf
         false
       end
     end # class << self
+
+    # The connection specification
+    attr_reader :conn_spec
+
+    # The scope that defines the global database scope
+    attr_reader :scope
+
+    # Creates an connection instance, wired to the specified folder.
+    #
+    # @param [String] folder path to the folder to use as dataset source.
+    def initialize(conn_spec)
+      @conn_spec = conn_spec
+    end
+
+    # Closes this connection, freeing resources if needed.
+    #
+    # @return [undefined]
+    def close
+    end
+
+    # Returns an optimizer instance
+    def optimizer
+      Optimizer.new.
+                register(Optimizer::Restrict.new, Operator::Relational::Restrict)
+    end
+
+    # Returns a compiler instance
+    def compiler
+      Engine::Compiler.new
+    end
+
+    # Returns a low-level Iterator for a given named variable
+    def iterator(name)
+      raise NotImplementedError, "Unable to serve `#{name}` in Connection.iterator"
+    end
+
+    # Returns the heading of a given named variable
+    def heading(name)
+      raise NotSupportedError, "Unable to infer heading for `#{name}`"
+    end
+
+    # Returns the keys of a given named variable
+    def keys(name)
+      raise NotSupportedError, "Unable to infer keys for `#{name}`"
+    end
+
+    # Returns a native schema instance
+    def native_schema_def
+    end
 
   end # class Connection
 end # module Alf

@@ -13,7 +13,7 @@ module Alf
 
       # (see Reader#each)
       def each
-        connection.query(input_text, input_path).each(&Proc.new)
+        context.query(input_text, input_path).each(&Proc.new)
       end
 
       Reader.register(:alf, [".alf"], self)

@@ -49,8 +49,7 @@ module Alf
       attr_reader :allbut
 
       # Creates a Materialize::Hash instance
-      def initialize(operand, key, allbut = false, context=nil)
-        super(context)
+      def initialize(operand, key, allbut = false)
         @operand = operand
         @key = key
         @allbut = allbut

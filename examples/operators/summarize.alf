@@ -1,7 +1,7 @@
 #!/usr/bin/env alf
 
 # What is the sum of supplied quantities by supplier?
-(summarize :supplies, 
+(summarize supplies, 
            [:sid],
            :total_qty => sum{ qty })
 
@@ -9,8 +9,8 @@
 # suppliers that have a status greater than 10
 (summarize \
   (join \
-    (join (restrict :suppliers, lambda{ status > 10 }), 
-          :supplies), 
-    :cities),
+    (join (restrict suppliers, lambda{ status > 10 }), 
+          supplies), 
+    cities),
   [:country], 
   :maxqty => sum{ qty })

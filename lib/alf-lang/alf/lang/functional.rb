@@ -13,7 +13,7 @@ module Alf
         def def_operator_method(name, clazz)
           define_method(name) do |*args|
             operands, arguments = args[0...clazz.arity], args[clazz.arity..-1]
-            _operator_output clazz.new(_context, operands, *arguments)
+            _operator_output clazz.new(operands, *arguments)
           end
         end
       end

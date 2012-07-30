@@ -26,9 +26,24 @@ module Alf
         expr
       end
 
+      def query(expr = nil, path = nil, line = nil, &block)
+        with_connection do |conn|
+          expr = parse(expr, path, line, &block)
+          expr = conn.optimizer.call(expr)
+          cog  = conn.compiler.call(expr)
+          Tools.to_relation(cog)
+        end
+      end
+
       # @api private
       def scope
         @database.scope [ definition ]
+      end
+
+    private
+
+      def with_connection
+        yield(database.connection)
       end
 
     end # class Schema

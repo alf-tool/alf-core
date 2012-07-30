@@ -25,15 +25,14 @@ module Alf
       attr_reader :ordering
 
       # Creates an ToArray instance
-      def initialize(operand, ordering, context=nil)
-        super(context)
+      def initialize(operand, ordering)
         @operand = operand
         @ordering = ordering
       end
 
       # (see Cog#each)
       def each(&block)
-        Sort.new(operand, ordering, context).each do |tuple|
+        Sort.new(operand, ordering).each do |tuple|
           yield recurse(tuple)
         end
       end
@@ -46,7 +45,7 @@ module Alf
 
       def reorder(value)
         if Iterator===value
-          ToArray.new(value, ordering, context).to_a
+          ToArray.new(value, ordering).to_a
         else
           value
         end

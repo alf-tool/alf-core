@@ -28,8 +28,7 @@ module Alf
       attr_reader :count
 
       # Creates an Generator instance
-      def initialize(as, offset, step, count, context=nil)
-        super(context)
+      def initialize(as, offset, step, count)
         @as = as
         @offset = offset
         @step = step

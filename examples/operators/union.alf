@@ -1,3 +1,3 @@
 #!/usr/bin/env alf
-(union (project :suppliers, [:city]), 
-       (project :parts,     [:city]))
+(union (project suppliers, [:city]), 
+       (project parts,     [:city]))

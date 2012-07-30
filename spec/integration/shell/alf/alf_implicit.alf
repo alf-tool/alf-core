@@ -1,1 +1,1 @@
-(restrict :suppliers, lambda{ status > 10 })
+(restrict suppliers, lambda{ status > 10 })

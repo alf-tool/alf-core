@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Clip do
 
-    let(:input){ [] }
+    let(:input){ suppliers_var_ref }
     subject{ Clip.run(argv) }
 
     before do
