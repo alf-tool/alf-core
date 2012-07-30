@@ -38,10 +38,15 @@ module Alf
         connect(Connection.folder Path.backfind('examples/operators'), &bl)
       end
 
+      # Returns the defined schemas (by name in a Hash)
+      def schemas
+        @schemas ||= (superclass.schemas.dup rescue {})
+      end
+
       # Create a named schema under the database.
       def schema(name, &bl)
-        @schemas ||= Hash.new{|h,k| h[k] = Schema.new }
-        @schemas[name].tap do |s|
+        schemas[name] ||= Schema.new
+        schemas[name].tap do |s|
           s.define(&bl) if bl
         end
       end
@@ -55,10 +60,7 @@ module Alf
       def_delegators :public_schema, :import_native_relvars,
                                      :relvar
 
-      # Returns the array of helper modules to use for defining the evaluation
-      # scope.
-      #
-      # @return [Array<Module>] helper modules for evaluation scope.
+      # Returns the array of helper modules to use for defining the evaluation scope.
       def helpers(*helpers, &inline)
         @helpers ||= (superclass.helpers.dup rescue [])
         @helpers << Module.new(&inline) if inline
