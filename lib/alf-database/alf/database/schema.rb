@@ -23,6 +23,8 @@ module Alf
         expr = scope.__send__(expr) if expr.is_a?(Symbol)
 
         expr
+      rescue NameError => ex
+        raise NoSuchRelvarError, "No such relvar `#{ex.name}`"
       end
 
       def query(expr = nil, path = nil, line = nil, &block)
