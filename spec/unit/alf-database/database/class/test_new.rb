@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
   describe Database, 'new' do
-    
-    it 'is private' do
-      lambda{ Database.new }.should raise_error(NoMethodError)
-    end
+
+    subject{ Database.new(Connection.folder '.') }
+
+    it{ should be_a(Database) }
 
   end
 end

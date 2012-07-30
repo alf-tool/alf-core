@@ -2,7 +2,6 @@ module Alf
   class Database
 
     class << self
-      private :new
 
       # Connects to a database, auto-detecting the connection to use.
       #
@@ -81,6 +80,23 @@ module Alf
 
     helpers Lang::Functional
 
+    # The underlying connection
+    attr_reader :connection
+
+    # Creates a new database instance
+    def initialize(connection)
+      @connection = connection
+    end
+
+    def schema(name)
+      Schema.new self, self.class.schema(name)
+    end
+
+    def scope(helpers = [])
+      Lang::Lispy.new(self, self.class.helpers + helpers)
+    end
+
   end # module Database
 end # module Alf
 require_relative 'database/schema_def'
+require_relative 'database/schema'
