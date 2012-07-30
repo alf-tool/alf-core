@@ -14,7 +14,9 @@ module Alf
       # @raise [ArgumentError] when no registered connection recognizes the arguments
       def connect(conn_spec)
         return conn_spec if conn_spec.is_a?(Connection)
-        conn = Connection.autodetect(conn_spec).new(conn_spec, helpers)
+        conn_class = Connection.autodetect(conn_spec)
+        scoping    = helpers + [ public_schema ]
+        conn       = conn_class.new(conn_spec, scoping)
         block_given? ? yield(conn) : conn
       ensure
         conn.close if conn and block_given?

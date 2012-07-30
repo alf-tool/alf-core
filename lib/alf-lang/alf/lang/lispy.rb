@@ -27,8 +27,8 @@ module Alf
 
       # Creates a language instance
       def initialize(context = nil, helpers = [ Lang::Functional ])
-        super [ OwnMethods ] + helpers
         @context = context
+        super [ OwnMethods ] + helpers
       end
 
       # Resolve DUM and DEE in ruby 1.9.2 context
