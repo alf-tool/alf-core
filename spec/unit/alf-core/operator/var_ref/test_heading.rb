@@ -4,9 +4,11 @@ module Alf
     describe VarRef, "heading" do
 
       let(:context){ Object.new.extend Module.new{
-        def relvar(name)
-          raise unless name == :suppliers
-          Struct.new(:heading).new(:name => String)
+        def connection
+          self
+        end
+        def heading(name)
+          {:name => String}
         end
       }}
       let(:var_ref){ VarRef.new(context, :suppliers) }

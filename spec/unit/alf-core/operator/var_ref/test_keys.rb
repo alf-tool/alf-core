@@ -4,9 +4,11 @@ module Alf
     describe VarRef, "keys" do
 
       let(:context){ Object.new.extend Module.new{
-        def relvar(name)
-          raise unless name == :suppliers
-          Struct.new(:keys).new([:foo])
+        def connection
+          self
+        end
+        def keys(name)
+          Keys[ [:foo] ]
         end
       }}
       let(:var_ref){ VarRef.new(context, :suppliers) }
@@ -14,7 +16,7 @@ module Alf
       subject { var_ref.keys }
 
       it 'delegates the call to the context' do
-        subject.should eq([:foo])
+        subject.should eq(Keys[[:foo]])
       end
 
     end

@@ -12,11 +12,11 @@ module Alf
       end
 
       def heading
-        @heading ||= relvar.heading
+        @heading ||= context.connection.heading(name)
       end
 
       def keys
-        @keys ||= relvar.keys
+        @keys ||= context.connection.keys(name)
       end
 
       def each(&bl)
@@ -25,12 +25,6 @@ module Alf
 
       def scope
         context.scope
-      end
-
-    private
-
-      def relvar
-        context.relvar(name)
       end
 
     end # class VarRef
