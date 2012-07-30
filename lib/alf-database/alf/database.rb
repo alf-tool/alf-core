@@ -50,9 +50,11 @@ module Alf
 
       # Create a named schema under the database.
       def schema(name, &bl)
-        schemas[name] ||= Schema.new
-        schemas[name].tap do |s|
-          s.define(&bl) if bl
+        if bl
+          schemas[name] ||= Schema.new
+          schemas[name].define(&bl)
+        else
+          schemas[name].tap{|s| raise NoSuchSchemaError unless s}
         end
       end
 
