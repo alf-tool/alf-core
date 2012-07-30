@@ -9,12 +9,15 @@ module Alf
       # The connection specification
       attr_reader :conn_spec
 
+      # The scope that defines the global database scope
+      attr_reader :scope
+
       # Creates an connection instance, wired to the specified folder.
       #
       # @param [String] folder path to the folder to use as dataset source.
       def initialize(conn_spec, scope_helpers = [ Lang::Functional ])
-        @scope_helpers = scope_helpers
-        @conn_spec     = conn_spec
+        @conn_spec = conn_spec
+        @scope     = Lang::Lispy.new(self, scope_helpers)
       end
 
       # Returns an optimizer instance
@@ -43,11 +46,9 @@ module Alf
         raise NotSupportedError, "Unable to infer keys for `#{name}`"
       end
 
-      # Returns an evaluation scope.
-      #
-      # @return [Scope] a scope instance on the global variables of the underlying database.
-      def scope
-        Lang::Lispy.new(self, @scope_helpers)
+      # Returns a native schema instance
+      def native_schema
+        raise NotSupportedError, "Unable to infer native schema on `#{self}`"
       end
 
     end # module Internal
