@@ -45,7 +45,7 @@ module Alf
   # @see Database.connect for more about recognized formats.
   #
   def self.connect(*args, &block)
-    Class.new(Database){ import_native_relvars }.connect(*args, &block)
+    Database.connect(*args, &block)
   end
 
   # Returns a Reader on `source` denoting a physical representation of a relation.

@@ -6,11 +6,18 @@ module Alf
 
     subject{ db_class.relvar(:suppliers) }
 
-    it 'installs the relvar on the public schema' do
+    it 'installs the relvar on the default schema' do
       subject
       lambda{
-        db_class.schema(:public).instance_method(:suppliers)
+        db_class.default_schema.instance_method(:suppliers)
       }.should_not raise_error(NameError)
+    end
+
+    it 'does not touch superclass default schema' do
+      subject
+      lambda{
+        Database.default_schema.instance_method(:suppliers)
+      }.should raise_error(NameError)
     end
 
   end

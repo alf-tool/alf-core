@@ -2,6 +2,11 @@ module Alf
   class Database
     class Schema < Module
 
+      # Returns a default, native schema
+      def self.native
+        Schema.new{ import_native_relvars }
+      end
+
       # Inform the schema to import native relation variables under public module
       # methods.
       def import_native_relvars

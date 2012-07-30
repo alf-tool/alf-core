@@ -15,7 +15,7 @@ module Alf
       def connect(conn_spec)
         return conn_spec if conn_spec.is_a?(Connection)
         conn_class = Connection.autodetect(conn_spec)
-        scoping    = helpers + [ public_schema ]
+        scoping    = helpers + [ default_schema ]
         conn       = conn_class.new(conn_spec, scoping)
         block_given? ? yield(conn) : conn
       ensure
@@ -42,7 +42,10 @@ module Alf
 
       # Returns the defined schemas (by name in a Hash)
       def schemas
-        @schemas ||= (superclass.schemas.dup rescue {})
+        @schemas ||= begin
+          schemas = superclass.schemas.dup rescue {:native => Schema.native}
+          Hash[schemas.map{|name,s| [name, s.dup] }]
+        end
       end
 
       # Create a named schema under the database.
@@ -53,14 +56,18 @@ module Alf
         end
       end
 
+      # Sets the name of the default schema to use
+      def default_schema=(name)
+        @default_schema = name
+      end
+
       # Returns/define the public schema
-      def public_schema(&bl)
-        schema(:public, &bl)
+      def default_schema(&bl)
+        schema(@default_schema || :native, &bl)
       end
 
       extend Forwardable
-      def_delegators :public_schema, :import_native_relvars,
-                                     :relvar
+      def_delegators :default_schema, :relvar
 
       # Returns the array of helper modules to use for defining the evaluation scope.
       def helpers(*helpers, &inline)
