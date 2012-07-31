@@ -19,9 +19,6 @@ module Alf
       end
 
       def Tuple(h)
-        unless h.keys.all?{|k| k.is_a?(::Symbol) } && h.values.all?{|v| !v.nil? }
-          ::Kernel.raise ArgumentError, "Invalid tuple literal #{h.inspect}"
-        end
         Alf::Tuple(h)
       end
 
