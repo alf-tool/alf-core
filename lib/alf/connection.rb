@@ -115,6 +115,21 @@ module Alf
       raise NotSupportedError, "Unable to infer keys for `#{name}`"
     end
 
+    # Inserts `tuples` in the relvar called `name`
+    def insert(name, tuples)
+      raise NotSupportedError, "Unable to insert in `#{name}`"
+    end
+
+    # Updates the relvar called `name`
+    def update(name, computation, predicate)
+      raise NotSupportedError, "Unable to update `#{name}`"
+    end
+
+    # Delete from the relvar called `name`
+    def delete(name, predicate)
+      raise NotSupportedError, "Unable to delete from `#{name}`"
+    end
+
     # Returns a native schema instance
     def native_schema_def
     end
