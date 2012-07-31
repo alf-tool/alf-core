@@ -85,6 +85,16 @@ module Alf
       alias :size  :cardinality
       alias :count :cardinality
 
+      # Coerces a single tuple
+      def coerce(tuple)
+        coercer = lambda{|(k,v)| [k, Tools.coerce(v, self[k])] }
+        if tuple.is_a?(Hash)
+          Tuple(tuple, &coercer)
+        else
+          tuple.map{|t| Tuple(t, &coercer)}
+        end
+      end
+
       # Computes the intersection of this heading with another one.
       #
       # @param [Heading] other another heading

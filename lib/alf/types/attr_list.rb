@@ -162,6 +162,13 @@ module Alf
         attributes.include?(attr_name)
       end
 
+      # Returns the size of this attribute list.
+      #
+      # @return [Integer] the number of attributes in the list
+      def size
+        attributes.size
+      end
+
       # Returns true if this attribute list is empty, false otherwise
       #
       # @return [Boolean] whether this attribute list is emtpy

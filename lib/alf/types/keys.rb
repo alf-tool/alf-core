@@ -45,6 +45,10 @@ module Alf
         end
       end
 
+      def first
+        keys.first
+      end
+
       def if_empty(keys = nil, &bl)
         return self unless empty?
         Keys.coerce(keys || bl.call)
