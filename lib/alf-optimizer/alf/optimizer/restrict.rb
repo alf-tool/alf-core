@@ -103,8 +103,12 @@ module Alf
       end
 
       def on_rename(expr, predicate)
-        # TODO:
-        restrict(expr, predicate)
+        begin
+          predicate = predicate.rename(expr.renaming.inverse)
+        rescue NotSupportedError
+          return restrict(expr, predicate)
+        end
+        on_pass_through(expr, predicate)
       end
 
       def on_restrict(expr, predicate)

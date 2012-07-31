@@ -30,7 +30,8 @@ module Alf
       specify "the restriction has been pushed with same predicate" do
         optimized.operands.each do |operand|
           operand.should be_a(Operator::Relational::Restrict)
-          operand.predicate.should eq(restriction.predicate)
+          repl = defined?(replaced_predicate) ? replaced_predicate : restriction.predicate
+          operand.predicate.should eq(repl)
         end
       end
 
