@@ -18,14 +18,13 @@ module Alf
         end
       end
 
-      def Tuple(h)
-        Alf::Tuple(h)
+      def Tuple(*args, &bl)
+        Alf::Tuple(*args, &bl)
       end
 
-      def Relation(first, *args)
+      def Relation(first, *args, &bl)
         if args.empty?
-          ::Kernel.raise "(Relation :relvar_name) is no longer supported." if first.is_a?(::Symbol)
-          Alf::Relation(first)
+          Alf::Relation(first, &bl)
         else
           Alf::Relation[*args.unshift(first)]
         end
