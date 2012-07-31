@@ -74,6 +74,10 @@ module Alf
       Predicate.new(!expr)
     end
 
+    def rename(renaming)
+      Predicate.new(expr.rename(renaming))
+    end
+
     def evaluate(scope)
       scope.instance_exec(&to_proc)
     end

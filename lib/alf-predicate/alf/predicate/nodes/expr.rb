@@ -40,6 +40,10 @@ module Alf
         (free_variables & attr_list).empty? ? [ tautology, self ] : [ self, tautology ]
       end
 
+      def rename(renaming)
+        Renamer.call(self, :renaming => renaming.to_hash)
+      end
+
       def to_ruby_code(options = {})
         ToRubyCode.call(self, options)
       end
