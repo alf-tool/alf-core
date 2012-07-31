@@ -11,7 +11,7 @@ module Alf
 
       it 'requests the insertion of the tuples on :suppliers' do
         subject
-        context.requests.should eq([
+        db_context.requests.should eq([
           [:insert, :suppliers, expected],
           [:insert, :parts, expected],
         ])

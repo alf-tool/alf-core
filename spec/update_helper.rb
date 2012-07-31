@@ -31,16 +31,16 @@ module Helpers
     UpdateContext.new
   end
 
-  def context
+  def db_context
     @context ||= an_update_context
   end
 
   def suppliers
-    var_ref(:suppliers, context)
+    var_ref(:suppliers, db_context)
   end
 
   def parts
-    var_ref(:parts, context)
+    var_ref(:parts, db_context)
   end
 
   def some_tuples
