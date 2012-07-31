@@ -86,7 +86,9 @@ module Alf
     end
 
     def _compile
-      context.compiler.call(expr)
+      expr = self.expr
+      expr = context.optimizer.call(expr)
+      expr = context.compiler.call(expr)
     end
 
     def _operator_output(op)
