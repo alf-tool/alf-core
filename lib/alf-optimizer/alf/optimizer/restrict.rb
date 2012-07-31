@@ -14,6 +14,8 @@ module Alf
 
       def call(restrict, search = nil)
         apply(restrict.operand, restrict.predicate)
+      rescue NotSupportedError
+        restrict
       end
 
       def restrict(operand, predicate)
