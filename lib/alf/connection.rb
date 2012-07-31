@@ -115,6 +115,11 @@ module Alf
       raise NotSupportedError, "Unable to infer keys for `#{name}`"
     end
 
+    # Yields the block in a transaction
+    def in_transaction
+      yield
+    end
+
     # Inserts `tuples` in the relvar called `name`
     def insert(name, tuples)
       raise NotSupportedError, "Unable to insert in `#{name}`"

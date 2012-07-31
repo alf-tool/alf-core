@@ -59,23 +59,29 @@ module Alf
 
     # Inserts some tuples inside this relation variable.
     def insert(tuples)
-      Update::Inserter.new.call(expr, tuples)
+      in_transaction do
+        Update::Inserter.new.call(expr, tuples)
+      end
     end
 
     # Updates all tuples of this relation variable.
     def update(computation, predicate = Predicate.tautology)
-      Update::Updater.new.call(expr, computation, predicate)
+      in_transaction do
+        Update::Updater.new.call(expr, computation, predicate)
+      end
     end
 
     # Delete all tuples of this relation variable.
     def delete(predicate = Predicate.tautology)
-      Update::Deleter.new.call(expr, predicate)
+      in_transaction do
+        Update::Deleter.new.call(expr, predicate)
+      end
     end
 
   private
 
-    def in_transaction
-      yield
+    def in_transaction(&bl)
+      context.in_transaction(&bl)
     end
 
     def _compile

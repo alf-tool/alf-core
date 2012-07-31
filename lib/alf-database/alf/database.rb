@@ -117,7 +117,11 @@ module Alf
                                 :iterator,
                                 :optimizer,
                                 :compiler,
-                                :native_schema_def
+                                :native_schema_def,
+                                :in_transaction,
+                                :insert,
+                                :delete,
+                                :update
 
     # @api private
     def scope(helpers = [])

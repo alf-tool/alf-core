@@ -7,10 +7,6 @@ class UpdateContext
   end
   attr_reader :requests
 
-  def connection
-    self
-  end
-
   def heading(name)
     case name
     when :suppliers then Alf::Heading[:sid => Integer, :name  => String]
