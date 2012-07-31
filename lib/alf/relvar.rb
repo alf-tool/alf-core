@@ -59,6 +59,7 @@ module Alf
 
     # Inserts some tuples inside this relation variable.
     def insert(tuples)
+      tuples = [ tuples ] if tuples.is_a?(Hash)
       in_transaction do
         Update::Inserter.new.call(expr, tuples)
       end
