@@ -12,15 +12,15 @@ module Alf
       end
 
       def heading
-        @heading ||= context.connection.heading(name)
+        @heading ||= context.heading(name)
       end
 
       def keys
-        @keys ||= context.connection.keys(name)
+        @keys ||= context.keys(name)
       end
 
       def each(&bl)
-        context.connection.iterator(name).each(&bl)
+        context.iterator(name).each(&bl)
       end
 
       def scope

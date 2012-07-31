@@ -112,6 +112,13 @@ module Alf
                                     :query,
                                     :relvar
 
+    def_delegators :connection, :heading,
+                                :keys,
+                                :iterator,
+                                :optimizer,
+                                :compiler,
+                                :native_schema_def
+
     # @api private
     def scope(helpers = [])
       Lang::Lispy.new(self, helpers + self.class.helpers)

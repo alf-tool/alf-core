@@ -79,7 +79,7 @@ module Alf
     end
 
     def _compile
-      context.connection.compiler.call(expr)
+      context.compiler.call(expr)
     end
 
     def _operator_output(op)
