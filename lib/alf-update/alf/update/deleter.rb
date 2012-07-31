@@ -2,114 +2,93 @@ module Alf
   module Update
     class Deleter < Lang::Compiler
 
+      def not_supported(*args)
+        raise NotSupportedError
+      end
+
+      def apply_and_split(expr, predicate, list)
+        top, down = predicate.and_split(list)
+        if top.tautology?
+          apply(expr.operand, predicate)
+        else
+          raise NotSupportedError
+        end
+      end
+
+      def on_unary_delegate(expr, predicate)
+        apply(expr.operand, predicate)
+      end
+
       ### VarRef, recursion end :-)
 
       def on_var_ref(expr, predicate)
-        raise NotImplementedError
+        expr.context.delete(expr.name, predicate)
       end
 
       ### non relational
 
       def on_autonum(expr, predicate)
-        raise NotSupportedError
+        apply_and_split(expr, predicate, AttrList[expr.as])
       end
 
-      def on_clip(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_clip :on_unary_delegate
 
-      def on_coerce(expr, predicate)
-        raise NotSupportedError
-      end
-
-      def on_compact(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_coerce  :not_supported
+      alias :on_compact :not_supported
 
       def on_defaults(expr, predicate)
-        raise NotSupportedError
+        apply_and_split(expr, predicate, expr.defaults.to_attr_list)
       end
 
-      def on_generator(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_generator :not_supported
 
-      def on_sort(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_sort :on_unary_delegate
 
       ### relational
 
       def on_extend(expr, predicate)
-        raise NotSupportedError
+        apply_and_split(expr, predicate, expr.ext.to_attr_list)
       end
 
       def on_group(expr, predicate)
-        raise NotSupportedError
+        apply_and_split(expr, predicate, AttrList[expr.as])
       end
 
-      def on_infer_heading(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_infer_heading :not_supported
 
       def on_intersect(expr, predicate)
-        raise NotSupportedError
+        apply(expr.left, predicate)
+        apply(expr.right, predicate)
       end
 
-      def on_join(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_join      :not_supported
+      alias :on_matching  :not_supported
+      alias :on_minus     :not_supported
+      alias :not_matching :not_supported
 
-      def on_matching(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_project :on_unary_delegate
 
-      def on_minus(expr, predicate)
-        raise NotSupportedError
-      end
-
-      def on_not_matching(expr, predicate)
-        raise NotSupportedError
-      end
-
-      def on_project(expr, predicate)
-        raise NotSupportedError
-      end
-
-      def on_quota(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_quota :not_supported
 
       def on_rank(expr, predicate)
-        raise NotSupportedError
+        apply_and_split(expr, predicate, AttrList[expr.as])
       end
 
       def on_rename(expr, predicate)
-        raise NotSupportedError
+        apply_and_split(expr, predicate, expr.renaming.inverse.to_attr_list)
       end
 
       def on_restrict(expr, predicate)
-        raise NotSupportedError
+        apply(expr.operand, expr.predicate & predicate)
       end
 
-      def on_summarize(expr, predicate)
-        raise NotSupportedError
-      end
-
-      def on_ungroup(expr, predicate)
-        raise NotSupportedError
-      end
-
-      def on_union(expr, predicate)
-        raise NotSupportedError
-      end
-
-      def on_unwrap(expr, predicate)
-        raise NotSupportedError
-      end
+      alias :on_summarize :not_supported
+      alias :on_ungroup   :not_supported
+      alias :on_union     :not_supported
+      alias :on_unwrap    :not_supported
 
       def on_wrap(expr, predicate)
-        raise NotSupportedError
+        apply_and_split(expr, predicate, AttrList[expr.as])
       end
 
     end # class Deleter
