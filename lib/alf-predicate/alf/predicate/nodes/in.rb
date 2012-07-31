@@ -1,18 +1,22 @@
 module Alf
   class Predicate
-    module VarRef
+    module In
       include Expr
 
       def priority
-        100
+        80
       end
 
-      def var_name
+      def var_ref
         self[1]
       end
 
+      def values
+        self[2]
+      end
+
       def free_variables
-        @free_variables ||= AttrList[ var_name ]
+        @free_variables ||= var_ref.free_variables
       end
 
     end

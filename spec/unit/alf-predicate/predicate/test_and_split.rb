@@ -15,7 +15,7 @@ module Alf
       context "on contradiction" do
         let(:pred){ p.contradiction }
 
-        it{ should eq([p.contradiction, p.contradiction]) }
+        it{ should eq([p.tautology, pred]) }
       end
 
       context "on var_ref (included)" do

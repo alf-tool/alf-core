@@ -59,10 +59,14 @@ module Alf
     end
 
     def &(other)
+      return self  if other.tautology?
+      return other if tautology?
       Predicate.new(expr & other.expr)
     end
 
     def |(other)
+      return self  if other.contradiction?
+      return other if contradiction?
       Predicate.new(expr | other.expr)
     end
 

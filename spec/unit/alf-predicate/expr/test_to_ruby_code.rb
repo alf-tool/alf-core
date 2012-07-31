@@ -75,6 +75,12 @@ module Alf
         it{ should eq("(x == 2) && (y == 3)") }
       end
 
+      describe "in" do
+        let(:expr){ f.in(:x, [2, 3]) }
+
+        it{ should eq("[2, 3].include?(x)") }
+      end
+
       describe "neq" do
         let(:expr){ f.neq(:x, 2) }
 

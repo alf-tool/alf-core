@@ -26,6 +26,11 @@ module Alf
         _factor_predicate([:not, sexpr(operand)])
       end
 
+      def in(var_ref, values)
+        var_ref = sexpr(var_ref) if var_ref.is_a?(Symbol)
+        _factor_predicate([:in, var_ref, values])
+      end
+
       def comp(op, h)
         if h.empty?
           return tautology
@@ -80,6 +85,7 @@ module Alf
       def sexpr(expr)
         case expr
         when Expr       then expr
+        when Predicate  then expr.expr
         when TrueClass  then Grammar.sexpr([:tautology, true])
         when FalseClass then Grammar.sexpr([:contradiction, false])
         when Symbol     then Grammar.sexpr([:var_ref, expr])

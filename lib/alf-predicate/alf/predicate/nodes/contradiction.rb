@@ -28,7 +28,7 @@ module Alf
       end
 
       def and_split(*args)
-        [self, self]
+        [tautology, self]
       end
 
     end

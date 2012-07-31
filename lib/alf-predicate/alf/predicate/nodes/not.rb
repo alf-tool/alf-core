@@ -19,12 +19,6 @@ module Alf
         @free_variables ||= last.free_variables
       end
 
-      def and_split(*args, &bl)
-        self.last.and_split(*args, &bl).map{|expr|
-          expr.tautology? ? expr : !expr
-        }
-      end
-
     end
   end
 end

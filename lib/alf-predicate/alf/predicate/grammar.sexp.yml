@@ -12,6 +12,7 @@ rules:
     - lte
     - gt
     - gte
+    - in
     - native
   tautology:
     - [ true ]
@@ -25,8 +26,6 @@ rules:
     - [ predicate+ ]
   or:
     - [ predicate+ ]
-  comp:
-    - [ "::Symbol", "::Hash" ]
   eq:
     - [ term, term ]
   neq:
@@ -39,12 +38,16 @@ rules:
     - [ term, term ]
   gte:
     - [ term, term ]
+  in:
+    - [ var_ref, values ]
   term:
     - var_ref
     - literal
   native:
     - [ "::Proc" ]
   literal:
+    - "::Object"
+  values:
     - "::Object"
   var_name:
     !ruby/regexp /^[a-zA-Z0-9_]+[?!]?$/

@@ -37,7 +37,7 @@ module Alf
       end
 
       def and_split(attr_list)
-        [ self, tautology ]
+        (free_variables & attr_list).empty? ? [ tautology, self ] : [ self, tautology ]
       end
 
       def to_ruby_code(options = {})

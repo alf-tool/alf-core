@@ -23,10 +23,6 @@ module Alf
         @free_variables ||= left.free_variables | right.free_variables
       end
 
-      def and_split(attr_list)
-        (free_variables & attr_list).empty? ? [ tautology, self ] : [ self, tautology ]
-      end
-
     end
   end
 end

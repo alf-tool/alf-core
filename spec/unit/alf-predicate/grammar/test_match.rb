@@ -46,14 +46,14 @@ module Alf
         end
       end
 
-      context "comp" do
-        subject{ Grammar[:comp] }
+      context "in" do
+        subject{ Grammar[:in] }
 
         it 'matches valid ASTs' do
-          subject.should be_match([:comp, :eq, {:x => 2}])
+          subject.should be_match([:in, [:var_ref, :x], [2, 3]])
         end
         it 'does not match invalid ASTs' do
-          subject.should_not be_match([:comp, {:x => 2}])
+          subject.should_not be_match([:in, :x])
         end
       end
 
