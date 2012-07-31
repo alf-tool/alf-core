@@ -83,7 +83,8 @@ module Alf
 
       def to_array(options = {})
         _with_ordering(options) do |o|
-          op = Alf::Engine::ToArray.new(_self_operand, o)
+          op = Alf::Engine::Compiler.new.call(_self_operand)
+          op = Alf::Engine::ToArray.new(op, o)
           block_given? ? yield(op) : op.to_a
         end
       end
