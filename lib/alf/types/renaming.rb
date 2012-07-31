@@ -103,6 +103,11 @@ module Alf
         renaming.dup
       end
 
+      # Returns an attribute list with renaming keys
+      def to_attr_list
+        AttrList.new renaming.keys
+      end
+
       # Returns the ordering hash code.
       #
       # @return [Integer] a hash code for this renaming
