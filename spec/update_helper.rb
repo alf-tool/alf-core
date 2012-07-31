@@ -27,6 +27,10 @@ class UpdateContext
     requests << [:delete, name, predicate]
   end
 
+  def update(name, updating, predicate)
+    requests << [:update, name, updating, predicate]
+  end
+
 end
 
 module Helpers
@@ -61,6 +65,10 @@ module Helpers
 
   def delete(expr, predicate)
     Alf::Update::Deleter.new.call(expr, predicate)
+  end
+
+  def update(expr, updating, predicate)
+    Alf::Update::Updater.new.call(expr, updating, predicate)
   end
 
 end
