@@ -36,7 +36,11 @@ module Alf
       alias :on_quota         :not_supported
       alias :on_rank          :not_supported
       alias :on_rename        :not_supported
-      alias :on_restrict      :not_supported
+
+      def on_restrict(expr, updating, predicate)
+        apply(expr.operand, updating, expr.predicate & predicate)
+      end
+
       alias :on_summarize     :not_supported
       alias :on_ungroup       :not_supported
       alias :on_union         :not_supported
