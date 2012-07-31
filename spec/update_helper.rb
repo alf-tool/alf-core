@@ -23,6 +23,10 @@ class UpdateContext
     requests << [:insert, name, tuples]
   end
 
+  def delete(name, predicate)
+    requests << [:delete, name, predicate]
+  end
+
 end
 
 module Helpers
@@ -53,6 +57,10 @@ module Helpers
 
   def insert(expr, tuples)
     Alf::Update::Inserter.new.call(expr, tuples)
+  end
+
+  def delete(expr, predicate)
+    Alf::Update::Deleter.new.call(expr, predicate)
   end
 
 end

@@ -3,6 +3,10 @@ module Alf
     class Inserter < Lang::Compiler
       include Lang::Functional
 
+      def not_supported(*args)
+        raise NotSupportedError
+      end
+
       ### VarRef, recursion end :-)
 
       def on_var_ref(expr, inserted)
@@ -11,11 +15,8 @@ module Alf
 
       ### non relational
 
-      def unsupported(*args)
-        raise NotSupportedError
-      end
-      alias :on_coerce    :unsupported
-      alias :on_generator :unsupported
+      alias :on_coerce    :not_supported
+      alias :on_generator :not_supported
 
       def on_autonum(expr, inserted)
         apply(expr.operand, allbut(inserted, [expr.as]))
@@ -48,7 +49,7 @@ module Alf
         apply(expr.operand, ungroup(inserted, expr.as))
       end
 
-      alias :on_infer_heading :unsupported
+      alias :on_infer_heading :not_supported
 
       def on_intersect(expr, inserted)
         apply(expr.left, inserted)
@@ -80,7 +81,7 @@ module Alf
         apply(expr.operand, extend(inserted, defaults))
       end
 
-      alias :on_quota :unsupported
+      alias :on_quota :not_supported
 
       def on_rank(expr, inserted)
         apply(expr.operand, allbut(inserted, [expr.as]))
@@ -95,15 +96,15 @@ module Alf
         apply(expr.operand, inserted)
       end
 
-      alias :on_summarize :unsupported
-      alias :on_ungroup :unsupported
+      alias :on_summarize :not_supported
+      alias :on_ungroup :not_supported
 
       def on_union(expr, inserted)
         apply(expr.left,  inserted)
         apply(expr.right, inserted)
       end
 
-      alias :on_unwrap :unsupported
+      alias :on_unwrap :not_supported
 
       def on_wrap(expr, inserted)
         apply(expr.operand, unwrap(inserted, expr.as))
