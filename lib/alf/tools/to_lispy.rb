@@ -92,7 +92,7 @@ module Alf
         oper, args, opts = v.class.signature.collect_on(v)
         args = opts.empty? ? (oper + args) : (oper + args + [ opts ])
         args = args.map{|arg| r.coerce(arg)}
-        "(#{cmdname} #{args.join(', ')})"
+        "#{cmdname}(#{args.join(', ')})"
       end
 
       # Let's assume to to_ruby_literal will make the job
