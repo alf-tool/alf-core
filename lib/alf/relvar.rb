@@ -79,6 +79,10 @@ module Alf
       end
     end
 
+    def to_lispy
+      Tools.to_lispy(expr)
+    end
+
   private
 
     def in_transaction(&bl)

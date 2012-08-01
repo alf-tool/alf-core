@@ -28,6 +28,10 @@ module Alf
       self.class.signature
     end
 
+    def to_s
+      Tools.to_lispy(self) rescue super
+    end
+
     def ==(other)
       (other.class == self.class) &&
       (other.operands == self.operands) &&
