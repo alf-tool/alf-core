@@ -128,6 +128,10 @@ module Alf
       Lang::Lispy.new(self, helpers + self.class.helpers)
     end
 
+    def to_s
+      "Alf::Database(#{connection})"
+    end
+
   end # module Database
 end # module Alf
 require_relative 'database/schema_def'
