@@ -112,6 +112,10 @@ module Alf
                                     :query,
                                     :relvar
 
+    def optimize(*args, &bl)
+      optimizer.call parse(*args, &bl)
+    end
+
     def_delegators :connection, :heading,
                                 :keys,
                                 :iterator,
