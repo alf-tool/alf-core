@@ -26,6 +26,21 @@ module Alf
         _factor_predicate([:not, sexpr(operand)])
       end
 
+      def relation(r)
+        tuples = r.to_a
+        case tuples.size
+        when 0 then contradiction
+        when 1 then eq(tuples.first)
+        else
+          if tuples.first.size==1
+            k = tuples.first.keys.first
+            self.in(k, tuples.map{|t| t[k]})
+          else
+            tuples.inject(contradiction){|p,t| p | eq(t) }
+          end
+        end
+      end
+
       def in(var_ref, values)
         var_ref = sexpr(var_ref) if var_ref.is_a?(Symbol)
         _factor_predicate([:in, var_ref, values])

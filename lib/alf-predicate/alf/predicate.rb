@@ -22,6 +22,7 @@ module Alf
         when Proc       then native(arg)
         when Hash       then eq(arg)
         when String     then Predicate.new(Grammar.parse(arg))
+        when Relation   then relation(arg)
         else
           raise ArgumentError, "Unable to coerce `#{arg}` to a predicate"
         end
