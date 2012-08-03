@@ -11,22 +11,21 @@ module Alf
     context 'on Database itself' do
       let(:db){ Database }
 
-      it 'should have 1 modules' do
-        subject.size.should eq(1)
+      it 'should have 0 modules' do
+        subject.size.should eq(0)
       end
     end
 
     context 'when subclassing' do
       let(:db){ Class.new(Database){ helpers HelpersInScope } }
 
-      it 'has 4 modules, with HelpersInScope as last one' do
-        subject.size.should eq(2)
-        subject.last.should 
+      it 'has 1 module, HelpersInScope' do
+        subject.size.should eq(1)
+        subject.last.should be(HelpersInScope)
       end
 
       it 'does not touch Database itself' do
-        Database.helpers.size.should eq(1)
-        Database.helpers.should_not include(HelpersInScope)
+        Database.helpers.size.should eq(0)
       end
     end
 
@@ -36,8 +35,8 @@ module Alf
           helpers{ def a_helper_method; end; }
         }
       }
-      it 'has 2 modules' do
-        subject.size.should eq(2)
+      it 'has 1 modules' do
+        subject.size.should eq(1)
       end
       it 'has helping methods on the last module' do
         subject.last.instance_methods.map(&:to_sym).should include(:a_helper_method)

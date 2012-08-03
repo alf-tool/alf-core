@@ -10,15 +10,11 @@ module Alf
       subject{ schema.define{ relvar :parts } }
 
       it 'installs the new relvars' do
-        lambda{
-          subject.instance_method(:parts)
-        }.should_not raise_error(NameError)
+        subject.relvars.should have_key(:parts)
       end
 
       it 'does not hide existing relvars' do
-        lambda{
-          subject.instance_method(:suppliers)
-        }.should_not raise_error(NameError)
+        subject.relvars.should have_key(:suppliers)
       end
 
     end

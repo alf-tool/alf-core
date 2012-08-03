@@ -1,6 +1,10 @@
 module Alf
   class Database
+    require_relative 'database/schema_def_methods'
+    require_relative 'database/schema_def'
+    require_relative 'database/schema'
 
+    # About connections
     class << self
 
       # Connects to a database, auto-detecting the connection to use.
@@ -36,54 +40,38 @@ module Alf
       def examples(&bl)
         connect(Connection.folder Path.backfind('examples/operators'), &bl)
       end
+    end
 
-      # Returns the defined schemas (by name in a Hash)
-      def schemas
-        @schemas ||= begin
-          schemas = superclass.schemas.dup rescue {:native => SchemaDef.native}
-          Hash[schemas.map{|name,s| [name, s.dup] }]
-        end
+    # About schema definitions
+    class << self
+
+      def build_toplevel_schema
+        SchemaDef.new(self){
+          schema(:native){ import_native_relvars }
+        }
       end
 
-      # Create a named schema under the database.
-      def schema(name, &bl)
-        if bl
-          schemas[name] ||= SchemaDef.new
-          schemas[name].define(&bl)
-        else
-          schemas[name].tap{|s|
-            raise NoSuchSchemaError, "No such schema `#{name}`" unless s
-          }
-        end
-      end
-
-      # Sets the name of the default schema to use
-      def default_schema=(name)
-        @default_schema = name
-      end
-
-      # Returns the name of the default schema to use
-      def default_schema_name
-        @default_schema || :native
-      end
-
-      # Returns/define the public schema
-      def default_schema(&bl)
-        schema(default_schema_name, &bl)
+      def toplevel_schema
+        @toplevel_schema ||= build_toplevel_schema
       end
 
       extend Forwardable
-      def_delegators :default_schema, :relvar
+      def_delegators :toplevel_schema, :schema,
+                                       :helpers
 
-      # Returns the array of helper modules to use for defining the evaluation scope.
-      def helpers(*helpers, &inline)
-        @helpers ||= (superclass.helpers.dup rescue [])
-        @helpers << Module.new(&inline) if inline
-        @helpers += helpers
+      def relvar(*args, &bl)
+        toplevel_schema.schema(:native).relvar(*args, &bl)
       end
     end
 
-    helpers Lang::Functional
+    # About scope
+    class << self
+
+      def scope(database, with = [])
+        Lang::Lispy.new(database, [ toplevel_schema.to_scope_module ] + with + [ Lang::Functional ])
+      end
+    end
+
 
     # The underlying connection
     attr_reader :connection
@@ -104,7 +92,7 @@ module Alf
     end
 
     def default_schema
-      schema self.class.default_schema_name
+      schema(:native)
     end
 
     extend Forwardable
@@ -127,9 +115,8 @@ module Alf
                                 :delete,
                                 :update
 
-    # @api private
-    def scope(helpers = [])
-      Lang::Lispy.new(self, helpers + self.class.helpers)
+    def scope
+      self.class.scope(self)
     end
 
     def to_s
@@ -138,5 +125,3 @@ module Alf
 
   end # module Database
 end # module Alf
-require_relative 'database/schema_def'
-require_relative 'database/schema'

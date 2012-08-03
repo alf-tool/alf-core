@@ -2,12 +2,11 @@ module Alf
   class Database
     class Schema
 
-      attr_reader :database, :definition
-
       def initialize(database, definition)
-        @database = database
+        @database   = database
         @definition = definition
       end
+      attr_reader :database, :definition
 
       def parse(expr = nil, path = nil, line = nil, &block)
         if (expr && block) || (expr.nil? and block.nil?)
@@ -23,8 +22,6 @@ module Alf
         expr = scope.__send__(expr) if expr.is_a?(Symbol)
 
         expr
-      rescue NameError => ex
-        raise NoSuchRelvarError, "No such relvar `#{ex.name}`"
       end
 
       def query(expr = nil, path = nil, line = nil, &block)
@@ -37,12 +34,12 @@ module Alf
       end
 
       def relvar(expr = nil, path = nil, line = nil, &block)
-        Relvar.new @database, parse(expr, path, line, &block)
+        Relvar.new database, parse(expr, path, line, &block)
       end
 
       # @api private
       def scope
-        @database.scope [ definition ]
+        definition.scope(database)
       end
 
     private

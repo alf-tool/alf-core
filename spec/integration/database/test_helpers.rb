@@ -5,7 +5,7 @@ describe Alf::Database, 'helpers' do
     examples_database do
       helpers HelpersInScope
       helpers do
-        def suppliers
+        def john
           Alf::Relvar::Memory.new self, Relation(:name => "John")
         end
         def quantities
@@ -21,7 +21,7 @@ describe Alf::Database, 'helpers' do
   it 'are available in extensions' do
     expected = Relation(:name => "John", :hello => "Hello John!")
     observed = db.query{
-      extend(suppliers, :hello => lambda{ hello(name) })
+      extend(john, :hello => lambda{ hello(name) })
     }
     observed.should eq(expected)
   end
@@ -29,7 +29,7 @@ describe Alf::Database, 'helpers' do
   it 'are available in restrictions' do
     expected = Relation(:name => "John")
     observed = db.query{
-      restrict(suppliers, lambda{ hello(name) == "Hello John!" })
+      restrict(john, lambda{ hello(name) == "Hello John!" })
     }
     observed.should eq(expected)
   end
@@ -37,7 +37,7 @@ describe Alf::Database, 'helpers' do
   it 'are available in defaults' do
     expected = Relation(:name => "John", :hello => "Hello John!")
     observed = db.query{
-      defaults(suppliers, :hello => lambda{ hello(name) })
+      defaults(john, :hello => lambda{ hello(name) })
     }
     observed.should eq(expected)
   end

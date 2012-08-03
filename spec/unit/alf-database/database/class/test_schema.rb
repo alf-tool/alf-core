@@ -20,9 +20,7 @@ module Alf
       subject{ db_class.schema(:public){ relvar :suppliers } }
 
       after do
-        lambda{
-          subject.instance_method(:suppliers)
-        }.should_not raise_error(NameError)
+        subject.relvars.should have_key(:suppliers)
       end
 
       it{ should be_a(Database::SchemaDef) }
@@ -40,9 +38,7 @@ module Alf
       before{ existing }
 
       after do
-        lambda{
-          subject.instance_method(:suppliers)
-        }.should_not raise_error(NameError)
+        subject.relvars.should have_key(:suppliers)
       end
 
       it{ should be(existing) }

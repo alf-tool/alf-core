@@ -1,9 +1,9 @@
 require 'spec_helper'
 module Alf
   class Database
-    describe SchemaDef, 'import native relvars' do
+    describe SchemaDef, 'import_native_relvars' do
 
-      let(:schema){
+      let(:defn){
         SchemaDef.new{
           relvar :suppliers
           import_native_relvars
@@ -15,16 +15,13 @@ module Alf
           def context
             self
           end
-          def connection
-            self
-          end
           def native_schema_def
-            Module.new{ def foo; :foo; end }
+            SchemaDef.new{ relvar :foo }
           end
         }
       }
 
-      before{ fake_scope.extend(schema) }
+      before{ fake_scope.extend(defn.to_scope_module) }
 
       it 'installs the native relvars' do
         fake_scope.should respond_to(:foo)
