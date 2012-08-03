@@ -60,6 +60,8 @@ module Alf
               Text::Renderer.render(value, "", @options)
             when Array
               array_rendering(value)
+            when Time, DateTime
+              value.to_s
             else
               value.to_s
           end

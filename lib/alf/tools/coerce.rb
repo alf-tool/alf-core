@@ -2,7 +2,9 @@ module Alf
   module Tools
 
     # Defines all coercion rules, through Myrrha inheritance
-    Coercions = Myrrha::Coerce.dup.append do
+    Coercions = Myrrha::Coerce.dup.append do |g|
+      g.coercion String, Time,     lambda{|s,t| Time.parse(s) }
+      g.coercion String, DateTime, lambda{|s,t| DateTime.parse(s) }
     end
 
     # Coerces a value to a particular domain.

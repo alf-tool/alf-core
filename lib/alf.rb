@@ -6,6 +6,7 @@ require "enumerator"
 require "stringio"
 require "set"
 require "forwardable"
+require 'time'
 
 require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'

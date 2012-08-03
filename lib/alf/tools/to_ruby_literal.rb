@@ -24,7 +24,9 @@ module Alf
     end
 
     # Myrrha rules for converting to ruby literals
-    ToRubyLiteral = Myrrha::ToRubyLiteral.dup.append do
+    ToRubyLiteral = Myrrha::ToRubyLiteral.dup.append do |g|
+      g.coercion(Time)    {|s,_| "Time.parse('#{s.iso8601}')"     }
+      g.coercion(DateTime){|s,_| "DateTime.parse('#{s.iso8601}')" }
     end
 
   end # module Tools
