@@ -76,6 +76,11 @@ module Alf
       cardinality == 0
     end
 
+    # Returns the attribute list, provided the relation contains at least one tuple.
+    def attribute_list
+      AttrList.new tuples.first.keys
+    end
+
     # (see Object#hash)
     def hash
       @tuples.hash
