@@ -93,8 +93,8 @@ module Alf
         else
           tuple.map{|t| Tuple(t, &coercer)}
         end
-      rescue CoercionError
-        raise CoercionError, "Unable to coerce `#{tuple.inspect}` to #{self.inspect}"
+      rescue CoercionError => ex
+        raise CoercionError, "Unable to coerce `#{tuple.inspect}` to #{self.inspect} (#{ex.message})"
       end
 
       # Computes the intersection of this heading with another one.
