@@ -38,6 +38,14 @@ module Alf
         with_operands(left, right)
       end
 
+      def common_heading
+        @common_heading ||= (left.heading & right.heading)
+      end
+
+      def common_attributes
+        @common_attributes ||= common_heading.to_attr_list
+      end
+
     end # module Binary
   end # module Operator
 end # module Alf

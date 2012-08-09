@@ -55,6 +55,8 @@ module Alf
 
     def clean_computed_attributes!
       @heading = nil
+      @common_heading = nil
+      @common_attributes = nil
       @keys = nil
     end
 
