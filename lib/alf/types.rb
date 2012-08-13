@@ -40,6 +40,7 @@ module Alf
     require_relative 'types/tuple_expression'
     require_relative 'types/tuple_computation'
     require_relative 'types/keys'
+    require_relative 'types/tuple'
 
     # Install all types on Alf now
     constants.each do |s|

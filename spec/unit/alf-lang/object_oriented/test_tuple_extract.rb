@@ -15,6 +15,10 @@ module Alf
           subject.should eq(:name => "Jones")
         end
 
+        it 'extends the resulting Hash with Tuple' do
+          subject.should be_a(Tuple)
+        end
+
         it 'is aliased as tuple!' do
           rel.extend(ObjectOriented.new(rel))
           rel.tuple!.should eq(:name => "Jones")
@@ -31,7 +35,7 @@ module Alf
         end
 
         it 'yields if a block' do
-          subject{ 12 }.should eq(12)
+          subject{ {:id => 12} }.should eq({:id => 12})
         end
       end
 

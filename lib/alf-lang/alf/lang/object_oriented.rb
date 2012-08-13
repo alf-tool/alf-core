@@ -104,7 +104,7 @@ module Alf
         end
         tuple ||= yield if block_given?
         raise NoSuchTupleError unless tuple or block_given?
-        tuple
+        Tuple(tuple)
       end
       alias :'tuple!' :tuple_extract
 

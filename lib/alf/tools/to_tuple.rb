@@ -13,7 +13,7 @@ module Alf
     def to_tuple(expr, &bl)
       tuple = ToTuple.apply(expr)
       tuple = Hash[tuple.map(&bl)] if bl
-      tuple
+      tuple.extend(Types::Tuple)
     end
 
     # Myrrha rules for converting objects to relations

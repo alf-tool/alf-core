@@ -25,5 +25,9 @@ module Alf
       }.should eq(:name => "ALF", :version => "FOO")
     end
 
+    it 'yields Tuple-extended hashes' do
+      to_tuple(:name => "Alf").should be_a(Alf::Tuple)
+    end
+
   end
 end
