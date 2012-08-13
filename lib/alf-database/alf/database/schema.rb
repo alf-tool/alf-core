@@ -33,6 +33,10 @@ module Alf
         end
       end
 
+      def tuple_extract(*args, &bl)
+        query(*args, &bl).tuple_extract
+      end
+
       def relvar(expr = nil, path = nil, line = nil, &block)
         Relvar.new database, parse(expr, path, line, &block)
       end

@@ -98,7 +98,8 @@ module Alf
     extend Forwardable
     def_delegators :default_schema, :parse,
                                     :query,
-                                    :relvar
+                                    :relvar,
+                                    :tuple_extract
 
     def optimize(*args, &bl)
       optimizer.call parse(*args, &bl)

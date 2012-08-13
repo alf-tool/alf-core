@@ -15,6 +15,13 @@ module Alf
         Tuple Hash[renaming.to_hash.each_pair.map{|o,n| [n, self[o]] }]
       end
 
+      def extend(computation)
+        computation = TupleComputation.coerce(computation)
+        scope       = TupleScope.new(self)
+        computed    = computation.evaluate(scope)
+        Tuple self.merge(computed)
+      end
+
     end # module Tuple
   end # module Types
 end # module Alf
