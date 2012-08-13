@@ -7,8 +7,8 @@ module Alf
 
       subject{ tuple.extend(:up => lambda{ name.upcase }) }
 
-      it 'returns a Hash' do
-        subject.should eq(:name => "Alf", :up => "ALF")
+      it 'returns an extended Hash' do
+        subject.should eq(:id => 1, :name => "Alf", :up => "ALF")
       end
 
       it 'extends it with Tuple' do

@@ -17,7 +17,7 @@ module Alf
 
       def extend(computation)
         computation = TupleComputation.coerce(computation)
-        scope       = TupleScope.new(self)
+        scope       = Tools::TupleScope.new(self)
         computed    = computation.evaluate(scope)
         Tuple self.merge(computed)
       end
