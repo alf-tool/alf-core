@@ -100,6 +100,12 @@ module Alf
     Alf::Tools.to_tuple(*args, &bl)
   end
 
+  # Coerces some arguments to a heading.
+  #
+  def self.Heading(*args, &bl)
+    Alf::Heading.coerce(*args, &bl)
+  end
+
   class << self
     alias :relation :Relation
   end

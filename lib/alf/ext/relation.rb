@@ -9,3 +9,7 @@ end
 def Tuple(*args, &bl)
   Alf::Tuple(*args, &bl)
 end
+
+def Heading(*args, &bl)
+  Alf::Heading(*args, &bl)
+end
