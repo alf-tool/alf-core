@@ -15,6 +15,15 @@ module Alf
         Tuple Hash[renaming.to_hash.each_pair.map{|o,n| [n, self[o]] }]
       end
 
+      def rename(renaming)
+        renaming = Renaming.coerce(renaming)
+        Tuple renaming.rename_tuple(self)
+      end
+
+      def coerce(heading)
+        Tuple Heading.coerce(heading).coerce(self)
+      end
+
       def extend(computation)
         computation = TupleComputation.coerce(computation)
         scope       = Tools::TupleScope.new(self)

@@ -87,7 +87,9 @@ module Alf
 
       # Coerces a single tuple
       def coerce(tuple)
-        coercer = lambda{|(k,v)| [k, Tools.coerce(v, self[k])] }
+        coercer = lambda{|(k,v)|
+          [k, attributes.has_key?(k) ? Tools.coerce(v, self[k]) : v]
+        }
         if tuple.is_a?(Hash)
           Tuple(tuple, &coercer)
         else
