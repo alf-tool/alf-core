@@ -76,6 +76,11 @@ module Alf
       cardinality == 0
     end
 
+    # Returns the relation heading
+    def heading
+      @heading ||= Heading.new Engine::InferHeading.new(self).first
+    end
+
     # Returns the attribute list, provided the relation contains at least one tuple.
     def attribute_list
       AttrList.new tuples.first.keys
