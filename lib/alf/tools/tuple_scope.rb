@@ -59,6 +59,10 @@ module Alf
         __build(@tuple = tuple) if tuple
       end
 
+      def query(&bl)
+        @parent.query(&bl)
+      end
+
     end # class TupleScope
   end # module Tools
 end # module Alf

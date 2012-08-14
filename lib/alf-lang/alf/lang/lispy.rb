@@ -23,6 +23,10 @@ module Alf
           @context
         end
 
+        def query(&bl)
+          context.query(&bl)
+        end
+
       end # OwnMethods
 
       # Creates a language instance
