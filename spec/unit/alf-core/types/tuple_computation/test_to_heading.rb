@@ -5,7 +5,8 @@ module Alf
     let(:computation){
       TupleComputation[
         :big? => lambda{ status > 20 },
-        :who  => lambda{ "#{first} #{last}" }
+        :who  => lambda{ "#{first} #{last}" },
+        :sub  => Relation::DUM
       ]
     }
 
@@ -20,7 +21,7 @@ module Alf
     end
 
     context 'with currenttype inference' do
-      it{ should eq(Heading[:big? => Object, :who => Object]) }
+      it{ should eq(Heading[:big? => Object, :who => Object, :sub => Relation]) }
     end
 
   end

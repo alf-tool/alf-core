@@ -121,7 +121,7 @@ module Alf
       # @return [AttrList] a computed heading from static analysis of expressions
       def to_heading
         h = Hash[computation.map{|name,expr|
-          [name, expr.infer_type]
+          [name, expr.is_a?(TupleExpression) ? expr.infer_type : expr.class]
         }]
         Heading[h]
       end
