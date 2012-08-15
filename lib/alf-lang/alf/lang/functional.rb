@@ -34,12 +34,12 @@ module Alf
         end
       end
 
-      def var_ref(name)
-        _operator_output Operator::VarRef.new(context, name)
-      end
-
       Aggregator.listen do |name, clazz|
         def_aggregator_method(name, clazz)
+      end
+
+      def var_ref(name)
+        _operator_output Operator::VarRef.new(context, name)
       end
 
       Operator.listen do |name, clazz|
@@ -48,14 +48,6 @@ module Alf
 
       def allbut(operand, attributes)
         project(operand, attributes, :allbut => true)
-      end
-
-      def to_relation(operand)
-        Tools.to_relation(operand)
-      end
-
-      def to_tuple(operand)
-        Tools.to_tuple(operand)
       end
 
     end
