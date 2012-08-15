@@ -7,6 +7,18 @@ module Alf
       def connect(conn_spec, &bl)
         Connection.connect(conn_spec, self, &bl)
       end
+
+      def native(as, native_name)
+        define_method(as) do
+          var_ref(native_name)
+        end
+      end
+
+      def namespace(name, schema)
+        define_method(name) do
+          Lang::Lispy.new(context, [ schema ])
+        end
+      end
     end
 
     def self.included(mod)
