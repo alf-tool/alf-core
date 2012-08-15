@@ -51,16 +51,16 @@ module Alf
           self
         end
 
+        def query
+          @parent.query(yield)
+        end
+
       end # module OwnMethods
 
       # Creates a scope instance
       def initialize(tuple = nil, extensions = [], parent = nil)
         super [ OwnMethods ] + extensions, parent
         __build(@tuple = tuple) if tuple
-      end
-
-      def query(&bl)
-        @parent.query(&bl)
       end
 
     end # class TupleScope

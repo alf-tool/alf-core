@@ -23,8 +23,28 @@ module Alf
           @context
         end
 
-        def query(&bl)
-          context.query(&bl)
+        def parse(expr = nil, path = nil, line = nil, &block)
+          if (expr && block) || (expr.nil? and block.nil?)
+            raise ArgumentError, "Either `expr` or `block` should be specified"
+          end
+          expr = evaluate(expr, path, line, &block) if block or expr.is_a?(String)
+          expr = __send__(expr)                     if expr.is_a?(Symbol)
+          expr
+        end
+
+        def query(expr = nil, path = nil, line = nil, &block)
+          expr = parse(expr, path, line, &block)
+          expr = context.optimizer.call(expr)
+          cog  = context.compiler.call(expr)
+          Tools.to_relation(cog)
+        end
+
+        def tuple_extract(*args, &bl)
+          query(*args, &bl).tuple_extract
+        end
+
+        def relvar(expr = nil, path = nil, line = nil, &block)
+          Relvar.new context, parse(expr, path, line, &block)
         end
 
       end # OwnMethods

@@ -12,6 +12,7 @@ module Alf
   # Connection.autodetect and Connection.recognizes? for details.
   #
   class Connection
+    extend Forwardable
 
     class << self
       include Tools::Registry
@@ -111,36 +112,10 @@ module Alf
       Lang::Lispy.new(self, [ @schema ])
     end
 
-    def parse(expr = nil, path = nil, line = nil, &block)
-      if (expr && block) || (expr.nil? and block.nil?)
-        raise ArgumentError, "Either `expr` or `block` should be specified"
-      end
-
-      # parse through a scope unless a Symbol
-      if block or expr.is_a?(String)
-        expr = scope.evaluate(expr, path, line, &block)
-      end
-
-      # Special VarRef case
-      expr = scope.__send__(expr) if expr.is_a?(Symbol)
-
-      expr
-    end
-
-    def query(expr = nil, path = nil, line = nil, &block)
-      expr = parse(expr, path, line, &block)
-      expr = optimizer.call(expr)
-      cog  = compiler.call(expr)
-      Tools.to_relation(cog)
-    end
-
-    def tuple_extract(*args, &bl)
-      query(*args, &bl).tuple_extract
-    end
-
-    def relvar(expr = nil, path = nil, line = nil, &block)
-      Relvar.new self, parse(expr, path, line, &block)
-    end
+    def_delegators :scope, :parse,
+                           :query,
+                           :relvar,
+                           :tuple_extract
 
     ### third-party helpers
 
