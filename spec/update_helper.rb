@@ -40,18 +40,18 @@ module Helpers
   end
 
   def suppliers
-    var_ref(:suppliers, db_context)
+    a_var_ref(:suppliers, db_context)
   end
 
   def parts
-    var_ref(:parts, db_context)
+    a_var_ref(:parts, db_context)
   end
 
   def some_tuples
     [ { :id => 1 }, { :id => 2 } ]
   end
 
-  def var_ref(name, context)
+  def a_var_ref(name, context)
     Alf::Operator::VarRef.new(context, name)
   end
 

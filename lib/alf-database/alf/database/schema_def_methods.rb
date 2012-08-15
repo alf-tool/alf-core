@@ -80,7 +80,7 @@ module Alf
             define_method(name){ defn.scope(context) }
           end
           me.relvars.each_pair do |name, defn|
-            defn ||= lambda{ ::Alf::Operator::VarRef.new(context, name) }
+            defn ||= lambda{ Operator::VarRef.new(context, name) }
             define_method(name, &defn)
           end
         }

@@ -34,6 +34,10 @@ module Alf
         end
       end
 
+      def var_ref(name)
+        _operator_output Operator::VarRef.new(context, name)
+      end
+
       Aggregator.listen do |name, clazz|
         def_aggregator_method(name, clazz)
       end
