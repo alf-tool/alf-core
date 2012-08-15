@@ -4,7 +4,7 @@ module Alf
 
       [ :tautology, :contradiction,
         :in, :eq, :neq,
-        :lt, :lte, :gt, :gte ].each do |m|
+        :lt, :lte, :gt, :gte, :between ].each do |m|
 
         define_method(m) do |*args|
           Predicate.send(m, *args)

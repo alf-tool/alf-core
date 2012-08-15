@@ -103,6 +103,12 @@ module Alf
     it_should_behave_like "a predicate"
   end
 
+  describe "Predicate.between" do
+    subject{ Predicate.between(:x, 2, 3) }
+
+    it_should_behave_like "a predicate"
+  end
+
   describe "Predicate.and" do
     subject{ Predicate.and(Predicate.eq(:x, 12), Predicate.eq(:y, 12)) }
 

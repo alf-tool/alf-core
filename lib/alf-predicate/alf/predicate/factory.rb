@@ -89,6 +89,11 @@ module Alf
         _factor_predicate([:gte, sexpr(left), sexpr(right)])
       end
 
+      def between(middle, lower_bound, upper_bound)
+        _factor_predicate [:and, [:gte, sexpr(middle), sexpr(lower_bound)],
+                                 [:lte, sexpr(middle), sexpr(upper_bound)]]
+      end
+
       def literal(literal)
         _factor_predicate([:literal, literal])
       end
