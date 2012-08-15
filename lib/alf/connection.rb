@@ -73,9 +73,6 @@ module Alf
     # The connection specification
     attr_reader :conn_spec
 
-    # The scope that defines the global database scope
-    attr_reader :scope
-
     # Creates an connection instance, wired to the specified folder.
     #
     # @param [String] folder path to the folder to use as dataset source.
