@@ -31,7 +31,7 @@ Alf implements a Domain Specific Language (DSL), for writing and executing relat
 * In Ruby scripts and programs
 
 <pre><code class="ruby">require 'alf'
-db = Alf::Database.examples
+db = Alf.examples
 db.evaluate{
   (restrict :suppliers, ->{ city == 'London' })
 }

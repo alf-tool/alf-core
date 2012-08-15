@@ -117,8 +117,8 @@ module Alf
     def initialize(*args)
       args.each do |arg|
         case arg
-          when Connection, Database then @context = arg
-          when Hash                 then @options = arg
+          when Connection then @context = arg
+          when Hash       then @options = arg
           else
             @input = arg if arg
         end

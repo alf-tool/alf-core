@@ -1,16 +1,16 @@
 require 'spec_helper'
 describe "Alf's alf command / " do
 
-  Dir[_('shell/**/*.cmd', __FILE__)].each do |input|
-    cmd = wlang(File.readlines(input).first, binding)
+  Path.relative('shell').glob('**/*.cmd').each do |input|
+    cmd = wlang(input.readlines.first, binding)
     specify{ cmd.should =~ /^alf / }
   
-    describe "#{File.basename(input)}: #{cmd}" do
-      let(:argv)     { Quickl.parse_commandline_args(cmd)[1..-1] }
-      let(:stdout)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stdout") }
-      let(:stderr)   { File.join(File.dirname(input), "#{File.basename(input, ".cmd")}.stderr") }
-      let(:stdout_expected) { File.exists?(stdout) ? wlang(File.read(stdout), binding) : "" }
-      let(:stderr_expected) { File.exists?(stderr) ? wlang(File.read(stderr), binding) : "" }
+    describe "#{input.basename}: #{cmd}" do
+      let(:argv)            { Quickl.parse_commandline_args(cmd)[1..-1] }
+      let(:stdout)          { input.sub_ext('.stdout') }
+      let(:stderr)          { input.sub_ext('.stderr') }
+      let(:stdout_expected) { stdout.exists? ? wlang(stdout.read, binding) : "" }
+      let(:stderr_expected) { stderr.exists? ? wlang(stderr.read, binding) : "" }
 
       before{ 
         $oldstdout = $stdout 
@@ -27,9 +27,9 @@ describe "Alf's alf command / " do
       
       specify{
         begin 
-          dir = File.expand_path('../__database__', __FILE__)
+          dir = Path.relative('__database__')
           main = Alf::Shell::Main.new
-          main.database = Alf::Database.folder(dir)
+          main.database = Alf.connect(dir)
           main.run(argv, __FILE__)
         rescue => ex
           begin

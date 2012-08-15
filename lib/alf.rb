@@ -24,8 +24,8 @@ require_relative "alf-lang/alf/lang"
 require_relative 'alf/relation'
 require_relative 'alf/relvar'
 
+require_relative 'alf/schema'
 require_relative 'alf/connection'
-require_relative 'alf-database/alf/database'
 
 require_relative 'alf/ext'
 
@@ -36,17 +36,35 @@ module Alf
 
   # Connects to a database instance from `args`.
   #
-  # Alf::Database's autodetection system is used here to choose which database
+  # Alf::Connection's autodetection system is used here to choose which connection
   # handler to use.
   #
-  # @param [Array] args arguments for the Database constructor
+  # @param [Array] args arguments for the Connection constructor
   # @return [Connection] an connection instance
   # @raise [ArgumentError] when no registered class recognizes the arguments
   #
-  # @see Database.connect for more about recognized formats.
+  # @see Connection.connect for more about recognized formats.
   #
   def self.connect(*args, &block)
-    Database.connect(*args, &block)
+    Connection.connect(*args, &block)
+  end
+
+  # Connects to the examples database.
+  #
+  # @return [Connection] a connection to the examples database
+  #
+  # @see connect for more about recognized formats.
+  def self.examples(&bl)
+    Connection.connect Path.backfind('examples/suppliers_and_parts'), &bl
+  end
+
+  # Connects to the default database.
+  #
+  # @return [Connection] a connection to the default database
+  #
+  # @see connect for more about recognized formats.
+  def self.default(&bl)
+    Connection.connect Path.pwd, &bl
   end
 
   # Returns a Reader on `source` denoting a physical representation of a relation.

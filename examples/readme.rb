@@ -1,20 +1,23 @@
 require 'alf'
 
-db  = Alf::Database.examples
+db = Alf.examples
 
-puts grouped = db.query{
-  group(:suppliers, [:sid, :name, :status], :in_that_city)
+grouped = db.query{
+  group(suppliers, [:sid, :name, :status], :in_that_city)
 }
+puts grouped
 
-puts db.query{
+grouped2 = db.query{
   extend(grouped, how_many:   ->{ in_that_city.count }, 
                   avg_status: ->{ in_that_city.avg{ status } })
 }
+puts grouped2
 
-puts summarized = db.query{
-  summary = summarize(:suppliers, [:city], how_many: count{ sid }, avg_status: avg{ status })
+summarized = db.query{
+  summary = summarize(suppliers, [:city], how_many: count{ sid }, avg_status: avg{ status })
   join(grouped, summary)
 }
+puts summarized
 
 require 'json'
 puts summarized.to_json

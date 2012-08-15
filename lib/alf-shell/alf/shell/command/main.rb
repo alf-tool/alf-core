@@ -42,7 +42,7 @@ module Alf
 
       end # class << self
 
-      # Database instance to use to get base iterators
+      # Connection instance to use to get base iterators
       attr_accessor :database
 
       # The reader to use when stdin is used as operand
@@ -55,7 +55,7 @@ module Alf
       attr_reader :rendering_options
 
       # Creates a command instance
-      def initialize(db = Database.default)
+      def initialize(db = Alf.default)
         @database = db
         @rendering_options = {}
       end
@@ -75,12 +75,12 @@ module Alf
         end
 
         opt.on('--examples', "Use the example database for database") do
-          @database = Database.examples
+          @database = Alf.examples
         end
 
         opt.on('--db=DB',
                "Set the database to use") do |value|
-          @database = Database.connect(value)
+          @database = Alf.connect(value)
         end
 
         @input_reader = :rash
@@ -148,7 +148,7 @@ module Alf
           database.query(argv.first)
         else
           op = yield
-          database.connection.compiler.call(op) if op
+          database.compiler.call(op) if op
         end
       end
 

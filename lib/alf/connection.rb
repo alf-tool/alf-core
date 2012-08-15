@@ -52,6 +52,19 @@ module Alf
         clazz
       end
 
+      # Automatically connects to a given database.
+      #
+      # @param [Hash] conn_spec a connection specification
+      # @param [Module] schema a module for scope definition
+      # @return [Connection] a connection instance
+      def connect(conn_spec, schema = Schema.native)
+        clazz = autodetect(conn_spec)
+        conn  = clazz.new(conn_spec, schema)
+        block_given? ? yield(conn) : conn
+      ensure
+        conn.close if conn and block_given?
+      end
+
       # Returns true _args_ can be used for building an connection instance,
       # false otherwise.
       #
@@ -76,8 +89,9 @@ module Alf
     # Creates an connection instance, wired to the specified folder.
     #
     # @param [String] folder path to the folder to use as dataset source.
-    def initialize(conn_spec)
+    def initialize(conn_spec, schema = Schema.native)
       @conn_spec = conn_spec
+      @schema    = schema
     end
 
     # Closes this connection, freeing resources if needed.
@@ -86,15 +100,65 @@ module Alf
     def close
     end
 
+    # Alias for close
+    def disconnect
+      close
+    end
+
+    ### high-level user-oriented API
+
+    def scope
+      Lang::Lispy.new(self, [ @schema ])
+    end
+
+    def parse(expr = nil, path = nil, line = nil, &block)
+      if (expr && block) || (expr.nil? and block.nil?)
+        raise ArgumentError, "Either `expr` or `block` should be specified"
+      end
+
+      # parse through a scope unless a Symbol
+      if block or expr.is_a?(String)
+        expr = scope.evaluate(expr, path, line, &block)
+      end
+
+      # Special VarRef case
+      expr = scope.__send__(expr) if expr.is_a?(Symbol)
+
+      expr
+    end
+
+    def query(expr = nil, path = nil, line = nil, &block)
+      expr = parse(expr, path, line, &block)
+      expr = optimizer.call(expr)
+      cog  = compiler.call(expr)
+      Tools.to_relation(cog)
+    end
+
+    def tuple_extract(*args, &bl)
+      query(*args, &bl).tuple_extract
+    end
+
+    def relvar(expr = nil, path = nil, line = nil, &block)
+      Relvar.new self, parse(expr, path, line, &block)
+    end
+
+    ### third-party helpers
+
     # Returns an optimizer instance
     def optimizer
-      Optimizer.new.
-                register(Optimizer::Restrict.new, Operator::Relational::Restrict)
+      Optimizer.new.register(Optimizer::Restrict.new, Operator::Relational::Restrict)
     end
 
     # Returns a compiler instance
     def compiler
       Engine::Compiler.new
+    end
+
+    ### low-level, adapter-oriented API
+
+    # Returns true if `name` is known, false otherwise
+    def known?(name)
+      !iterator(name).nil? rescue false
     end
 
     # Returns a low-level Iterator for a given named variable
@@ -130,10 +194,6 @@ module Alf
     # Delete from the relvar called `name`
     def delete(name, predicate)
       raise NotSupportedError, "Unable to delete from `#{name}`"
-    end
-
-    # Returns a native schema instance
-    def native_schema_def
     end
 
   end # class Connection

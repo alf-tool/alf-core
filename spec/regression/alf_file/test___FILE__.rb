@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Reader::AlfFile do
     subject{
-      Reader::AlfFile.new(File.expand_path("../__FILE__.alf", __FILE__), Database.examples)
+      Reader::AlfFile.new(File.expand_path("../__FILE__.alf", __FILE__), Alf.examples)
     }
 
     specify {

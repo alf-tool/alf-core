@@ -26,34 +26,24 @@ module Alf
         end
       end
 
-      def native_schema_def
-        s = Database::SchemaDef.new
-        Path(folder).glob('*').each do |file|
-          if f = find_file(file.basename)
-            s.relvar f.basename.rm_ext.to_sym
-          end
-        end
-        s
+    protected
+
+      # Returns the folder on which this connection works
+      def folder
+        Path(conn_spec)
       end
 
-      protected
-
-        # Returns the folder on which this connection works
-        def folder
-          Path(conn_spec)
+      # Finds a specific file by name
+      #
+      # @param [String] name the name of a dataset
+      # @return [Path] path to an existing file if it exists, nil otherwise.
+      def find_file(name)
+        if (explicit = folder/name.to_s).file?
+          explicit
+        else
+          folder.glob("#{name}.*").find{|f| f.file?}
         end
-
-        # Finds a specific file by name
-        #
-        # @param [String] name the name of a dataset
-        # @return [Path] path to an existing file if it exists, nil otherwise.
-        def find_file(name)
-          if (explicit = folder/name.to_s).file?
-            explicit
-          else
-            folder.glob("#{name}.*").find{|f| f.file?}
-          end
-        end
+      end
 
       Connection.register(:folder, self)
     end # class Folder

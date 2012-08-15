@@ -38,9 +38,9 @@ module Helpers
 
   def examples_database(&bl)
     if bl
-      Class.new(Alf::Database, &bl).connect(examples_path)
+      raise NotImplementedError, "Block no longer supported"
     else
-      Alf::Database.examples
+      Alf.examples
     end
   end
 

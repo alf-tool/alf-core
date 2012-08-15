@@ -6,7 +6,7 @@ module Alf
     # A .alf file simply contains a query expression in the Lispy DSL. This reader decodes
     # and compiles the expression and delegates the enumeration to the obtained operator.
     #
-    # Note that an Database must be wired at creation time. A NoSuchRelvarError will
+    # Note that a connection must be wired at creation time. A NoSuchRelvarError will
     # certainly occur otherwise.
     #
     class AlfFile < Reader

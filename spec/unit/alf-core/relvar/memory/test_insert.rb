@@ -3,11 +3,11 @@ module Alf
   class Relvar
     describe Memory, "insert" do
 
-      let(:context){ examples_database }
+      let(:db){ examples_database }
 
       let(:value){ Relation(:id => [1, 2, 3]) }
 
-      let(:relvar){ Relvar::Memory.new(context, value) }
+      let(:relvar){ Relvar::Memory.new(db, value) }
 
       subject{
         relvar.insert(arg)
