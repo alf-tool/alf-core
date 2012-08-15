@@ -1,7 +1,6 @@
 module Alf
   module Lang
     module ObjectOriented
-      include Support
 
       def self.new(self_operand)
         Module.new{
@@ -110,12 +109,29 @@ module Alf
 
     private
 
+      def _with_ordering(options, &bl)
+        case options
+        when Array, Ordering
+          _with_ordering(:sort => options, &bl)
+        when Hash
+          ordering = options.delete(:order) || options.delete(:sort)
+          ordering = Ordering.coerce(ordering || [])
+          yield(ordering)
+        else
+          ::Kernel.raise "Invalid ordering `#{options}`"
+        end
+      end
+
       def _compile
         Alf::Engine::Compiler.new.call(_self_operand)
       end
 
       def _self_operand
         self
+      end
+
+      def _operator_output(op)
+        op
       end
 
     end # module ObjectOriented

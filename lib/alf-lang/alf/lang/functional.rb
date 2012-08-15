@@ -1,7 +1,6 @@
 module Alf
   module Lang
     module Functional
-      include Support
 
       class << self
         def def_aggregator_method(name, clazz)
@@ -13,7 +12,7 @@ module Alf
         def def_operator_method(name, clazz)
           define_method(name) do |*args|
             operands, arguments = args[0...clazz.arity], args[clazz.arity..-1]
-            _operator_output clazz.new(operands, *arguments)
+            clazz.new(operands, *arguments)
           end
         end
       end
@@ -39,7 +38,7 @@ module Alf
       end
 
       def var_ref(name)
-        _operator_output Operator::VarRef.new(context, name)
+        Operator::VarRef.new(context, name)
       end
 
       Operator.listen do |name, clazz|
