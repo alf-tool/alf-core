@@ -12,7 +12,7 @@ module Alf
         def def_operator_method(name, clazz)
           define_method(name) do |*args|
             operands, arguments = args[0...clazz.arity], args[clazz.arity..-1]
-            clazz.new(operands, *arguments)
+            _op_wrap clazz.new(operands.map{|op| _op_unwrap(op) }, *arguments)
           end
         end
       end
@@ -47,6 +47,16 @@ module Alf
 
       def allbut(operand, attributes)
         project(operand, attributes, :allbut => true)
+      end
+
+    private
+
+      def _op_wrap(expr)
+        expr
+      end
+
+      def _op_unwrap(expr)
+        expr
       end
 
     end
