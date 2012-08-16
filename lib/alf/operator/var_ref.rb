@@ -27,6 +27,10 @@ module Alf
         context.scope
       end
 
+      def to_s
+        Tools.to_lispy(self) rescue super
+      end
+
     end # class VarRef
   end # module Operator
 end # module Operator
