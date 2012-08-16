@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe InferHeading do
 
-    let(:input){ suppliers_var_ref }
+    let(:input){ suppliers }
     subject{ InferHeading.run(argv) }
 
     context "the default config" do

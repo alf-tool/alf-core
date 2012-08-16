@@ -19,10 +19,10 @@ module Alf
         apply(expr.operand, predicate)
       end
 
-      ### VarRef, recursion end :-)
+      ### Outside, recursion end :-)
 
-      def on_var_ref(expr, predicate)
-        expr.context.delete(expr.name, predicate)
+      def on_outside(expr, predicate)
+        expr.delete(predicate)
       end
 
       ### non relational

@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Unwrap do
 
-    let(:input){ suppliers_var_ref }
+    let(:input){ suppliers }
     subject{ Unwrap.run(argv) }
 
     before do

@@ -16,20 +16,39 @@ module Alf
         dup.set!(:keys => Alf::Keys.coerce(keys))
       end
 
+      def with_name(name)
+        dup.set!(:name => name.to_sym)
+      end
+
       def each
       end
 
+      def name
+        @attributes[:name] || "a_fake_operand"
+      end
+
       def heading
-        raise NotSupportedError unless @attributes[:heading]
-        @attributes[:heading]
+        @attributes[:heading] || context.heading(name)
       end
 
       def keys
         @attributes[:keys] || Keys::EMPTY
       end
 
+      def delete(predicate)
+        context.delete(name, predicate)
+      end
+
+      def insert(inserted)
+        context.insert(name, inserted)
+      end
+
+      def update(updating, predicate)
+        context.update(name, updating, predicate)
+      end
+
       def to_lispy
-        "a_fake_operand"
+        name
       end
 
     protected

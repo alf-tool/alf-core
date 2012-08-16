@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Summarize do
 
-    let(:input){ suppliers_var_ref }
+    let(:input){ suppliers }
     subject{ Summarize.run(argv) }
 
     before do

@@ -14,7 +14,7 @@ module Alf
 
     it 'bounds the result correctly' do
       subject.expr.should be_a(Operator::Relational::Restrict)
-      subject.expr.operand.should be_a(Operator::VarRef)
+      subject.expr.operand.should eq(relvar.expr)
     end
 
   end

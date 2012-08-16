@@ -6,10 +6,10 @@ module Alf
         raise NotSupportedError
       end
 
-      ### VarRef, recursion end :-)
+      ### Outside, recursion end :-)
 
-      def on_var_ref(expr, updating, predicate)
-        expr.context.update(expr.name, updating, predicate)
+      def on_outside(expr, updating, predicate)
+        expr.update(updating, predicate)
       end
 
       ### non relational

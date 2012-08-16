@@ -10,7 +10,7 @@ module Alf
 
       def native(as, native_name)
         define_method(as) do
-          var_ref(native_name)
+          context.iterator(native_name)
         end
       end
 
@@ -31,7 +31,7 @@ module Alf
 
         def method_missing(name, *args, &bl)
           return super unless args.empty? and bl.nil?
-          context.known?(name) ? var_ref(name) : super
+          context.known?(name) ? context.iterator(name) : super
         end
       }
     end

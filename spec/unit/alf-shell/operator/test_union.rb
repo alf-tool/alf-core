@@ -2,8 +2,8 @@ require 'spec_helper'
 module Alf::Shell::Operator
   describe Union do
 
-    let(:left) { suppliers_var_ref }
-    let(:right){ suppliers_var_ref }
+    let(:left) { suppliers }
+    let(:right){ suppliers }
     subject{ Union.run(argv) }
 
     context "the default config" do

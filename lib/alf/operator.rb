@@ -65,7 +65,6 @@ end # module Alf
 require_relative 'operator/class_methods'
 require_relative 'operator/signature'
 
-require_relative 'operator/var_ref'
 require_relative 'operator/nullary'
 require_relative 'operator/unary'
 require_relative 'operator/binary'

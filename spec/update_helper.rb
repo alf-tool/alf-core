@@ -7,6 +7,10 @@ class UpdateContext
   end
   attr_reader :requests
 
+  def iterator(name)
+    Alf::Tools::FakeOperand.new(self).with_name(name)
+  end
+
   def heading(name)
     case name
     when :suppliers then Alf::Heading[:sid => Integer, :name  => String]
@@ -40,19 +44,15 @@ module Helpers
   end
 
   def suppliers
-    a_var_ref(:suppliers, db_context)
+    db_context.iterator(:suppliers)
   end
 
   def parts
-    a_var_ref(:parts, db_context)
+    db_context.iterator(:parts)
   end
 
   def some_tuples
     [ { :id => 1 }, { :id => 2 } ]
-  end
-
-  def a_var_ref(name, context)
-    Alf::Operator::VarRef.new(context, name)
   end
 
   def insert(expr, tuples)

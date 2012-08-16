@@ -15,12 +15,6 @@ module Alf
         end
       end
 
-      ### VarRef, end of recursion :-)
-
-      def on_var_ref(expr)
-        Leaf.new(expr)
-      end
-
       ### non relational
 
       def on_autonum(expr)

@@ -7,10 +7,10 @@ module Alf
         raise NotSupportedError
       end
 
-      ### VarRef, recursion end :-)
+      ### Outside, recursion end :-)
 
-      def on_var_ref(expr, inserted)
-        expr.context.insert(expr.name, inserted)
+      def on_outside(expr, inserted)
+        expr.insert(inserted)
       end
 
       ### non relational

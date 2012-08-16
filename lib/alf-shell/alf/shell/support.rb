@@ -14,7 +14,7 @@ module Alf
         operands = [ stdin_operand ] + Array(argv)
         operands = operands[(operands.size - size)..-1] if size
         operands = operands.map{|arg|
-          arg = Alf::Operator::VarRef.new(database, arg.to_sym) if arg.is_a?(String)
+          arg = database.iterator(arg.to_sym) if arg.is_a?(String)
           arg
         }
       end

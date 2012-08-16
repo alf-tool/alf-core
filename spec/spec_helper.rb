@@ -44,8 +44,8 @@ module Helpers
     end
   end
 
-  def suppliers_var_ref
-    Alf::Operator::VarRef.new(examples_database, :suppliers)
+  def suppliers
+    examples_database.iterator(:suppliers)
   end
 
   def an_operand
