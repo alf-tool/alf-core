@@ -47,7 +47,7 @@ module Alf
         def_aggregator_method(name, clazz)
       end
 
-      Operator.listen do |name, clazz|
+      Algebra::Operator.listen do |name, clazz|
         def_operator_method(name, clazz)
       end
 

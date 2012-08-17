@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Restrict.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Restrict)
+      subject.should be_a(Alf::Algebra::Restrict)
       subject.operands.should eq([input])
     end
 

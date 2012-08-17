@@ -17,7 +17,7 @@ module Alf
     end
 
     it "should work on a Module" do
-      tools.rubycase_name(Alf::Operator::NonRelational).should == :non_relational
+      tools.rubycase_name(Algebra::NonRelational).should == :non_relational
     end
 
   end

@@ -4,14 +4,14 @@ module Alf
     describe Search do
 
       let(:search){ 
-        Search.new(processor, Operator::Relational::Project)
+        Search.new(processor, Algebra::Project)
       }
 
       let(:new_operand){ an_operand }
 
       let(:processor){
         lambda{|expr, s|
-          raise unless expr.is_a?(Operator::Relational::Project)
+          raise unless expr.is_a?(Algebra::Project)
           raise unless s == search
           new_operand
         }
@@ -35,7 +35,7 @@ module Alf
         let(:expr){ clip(project(an_operand, [:foo]), [:foo]) }
 
         specify "the top one should be a Clip" do
-          subject.should be_a(Operator::NonRelational::Clip)
+          subject.should be_a(Algebra::Clip)
         end
 
         specify "the internal one has been seen by processor" do

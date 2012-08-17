@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Coerce.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::NonRelational::Coerce)
+      subject.should be_a(Alf::Algebra::Coerce)
       subject.operands.should eq([input])
     end
 

@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Wrap.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Wrap)
+      subject.should be_a(Alf::Algebra::Wrap)
       subject.operands.should eq([input])
     end
 

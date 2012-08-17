@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Summarize.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Summarize)
+      subject.should be_a(Alf::Algebra::Summarize)
       subject.operands.should eq([input])
       subject.by.should eq(Alf::AttrList[:a])
       subject.summarization.should eq(Alf::Summarization[:time_sum => "sum{ time }"])

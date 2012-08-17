@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Extend.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Extend)
+      subject.should be_a(Alf::Algebra::Extend)
       subject.operands.should eq([input])
     end
 

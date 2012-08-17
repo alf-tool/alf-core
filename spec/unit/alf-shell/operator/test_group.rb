@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Group.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Group)
+      subject.should be_a(Alf::Algebra::Group)
       subject.operands.should eq([input])
     end
 

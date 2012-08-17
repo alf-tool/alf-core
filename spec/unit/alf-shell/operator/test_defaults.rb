@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Defaults.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::NonRelational::Defaults)
+      subject.should be_a(Alf::Algebra::Defaults)
       subject.defaults.should eq(Alf::TupleComputation[:a => Alf::TupleExpression["1"], :c => Alf::TupleExpression["'blue'"]])
       subject.operands.should eq([input])
     end

@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Ungroup.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Ungroup)
+      subject.should be_a(Alf::Algebra::Ungroup)
       subject.operands.should eq([input])
     end
 

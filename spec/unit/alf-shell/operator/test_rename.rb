@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Rename.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Rename)
+      subject.should be_a(Alf::Algebra::Rename)
       subject.operands.should eq([input])
     end
 

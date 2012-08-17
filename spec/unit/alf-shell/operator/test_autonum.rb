@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Autonum.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::NonRelational::Autonum)
+      subject.should be_a(Alf::Algebra::Autonum)
       subject.operands.should eq([input])
     end
 

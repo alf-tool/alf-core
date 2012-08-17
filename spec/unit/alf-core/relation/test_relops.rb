@@ -14,7 +14,7 @@ module Alf
     ]}
 
     it 'should have all relational operators installed' do
-      Alf::Operator.each do |op|
+      Algebra::Operator.each do |op|
         rel1.should respond_to(op.rubycase_name)
       end
     end

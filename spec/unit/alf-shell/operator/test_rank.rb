@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Rank.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Rank)
+      subject.should be_a(Alf::Algebra::Rank)
       subject.operands.should eq([input])
     end
 

@@ -5,7 +5,7 @@ module Alf::Shell::Operator
     subject{ Generator.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::NonRelational::Generator)
+      subject.should be_a(Alf::Algebra::Generator)
       subject.operands.should eq([])
     end
 

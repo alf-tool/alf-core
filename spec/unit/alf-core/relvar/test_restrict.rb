@@ -13,7 +13,7 @@ module Alf
     end
 
     it 'bounds the result correctly' do
-      subject.expr.should be_a(Operator::Relational::Restrict)
+      subject.expr.should be_a(Algebra::Restrict)
       subject.expr.operand.should eq(relvar.expr)
     end
 

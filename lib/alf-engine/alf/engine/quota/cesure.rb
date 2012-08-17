@@ -21,18 +21,18 @@ module Alf
 
       protected
 
-      # (see Operator::Cesure#project)
+      # (see Cesure#project)
       def project(tuple)
         @by.project_tuple(tuple, false)
       end
 
-      # (see Operator::Cesure#start_cesure)
+      # (see Cesure#start_cesure)
       def start_cesure(key, receiver)
         @scope = tuple_scope unless @scope
         @aggs  = @summarization.least
       end
 
-      # (see Operator::Cesure#accumulate_cesure)
+      # (see Cesure#accumulate_cesure)
       def accumulate_cesure(tuple, receiver)
         @aggs = @summarization.happens(@aggs, @scope.__set_tuple(tuple))
         receiver.call tuple.merge(@summarization.finalize(@aggs))

@@ -25,9 +25,9 @@ module Alf
       # end
 
       specify "optimized leads to a restrict[initial[restrict[...]]]" do
-        optimized.should be_a(Operator::Relational::Restrict)
+        optimized.should be_a(Algebra::Restrict)
         middle.should be_a(subject.class)
-        inside.should be_a(Operator::Relational::Restrict)
+        inside.should be_a(Algebra::Restrict)
       end
 
       specify "middle's signature is kept unchanged" do

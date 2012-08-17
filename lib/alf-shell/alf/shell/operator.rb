@@ -3,20 +3,6 @@ module Alf
   module Shell
     module Operator
 
-      # Defines a command for `clazz`
-      def self.define_operator(op_name, op_class)
-        superclass = Shell::Operator() do |b|
-          b.callback do |cmd|
-            cmd.operator_class = op_class
-          end
-        end
-        Operator.const_set(::Alf::Support.class_name(op_class), Class.new(superclass))
-      end
-
-      Alf::Operator.listen do |op_name, op_class|
-        define_operator(op_name, op_class)
-      end
-
       module ClassMethods
         extend Forwardable
 
@@ -56,6 +42,21 @@ module Alf
         end
 
       end # module InstanceMethods
+
+
+      # Defines a command for `clazz`
+      def self.define_operator(op_name, op_class)
+        superclass = Shell::Operator() do |b|
+          b.callback do |cmd|
+            cmd.operator_class = op_class
+          end
+        end
+        Operator.const_set(::Alf::Support.class_name(op_class), Class.new(superclass))
+      end
+
+      Algebra::Operator.listen do |op_name, op_class|
+        define_operator(op_name, op_class)
+      end
 
     end # module Operator
   end # module Shell

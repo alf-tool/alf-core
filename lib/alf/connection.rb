@@ -121,7 +121,7 @@ module Alf
 
     # Returns an optimizer instance
     def optimizer
-      Optimizer.new.register(Optimizer::Restrict.new, Operator::Relational::Restrict)
+      Optimizer.new.register(Optimizer::Restrict.new, Algebra::Restrict)
     end
 
     # Returns a compiler instance

@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Quota.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::Relational::Quota)
+      subject.should be_a(Alf::Algebra::Quota)
       subject.operands.should eq([input])
     end
 

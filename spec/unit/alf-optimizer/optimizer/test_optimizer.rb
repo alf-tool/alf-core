@@ -16,8 +16,8 @@ module Alf
         lambda{|expr, search| autonum(search.copy_and_apply(expr), :auto) }
       }
       let(:optimizer){
-        Optimizer.new.register(processor_1, Operator::Relational::Project).
-                      register(processor_2, Operator::Relational::Rename)
+        Optimizer.new.register(processor_1, Algebra::Project).
+                      register(processor_2, Algebra::Rename)
       }
 
       subject{ optimizer.call(expr) }

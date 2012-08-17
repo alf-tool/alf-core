@@ -41,5 +41,5 @@ module Alf
       end
 
     end # module Cesure
-  end # module Operator
+  end # module Engine
 end # module Alf

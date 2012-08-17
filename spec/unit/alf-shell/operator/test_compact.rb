@@ -8,7 +8,7 @@ module Alf::Shell::Operator
     context "the default config" do
       let(:argv){ [input] }
       specify{
-        subject.should be_a(Alf::Operator::NonRelational::Compact)
+        subject.should be_a(Alf::Algebra::Compact)
       }
     end
 

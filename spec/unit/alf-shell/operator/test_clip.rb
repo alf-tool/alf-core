@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Clip.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::NonRelational::Clip)
+      subject.should be_a(Alf::Algebra::Clip)
       subject.attributes.should eq(Alf::AttrList[:a, :b])
       subject.operands.should eq([input])
     end

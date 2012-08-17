@@ -9,7 +9,7 @@ module Alf::Shell::Operator
     context "the default config" do
       let(:argv){ [left, right] }
       specify{
-        subject.should be_a(Alf::Operator::Relational::Union)
+        subject.should be_a(Alf::Algebra::Union)
         subject.operands.should eq([left, right])
       }
     end

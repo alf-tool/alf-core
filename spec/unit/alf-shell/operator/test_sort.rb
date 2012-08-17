@@ -6,7 +6,7 @@ module Alf::Shell::Operator
     subject{ Sort.run(argv) }
 
     before do
-      subject.should be_a(Alf::Operator::NonRelational::Sort)
+      subject.should be_a(Alf::Algebra::Sort)
       subject.operands.should eq([input])
     end
 
