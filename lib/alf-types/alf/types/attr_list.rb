@@ -35,7 +35,7 @@ module Alf
           return arg.to_attr_list if arg.respond_to?(:to_attr_list)
           case arg
           when Array
-            AttrList.new(arg.collect{|s| Tools.coerce(s, AttrName)})
+            AttrList.new(arg.collect{|s| Support.coerce(s, AttrName)})
           else
             raise ArgumentError, "Unable to coerce `#{arg.inspect}` to a projection key"
           end
@@ -252,7 +252,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::AttrList#{Tools.to_ruby_literal(attributes)}"
+        "Alf::AttrList#{Support.to_ruby_literal(attributes)}"
       end
       alias :inspect :to_ruby_literal
 

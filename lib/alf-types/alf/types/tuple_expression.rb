@@ -111,7 +111,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::#{Tools.class_name(self.class)}[#{Tools.to_ruby_literal(has_source_code!)}]"
+        "Alf::#{Support.class_name(self.class)}[#{Support.to_ruby_literal(has_source_code!)}]"
       end
 
       # Returns a string representation of this expression

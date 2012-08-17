@@ -5,7 +5,7 @@ module Alf
   module Operator
 
     class << self
-      include Tools::Registry
+      include Support::Registry
 
       # Installs the class methods needed on all operators
       def included(mod)
@@ -29,7 +29,7 @@ module Alf
     end
 
     def to_s
-      Tools.to_lispy(self) rescue super
+      Support.to_lispy(self) rescue super
     end
 
     def ==(other)

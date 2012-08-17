@@ -44,7 +44,7 @@ module Alf
             if arg.all?{|a| a.is_a?(Array)}
               Ordering.new(arg)
             else
-              symbolized = arg.collect{|s| Tools.coerce(s, Symbol)}
+              symbolized = arg.collect{|s| Support.coerce(s, Symbol)}
               sliced = symbolized.each_slice(2)
               if sliced.all?{|a,o| [:asc,:desc].include?(o)}
                 Ordering.new sliced.to_a
@@ -138,7 +138,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::Ordering[#{Tools.to_ruby_literal(ordering)}]"
+        "Alf::Ordering[#{Support.to_ruby_literal(ordering)}]"
       end
       alias :inspect :to_ruby_literal
 

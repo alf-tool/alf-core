@@ -15,8 +15,8 @@ module Alf
       }
 
       # before(:all) do
-      #   puts Tools.to_lispy(restriction)
-      #   puts Tools.to_lispy(optimized)
+      #   puts Support.to_lispy(restriction)
+      #   puts Support.to_lispy(optimized)
       # end
 
       specify "optimized is unchanged" do

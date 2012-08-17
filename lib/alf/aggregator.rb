@@ -55,7 +55,7 @@ module Alf
     #   end
     #
     class << self
-      include Tools::Registry
+      include Support::Registry
 
       # Automatically installs factory methods for inherited classes.
       #
@@ -105,7 +105,7 @@ module Alf
     #
     def initialize(options = {}, &block)
       @options = default_options.merge(options)
-      @functor = Tools.coerce(block, TupleExpression)
+      @functor = Support.coerce(block, TupleExpression)
     end
 
     # Returns the default options to use
@@ -134,10 +134,10 @@ module Alf
     # and delegates to _happens.
     #
     # @param [Object] memo the current aggregation value
-    # @param [Tools::TupleScope] a tuple scope bound to the current tuple
+    # @param [Support::TupleScope] a tuple scope bound to the current tuple
     # @return [Object] updated memo value
     def happens(memo, scope)
-      raise unless Tools::TupleScope===scope
+      raise unless Support::TupleScope===scope
       _happens(memo, @functor.evaluate(scope))
     end
 
@@ -159,7 +159,7 @@ module Alf
     # @param [Enumerable<Tuple>] an enumerable of tuples
     # @return [Object] the computed aggregation value
     def aggregate(enum)
-      scope = Tools::TupleScope.new
+      scope = Support::TupleScope.new
       finalize(enum.inject(least){|m,t| happens(m, scope.__set_tuple(t))})
     end
 

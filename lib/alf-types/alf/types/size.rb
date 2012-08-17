@@ -24,7 +24,7 @@ module Alf
         # @return [Size] the coerced size when success
         # @raise [ArgumentError] if the coercion fails
         def coerce(arg)
-          res = Tools.coerce(arg, Integer)
+          res = Support.coerce(arg, Integer)
           if self === res
             res
           else

@@ -34,13 +34,13 @@ module Alf
             arg
           when Array
             Heading.new Hash[arg.each_slice(2).map{|k,v|
-              [ Tools.coerce(k, Symbol),
-                Tools.coerce(v, Module) ]
+              [ Support.coerce(k, Symbol),
+                Support.coerce(v, Module) ]
             }]
           when Hash
             Heading.new Hash[arg.map{|k,v|
-              [ Tools.coerce(k, Symbol),
-                Tools.coerce(v, Module) ]
+              [ Support.coerce(k, Symbol),
+                Support.coerce(v, Module) ]
             }]
           else
             raise ArgumentError, "Unable to coerce #{arg.inspect} to a Heading"
@@ -88,7 +88,7 @@ module Alf
       # Coerces a single tuple
       def coerce(tuple)
         coercer = lambda{|(k,v)|
-          [k, attributes.has_key?(k) ? Tools.coerce(v, self[k]) : v]
+          [k, attributes.has_key?(k) ? Support.coerce(v, self[k]) : v]
         }
         if tuple.is_a?(Hash)
           Tuple(tuple, &coercer)
@@ -194,7 +194,7 @@ module Alf
       def to_ruby_literal
         attributes.empty? ?
           "Alf::Heading::EMPTY" :
-          "Alf::Heading[#{Tools.to_ruby_literal(attributes)[1...-1]}]"
+          "Alf::Heading[#{Support.to_ruby_literal(attributes)[1...-1]}]"
       end
       alias :inspect :to_ruby_literal
 

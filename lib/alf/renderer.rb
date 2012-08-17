@@ -25,7 +25,7 @@ module Alf
   class Renderer
 
     class << self
-      include Tools::Registry
+      include Support::Registry
 
       #
       # Register a renderering class with a given name and description.

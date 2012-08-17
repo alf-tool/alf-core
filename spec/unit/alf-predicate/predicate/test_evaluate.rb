@@ -10,19 +10,19 @@ module Alf
       subject{ predicate.evaluate(scope) }
 
       describe "on x == 2" do
-        let(:scope){ Tools::TupleScope.new(:x => 2) }
+        let(:scope){ Support::TupleScope.new(:x => 2) }
 
         it{ should be_true }
       end
 
       describe "on x == 1" do
-        let(:scope){ Tools::TupleScope.new(:x => 1) }
+        let(:scope){ Support::TupleScope.new(:x => 1) }
 
         it{ should be_true }
       end
 
       describe "on x == 3" do
-        let(:scope){ Tools::TupleScope.new(:x => 3) }
+        let(:scope){ Support::TupleScope.new(:x => 3) }
 
         it{ should be_false }
       end

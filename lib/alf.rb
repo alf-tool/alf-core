@@ -13,7 +13,7 @@ require 'myrrha/coerce'
 
 require_relative "alf-predicate/alf/predicate"
 require_relative 'alf-types/alf/types'
-require_relative 'alf/tools'
+require_relative 'alf-support/alf/support'
 require_relative 'alf/iterator'
 require_relative 'alf/reader'
 require_relative 'alf/renderer'
@@ -101,7 +101,7 @@ module Alf
   #   # loaded through available readers
   #
   def self.Relation(*args, &bl)
-    Alf::Tools.to_relation(*args, &bl)
+    Alf::Support.to_relation(*args, &bl)
   end
 
   # Coerces some arguments to a tuple.
@@ -115,7 +115,7 @@ module Alf
   #   # the same Hash with symbolized keys
   #
   def self.Tuple(*args, &bl)
-    Alf::Tools.to_tuple(*args, &bl)
+    Alf::Support.to_tuple(*args, &bl)
   end
 
   # Coerces some arguments to a heading.

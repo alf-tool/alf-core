@@ -35,7 +35,7 @@ module Alf
       def each
         @operand.each do |tuple|
           yield tuple.merge(Hash[@coercions.map{|k,d|
-            [k, Tools.coerce(tuple[k], d)]
+            [k, Support.coerce(tuple[k], d)]
           }])
         end
       end

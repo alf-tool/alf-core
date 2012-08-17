@@ -31,7 +31,7 @@ module Alf
       # @raise [ArgumentError] when `val` is not recognized
       #
       def coerce(val)
-        Alf::Tools.to_relation(val)
+        Alf::Support.to_relation(val)
       rescue Myrrha::Error
         raise ArgumentError, "Unable to coerce `#{val}` to a Relation"
       end
@@ -106,7 +106,7 @@ module Alf
     # Returns a  literal representation of this relation
     def to_ruby_literal
       "Alf::Relation[" +
-        tuples.map{|t| Tools.to_ruby_literal(t)}.join(', ') + "]"
+        tuples.map{|t| Support.to_ruby_literal(t)}.join(', ') + "]"
     end
     alias :inspect :to_ruby_literal
 

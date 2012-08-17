@@ -20,8 +20,8 @@ module Alf
 
       # before(:all) do
       #   puts "\n--------"
-      #   puts Tools.to_lispy(restriction)
-      #   puts Tools.to_lispy(optimized)
+      #   puts Support.to_lispy(restriction)
+      #   puts Support.to_lispy(optimized)
       # end
 
       specify "optimized leads to a restrict[initial[restrict[...]]]" do

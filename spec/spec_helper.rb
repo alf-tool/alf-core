@@ -49,7 +49,7 @@ module Helpers
   end
 
   def an_operand
-    Alf::Tools::FakeOperand.new
+    Alf::Support::FakeOperand.new
   end
 
 end

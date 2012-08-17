@@ -22,7 +22,7 @@ module Alf
       res.should eq(:big? => false, :who => "Bill Jones")
     end
 
-    let(:scope){ Tools::TupleScope.new(:who => "alf") }
+    let(:scope){ Support::TupleScope.new(:who => "alf") }
 
     describe "coerce" do
 

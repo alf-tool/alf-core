@@ -6,7 +6,7 @@ module Alf
     module Experimental
 
       class << self
-        include Tools::Registry
+        include Support::Registry
 
         def included(mod)
           super

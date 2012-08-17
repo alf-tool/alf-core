@@ -16,7 +16,7 @@ module Alf
 
       # (see Relvar#affect)
       def affect(tuples)
-        @value = Tools.to_relation(tuples)
+        @value = Support.to_relation(tuples)
       end
 
       # (see Relvar#insert)

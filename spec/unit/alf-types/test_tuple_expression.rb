@@ -14,7 +14,7 @@ module Alf
     end
 
     let(:scope) {
-      Tools::TupleScope.new(:status => 10)
+      Support::TupleScope.new(:status => 10)
     }
 
     describe "coerce" do

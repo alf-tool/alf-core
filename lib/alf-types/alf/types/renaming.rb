@@ -31,8 +31,8 @@ module Alf
             arg
           when Hash
             Renaming.new Hash[arg.map{|k,v|
-              [ Tools.coerce(k, AttrName),
-                Tools.coerce(v, AttrName) ]
+              [ Support.coerce(k, AttrName),
+                Support.coerce(v, AttrName) ]
             }]
           when Array
             coerce(Hash[*arg])
@@ -128,7 +128,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::Renaming[#{Tools.to_ruby_literal(renaming)}]"
+        "Alf::Renaming[#{Support.to_ruby_literal(renaming)}]"
       end
       alias :inspect :to_ruby_literal
 

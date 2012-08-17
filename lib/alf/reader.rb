@@ -29,7 +29,7 @@ module Alf
     include Iterator
 
     class << self
-      include Tools::Registry
+      include Support::Registry
 
       # Registers a reader class associated with specific file extensions.
       #

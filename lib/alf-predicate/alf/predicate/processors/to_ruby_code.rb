@@ -43,7 +43,7 @@ module Alf
       alias :on_gte :on_dyadic
 
       def on_in(sexpr)
-        "#{Tools.to_ruby_literal(sexpr.values)}.include?(#{apply(sexpr.var_ref)})"
+        "#{Support.to_ruby_literal(sexpr.values)}.include?(#{apply(sexpr.var_ref)})"
       end
 
       def on_native(sexpr)
@@ -56,7 +56,7 @@ module Alf
       end
 
       def on_literal(sexpr)
-        Tools.to_ruby_literal(sexpr.last)
+        Support.to_ruby_literal(sexpr.last)
       end
 
     protected

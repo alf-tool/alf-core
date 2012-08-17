@@ -20,7 +20,7 @@ module Alf
       end
 
       def tuple_scope(tuple = nil)
-        Tools::TupleScope.new tuple, [], main_scope
+        Support::TupleScope.new tuple, [], main_scope
       end
 
     end # module Cog

@@ -77,7 +77,7 @@ module Alf
       end
 
       def to_relation
-        Tools.to_relation(_self_operand)
+        Support.to_relation(_self_operand)
       end
 
       def to_array(options = {})

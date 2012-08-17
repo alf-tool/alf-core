@@ -45,7 +45,7 @@ module Alf
     #
     # @return [Relation] a relation value.
     def value
-      Tools.to_relation _compile
+      Support.to_relation _compile
     end
     alias :to_relation :value
 
@@ -80,7 +80,7 @@ module Alf
     end
 
     def to_lispy
-      Tools.to_lispy(expr)
+      Support.to_lispy(expr)
     end
 
   private

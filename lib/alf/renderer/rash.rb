@@ -24,7 +24,7 @@ module Alf
       private
 
       def lit(x)
-        Tools.to_ruby_literal(x)
+        Support.to_ruby_literal(x)
       end
 
       Renderer.register(:rash, "as ruby hashes", self)

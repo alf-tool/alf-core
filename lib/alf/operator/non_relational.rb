@@ -3,7 +3,7 @@ module Alf
     module NonRelational
 
       class << self
-        include Tools::Registry
+        include Support::Registry
 
         def included(mod)
           super

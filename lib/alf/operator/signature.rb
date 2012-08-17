@@ -72,7 +72,7 @@ module Alf
           name, domain, = siginfo
           clazz.send(:attr_reader, name)
           clazz.send(:define_method, :"#{name}=") do |val|
-            instance_variable_set(:"@#{name}", Tools.coerce(val, domain))
+            instance_variable_set(:"@#{name}", Support.coerce(val, domain))
           end
           clazz.send(:private, :"#{name}=")
         }

@@ -35,8 +35,8 @@ module Alf
             coerce(Hash[*arg])
           when Hash
             Summarization.new Hash[arg.map{|k,v|
-              [ Tools.coerce(k, AttrName),
-                Tools.coerce(v, Aggregator) ]
+              [ Support.coerce(k, AttrName),
+                Support.coerce(v, Aggregator) ]
             }]
           else
             raise ArgumentError, "Invalid arg `#{arg}` for Summarization()"
@@ -69,7 +69,7 @@ module Alf
 
       # Computes the resulting aggregation from aggs if tuple happens.
       #
-      # @return [Tools::TupleScope] a scope bound to the current tuple
+      # @return [Support::TupleScope] a scope bound to the current tuple
       def happens(aggs, scope)
         Hash[@aggregations.map{|k,v|
           [k, v.happens(aggs[k], scope)]
@@ -90,7 +90,7 @@ module Alf
       # @param [Enumerable] enum an enumeration of tuples
       # @returns [Tuple] The summarization of `enum`
       def summarize(enum)
-        scope = Tools::TupleScope.new
+        scope = Support::TupleScope.new
         finalize(enum.inject(least){|m,t| happens(m, scope.__set_tuple(t))})
       end
 
@@ -132,7 +132,7 @@ module Alf
         map = Hash[aggregations.map{|k,v|
           [k.to_s, "#{v.has_source_code!}"]
         }]
-        "Alf::Summarization[#{Tools.to_ruby_literal(map)}]"
+        "Alf::Summarization[#{Support.to_ruby_literal(map)}]"
       end
 
       # Returns a string representation of this expression

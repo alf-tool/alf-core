@@ -15,7 +15,7 @@ module Alf
     extend Forwardable
 
     class << self
-      include Tools::Registry
+      include Support::Registry
 
       # Register an connection class under a specific name.
       #

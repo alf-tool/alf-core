@@ -10,7 +10,7 @@ module Alf
             cmd.operator_class = op_class
           end
         end
-        Operator.const_set(Tools.class_name(op_class), Class.new(superclass))
+        Operator.const_set(::Alf::Support.class_name(op_class), Class.new(superclass))
       end
 
       Alf::Operator.listen do |op_name, op_class|

@@ -15,7 +15,7 @@ module Alf
     # itself, thus not considered as part of the public API, and may therefore evolve
     # at any time. In other words, this class is not intended to be directly outside Alf.
     #
-    class Lispy < Tools::Scope
+    class Lispy < Support::Scope
 
       module OwnMethods
 
@@ -36,7 +36,7 @@ module Alf
           expr = parse(expr, path, line, &block)
           expr = context.optimizer.call(expr)
           cog  = context.compiler.call(expr)
-          Tools.to_relation(cog)
+          Support.to_relation(cog)
         end
 
         def tuple_extract(*args, &bl)

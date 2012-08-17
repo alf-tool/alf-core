@@ -46,8 +46,8 @@ module Alf
                 v = TupleExpression.coerce(v) if v.is_a?(Proc)
                 [k, v]
               else
-                [ Tools.coerce(k, AttrName),
-                  Tools.coerce(v, TupleExpression) ]
+                [ Support.coerce(k, AttrName),
+                  Support.coerce(v, TupleExpression) ]
               end
             }]
           when Array
@@ -85,7 +85,7 @@ module Alf
       # @param [Hash] tuple a Tuple instance
       # @return [Object] the resulting tuple
       def call(tuple)
-        evaluate(Tools::TupleScope.new(tuple))
+        evaluate(Support::TupleScope.new(tuple))
       end
       alias :[] :call
 
@@ -137,7 +137,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::TupleComputation[#{Tools.to_ruby_literal(computation)}]"
+        "Alf::TupleComputation[#{Support.to_ruby_literal(computation)}]"
       end
       alias :inspect :to_ruby_literal
 
