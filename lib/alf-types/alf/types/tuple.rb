@@ -3,7 +3,8 @@ module Alf
     module Tuple
 
       def project(attr_list)
-        Tuple Hash[attr_list.to_a.map{|k| [k, self[k]] }]
+        attrs = self.keys & attr_list.to_a
+        Tuple Hash[attrs.map{|k| [k, self[k]] }]
       end
 
       def allbut(attr_list)

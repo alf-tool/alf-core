@@ -15,6 +15,10 @@ module Alf
         subject.should be_a(Tuple)
       end
 
+      it 'does not create nil for missing entries' do
+        tuple.project([:none]).should eq({})
+      end
+
     end
   end
 end
