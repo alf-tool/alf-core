@@ -12,7 +12,7 @@ require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'
 
 require_relative "alf-predicate/alf/predicate"
-require_relative 'alf/types'
+require_relative 'alf-types/alf/types'
 require_relative 'alf/tools'
 require_relative 'alf/iterator'
 require_relative 'alf/reader'
