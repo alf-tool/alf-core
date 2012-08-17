@@ -26,6 +26,20 @@ module Alf
       s.to_s.gsub(/[A-Z]/){|x| "_#{x.downcase}"}[1..-1]
     end
 
+    # Converts `name` to a rubycase name, as a Symbol.
+    #
+    # Example:
+    #   rubycase_name(Alf)        => :alf
+    #   rubycase_name(HelloWorld) => :hello_world
+    #
+    # @param [Object] any object, typically a Class, Symbol or String
+    # @return [Symbol] a symbol capturing `name` in ruby-like casing
+    def rubycase_name(name)
+      name = class_name(name) if name.is_a?(Module)
+      name = ruby_case(name.to_s)
+      name.to_sym
+    end
+
     # Symbolizes all keys of `tuple`
     #
     # @param  [Hash]  tuple a tuple, represented by a Hash
