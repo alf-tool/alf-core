@@ -17,6 +17,7 @@ require_relative 'alf-support/alf/support'
 require_relative 'alf-aggregator/alf/aggregator'
 require_relative 'alf/iterator'
 require_relative 'alf-io/alf/io'
+require_relative 'alf-csv/alf/csv'
 require_relative 'alf/operator'
 require_relative "alf-lang/alf/lang"
 
