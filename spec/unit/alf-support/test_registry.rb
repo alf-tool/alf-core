@@ -47,6 +47,17 @@ module Alf
         end
       end
 
+      describe 'when listen after some components have already been registered' do
+        before do
+          clazz.register(Integer, clazz)
+        end
+        it 'calls the listener with registered components at listening time' do
+          seen = []
+          clazz.listen{|n,c| seen << [n,c] }
+          seen.should eq([[:integer, Integer]])
+        end
+      end
+
     end
   end
 end

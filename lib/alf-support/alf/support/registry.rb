@@ -8,6 +8,10 @@ module Alf
 
       def listen(&listener)
         listeners << listener
+        registered.each do |what|
+          method_name, factory = Registry.decode_registered(what)
+          listener.call(method_name, factory)
+        end
       end
 
       def registered
@@ -20,12 +24,7 @@ module Alf
       end
 
       def register(what, registry)
-        method_name, factory = nil, nil
-        Array(what).each do |arg|
-          method_name ||= arg if arg.is_a?(Symbol)
-          factory     ||= arg if arg.is_a?(Class)
-        end
-        method_name = Registry.extract_name(factory) unless method_name
+        method_name, factory = Registry.decode_registered(what)
         (class << registry; self; end).
           send(:define_method, method_name) do |*args, &block|
             factory.new(*args, &block)
@@ -38,8 +37,14 @@ module Alf
 
     private
 
-      def self.extract_name(factory)
-        Support.ruby_case(Support.class_name(factory)).to_sym
+      def self.decode_registered(what)
+        method_name, factory = nil, nil
+        Array(what).each do |arg|
+          method_name ||= arg if arg.is_a?(Symbol)
+          factory     ||= arg if arg.is_a?(Class)
+        end
+        method_name = Support.rubycase_name(factory) unless method_name
+        [method_name, factory]
       end
 
     end # module Registry
