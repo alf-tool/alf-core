@@ -85,7 +85,6 @@ module Alf
           raise ArgumentError, "Invalid arg `arg` for Aggregator()"
         end
       end
-
     end # class << self
 
     # @return [Hash] Aggregation options
@@ -203,3 +202,12 @@ module Alf
 
   end # class Aggregator
 end # module Alf
+require_relative 'aggregator/count'
+require_relative 'aggregator/sum'
+require_relative 'aggregator/min'
+require_relative 'aggregator/max'
+require_relative 'aggregator/avg'
+require_relative 'aggregator/variance'
+require_relative 'aggregator/stddev'
+require_relative 'aggregator/collect'
+require_relative 'aggregator/concat'

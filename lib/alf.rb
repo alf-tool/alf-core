@@ -14,11 +14,11 @@ require 'myrrha/coerce'
 require_relative "alf-predicate/alf/predicate"
 require_relative 'alf-types/alf/types'
 require_relative 'alf-support/alf/support'
+require_relative 'alf-aggregator/alf/aggregator'
 require_relative 'alf/iterator'
 require_relative 'alf/reader'
 require_relative 'alf/renderer'
 require_relative 'alf/operator'
-require_relative 'alf/aggregator'
 require_relative "alf-lang/alf/lang"
 
 require_relative 'alf/relation'
