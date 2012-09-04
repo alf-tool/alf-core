@@ -8,7 +8,7 @@ module Alf
         Connection.connect(conn_spec, self, &bl)
       end
 
-      def native(as, native_name)
+      def native(as, native_name = as)
         define_method(as) do
           context.iterator(native_name)
         end
