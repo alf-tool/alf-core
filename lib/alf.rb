@@ -20,6 +20,7 @@ require_relative 'alf-io/alf/io'
 require_relative 'alf-csv/alf/csv'
 require_relative 'alf-algebra/alf/algebra'
 require_relative "alf-lang/alf/lang"
+require_relative "alf-engine/alf/engine"
 
 require_relative 'alf/relation'
 require_relative 'alf/relvar'
@@ -133,6 +134,5 @@ module Alf
 end # module Alf
 
 require_relative 'alf-shell/alf/shell'
-require_relative "alf-engine/alf/engine"
 require_relative "alf-optimizer/alf/optimizer"
 require_relative "alf-update/alf/update"
