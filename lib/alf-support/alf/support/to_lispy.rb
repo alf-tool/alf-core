@@ -86,13 +86,13 @@ module Alf
         cmdname  = v.class.rubycase_name
         oper, args, opts = v.class.signature.collect_on(v)
         args = opts.empty? ? (oper + args) : (oper + args + [ opts ])
-        args = args.map{|arg| r.coerce(arg)}
+        args = args.map{|arg| r.coerce(arg) }
         "#{cmdname}(#{args.join(', ')})"
       end
 
       # Let's assume to to_ruby_literal will make the job
       r.fallback(Object) do |v, _|
-        Support.to_ruby_literal(v)
+        Support.to_ruby_literal(v) rescue v.inspect
       end
 
     end # ToLispy
