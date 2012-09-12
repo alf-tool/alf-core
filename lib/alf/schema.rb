@@ -14,9 +14,9 @@ module Alf
         end
       end
 
-      def namespace(name, schema)
+      def namespace(name, *schemas)
         define_method(name) do
-          Lang::Lispy.new(context, [ schema ])
+          Lang::Lispy.new(context, schemas)
         end
       end
     end
