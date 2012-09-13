@@ -2,8 +2,8 @@ module Alf
   module Update
     class Updater < Lang::Compiler
 
-      def not_supported(*args)
-        raise NotSupportedError
+      def not_supported(expr, *args)
+        raise NotSupportedError, "Unable to compile #{expr} for update"
       end
 
       ### Outside, recursion end :-)

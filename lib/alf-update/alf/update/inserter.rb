@@ -4,7 +4,7 @@ module Alf
       include Lang::Functional
 
       def not_supported(*args)
-        raise NotSupportedError
+        raise NotSupportedError, "Unable to compile #{expr} for insert"
       end
 
       ### Outside, recursion end :-)
