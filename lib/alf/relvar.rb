@@ -47,6 +47,18 @@ module Alf
       true
     end
 
+    # Raises a Alf::FactAssertionError unless the relvar is empty
+    def empty!
+      raise FactAssertionError unless empty?
+      true
+    end
+
+    # Raises a Alf::FactAssertionError if the relvar is empty
+    def not_empty!
+      raise FactAssertionError if empty?
+      true
+    end
+
     # Returns the relation value that this variable currently holds.
     #
     # @return [Relation] a relation value.

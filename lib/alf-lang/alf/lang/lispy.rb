@@ -40,7 +40,7 @@ module Alf
         end
 
         def assert!(*args, &bl)
-          ::Kernel.raise Alf::FactAssertionError if relvar(*args, &bl).empty?
+          relvar(*args, &bl).not_empty!
         end
 
         def tuple_extract(*args, &bl)
