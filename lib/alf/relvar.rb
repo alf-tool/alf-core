@@ -41,6 +41,12 @@ module Alf
       _compile.each(&bl)
     end
 
+    # Returns true if this relvar is empty, false otherwise
+    def empty?
+      each{ return false }
+      true
+    end
+
     # Returns the relation value that this variable currently holds.
     #
     # @return [Relation] a relation value.
