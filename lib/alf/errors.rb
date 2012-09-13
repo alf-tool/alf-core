@@ -4,5 +4,6 @@ module Alf
   class NoSuchSchemaError < Error; end
   class NoSuchRelvarError < Error; end
   class NoSuchTupleError < Error; end
+  class FactAssertionError < Error; end
   class CoercionError < Error; end
 end

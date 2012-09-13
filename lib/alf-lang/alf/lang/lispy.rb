@@ -39,6 +39,10 @@ module Alf
           Support.to_relation(cog)
         end
 
+        def assert!(*args, &bl)
+          ::Kernel.raise Alf::FactAssertionError if relvar(*args, &bl).empty?
+        end
+
         def tuple_extract(*args, &bl)
           query(*args, &bl).tuple_extract
         end
