@@ -115,6 +115,8 @@ module Alf
     def_delegators :scope, :parse,
                            :query,
                            :assert!,
+                           :deny!,
+                           :fact!,
                            :relvar,
                            :tuple_extract
 

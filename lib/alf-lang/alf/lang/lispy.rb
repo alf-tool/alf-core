@@ -43,6 +43,16 @@ module Alf
           relvar(*args, &bl).not_empty!
         end
 
+        def fact!(*args, &bl)
+          relvar(*args, &bl).tuple_extract
+        rescue NoSuchTupleError
+          Kernel.raise ::Alf::FactAssertionError
+        end
+
+        def deny!(*args, &bl)
+          relvar(*args, &bl).empty!
+        end
+
         def tuple_extract(*args, &bl)
           query(*args, &bl).tuple_extract
         end
