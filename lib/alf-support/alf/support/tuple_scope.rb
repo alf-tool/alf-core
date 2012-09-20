@@ -55,6 +55,10 @@ module Alf
           @parent.query(yield)
         end
 
+        def tuple_extract
+          @parent.tuple_extract(yield)
+        end
+
       end # module OwnMethods
 
       # Creates a scope instance
