@@ -31,12 +31,12 @@ module Alf
           Size.coerce("10").should eq(10)
         end
 
-        it 'should raise ArgumentError on negative integers' do
-          lambda{ Size.coerce("-1") }.should raise_error(ArgumentError)
+        it 'should raise Myrrha::Error on negative integers' do
+          lambda{ Size.coerce("-1") }.should raise_error(Myrrha::Error)
         end
 
-        it 'should raise ArgumentError on non integers' do
-          lambda{ Size.coerce("hello") }.should raise_error(ArgumentError)
+        it 'should raise Myrrha::Error on non integers' do
+          lambda{ Size.coerce("hello") }.should raise_error(Myrrha::Error)
         end
 
       end # coerce
@@ -64,7 +64,7 @@ module Alf
         it 'raise an ArgumentError on non coercable' do
           lambda{ 
             Size.from_argv(["hello"])
-          }.should raise_error(ArgumentError)
+          }.should raise_error(Myrrha::Error)
         end
 
       end

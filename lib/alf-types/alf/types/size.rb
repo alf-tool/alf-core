@@ -4,35 +4,13 @@ module Alf
     # Defines a Size domain, as a (non strictly) positive integer.
     #
     class Size < Integer
-      extend Myrrha::Domain
+      extend Myrrha::Domain::SByC.new(Integer, [], lambda{|i| i >= 0})
 
-      # The size predicate
-      PREDICATE = lambda{|i| i >= 0}
+      coercions do |c|
+        c.upon(Object){|s,t| new Support.coerce(s, Integer) }
+      end
 
       class << self
-
-        # Returns the domain predicate.
-        #
-        # @return [Proc] the domain predicate as a Proc object
-        def predicate
-          PREDICATE
-        end
-
-        # Coerces `arg` to a size
-        #
-        # @param [Object] arg any value coercable to an Integer
-        # @return [Size] the coerced size when success
-        # @raise [ArgumentError] if the coercion fails
-        def coerce(arg)
-          res = Support.coerce(arg, Integer)
-          if self === res
-            res
-          else
-            raise ArgumentError, "Invalid value `#{arg}` for Size()"
-          end
-        rescue Alf::CoercionError
-          raise ArgumentError, "Invalid value `#{arg}` for Size()"
-        end
 
         # Coerces commandline arguments to a Size.
         #
