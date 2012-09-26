@@ -18,7 +18,12 @@ module Alf
 
       subject{ AttrList.coerce(arg) }
 
-      describe "when passed a AttrList" do
+      describe "when passed an AttrList" do
+        let(:arg){ AttrList.new [:a, :b] }
+        it{ should be(arg) }
+      end
+
+      describe "when passed a a list of attribute names as Symbols" do
         let(:arg){ [:a, :b] } 
         it{ should eq(AttrList.new(arg)) }
       end
@@ -36,15 +41,10 @@ module Alf
         }
       end
 
-      describe "when passed an array" do
-        let(:arg){ [:a, :b] }
-        it{ should eq(AttrList.new([:a, :b])) }
-      end
-
       describe "when passed an unrecognized argument" do
         let(:arg){ :not_recognized }
         specify{
-          lambda{ subject }.should raise_error(ArgumentError)
+          lambda{ subject }.should raise_error(Myrrha::Error)
         }
       end
 
@@ -84,7 +84,7 @@ module Alf
       describe "when passed an unrecognized argument" do
         let(:argv){ :not_recognized }
         specify{
-          lambda{ subject }.should raise_error(ArgumentError)
+          lambda{ subject }.should raise_error(Myrrha::Error)
         }
       end
 

@@ -8,38 +8,14 @@ module Alf
     #     list = AttrList[:name, :city]
     #
     class AttrList
+      include Myrrha::Domain::Impl.new([:attributes])
 
-      # @return [Array<AttrName>] the list of attribute names
-      attr_accessor :attributes
-
-      # Creates an AttrList instance.
-      #
-      # @param [Array<AttrName>] the list of attribute names
-      def initialize(attributes)
-        @attributes = attributes
+      coercions do |c|
+        c.delegate :to_attr_list
+        c.coercion(Array){|v,_| AttrList.new(v.map{|a| AttrName.coerce(a) })}
       end
 
       class << self
-
-        # Coerces `arg` to an AttrList.
-        #
-        # Recognizes coercions are:
-        # - AttrList -> self
-        # - Ordering -> the underlying list of attributes
-        # - Array    -> through AttrName coercion of its elements
-        #
-        # @param [Object] arg the value to coerce to an AttrList
-        # @return [AttrList] an attribute list if coercion succeeds
-        # @raise [ArgumentError] if the coercion fails
-        def coerce(arg)
-          return arg.to_attr_list if arg.respond_to?(:to_attr_list)
-          case arg
-          when Array
-            AttrList.new(arg.collect{|s| Support.coerce(s, AttrName)})
-          else
-            raise ArgumentError, "Unable to coerce `#{arg.inspect}` to a projection key"
-          end
-        end
 
         # Coerces a list of names to an AttrList.
         #
@@ -66,14 +42,6 @@ module Alf
       # Build a new AttrList through `map`
       def map(&bl)
         AttrList.new attributes.map(&bl)
-      end
-
-      # Converts this attribute list to an ordering.
-      #
-      # @param [Symbol] :asc or :desc for ordering direction
-      # @return [Ordering] an ordering instance
-      def to_ordering(order = :asc)
-        Ordering.new attributes.map{|arg| [arg, order]}
       end
 
       # Splits a tuple in two parts according `allbut`.
@@ -246,6 +214,14 @@ module Alf
       # @return [AttrList] return self
       def to_attr_list
         self
+      end
+
+      # Converts this attribute list to an ordering.
+      #
+      # @param [Symbol] :asc or :desc for ordering direction
+      # @return [Ordering] an ordering instance
+      def to_ordering(order = :asc)
+        Ordering.new attributes.map{|arg| [arg, order]}
       end
 
       # Returns a ruby literal for this attribute list.
