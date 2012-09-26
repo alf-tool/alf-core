@@ -9,6 +9,7 @@ module Alf
     #
     class AttrList
       include Myrrha::Domain::Impl.new([:attributes])
+      include Support::OrderedSet
 
       coercions do |c|
         c.delegate :to_attr_list
@@ -26,11 +27,6 @@ module Alf
         end
 
       end # class << self
-
-      # Build a new AttrList through `map`
-      def map(&bl)
-        AttrList.new attributes.map(&bl)
-      end
 
       # Splits a tuple in two parts according `allbut`.
       #
@@ -86,52 +82,6 @@ module Alf
         AttrList.new(allbut ? attributes - attrs : attributes & attrs)
       end
 
-      # Computes an Attrlist as a set intersection with another attribute list.
-      #
-      # @param [AttrList] other another attribute list
-      # @return [AttrList] a list containing attributes common to self and other
-      def &(other)
-        AttrList.new(attributes & AttrList.coerce(other).attributes)
-      end
-
-      # Computes an Attrlist as a set union with another attribute list.
-      #
-      # @param [AttrList] other another attribute list
-      # @return [AttrList] a list containing attributes from either self or other
-      def |(other)
-        AttrList.new(attributes | AttrList.coerce(other).attributes)
-      end
-
-      # Computes an Attrlist as a set difference with another attribute list.
-      #
-      # @param [AttrList] other another attribute list
-      # @return [AttrList] a list containing attributes from self only
-      def -(other)
-        AttrList.new(attributes - AttrList.coerce(other).attributes)
-      end
-
-      # Check if `attr_name` is included in this list.
-      #
-      # @param [AttrName] an attribute name
-      # @return [Boolean] true if this attribute is included, false otherwise
-      def include?(attr_name)
-        attributes.include?(attr_name)
-      end
-
-      # Returns the size of this attribute list.
-      #
-      # @return [Integer] the number of attributes in the list
-      def size
-        attributes.size
-      end
-
-      # Returns true if this attribute list is empty, false otherwise
-      #
-      # @return [Boolean] whether this attribute list is emtpy
-      def empty?
-        attributes.empty?
-      end
-
       # Compares this attribute list with `other` on a set basis.
       #
       # @param [AttrList] other another attribute list
@@ -173,30 +123,6 @@ module Alf
         !((self & other).empty?) || (empty? && other.empty?)
       end
 
-      # Checks equality with another attribute list.
-      #
-      # @param [Object] other another attribute list
-      # @return [Boolean] true if `other` is an attribute list and contains
-      #         the same attributes, in the same order
-      def ==(other)
-        other.is_a?(AttrList) && (other.attributes.to_set == attributes.to_set)
-      end
-      alias :eql? :==
-
-      # Returns an hash code.
-      #
-      # @return [Integer] an hash code for this attribute list
-      def hash
-        @hash ||= attributes.to_set.hash
-      end
-
-      # Converts to an array of attribute names.
-      #
-      # @return [Array<AttrName>] and array of attribute names
-      def to_a
-        attributes.dup
-      end
-
       # Converts to an attribute list.
       #
       # @return [AttrList] return self
@@ -221,6 +147,13 @@ module Alf
       alias :inspect :to_ruby_literal
 
       EMPTY = AttrList.new([])
+
+    protected
+
+      def elements
+        attributes
+      end
+
     end # class AttrList
   end # module Types
 end # module Alf
