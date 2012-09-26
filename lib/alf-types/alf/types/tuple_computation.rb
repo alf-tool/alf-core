@@ -12,50 +12,26 @@ module Alf
     #   # => {:big? => false, :who => "Bill Jones"}
     #
     class TupleComputation
+      include Myrrha::Domain::Impl.new([:computation])
 
-      # @return [Hash] a computation hash, mapping AttrName -> TupleExpression
-      attr_reader :computation
-
-      #
-      # Creates a TupleComputation instance
-      #
-      # @param [Hash] computation, a mappping AttrName -> TupleExpression
-      #
-      def initialize(computation)
-        @computation = computation
+      coercions do |c|
+        c.delegate :to_tuple_computation
+        c.upon(Hash){|arg,_|
+          TupleComputation.new Hash[arg.map{|k,v|
+            if AttrName === k
+              [ k, v.is_a?(Proc) ? TupleExpression.coerce(v) : v ]
+            else
+              [ AttrName.coerce(k), TupleExpression.coerce(v) ]
+            end
+          }]
+        }
+        c.upon(Array){|arg,_|
+          coerce(Hash[*arg])
+        }
       end
 
       class << self
 
-        # Coerces `arg` to a tuple computation
-        #
-        # Implemented coercions are
-        # - TupleComputation    -> self
-        # - {name => expr, ...} -> {AttrName[name] => TupleExpression[expr], ...}
-        # - [name, expr, ...]   -> {AttrName[name] => TupleExpression[expr], ...}
-        #
-        # @param [Object] arg the value to coerce to a tuple computation
-        # @return [TupleComputation] the computation when the coercion succeeds
-        def coerce(arg)
-          case arg
-          when TupleComputation
-            arg
-          when Hash
-            TupleComputation.new Hash[arg.map{|k,v|
-              if AttrName === k
-                v = TupleExpression.coerce(v) if v.is_a?(Proc)
-                [k, v]
-              else
-                [ Support.coerce(k, AttrName),
-                  Support.coerce(v, TupleExpression) ]
-              end
-            }]
-          when Array
-            coerce(Hash[*arg])
-          else
-            raise ArgumentError, "Invalid argument `arg` for TupleComputation()"
-          end
-        end
         alias :[] :coerce
 
         # Convert commandline arguments to a tuple computation
@@ -100,30 +76,18 @@ module Alf
         }]
       end
 
-      # Returns a hash code.
-      #
-      # @return [Integer] a hash code for this expression
-      def hash
-        @computation.hash
+      # Returns self
+      def to_tuple_computation
+        self
       end
-
-      # Checks equality with another computation
-      #
-      # @param [TupleComputation] another computation
-      # @return [Boolean] true if self and other are equal, false otherwise
-      def ==(other)
-        other.is_a?(TupleComputation) && (computation == other.computation)
-      end
-      alias :eql? :==
 
       # Converts to a heading.
       #
       # @return [AttrList] a computed heading from static analysis of expressions
       def to_heading
-        h = Hash[computation.map{|name,expr|
+        Heading.new Hash[computation.map{|name,expr|
           [name, expr.is_a?(TupleExpression) ? expr.infer_type : expr.class]
         }]
-        Heading[h]
       end
 
       # Converts to an attribute list.

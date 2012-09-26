@@ -4,42 +4,20 @@ module Alf
     # Encapsulates a Renaming information
     #
     class Renaming
+      include Myrrha::Domain::Impl.new([:renaming])
 
-      # @return [Hash] a renaming mapping as AttrName -> AttrName
-      attr_reader :renaming
-
-      # Creates a renaming instance
-      #
-      # @param [Hash] a renaming mapping as AttrName -> AttrName
-      def initialize(renaming)
-        @renaming = renaming
+      coercions do |c|
+        c.delegate :to_renaming
+        c.coercion(Hash){|arg,_|
+          Renaming.new Hash[arg.map{|k,v| [ AttrName.coerce(k), AttrName.coerce(v) ] }]
+        }
+        c.coercion(Array){|arg,_|
+          coerce(Hash[*arg])
+        }
       end
 
       class << self
 
-        # Coerces `arg` to a renaming
-        #
-        # Implemented coercions are:
-        # - Renaming: self
-        # - {old1 => new1, ...} with AttrName coercions on olds and news
-        # - [old1, new1, ...] with AttrName coercions on olds and news
-        #
-        # @param [Object] arg the value to coerce to a Renaming
-        def coerce(arg)
-          case arg
-          when Renaming
-            arg
-          when Hash
-            Renaming.new Hash[arg.map{|k,v|
-              [ Support.coerce(k, AttrName),
-                Support.coerce(v, AttrName) ]
-            }]
-          when Array
-            coerce(Hash[*arg])
-          else
-            raise ArgumentError, "Invalid argument `#{arg}` for Renaming()"
-          end
-        end
         alias :[] :coerce
 
         # Converts commandline arguments to a renaming.
@@ -103,26 +81,15 @@ module Alf
         renaming.dup
       end
 
+      # Returns self
+      def to_renaming
+        self
+      end
+
       # Returns an attribute list with renaming keys
       def to_attr_list
         AttrList.new renaming.keys
       end
-
-      # Returns the ordering hash code.
-      #
-      # @return [Integer] a hash code for this renaming
-      def hash
-        renaming.hash
-      end
-
-      # Checks equality with another Renaming instance.
-      #
-      # @param [Renaming] other another renaming instance
-      # @return [Boolean] true if self and other are equal, false otherwise
-      def ==(other)
-        other.is_a?(Renaming) && (other.renaming == renaming)
-      end
-      alias :eql? :==
 
       # Returns a ruby literal for this renaming.
       #

@@ -4,44 +4,20 @@ module Alf
     # Encapsulates a Summarization information.
     #
     class Summarization
+      include Myrrha::Domain::Impl.new([:aggregations])
 
-      # @return [Hash] the hash of aggregations, AttrName -> Aggregator
-      attr_reader :aggregations
-
-      # Creates a Summarization instance
-      #
-      # @param [Hash] aggs, aggregations as a mapping AttrName -> Aggregator
-      def initialize(aggs)
-        @aggregations = aggs
+      coercions do |c|
+        c.delegate :to_summarization
+        c.coercion(Hash){|arg,_|
+          Summarization.new Hash[arg.map{|k,v| [ AttrName.coerce(k), Aggregator.coerce(v) ] }]
+        }
+        c.coercion(Array){|arg,_|
+          coerce(Hash[*arg])
+        }
       end
 
       class << self
 
-        # Coerces `arg` to an Summarization
-        #
-        # Implemented coercions are:
-        # - Summarization        -> self
-        # - [attr1, agg1, ...]   -> {AttrName(attr1) -> Aggregator(agg1), ...}
-        # - {attr1 => agg1, ...} -> {AttrName(attr1) -> Aggregator(agg1), ...}
-        #
-        # @param [Object] arg any ruby object to coerce to an Summarization
-        # @return [Summarization] the coerced summarization
-        # @raise [ArgumentError] is the coercion fails
-        def coerce(arg)
-          case arg
-          when Summarization
-            arg
-          when Array
-            coerce(Hash[*arg])
-          when Hash
-            Summarization.new Hash[arg.map{|k,v|
-              [ Support.coerce(k, AttrName),
-                Support.coerce(v, Aggregator) ]
-            }]
-          else
-            raise ArgumentError, "Invalid arg `#{arg}` for Summarization()"
-          end
-        end
         alias :[] :coerce
 
         # Coerces commandline arguments to a Summarization
@@ -94,28 +70,16 @@ module Alf
         finalize(enum.inject(least){|m,t| happens(m, scope.__set_tuple(t))})
       end
 
-      # Returns a hash code.
-      #
-      # @return [Integer] a hash code for this expression
-      def hash
-        aggregations.hash
+      # Returns self
+      def to_summarization
+        self
       end
-
-      # Checks equality with another summarization
-      #
-      # @param [Summarization] another summariation
-      # @return [Boolean] true is self and other are equal, false otherwise
-      def ==(other)
-        other.is_a?(Summarization) && (other.aggregations == aggregations)
-      end
-      alias :eql? :==
 
       # Converts to an Heading.
       #
       # @return [Heading] a heading
       def to_heading
-        h = Hash[aggregations.map{|name,agg| [name, agg.infer_type]}]
-        Heading[h]
+        Heading.new Hash[aggregations.map{|name,agg| [name, agg.infer_type]}]
       end
 
       # Converts to an attribute list.

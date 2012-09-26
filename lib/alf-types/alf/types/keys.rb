@@ -1,7 +1,7 @@
 module Alf
   module Types
     class Keys
-      extend  Forwardable
+      extend Forwardable
 
       attr_reader :keys
 
