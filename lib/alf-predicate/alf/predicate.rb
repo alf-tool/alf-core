@@ -29,16 +29,6 @@ module Alf
       end
       alias :parse :coerce
 
-      def from_argv(argv)
-        if argv.size == 1
-          coerce(argv.first)
-        elsif (argv.size % 2) == 0
-          coerce(Hash[argv.each_slice(2).map{|k,v| [k.to_sym, eval(v)] }])
-        else
-          raise ArgumentError, "Unable to coerce from ARGV `#{argv.inspect}`"
-        end
-      end
-
     private
 
       def _factor_predicate(arg)

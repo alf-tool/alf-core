@@ -55,35 +55,6 @@ module Alf
 
     end # coerce
 
-    describe "from_argv" do
-
-      subject{ TupleExpression.from_argv(argv) }
-
-      describe "with a String (1)" do
-        let(:argv){ %w{true} }
-        it { should be_a(TupleExpression) }
-        specify{
-          subject.evaluate(scope).should eql(true)
-          subject.source.should eq("true")
-        }
-      end
-
-      describe "with a String (2)" do
-        let(:argv){ ["status > 10"] }
-        it { should be_a(TupleExpression) }
-        specify{
-          subject.evaluate(scope).should eql(false)
-          subject.source.should eq("status > 10")
-        }
-      end
-
-      describe "with two String" do
-        let(:argv){ %w{hello world} }
-        specify{ lambda{subject}.should raise_error(ArgumentError) }
-      end
-
-    end # from_argv
-
     describe 'to_ruby_literal' do
 
       it 'should work when code is known' do

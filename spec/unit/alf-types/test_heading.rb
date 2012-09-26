@@ -62,14 +62,6 @@ module Alf
 
     end # []
 
-    describe "from_argv" do
-
-      it "should work with an array of strings" do
-        Heading.from_argv(["name", "String"]).should eq(h1)
-      end
-
-    end
-
     describe "cardinality" do
 
       it "should return the number of pairs" do

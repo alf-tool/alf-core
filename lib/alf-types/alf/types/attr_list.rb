@@ -25,18 +25,6 @@ module Alf
           coerce(args)
         end
 
-        # Builds an AttrList from commandline arguments.
-        #
-        # This method relies on `coerce` and therefore shares its spec.
-        #
-        # @param [Array] argv an array of commandline arguments
-        # @param [Hash] opts convertion options (unused)
-        # @return [AttrList] an attribute list if coercion succeeds
-        # @raise [ArgumentError] if the coercion fails
-        def from_argv(argv, opts = {})
-          coerce(argv)
-        end
-
       end # class << self
 
       # Build a new AttrList through `map`

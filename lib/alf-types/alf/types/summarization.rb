@@ -20,18 +20,6 @@ module Alf
 
         alias :[] :coerce
 
-        # Coerces commandline arguments to a Summarization
-        #
-        # This method reuses `coerce(Array)` and therefore shares its spec.
-        #
-        # @params [Array<String>] argv commandline arguments
-        # @params [Hash] opts coercion options (not used)
-        # @return [Summarization] the coerced summarization
-        # @raise [ArgumentError] is the coercion fails
-        def from_argv(argv, opts = {})
-          coerce(argv)
-        end
-
       end
 
       # Computes the least tuple.

@@ -39,6 +39,7 @@ module Alf
 
   end # module Shell
 end # module Alf
+require_relative 'shell/from_argv'
 require_relative 'shell/support'
 require_relative 'shell/command'
 require_relative 'shell/operator'

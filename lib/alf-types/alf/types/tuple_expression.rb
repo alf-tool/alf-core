@@ -53,21 +53,6 @@ module Alf
         end
         alias :[] :coerce
 
-        # Convert commandline arguments to a tuple expression
-        #
-        # Arguments should either be empty or a singleton. In the former case,
-        # `opts[:default]` is used. In the latter case, the unique argument is
-        # taken as the expression source code and `coerce` is called on it.
-        #
-        # @param [Array] args commandline arguments
-        # @param [Hash] opts coercion options.
-        # @return [TupleExpression] the expression if coercion succeeds
-        # @raise [ArgumentError] if the coercion fails.
-        def from_argv(argv, opts = {})
-          raise ArgumentError if argv.size > 1
-          coerce(argv.first || opts[:default])
-        end
-
       end # class << self
 
       # Evaluates the expression in the context of a TupleScope

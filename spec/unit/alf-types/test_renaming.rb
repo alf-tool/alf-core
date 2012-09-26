@@ -36,27 +36,6 @@ module Alf
 
     end # coerce
 
-    describe "from_argv" do
-
-      subject{ Renaming.from_argv(argv) }
-
-      describe "from an empty Array" do
-        let(:argv){ [] }
-        it{ should eq(Renaming.new({})) }
-      end
-
-      describe "from an Array of two elements" do
-        let(:argv){ ["old", "new"] }
-        it{ should eq(Renaming.new(:old => :new)) }
-      end
-
-      describe "from an Array of four elements" do
-        let(:argv){ ["old", "new", "hello", "world"] }
-        it{ should eq(Renaming.new(:old => :new, :hello => :world)) }
-      end
-
-    end # from_argv
-
     describe "rename_tuple" do
       let(:r){ Renaming.coerce(["old", "new"]) } 
 

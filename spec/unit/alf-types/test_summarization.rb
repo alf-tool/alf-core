@@ -44,23 +44,6 @@ module Alf
 
     end # coerce
 
-    describe "from_argv" do
-
-      subject{ Summarization.from_argv(argv) }
-
-      describe "from an Array" do
-        let(:argv){ ["s", "sum{ qty }", "m", "max{ size }"] }
-        it{ should be_a(Summarization) }
-        specify{ 
-          ([:s, :m] & subject.aggregations.keys).should eq([:s, :m]) 
-          subject.aggregations.values.all?{|v|
-            v.is_a?(Aggregator)
-          }.should be_true
-        }
-      end
-
-    end # from argv
-
     describe "least" do
 
       it 'should invoke least on each aggregator' do

@@ -62,34 +62,6 @@ module Alf
 
     end # []
 
-    describe "from_argv" do
-
-      subject{ AttrList.from_argv(argv) }
-
-      describe "on an empty array" do
-        let(:argv){ [] }
-        it{ should eq(AttrList.new([])) }
-      end
-
-      describe "on a singleton" do
-        let(:argv){ ["hello"] }
-        it{ should eq(AttrList.new([:hello])) }
-      end
-
-      describe "on multiple strings" do
-        let(:argv){ ["hello", "world"] }
-        it{ should eq(AttrList.new([:hello, :world])) }
-      end
-
-      describe "when passed an unrecognized argument" do
-        let(:argv){ :not_recognized }
-        specify{
-          lambda{ subject }.should raise_error(Myrrha::Error)
-        }
-      end
-
-    end # from_argv
-
     describe "to_ordering" do
 
       describe "without direction" do

@@ -65,32 +65,6 @@ module Alf
 
     end # coerce
 
-    describe "from_argv" do
-
-      subject{ Ordering.from_argv(argv) }
-
-      describe "on an empty array" do
-        let(:argv){ [] }
-        it{ should eq(Ordering.new([])) }
-      end
-
-      describe "on a singleton" do
-        let(:argv){ ["hello"] }
-        it{ should eq(Ordering.new([[:hello, :asc]])) }
-      end
-
-      describe "on multiple strings without explit directions" do
-        let(:argv){ ["hello", "world"] }
-        it{ should eq(Ordering.new([[:hello, :asc], [:world, :asc]])) }
-      end
-
-      describe "on multiple strings with explit directions" do
-        let(:argv){ ["hello", "asc", "world", "desc"] }
-        it{ should eq(Ordering.new([[:hello, :asc], [:world, :desc]])) }
-      end
-
-    end # from_argv
-
     describe "compare" do
 
       it "should work on a singleton ordering" do

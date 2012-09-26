@@ -25,19 +25,6 @@ module Alf
 
         alias :[] :coerce
 
-        # Coerces commandline arguments to a Heading.
-        #
-        # This method simply reuses `coerce(Array)` and therefore shares its
-        # spec.
-        #
-        # @param [Array] argv commandline arguments
-        # @param [Hash] opts options (unused)
-        # @return [Heading] a heading instance when coercion succeeds
-        # @raise [ArgumentError] is coercion fails
-        def from_argv(argv, opts = {})
-          coerce(argv)
-        end
-
       end # class << self
 
       # Returns the type associated to the attribute `name`.

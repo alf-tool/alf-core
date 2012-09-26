@@ -41,34 +41,6 @@ module Alf
 
       end # coerce
 
-      describe "from_argv" do
-
-        it 'should allow an empty array' do
-          Size.from_argv([]).should eq(0)
-        end
-
-        it 'should use the default value on empty array' do
-          Size.from_argv([], :default => 10).should eq(10)
-        end
-
-        it 'correctly coerce when non empty' do
-          Size.from_argv(["12"]).should eq(12)
-        end
-
-        it 'raise an ArgumentError on big array' do
-          lambda{ 
-            Size.from_argv(["12", "hello"])
-          }.should raise_error(ArgumentError)
-        end
-
-        it 'raise an ArgumentError on non coercable' do
-          lambda{ 
-            Size.from_argv(["hello"])
-          }.should raise_error(Myrrha::Error)
-        end
-
-      end
-
     end
   end
 end

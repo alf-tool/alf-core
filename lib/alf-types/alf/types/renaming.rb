@@ -20,19 +20,6 @@ module Alf
 
         alias :[] :coerce
 
-        # Converts commandline arguments to a renaming.
-        #
-        # This method reuses the `coerce(Array)` coercion heuristics and
-        # therefore shares its spec.
-        #
-        # @param [Array] argv commandline arguments
-        # @param [Hash] opts options (not used)
-        # @return [Ordering] when coercion succeeds
-        # @raises [ArgumentError] when coercion fails
-        def from_argv(argv, opts = {})
-          coerce(argv)
-        end
-
       end # class << self
 
       # Returns the renaming of `name`

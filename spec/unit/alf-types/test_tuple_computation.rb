@@ -65,20 +65,6 @@ module Alf
 
     end # coerce
 
-    describe "from_argv" do
-
-      subject{ TupleComputation.from_argv(argv).evaluate(scope) }
-
-      describe "from an Array with coercions" do
-        let(:argv){ ["hello", "who", "hello2", "2"] }
-        let(:expected){
-          {:hello => "alf", :hello2 => 2}
-        }
-        it{ should eql(expected) }
-      end
-
-    end # from_argv
-
     describe "to_attr_list" do
 
       it 'should return the correct list of attribute names' do

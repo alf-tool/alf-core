@@ -34,18 +34,6 @@ module Alf
 
         alias :[] :coerce
 
-        # Convert commandline arguments to a tuple computation
-        #
-        # This method reuses `coerce(Array)` and therefore shares its spec.
-        #
-        # @param [Array] args commandline arguments
-        # @param [Hash] opts coercion options (not used).
-        # @return [TupleExpression] the expression if coercion succeeds
-        # @raise [ArgumentError] if the coercion fails.
-        def from_argv(argv, opts = {})
-          coerce(argv)
-        end
-
       end # class << self
 
       # Makes the computation in the context of a tuple

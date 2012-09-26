@@ -133,7 +133,7 @@ module Alf
         args = []
         with_each_arg(argv) do |name,dom,value|
           invalid_args!(args) if value.nil?
-          args << dom.from_argv(Array(value))
+          args << Shell.from_argv(Array(value), dom)
         end
 
         [oper, args, opts]
