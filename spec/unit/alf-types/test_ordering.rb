@@ -91,22 +91,6 @@ module Alf
 
     end # from_argv
 
-    describe "attributes" do
-
-      it 'should work on an empty ordering' do
-        Ordering.new([]).attributes.should eq([])
-      end
-
-      it 'should work on an singleton ordering' do
-        Ordering.new([[:a, :asc]]).attributes.should eq([:a])
-      end
-
-      it 'should work on an ordering' do
-        Ordering.new([[:a, :asc], [:b, :desc]]).attributes.should eq([:a, :b])
-      end
-
-    end # attributes
-
     describe "compare" do
 
       it "should work on a singleton ordering" do
@@ -174,6 +158,10 @@ module Alf
     end # +
 
     describe "to_attr_list" do
+
+      it 'should work on an empty ordering' do
+        Ordering.new([]).to_attr_list.should eq(AttrList.new [])
+      end
 
       it 'should return the correct list of attribute names' do
         Ordering.new([[:a, :asc], [:b, :desc]]).to_attr_list.should eq(AttrList[:a, :b])
