@@ -4,48 +4,25 @@ module Alf
     # Defines a Heading, that is, a set of attribute (name,domain) pairs.
     #
     class Heading
+      include Myrrha::Domain::Impl.new([:attributes])
       include Enumerable
 
-      # @return [Hash] a (freezed) hash of (name, type) pairs
-      attr_reader :attributes
-
-      # Creates a Heading instance
-      #
-      # @param [Hash] a hash of attribute (name, type) pairs where name is
-      #        an AttrName and type is a Class
-      def initialize(attributes)
-        @attributes = attributes.dup.freeze
+      coercions do |c|
+        c.delegate :to_heading
+        c.coercion(Array){|arg,_|
+          Heading.new Hash[arg.each_slice(2).map{|k,v|
+            [ AttrName.coerce(k), Support.coerce(v, Module) ]
+          }]
+        }
+        c.coercion(Hash){|arg,_|
+          Heading.new Hash[arg.map{|k,v|
+            [ AttrName.coerce(k), Support.coerce(v, Module) ]
+          }]
+        }
       end
 
       class << self
 
-        # Coerces `arg` to a Heading.
-        #
-        # Implemented coercions are:
-        # - Array: [AttrName, Module, ..., AttrName, Module]
-        # - Hash:  {AttrName => Module, ..., AttrName => Module}
-        #
-        # @param [Object] arg value to coerce to a Heading
-        # @return [Heading] a heading instance when coercion succeeds
-        # @raise [ArgumentError] is coercion fails
-        def coerce(arg)
-          case arg
-          when Heading
-            arg
-          when Array
-            Heading.new Hash[arg.each_slice(2).map{|k,v|
-              [ Support.coerce(k, Symbol),
-                Support.coerce(v, Module) ]
-            }]
-          when Hash
-            Heading.new Hash[arg.map{|k,v|
-              [ Support.coerce(k, Symbol),
-                Support.coerce(v, Module) ]
-            }]
-          else
-            raise ArgumentError, "Unable to coerce #{arg.inspect} to a Heading"
-          end
-        end
         alias :[] :coerce
 
         # Coerces commandline arguments to a Heading.
@@ -154,25 +131,6 @@ module Alf
       def project(names, allbut = false)
         Heading[AttrList.coerce(names).project_tuple(attributes, allbut)]
       end
-
-      # Returns heading's hash code
-      #
-      # @return [Integer] the heading's hash code
-      def hash
-        attributes.hash
-      end
-
-      # Checks equality with other heading
-      #
-      # Classical set equality applies to headings.
-      #
-      # @param [Heading] other another heading
-      # @return [Boolean] true if other is the same heading than self, false
-      #         otherwise
-      def ==(other)
-        other.is_a?(Heading) && (attributes == other.attributes)
-      end
-      alias :eql? :==
 
       # Converts this heading to an attribute list.
       #

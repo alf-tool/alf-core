@@ -41,7 +41,7 @@ module Alf
       end
 
       specify "should raise ArgumentError on error" do
-        lambda{ Heading.coerce(true) }.should raise_error(ArgumentError)
+        lambda{ Heading.coerce(true) }.should raise_error(Myrrha::Error)
       end
 
     end # coerce
@@ -57,7 +57,7 @@ module Alf
       end
 
       specify "should raise ArgumentError on error" do
-        lambda{ Heading[true] }.should raise_error(ArgumentError)
+        lambda{ Heading[true] }.should raise_error(Myrrha::Error)
       end
 
     end # []
