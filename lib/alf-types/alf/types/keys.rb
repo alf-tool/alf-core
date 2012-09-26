@@ -29,7 +29,8 @@ module Alf
       def_delegators :keys, :empty?, 
                             :each,
                             :any?,
-                            :all?
+                            :all?,
+                            :first
 
       def +(other)
         Keys.new (keys + Keys.coerce(other).keys).uniq
@@ -43,10 +44,6 @@ module Alf
         define_method(m) do |*args, &bl|
           Keys.new keys.send(m, *args, &bl).uniq
         end
-      end
-
-      def first
-        keys.first
       end
 
       def if_empty(keys = nil, &bl)
