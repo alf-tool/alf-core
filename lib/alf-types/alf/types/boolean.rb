@@ -17,7 +17,7 @@ module Alf
       raise ArgumentError if argv.size > 1
       value = argv.first || opts[:default] || false
       Support.coerce(value, Boolean)
-    rescue CoercionError
+    rescue Myrrha::Error, CoercionError
       raise ArgumentError, "Unable to coerce `#{value.inspect}` to Boolean"
     end
 
