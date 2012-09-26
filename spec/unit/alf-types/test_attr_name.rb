@@ -39,7 +39,8 @@ module Alf
       end
 
       it 'should raise ArgumentError otherwise' do
-        lambda{ AttrName["!123"] }.should raise_error(ArgumentError)
+        lambda{ AttrName["!123"] }.should raise_error(Myrrha::Error)
+        lambda{ AttrName[:'!123'] }.should raise_error(Myrrha::Error)
       end
 
     end # coerce
