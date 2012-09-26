@@ -9,7 +9,7 @@ module Alf
     #
     # Example:
     #
-    #     AttrName["city"]
+    #     AttrName.coerce("city")
     #     # => :city
     #
     class AttrName < Symbol
@@ -20,8 +20,6 @@ module Alf
       end
 
       class << self
-
-        alias :[] :coerce
 
         # Converts commandline arguments to an AttrName.
         #
