@@ -4,7 +4,7 @@ module Alf
     # Encapsulates a Renaming information
     #
     class Renaming
-      include Myrrha::Domain::Impl.new([:renaming])
+      extend Domain::Scalar.new(:renaming)
 
       coercions do |c|
         c.delegate :to_renaming

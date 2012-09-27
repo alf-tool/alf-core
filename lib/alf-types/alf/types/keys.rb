@@ -1,7 +1,7 @@
 module Alf
   module Types
     class Keys
-      include Myrrha::Domain::Impl.new([:keys])
+      extend Domain::Scalar.new(:keys)
       include Support::OrderedSet
 
       coercions do |c|

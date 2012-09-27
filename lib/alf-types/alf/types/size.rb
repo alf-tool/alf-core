@@ -4,7 +4,7 @@ module Alf
     # Defines a Size domain, as a (non strictly) positive integer.
     #
     class Size < Integer
-      extend Myrrha::Domain::SByC.new(Integer, [], lambda{|i| i >= 0})
+      extend Domain::SByC.new(Integer){|i| i >= 0}
 
       coercions do |c|
         c.upon(Object){|s,t| new Support.coerce(s, Integer) }

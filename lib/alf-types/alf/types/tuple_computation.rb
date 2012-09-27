@@ -12,7 +12,7 @@ module Alf
     #   # => {:big? => false, :who => "Bill Jones"}
     #
     class TupleComputation
-      include Myrrha::Domain::Impl.new([:computation])
+      extend Domain::Scalar.new(:computation)
 
       coercions do |c|
         c.delegate :to_tuple_computation

@@ -8,7 +8,7 @@ module Alf
     #     list = AttrList[:name, :city]
     #
     class AttrList
-      include Myrrha::Domain::Impl.new([:attributes])
+      extend Domain::Scalar.new(:attributes)
       include Support::OrderedSet
 
       coercions do |c|

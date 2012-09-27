@@ -4,7 +4,7 @@ module Alf
     # Defines an ordering on tuple attributes
     #
     class Ordering
-      include Myrrha::Domain::Impl.new([:ordering])
+      extend Domain::Scalar.new(:ordering)
 
       coercions do |c|
         c.delegate :to_ordering

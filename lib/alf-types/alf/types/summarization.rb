@@ -4,7 +4,7 @@ module Alf
     # Encapsulates a Summarization information.
     #
     class Summarization
-      include Myrrha::Domain::Impl.new([:aggregations])
+      extend Domain::Reuse.new(Hash)
 
       coercions do |c|
         c.delegate :to_summarization

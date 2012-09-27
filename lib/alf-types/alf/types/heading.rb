@@ -4,7 +4,7 @@ module Alf
     # Defines a Heading, that is, a set of attribute (name,domain) pairs.
     #
     class Heading
-      include Myrrha::Domain::Impl.new([:attributes])
+      extend Domain::Scalar.new(:attributes)
       include Enumerable
 
       coercions do |c|

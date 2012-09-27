@@ -13,7 +13,7 @@ module Alf
     #     # => :city
     #
     class AttrName < Symbol
-      extend Myrrha::Domain::SByC.new(Symbol, [], lambda{|s| s.to_s =~ /^[a-zA-Z0-9_]+[?!]?$/})
+      extend Domain::SByC.new(Symbol){|s| s.to_s =~ /^[a-zA-Z0-9_]+[?!]?$/}
 
       coercions do |c|
         c.delegate(:to_sym){|v,_| new(v.to_sym) }
