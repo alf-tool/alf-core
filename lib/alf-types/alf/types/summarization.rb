@@ -17,36 +17,31 @@ module Alf
       end
 
       class << self
-
         alias :[] :coerce
-
       end
+
+      reuse :map, :keys, :to_hash
+      private :keys
 
       # Computes the least tuple.
       #
       # @return [Tuple] a tuple with least values for each attribute
       def least
-        Hash[@aggregations.map{|k,v|
-          [k, v.least]
-        }]
+        Hash[map{|k,v| [k, v.least] }]
       end
 
       # Computes the resulting aggregation from aggs if tuple happens.
       #
       # @return [Support::TupleScope] a scope bound to the current tuple
       def happens(aggs, scope)
-        Hash[@aggregations.map{|k,v|
-          [k, v.happens(aggs[k], scope)]
-        }]
+        Hash[map{|k,v| [k, v.happens(aggs[k], scope)] }]
       end
 
       # Finalizes the summarization
       #
       # @return [Tuple] the finalized aggregated tuple
       def finalize(aggs)
-        Hash[@aggregations.map{|k,v|
-          [k, v.finalize(aggs[k])]
-        }]
+        Hash[map{|k,v| [k, v.finalize(aggs[k])] }]
       end
 
       # Summarizes an enumeration of tuples.
@@ -67,23 +62,21 @@ module Alf
       #
       # @return [Heading] a heading
       def to_heading
-        Heading.new Hash[aggregations.map{|name,agg| [name, agg.infer_type]}]
+        Heading.new Hash[map{|name,agg| [name, agg.infer_type]}]
       end
 
       # Converts to an attribute list.
       #
       # @return [AttrList] a list of computed attribute names
       def to_attr_list
-        AttrList.new(aggregations.keys)
+        AttrList.new(keys)
       end
 
       # Returns a ruby literal for this expression.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        map = Hash[aggregations.map{|k,v|
-          [k.to_s, "#{v.has_source_code!}"]
-        }]
+        map = Hash[map{|k,v| [k.to_s, "#{v.has_source_code!}"] }]
         "Alf::Summarization[#{Support.to_ruby_literal(map)}]"
       end
 

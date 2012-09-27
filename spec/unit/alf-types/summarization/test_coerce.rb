@@ -13,9 +13,8 @@ module Alf
       let(:arg){ { :s => "sum{ qty }", :m => Aggregator.max{ size } } }
       it{ should be_a(Summarization) }
       specify{ 
-        subject.aggregations.values.all?{|v|
-          v.is_a?(Aggregator)
-        }.should be_true
+        subject.to_hash.keys.to_set.should eq([:s, :m].to_set)
+        subject.to_hash.values.all?{|v| v.should be_a(Aggregator) }
       }
     end
 
@@ -23,10 +22,8 @@ module Alf
       let(:arg){ ["s", "sum{ qty }", "m", "max{ size }"] }
       it{ should be_a(Summarization) }
       specify{ 
-        ([:s, :m] & subject.aggregations.keys).should eq([:s, :m]) 
-        subject.aggregations.values.all?{|v|
-          v.is_a?(Aggregator)
-        }.should be_true
+        subject.to_hash.keys.to_set.should eq([:s, :m].to_set)
+        subject.to_hash.values.all?{|v| v.should be_a(Aggregator) }
       }
     end
 

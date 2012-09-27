@@ -65,7 +65,7 @@ module Alf
 
       # Summarization -> { :total => ->{ ... } }
       r.upon(Types::Summarization) do |v, rd|
-        "{" + v.aggregations.map{|name,compu|
+        "{" + v.map{|name,compu|
           [name.inspect, r.coerce(compu)].join(" => ")
         }.join(', ') + "}"
       end
