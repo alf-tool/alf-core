@@ -3,7 +3,7 @@ module Alf
     class Tuple
       extend Domain::Reuse.new(Hash)
 
-      reuse :map, :size, :empty?, :[], :to_hash, :to_a, :keys
+      reuse :map, :size, :empty?, :[], :to_hash, :to_a, :keys, :values_at
 
       def remap(&bl)
         self.class.new reused_instance.each_with_object({}){|(k,v),h| h[k] = yield(k,v)}
