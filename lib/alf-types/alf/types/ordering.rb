@@ -4,7 +4,7 @@ module Alf
     # Defines an ordering on tuple attributes
     #
     class Ordering
-      extend Domain::Scalar.new(:ordering)
+      extend Domain::Reuse.new(Array)
 
       coercions do |c|
         c.delegate :to_ordering
@@ -36,10 +36,10 @@ module Alf
       end
 
       class << self
-
         alias :[] :coerce
-
       end # class << self
+
+      reuse :to_a
 
       # Compares two tuples according to this ordering.
       #
@@ -51,7 +51,7 @@ module Alf
       # @return [-1, 0 or 1] according to the classical ruby semantics of
       #         `(t1 <=> t2)`
       def compare(t1, t2)
-        ordering.each do |atr, dir|
+        reused_instance.each do |atr, dir|
           x, y = t1[atr], t2[atr]
           comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
           comp *= -1 if dir == :desc
@@ -68,14 +68,7 @@ module Alf
       # @param [Ordering] other another Ordering (coercions will apply)
       # @return [Ordering] the union ordering
       def +(other)
-        Ordering.new(ordering + Ordering.coerce(other).ordering)
-      end
-
-      # Returns this ordering as an array of (AttrName,Direction) pairs.
-      #
-      # @return [Array] this ordering as an array
-      def to_a
-        ordering
+        Ordering.new(reused_instance + Ordering.coerce(other).reused_instance)
       end
 
       # Converts to an attribute list.
@@ -83,14 +76,14 @@ module Alf
       # @return [AttrList] a list of attribute names that participate to the
       #         ordering
       def to_attr_list
-        AttrList.new(ordering.map(&:first))
+        AttrList.new(reused_instance.map(&:first))
       end
 
       # Returns a ruby literal for this ordering.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::Ordering[#{Support.to_ruby_literal(ordering)}]"
+        "Alf::Ordering[#{Support.to_ruby_literal(reused_instance)}]"
       end
       alias :inspect :to_ruby_literal
 

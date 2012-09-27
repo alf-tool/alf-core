@@ -38,7 +38,7 @@ module Alf
 
       # Ordering -> [[:sid, :asc], ...]
       r.upon(Types::Ordering) do |v, rd|
-        Support.to_ruby_literal(v.ordering)
+        Support.to_ruby_literal(v.to_a)
       end
 
       # Renaming -> {:old => :new, ...}
