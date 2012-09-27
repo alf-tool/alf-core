@@ -3,7 +3,7 @@ module Alf
   describe "Support#to_tuple" do
 
     let(:expected){
-      {:name => "Alf"}
+      Tuple.new(:name => "Alf")
     }
 
     def to_tuple(x, &bl)
@@ -18,15 +18,11 @@ module Alf
       to_tuple('name' => "Alf").should eq(expected)
     end
 
-    it 'supports a block' do
+    it 'supports a block that is delegated to remap' do
       to_tuple('name' => "alf", 'version' => "foo"){|k,v|
         k.should be_a(Symbol)
-        [k, v.upcase]
-      }.should eq(:name => "ALF", :version => "FOO")
-    end
-
-    it 'yields Tuple-extended hashes' do
-      to_tuple(:name => "Alf").should be_a(Alf::Tuple)
+        v.upcase
+      }.should eq(Tuple.new(:name => "ALF", :version => "FOO"))
     end
 
   end

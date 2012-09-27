@@ -7,13 +7,7 @@ module Alf
 
       subject{ tuple.only(:name => :first_name) }
 
-      it 'renames the attributes' do
-        subject.should eq(:first_name => "Alf")
-      end
-
-      it 'extends it with Tuple' do
-        subject.should be_a(Tuple)
-      end
+      it { should eq(Tuple.new(:first_name => "Alf")) }
 
     end
   end

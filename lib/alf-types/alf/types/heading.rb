@@ -31,20 +31,6 @@ module Alf
       alias_method :count, :size
       alias_method :to_h, :to_hash
 
-      # Coerces a single tuple
-      def coerce(tuple)
-        coercer = lambda{|(k,v)|
-          [k, attributes.has_key?(k) ? Support.coerce(v, self[k]) : v]
-        }
-        if tuple.is_a?(Hash)
-          Tuple(tuple, &coercer)
-        else
-          tuple.map{|t| Tuple(t, &coercer)}
-        end
-      rescue CoercionError => ex
-        raise CoercionError, "Unable to coerce `#{tuple.inspect}` to #{self.inspect} (#{ex.message})"
-      end
-
       # Computes the intersection of this heading with another one.
       #
       # @param [Heading] other another heading

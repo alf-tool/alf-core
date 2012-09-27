@@ -9,19 +9,16 @@ module Alf
       end
 
       context 'on a singleton' do
-        let(:rel){ [{:name => "Jones"}] }
+        let(:rel)     { [{:name => "Jones"}] }
+        let(:expected){ Tuple.new(:name => "Jones") }
 
         it 'returns the tuple' do
-          subject.should eq(:name => "Jones")
-        end
-
-        it 'extends the resulting Hash with Tuple' do
-          subject.should be_a(Tuple)
+          subject.should eq(expected)
         end
 
         it 'is aliased as tuple!' do
           rel.extend(ObjectOriented.new(rel))
-          rel.tuple!.should eq(:name => "Jones")
+          rel.tuple!.should eq(expected)
         end
       end
 
@@ -35,7 +32,7 @@ module Alf
         end
 
         it 'yields if a block' do
-          subject{ {:id => 12} }.should eq({:id => 12})
+          subject{ {:id => 12} }.should eq(Tuple.new(:id => 12))
         end
       end
 

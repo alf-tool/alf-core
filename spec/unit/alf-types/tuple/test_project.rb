@@ -7,16 +7,10 @@ module Alf
 
       subject{ tuple.project([:name]) }
 
-      it 'returns a Hash' do
-        subject.should eq(:name => "Alf")
-      end
-
-      it 'extends it with Tuple' do
-        subject.should be_a(Tuple)
-      end
+      it { should eq(Tuple(:name => "Alf")) }
 
       it 'does not create nil for missing entries' do
-        tuple.project([:none]).should eq({})
+        tuple.project([:none]).should eq(Tuple.new({}))
       end
 
     end

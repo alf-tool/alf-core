@@ -12,18 +12,18 @@ module Alf
     # @return [Hash] a tuple as a Hash for `expr`
     def to_tuple(expr, &bl)
       tuple = ToTuple.apply(expr)
-      tuple = Hash[tuple.map(&bl)] if bl
-      tuple.extend(Types::Tuple)
+      tuple = tuple.remap(&bl) if bl
+      tuple
     end
 
     # Myrrha rules for converting objects to relations
     ToTuple = Myrrha::coercions do |r|
+      r.main_target_domain = Tuple
 
       # Hash to Tuple
       r.upon(Hash) do |v,_|
-        Support.symbolize_keys(v)
+        Tuple.new(Support.symbolize_keys(v))
       end
-
     end # ToTuple
 
   end # module Support

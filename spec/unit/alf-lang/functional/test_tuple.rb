@@ -8,12 +8,12 @@ module Alf
 
       describe 'on an empty tuple' do
         let(:h){ {} }
-        it{ should eq({}) }
+        it{ should eq(Tuple.new({})) }
       end
 
       describe 'on an valid tuple' do
         let(:h){ {:name => "Alf"} }
-        it{ should eq({:name => "Alf"}) }
+        it{ should eq(Tuple.new(:name => "Alf")) }
       end
 
     end
