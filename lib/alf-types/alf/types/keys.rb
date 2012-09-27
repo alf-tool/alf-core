@@ -1,7 +1,7 @@
 module Alf
   module Types
     class Keys
-      extend Domain::Scalar.new(:keys)
+      extend Domain::Reuse.new(Array)
       include Support::OrderedSet
 
       coercions do |c|
@@ -9,11 +9,9 @@ module Alf
       end
 
       class << self
-
         def [](*args)
           coerce(args)
         end
-
       end # class << self
 
       def if_empty(keys = nil, &bl)
@@ -35,12 +33,6 @@ module Alf
       end
 
       EMPTY = Keys.new([])
-
-    protected
-
-      def elements
-        keys
-      end
 
     end # class Keys
   end # module Types

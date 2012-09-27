@@ -17,14 +17,14 @@ module Alf
       it{ should be_a(Keys) }
 
       it 'should have expected AttLists' do
-        subject.keys.should eq([ AttrList[:id], AttrList[:name] ])
+        subject.should eq(Keys[ AttrList[:id], AttrList[:name] ])
       end
     end
 
     it 'is available through [] with varargs' do
       keys = Keys[ [:id], [:name] ]
       keys.should be_a(Keys)
-      keys.keys.should eq([ AttrList[:id], AttrList[:name] ])
+      keys.should eq(Keys[ AttrList[:id], AttrList[:name] ])
     end
 
   end

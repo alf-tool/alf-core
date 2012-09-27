@@ -28,7 +28,7 @@ module Alf
 
       # AttrList -> [:sid, :sname, ...]
       r.upon(Types::AttrList) do |v, rd|
-        Support.to_ruby_literal(v.attributes)
+        Support.to_ruby_literal(v.to_a)
       end
 
       # Heading -> {:sid => String, ...}

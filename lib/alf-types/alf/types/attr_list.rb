@@ -8,7 +8,7 @@ module Alf
     #     list = AttrList[:name, :city]
     #
     class AttrList
-      extend Domain::Scalar.new(:attributes)
+      extend Domain::Reuse.new(Array)
       include Support::OrderedSet
 
       coercions do |c|
@@ -46,7 +46,7 @@ module Alf
       #         attributes and `allbut`
       def split_tuple(tuple, allbut = false)
         projection, rest = {}, tuple.dup
-        attributes.each do |a|
+        each do |a|
           projection[a] = tuple[a] if tuple.has_key?(a)
           rest.delete(a)
         end
@@ -78,8 +78,7 @@ module Alf
       # @param [Boolean] allbut projection?
       # @return [AttrList] the projection as an attribute list
       def project(attrs, allbut = false)
-        attrs = AttrList.coerce(attrs).attributes
-        AttrList.new(allbut ? attributes - attrs : attributes & attrs)
+        allbut ? self - attrs : self & attrs
       end
 
       # Compares this attribute list with `other` on a set basis.
@@ -89,8 +88,8 @@ module Alf
       # other, 1 if a superset, nil otherwise.
       def set_compare(other)
         return nil unless other.is_a?(AttrList)
-        s1, s2 = attributes.to_set, other.attributes.to_set
-        if s1==s2
+        s1, s2 = to_set, other.to_set
+        if s1==s2 
           0
         elsif s1.subset?(s2)
           -1
@@ -135,24 +134,18 @@ module Alf
       # @param [Symbol] :asc or :desc for ordering direction
       # @return [Ordering] an ordering instance
       def to_ordering(order = :asc)
-        Ordering.new attributes.map{|arg| [arg, order]}
+        Ordering.new elements.map{|arg| [arg, order]}
       end
 
       # Returns a ruby literal for this attribute list.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::AttrList#{Support.to_ruby_literal(attributes)}"
+        "Alf::AttrList#{Support.to_ruby_literal(to_a)}"
       end
       alias :inspect :to_ruby_literal
 
       EMPTY = AttrList.new([])
-
-    protected
-
-      def elements
-        attributes
-      end
 
     end # class AttrList
   end # module Types

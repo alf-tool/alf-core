@@ -44,8 +44,7 @@ module Alf
       # @param [AttrList] an attribute list
       # @return [AttrList] the input list where attributes have been renamed
       def rename_attr_list(attr_list)
-        attr_list = AttrList.coerce(attr_list)
-        AttrList.new attr_list.attributes.map{|k| self[k] || k}
+        AttrList.coerce(attr_list).map{|k| self[k] || k}
       end
 
       # Returns self

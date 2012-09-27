@@ -1,10 +1,14 @@
 module Alf
   module Support
     module OrderedSet
-      extend Forwardable
-      include Enumerable
+      extend Domain::Reuse::Methods
 
-      def_delegators :elements, :size, :each, :include?, :empty?, :to_a, :to_set
+      reuse  :size, :each, :include?, :empty?, :to_a, :to_set, :first, :any?, :all?
+      recoat :select, :reject
+
+      def elements
+        reused_instance
+      end
 
       def -(other)
         self.class.new (elements - self.class.coerce(other).elements)
@@ -19,25 +23,11 @@ module Alf
       end
       alias_method :+, :|
 
-      [ :select, :reject, :map ].each do |m|
-        define_method(m) do |*args, &bl|
-          self.class.new elements.send(m, *args, &bl).uniq
-        end
+      def map(&bl)
+        self.class.new reused_instance.map(&bl).uniq
       end
 
-      def eql?(other)
-        instance_of?(other.class) and to_set.eql?(other.to_set)
-      end
-
-      def ==(other)
-        return false unless self.class <=> other.class
-        to_set == other.to_set
-      end
-
-      def hash
-        to_set.hash
-      end
-
+      include Domain::Equalizer.new(:to_set)
     end # module OrderedSet
   end # module Support
 end # module Alf
