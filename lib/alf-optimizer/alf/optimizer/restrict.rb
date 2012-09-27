@@ -104,7 +104,7 @@ module Alf
 
       def on_rename(expr, predicate)
         begin
-          predicate = predicate.rename(expr.renaming.inverse)
+          predicate = predicate.rename(expr.renaming.invert)
         rescue NotSupportedError
           return restrict(expr, predicate)
         end

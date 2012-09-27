@@ -4,7 +4,7 @@ module Alf
     # Encapsulates a Renaming information
     #
     class Renaming
-      extend Domain::Scalar.new(:renaming)
+      extend Domain::Reuse.new(Hash)
 
       coercions do |c|
         c.delegate :to_renaming
@@ -17,30 +17,15 @@ module Alf
       end
 
       class << self
-
         alias :[] :coerce
-
       end # class << self
 
-      # Returns the renaming of `name`
-      def [](name)
-        renaming[name]
-      end
-
-      # Returns the inverse renaming.
-      #
-      # @return [Renaming] the inversed renaming
-      def inverse
-        inversed = {}
-        renaming.each_pair{|k,v| inversed[v] = k}
-        Renaming.new inversed
-      end
+      reuse  :[], :to_hash
+      recoat :invert
 
       # Returns a completed renaming with at least all attributes in `attr_list`
       def complete(attr_list)
-        completed = renaming.dup
-        attr_list.to_a.each{|k| completed[k] ||= k}
-        Renaming.new completed
+        Renaming.new attr_list.to_a.each_with_object(reused_instance.dup){|k,h| h[k] ||= k}
       end
 
       # Renames a tuple according to this renaming pairs.
@@ -51,7 +36,7 @@ module Alf
       # @param [Hash] tuple a tuple to rename
       # @return [Hash] the renamed tuple
       def rename_tuple(tuple)
-        Hash[tuple.map{|k,v| [@renaming[k] || k, v]}]
+        Hash[tuple.map{|k,v| [self[k] || k, v]}]
       end
 
       # Renames an attribute list.
@@ -60,12 +45,7 @@ module Alf
       # @return [AttrList] the input list where attributes have been renamed
       def rename_attr_list(attr_list)
         attr_list = AttrList.coerce(attr_list)
-        AttrList.new attr_list.attributes.map{|k| renaming[k] || k}
-      end
-
-      # Returns this renaming as a Hash
-      def to_hash
-        renaming.dup
+        AttrList.new attr_list.attributes.map{|k| self[k] || k}
       end
 
       # Returns self
@@ -75,14 +55,14 @@ module Alf
 
       # Returns an attribute list with renaming keys
       def to_attr_list
-        AttrList.new renaming.keys
+        AttrList.new reused_instance.keys
       end
 
       # Returns a ruby literal for this renaming.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::Renaming[#{Support.to_ruby_literal(renaming)}]"
+        "Alf::Renaming[#{Support.to_ruby_literal(reused_instance)}]"
       end
       alias :inspect :to_ruby_literal
 

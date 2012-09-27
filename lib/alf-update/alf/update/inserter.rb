@@ -88,7 +88,7 @@ module Alf
       end
 
       def on_rename(expr, inserted)
-        apply(expr.operand, rename(inserted, expr.renaming.inverse))
+        apply(expr.operand, rename(inserted, expr.renaming.invert))
       end
 
       def on_restrict(expr, inserted)

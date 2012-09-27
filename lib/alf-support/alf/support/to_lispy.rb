@@ -43,7 +43,7 @@ module Alf
 
       # Renaming -> {:old => :new, ...}
       r.upon(Types::Renaming) do |v, rd|
-        Support.to_ruby_literal(v.renaming)
+        Support.to_ruby_literal(v.to_hash)
       end
 
       # Predicate -> ->{ ... }

@@ -75,7 +75,7 @@ module Alf
       end
 
       def on_rename(expr, predicate)
-        apply_and_split(expr, predicate, expr.renaming.inverse.to_attr_list)
+        apply_and_split(expr, predicate, expr.renaming.invert.to_attr_list)
       end
 
       def on_restrict(expr, predicate)
