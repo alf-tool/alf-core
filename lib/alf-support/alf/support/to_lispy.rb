@@ -58,15 +58,15 @@ module Alf
 
       # TupleComputation -> { :big => ->{ ... }, ... }
       r.upon(Types::TupleComputation) do |v, rd|
-        "{" + v.computation.map{|name,compu|
-          [name.inspect, r.coerce(compu)].join(" => ")
+        "{" + v.map{|k,v|
+          [k.inspect, r.coerce(v)].join(" => ")
         }.join(', ') + "}"
       end
 
       # Summarization -> { :total => ->{ ... } }
       r.upon(Types::Summarization) do |v, rd|
-        "{" + v.map{|name,compu|
-          [name.inspect, r.coerce(compu)].join(" => ")
+        "{" + v.map{|k,v|
+          [k.inspect, r.coerce(v)].join(" => ")
         }.join(', ') + "}"
       end
 

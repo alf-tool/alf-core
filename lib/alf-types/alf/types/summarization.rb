@@ -23,29 +23,25 @@ module Alf
       reuse :map, :keys, :to_hash
       private :keys
 
-      def remap(&bl)
-        map.each_with_object({}){|(k,v),h| h[k] = yield(k,v)}
-      end
-
       # Computes the least tuple.
       #
       # @return [Tuple] a tuple with least values for each attribute
       def least
-        remap{|k,v| v.least }
+        hmap{|k,v| v.least }
       end
 
       # Computes the resulting aggregation from aggs if tuple happens.
       #
       # @return [Support::TupleScope] a scope bound to the current tuple
       def happens(aggs, scope)
-        remap{|k,v| v.happens(aggs[k], scope) }
+        hmap{|k,v| v.happens(aggs[k], scope) }
       end
 
       # Finalizes the summarization
       #
       # @return [Tuple] the finalized aggregated tuple
       def finalize(aggs)
-        remap{|k,v| v.finalize(aggs[k]) }
+        hmap{|k,v| v.finalize(aggs[k]) }
       end
 
       # Summarizes an enumeration of tuples.
@@ -66,7 +62,7 @@ module Alf
       #
       # @return [Heading] a heading
       def to_heading
-        Heading.new remap{|name,agg| agg.infer_type}
+        Heading.new hmap{|name,agg| agg.infer_type}
       end
 
       # Converts to an attribute list.
@@ -80,7 +76,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        map = remap{|k,v| "#{v.has_source_code!}" }
+        map = hmap{|k,v| "#{v.has_source_code!}" }
         "Alf::Summarization[#{Support.to_ruby_literal(map)}]"
       end
 
@@ -89,6 +85,12 @@ module Alf
         to_ruby_literal
       rescue NotImplementedError
         super
+      end
+
+    private
+
+      def hmap(&bl)
+        map.each_with_object({}){|(k,v),h| h[k] = yield(k,v)}
       end
 
     end # class Summarization

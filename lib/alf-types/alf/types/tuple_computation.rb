@@ -12,7 +12,7 @@ module Alf
     #   # => {:big? => false, :who => "Bill Jones"}
     #
     class TupleComputation
-      extend Domain::Scalar.new(:computation)
+      extend Domain::Reuse.new(Hash)
 
       coercions do |c|
         c.delegate :to_tuple_computation
@@ -31,10 +31,10 @@ module Alf
       end
 
       class << self
-
         alias :[] :coerce
-
       end # class << self
+
+      reuse :to_hash, :map
 
       # Makes the computation in the context of a tuple
       #
@@ -59,9 +59,7 @@ module Alf
       # @param [TupleScope] scope a tuple scope instance.
       # @return [Hash] the resulting tuple
       def evaluate(scope = nil)
-        Hash[ @computation.map{|k,v|
-          [k, v.is_a?(TupleExpression) ? v.evaluate(scope) : v]
-        }]
+        hmap{|_,v| v.is_a?(TupleExpression) ? v.evaluate(scope) : v }
       end
 
       # Returns self
@@ -73,25 +71,29 @@ module Alf
       #
       # @return [AttrList] a computed heading from static analysis of expressions
       def to_heading
-        Heading.new Hash[computation.map{|name,expr|
-          [name, expr.is_a?(TupleExpression) ? expr.infer_type : expr.class]
-        }]
+        Heading.new hmap{|_,v| v.is_a?(TupleExpression) ? v.infer_type : v.class}
       end
 
       # Converts to an attribute list.
       #
       # @return [AttrList] a list of computed attribute names
       def to_attr_list
-        AttrList.new(computation.keys)
+        AttrList.new(reused_instance.keys)
       end
 
       # Returns a ruby literal for this expression.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::TupleComputation[#{Support.to_ruby_literal(computation)}]"
+        "Alf::TupleComputation[#{Support.to_ruby_literal(reused_instance)}]"
       end
       alias :inspect :to_ruby_literal
+
+    private
+
+      def hmap(&bl)
+        map.each_with_object({}){|(k,v),h| h[k] = yield(k,v)}
+      end
 
     end # class TupleComputation
   end # module Types
