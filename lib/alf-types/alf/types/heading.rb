@@ -4,8 +4,7 @@ module Alf
     # Defines a Heading, that is, a set of attribute (name,domain) pairs.
     #
     class Heading
-      extend Domain::Scalar.new(:attributes)
-      include Enumerable
+      extend Domain::Reuse.new(Hash)
 
       coercions do |c|
         c.delegate :to_heading
@@ -22,32 +21,15 @@ module Alf
       end
 
       class << self
-
-        alias :[] :coerce
-
+        alias_method :[], :coerce
       end # class << self
 
-      # Returns the type associated to the attribute `name`.
-      #
-      # @param [Symbol] name the name of an attribute
-      # @return [Class] the associated type
-      def [](name)
-        attributes[name]
-      end
+      reuse :each, :[], :size, :to_hash, :map
 
-      # Yields each (name,domain) pair in turn.
-      def each(&block)
-        attributes.each(&block)
-      end
-
-      # Returns heading's cardinality, i.e. the number of (name,type) pairs.
-      #
-      # @return [Integer] the number of pairs
-      def cardinality
-        attributes.size
-      end
-      alias :size  :cardinality
-      alias :count :cardinality
+      alias_method :attributes, :reused_instance
+      alias_method :cardinality, :size
+      alias_method :count, :size
+      alias_method :to_h, :to_hash
 
       # Coerces a single tuple
       def coerce(tuple)
@@ -73,7 +55,7 @@ module Alf
           [name, Types.common_super_type(self[name], other[name])]
         }]
       end
-      alias :& :intersection
+      alias_method :&, :intersection
 
       # Computes the union of this heading with `other`.
       #
@@ -88,8 +70,8 @@ module Alf
           Types.common_super_type(t1, t2)
         }
       end
-      alias :+ :union
-      alias :join :union
+      alias_method :+, :union
+      alias_method :join, :union
 
       # Computes the merge of this heading with `other`.
       #
@@ -126,13 +108,6 @@ module Alf
         AttrList.new attributes.keys
       end
 
-      # Converts this heading to a Hash of (name,type) pairs
-      #
-      # @return [Hash] this heading as a Hash of (name, type) pairs
-      def to_h
-        attributes.dup
-      end
-
       # Returns a Heading literal
       #
       # @return [String] a Heading literal
@@ -141,7 +116,7 @@ module Alf
           "Alf::Heading::EMPTY" :
           "Alf::Heading[#{Support.to_ruby_literal(attributes)[1...-1]}]"
       end
-      alias :inspect :to_ruby_literal
+      alias_method :inspect, :to_ruby_literal
 
       EMPTY = Heading.new({})
     end # class Heading
