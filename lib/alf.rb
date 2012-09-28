@@ -36,6 +36,9 @@ require_relative 'alf/ext'
 #
 module Alf
 
+  TupleLike    = lambda{|t| t.is_a?(Hash) || t.is_a?(Tuple) }
+  RelationLike = lambda{|r| Iterator===r }
+
   # Connects to a database instance from `args`.
   #
   # Alf::Connection's autodetection system is used here to choose which connection

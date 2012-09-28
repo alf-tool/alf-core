@@ -13,7 +13,7 @@ module Alf
       def line2tuple(line)
         begin
           h = Kernel.eval(line)
-          raise "hash expected, got #{h}" unless h.is_a?(Hash)
+          raise "Tuple expected, got #{h}" unless TupleLike===h
         rescue Exception => ex
           $stderr << "Skipping #{line.strip}: #{ex.message}\n"
           nil

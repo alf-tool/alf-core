@@ -21,7 +21,7 @@ module Alf
 
       # (see Relvar#insert)
       def insert(tuples)
-        tuples   = [ tuples ] if tuples.is_a?(Hash)
+        tuples   = [ tuples ] if TupleLike===tuples
         existing = self
         @value   = context.query{ union(existing, tuples) }
       end

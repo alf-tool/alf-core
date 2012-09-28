@@ -8,7 +8,7 @@ require 'unit/alf-optimizer/shared/an_optimizable_expression_for_restrict'
 module Helpers
 
   def comp(*args)
-    args.unshift(:eq) if args.first.is_a?(Hash)
+    args.unshift(:eq) if Alf::TupleLike===args.first
     Alf::Predicate.comp(*args)
   end
 

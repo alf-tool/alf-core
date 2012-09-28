@@ -8,11 +8,6 @@ module Alf
 
       module Utils
 
-        def looks_a_relation?(value)
-          value.is_a?(Alf::Iterator) or
-            (value.is_a?(Array) && !value.empty? && value.all?{|v| v.is_a?(Hash)})
-        end
-
         def max(x, y)
           return y if x.nil?
           return x if y.nil?
@@ -68,7 +63,7 @@ module Alf
         end
 
         def array_rendering(value)
-          if looks_a_relation?(value)
+          if RelationLike===value
             Text::Renderer.render(value, "")
           elsif value.empty?
             "[]"
