@@ -36,7 +36,7 @@ module Alf
           expr = parse(expr, path, line, &block)
           expr = context.optimizer.call(expr)
           cog  = context.compiler.call(expr)
-          Support.to_relation(cog)
+          Relation.coerce(cog)
         end
 
         def assert!(*args, &bl)

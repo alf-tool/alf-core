@@ -17,7 +17,7 @@ module Alf
     # @return [Relation] a relation instance, as the set of tuples that would be yield by
     # this iterator.
     def to_relation
-      Relation::new(self.to_set)
+      Relation.coerce(self.to_a)
     end
 
   end # module Iterator

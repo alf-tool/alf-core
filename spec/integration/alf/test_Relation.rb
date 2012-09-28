@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe "Relation" do
 
-    let(:expected){ Alf::Relation.new([ {:name => "Jones"} ].to_set) }
+    let(:expected){ Alf::Relation[ {:name => "Jones"} ] }
 
     it 'works as expected on a tuple' do
       Alf::Relation(:name => "Jones").should eq(expected)

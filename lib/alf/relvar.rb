@@ -63,7 +63,7 @@ module Alf
     #
     # @return [Relation] a relation value.
     def value
-      Support.to_relation _compile
+      Relation.coerce _compile
     end
     alias :to_relation :value
 

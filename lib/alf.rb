@@ -103,7 +103,7 @@ module Alf
   #   # loaded through available readers
   #
   def self.Relation(*args, &bl)
-    Alf::Support.to_relation(*args, &bl)
+    Alf::Relation.coerce(*args, &bl)
   end
 
   # Coerces some arguments to a tuple.
