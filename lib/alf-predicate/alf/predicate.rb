@@ -15,14 +15,14 @@ module Alf
 
       def coerce(arg)
         case arg
-        when Predicate  then arg
-        when TrueClass  then tautology
-        when FalseClass then contradiction
-        when Symbol     then var_ref(arg)
-        when Proc       then native(arg)
-        when Hash       then eq(arg)
-        when String     then Predicate.new(Grammar.parse(arg))
-        when Relation   then relation(arg)
+        when Predicate   then arg
+        when TrueClass   then tautology
+        when FalseClass  then contradiction
+        when Symbol      then var_ref(arg)
+        when Proc        then native(arg)
+        when Hash, Tuple then eq(arg)
+        when String      then Predicate.new(Grammar.parse(arg))
+        when Relation    then relation(arg)
         else
           raise ArgumentError, "Unable to coerce `#{arg}` to a predicate"
         end

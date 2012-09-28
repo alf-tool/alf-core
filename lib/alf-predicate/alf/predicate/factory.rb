@@ -47,6 +47,7 @@ module Alf
       end
 
       def comp(op, h)
+        h = h.to_hash
         if h.empty?
           return tautology
         elsif h.size==1
@@ -60,33 +61,37 @@ module Alf
       end
 
       def eq(left, right = nil)
-        return comp(:eq, left) if left.is_a?(Hash) and right.nil?
+        return comp(:eq, left) if looks_a_hash?(left, right)
         _factor_predicate([:eq, sexpr(left), sexpr(right)])
       end
 
       def neq(left, right = nil)
-        return comp(:neq, left) if left.is_a?(Hash) and right.nil?
+        return comp(:neq, left) if looks_a_hash?(left, right)
         _factor_predicate([:neq, sexpr(left), sexpr(right)])
       end
 
       def lt(left, right = nil)
-        return comp(:lt, left) if left.is_a?(Hash) and right.nil?
+        return comp(:lt, left) if looks_a_hash?(left, right)
         _factor_predicate([:lt, sexpr(left), sexpr(right)])
       end
 
       def lte(left, right = nil)
-        return comp(:lte, left) if left.is_a?(Hash) and right.nil?
+        return comp(:lte, left) if looks_a_hash?(left, right)
         _factor_predicate([:lte, sexpr(left), sexpr(right)])
       end
 
       def gt(left, right = nil)
-        return comp(:gt, left) if left.is_a?(Hash) and right.nil?
+        return comp(:gt, left) if looks_a_hash?(left, right)
         _factor_predicate([:gt, sexpr(left), sexpr(right)])
       end
 
       def gte(left, right = nil)
-        return comp(:gte, left) if left.is_a?(Hash) and right.nil?
+        return comp(:gte, left) if looks_a_hash?(left, right)
         _factor_predicate([:gte, sexpr(left), sexpr(right)])
+      end
+
+      def looks_a_hash?(left, right)
+        left.respond_to?(:to_hash) and right.nil?
       end
 
       def between(middle, lower_bound, upper_bound)

@@ -63,8 +63,25 @@ module Alf
         }
       end
 
+      describe "from Tuple (single)" do
+        let(:arg){ Tuple.new(:status => 10) }
+
+        specify{
+          subject.expr.should be_a(Eq)
+          subject.expr.should eq([:eq, [:var_ref, :status], [:literal, 10]])
+        }
+      end
+
       describe "from Hash (multiple)" do
         let(:arg){ {:status => 10, :name => "Jones"} }
+
+        specify{
+          subject.should eq(Predicate.eq(:status => 10) & Predicate.eq(:name => "Jones"))
+        }
+      end
+
+      describe "from Tuple (multiple)" do
+        let(:arg){ Tuple.new(:status => 10, :name => "Jones") }
 
         specify{
           subject.should eq(Predicate.eq(:status => 10) & Predicate.eq(:name => "Jones"))
