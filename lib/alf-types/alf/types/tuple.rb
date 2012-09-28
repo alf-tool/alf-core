@@ -51,6 +51,10 @@ module Alf
         merge(computed)
       end
 
+      def to_json(*args, &bl)
+        to_hash.to_json(*args, &bl)
+      end
+
     end # module Tuple
   end # module Types
 end # module Alf

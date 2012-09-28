@@ -117,7 +117,9 @@ module Alf
   #   # the same Hash with symbolized keys
   #
   def self.Tuple(*args, &bl)
-    Alf::Support.to_tuple(*args, &bl)
+    tuple = Alf::Tuple.coerce(*args)
+    tuple = tuple.remap(&bl) if bl
+    tuple
   end
 
   # Coerces some arguments to a heading.
