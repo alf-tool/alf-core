@@ -20,10 +20,6 @@ module Alf
         }
       end
 
-      class << self
-        alias_method :[], :coerce
-      end # class << self
-
       reuse :each, :[], :size, :to_hash, :map
 
       alias_method :attributes, :reused_instance

@@ -30,10 +30,6 @@ module Alf
         }
       end
 
-      class << self
-        alias :[] :coerce
-      end # class << self
-
       reuse :to_hash, :map
 
       # Makes the computation in the context of a tuple

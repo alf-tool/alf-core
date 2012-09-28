@@ -35,10 +35,6 @@ module Alf
         @sorter = lambda{|t1,t2| compare(t1, t2)}
       end
 
-      class << self
-        alias :[] :coerce
-      end # class << self
-
       reuse :to_a
 
       # Compares two tuples according to this ordering.

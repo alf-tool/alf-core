@@ -16,10 +16,6 @@ module Alf
         }
       end
 
-      class << self
-        alias :[] :coerce
-      end
-
       reuse :map, :keys, :to_hash
       private :keys
 

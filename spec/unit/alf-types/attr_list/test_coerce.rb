@@ -28,22 +28,25 @@ module Alf
     end
 
     describe "when passed an unrecognized argument" do
-      let(:arg){ :not_recognized }
+      let(:arg){ false }
       specify{
-        lambda{ subject }.should raise_error(Myrrha::Error)
+        lambda{ subject }.should raise_error(TypeError)
       }
     end
 
     describe 'the [] alias' do
 
-      it 'should allow an empty list' do
-        AttrList[].should eq(AttrList.new([]))
+      it 'allows an empty list' do
+        AttrList[].should eq(AttrList::EMPTY)
       end
 
-      it 'should allow an non-empty list' do
+      it 'allows a singleton literal list' do
+        AttrList[:name].should eq(AttrList.new([:name]))
+      end
+
+      it 'allows a non-empty literal list' do
         AttrList[:name, :city].should eq(AttrList.new([:name, :city]))
       end
-
     end
 
   end

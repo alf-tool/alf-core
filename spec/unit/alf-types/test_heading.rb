@@ -22,30 +22,6 @@ module Alf
       h2.map{|k,v| [k,v]}.to_set.should eq([[:name, String], [:price, Float]].to_set)
     end
 
-    describe "coerce" do
-
-      it "should work with a heading" do
-        Heading.coerce(h0).should eq(h0)
-        Heading.coerce(h1).should eq(h1)
-      end
-
-      it "should work with hashes" do
-        Heading.coerce(:name => String).should eq(h1)
-        Heading.coerce("name" => "String").should eq(h1)
-        Heading.coerce({}).should eq(h0)
-      end
-
-      it "should work with arrays" do
-        Heading.coerce([]).should eq(h0)
-        Heading.coerce(["name", "String"]).should eq(h1)
-      end
-
-      specify "should raise ArgumentError on error" do
-        lambda{ Heading.coerce(true) }.should raise_error(Myrrha::Error)
-      end
-
-    end # coerce
-
     describe "[]" do
 
       specify "it should mimic coerce" do
@@ -57,34 +33,10 @@ module Alf
       end
 
       specify "should raise ArgumentError on error" do
-        lambda{ Heading[true] }.should raise_error(Myrrha::Error)
+        lambda{ Heading[true] }.should raise_error(TypeError)
       end
 
     end # []
-
-    describe "cardinality" do
-
-      it "should return the number of pairs" do
-        h0.cardinality.should eq(0)
-        h1.cardinality.should eq(1)
-        h2.cardinality.should eq(2)
-      end
-
-      it 'should be aliased as count' do
-        [h0, h1, h2].all?{|h| h.cardinality == h.count}.should be_true
-      end
-
-      it 'should be aliased as size' do
-        [h0, h1, h2].all?{|h| h.cardinality == h.size}.should be_true
-      end
-
-    end # cardinality, count, size
-
-    it "should implement a to_h method" do
-      h0.to_h.should eq({})
-      h1.to_h.should eq(:name => String)
-      h2.to_h.should eq(:name => String, :price => Float)
-    end
 
     describe "EMPTY" do
       subject{ Heading::EMPTY }

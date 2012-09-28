@@ -1,7 +1,7 @@
 module Alf
   module Support
     module OrderedSet
-      extend Domain::Reuse::Methods
+      extend Domain::Reuse::Helpers
 
       reuse  :size, :each, :include?, :empty?, :to_a, :to_set, :first, :any?, :all?
       recoat :select, :reject

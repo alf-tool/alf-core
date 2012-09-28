@@ -9,11 +9,11 @@ module Alf
       end
 
       it 'should raise Myrrha::Error on negative integers' do
-        lambda{ Size.coerce("-1") }.should raise_error(Myrrha::Error)
+        lambda{ Size.coerce("-1") }.should raise_error(TypeError)
       end
 
       it 'should raise Myrrha::Error on non integers' do
-        lambda{ Size.coerce("hello") }.should raise_error(Myrrha::Error)
+        lambda{ Size.coerce("hello") }.should raise_error(TypeError)
       end
 
     end

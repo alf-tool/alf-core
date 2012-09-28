@@ -13,20 +13,10 @@ module Alf
 
       coercions do |c|
         c.delegate :to_attr_list
-        c.coercion(Array){|v,_| AttrList.new(v.map{|a| AttrName.coerce(a) })}
+        c.coercion(Symbol){|v,_| AttrList.new([v]) }
+        c.coercion(Array) {|v,_| AttrList.new(v.map{|a| AttrName.coerce(a) })}
       end
-
-      class << self
-
-        # Coerces a list of names to an AttrList.
-        #
-        # @param [Array] args a list of names (Symbol or String)
-        # @return [AttrList] an attribute list
-        def [](*args)
-          coerce(args)
-        end
-
-      end # class << self
+      def self.[](*args); coerce(args); end
 
       # Splits a tuple in two parts according `allbut`.
       #
@@ -146,7 +136,6 @@ module Alf
       alias :inspect :to_ruby_literal
 
       EMPTY = AttrList.new([])
-
     end # class AttrList
   end # module Types
 end # module Alf

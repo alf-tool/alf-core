@@ -8,8 +8,8 @@ module Alf
     end
 
     it 'should raise ArgumentError otherwise' do
-      lambda{ AttrName.coerce("!123")  }.should raise_error(Myrrha::Error)
-      lambda{ AttrName.coerce(:'!123') }.should raise_error(Myrrha::Error)
+      lambda{ AttrName.coerce("!123")  }.should raise_error(TypeError)
+      lambda{ AttrName.coerce(:'!123') }.should raise_error(TypeError)
     end
 
   end

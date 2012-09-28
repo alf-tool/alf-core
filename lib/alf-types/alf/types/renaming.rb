@@ -16,10 +16,6 @@ module Alf
         }
       end
 
-      class << self
-        alias :[] :coerce
-      end # class << self
-
       reuse  :[], :to_hash
       recoat :invert
 

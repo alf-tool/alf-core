@@ -5,14 +5,9 @@ module Alf
       include Support::OrderedSet
 
       coercions do |c|
-        c.coercion(Array){|arg,_| Keys.new arg.map{|k| AttrList.coerce(k)} }
+        c.coercion(Array){|v,_| Keys.new(v.map{|e| AttrList.coerce(e)}) }
       end
-
-      class << self
-        def [](*args)
-          coerce(args)
-        end
-      end # class << self
+      def self.[](*args); coerce(args); end
 
       def if_empty(keys = nil, &bl)
         return self unless empty?
@@ -33,7 +28,6 @@ module Alf
       end
 
       EMPTY = Keys.new([])
-
     end # class Keys
   end # module Types
 end # module Alf
