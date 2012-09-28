@@ -9,9 +9,9 @@ describe Alf::Relation, 'to_array' do
 
   let(:expected){
     [
-      {:city => 'Athens', :incity => [ {:name => 'Adams'} ]},
-      {:city => 'London', :incity => [ {:name => 'Clark'}, {:name => 'Smith'} ]},
-      {:city => 'Paris',  :incity => [ {:name => 'Blake'}, {:name => 'Jones'} ]},
+      Tuple(:city => 'Athens', :incity => [ Tuple(:name => 'Adams') ] ),
+      Tuple(:city => 'London', :incity => [ Tuple(:name => 'Clark'), Tuple(:name => 'Smith') ]),
+      Tuple(:city => 'Paris',  :incity => [ Tuple(:name => 'Blake'), Tuple(:name => 'Jones') ]),
     ]
   }
 

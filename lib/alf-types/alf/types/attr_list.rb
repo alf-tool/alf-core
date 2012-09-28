@@ -35,7 +35,7 @@ module Alf
       # @return [Array<Hash>] an array containing two tuples, according to known
       #         attributes and `allbut`
       def split_tuple(tuple, allbut = false)
-        projection, rest = {}, tuple.dup
+        projection, rest = {}, tuple.to_hash.dup
         each do |a|
           projection[a] = tuple[a] if tuple.has_key?(a)
           rest.delete(a)

@@ -16,65 +16,36 @@ module Alf
   # See main Alf documentation about relational operators.
   #
   class Relation
+    extend Domain::Reuse.new(::Set)
     include Iterator
     include Lang::ObjectOriented
 
-    class << self
-
-      #
-      # Coerces `val` to a relation.
-      #
-      # Recognized arguments are: Relation (identity coercion), Set of ruby hashes,
-      # Array of ruby hashes, Alf::Iterator.
-      #
-      # @return [Relation] a relation instance for the given set of tuples
-      # @raise [ArgumentError] when `val` is not recognized
-      #
-      def coerce(val)
-        Alf::Support.to_relation(val)
-      rescue Myrrha::Error
-        raise ArgumentError, "Unable to coerce `#{val}` to a Relation"
+    coercions do |c|
+      c.delegate :to_relation
+      c.coercion(Hash) do |v,_|
+        throw :next_rule unless v.size==1 and v.values.first.is_a?(Array)
+        key, values = v.to_a.first
+        tuples      = values.map{|value| Tuple.new(key.to_sym => value) }.to_set
+        Relation.new(tuples)
       end
-
-      # (see Relation.coerce)
-      def [](*tuples)
-        coerce(tuples)
+      c.coercion(Hash) do |v,_|
+        Relation.new(Set.new << Tuple.coerce(v))
       end
-
-    end # class << self
-
-    protected
-
-    # @return [Set] the set of tuples
-    attr_reader :tuples
-
-    public
-
-    # Creates a Relation instance.
-    #
-    # @param [Set] tuples a set of tuples
-    def initialize(tuples)
-      raise ArgumentError unless tuples.is_a?(Set)
-      @tuples = tuples
+      c.coercion(Tuple) do |v,_|
+        Relation.new(Set.new << v)
+      end
+      c.upon(Enumerable) do |v,_|
+        Relation.new(v.map{|t| Tuple.coerce(t)}.to_set)
+      end
+      c.coercion(Path.like) do |v,_|
+        Relation.new Alf.reader(v).map{|t| Tuple.new(t)}.to_set
+      end
     end
+    def self.[](*args); coerce(args); end
 
-    # (see Iterator#each)
-    def each(&block)
-      tuples.each(&block)
-    end
-
-    # Returns relation's cardinality (number of tuples).
-    #
-    # @return [Integer] relation's cardinality
-    def cardinality
-      tuples.size
-    end
-    alias :size :cardinality
-
-    # Returns true if this relation is empty
-    def empty?
-      cardinality == 0
-    end
+    reuse :each, :size, :empty?
+    alias_method :tuples, :reused_instance
+    alias_method :cardinality, :size
 
     # Returns the relation heading
     def heading
@@ -85,18 +56,6 @@ module Alf
     def attribute_list
       AttrList.new tuples.first.keys
     end
-
-    # (see Object#hash)
-    def hash
-      @tuples.hash
-    end
-
-    # (see Object#==)
-    def ==(other)
-      return nil unless other.is_a?(Relation)
-      other.tuples == self.tuples
-    end
-    alias :eql? :==
 
     # Returns a textual representation of this relation
     def to_s
@@ -110,8 +69,8 @@ module Alf
     end
     alias :inspect :to_ruby_literal
 
-    DEE = Relation.new([{}].to_set)
-    DUM = Relation.new([].to_set)
+    DEE = Relation.new(Set.new << Tuple.new({}))
+    DUM = Relation.new(Set.new)
 
   private
 

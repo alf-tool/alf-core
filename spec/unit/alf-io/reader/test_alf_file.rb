@@ -9,12 +9,12 @@ module Alf
     }
 
     describe "on pure functional expressions" do
-      let(:expr){ 
+      let(:expr){
         "(restrict suppliers, lambda{status > 20})"
       }
       let(:expected){
-        [{:sid=>"S3", :name=>"Blake", :status=>30, :city=>"Paris"},
-         {:sid=>"S5", :name=>"Adams", :status=>30, :city=>"Athens"}]        
+        [ Tuple.new(:sid=>"S3", :name=>"Blake", :status=>30, :city=>"Paris"),
+          Tuple.new(:sid=>"S5", :name=>"Adams", :status=>30, :city=>"Athens") ]
       }
 
       it{ should eq(expected.to_set) }
@@ -28,8 +28,8 @@ module Alf
         EOF
       }
       let(:expected){
-        [{:sid=>"S3", :name=>"Blake", :status=>30, :city=>"Paris", :rev=>-30},
-         {:sid=>"S5", :name=>"Adams", :status=>30, :city=>"Athens", :rev=>-30}]        
+        [ Tuple(:sid=>"S3", :name=>"Blake", :status=>30, :city=>"Paris",  :rev=>-30),
+          Tuple(:sid=>"S5", :name=>"Adams", :status=>30, :city=>"Athens", :rev=>-30) ]
       }
 
       it{ should eq(expected.to_set) }

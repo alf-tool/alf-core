@@ -45,7 +45,7 @@ module Alf
         {:sid => 'S2'},
         {:sid => 'S5'}
       ]
-    end # coerce
+    end # union
 
     specify "difference" do
       (rel1 - rel1).should == Alf::Relation[]
@@ -56,7 +56,7 @@ module Alf
       (rel2 - rel1).should == Alf::Relation[
         {:sid => 'S5'}
       ]
-    end # coerce
+    end # difference
 
     specify "join" do
       (rel1 * rel2).should == Alf::Relation[ {:sid => 'S2'} ]

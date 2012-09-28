@@ -3,7 +3,7 @@ module Alf
     class Tuple
       extend Domain::Reuse.new(Hash)
 
-      reuse :map, :size, :empty?, :[], :to_hash, :to_a, :keys, :values_at
+      reuse :map, :size, :empty?, :[], :to_hash, :to_a, :keys, :values_at, :has_key?
 
       coercions do |c|
         c.coercion(Hash){|v,_| Tuple.new Support.symbolize_keys(v) }
@@ -54,6 +54,11 @@ module Alf
       def to_json(*args, &bl)
         to_hash.to_json(*args, &bl)
       end
+
+      def to_ruby_literal
+        "Tuple(#{Support.to_ruby_literal(to_hash)})"
+      end
+      alias :inspect :to_ruby_literal
 
     end # module Tuple
   end # module Types
