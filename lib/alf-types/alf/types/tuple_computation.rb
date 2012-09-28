@@ -16,8 +16,8 @@ module Alf
 
       coercions do |c|
         c.delegate :to_tuple_computation
-        c.upon(Hash){|arg,_|
-          TupleComputation.new Hash[arg.map{|k,v|
+        c.upon(lambda{|v,_| v.respond_to?(:to_hash)}){|arg,_|
+          TupleComputation.new Hash[arg.to_hash.map{|k,v|
             if AttrName === k
               [ k, v.is_a?(Proc) ? TupleExpression.coerce(v) : v ]
             else

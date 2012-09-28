@@ -35,6 +35,13 @@ module Alf
       it{ should eql(expected) }
     end
 
+    describe "from a Tuple" do
+      let(:arg){ Tuple.new(:hello => TupleExpression.coerce(:who)) }
+      let(:expected){ {:hello => "alf"} }
+
+      it{ should eql(expected) }
+    end
+
     describe "from an Array with coercions" do
       let(:arg){ ["hello", "who", "hello2", "2"] }
       let(:expected){
