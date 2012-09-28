@@ -110,8 +110,8 @@ module Alf
     end
     alias :inspect :to_ruby_literal
 
-    DEE = Relation.coerce([{}])
-    DUM = Relation.coerce([])
+    DEE = Relation.new([{}].to_set)
+    DUM = Relation.new([].to_set)
 
   private
 
