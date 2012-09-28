@@ -27,6 +27,18 @@ module Alf
       alias_method :count, :size
       alias_method :to_h, :to_hash
 
+      # Coerces a single tuple
+      def coerce(tuple)
+        case tuple
+        when Tuple
+          tuple.remap{|k,v| attributes.has_key?(k) ? Support.coerce(v, self[k]) : v }
+        when Hash
+          coerce Tuple(tuple)
+        else
+          tuple.map{|t| coerce(t)}
+        end
+      end
+
       # Computes the intersection of this heading with another one.
       #
       # @param [Heading] other another heading

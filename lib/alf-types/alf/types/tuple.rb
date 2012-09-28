@@ -5,6 +5,10 @@ module Alf
 
       reuse :map, :size, :empty?, :[], :to_hash, :to_a, :keys, :values_at
 
+      coercions do |c|
+        c.coercion(Hash){|v,_| Tuple.new Support.symbolize_keys(v) }
+      end
+
       def remap(&bl)
         self.class.new reused_instance.each_with_object({}){|(k,v),h| h[k] = yield(k,v)}
       end

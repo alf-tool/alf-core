@@ -1,40 +1,21 @@
 require 'spec_helper'
 module Alf
-  describe Heading, "coerce" do
+  describe Heading, "#coerce" do
 
-    subject{ Heading.coerce(arg) }
+    let(:tuple)  { Tuple[:id => 3, :name => "Alf"] }
+    let(:heading){ Heading[:id => Integer, :name => String] }
 
-    context 'with a Heading' do
-      let(:arg){ Heading.new :foo => String }
+    context 'on a Hash' do
+      subject{ heading.coerce("id" => "3", "name" => "Alf") }
 
-      it{ should be(arg) }
+      it { should eq(tuple) }
     end
 
-    context 'with a Hash' do
-      let(:arg){ {:foo => String} }
+    context 'on an Array' do
+      subject{ heading.coerce([{"id" => "3", "name" => "Alf"}]) }
 
-      it{ should eq(Heading.new :foo => String) }
+      it { should eq([tuple]) }
     end
 
-    context 'with an empty Array' do
-      let(:arg){ [] }
-
-      it{ should eq(Heading::EMPTY) }
-    end
-
-    context 'with a non-empty Array' do
-      let(:arg){ ["name", "String"] }
-
-      it{ should eq(Heading.new :name => String) }
-    end
-
-    context 'with something unrecognized' do
-      let(:arg){ true }
-
-      specify{
-        lambda{ subject }.should raise_error(TypeError, /Can't convert `true` into (.*?)Heading/)
-      }
-    end
-
-  end 
+  end
 end
