@@ -30,7 +30,7 @@ module Alf
         atr, alb = @attributes, @allbut
         index = Materialize::Hash.new(operand, atr, !alb)
         index.each_pair do |k,v|
-          grouped = Relation.new(Clip.new(v, atr, alb).to_set)
+          grouped = Clip.new(v, atr, alb).to_relation
           yield k.merge(@as => grouped)
         end
       end

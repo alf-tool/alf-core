@@ -4,7 +4,7 @@ module Alf
       include Enumerable
 
       def to_relation
-        Relation.new(to_set)
+        Relation.coerce(to_a)
       end
 
     protected

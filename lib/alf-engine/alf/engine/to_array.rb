@@ -40,7 +40,12 @@ module Alf
     private
 
       def recurse(tuple)
-        Hash[tuple.map{|k,v| [k, reorder(v)] }]
+        case tuple
+        when Hash
+          Hash[tuple.map{|k,v| [k, reorder(v)] }]
+        when Tuple
+          tuple.remap{|k,v| reorder(v) }
+        end
       end
 
       def reorder(value)

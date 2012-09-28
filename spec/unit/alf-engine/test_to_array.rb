@@ -33,8 +33,8 @@ module Alf
           {:name => "Jones", :rva => Relation(:id => [1, 3]) }
         ]
         exp = [
-          {:name => "Jones", :rva => [{:id => 1}, {:id => 3}] },
-          {:name => "Smith", :rva => [{:id => 7}, {:id => 8}] }
+          {:name => "Jones", :rva => [Tuple(:id => 1), Tuple(:id => 3)] },
+          {:name => "Smith", :rva => [Tuple(:id => 7), Tuple(:id => 8)] }
         ]
         ToArray.new(rel, Ordering[[:name, :id]]).to_a.should eq(exp)
       end
