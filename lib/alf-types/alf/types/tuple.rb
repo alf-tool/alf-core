@@ -3,7 +3,7 @@ module Alf
     class Tuple
       extend Domain::Reuse.new(Hash)
 
-      reuse :map, :size, :empty?, :[], :to_hash, :to_a, :keys, :values_at, :has_key?
+      reuse :map, :size, :empty?, :[], :to_a, :keys, :values_at, :has_key?
 
       coercions do |c|
         c.coercion(Hash){|v,_| Tuple.new Support.symbolize_keys(v) }
@@ -15,6 +15,15 @@ module Alf
 
       def merge(other, &bl)
         self.class.new reused_instance.merge(other.to_hash, &bl)
+      end
+
+      def split(attr_list)
+        return [ EMPTY, self ] if attr_list.empty?
+        left, right = {}, to_hash
+        attr_list.each do |a|
+          left[a] = right.delete(a)
+        end
+        [ Tuple.new(left), Tuple.new(right) ]
       end
 
       def project(attr_list)
@@ -51,6 +60,10 @@ module Alf
         merge(computed)
       end
 
+      def to_hash(dup = true)
+        dup ? reused_instance.dup : reused_instance
+      end
+
       def to_json(*args, &bl)
         to_hash.to_json(*args, &bl)
       end
@@ -60,6 +73,7 @@ module Alf
       end
       alias :inspect :to_ruby_literal
 
+      EMPTY = Tuple.new({})
     end # module Tuple
   end # module Types
 end # module Alf
