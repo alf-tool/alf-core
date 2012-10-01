@@ -51,7 +51,7 @@ module Alf
               (@options[:float_format] || "%.3f") % value
             when Hash
               value.inspect
-            when Alf::Iterator
+            when RelationLike, Alf::Iterator
               Text::Renderer.render(value, "", @options)
             when Array
               array_rendering(value)
@@ -63,12 +63,12 @@ module Alf
         end
 
         def array_rendering(value)
-          if RelationLike===value
+          if TupleLike===value.first
             Text::Renderer.render(value, "")
           elsif value.empty?
             "[]"
           else
-            values = value.collect{|x| Cell.new(x).text_rendering}
+            values = value.map{|x| Cell.new(x).text_rendering}
             if values.inject(0){|memo,s| memo + s.size} < 20
               "[" + values.join(", ") + "]"
             else
