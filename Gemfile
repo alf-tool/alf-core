@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 group :runtime do
   gem "quickl", "~> 0.4.3"
-  gem "myrrha", "~> 3.0.0.rc4"
+  gem "myrrha", "~> 3.0.0.rc5"
   gem "domain", "~> 1.0.0.rc2"
   gem "backports", "~> 2.6"
   gem "path", "~> 1.3"
