@@ -10,9 +10,14 @@ module Alf
       # (see Alf::Renderer#render)
       def render(input, output)
         require "json"
-        # TODO: refactor this to avoid loading all tuples
-        # in memory
-        output << input.to_a.to_json << "\n"
+        first = true
+        output << "["
+        input.each do |t|
+          output << "," unless first
+          output << ::JSON.fast_generate(t)
+          first = false
+        end
+        output << "]"
         output
       end
 
