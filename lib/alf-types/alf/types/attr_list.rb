@@ -133,6 +133,7 @@ module Alf
       def to_ruby_literal
         "Alf::AttrList#{Support.to_ruby_literal(to_a)}"
       end
+      alias :to_s :to_ruby_literal
       alias :inspect :to_ruby_literal
 
       EMPTY = AttrList.new([])
