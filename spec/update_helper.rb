@@ -8,7 +8,7 @@ class UpdateContext
   attr_reader :requests
 
   def iterator(name)
-    Alf::Support::FakeOperand.new(self).with_name(name)
+    Alf::Algebra::Operand::Fake.new(self).with_name(name)
   end
 
   def heading(name)

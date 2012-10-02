@@ -4,3 +4,4 @@ module Alf
     end # module Operand
   end # module Algebra
 end # module Alf
+require_relative 'operand/fake'
