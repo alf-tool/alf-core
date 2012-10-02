@@ -1,24 +1,18 @@
 module Alf
   #
-  # Implements an Iterator at the interface with the outside world.
+  # Implements an iterator at the interface with the outside world.
   #
-  # The contrat of a Reader is simply to be an Iterator. Unlike operators, however,
-  # readers are not expected to take other iterators as input, but IO objects, database
-  # tables, or something similar instead. This base class provides a default behavior for
-  # readers that works with IO objects. It can be safely extended, overriden, or even
-  # mimiced (provided that you include and implement the Iterator contract).
-  #
-  # This class also provides a registration mechanism to help getting Reader instances for
-  # specific file extensions. A typical scenario for using this registration mechanism is
-  # as follows:
+  # This base class provides a default behavior for readers that works with IO objects. It
+  # can be safely extended, overriden, or mimiced. This class also provides a registration
+  # mechanism to help getting Reader instances for specific file extensions. A typical
+  # scenario for using this registration mechanism is as follows:
   #
   #   # Registers a reader kind named :foo, associated with ".foo" file
   #   # extensions and the FooFileDecoder class (typically a subclass of
   #   # Reader)
   #   Reader.register(:foo, [".foo"], FooFileDecoder)
   #
-  #   # Later on, you can request a reader instance for a .foo file, as
-  #   # illustrated below.
+  #   # Later on, you can request a reader instance for a .foo file
   #   r = Reader.reader('/a/path/to/a/file.foo')
   #
   #   # Also, a factory method is automatically installed on the Reader class
