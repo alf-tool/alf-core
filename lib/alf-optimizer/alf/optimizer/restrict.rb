@@ -31,6 +31,36 @@ module Alf
         restrict(expr.with_operand(apply(expr.operand, down)), top)
       end
 
+      def binary_split(expr, predicate)
+        left_attrs, right_attrs = expr.operands.map{|op| op.heading.to_attr_list }
+        left_only,  right_only  = left_attrs - right_attrs, right_attrs - left_attrs
+
+        # left_top is the push-stopper due to right_only attributes
+        # right_top is the push-stopper due to left_only attributes
+        left_top,   left_pred   = predicate.and_split(right_only)
+        right_top,  right_pred  = predicate.and_split(left_only)
+
+        # left_rest is tautology if left_top is already fully covered by right_pred
+        left_rest,  _ = left_top.and_split(left_only)
+        # right_rest is a tautology if right_top is already fully covered by left_pred
+        right_rest, _ = right_top.and_split(right_only)
+
+        # basic join with restricted operands
+        join = expr.with_operands(
+          apply(expr.left, left_pred),
+          apply(expr.right, right_pred))
+
+        if left_top.tautology? || right_top.tautology?
+          # everything is already covered by one restriction pushed
+          join
+        elsif left_rest.tautology? && right_rest.tautology?
+          # everything is already covered by the conjunctions of pushed restrictions
+          join
+        else
+          restrict(join, left_rest & right_rest)
+        end
+      end
+
       ### catch all, pass-through, unoptimizable
 
       def on_missing(expr, predicate)
@@ -55,6 +85,13 @@ module Alf
       alias :on_generator     :on_unoptimizable
       alias :on_infer_heading :on_unoptimizable
 
+      def on_binary_optimizable(expr, predicate)
+        binary_split(expr, predicate)
+      end
+      alias :on_join         :on_binary_optimizable
+      alias :on_matching     :on_binary_optimizable
+      alias :on_not_matching :on_binary_optimizable
+
       ### non relational
 
       def on_autonum(expr, predicate)
@@ -77,21 +114,6 @@ module Alf
 
       def on_group(expr, predicate)
         unary_split(expr, predicate, AttrList[expr.as])
-      end
-
-      def on_join(expr, predicate)
-        # TODO: we could be MUCH smarter here
-        restrict(expr, predicate)
-      end
-
-      def on_matching(expr, predicate)
-        # TODO: we could be smarter here
-        expr.with_left(apply(expr.left, predicate))
-      end
-
-      def on_not_matching(expr, predicate)
-        # TODO: we could be smarter here
-        expr.with_left(apply(expr.left, predicate))
       end
 
       def on_quota(expr, predicate)
