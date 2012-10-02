@@ -114,6 +114,8 @@ module Alf
 
     def_delegators :scope, :parse,
                            :query,
+                           :optimize,
+                           :compile,
                            :assert!,
                            :deny!,
                            :fact!,

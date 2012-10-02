@@ -32,10 +32,18 @@ module Alf
           expr
         end
 
+        def optimize(expr)
+          context.optimizer.call(expr)
+        end
+
+        def compile(expr)
+          context.compiler.call(expr)
+        end
+
         def query(expr = nil, path = nil, line = nil, &block)
           expr = parse(expr, path, line, &block)
-          expr = context.optimizer.call(expr)
-          cog  = context.compiler.call(expr)
+          expr = optimize(expr)
+          cog  = compile(expr)
           Relation.coerce(cog)
         end
 
