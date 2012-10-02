@@ -50,13 +50,13 @@ module Alf
     end
 
     def &(other)
-      return self  if other.tautology?
+      return self  if other.tautology? or other==self
       return other if tautology?
       Predicate.new(expr & other.expr)
     end
 
     def |(other)
-      return self  if other.contradiction?
+      return self  if other.contradiction? or other==self
       return other if contradiction?
       Predicate.new(expr | other.expr)
     end
@@ -88,6 +88,7 @@ module Alf
     def to_ruby_code
       @ruby_code ||= expr.to_ruby_code(:scope => "self")
     end
+    alias :to_s :to_ruby_code
 
     def to_proc
       @proc ||= expr.to_proc(:scope => "self")
