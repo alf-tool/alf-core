@@ -20,7 +20,7 @@ module Alf
   #   r = Reader.foo([a path or a IO object])
   #
   class Reader
-    include Iterator
+    include Enumerable
 
     class << self
       include Support::Registry
@@ -121,7 +121,7 @@ module Alf
       @options = self.class.const_get(:DEFAULT_OPTIONS).merge(@options || {})
     end
 
-    # (see Iterator#each)
+    # Yields each tuple in turn
     #
     # @private the default implementation reads lines of the input stream and
     # yields the block with <code>line2tuple(line)</code> on each of them. This

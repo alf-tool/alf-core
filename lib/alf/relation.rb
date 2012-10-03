@@ -17,7 +17,8 @@ module Alf
   #
   class Relation
     extend Domain::Reuse.new(::Set)
-    include Iterator
+    include Algebra::Operand
+    include Enumerable
     include Lang::ObjectOriented
 
     coercions do |c|

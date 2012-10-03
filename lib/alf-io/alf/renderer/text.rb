@@ -51,7 +51,7 @@ module Alf
               (@options[:float_format] || "%.3f") % value
             when Hash
               value.inspect
-            when RelationLike, Alf::Iterator
+            when RelationLike
               Text::Renderer.render(value, "", @options)
             when Array
               array_rendering(value)

@@ -1,6 +1,7 @@
 module Alf
   module Algebra
     module Operator
+      include Operand
 
       # Encapsulates method that allows making operator introspection, that is,
       # knowing operator cardinality and similar stuff.
@@ -142,4 +143,3 @@ require_relative 'operator/summarize'
 require_relative 'operator/rank'
 require_relative 'operator/quota'
 require_relative 'operator/infer_heading'
-

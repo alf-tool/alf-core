@@ -49,7 +49,7 @@ module Alf
       end
 
       def reorder(value)
-        if Iterator===value
+        if RelationLike===value
           ToArray.new(value, ordering).to_a
         else
           value

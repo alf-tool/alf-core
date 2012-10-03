@@ -16,7 +16,6 @@ require_relative 'alf-support/alf/support/ordered_set'
 require_relative 'alf-types/alf/types'
 require_relative 'alf-support/alf/support'
 require_relative 'alf-aggregator/alf/aggregator'
-require_relative 'alf/iterator'
 require_relative 'alf-io/alf/io'
 require_relative 'alf-csv/alf/csv'
 require_relative 'alf-algebra/alf/algebra'
@@ -37,7 +36,7 @@ require_relative 'alf/ext'
 module Alf
 
   TupleLike    = lambda{|t| t.is_a?(Hash) || t.is_a?(Tuple) }
-  RelationLike = lambda{|r| Iterator===r }
+  RelationLike = lambda{|r| Relation===r || Engine::Cog===r || Reader===r || Relvar===r }
 
   # Connects to a database instance from `args`.
   #

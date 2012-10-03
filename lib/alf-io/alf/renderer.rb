@@ -1,11 +1,8 @@
 module Alf
   #
-  # Renders a relation (given by any Iterator) in a specific format.
+  # Renders a relation iterator in a specific format.
   #
-  # A renderer takes an Iterator instance as input and renders it on an output stream.
-  # Renderers are **not** iterators themselves. Their usage is made via their {#execute}
-  # method.
-  #
+  # A renderer takes a tuple iterator as input and renders it on an output stream.
   # Similarly to the {Reader} class, this one provides a registration mechanism for
   # specific output formats. The common scenario is as follows:
   #
@@ -16,11 +13,11 @@ module Alf
   #
   #   # Later on, you can request a renderer instance for a specific format
   #   # as follows (wiring input is optional)
-  #   r = Renderer.renderer(:foo, [an Iterator])
+  #   r = Renderer.renderer(:foo, [an iterator])
   #
   #   # Also, a factory method is automatically installed on the Renderer class
   #   # itself.
-  #   r = Renderer.foo([an Iterator])
+  #   r = Renderer.foo([an iterator])
   #
   class Renderer
 
@@ -64,7 +61,7 @@ module Alf
     # Default renderer options
     DEFAULT_OPTIONS = {}
 
-    # Renderer input (typically an Iterator)
+    # Renderer tuple iterator
     attr_accessor :input
 
     # @return [Hash] Renderer's options
@@ -72,7 +69,7 @@ module Alf
 
     # Creates a reader instance.
     #
-    # @param [Iterator] iterator an Iterator of tuples to render
+    # @param [#each] iterator an iterator of tuples to render
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(input, options = {})
       @input   = input
@@ -82,8 +79,7 @@ module Alf
     # Executes the rendering, outputting the resulting tuples on the provided
     # output buffer.
     #
-    # The default implementation simply coerces the input as an Iterator and
-    # delegates the call to {#render}.
+    # The default implementation delegates the call to {#render}.
     def execute(output = $stdout)
       render(input, output)
     end

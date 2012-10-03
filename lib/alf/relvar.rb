@@ -3,7 +3,8 @@ module Alf
   # Captures a database relation variable.
   #
   class Relvar
-    include Iterator
+    include Enumerable
+    include Algebra::Operand
     include Lang::ObjectOriented
 
     # The context under which this relvar was served.

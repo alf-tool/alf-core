@@ -141,7 +141,7 @@ module Alf
       !iterator(name).nil? rescue false
     end
 
-    # Returns a low-level Iterator for a given named variable
+    # Returns a low-level iterator for a given named variable
     def iterator(name)
       raise NotImplementedError, "Unable to serve `#{name}` in Connection.iterator"
     end
