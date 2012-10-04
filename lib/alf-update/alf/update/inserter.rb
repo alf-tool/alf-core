@@ -3,13 +3,19 @@ module Alf
     class Inserter < Lang::Compiler
       include Lang::Functional
 
-      def not_supported(*args)
-        raise NotSupportedError, "Unable to compile #{expr} for insert"
+      ### overridings
+
+      def call(expr, tuples)
+        super(expr, Alf::Algebra::Operand.coerce(tuples))
       end
 
-      ### Outside, recursion end :-)
+      def not_supported(expr, *args)
+        raise NotSupportedError, "Unable to insert through `#{expr}`"
+      end
 
-      def on_outside(expr, inserted)
+      ### Operand::Leaf, recursion end :-)
+
+      def on_leaf_operand(expr, inserted)
         expr.insert(inserted)
       end
 

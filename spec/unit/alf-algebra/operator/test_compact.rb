@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.compact([]) }
+      subject{ a_lispy.compact(an_operand) }
 
       it { should be_a(Compact) }
 

@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.union([], []) }
+      subject{ a_lispy.union(an_operand, an_operand) }
 
       it { should be_a(Union) }
 

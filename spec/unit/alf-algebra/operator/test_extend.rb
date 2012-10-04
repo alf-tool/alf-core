@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.extend([], :big => lambda{ tested > 10 }) }
+      subject{ a_lispy.extend(an_operand, :big => lambda{ tested > 10 }) }
 
       it{ should be_a(Extend) }
 

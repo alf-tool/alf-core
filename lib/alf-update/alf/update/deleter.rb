@@ -2,9 +2,13 @@ module Alf
   module Update
     class Deleter < Lang::Compiler
 
-      def not_supported(*args)
-        raise NotSupportedError
+      ### overridings
+
+      def not_supported(expr, *args)
+        raise NotSupportedError, "Unable to delete through `#{expr}`"
       end
+
+      ### Reusable rules
 
       def apply_and_split(expr, predicate, list)
         top, down = predicate.and_split(list)
@@ -19,9 +23,9 @@ module Alf
         apply(expr.operand, predicate)
       end
 
-      ### Outside, recursion end :-)
+      ### Operand::Leaf, recursion end :-)
 
-      def on_outside(expr, predicate)
+      def on_leaf_operand(expr, predicate)
         expr.delete(predicate)
       end
 

@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.rename([], {:a => :z}) }
+      subject{ a_lispy.rename(an_operand, {:a => :z}) }
 
       it{ should be_a(Rename) }
 

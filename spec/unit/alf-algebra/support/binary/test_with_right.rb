@@ -3,9 +3,9 @@ module Alf
   module Algebra
     describe Binary, "with_right" do
 
-      let(:operand_1){ [ {:id => 1 } ] }
-      let(:operand_2){ [ {:id => 2 } ] }
-      let(:operand_3){ [ {:id => 3 } ] }
+      let(:operand_1){ an_operand }
+      let(:operand_2){ an_operand }
+      let(:operand_3){ an_operand }
       let(:operator) { a_lispy.union(operand_1, operand_2) }
 
       subject{ operator.with_right(operand_3) }

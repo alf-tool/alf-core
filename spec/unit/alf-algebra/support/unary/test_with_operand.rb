@@ -3,8 +3,8 @@ module Alf
   module Algebra
     describe Unary, "with_operand" do
 
-      let(:operand_1){ [ {:id => 1 } ] }
-      let(:operand_2){ [ {:id => 2 } ] }
+      let(:operand_1){ an_operand }
+      let(:operand_2){ an_operand }
       let(:extension){ TupleComputation.coerce({:big => "tested > 10"}) }
 
       let(:operator) { a_lispy.extend(operand_1, extension) }

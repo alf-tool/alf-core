@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.rank([], [:weight]) }
+      subject{ a_lispy.rank(an_operand, [:weight]) }
 
       it{ should be_a(Rank) }
 

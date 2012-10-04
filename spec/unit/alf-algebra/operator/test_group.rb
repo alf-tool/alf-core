@@ -8,7 +8,7 @@ module Alf
       it_should_behave_like("An operator class")
 
       context "--no-allbut" do
-        subject{ a_lispy.group([], [:time, :b], :as) }
+        subject{ a_lispy.group(an_operand, [:time, :b], :as) }
 
         it { should be_a(Group) }
 
@@ -18,7 +18,7 @@ module Alf
       end # --no-allbut
 
       context "--allbut" do
-        subject{ a_lispy.group([], [:a], :as, :allbut => true) }
+        subject{ a_lispy.group(an_operand, [:a], :as, :allbut => true) }
         it { should be_a(Group) }
 
         it 'is allbut' do

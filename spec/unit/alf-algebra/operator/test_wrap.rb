@@ -9,7 +9,7 @@ module Alf
 
 
       context '--no-allbut' do
-        subject{ a_lispy.wrap([], [:a, :b], :wraped) }
+        subject{ a_lispy.wrap(an_operand, [:a, :b], :wraped) }
 
         it { should be_a(Wrap) }
 
@@ -19,7 +19,7 @@ module Alf
       end
 
       context '--allbut' do
-        subject{ a_lispy.wrap([], [:a, :b], :wraped, :allbut => true) }
+        subject{ a_lispy.wrap(an_operand, [:a, :b], :wraped, :allbut => true) }
 
         it { should be_a(Wrap) }
 

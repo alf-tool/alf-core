@@ -10,7 +10,7 @@ module Alf
       let(:aggs){{:time_sum => Aggregator.sum{ time },
                   :time_max => Aggregator.max{ time }}}
 
-      subject{ a_lispy.quota([], [:a], [:time], aggs) }
+      subject{ a_lispy.quota(an_operand, [:a], [:time], aggs) }
 
       it { should be_a(Quota) }
 

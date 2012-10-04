@@ -2,13 +2,15 @@ module Alf
   module Update
     class Updater < Lang::Compiler
 
+      ### overridings
+
       def not_supported(expr, *args)
-        raise NotSupportedError, "Unable to compile #{expr} for update"
+        raise NotSupportedError, "Unable to update through `#{expr}`"
       end
 
-      ### Outside, recursion end :-)
+      ### Operand::Leaf, recursion end :-)
 
-      def on_outside(expr, updating, predicate)
+      def on_leaf_operand(expr, updating, predicate)
         expr.update(updating, predicate)
       end
 

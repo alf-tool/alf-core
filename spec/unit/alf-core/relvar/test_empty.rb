@@ -14,7 +14,7 @@ module Alf
 
     context 'on an non empty relvar' do
       let(:relvar){
-        examples_database.relvar(:suppliers)
+        examples_database.relvar{ suppliers }
       }
 
       it{ should be_false }

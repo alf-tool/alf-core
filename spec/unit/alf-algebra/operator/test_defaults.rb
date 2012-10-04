@@ -8,7 +8,7 @@ module Alf
       it_should_behave_like("An operator class")
 
       context "--no-strict" do
-        subject{ a_lispy.defaults([], :a => 1, :c => "blue") }
+        subject{ a_lispy.defaults(an_operand, :a => 1, :c => "blue") }
 
         it{ should be_a(Defaults) }
 
@@ -18,7 +18,7 @@ module Alf
       end # --no-strict
 
       describe "--strict" do
-        subject{ a_lispy.defaults([], {:a => 1, :c => "blue"}, :strict => true) }
+        subject{ a_lispy.defaults(an_operand, {:a => 1, :c => "blue"}, :strict => true) }
 
         it{ should be_a(Defaults) }
 

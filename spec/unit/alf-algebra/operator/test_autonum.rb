@@ -8,7 +8,7 @@ module Alf
       it_should_behave_like("An operator class")
 
       context "with default attribute name" do
-        subject{ a_lispy.autonum([]) }
+        subject{ a_lispy.autonum(an_operand) }
 
         it{ should be_a(Autonum) }
 
@@ -18,7 +18,7 @@ module Alf
       end # default attribute name
 
       context "with explicit attribute name" do
-        subject{ a_lispy.autonum([], :unique) }
+        subject{ a_lispy.autonum(an_operand, :unique) }
 
         it{ should be_a(Autonum) }
 

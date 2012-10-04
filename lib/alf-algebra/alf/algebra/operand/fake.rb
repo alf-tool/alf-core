@@ -2,7 +2,7 @@ module Alf
   module Algebra
     module Operand
       class Fake
-        include Operand
+        include Operand::Leaf
 
         def initialize(context = nil)
           @context = context

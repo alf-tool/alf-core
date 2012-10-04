@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.sort([], [[:first, :asc], [:second, :asc]]) }
+      subject{ a_lispy.sort(an_operand, [[:first, :asc], [:second, :asc]]) }
 
       it{ should be_a(Sort) }
 

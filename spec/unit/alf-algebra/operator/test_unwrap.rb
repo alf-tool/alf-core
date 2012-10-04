@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.unwrap([], :wrapped) }
+      subject{ a_lispy.unwrap(an_operand, :wrapped) }
 
       it { should be_a(Unwrap) }
 

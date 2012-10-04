@@ -2,17 +2,10 @@ module Alf
   module Engine
     class Compiler < Lang::Compiler
 
-      ### to be cleaned
+      ### leaf
 
-      def on_outside(expr)
-        case expr
-        when String, Symbol      then raise "Symbol operands are no longer supported"
-        when Array, Relation     then Leaf.new(expr)
-        when Reader, Relvar, Cog then Leaf.new(expr)
-        when IO, StringIO        then Leaf.new(Reader.coerce(expr))
-        else
-          super
-        end
+      def on_leaf_operand(expr)
+        expr.to_cog
       end
 
       ### non relational

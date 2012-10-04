@@ -8,6 +8,8 @@ module Alf
       end
       let(:receiver){ FakeOp.new }
 
+      let(:operand){ an_operand }
+
       before{ 
         signature.install
       }
@@ -21,14 +23,14 @@ module Alf
             s.argument :proj, AttrList
           end
         }
-        let(:args){ [ [:operand], ["hello", "world"] ] }
+        let(:args){ [ [operand], ["hello", "world"] ] }
 
         it 'should return the receiver' do
           subject.should eq(receiver)
         end
 
         it "should set the operands" do
-          subject.operands.should eq([:operand])
+          subject.operands.should eq([operand])
         end
 
         it 'should set the arguments' do
@@ -44,7 +46,7 @@ module Alf
         }
 
         context 'and passed' do
-          let(:args){ [[:operand], "hello"] }
+          let(:args){ [[operand], "hello"] }
 
           it 'should not use the default value' do
             subject.attrname.should eq(:hello) 
@@ -52,7 +54,7 @@ module Alf
         end
 
         context 'and not passed' do
-          let(:args){ [[:operand]] }
+          let(:args){ [[operand]] }
 
           it 'should use the default value' do
             subject.attrname.should eq(:autonum) 
@@ -69,7 +71,7 @@ module Alf
         }
 
         context "when no option is provided" do
-          let(:args){ [[:operand], [:hello, :world]] }
+          let(:args){ [[operand], [:hello, :world]] }
 
           it 'should use the default values for options' do
             subject.allbut.should eql(false)
@@ -77,7 +79,7 @@ module Alf
         end
 
         context "when option is provided" do
-          let(:args){ [[:operand], [:hello, :world], {:allbut => true}] }
+          let(:args){ [[operand], [:hello, :world], {:allbut => true}] }
 
           it 'should not use the default values for options' do
             subject.allbut.should eql(true)

@@ -12,7 +12,7 @@ module Alf
                   :time_avg => Aggregator.avg{ time }}}
 
       context "--no-allbut" do
-        subject{ a_lispy.summarize([], [:a], aggs) }
+        subject{ a_lispy.summarize(an_operand, [:a], aggs) }
 
         it { should be_a(Summarize) }
 
@@ -22,7 +22,7 @@ module Alf
       end # --no-allbut
 
       context "--allbut" do
-        subject{ a_lispy.summarize([], [:time], aggs, :allbut => true) }
+        subject{ a_lispy.summarize(an_operand, [:time], aggs, :allbut => true) }
 
         it { should be_a(Summarize) }
 

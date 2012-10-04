@@ -19,12 +19,8 @@ module Alf
         raise NotSupportedError, "Unable to compile `#{expr}`"
       end
 
-      def on_outside(expr, *args, &bl)
-        if expr.respond_to?(:each)
-          expr
-        else
-          raise NotSupportedError, "Unable to compile `#{expr}`"
-        end
+      def not_supported(expr, *args, &bl)
+        raise NotSupportedError, "Unexpected operand `#{expr}`"
       end
 
     end # class Compiler

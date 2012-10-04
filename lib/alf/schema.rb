@@ -31,7 +31,7 @@ module Alf
 
         def method_missing(name, *args, &bl)
           return super unless args.empty? and bl.nil?
-          context.known?(name) ? context.iterator(name) : super
+          context.known?(name) ? Algebra::Operand.coerce(context.iterator(name)) : super
         end
       }
     end

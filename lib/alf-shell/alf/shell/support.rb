@@ -15,7 +15,7 @@ module Alf
         operands = operands[(operands.size - size)..-1] if size
         operands = operands.map{|arg|
           arg = database.iterator(arg.to_sym) if arg.is_a?(String)
-          arg
+          Algebra::Operand.coerce(arg)
         }
       end
 

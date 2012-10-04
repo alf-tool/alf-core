@@ -89,7 +89,7 @@ module Alf
 
         # 1) Check and set operands, passed as an array as first argument
         invalid_args!(args) unless args.first.is_a?(Array)
-        receiver.send(:operands=, args.shift)
+        receiver.send(:operands=, args.shift.map{|op| Operand.coerce(op)})
 
         # 2) Extract options if provided
         optargs = default_options

@@ -7,7 +7,7 @@ module Alf
 
       it_should_behave_like("An operator class")
 
-      subject{ a_lispy.restrict([], lambda{ name < 10 }) }
+      subject{ a_lispy.restrict(an_operand, lambda{ name < 10 }) }
 
       it { should be_a(Restrict) }
 

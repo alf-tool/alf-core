@@ -1,3 +1,10 @@
+module Alf
+  module Engine
+
+    Cogable = lambda{|arg| arg.respond_to?(:to_cog) }
+
+  end # module Engine
+end # module Alf
 require_relative 'engine/cog'
 require_relative 'engine/leaf'
 require_relative 'engine/cesure'

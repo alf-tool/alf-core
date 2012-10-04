@@ -4,7 +4,7 @@ module Alf
   #
   class Relvar
     include Enumerable
-    include Algebra::Operand
+    include Algebra::Operand::Leaf
     include Lang::ObjectOriented
 
     # The context under which this relvar was served.
@@ -96,6 +96,10 @@ module Alf
       in_transaction do
         Update::Deleter.new.call(expr, predicate)
       end
+    end
+
+    def to_cog
+      _compile
     end
 
     def to_lispy

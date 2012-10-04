@@ -17,7 +17,7 @@ module Alf
   #
   class Relation
     extend Domain::Reuse.new(::Set)
-    include Algebra::Operand
+    include Algebra::Operand::Leaf
     include Enumerable
     include Lang::ObjectOriented
 
@@ -58,6 +58,11 @@ module Alf
       AttrList.new tuples.first.keys
     end
 
+    # Returns an engine Cog
+    def to_cog
+      Engine::Leaf.new(self)
+    end
+
     # Returns a textual representation of this relation
     def to_s
       to_text
@@ -66,7 +71,7 @@ module Alf
     # Returns a  literal representation of this relation
     def to_ruby_literal
       "Alf::Relation[" +
-        tuples.map{|t| Support.to_ruby_literal(t)}.join(', ') + "]"
+        tuples.map{|t| Support.to_ruby_literal(t) }.join(', ') + "]"
     end
     alias :inspect :to_ruby_literal
 

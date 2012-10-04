@@ -8,7 +8,7 @@ module Alf
       it_should_behave_like("An operator class")
 
       context "--no-allbut" do
-        subject{ a_lispy.project([], [:a]) }
+        subject{ a_lispy.project(an_operand, [:a]) }
 
         it { should be_a(Project) }
 
@@ -18,7 +18,7 @@ module Alf
       end # --no-allbut
 
       context "--allbut" do
-        subject{ a_lispy.project([], [:a], :allbut => true) }
+        subject{ a_lispy.project(an_operand, [:a], :allbut => true) }
 
         it { should be_a(Project) }
 
