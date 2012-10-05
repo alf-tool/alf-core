@@ -14,6 +14,11 @@ module Alf
           Alf::Engine::Leaf.new(subject)
         end
 
+        def to_relvar
+          return subject.to_relvar if subject.respond_to?(:to_relvar)
+          super
+        end
+
       end # class Proxy
     end # module Operand
   end # module Algebra

@@ -23,7 +23,7 @@ require_relative "alf-lang/alf/lang"
 require_relative "alf-engine/alf/engine"
 
 require_relative 'alf/relation'
-require_relative 'alf/relvar'
+require_relative 'alf-relvar/alf/relvar'
 
 require_relative 'alf/schema'
 require_relative 'alf/connection'

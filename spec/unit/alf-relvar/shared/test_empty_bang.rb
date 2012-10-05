@@ -1,21 +1,18 @@
 require 'spec_helper'
 module Alf
   describe Relvar, 'empty!' do
+    include Relvar
 
-    subject{ relvar.empty! }
+    subject{ empty! }
 
     context 'on an empty relvar' do
-      let(:relvar){
-        examples_database.relvar{ restrict(suppliers, false) }
-      }
+      let(:to_cog){ [] }
 
       it{ should be_true }
     end
 
     context 'on an non empty relvar' do
-      let(:relvar){
-        examples_database.relvar(:suppliers)
-      }
+      let(:to_cog){ [ 1 ] }
 
       it "should raise a fact error" do
         lambda{ subject }.should raise_error(Alf::FactAssertionError)
