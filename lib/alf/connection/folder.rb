@@ -17,8 +17,8 @@ module Alf
         Path.like?(conn_spec) && Path(conn_spec).directory?
       end
 
-      # Returns a low-level iterator for a given named variable
-      def iterator(name)
+      # Returns a cog for a given named variable
+      def cog(name)
         if file = find_file(name)
           Reader.reader(file, self)
         else

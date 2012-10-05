@@ -42,7 +42,7 @@ module Alf
 
       end # class << self
 
-      # Connection instance to use to get base iterators
+      # Connection instance to use to get base relations
       attr_accessor :database
 
       # The reader to use when stdin is used as operand

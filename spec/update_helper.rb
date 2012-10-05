@@ -7,10 +7,6 @@ class UpdateContext
   end
   attr_reader :requests
 
-  def iterator(name)
-    Alf::Algebra::Operand::Fake.new(self).with_name(name)
-  end
-
   def heading(name)
     case name
     when :suppliers then Alf::Heading[:sid => Integer, :name  => String]

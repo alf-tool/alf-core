@@ -91,7 +91,7 @@ module Alf
     #
     # This method must be implemented by subclasses unless {#execute} is
     # overriden.
-    def render(iterator, output)
+    def render(input, output)
     end
     undef :render
 

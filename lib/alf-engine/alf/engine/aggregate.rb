@@ -1,8 +1,8 @@
 module Alf
   module Engine
     #
-    # Aggregates the whole operand according to a Summarization. The resulting
-    # iterator contains only one tuple.
+    # Aggregates the whole operand according to a Summarization. The result contains
+    # only one tuple.
     #
     # Example:
     #

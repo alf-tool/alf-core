@@ -1,6 +1,6 @@
 module Alf
   #
-  # A connection encapsulates the interface with the outside world, providing base iterators
+  # A connection encapsulates the interface with the outside world, providing base cogs
   # for named datasets.
   #
   # You can implement your own connection by subclassing this class and implementing the
@@ -138,22 +138,27 @@ module Alf
 
     # Returns true if `name` is known, false otherwise
     def known?(name)
-      !iterator(name).nil? rescue false
+      !cog(name).nil? rescue false
     end
 
-    # Returns a low-level iterator for a given named variable
-    def iterator(name)
-      raise NotImplementedError, "Unable to serve `#{name}` in Connection.iterator"
+    # Returns a cog for a given name
+    def cog(name)
+      raise NotSupportedError, "Unable to serve cog `#{name}` in `#{self}`"
+    end
+
+    # Returns a relvar for a given name
+    def relvar(name)
+      raise NotSupportedError, "Unable to serve relvar `#{name}` in `#{self}`"
     end
 
     # Returns the heading of a given named variable
     def heading(name)
-      raise NotSupportedError, "Unable to infer heading for `#{name}`"
+      raise NotSupportedError, "Unable to serve heading of `#{name}` in `#{self}`"
     end
 
     # Returns the keys of a given named variable
     def keys(name)
-      raise NotSupportedError, "Unable to infer keys for `#{name}`"
+      raise NotSupportedError, "Unable to serve keys of `#{name}` in `#{self}`"
     end
 
     # Yields the block in a transaction

@@ -1,8 +1,8 @@
 module Alf
   module Engine
     #
-    # Ensures an order on the main iterator of tuples, as well as on relation
-    # value attributes, that are converted as arrays as well.
+    # Ensures an order of tuples, recursing on relation value attributes, that are
+    # converted as arrays as well.
     #
     # Example:
     #
