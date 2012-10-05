@@ -5,7 +5,6 @@ module Alf
 
       let(:rv)        { Virtual.new(connection, expr)                 }
       let(:expr)      { Algebra.named_operand(:suppliers, connection) }
-      let(:predicate) { Predicate.eq(:sid, 1)                         }
       let(:connection){ self                                          }
 
       def delete(*args)
@@ -16,11 +15,25 @@ module Alf
         Relvar::Base.new(connection, name)
       end
 
-      subject{ rv.delete(predicate) }
+      context 'with a predicate' do
+        let(:predicate) { Predicate.eq(:sid, 1) }
 
-      it 'delegates the call to the connection' do
-        subject
-        @seen.should eq([:suppliers, predicate])
+        subject{ rv.delete(predicate) }
+
+        it 'delegates the call to the connection' do
+          subject
+          @seen.should eq([:suppliers, predicate])
+        end
+      end
+
+      context 'without predicate' do
+
+        subject{ rv.delete }
+
+        it 'uses a tautology' do
+          subject
+          @seen.should eq([:suppliers, Predicate.tautology])
+        end
       end
 
     end

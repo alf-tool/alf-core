@@ -24,7 +24,7 @@ module Alf
         connection.insert(name, tuples)
       end
 
-      def delete(predicate)
+      def delete(predicate = Predicate.tautology)
         connection.delete(name, predicate)
       end
 
