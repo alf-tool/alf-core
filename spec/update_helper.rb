@@ -44,11 +44,11 @@ module Helpers
   end
 
   def suppliers
-    Alf::Algebra::Operand::Named.new(db_context, :suppliers)
+    Alf::Algebra.named_operand(:suppliers, db_context)
   end
 
   def parts
-    Alf::Algebra::Operand::Named.new(db_context, :parts)
+    Alf::Algebra.named_operand(:parts, db_context)
   end
 
   def some_tuples

@@ -4,9 +4,9 @@ module Alf
       class Named
         include Operand::Leaf
 
-        def initialize(connection, name)
-          @connection = connection
+        def initialize(name, connection)
           @name = name
+          @connection = connection
         end
         attr_reader :connection, :name
 

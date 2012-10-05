@@ -10,7 +10,7 @@ module Alf
 
       def native(as, native_name = as)
         define_method(as) do
-          Algebra::Operand::Named.new(context, native_name)
+          Algebra.named_operand(native_name, context)
         end
       end
 
@@ -33,7 +33,7 @@ module Alf
           if !args.empty? || bl || !context.known?(name)
             super
           else
-            Algebra::Operand::Named.new(context, name)
+            Algebra.named_operand(name, context)
           end
         end
       }

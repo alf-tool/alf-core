@@ -46,7 +46,7 @@ module Helpers
   end
 
   def suppliers
-    Alf::Algebra::Operand::Named.new(examples_database, :suppliers)
+    Alf::Algebra.named_operand(:suppliers, examples_database)
   end
 
   def an_operand
