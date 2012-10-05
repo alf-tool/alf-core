@@ -6,4 +6,5 @@ require_relative 'support/relational'
 require_relative 'support/non_relational'
 require_relative 'support/experimental'
 
+require_relative 'support/classification'
 require_relative 'support/signature'
