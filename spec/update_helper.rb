@@ -40,11 +40,11 @@ module Helpers
   end
 
   def suppliers
-    db_context.iterator(:suppliers)
+    Alf::Algebra::Operand::Named.new(db_context, :suppliers)
   end
 
   def parts
-    db_context.iterator(:parts)
+    Alf::Algebra::Operand::Named.new(db_context, :parts)
   end
 
   def some_tuples

@@ -33,3 +33,4 @@ end # module Alf
 require_relative 'operand/leaf'
 require_relative 'operand/fake'
 require_relative 'operand/proxy'
+require_relative 'operand/named'

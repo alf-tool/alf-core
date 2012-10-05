@@ -10,7 +10,7 @@ module Alf
 
       def native(as, native_name = as)
         define_method(as) do
-          context.iterator(native_name)
+          Algebra::Operand::Named.new(context, native_name)
         end
       end
 
@@ -30,8 +30,11 @@ module Alf
         include ::Alf::Schema
 
         def method_missing(name, *args, &bl)
-          return super unless args.empty? and bl.nil?
-          context.known?(name) ? Algebra::Operand.coerce(context.iterator(name)) : super
+          if !args.empty? || bl || !context.known?(name)
+            super
+          else
+            Algebra::Operand::Named.new(context, name)
+          end
         end
       }
     end

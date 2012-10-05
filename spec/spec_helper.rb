@@ -46,7 +46,7 @@ module Helpers
   end
 
   def suppliers
-    examples_database.iterator(:suppliers)
+    Alf::Algebra::Operand::Named.new(examples_database, :suppliers)
   end
 
   def an_operand
