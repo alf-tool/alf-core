@@ -26,7 +26,7 @@ module Alf
       ### Operand::Leaf, recursion end :-)
 
       def on_leaf_operand(expr, predicate)
-        expr.delete(predicate)
+        expr.to_relvar.delete(predicate)
       end
 
       ### non relational

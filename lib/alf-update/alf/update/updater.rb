@@ -11,7 +11,7 @@ module Alf
       ### Operand::Leaf, recursion end :-)
 
       def on_leaf_operand(expr, updating, predicate)
-        expr.update(updating, predicate)
+        expr.to_relvar.update(updating, predicate)
       end
 
       ### non relational

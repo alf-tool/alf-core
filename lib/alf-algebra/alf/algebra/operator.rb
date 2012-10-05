@@ -53,17 +53,17 @@ module Alf
         self.class.signature
       end
 
+    ### -> to_xxx
+
       def to_s
         Support.to_lispy(self) rescue super
       end
 
-      def ==(other)
-        (other.class == self.class) &&
-        (other.operands == self.operands) &&
-        (other.signature.collect_on(self) == self.signature.collect_on(self))
-      end
+    ### identity and pseudo-mutability
 
-    ### rewriting utils (careful to clean state-full information here!)
+      def with_operands(*operands)
+        dup{|copy| copy.operands = operands }
+      end
 
       def dup
         super.tap do |copy|
@@ -72,8 +72,11 @@ module Alf
         end
       end
 
-      def with_operands(*operands)
-        dup{|copy| copy.operands = operands}
+      def ==(other)
+        (other.object_id == self.object_id) ||
+        ((other.class == self.class) &&
+         (other.operands == self.operands) &&
+         (other.signature.collect_on(self) == self.signature.collect_on(self)))
       end
 
     protected

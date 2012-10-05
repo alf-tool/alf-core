@@ -37,18 +37,6 @@ module Alf
           @attributes[:keys] || Keys::EMPTY
         end
 
-        def delete(predicate)
-          context.delete(name, predicate)
-        end
-
-        def insert(inserted)
-          context.insert(name, inserted)
-        end
-
-        def update(updating, predicate)
-          context.update(name, updating, predicate)
-        end
-
         def to_lispy
           name
         end

@@ -16,7 +16,7 @@ module Alf
       ### Operand::Leaf, recursion end :-)
 
       def on_leaf_operand(expr, inserted)
-        expr.insert(inserted)
+        expr.to_relvar.insert(inserted)
       end
 
       ### non relational
