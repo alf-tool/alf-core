@@ -1,8 +1,4 @@
-module Alf
-  module Engine
-    module Summarize
-    end # module Summarize
-  end # module Engine
-end # module Alf
+module Alf::Engine::Summarize
+end
 require_relative 'summarize/cesure'
 require_relative 'summarize/hash'

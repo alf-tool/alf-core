@@ -22,7 +22,8 @@ module Alf
     #     #      {:city => "Paris"}
     #     #    ]
     #
-    class Clip < Cog
+    class Clip
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

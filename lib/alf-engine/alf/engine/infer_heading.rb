@@ -3,7 +3,8 @@ module Alf
     #
     # Infers the heading of the iterated relation.
     #
-    class InferHeading < Cog
+    class InferHeading
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

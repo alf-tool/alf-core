@@ -13,7 +13,8 @@ module Alf
     #     #      {:id => 20}
     #     #    ]
     #
-    class Generator < Cog
+    class Generator
+      include Cog
 
       # @return [Symbol] Name of the autonum attribute
       attr_reader :as

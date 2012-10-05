@@ -13,7 +13,8 @@ module Alf
     #     #      {:last_name => "Jones", :city => "London"}
     #     #    ]
     #
-    class Rename < Cog
+    class Rename
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

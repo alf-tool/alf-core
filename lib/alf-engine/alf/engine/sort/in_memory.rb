@@ -15,7 +15,8 @@ module Alf
     #     #      {:name => "Smith"},
     #     #    ]
     #
-    class Sort::InMemory < Cog
+    class Sort::InMemory
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

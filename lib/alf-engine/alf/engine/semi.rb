@@ -1,7 +1,3 @@
-module Alf
-  module Engine
-    module Semi
-    end # module Semi
-  end # module Engine
-end # module Alf
+module Alf::Engine::Semi
+end
 require_relative 'semi/hash'

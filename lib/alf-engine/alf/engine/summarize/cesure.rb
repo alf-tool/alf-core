@@ -1,6 +1,6 @@
 module Alf
   module Engine
-    class Summarize::Cesure < Cog
+    class Summarize::Cesure
       include Engine::Cesure
 
       # @return [Enumerable] The operand

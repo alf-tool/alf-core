@@ -3,7 +3,8 @@ module Alf
     #
     # Remove duplicate tuples from its operand.
     #
-    class Compact < Cog
+    class Compact
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

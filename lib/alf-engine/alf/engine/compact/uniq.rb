@@ -3,7 +3,8 @@ module Alf
     #
     # Remove duplicate tuples through an in-memory `to_a.uniq` heuristics.
     #
-    class Compact::Uniq < Cog
+    class Compact::Uniq
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

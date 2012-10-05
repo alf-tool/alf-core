@@ -3,7 +3,8 @@ module Alf
     #
     # Unwraps a tuple attribute
     #
-    class Unwrap < Cog
+    class Unwrap
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

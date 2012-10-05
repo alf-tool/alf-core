@@ -3,7 +3,8 @@ module Alf
     #
     # Concat tuples from multiple operands.
     #
-    class Concat < Cog
+    class Concat
+      include Cog
 
       # @return [Array] operands to concatenate
       attr_reader :operands

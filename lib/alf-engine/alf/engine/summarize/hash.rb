@@ -1,6 +1,7 @@
 module Alf
   module Engine
-    class Summarize::Hash < Cog
+    class Summarize::Hash
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

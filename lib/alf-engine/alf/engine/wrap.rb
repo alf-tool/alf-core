@@ -3,7 +3,8 @@ module Alf
     #
     # Wraps attributes under as a sub-tuple
     #
-    class Wrap < Cog
+    class Wrap
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

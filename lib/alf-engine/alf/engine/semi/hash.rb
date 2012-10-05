@@ -3,7 +3,8 @@ module Alf
     #
     # Filters tuples from `left` that match or do not match tuples from `right`.
     #
-    class Semi::Hash < Cog
+    class Semi::Hash
+      include Cog
 
       # @return [Enumerable] The left operand
       attr_reader :left

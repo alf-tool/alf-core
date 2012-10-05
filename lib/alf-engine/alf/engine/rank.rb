@@ -1,7 +1,3 @@
-module Alf
-  module Engine
-    module Rank
-    end # module Rank
-  end # module Engine
-end # module Alf
+module Alf::Engine::Rank
+end
 require_relative 'rank/cesure'

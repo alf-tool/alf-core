@@ -1,7 +1,3 @@
-module Alf
-  module Engine
-    module Quota
-    end # module Quota
-  end # module Engine
-end # module Alf
+module Alf::Engine::Quota
+end
 require_relative 'quota/cesure'

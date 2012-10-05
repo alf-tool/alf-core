@@ -14,7 +14,8 @@ module Alf
     #     #      {:name => "Jones"}
     #     #    ]
     #
-    class Filter < Cog
+    class Filter
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

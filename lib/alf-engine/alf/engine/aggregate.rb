@@ -17,7 +17,8 @@ module Alf
     #   #      {:size => 2, :total => 22.0}
     #   #    ]
     #
-    class Aggregate < Cog
+    class Aggregate
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand
@@ -41,5 +42,5 @@ module Alf
       end
 
     end # class Aggregate
-  end # Engine
+  end # module Engine
 end # module Alf

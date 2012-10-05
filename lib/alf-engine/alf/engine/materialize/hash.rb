@@ -37,7 +37,8 @@ module Alf
     #     op[:city => "Athens"].to_a
     #     # => []
     #
-    class Materialize::Hash < Cog
+    class Materialize::Hash
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

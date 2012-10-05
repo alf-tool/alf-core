@@ -3,7 +3,8 @@ module Alf
     #
     # Sort its operand according to an ordering information.
     #
-    class Sort < Cog
+    class Sort
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

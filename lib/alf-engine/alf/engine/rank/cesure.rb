@@ -1,6 +1,6 @@
 module Alf
   module Engine
-    class Rank::Cesure < Cog
+    class Rank::Cesure
       include Engine::Cesure
 
       # @return [Enumerable] The operand

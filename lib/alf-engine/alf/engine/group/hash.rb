@@ -3,7 +3,8 @@ module Alf
     #
     # Provides hash-based grouping.
     #
-    class Group::Hash < Cog
+    class Group::Hash
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

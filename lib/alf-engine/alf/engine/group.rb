@@ -1,7 +1,3 @@
-module Alf
-  module Engine
-    module Group
-    end # module Group
-  end # module Engine
-end # module Alf
+module Alf::Engine::Group
+end
 require_relative 'group/hash'

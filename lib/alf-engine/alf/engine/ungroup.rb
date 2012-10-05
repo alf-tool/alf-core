@@ -1,6 +1,7 @@
 module Alf
   module Engine
-    class Ungroup < Cog
+    class Ungroup
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

@@ -17,7 +17,8 @@ module Alf
     #     #      {:name => "Smith", :price => -12.0}
     #     #    ]
     #
-    class Coerce < Cog
+    class Coerce
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

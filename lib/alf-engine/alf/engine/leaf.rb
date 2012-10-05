@@ -3,7 +3,8 @@ module Alf
     #
     # Marker for leaf compiled nodes
     #
-    class Leaf < Cog
+    class Leaf
+      include Cog
 
       # The initial expression
       attr_reader :operand

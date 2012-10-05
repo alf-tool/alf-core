@@ -18,7 +18,8 @@ module Alf
     #     #      {:name => "Jones", :city => "LONDON", :concat => "Jones LONDON"}
     #     #    ]
     #
-    class SetAttr < Cog
+    class SetAttr
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

@@ -15,7 +15,8 @@ module Alf
     #     #      {:id => 2, :name => "Smith"}
     #     #    ]
     #
-    class Defaults < Cog
+    class Defaults
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

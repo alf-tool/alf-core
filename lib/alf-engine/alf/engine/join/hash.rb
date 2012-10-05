@@ -3,7 +3,8 @@ module Alf
     #
     # Provides hash-based join.
     #
-    class Join::Hash < Cog
+    class Join::Hash
+      include Cog
 
       # @return [Enumerable] The left operand
       attr_reader :left

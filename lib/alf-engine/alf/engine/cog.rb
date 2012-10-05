@@ -1,6 +1,6 @@
 module Alf
   module Engine
-    class Cog
+    module Cog
       include Enumerable
 
       def to_relation

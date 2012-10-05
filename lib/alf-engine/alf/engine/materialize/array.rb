@@ -27,7 +27,8 @@ module Alf
     #            {:name => "Smith", :city => "Paris"}
     #          ]
     #
-    class Materialize::Array < Cog
+    class Materialize::Array
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand

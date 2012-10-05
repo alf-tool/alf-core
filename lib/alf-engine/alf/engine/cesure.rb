@@ -1,6 +1,7 @@
 module Alf
   module Engine
     module Cesure
+      include Cog
 
       # (see Cog#each)
       def each(&receiver)

@@ -16,7 +16,8 @@ module Alf
     #     #      {:name => "Smith", :id => 1}
     #     #    ]
     #
-    class Autonum < Cog
+    class Autonum
+      include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand
