@@ -148,7 +148,7 @@ module Alf
 
     # Returns a relvar for a given name
     def relvar(name)
-      raise NotSupportedError, "Unable to serve relvar `#{name}` in `#{self}`"
+      Relvar::Base.new(self, name)
     end
 
     # Returns the heading of a given named variable
