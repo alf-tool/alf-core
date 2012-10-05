@@ -9,18 +9,8 @@ module Alf
 
     protected
 
-      def main_scope
-        if respond_to?(:operand)
-          operand.main_scope
-        elsif respond_to?(:left)
-          left.main_scope
-        else
-          raise "Unable to infer scope on `#{self}`"
-        end
-      end
-
       def tuple_scope(tuple = nil)
-        Support::TupleScope.new tuple, [], main_scope
+        Support::TupleScope.new tuple, []
       end
 
     end # module Cog

@@ -13,10 +13,6 @@ module Alf
         @operand = operand
       end
 
-      def main_scope
-        operand.respond_to?(:scope) ? operand.scope : nil
-      end
-
       # (see Cog#each)
       def each(&block)
         operand.each(&block)
