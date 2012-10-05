@@ -128,4 +128,5 @@ module Alf
 
   end # class Relvar
 end # module Alf
-require_relative 'relvar/memory'
+require_relative 'relvar/base'
+require_relative 'relvar/virtual'
