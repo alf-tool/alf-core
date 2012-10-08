@@ -114,12 +114,12 @@ module Alf
 
     def_delegators :scope, :parse,
                            :query,
+                           :relvar,
                            :optimize,
                            :compile,
                            :assert!,
                            :deny!,
                            :fact!,
-                           :relvar,
                            :tuple_extract
 
     ### third-party helpers
@@ -144,11 +144,6 @@ module Alf
     # Returns a cog for a given name
     def cog(name)
       raise NotSupportedError, "Unable to serve cog `#{name}` in `#{self}`"
-    end
-
-    # Returns a relvar for a given name
-    def relvar(name)
-      Relvar::Base.new(self, name)
     end
 
     # Returns the heading of a given named variable
