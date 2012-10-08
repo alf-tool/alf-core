@@ -1,5 +1,5 @@
 language: ruby
-bundler_args: --without release doc
+bundler_args: --without release doc extra
 script: "bundle exec rake spec"
 rvm:
   - 1.9.2

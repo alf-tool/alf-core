@@ -10,7 +10,6 @@ group :runtime do
 end
 
 group :test do
-  gem "letters"
   gem "rake", "~> 0.9.2"
   gem "rspec", "~> 2.10"
 end
@@ -28,6 +27,7 @@ group :doc do
 end
 
 group :extra do
+  gem "letters"
   gem "highline", "~> 1.6"
   gem 'json', :platforms => [:ruby_18, :jruby, :mingw_18]
 end
