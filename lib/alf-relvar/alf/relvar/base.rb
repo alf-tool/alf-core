@@ -21,6 +21,7 @@ module Alf
       ### Update
 
       def insert(tuples)
+        tuples = [ tuples ] if TupleLike===tuples
         connection.insert(name, tuples)
       end
 

@@ -23,6 +23,7 @@ module Alf
 
       # Inserts some tuples inside this relation variable.
       def insert(tuples)
+        tuples = [ tuples ] if TupleLike===tuples
         Update::Inserter.new.call(expr, tuples)
       end
 
