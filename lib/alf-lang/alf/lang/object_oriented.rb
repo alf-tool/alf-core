@@ -8,6 +8,9 @@ module Alf
           define_method(:_self_operand) do
             self_operand
           end
+          define_method(:to_cog) do
+            self_operand.to_cog
+          end
           private :_self_operand
         }
       end
