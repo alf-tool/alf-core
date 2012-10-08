@@ -3,11 +3,6 @@ module Alf
     include Algebra::Operand::Leaf
     include Lang::ObjectOriented
 
-    def self.new(connection, expr)
-      return expr.to_relvar if expr.respond_to?(:to_relvar)
-      Virtual.new(connection, expr)
-    end
-
     def empty?
       to_cog.each{ return false }
       true

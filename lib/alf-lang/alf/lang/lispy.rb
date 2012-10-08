@@ -66,7 +66,8 @@ module Alf
         end
 
         def relvar(expr = nil, path = nil, line = nil, &block)
-          Relvar.new context, parse(expr, path, line, &block)
+          expr = parse(expr, path, line, &block)
+          expr.respond_to?(:to_relvar) ? expr.to_relvar : Relvar::Virtual.new(context, expr)
         end
 
       end # OwnMethods

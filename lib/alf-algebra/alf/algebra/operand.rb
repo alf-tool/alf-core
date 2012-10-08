@@ -29,18 +29,6 @@ module Alf
         raise NotSupportedError
       end
 
-      ### -> Engine
-
-      def to_cog
-        raise NotSupportedError, "Unable to get a cog from `#{self}`"
-      end
-
-      ### -> Relvar & Update
-
-      def to_relvar
-        raise NotSupportedError, "Unable to get a relvar from `#{self}`"
-      end
-
     end # module Operand
   end # module Algebra
 end # module Alf
