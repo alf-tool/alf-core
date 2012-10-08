@@ -7,16 +7,14 @@ module Alf
     end
 
     it 'works on DateTime' do
-      dt = DateTime.parse('2012-05-11T12:00:00+02:00')
+      dt = DateTime.parse('2012-05-11T12:00:00+00:00')
       rl = Support.to_ruby_literal(dt)
-      rl.should eql("DateTime.parse('2012-05-11T12:00:00+02:00')")
       ::Kernel.eval(rl).should eq(dt)
     end
 
     it 'works on Time' do
-      t = Time.parse('2012-05-11T12:00:00+02:00')
+      t = Time.parse('2012-05-11T12:00:00+00:00')
       rl = Support.to_ruby_literal(t)
-      rl.should eql("Time.parse('2012-05-11T12:00:00+02:00')")
       ::Kernel.eval(rl).should eq(t)
     end
 
