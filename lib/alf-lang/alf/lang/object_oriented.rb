@@ -82,7 +82,7 @@ module Alf
 
       def to_array(options = {})
         _with_ordering(options) do |o|
-          op = Alf::Engine::ToArray.new(_compile, o)
+          op = Alf::Engine::ToArray.new(to_cog, o)
           block_given? ? yield(op) : op.to_a
         end
       end
@@ -120,10 +120,6 @@ module Alf
         else
           ::Kernel.raise "Invalid ordering `#{options}`"
         end
-      end
-
-      def _compile
-        Alf::Engine::Compiler.new.call(_self_operand)
       end
 
       def _self_operand
