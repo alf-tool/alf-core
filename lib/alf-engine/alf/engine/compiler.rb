@@ -2,6 +2,12 @@ module Alf
   module Engine
     class Compiler < Lang::Compiler
 
+      def not_supported(expr)
+        # sub-compilers (i.e. Alf::Sequel's one) cheat a bit by partly rewriting
+        # expressions so that their operands are actually Cogs...
+        expr.is_a?(Cog) ? expr : super
+      end
+
       ### leaf
 
       def on_leaf_operand(expr)

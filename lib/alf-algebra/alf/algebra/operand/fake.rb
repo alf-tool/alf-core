@@ -37,6 +37,10 @@ module Alf
           @attributes[:keys] || Keys::EMPTY
         end
 
+        def to_cog
+          Engine::Leaf.new([])
+        end
+
         def to_lispy
           name
         end
