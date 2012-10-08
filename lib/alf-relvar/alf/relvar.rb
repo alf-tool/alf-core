@@ -3,6 +3,10 @@ module Alf
     include Algebra::Operand
     include Lang::ObjectOriented
 
+    def each(&bl)
+      to_cog.each(&bl)
+    end
+
     def empty?
       to_cog.each{ return false }
       true
