@@ -1,6 +1,6 @@
 module Alf
   module Relvar
-    include Algebra::Operand::Leaf
+    include Algebra::Operand
     include Lang::ObjectOriented
 
     def empty?

@@ -2,7 +2,7 @@ module Alf
   module Algebra
     module Operand
       class Named
-        include Operand::Leaf
+        include Operand
 
         def initialize(name, connection)
           @name = name

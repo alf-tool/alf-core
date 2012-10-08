@@ -2,7 +2,7 @@ module Alf
   module Algebra
     module Operand
       class Proxy
-        include Operand::Leaf
+        include Operand
 
         def initialize(subject)
           @subject = subject

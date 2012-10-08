@@ -13,7 +13,7 @@ module Alf
         raise NotSupportedError, "Unable to insert through `#{expr}`"
       end
 
-      ### Operand::Leaf, recursion end :-)
+      ### leaf Operand, recursion end :-)
 
       def on_leaf_operand(expr, inserted)
         expr.to_relvar.insert(inserted)

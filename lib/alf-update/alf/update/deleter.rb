@@ -23,7 +23,7 @@ module Alf
         apply(expr.operand, predicate)
       end
 
-      ### Operand::Leaf, recursion end :-)
+      ### leaf Operand, recursion end :-)
 
       def on_leaf_operand(expr, predicate)
         expr.to_relvar.delete(predicate)

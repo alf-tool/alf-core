@@ -8,7 +8,7 @@ module Alf
         raise NotSupportedError, "Unable to update through `#{expr}`"
       end
 
-      ### Operand::Leaf, recursion end :-)
+      ### leaf Operand, recursion end :-)
 
       def on_leaf_operand(expr, updating, predicate)
         expr.to_relvar.update(updating, predicate)

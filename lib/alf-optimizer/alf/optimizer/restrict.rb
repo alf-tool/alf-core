@@ -18,7 +18,7 @@ module Alf
         check_constant(operand, predicate){ super }
       end
 
-    # Operand::Leaf, recursion end :-)
+    # leaf Operand, recursion end :-)
 
       def on_leaf_operand(expr, predicate)
         restrict(expr, predicate)

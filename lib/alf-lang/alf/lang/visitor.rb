@@ -19,7 +19,7 @@ module Alf
           meth = :"#{prefix}#{name}"
           meth = :"#{prefix}missing" unless respond_to?(meth)
           meth
-        when Algebra::Operand::Leaf
+        when Algebra::Operand
           :on_leaf_operand
         else
           :not_supported
