@@ -10,7 +10,7 @@ group :runtime do
 end
 
 group :test do
-  gem "letters", "~> 0.2.6"
+  gem "letters"
   gem "rake", "~> 0.9.2"
   gem "rspec", "~> 2.10"
 end
