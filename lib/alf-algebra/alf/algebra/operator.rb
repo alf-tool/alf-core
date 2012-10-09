@@ -62,14 +62,14 @@ module Alf
     ### identity and pseudo-mutability
 
       def with_operands(*operands)
-        dup{|copy| copy.operands = operands }
+        dup{|copy|
+          copy.operands = operands
+          copy.clean_computed_attributes!
+        }
       end
 
-      def dup
-        super.tap do |copy|
-          yield(copy) if block_given?
-          copy.clean_computed_attributes!
-        end
+      def dup(&bl)
+        bl.nil? ? super : super.tap(&bl)
       end
 
       def ==(other)
