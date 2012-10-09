@@ -9,13 +9,14 @@ module Alf
         yield
       end
 
-      def closed?
-        defined?(@closed) && @closed
-      end
-
       # Closes the connection
       def close
         @closed = true
+      end
+
+      # Checks whether the connection is closed
+      def closed?
+        defined?(@closed) && @closed
       end
 
       ### schema methods
