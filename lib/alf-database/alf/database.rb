@@ -3,6 +3,15 @@ module Alf
 
     DEFAULT_OPTIONS = { cache_schema: true }
 
+    def self.connect(conn_spec, &bl)
+      adapter = Adapter.factor(conn_spec)
+      if bl
+        Database.new(adapter).connect(&bl)
+      else
+        Database.new(adapter).connection
+      end
+    end
+
     def initialize(adapter, options = {})
       @adapter = adapter
       @options = DEFAULT_OPTIONS.merge(options)
