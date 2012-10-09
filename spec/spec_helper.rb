@@ -16,6 +16,10 @@ require 'shared/a_valid_type_implementation'
 require 'shared/a_value'
 require 'shared/a_scope'
 
+(Path.dir/"unit").glob("**/shared_examples/*").each do |f|
+  require(f)
+end
+
 module Helpers
 
   SUPPLIER_NAMES = ["Smith", "Clark", "Jones", "Blake", "Adams"]
