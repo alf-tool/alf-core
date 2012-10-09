@@ -1,6 +1,7 @@
 module Alf
   module Algebra
     module Operand
+      include Support::Bindable
 
       def self.coerce(op)
         case op

@@ -4,11 +4,11 @@ module Alf
       class Named
         include Operand
 
-        def initialize(name, connection)
+        def initialize(name, connection = nil)
           @name = name
           @connection = connection
         end
-        attr_reader :connection, :name
+        attr_reader :name
 
         ### Operand
 
