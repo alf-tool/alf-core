@@ -8,7 +8,7 @@ module Alf
     end
 
     def empty?
-      to_cog.each{ return false }
+      to_cog.each{|_| return false }
       true
     end
 
@@ -29,6 +29,14 @@ module Alf
     def affect(value)
       delete
       insert(value)
+    end
+
+    def to_relvar
+      self
+    end
+
+    def to_relation
+      to_cog.to_relation
     end
 
   private

@@ -41,14 +41,6 @@ module Alf
         connection!.cog(name)
       end
 
-      def to_relvar
-        self
-      end
-
-      def to_relation
-        to_cog.to_relation
-      end
-
       def to_lispy
         name.to_s
       end

@@ -45,14 +45,6 @@ module Alf
         expr = connection!.compiler.call(expr)
       end
 
-      def to_relvar
-        self
-      end
-
-      def to_relation
-        to_cog.to_relation
-      end
-
       def to_lispy
         expr.to_lispy
       end
