@@ -76,11 +76,6 @@ module Alf
       @conn_spec = conn_spec
     end
 
-    # Returns a compiler instance
-    def compiler
-      Engine::Compiler.new
-    end
-
     # Returns a low-level connection on this adapter
     def connection
       Connection.new

@@ -31,10 +31,4 @@ shared_examples_for "an adapter" do
     end
   end
 
-  describe 'compiler' do
-    subject{ adapter.compiler }
-
-    it{ should be_a(Alf::Algebra::Compiler) }
-  end
-
 end
