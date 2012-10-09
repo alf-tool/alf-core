@@ -7,12 +7,8 @@ module Alf
 
       subject{ rv.to_relation }
 
-      def optimizer
-        lambda{|expr| expr }
-      end
-
-      def compiler
-        lambda{|expr| Struct.new(:to_relation).new("a relation") }
+      def compile(expr)
+        Struct.new(:to_relation).new("a relation")
       end
 
       it{ should eq("a relation") }

@@ -7,15 +7,11 @@ module Alf
 
       subject{ rv.to_cog }
 
-      def optimizer
-        lambda{|*args| args }
+      def compile(expr)
+        [expr]
       end
 
-      def compiler
-        lambda{|*args| args }
-      end
-
-      it{ should eq([[:expr]]) }
+      it{ should eq([:expr]) }
 
     end
   end
