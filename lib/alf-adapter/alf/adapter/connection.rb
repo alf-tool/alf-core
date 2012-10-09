@@ -62,3 +62,4 @@ module Alf
     end # class Connection
   end # class Adapter
 end # module Alf
+require_relative 'connection/schema_cached'
