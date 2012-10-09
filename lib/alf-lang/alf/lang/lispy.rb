@@ -29,7 +29,7 @@ module Alf
           end
           expr = evaluate(expr, path, line, &block) if block or expr.is_a?(String)
           expr = __send__(expr)                     if expr.is_a?(Symbol)
-          expr = expr.bind(context) if expr.is_a?(Support::Bindable)
+          expr = expr.bind(context)                 if expr.is_a?(Support::Bindable)
           expr
         end
 
