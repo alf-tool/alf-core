@@ -48,6 +48,11 @@ module Alf
         signature.parse_args(args, self)
       end
 
+      # Binds to a connection
+      def bind(connection)
+        super{|c| c.operands = operands.map{|op| op.bind(connection) } }
+      end
+
       # @return [Signature] the operator signature.
       def signature
         self.class.signature
@@ -57,6 +62,10 @@ module Alf
 
       def to_s
         Support.to_lispy(self) rescue super
+      end
+
+      def to_relvar
+        Relvar::Virtual.new(self, connection)
       end
 
     ### identity and pseudo-mutability

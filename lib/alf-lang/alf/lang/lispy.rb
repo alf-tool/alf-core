@@ -29,6 +29,7 @@ module Alf
           end
           expr = evaluate(expr, path, line, &block) if block or expr.is_a?(String)
           expr = __send__(expr)                     if expr.is_a?(Symbol)
+          expr = expr.bind(context) if expr.is_a?(Support::Bindable)
           expr
         end
 
@@ -66,8 +67,7 @@ module Alf
         end
 
         def relvar(expr = nil, path = nil, line = nil, &block)
-          expr = parse(expr, path, line, &block)
-          expr.respond_to?(:to_relvar) ? expr.to_relvar : Relvar::Virtual.new(expr, context)
+          parse(expr, path, line, &block).to_relvar
         end
 
       end # OwnMethods
