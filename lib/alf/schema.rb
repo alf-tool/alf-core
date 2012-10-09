@@ -30,7 +30,7 @@ module Alf
         include ::Alf::Schema
 
         def method_missing(name, *args, &bl)
-          if !args.empty? || bl || !context.known?(name)
+          if !args.empty? || bl || !context.knows?(name)
             super
           else
             Algebra.named_operand(name, context)

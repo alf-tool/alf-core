@@ -137,7 +137,7 @@ module Alf
     ### low-level, adapter-oriented API
 
     # Returns true if `name` is known, false otherwise
-    def known?(name)
+    def knows?(name)
       !cog(name).nil? rescue false
     end
 
