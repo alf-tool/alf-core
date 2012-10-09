@@ -19,8 +19,8 @@ module Alf
 
       module OwnMethods
 
-        def context
-          @context
+        def connection
+          @connection
         end
 
         def parse(expr = nil, path = nil, line = nil, &block)
@@ -29,52 +29,15 @@ module Alf
           end
           expr = evaluate(expr, path, line, &block) if block or expr.is_a?(String)
           expr = __send__(expr)                     if expr.is_a?(Symbol)
-          expr = expr.bind(context)                 if expr.is_a?(Support::Bindable)
+          expr = expr.bind(connection)              if expr.is_a?(Support::Bindable)
           expr
-        end
-
-        def optimize(expr)
-          context.optimizer.call(expr)
-        end
-
-        def compile(expr)
-          context.compiler.call(expr)
-        end
-
-        def query(expr = nil, path = nil, line = nil, &block)
-          expr = parse(expr, path, line, &block)
-          expr = optimize(expr)
-          cog  = compile(expr)
-          Relation.coerce(cog)
-        end
-
-        def assert!(*args, &bl)
-          relvar(*args, &bl).not_empty!
-        end
-
-        def fact!(*args, &bl)
-          relvar(*args, &bl).tuple_extract
-        rescue NoSuchTupleError
-          Kernel.raise ::Alf::FactAssertionError
-        end
-
-        def deny!(*args, &bl)
-          relvar(*args, &bl).empty!
-        end
-
-        def tuple_extract(*args, &bl)
-          query(*args, &bl).tuple_extract
-        end
-
-        def relvar(expr = nil, path = nil, line = nil, &block)
-          parse(expr, path, line, &block).to_relvar
         end
 
       end # OwnMethods
 
       # Creates a language instance
-      def initialize(context = nil, helpers = [ ])
-        @context = context
+      def initialize(connection = nil, helpers = [ ])
+        @connection = connection
         super [ OwnMethods, Functional, Predicates ] + helpers
       end
 
