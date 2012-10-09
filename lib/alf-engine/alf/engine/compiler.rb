@@ -1,6 +1,6 @@
 module Alf
   module Engine
-    class Compiler < Lang::Compiler
+    class Compiler < Algebra::Compiler
 
       def not_supported(expr)
         # sub-compilers (i.e. Alf::Sequel's one) cheat a bit by partly rewriting

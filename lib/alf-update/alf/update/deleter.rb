@@ -1,6 +1,6 @@
 module Alf
   module Update
-    class Deleter < Lang::Compiler
+    class Deleter < Algebra::Compiler
 
       ### overridings
 

@@ -1,6 +1,6 @@
 module Alf
   module Update
-    class Updater < Lang::Compiler
+    class Updater < Algebra::Compiler
 
       ### overridings
 

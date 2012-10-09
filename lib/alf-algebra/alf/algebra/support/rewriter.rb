@@ -1,8 +1,7 @@
 module Alf
-  module Lang
+  module Algebra
     class Rewriter
       include Visitor
-      include Lang::Functional
 
     # public interface
 
@@ -29,5 +28,5 @@ module Alf
       end
 
     end # class Rewriter
-  end # module Lang
+  end # module Algebra
 end # module Alf

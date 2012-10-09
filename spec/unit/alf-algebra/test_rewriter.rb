@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  module Lang
+  module Algebra
     describe Rewriter do
 
       let(:expr){

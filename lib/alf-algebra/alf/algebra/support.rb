@@ -8,3 +8,7 @@ require_relative 'support/experimental'
 
 require_relative 'support/classification'
 require_relative 'support/signature'
+
+require_relative 'support/visitor'
+require_relative 'support/compiler'
+require_relative 'support/rewriter'

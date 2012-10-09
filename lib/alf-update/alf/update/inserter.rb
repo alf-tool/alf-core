@@ -1,6 +1,6 @@
 module Alf
   module Update
-    class Inserter < Lang::Compiler
+    class Inserter < Algebra::Compiler
       include Lang::Functional
 
       ### overridings

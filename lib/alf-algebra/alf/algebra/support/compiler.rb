@@ -1,5 +1,5 @@
 module Alf
-  module Lang
+  module Algebra
     class Compiler
       include Visitor
 
@@ -24,5 +24,5 @@ module Alf
       end
 
     end # class Compiler
-  end # module Lang
+  end # module Algebra
 end # module Alf

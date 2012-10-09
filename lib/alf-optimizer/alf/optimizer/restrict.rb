@@ -1,6 +1,7 @@
 module Alf
   class Optimizer
-    class Restrict < Lang::Rewriter
+    class Restrict < Algebra::Rewriter
+      include Lang::Functional
 
     ### overridings
 

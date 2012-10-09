@@ -20,6 +20,7 @@ module Alf
   #   r = Reader.foo([a path or a IO object])
   #
   class Reader
+    include Alf::Engine::Cog
     include Enumerable
 
     class << self

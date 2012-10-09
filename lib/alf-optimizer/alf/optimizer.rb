@@ -17,7 +17,7 @@ module Alf
       self
     end
 
-    class Search < Lang::Rewriter
+    class Search < Algebra::Rewriter
 
       def initialize(processor, interest)
         @processor = processor

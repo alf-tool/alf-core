@@ -1,5 +1,5 @@
 module Alf
-  module Lang
+  module Algebra
     module Visitor
 
       def copy_and_apply(expr)
@@ -27,5 +27,5 @@ module Alf
       end
 
     end # module Visitor
-  end # module Lang
+  end # module Algebra
 end # module Alf

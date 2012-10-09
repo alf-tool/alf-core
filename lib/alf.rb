@@ -16,11 +16,11 @@ require_relative 'alf-support/alf/support/ordered_set'
 require_relative 'alf-types/alf/types'
 require_relative 'alf-support/alf/support'
 require_relative 'alf-aggregator/alf/aggregator'
+require_relative 'alf-algebra/alf/algebra'
+require_relative "alf-engine/alf/engine"
 require_relative 'alf-io/alf/io'
 require_relative 'alf-csv/alf/csv'
-require_relative 'alf-algebra/alf/algebra'
 require_relative "alf-lang/alf/lang"
-require_relative "alf-engine/alf/engine"
 
 require_relative 'alf/relation'
 require_relative 'alf-relvar/alf/relvar'
