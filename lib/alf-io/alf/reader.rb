@@ -101,7 +101,6 @@ module Alf
     # Creates a reader instance.
     #
     # @param [String or IO] path to a file or IO object for input
-    # @param [Connection] connection wired connection, serving this reader
     # @param [Hash] options Reader's options (see doc of subclasses)
     def initialize(input, options = {})
       @input   = input

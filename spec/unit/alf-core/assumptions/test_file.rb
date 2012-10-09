@@ -13,5 +13,4 @@ describe "__FILE__" do
     it { should == "hello.rb" }
   end
   
-  
 end
