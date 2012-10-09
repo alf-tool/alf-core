@@ -41,11 +41,19 @@ module Helpers
   end
 
   def examples_database(&bl)
-    if bl
-      raise NotImplementedError, "Block no longer supported"
-    else
-      Alf.examples
-    end
+    Alf.examples
+  end
+
+  def sap_adapter
+    Alf::Adapter.factor(examples_path)
+  end
+
+  def sap_db
+    Alf::Database.new(sap_adapter)
+  end
+
+  def sap_conn
+    sap_db.connection
   end
 
   def suppliers

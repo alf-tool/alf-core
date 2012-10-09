@@ -144,3 +144,4 @@ require_relative "alf-update/alf/update"
 
 require_relative "alf-adapter/alf/adapter"
 require_relative "alf-adapter-fs/alf/adapter/fs"
+require_relative "alf-database/alf/database"
