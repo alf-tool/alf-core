@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Base, "keys" do
 
-      let(:rv)        { Base.new(connection, :suppliers) }
+      let(:rv)        { Base.new(:suppliers, connection) }
       let(:connection){ self                             }
 
       def keys(*args)

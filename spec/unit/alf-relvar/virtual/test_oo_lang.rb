@@ -3,8 +3,8 @@ module Alf
   module Relvar
     describe Virtual, 'OO relational language' do
 
-      let(:base){ Base.new(:connection, :suppliers) }
-      let(:rv)  { Virtual.new(:connection, base)    }
+      let(:base){ Base.new(:suppliers, :connection) }
+      let(:rv)  { Virtual.new(base, :connection)    }
 
       subject{ rv.project([:sid]) }
 

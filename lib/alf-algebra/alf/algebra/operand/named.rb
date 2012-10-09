@@ -27,7 +27,7 @@ module Alf
         end
 
         def to_relvar
-          Relvar::Base.new connection, name
+          Relvar::Base.new name, connection
         end
 
         ### Readable output

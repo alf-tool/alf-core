@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Base, "name" do
 
-      let(:rv){ Base.new(:connection, :name) }
+      let(:rv){ Base.new(:name, :connection) }
 
       subject{ rv.name }
 

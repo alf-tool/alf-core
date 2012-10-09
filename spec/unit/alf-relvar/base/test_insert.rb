@@ -3,8 +3,8 @@ module Alf
   module Relvar
     describe Base, "insert" do
 
-      let(:rv)        { Base.new(connection, :suppliers) }
-      let(:tuples)    { Relation.new(:id => 1)                        }
+      let(:rv)        { Base.new(:suppliers, connection) }
+      let(:tuples)    { Relation.new(:id => 1)           }
       let(:connection){ self                             }
 
       def insert(*args)

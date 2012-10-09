@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Base, "update" do
 
-      let(:rv)        { Base.new(connection, :suppliers) }
+      let(:rv)        { Base.new(:suppliers, connection) }
       let(:updating)  { {sname: 'Jones'}                 }
       let(:predicate) { Predicate.eq(:sid, 1)            }
       let(:connection){ self                             }

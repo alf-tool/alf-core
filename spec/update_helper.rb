@@ -14,10 +14,6 @@ class UpdateContext
     end
   end
 
-  def relvar(name)
-    Alf::Relvar::Base.new(self, name)
-  end
-
   def insert(name, tuples)
     tuples = Alf::Engine::Compiler.new.call(tuples).to_a
     requests << [:insert, name, tuples]

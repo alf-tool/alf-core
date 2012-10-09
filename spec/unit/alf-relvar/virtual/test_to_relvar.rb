@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Virtual, "to_relvar" do
 
-      let(:rv){ Virtual.new(:connection, :expr) }
+      let(:rv){ Virtual.new(:expr, :connection) }
 
       subject{ rv.to_relvar }
 

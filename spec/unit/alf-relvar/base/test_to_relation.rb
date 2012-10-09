@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Base, "to_relation" do
 
-      let(:rv)        { Base.new(connection, :suppliers) }
+      let(:rv)        { Base.new(:suppliers, connection) }
       let(:connection){ self                             }
 
       def cog(*args)

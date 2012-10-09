@@ -3,11 +3,11 @@ module Alf
     class Virtual
       include Relvar
 
-      def initialize(connection, expr)
-        @connection = connection
+      def initialize(expr, connection = nil)
         @expr = expr
+        @connection = connection
       end
-      attr_reader :connection, :expr
+      attr_reader :expr
 
       ### Static analysis & inference
 
@@ -41,8 +41,8 @@ module Alf
 
       def to_cog
         expr = self.expr
-        expr = connection.optimizer.call(expr)
-        expr = connection.compiler.call(expr)
+        expr = connection!.optimizer.call(expr)
+        expr = connection!.compiler.call(expr)
       end
 
       def to_relvar

@@ -3,40 +3,42 @@ module Alf
     class Base
       include Relvar
 
-      def initialize(connection, name)
-        @connection, @name = connection, name
+      def initialize(name, connection = nil)
+        raise unless name.is_a?(Symbol)
+        @name = name
+        @connection = connection
       end
-      attr_reader :connection, :name
+      attr_reader :name
 
       ### Static analysis & inference
 
       def heading
-        connection.heading(name)
+        connection!.heading(name)
       end
 
       def keys
-        connection.keys(name)
+        connection!.keys(name)
       end
 
       ### Update
 
       def insert(tuples)
         tuples = [ tuples ] if TupleLike===tuples
-        connection.insert(name, tuples)
+        connection!.insert(name, tuples)
       end
 
       def delete(predicate = Predicate.tautology)
-        connection.delete(name, predicate)
+        connection!.delete(name, predicate)
       end
 
       def update(updating, predicate)
-        connection.update(name, updating, predicate)
+        connection!.update(name, updating, predicate)
       end
 
       ### to_xxx
 
       def to_cog
-        connection.cog(name)
+        connection!.cog(name)
       end
 
       def to_relvar

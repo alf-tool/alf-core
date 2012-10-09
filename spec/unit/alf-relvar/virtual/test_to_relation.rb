@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Virtual, "to_relation" do
 
-      let(:rv){ Virtual.new(self, :expr) }
+      let(:rv){ Virtual.new(:expr, self) }
 
       subject{ rv.to_relation }
 

@@ -34,7 +34,7 @@ module Alf
   private
 
     def _operator_output(expr)
-      Relvar::Virtual.new(connection, expr)
+      Relvar::Virtual.new(expr, connection)
     end
 
   end # module Relvar

@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Virtual, "to_lispy" do
 
-      let(:rv){ Virtual.new(:connection, self) }
+      let(:rv){ Virtual.new(self, :connection) }
 
       def to_lispy
         "a lispy expression"

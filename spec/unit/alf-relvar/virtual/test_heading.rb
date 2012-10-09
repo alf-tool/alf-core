@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Virtual, "heading" do
 
-      let(:rv){ Virtual.new(:connection, self) }
+      let(:rv){ Virtual.new(self, :connection) }
 
       def heading
         "a heading"
