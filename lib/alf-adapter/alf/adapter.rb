@@ -12,9 +12,9 @@ module Alf
       #
       # Example:
       #
-      #     Connection.register(:sqlite, MySQLiteConnectionClass)
-      #     Connection.sqlite(...)        # MySQLiteConnectionClass.new(...)
-      #     Connection.autodetect(...)    # => MySQLiteConnectionClass.new(...)
+      #     Adapter.register(:sqlite, MySQLiteAdapterClass)
+      #     Adapter.sqlite(...)        # MySQLiteAdapterClass.new(...)
+      #     Adapter.autodetect(...)    # => MySQLiteAdapterClass.new(...)
       #
       # @see also autodetect and recognizes?
       # @param [Symbol] name name of the connection kind
@@ -40,17 +40,13 @@ module Alf
         clazz
       end
 
-      # Automatically connects to a given database.
+      # Builds an adapter instance through the autodetection adapter mechanism.
       #
       # @param [Hash] conn_spec a connection specification
       # @param [Module] schema a module for scope definition
-      # @return [Connection] a connection instance
-      def connect(conn_spec)
-        clazz = autodetect(conn_spec)
-        conn  = clazz.new(conn_spec)
-        block_given? ? yield(conn) : conn
-      ensure
-        conn.close if conn and block_given?
+      # @return [Adapter] an adapter instance
+      def factor(conn_spec)
+        autodetect(conn_spec).new(conn_spec)
       end
 
       # Returns true if _args_ can be used for get an adapter instance, false otherwise.
@@ -60,10 +56,10 @@ module Alf
       # should not occur (missing argument, wrong typing, etc.).
       #
       # Please be specific in the implementation of this extension point, as registered
-      # connections for a chain and each of them should have a chance of being selected.
+      # adapters for a chain and each of them should have a chance of being selected.
       #
-      # @param [Array] args arguments for the Connection constructor
-      # @return [Boolean] true if an connection may be built using `args`,
+      # @param [Array] args arguments for the Adapter constructor
+      # @return [Boolean] true if an adapter may be built using `args`,
       #         false otherwise.
       def recognizes?(args)
         false
@@ -80,46 +76,24 @@ module Alf
       @conn_spec = conn_spec
     end
 
-    # Returns a low-level connection on this adapter
-    def connection
-      self
-    end
-
-    # Closes the connection
-    def close
-    end
-
     # Returns a compiler instance
     def compiler
       Engine::Compiler.new
     end
 
-    ### low-level, adapter-oriented API
-
-    # Returns true if `name` is known, false otherwise.
-    def known?(name)
-      raise NotSupportedError, "Unable to respond to known? `#{name}` in `#{self}`"
+    # Returns a low-level connection on this adapter
+    def connection
+      Connection.new
     end
 
-    # Returns the heading of a given named variable
-    def heading(name)
-      raise NotSupportedError, "Unable to serve heading of `#{name}` in `#{self}`"
-    end
-
-    # Returns the keys of a given named variable
-    def keys(name)
-      raise NotSupportedError, "Unable to serve keys of `#{name}` in `#{self}`"
-    end
-
-    # Returns a cog for a given name
-    def cog(name)
-      raise NotSupportedError, "Unable to serve cog `#{name}` in `#{self}`"
-    end
-
-    # Yields the block in a transaction
-    def in_transaction
-      yield
+    # Yields the block with a connection and closes it afterwards
+    def connect
+      c = connection
+      yield(c)
+    ensure
+      c.close if c
     end
 
   end # class Adapter
 end # module Alf
+require_relative 'adapter/connection'
