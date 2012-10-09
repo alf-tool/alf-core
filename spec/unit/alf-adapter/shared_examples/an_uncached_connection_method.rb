@@ -9,7 +9,7 @@ module Alf
             define_method(meth) do |*args, &bl|
               bl ? bl.call(args) : args
             end
-          end.new
+          end.new(nil)
         }
         let(:cached){ SchemaCached.new(connection) }
 

@@ -10,7 +10,7 @@ module Alf
               raise unless @seen.nil?
               @seen = [ name ]
             end
-          end.new
+          end.new(nil)
         }
         let(:cached)     { SchemaCached.new(connection) }
         let(:relvar_name){ :a_relvar_name }

@@ -2,6 +2,11 @@ module Alf
   class Adapter
     class Connection
 
+      def initialize(conn_spec)
+        @conn_spec = conn_spec
+      end
+      attr_reader :conn_spec
+
       ### connection, transaction, locks
 
       # Yields the block in a transaction

@@ -3,10 +3,7 @@ module Alf
     class Folder
       class Connection < Adapter::Connection
 
-        def initialize(folder)
-          @folder = folder
-        end
-        attr_reader :folder
+        alias :folder :conn_spec
 
         # Returns true if `name` is known, false otherwise.
         def knows?(name)

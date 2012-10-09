@@ -78,7 +78,7 @@ module Alf
 
     # Returns a low-level connection on this adapter
     def connection
-      Connection.new
+      Connection.new(conn_spec)
     end
 
     # Yields the block with a connection and closes it afterwards
