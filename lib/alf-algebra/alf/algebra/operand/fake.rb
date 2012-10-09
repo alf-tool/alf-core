@@ -4,11 +4,10 @@ module Alf
       class Fake
         include Operand
 
-        def initialize(context = nil)
-          @context = context
+        def initialize(connection = nil)
+          @connection = connection
           @attributes = {}
         end
-        attr_reader :context
 
         def with_heading(h)
           dup.set!(:heading => Alf::Heading.coerce(h))
@@ -30,7 +29,7 @@ module Alf
         end
 
         def heading
-          @attributes[:heading] || context.heading(name)
+          @attributes[:heading] || connection.heading(name)
         end
 
         def keys
