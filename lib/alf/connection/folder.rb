@@ -20,7 +20,7 @@ module Alf
       # Returns a cog for a given named variable
       def cog(name)
         if file = find_file(name)
-          Reader.reader(file, self)
+          Reader.reader(file)
         else
           raise NoSuchRelvarError, "No such relvar #{name} (#{@folder})"
         end
