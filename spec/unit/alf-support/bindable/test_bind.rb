@@ -23,9 +23,7 @@ module Alf
         end
 
         it 'lets the original one unchanged' do
-          lambda{
-            bindable.connection
-          }.should raise_error(UnboundError)
+          bindable.connection.should be_nil
         end
       end
 
@@ -53,9 +51,7 @@ module Alf
 
         it 'lets the original one unchanged' do
           bindable.name.should eq("default")
-          lambda{
-            bindable.connection
-          }.should raise_error(UnboundError)
+          bindable.connection.should be_nil
         end
       end
 

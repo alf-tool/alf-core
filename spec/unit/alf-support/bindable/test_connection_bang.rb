@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   module Support
-    describe Bindable, "connection" do
+    describe Bindable, "connection!" do
 
       let(:clazz){
         Class.new{
@@ -12,12 +12,16 @@ module Alf
         }
       }
 
-      subject{ bindable.connection }
+      subject{ bindable.connection! }
 
       context 'on an unbound object' do
         let(:bindable){ clazz.new }
 
-        it{ should be_nil }
+        it 'raises an UnboundError' do
+          lambda{
+            subject
+          }.should raise_error(UnboundError)
+        end
       end
 
       context 'on a bound object' do

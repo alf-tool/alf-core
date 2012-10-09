@@ -13,17 +13,17 @@ module Alf
         ### Operand
 
         def keys
-          connection.keys(name)
+          connection!.keys(name)
         end
 
         def heading
-          connection.heading(name)
+          connection!.heading(name)
         end
 
         ### Compilation and update
 
         def to_cog
-          connection.cog(name)
+          connection!.cog(name)
         end
 
         def to_relvar

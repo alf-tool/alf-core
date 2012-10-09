@@ -2,7 +2,7 @@ module Alf
   module Support
     module Bindable
 
-      attr_writer :connection
+      attr_accessor :connection
       protected :connection=
 
       def bind(connection)
@@ -16,7 +16,7 @@ module Alf
         defined?(@connection) && !@connection.nil?
       end
 
-      def connection
+      def connection!
         raise UnboundError unless bound?
         @connection
       end
