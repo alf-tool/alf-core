@@ -36,22 +36,22 @@ module Alf
         relvar(*args, &bl).to_relation
       end
 
-      def tuple_extract(*args, &bl)
-        relvar(*args, &bl).tuple_extract
-      end
-
       def assert!(*args, &bl)
         relvar(*args, &bl).not_empty!
+      end
+
+      def deny!(*args, &bl)
+        relvar(*args, &bl).empty!
+      end
+
+      def tuple_extract(*args, &bl)
+        relvar(*args, &bl).tuple_extract
       end
 
       def fact!(*args, &bl)
         relvar(*args, &bl).tuple_extract
       rescue NoSuchTupleError
         raise FactAssertionError
-      end
-
-      def deny!(*args, &bl)
-        relvar(*args, &bl).empty!
       end
 
     private
