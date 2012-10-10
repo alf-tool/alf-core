@@ -1,7 +1,7 @@
 module Alf
   class DatabaseOptionError < Alf::Error; end
   class Database
-    module Options
+    class Options
 
       def self.option(name, domain, default_value)
         getter_name = domain == Boolean ? :"#{name}?" : :"#{name}"
@@ -23,6 +23,11 @@ module Alf
       # What viewpoint to use by default?
       option :default_viewpoint, Module, Viewpoint::NATIVE
 
+      # Creates a default options instance
+      def initialize(h = {})
+        install_options_from_hash(h)
+      end
+
     private
 
       def install_options_from_hash(h)
@@ -40,6 +45,6 @@ module Alf
         raise DatabaseOptionError, "Invalid option value `#{k}`: `#{v}`"
       end
 
-    end # module Options
+    end # class Options
   end # class Database
 end # module Alf

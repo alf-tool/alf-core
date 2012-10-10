@@ -2,12 +2,13 @@ require_relative 'database/options'
 require_relative 'database/connection'
 module Alf
   class Database
-    include Options
+    extend Forwardable
 
     def self.new(conn_spec, options = {})
-      db = super(Adapter.factor(conn_spec), options)
-      yield(db) if block_given?
-      db
+      adapter = Adapter.factor(conn_spec)
+      options = Options.new(options)
+      yield(options) if block_given?
+      super(adapter, options)
     end
 
     def self.connect(conn_spec, options = {}, &bl)
@@ -15,11 +16,13 @@ module Alf
       bl ? db.connect(&bl) : db.connection
     end
 
-    def initialize(adapter, options = {})
-      @adapter = adapter
-      install_options_from_hash(options)
+    def initialize(adapter, options)
+      @adapter, @options = adapter, options.freeze
     end
     attr_reader :adapter, :options
+
+    def_delegators :options, *Options.public_instance_methods(false)
+                                     .reject{|m| m.to_s =~ /=$/ }
 
     ### connection handling
 

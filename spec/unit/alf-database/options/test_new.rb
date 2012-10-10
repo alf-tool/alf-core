@@ -2,19 +2,17 @@ require 'spec_helper'
 module Alf
   class Database
     describe Options, "install_options_from_hash" do
-      include Options
 
       let(:viewpoint){ Module.new{ include Viewpoint } }
 
-      subject{ install_options_from_hash(h) }
+      subject{ Options.new(h) }
 
       context 'when valid, coercable options' do
         let(:h){ {schema_cache: "false", default_viewpoint: viewpoint} }
 
         it 'sets the options as expected' do
-          subject
-          schema_cache?.should eq(false)
-          default_viewpoint.should be(viewpoint)
+          subject.schema_cache?.should eq(false)
+          subject.default_viewpoint.should be(viewpoint)
         end
       end
 

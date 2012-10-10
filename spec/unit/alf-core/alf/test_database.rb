@@ -13,9 +13,9 @@ describe Alf, '.database' do
     subject.schema_cache?.should eq(false)
   end
 
-  it 'yields the block' do
+  it 'yields the options to the block' do
     subject
-    @seen.should be(subject)
+    @seen.should be_a(Alf::Database::Options)
   end
 
 end

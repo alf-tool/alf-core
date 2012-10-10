@@ -44,8 +44,8 @@ module Alf
       subject{ Database.new(adapter){|d| @seen = d } }
 
       it 'yields the block' do
-        subject
-        @seen.should be(subject)
+        subject.should be_a(Database)
+        @seen.should be_a(Database::Options)
       end
     end
 
