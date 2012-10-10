@@ -24,9 +24,5 @@ module Alf
       Alf::Relation(File.expand_path('../example.rash', __FILE__)).should eq(expected)
     end
 
-    it 'is aliased as relation' do
-      Alf.relation(:name => "Jones").should eq(expected)
-    end
-
   end
 end

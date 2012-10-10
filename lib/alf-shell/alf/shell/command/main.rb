@@ -55,7 +55,7 @@ module Alf
       attr_reader :rendering_options
 
       # Creates a command instance
-      def initialize(db = Alf.default)
+      def initialize(db = Alf.connect(Path.pwd))
         @database = db
         @rendering_options = {}
       end
