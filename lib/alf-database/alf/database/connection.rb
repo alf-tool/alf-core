@@ -8,27 +8,9 @@ module Alf
       end
       attr_reader :db, :options
 
-      def_delegators :adapter_connection, :close,
-                                          :closed?,
-                                          :in_transaction,
-                                          :knows?,
-                                          :heading,
-                                          :keys,
-                                          :cog,
-                                          :insert,
-                                          :delete,
-                                          :update
-
       def_delegators :options, *Options.delegation_methods
 
-      def cog(expr)
-        case expr
-        when Symbol           then adapter_connection.cog(expr)
-        when Algebra::Operand then compile(expr)
-        else
-          raise ArgumentError, "Unable to compile `#{expr}` to a cog"
-        end
-      end
+      ### logical level
 
       def parse(*args, &bl)
         parser.parse(*args, &bl).bind(self)
@@ -59,6 +41,31 @@ module Alf
       rescue NoSuchTupleError
         raise FactAssertionError
       end
+
+      ### middleware level
+
+      def cog(expr)
+        case expr
+        when Symbol           then adapter_connection.cog(expr)
+        when Algebra::Operand then compile(expr)
+        else
+          raise ArgumentError, "Unable to compile `#{expr}` to a cog"
+        end
+      end
+
+      ### physical level
+
+      def_delegators :adapter_connection, :close,
+                                          :closed?,
+                                          :in_transaction,
+                                          :knows?,
+                                          :heading,
+                                          :keys,
+                                          :insert,
+                                          :delete,
+                                          :update
+
+      ### others
 
       def to_s
         "Alf::Database::Connection(#{adapter_connection})"
