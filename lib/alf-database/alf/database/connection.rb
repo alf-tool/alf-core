@@ -3,10 +3,10 @@ module Alf
     class Connection
       extend Forwardable
 
-      def initialize(db, low_connection, schema = Schema::NATIVE)
+      def initialize(db, low_connection, viewpoint = Viewpoint::NATIVE)
         @db = db
         @low_connection = low_connection
-        @schema = schema
+        @viewpoint = viewpoint
       end
 
       def_delegators :'@low_connection', :close,
@@ -68,7 +68,7 @@ module Alf
       end
 
       def parser
-        @parser ||= Lang::Lispy.new([ @schema ])
+        @parser ||= @viewpoint.parser
       end
 
     end # class Connection

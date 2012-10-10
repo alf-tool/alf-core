@@ -1,5 +1,5 @@
 module Alf
-  module Schema
+  module Viewpoint
 
     module ClassMethods
 
@@ -17,9 +17,9 @@ module Alf
         end
       end
 
-      def namespace(name, *schemas)
+      def namespace(name, *viewpoints)
         define_method(name) do
-          Lang::Lispy.new(schemas)
+          Lang::Lispy.new(viewpoints)
         end
       end
     end
@@ -30,12 +30,12 @@ module Alf
     end
 
     NATIVE = Module.new{
-      include ::Alf::Schema
+      include ::Alf::Viewpoint
 
       def method_missing(name, *args, &bl)
         (!args.empty? || bl) ? super : ::Alf::Algebra.named_operand(name)
       end
     }
 
-  end # module Schema
+  end # module Viewpoint
 end # module Alf

@@ -1,7 +1,7 @@
 require 'alf'
 
 module Database
-  include Alf::Schema
+  include Alf::Viewpoint
 
   def orders
     Relation(

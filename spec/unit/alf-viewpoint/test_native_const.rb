@@ -1,8 +1,8 @@
 require 'spec_helper'
 module Alf
-  describe Schema, "NATIVE" do
+  describe Viewpoint, "NATIVE" do
 
-    subject{ Schema::NATIVE }
+    subject{ Viewpoint::NATIVE }
 
     it{ should be_a(Module) }
 

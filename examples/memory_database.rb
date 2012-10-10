@@ -1,6 +1,6 @@
 require 'alf'
 module MemoryDatabase
-  include Alf::Schema
+  include Alf::Viewpoint
 
   def suppliers
     Relation(
