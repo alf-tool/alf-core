@@ -28,12 +28,18 @@ module Alf
         install_options_from_hash(h)
       end
 
-    private
+      # Merge with another options from a hash
+      def merge(h)
+        dup.install_options_from_hash(h)
+      end
+
+    protected
 
       def install_options_from_hash(h)
         h.each_pair do |k,v|
           install_single_option(k, v)
         end
+        self
       end
 
       def install_single_option(k, v)
