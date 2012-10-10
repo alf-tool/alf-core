@@ -1,8 +1,15 @@
 module Alf
   module Schema
-    include Lang::Functional
 
     module ClassMethods
+
+      def parser
+        Lang::Lispy.new([ self ])
+      end
+
+      def parse(*args, &bl)
+        parser.parse(*args, &bl)
+      end
 
       def native(as, native_name = as)
         define_method(as) do
@@ -16,19 +23,19 @@ module Alf
         end
       end
     end
+    extend ClassMethods
 
     def self.included(mod)
       mod.extend(ClassMethods)
     end
 
-    def self.native
-      Module.new{
-        include ::Alf::Schema
-        def method_missing(name, *args, &bl)
-          (!args.empty? || bl) ? super : Algebra.named_operand(name)
-        end
-      }
-    end
+    NATIVE = Module.new{
+      include ::Alf::Schema
+
+      def method_missing(name, *args, &bl)
+        (!args.empty? || bl) ? super : ::Alf::Algebra.named_operand(name)
+      end
+    }
 
   end # module Schema
 end # module Alf

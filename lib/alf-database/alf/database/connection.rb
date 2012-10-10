@@ -3,7 +3,7 @@ module Alf
     class Connection
       extend Forwardable
 
-      def initialize(db, low_connection, schema = Schema.native)
+      def initialize(db, low_connection, schema = Schema::NATIVE)
         @db = db
         @low_connection = low_connection
         @schema = schema
