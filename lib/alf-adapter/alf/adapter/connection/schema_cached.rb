@@ -24,6 +24,10 @@ module Alf
           end
         end
 
+        def to_s
+          "#{@connection.to_s} (with cache)"
+        end
+
       end # class SchemaCached
     end # class Connection
   end # class Database

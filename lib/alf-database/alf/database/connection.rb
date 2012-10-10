@@ -54,6 +54,10 @@ module Alf
         raise FactAssertionError
       end
 
+      def to_s
+        "Alf::Database::Connection(#{@low_connection})"
+      end
+
     private
 
       def compilation_chain
