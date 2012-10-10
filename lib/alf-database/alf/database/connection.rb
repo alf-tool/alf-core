@@ -3,22 +3,21 @@ module Alf
     class Connection
       extend Forwardable
 
-      def initialize(db, low_connection, viewpoint = Viewpoint::NATIVE)
+      def initialize(db)
         @db = db
-        @low_connection = low_connection
-        @viewpoint = viewpoint
       end
+      attr_reader :db
 
-      def_delegators :'@low_connection', :close,
-                                         :closed?,
-                                         :in_transaction,
-                                         :knows?,
-                                         :heading,
-                                         :keys,
-                                         :cog,
-                                         :insert,
-                                         :delete,
-                                         :update
+      def_delegators :'adapter_connection', :close,
+                                            :closed?,
+                                            :in_transaction,
+                                            :knows?,
+                                            :heading,
+                                            :keys,
+                                            :cog,
+                                            :insert,
+                                            :delete,
+                                            :update
 
       def compile(expr)
         compilation_chain.inject(expr){|e,c| c.call(e) }
@@ -55,20 +54,24 @@ module Alf
       end
 
       def to_s
-        "Alf::Database::Connection(#{@low_connection})"
+        "Alf::Database::Connection(#{adapter_connection})"
       end
 
     private
 
+      def adapter_connection
+        @adapter_connection ||= db.adapter_connection
+      end
+
       def compilation_chain
         [ 
           Optimizer.new.register(Optimizer::Restrict.new, Algebra::Restrict),
-          @low_connection.compiler
+          adapter_connection.compiler
         ]
       end
 
       def parser
-        @parser ||= @viewpoint.parser
+        @parser ||= db.default_viewpoint.parser
       end
 
     end # class Connection

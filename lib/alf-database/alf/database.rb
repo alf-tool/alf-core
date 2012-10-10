@@ -23,8 +23,14 @@ module Alf
 
     ### connection handling
 
+    def adapter_connection
+      conn = adapter.connection
+      conn = Adapter::Connection::SchemaCached.new(conn) if schema_cache?
+      conn
+    end
+
     def connection
-      Connection.new(self, adapter_connection, default_viewpoint)
+      Connection.new(self)
     end
 
     def connect
@@ -32,14 +38,6 @@ module Alf
       yield(c)
     ensure
       c.close if c
-    end
-
-  private
-
-    def adapter_connection
-      conn = adapter.connection
-      conn = Adapter::Connection::SchemaCached.new(conn) if schema_cache?
-      conn
     end
 
   end # class Database
