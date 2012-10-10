@@ -10,5 +10,11 @@ module Alf
       it{ should be_a(Adapter::Folder) }
     end
 
+    context "on an Adapter" do
+      let(:conn_spec){ Adapter.new(nil) }
+
+      it{ should be(conn_spec) }
+    end
+
   end
 end

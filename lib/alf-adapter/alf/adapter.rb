@@ -46,6 +46,7 @@ module Alf
       # @param [Module] schema a module for scope definition
       # @return [Adapter] an adapter instance
       def factor(conn_spec)
+        return conn_spec if conn_spec.is_a?(Adapter)
         autodetect(conn_spec).new(conn_spec)
       end
 
