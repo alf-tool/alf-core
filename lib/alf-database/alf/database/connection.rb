@@ -9,20 +9,25 @@ module Alf
       attr_reader :db, :options
 
       def_delegators :adapter_connection, :close,
-                                            :closed?,
-                                            :in_transaction,
-                                            :knows?,
-                                            :heading,
-                                            :keys,
-                                            :cog,
-                                            :insert,
-                                            :delete,
-                                            :update
+                                          :closed?,
+                                          :in_transaction,
+                                          :knows?,
+                                          :heading,
+                                          :keys,
+                                          :cog,
+                                          :insert,
+                                          :delete,
+                                          :update
 
       def_delegators :options, *Options.delegation_methods
 
-      def compile(expr)
-        compilation_chain.inject(expr){|e,c| c.call(e) }
+      def cog(expr)
+        case expr
+        when Symbol           then adapter_connection.cog(expr)
+        when Algebra::Operand then compile(expr)
+        else
+          raise ArgumentError, "Unable to compile `#{expr}` to a cog"
+        end
       end
 
       def parse(*args, &bl)
@@ -67,6 +72,10 @@ module Alf
           conn = Adapter::Connection::SchemaCached.new(conn) if schema_cache?
           conn
         end
+      end
+
+      def compile(expr)
+        compilation_chain.inject(expr){|e,c| c.call(e) }
       end
 
       def compilation_chain

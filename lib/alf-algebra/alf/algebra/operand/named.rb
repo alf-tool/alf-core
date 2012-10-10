@@ -10,8 +10,6 @@ module Alf
         end
         attr_reader :name
 
-        ### Operand
-
         def keys
           connection!.keys(name)
         end
@@ -20,17 +18,9 @@ module Alf
           connection!.heading(name)
         end
 
-        ### Compilation and update
-
-        def to_cog
-          connection!.cog(name)
-        end
-
         def to_relvar
-          Relvar::Base.new name, connection
+          Relvar::Base.new(name, connection)
         end
-
-        ### Readable output
 
         def to_s
           "Operand::Named(#{name.inspect})"

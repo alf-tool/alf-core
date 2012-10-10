@@ -40,7 +40,7 @@ module Alf
       ### to_xxx
 
       def to_cog
-        connection!.compile(expr)
+        connection!.cog(expr)
       end
 
       def to_lispy

@@ -7,7 +7,7 @@ module Alf
 
       subject{ rv.to_relation }
 
-      def compile(expr)
+      def cog(expr)
         Struct.new(:to_relation).new("a relation")
       end
 

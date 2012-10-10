@@ -7,7 +7,7 @@ module Alf
 
       subject{ rv.to_cog }
 
-      def compile(expr)
+      def cog(expr)
         [expr]
       end
 

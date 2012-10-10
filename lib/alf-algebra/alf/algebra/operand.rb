@@ -31,6 +31,12 @@ module Alf
         raise NotSupportedError
       end
 
+      ### to_xxx
+
+      def to_cog
+        to_relvar.to_cog
+      end
+
     end # module Operand
   end # module Algebra
 end # module Alf
