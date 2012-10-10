@@ -6,6 +6,7 @@ module Alf
       def self.coerce(op)
         case op
         when Operand     then op
+        when Symbol      then Operand::Named.new(op)
         when Reader      then Proxy.new(op)
         when Array       then Proxy.new(op)
         when Engine::Cog then Proxy.new(op)
