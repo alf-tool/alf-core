@@ -44,9 +44,9 @@ module Alf
 
       ### middleware level
 
-      def cog(expr)
+      def cog(expr, *args, &bl)
         case expr
-        when Symbol           then adapter_connection.cog(expr)
+        when Symbol           then adapter_connection.cog(*args.unshift(expr), &bl)
         when Algebra::Operand then compile(expr)
         else
           raise ArgumentError, "Unable to compile `#{expr}` to a cog"
