@@ -1,3 +1,5 @@
+require_relative 'database/options'
+require_relative 'database/connection'
 module Alf
   class Database
 
@@ -47,4 +49,3 @@ module Alf
 
   end # class Database
 end # module Alf
-require_relative 'database/connection'
