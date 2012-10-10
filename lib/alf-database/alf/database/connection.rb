@@ -64,7 +64,7 @@ module Alf
       end
 
       def parser
-        @parser ||= Lang::Lispy.new(self, [ @schema ])
+        @parser ||= Lang::Lispy.new([ @schema ])
       end
 
     end # class Connection
