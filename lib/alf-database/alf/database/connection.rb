@@ -3,12 +3,12 @@ module Alf
     class Connection
       extend Forwardable
 
-      def initialize(db)
-        @db = db
+      def initialize(db, options = Options.new)
+        @db, @options = db, options.freeze
       end
-      attr_reader :db
+      attr_reader :db, :options
 
-      def_delegators :'adapter_connection', :close,
+      def_delegators :adapter_connection, :close,
                                             :closed?,
                                             :in_transaction,
                                             :knows?,
@@ -18,6 +18,8 @@ module Alf
                                             :insert,
                                             :delete,
                                             :update
+
+      def_delegators :options, *Options.delegation_methods
 
       def compile(expr)
         compilation_chain.inject(expr){|e,c| c.call(e) }
@@ -60,7 +62,11 @@ module Alf
     private
 
       def adapter_connection
-        @adapter_connection ||= db.adapter_connection
+        @adapter_connection ||= begin
+          conn = db.adapter.connection
+          conn = Adapter::Connection::SchemaCached.new(conn) if schema_cache?
+          conn
+        end
       end
 
       def compilation_chain
@@ -71,7 +77,7 @@ module Alf
       end
 
       def parser
-        @parser ||= db.default_viewpoint.parser
+        @parser ||= default_viewpoint.parser
       end
 
     end # class Connection

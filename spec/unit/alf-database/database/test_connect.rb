@@ -31,6 +31,14 @@ module Alf
         @seen.should be_closed
       end
     end
-    
+
+    context 'when passing options' do
+      subject{ Database.connect(Path.dir, schema_cache: false) }
+
+      it 'overrides default options' do
+        subject.schema_cache?.should eq(false)
+      end
+    end
+
   end
 end

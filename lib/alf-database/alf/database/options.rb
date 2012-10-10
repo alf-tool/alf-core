@@ -3,6 +3,10 @@ module Alf
   class Database
     class Options
 
+      def self.delegation_methods
+        public_instance_methods(false).reject{|m| m.to_s =~ /=$/ }
+      end
+
       def self.option(name, domain, default_value)
         getter_name = domain == Boolean ? :"#{name}?" : :"#{name}"
         setter_name = :"#{name}="

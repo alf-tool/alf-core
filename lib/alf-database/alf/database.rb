@@ -17,27 +17,20 @@ module Alf
     end
 
     def initialize(adapter, options)
-      @adapter, @options = adapter, options.freeze
+      @adapter, @default_options = adapter, options.freeze
     end
-    attr_reader :adapter, :options
+    attr_reader :adapter, :default_options
 
-    def_delegators :options, *Options.public_instance_methods(false)
-                                     .reject{|m| m.to_s =~ /=$/ }
+    def_delegators :default_options, *Options.delegation_methods
 
     ### connection handling
 
-    def adapter_connection
-      conn = adapter.connection
-      conn = Adapter::Connection::SchemaCached.new(conn) if schema_cache?
-      conn
+    def connection(opts = {})
+      Connection.new(self, default_options.merge(opts))
     end
 
-    def connection
-      Connection.new(self)
-    end
-
-    def connect
-      c = connection
+    def connect(opts = {})
+      c = connection(opts)
       yield(c)
     ensure
       c.close if c
