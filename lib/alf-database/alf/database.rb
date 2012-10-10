@@ -2,7 +2,7 @@ require_relative 'database/options'
 require_relative 'database/connection'
 module Alf
   class Database
-    extend Forwardable
+    include Options.helpers(:default_options)
 
     def self.new(conn_spec, options = {})
       adapter = Adapter.factor(conn_spec)
@@ -20,8 +20,6 @@ module Alf
       @adapter, @default_options = adapter, options.freeze
     end
     attr_reader :adapter, :default_options
-
-    def_delegators :default_options, *Options.delegation_methods
 
     ### connection handling
 

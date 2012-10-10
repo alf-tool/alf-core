@@ -6,6 +6,15 @@ module Alf
         public_instance_methods(false).reject{|m| m.to_s =~ /=$/ }
       end
 
+      def self.helpers(to = :config)
+        meths = delegation_methods
+        Module.new do
+          meths.each do |m|
+            define_method(m){|*args, &bl| self.send(to).send(m, *args, &bl) }
+          end
+        end
+      end
+
       def self.option(name, domain, default_value)
         getter_name = domain == Boolean ? :"#{name}?" : :"#{name}"
         setter_name = :"#{name}="
