@@ -138,8 +138,8 @@ end # module Alf
 require_relative "alf-optimizer/alf/optimizer"
 require_relative "alf-update/alf/update"
 require_relative "alf-adapter/alf/adapter"
-require_relative "alf-database/alf/database"
 require_relative 'alf-viewpoint/alf/viewpoint'
+require_relative "alf-database/alf/database"
 
 require_relative 'alf-shell/alf/shell'
 require_relative "alf-adapter-fs/alf/adapter/fs"
