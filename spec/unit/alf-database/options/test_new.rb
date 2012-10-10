@@ -22,7 +22,7 @@ module Alf
         it 'raises an error' do
           lambda{
             subject
-          }.should raise_error(DatabaseOptionError, /No such database option `nosuchone`/)
+          }.should raise_error(ConfigError, /No such option `nosuchone`/)
         end
       end
 
@@ -32,7 +32,7 @@ module Alf
         it 'raises an error' do
           lambda{
             subject
-          }.should raise_error(DatabaseOptionError, /Invalid option value `schema_cache`: `blah`/)
+          }.should raise_error(ConfigError, /Invalid option value `schema_cache`: `blah`/)
         end
       end
 
@@ -44,7 +44,7 @@ module Alf
         it 'raises an error' do
           lambda{
             subject
-          }.should raise_error(DatabaseOptionError, /No such database option `hello_world`/)
+          }.should raise_error(ConfigError, /No such option `hello_world`/)
         end
       end
 

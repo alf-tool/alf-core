@@ -1,5 +1,6 @@
 module Alf
   class Error < StandardError; end
+  class ConfigError < Alf::Error; end
   class UnboundError < StandardError; end
   class NotSupportedError < Error; end
   class NoSuchRelvarError < Error; end
