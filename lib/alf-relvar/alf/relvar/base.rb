@@ -22,6 +22,10 @@ module Alf
 
       ### Update
 
+      def lock(mode = :exclusive, &bl)
+        connection!.lock(name, mode, &bl)
+      end
+
       def insert(tuples)
         tuples = [ tuples ] if TupleLike===tuples
         connection!.insert(name, tuples)

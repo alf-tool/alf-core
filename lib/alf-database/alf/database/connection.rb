@@ -53,6 +53,14 @@ module Alf
         end
       end
 
+      def lock(expr, mode = :exclusive, &bl)
+        case expr
+        when Symbol then adapter_connection.lock(expr, mode, &bl)
+        else
+          raise NotImplementedError, "Unable to lock virtual relvars"
+        end
+      end
+
       ### physical level
 
       def_delegators :adapter_connection, :close,

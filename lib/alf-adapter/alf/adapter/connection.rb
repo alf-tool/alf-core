@@ -50,6 +50,11 @@ module Alf
 
       ### update methods
 
+      # Locks the table with name `name`
+      def lock(name, mode)
+        yield
+      end
+
       # Inserts `tuples` in the relvar called `name`
       def insert(name, tuples)
         raise NotSupportedError, "Unable to insert in `#{self}`"
