@@ -58,6 +58,11 @@ module Alf
       AttrList.new tuples.first.keys
     end
 
+    # Returns a ReadOnly relvar
+    def to_relvar
+      Relvar::ReadOnly.new(self)
+    end
+
     # Returns an engine Cog
     def to_cog
       Engine::Leaf.new(self)

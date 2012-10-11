@@ -7,4 +7,5 @@ module Alf
   class NoSuchTupleError < Error; end
   class FactAssertionError < Error; end
   class CoercionError < Error; end
+  class ReadOnlyError < Error; end
 end
