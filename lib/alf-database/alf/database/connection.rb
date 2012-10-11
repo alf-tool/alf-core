@@ -1,6 +1,7 @@
 module Alf
   class Database
     class Connection
+      include Options.helpers(:options)
       extend Forwardable
 
       def initialize(db, options = Options.new)
@@ -8,7 +9,6 @@ module Alf
       end
       attr_reader :db, :options
 
-      def_delegators :options, *Options.delegation_methods
 
       ### logical level
 
