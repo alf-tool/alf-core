@@ -10,6 +10,10 @@ module Alf
         p.should be_a(Alf::Predicate)
       end
 
+      it 'provides a friendly to_s' do
+        lispy.to_s.should eq("Lispy(Alf::Lang::Functional,Alf::Lang::Predicates)")
+      end
+
     end
   end
 end

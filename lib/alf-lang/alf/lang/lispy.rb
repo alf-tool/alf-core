@@ -13,6 +13,11 @@ module Alf
           expr
         end
 
+        def to_s
+          "Lispy(#{@extensions.map(&:name).reject{|x| x =~ /OwnMethods/}.join(',')})"
+        end
+        alias_method :inspect, :to_s
+
       end # OwnMethods
 
       # Creates a language instance
