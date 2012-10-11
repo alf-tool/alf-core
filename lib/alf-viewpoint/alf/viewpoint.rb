@@ -19,7 +19,7 @@ module Alf
 
       def namespace(name, *viewpoints)
         define_method(name) do
-          Lang::Lispy.new(viewpoints)
+          Lang::Lispy.new(viewpoints, connection)
         end
       end
     end
