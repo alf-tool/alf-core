@@ -17,7 +17,7 @@ module Alf
         attr_reader :connection
 
         def connection!
-          connection.tap{|c| ::Kernel.raise UnboundError unless c }
+          connection.tap{|c| ::Kernel.raise(UnboundError, "#{self} not bound") unless c }
         end
 
         def to_s
