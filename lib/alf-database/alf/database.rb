@@ -24,7 +24,11 @@ module Alf
     ### connection handling
 
     def connection(opts = {})
-      Connection.new(self, default_options.merge(opts))
+      Connection.new(self, default_options.merge(opts)) do |conn_opts|
+        conn = adapter.connection
+        conn = Adapter::Connection::SchemaCached.new(conn) if conn_opts.schema_cache?
+        conn
+      end
     end
 
     def connect(opts = {})

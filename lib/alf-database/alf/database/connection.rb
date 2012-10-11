@@ -4,11 +4,35 @@ module Alf
       include Options.helpers(:options)
       extend Forwardable
 
-      def initialize(db, options = Options.new)
-        @db, @options = db, options.freeze
+      def initialize(db, options = Options.new, &connection_handler)
+        @db, @options, @connection_handler = db, options.freeze, connection_handler
+        open!
       end
-      attr_reader :db, :options
+      attr_reader :db, :options, :connection_handler
 
+      ### connection handling
+      private :connection_handler
+
+      def adapter_connection
+        @adapter_connection ||= connection_handler.call(options)
+      end
+      alias_method :open!, :adapter_connection
+      private :open!
+
+      def reconnect(opts = {})
+        close unless (opts.keys & [:schema_cache]).empty?
+        @options = options.merge(opts)
+        open!
+      end
+
+      def closed?
+        @adapter_connection.nil?
+      end
+
+      def close
+        adapter_connection.close unless closed?
+        @adapter_connection = nil
+      end
 
       ### logical level
 
@@ -63,9 +87,7 @@ module Alf
 
       ### physical level
 
-      def_delegators :adapter_connection, :close,
-                                          :closed?,
-                                          :in_transaction,
+      def_delegators :adapter_connection, :in_transaction,
                                           :knows?,
                                           :heading,
                                           :keys,
@@ -81,14 +103,6 @@ module Alf
 
     private
 
-      def adapter_connection
-        @adapter_connection ||= begin
-          conn = db.adapter.connection
-          conn = Adapter::Connection::SchemaCached.new(conn) if schema_cache?
-          conn
-        end
-      end
-
       def compile(expr)
         compilation_chain.inject(expr){|e,c| c.call(e) }
       end
@@ -101,7 +115,7 @@ module Alf
       end
 
       def parser
-        @parser ||= default_viewpoint.parser
+        options.default_viewpoint.parser
       end
 
     end # class Connection
