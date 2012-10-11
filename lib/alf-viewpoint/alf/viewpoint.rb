@@ -3,8 +3,8 @@ module Alf
 
     module ClassMethods
 
-      def parser
-        Lang::Lispy.new([ self ])
+      def parser(connection = nil)
+        Lang::Lispy.new([ self ], connection)
       end
 
       def parse(*args, &bl)

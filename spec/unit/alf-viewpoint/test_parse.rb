@@ -2,33 +2,33 @@ require 'spec_helper'
 module Alf
   describe Viewpoint, "parse" do
 
-    it 'allows parsing predicate expressions' do
-      Viewpoint.parse{
-        tautology
-      }.should eq(Predicate.tautology)
-      Viewpoint.parse{
-        eq(:x, 2)
-      }.should be_a(Predicate)
+    subject{ viewpoint.parse(&expr) }
+
+    context 'on predicate expressions' do
+      let(:viewpoint){ Viewpoint }
+      let(:expr){ ->{ eq(:x, 2) } }
+
+      it{ should be_a(Predicate) }
     end
 
-    it 'allows parsing relational expressions' do
-      Viewpoint.parse{
-        restrict(:suppliers, ->{ sid == 'S1' })
-      }.should be_a(Algebra::Restrict)
+    context 'on relational expressions' do
+      let(:viewpoint){ Viewpoint }
+      let(:expr){ ->{ restrict(:suppliers, ->{ sid == 'S1' }) } }
+
+      it{ should be_a(Algebra::Restrict) }
     end
 
     context 'on a sub-viewpoint' do
       let(:viewpoint){
         Module.new{
           include Alf::Viewpoint
-          def hello
-            "world"
-          end
+          def hello; "world"; end
         }
       }
+      let(:expr){ ->{ hello } }
 
       it 'uses the expected binding' do
-        viewpoint.parse{ hello }.should eq("world")
+        subject.should eq("world")
       end
     end
 
