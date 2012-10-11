@@ -37,6 +37,10 @@ module Alf
         to_relvar.to_cog
       end
 
+      def to_relation
+        to_relvar.to_relation
+      end
+
     end # module Operand
   end # module Algebra
 end # module Alf
