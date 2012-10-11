@@ -37,7 +37,7 @@ module Alf
       ### logical level
 
       def parse(*args, &bl)
-        parser.parse(*args, &bl).bind(self)
+        parser.parse(*args, &bl)
       end
 
       def relvar(*args, &bl)
@@ -115,7 +115,7 @@ module Alf
       end
 
       def parser
-        options.default_viewpoint.parser
+        options.default_viewpoint.parser(self)
       end
 
     end # class Connection
