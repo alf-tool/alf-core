@@ -18,6 +18,7 @@ module Alf
 
     def initialize(adapter, options)
       @adapter, @default_options = adapter, options.freeze
+      @schema_cache = Adapter::Connection::SchemaCached.empty_cache
     end
     attr_reader :adapter, :default_options
 
@@ -26,7 +27,9 @@ module Alf
     def connection(opts = {})
       Connection.new(self, default_options.merge(opts)) do |conn_opts|
         conn = adapter.connection
-        conn = Adapter::Connection::SchemaCached.new(conn) if conn_opts.schema_cache?
+        if conn_opts.schema_cache?
+          conn = Adapter::Connection::SchemaCached.new(conn, @schema_cache)
+        end
         conn
       end
     end

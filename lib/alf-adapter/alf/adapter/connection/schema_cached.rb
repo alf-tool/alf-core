@@ -7,9 +7,9 @@ module Alf
           Hash.new{|h,k| h[k] = {}}
         end
 
-        def initialize(connection, cache = SchemaCached.empty_cache)
+        def initialize(connection, cache = nil)
           @connection = connection
-          @cache      = cache
+          @cache      = cache || SchemaCached.empty_cache
         end
 
         Connection.instance_methods(false).each do |meth|
