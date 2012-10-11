@@ -10,7 +10,14 @@ module Alf
           end
           expr = evaluate(expr, path, line, &block) if block or expr.is_a?(String)
           expr = __send__(expr)                     if expr.is_a?(Symbol)
+          expr = expr.bind(connection)              if expr.is_a?(Support::Bindable) && connection
           expr
+        end
+
+        attr_reader :connection
+
+        def connection!
+          connection.tap{|c| ::Kernel.raise UnboundError unless c }
         end
 
         def to_s
@@ -21,7 +28,8 @@ module Alf
       end # OwnMethods
 
       # Creates a language instance
-      def initialize(helpers = [ ])
+      def initialize(helpers = [ ], connection = nil)
+        @connection = connection
         super [ OwnMethods, Functional, Predicates ] + helpers
       end
 
