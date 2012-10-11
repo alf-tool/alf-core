@@ -12,7 +12,11 @@ module Alf
 
         # Returns a cog for `name`
         def cog(name)
-          Reader.reader(find_file(name))
+          if f = find_file(name)
+            Reader.reader(find_file(name))
+          else
+            raise NoSuchRelvarError, "Unable to find a file for #{name}"
+          end
         end
 
       protected
