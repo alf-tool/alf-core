@@ -103,6 +103,7 @@ module Alf
     #   Aggregator.new{ size * price }
     #
     def initialize(options = {}, &block)
+      options, block = {}, options if options.is_a?(Symbol) && block.nil?
       @options = default_options.merge(options)
       @functor = Support.coerce(block, TupleExpression)
     end
