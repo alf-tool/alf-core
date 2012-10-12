@@ -40,6 +40,10 @@ module Alf
         parser.parse(*args, &bl)
       end
 
+      def optimize(*args, &bl)
+        optimizer.call(parse(*args, &bl))
+      end
+
       def relvar(*args, &bl)
         parse(*args, &bl).to_relvar
       end
@@ -107,11 +111,12 @@ module Alf
         compilation_chain.inject(expr){|e,c| c.call(e) }
       end
 
+      def optimizer
+        Optimizer.new.register(Optimizer::Restrict.new, Algebra::Restrict)
+      end
+
       def compilation_chain
-        [ 
-          Optimizer.new.register(Optimizer::Restrict.new, Algebra::Restrict),
-          adapter_connection.compiler
-        ]
+        [ optimizer, adapter_connection.compiler ]
       end
 
       def parser
