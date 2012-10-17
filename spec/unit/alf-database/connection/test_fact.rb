@@ -33,6 +33,16 @@ module Alf
         end
       end
 
+      context 'with an error message' do
+        subject{ conn.fact!("foo"){ suppliers } }
+
+        it 'raises a FactAssertionError' do
+          lambda{
+            subject
+          }.should raise_error(FactAssertionError, /foo/)
+        end
+      end
+
     end
   end
 end

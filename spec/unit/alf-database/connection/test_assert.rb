@@ -21,6 +21,16 @@ module Alf
         end
       end
 
+      context 'with an error message' do
+        subject{ conn.assert!("foo"){ restrict(suppliers, ->{false}) } }
+
+        it 'raises a AssertionError' do
+          lambda{
+            subject
+          }.should raise_error(FactAssertionError, /foo/)
+        end
+      end
+
     end
   end
 end

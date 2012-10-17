@@ -19,5 +19,13 @@ module Alf
       it{ should be_true }
     end
 
+    context 'on an empty relvar with an error message' do
+      let(:to_cog){ [] }
+
+      it "should raise a fact error" do
+        lambda{ not_empty!("foo") }.should raise_error(Alf::FactAssertionError, /foo/)
+      end
+    end
+
   end
 end

@@ -52,22 +52,22 @@ module Alf
         relvar(*args, &bl).to_relation
       end
 
-      def assert!(*args, &bl)
-        relvar(*args, &bl).not_empty!
-      end
-
-      def deny!(*args, &bl)
-        relvar(*args, &bl).empty!
-      end
-
       def tuple_extract(*args, &bl)
         relvar(*args, &bl).tuple_extract
       end
 
-      def fact!(*args, &bl)
-        relvar(*args, &bl).tuple_extract
+      def assert!(msg = "an assert! assertion failed", &bl)
+        relvar(&bl).not_empty!(msg)
+      end
+
+      def deny!(msg = "a deny! assertion failed", &bl)
+        relvar(&bl).empty!(msg)
+      end
+
+      def fact!(msg = "a fact! assertion failed", &bl)
+        relvar(&bl).tuple_extract
       rescue NoSuchTupleError
-        raise FactAssertionError
+        raise FactAssertionError, msg
       end
 
       ### middleware level

@@ -21,6 +21,16 @@ module Alf
         it{ should be_true }
       end
 
+      context 'with an error message' do
+        subject{ conn.deny!("foo"){ suppliers } }
+
+        it 'raises a AssertionError' do
+          lambda{
+            subject
+          }.should raise_error(FactAssertionError, /foo/)
+        end
+      end
+
     end
   end
 end
