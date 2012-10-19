@@ -180,6 +180,15 @@ module Alf
       end
     end
 
+    # Returns a lispy expression
+    #
+    # @return [String] a lispy expression for this aggregator
+    def to_lispy
+      has_source_code!
+    rescue NotImplementedError
+      "[lispy code unavailable]"
+    end
+
     # Checks equality with another aggregator
     #
     # @param [Aggregator] other another aggregator

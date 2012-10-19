@@ -94,6 +94,10 @@ module Alf
       @proc ||= expr.to_proc(:scope => "self")
     end
 
+    def to_lispy
+      "->{ #{to_ruby_code} }"
+    end
+
     def to_ruby_literal
       to_proc.to_ruby_literal
     end

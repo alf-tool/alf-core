@@ -92,6 +92,15 @@ module Alf
       end
       alias :eql? :==
 
+      # Returns a lispy expression.
+      #
+      # @return [String] a lispy expression for this tuple expression
+      def to_lispy
+        "->{ #{has_source_code!} }"
+      rescue NotImplementedError => ex
+        "->{ [code unavailable] }"
+      end
+
       # Returns a ruby literal for this expression.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`

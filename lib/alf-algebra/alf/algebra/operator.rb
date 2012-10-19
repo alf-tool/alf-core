@@ -60,9 +60,14 @@ module Alf
 
     ### -> to_xxx
 
-      def to_s
-        Support.to_lispy(self) rescue super
+      def to_lispy
+        cmdname  = self.class.rubycase_name
+        oper, args, opts = signature.collect_on(self)
+        args = opts.empty? ? (oper + args) : (oper + args + [ opts ])
+        args = args.map{|arg| Support.to_lispy(arg) }
+        "#{cmdname}(#{args.join(', ')})"
       end
+      alias :to_s :to_lispy
 
       def to_relvar
         Relvar::Virtual.new(self, connection)

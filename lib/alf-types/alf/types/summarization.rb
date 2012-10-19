@@ -68,6 +68,13 @@ module Alf
         AttrList.new(keys)
       end
 
+      # Returns a lispy expression.
+      #
+      # @return [String] a lispy expression for this summarization
+      def to_lispy
+        "{" << map{|k,v| "#{k}: #{Support.to_lispy(v)}" }.join(', ') << "}"
+      end
+
       # Returns a ruby literal for this expression.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`

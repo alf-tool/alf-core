@@ -127,6 +127,13 @@ module Alf
         Ordering.new elements.map{|arg| [arg, order]}
       end
 
+      # Returns a lispy expression.
+      #
+      # @return [String] a lispy expression for this attribute list
+      def to_lispy
+        Support.to_ruby_literal(to_a)
+      end
+
       # Returns a ruby literal for this attribute list.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`

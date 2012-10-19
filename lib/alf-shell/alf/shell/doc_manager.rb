@@ -37,7 +37,7 @@ module Alf
             res  = op.to_relation.to_s
             res  = realign(res, spacing, false)[0...-1]
             if options[:method] == :lispy
-              invocation = Support.to_lispy(op)
+              invocation = Alf::Support.to_lispy(op)
             end
             realign("$ #{invocation}\n\n#{res}", spacing, false)
           }

@@ -128,7 +128,7 @@ module Alf
 
         # compile the operator, render and returns it
         compile(argv){ super }.tap do |op|
-          render(op) if op && requester
+          render(op.to_cog) if op && requester
         end
       end
 
@@ -148,7 +148,8 @@ module Alf
           database.query(argv.first)
         else
           op = yield
-          database.cog(op) if op
+          op = op.bind(database) if op
+          op
         end
       end
 

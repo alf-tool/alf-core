@@ -75,6 +75,13 @@ module Alf
         AttrList.new(reused_instance.map(&:first))
       end
 
+      # Returns a lispy expression.
+      #
+      # @return [String] a lispy expression for this ordering
+      def to_lispy
+        Support.to_ruby_literal(to_a)
+      end
+
       # Returns a ruby literal for this ordering.
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`

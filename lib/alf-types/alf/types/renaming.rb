@@ -48,6 +48,13 @@ module Alf
         self
       end
 
+      # Returns a lispy expression.
+      #
+      # @return [String] a lispy expression for this renaming
+      def to_lispy
+        Support.to_ruby_literal(to_hash)
+      end
+
       # Returns an attribute list with renaming keys
       def to_attr_list
         AttrList.new reused_instance.keys

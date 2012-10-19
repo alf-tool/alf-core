@@ -102,6 +102,13 @@ module Alf
         AttrList.new attributes.keys
       end
 
+      # Returns a lispy expression.
+      #
+      # @return [String] a lispy expression for this heading
+      def to_lispy
+        "{" << to_h.map{|k,v| "#{k}: #{Support.to_lispy(v)}" }.join(', ') << "}"
+      end
+
       # Returns a Heading literal
       #
       # @return [String] a Heading literal
