@@ -8,7 +8,11 @@ module Alf
       end
 
       def heading
-        raise NotSupportedError
+        @heading ||= begin
+          h = operand.heading.to_hash
+          reltype = h.delete(attribute)
+          Heading.new(h.merge(reltype.heading.to_hash))
+        end
       end
 
       def keys

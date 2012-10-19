@@ -4,10 +4,10 @@ module Alf
     describe Group, 'heading' do
 
       let(:operand){
-        an_operand.with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(id: Integer, name: String)
       }
       let(:expected){
-        Heading[:id => Integer, :names => Relation]
+        Heading[:id => Integer, :names => Relation.type(name: String) ]
       }
 
       subject{ op.heading }
