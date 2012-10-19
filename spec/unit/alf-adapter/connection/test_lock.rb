@@ -1,3 +1,4 @@
+require 'spec_helper'
 module Alf
   class Adapter
     describe Connection, "lock" do
