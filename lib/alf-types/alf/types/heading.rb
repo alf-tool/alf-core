@@ -95,6 +95,15 @@ module Alf
         Heading[AttrList.coerce(names).project_tuple(attributes, allbut)]
       end
 
+      # Check conformance of a given tuple.
+      #
+      # @return [Boolean] true if the tuple conforms to this heading, false otherwise.
+      def ===(tuple)
+        return false unless tuple.respond_to?(:to_hash)
+        types, values = attributes, tuple.to_hash
+        (types.size == values.size) && types.keys.all?{|k| types[k]===values[k]}
+      end
+
       # Converts this heading to an attribute list.
       #
       # @return [AttrList] heading's attributes as an attribute list
