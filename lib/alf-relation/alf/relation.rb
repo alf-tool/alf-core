@@ -44,6 +44,25 @@ module Alf
     end
     def self.[](*args); coerce(args); end
 
+    def self.type(heading)
+      Class.new(Relation).extend(DomainMethods.new(Heading.coerce(heading)))
+    end
+
+    class DomainMethods < Module
+
+      def initialize(heading)
+        define_method(:heading){
+          heading
+        }
+        define_method(:===){|value|
+          super(value) || (value.is_a?(Relation) && value.all?{|t| heading===t})
+        }
+        define_method(:==){|other|
+          other.is_a?(Class) && other.superclass==Relation && other.heading==heading
+        }
+      end
+    end # module DomainMethods
+
     reuse :each, :size, :empty?
     alias_method :tuples, :reused_instance
     alias_method :cardinality, :size
