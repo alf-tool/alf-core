@@ -87,6 +87,14 @@ module Alf
         Heading.new renaming.rename_tuple(attributes)
       end
 
+      # Splits this heading according to an attribute list
+      #
+      # @return [Array[Heading]] an array of two headings.
+      def split(names, allbut=false)
+        l, r = AttrList.coerce(names).split_tuple(attributes, allbut)
+        [Heading.new(l), Heading.new(r)]
+      end
+
       # Projects this heading on specified names.
       #
       # @param [AttrList] names an enumerable of attribute names.
