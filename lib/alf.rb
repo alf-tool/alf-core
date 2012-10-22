@@ -73,4 +73,4 @@ module Alf
   DUM = Relation::DUM
   DEE = Relation::DEE
 end
-require_relative 'alf/ext'
+require_relative 'alf/core_ext'
