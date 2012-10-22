@@ -4,6 +4,7 @@ module Alf
     # Defines a Heading, that is, a set of attribute (name,domain) pairs.
     #
     class Heading
+      include Comparable
       extend Domain::Reuse.new(Hash)
 
       coercions do |c|
@@ -101,6 +102,20 @@ module Alf
       # @param [Boolean] allbut apply a allbut projection?
       def project(names, allbut = false)
         Heading[AttrList.coerce(names).project_tuple(attributes, allbut)]
+      end
+
+      # Compares this heading with another one
+      #
+      # @return [Fixnum] -1 if a self is a sub heading, 0 if equal, 1 if a super heading,
+      #                  nil if not comparable.
+      def <=>(other)
+        return nil unless other.is_a?(Heading) && to_attr_list==other.to_attr_list
+        comparisons = attributes.keys.map{|k| self[k] <=> other[k] }.reject{|x| x == 0}.uniq
+        case comparisons.size
+        when 0 then 0
+        when 1 then comparisons.first
+        else nil
+        end
       end
 
       # Check conformance of a given tuple.
