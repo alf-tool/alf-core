@@ -52,11 +52,6 @@ module Alf
       it_should_behave_like "A value"
     end
 
-    specify "different empty relations instances should be equal" do
-      Relation.new(Set.new).should eq(Relation.new(Set.new))
-      Relation[{}].should eq(Relation[{}])
-    end
-
     describe "DUM" do
       subject{ Relation::DUM }
       it_should_behave_like "A value"

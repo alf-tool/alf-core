@@ -8,6 +8,7 @@ module Alf
     subject{ rel.hash == other.hash }
 
     before do
+      (reltype === rel).should be_true
       rel.should be_a(reltype)
     end
 

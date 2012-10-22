@@ -114,17 +114,6 @@ module Alf
       Engine::Leaf.new(self)
     end
 
-    # Returns a hash code
-    def hash
-      @hash ||= 37*self.class.hash + tuples.hash
-    end
-
-    # Equality checking
-    def ==(other)
-      (self.class == other.class) && (self.tuples == other.tuples)
-    end
-    alias_method :eql?, :==
-
     # Returns a textual representation of this relation
     def to_s
       to_text
