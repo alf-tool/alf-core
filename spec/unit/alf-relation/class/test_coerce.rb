@@ -2,18 +2,18 @@ require 'spec_helper'
 module Alf
   describe Relation, '.coerce' do
 
-    let(:tuples_by_sid){[
-      {:sid => 'S1', :name => 'Smith', :status => 20, :city => 'London'},
-      {:sid => 'S2', :name => 'Jones', :status => 10, :city => 'Paris'},
-      {:sid => 'S3', :name => 'Blake', :status => 30, :city => 'Paris'}
-    ]}
+    let(:heading) { {sid: String}               }
+    let(:type)    { Relation.type(heading)      }
+    let(:tuple)   { {sid: 'S1'}                 }
+    let(:tuples)  { Set.new << Tuple.new(tuple) }
+    let(:expected){ type.new(tuples)            }
 
     subject{ Relation.coerce(arg) }
 
     context 'on a Relation' do
-      let(:arg){ Relation.new tuples_by_sid.to_set }
+      let(:arg){ expected }
 
-      it{ should be(arg) }
+      it{ should be(expected) }
     end
 
     context 'on a to_relation capable' do
@@ -23,21 +23,21 @@ module Alf
     end
 
     context 'on a single Hash' do
-      let(:arg){ {:sid => 'S1'} }
+      let(:arg){ tuple }
 
-      it{ should eq(Relation.new [Tuple(:sid => 'S1')].to_set) }
+      it{ should eq(expected) }
     end
 
     context 'on a single Tuple' do
-      let(:arg){ Tuple(:sid => 'S1') }
+      let(:arg){ Tuple(tuple) }
 
-      it{ should eq(Relation.new [arg].to_set) }
+      it{ should eq(expected) }
     end
 
     context 'on an array of Hashes' do
-      let(:arg){ tuples_by_sid }
+      let(:arg){ [tuple] }
 
-      it{ should eq(Relation.new arg.map{|t| Tuple.new(t)}.to_set) }
+      it{ should eq(expected) }
     end
 
     context "with unrecognized arg" do
@@ -54,10 +54,8 @@ module Alf
     context 'with files and IOs' do
       let(:path){ Path.dir/'to_relation.rash' }
 
-      before{ path.write("{:name => 'Alf'}") }
-      after { path.unlink rescue nil         }
-
-      let(:expected){ Relation.new [ Tuple.new(:name => 'Alf') ].to_set }
+      before{ path.write("{:sid => 'S1'}") }
+      after { path.unlink rescue nil       }
 
       context 'on a Path' do
         let(:arg){ path }

@@ -25,22 +25,14 @@ module Alf
       Class.new(Relation).extend(DomainMethods.new(Heading.coerce(heading)))
     end
 
-    def self.new(tuples, type_info = nil)
-      case type_info
-      when Class
-        super(tuples.map{|x| Tuple.coerce(x)}.to_set)
-      when Hash, Heading
-        Relation.type(type_info).new(tuples)
-      when NilClass
-        heading = Engine::InferHeading.new(tuples).first
-        Relation.type(heading).new(tuples)
-      else
-        raise ArgumentError, "Invalid relation type `#{type_info}`"
-      end
+    def self.new(tuples, type_info)
+      raise ArgumentError if Relation==type_info
+      super(tuples.map{|x| Tuple.coerce(x)}.to_set)
     end
 
-    def self.super_domain_of?(x)
-      x.is_a?(Class) && x.ancestors.include?(Relation)
+    def self.<=>(other)
+      return nil unless other.ancestors.include?(Relation)
+      heading <=> other.heading
     end
 
     coercions do |c|
@@ -57,6 +49,7 @@ module Alf
         c.coerce(Alf.reader(v).to_set, t)
       end
       c.coercion(Enumerable) do |v,t|
+        t = Relation.type(Engine::InferHeading.new(v).first) if Relation==t
         t.new(v)
       end
     end
