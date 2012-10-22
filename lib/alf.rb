@@ -11,20 +11,6 @@ require 'time'
 require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'
 
-require_relative "alf-predicate/alf/predicate"
-require_relative 'alf-support/alf/support'
-require_relative 'alf-types/alf/types'
-require_relative 'alf-aggregator/alf/aggregator'
-require_relative 'alf-algebra/alf/algebra'
-require_relative "alf-engine/alf/engine"
-require_relative 'alf-io/alf/io'
-require_relative 'alf-csv/alf/csv'
-require_relative "alf-lang/alf/lang"
-require_relative 'alf-relation/alf/relation'
-require_relative 'alf-relvar/alf/relvar'
-
-require_relative 'alf/ext'
-
 #
 # Classy data-manipulation dressed in a DSL (+ commandline)
 #
@@ -63,15 +49,29 @@ module Alf
     Alf::Heading.coerce(*args, &bl)
   end
 
-  DUM = Relation::DUM
-  DEE = Relation::DEE
 end # module Alf
 
+require_relative "alf-predicate/alf/predicate"
+require_relative 'alf-support/alf/support'
+require_relative 'alf-types/alf/types'
+require_relative 'alf-aggregator/alf/aggregator'
+require_relative 'alf-algebra/alf/algebra'
+require_relative "alf-engine/alf/engine"
+require_relative 'alf-io/alf/io'
+require_relative 'alf-csv/alf/csv'
+require_relative "alf-lang/alf/lang"
+require_relative 'alf-relation/alf/relation'
+require_relative 'alf-relvar/alf/relvar'
 require_relative "alf-optimizer/alf/optimizer"
 require_relative "alf-update/alf/update"
 require_relative "alf-adapter/alf/adapter"
 require_relative 'alf-viewpoint/alf/viewpoint'
 require_relative "alf-database/alf/database"
-
 require_relative 'alf-shell/alf/shell'
 require_relative "alf-adapter-fs/alf/adapter/fs"
+
+module Alf
+  DUM = Relation::DUM
+  DEE = Relation::DEE
+end
+require_relative 'alf/ext'
