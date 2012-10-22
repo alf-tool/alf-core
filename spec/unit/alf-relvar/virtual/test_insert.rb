@@ -5,7 +5,7 @@ module Alf
 
       let(:rv)        { Virtual.new(expr, connection)                 }
       let(:expr)      { Algebra.named_operand(:suppliers, connection) }
-      let(:tuples)    { Relation.new(:id => 1)                        }
+      let(:tuples)    { Relation.coerce(:id => 1)                     }
       let(:connection){ self                                          }
 
       def insert(*args)

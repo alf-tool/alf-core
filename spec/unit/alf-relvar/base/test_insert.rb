@@ -4,7 +4,7 @@ module Alf
     describe Base, "insert" do
 
       let(:rv)        { Base.new(:suppliers, connection) }
-      let(:tuples)    { Relation.new(:id => 1)           }
+      let(:tuples)    { Relation.coerce(:id => 1)        }
       let(:connection){ self                             }
 
       def insert(*args)

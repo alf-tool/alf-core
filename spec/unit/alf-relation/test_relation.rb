@@ -23,9 +23,19 @@ module Alf
     end
 
     it "should define == correctly" do
-      rel1.should == rel2
-      rel2.should == rel1
-      rel3.should_not == rel1
+      rel1.should eq(rel2)
+      rel2.should eq(rel1)
+      rel3.should_not eq(rel1)
+    end
+
+    it "should define eql? correctly" do
+      rel1.should eql(rel2)
+      rel2.should eql(rel1)
+      rel3.should_not eql(rel1)
+    end
+
+    it "should define hash correctly" do
+      rel1.hash.should eq(rel2.hash)
     end
 
     it "should allow putting them in hashes" do

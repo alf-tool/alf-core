@@ -21,7 +21,7 @@ module Alf
     end
 
     context 'with currenttype inference' do
-      it{ should eq(Heading[:big? => Object, :who => Object, :sub => Relation]) }
+      it{ should eq(Heading[:big? => Object, :who => Object, :sub => Relation::DUM_TYPE]) }
     end
 
   end
