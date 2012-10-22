@@ -21,18 +21,18 @@ module Alf
     include Enumerable
     include Lang::ObjectOriented
 
-    def self.type(heading)
-      Class.new(Relation).extend(DomainMethods.new(Heading.coerce(heading)))
-    end
+    module GeneratorMethods
 
-    def self.new(tuples, type_info)
-      raise ArgumentError if Relation==type_info
+      def type(heading)
+        heading = Heading.coerce(heading)
+        meths   = DomainMethods.new(Relation, heading)
+        Class.new(Relation).extend(meths)
+      end
+    end
+    extend GeneratorMethods
+
+    def initialize(tuples)
       super(tuples.map{|x| Tuple.coerce(x)}.to_set)
-    end
-
-    def self.<=>(other)
-      return nil unless other.ancestors.include?(Relation)
-      heading <=> other.heading
     end
 
     coercions do |c|
@@ -57,28 +57,29 @@ module Alf
 
     class DomainMethods < Module
 
-      def initialize(heading)
-        define_method(:new){|tuples|
-          super(tuples, self)
-        }
+      def initialize(master_class, heading)
         define_method(:heading){
           heading
         }
+        define_method(:<=>){|other|
+          return nil unless other.ancestors.include?(master_class)
+          heading <=> other.heading
+        }
         define_method(:===){|value|
           super(value) ||
-          (value.is_a?(Relation) && value.heading == heading)
+          (value.is_a?(master_class) && value.heading == heading)
         }
         define_method(:hash){
-          @hash ||= 37*Relation.hash + heading.hash
+          @hash ||= 37*master_class.hash + heading.hash
         }
         define_method(:==){|other|
-          other.is_a?(Class) && other.superclass==Relation && other.heading==heading
+          other.is_a?(Class) && other.superclass==master_class && other.heading==heading
         }
         define_method(:coerce){|arg|
-          Relation.coercions.apply(arg, self)
+          master_class.coercions.apply(arg, self)
         }
         define_method(:to_s){
-          "Relation.type(#{Support.to_ruby_literal(heading.to_hash)})"
+          "#{master_class.name}.type(#{Support.to_ruby_literal(heading.to_hash)})"
         }
       end
     end # module DomainMethods
@@ -92,7 +93,7 @@ module Alf
       self.class.heading
     end
 
-    # Returns the attribute list, provided the relation contains at least one tuple.
+    # Returns the attribute list.
     def attribute_list
       heading.to_attr_list
     end
