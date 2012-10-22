@@ -16,20 +16,11 @@ module Alf
   # See main Alf documentation about relational operators.
   #
   class Relation
+    extend Domain::HeadingBased.new(self)
     extend Domain::Reuse.new(::Set)
     include Algebra::Operand
     include Enumerable
     include Lang::ObjectOriented
-
-    module GeneratorMethods
-
-      def type(heading)
-        heading = Heading.coerce(heading)
-        meths   = DomainMethods.new(Relation, heading)
-        Class.new(Relation).extend(meths)
-      end
-    end
-    extend GeneratorMethods
 
     def initialize(tuples)
       super(tuples.map{|x| Tuple.coerce(x)}.to_set)
@@ -54,35 +45,6 @@ module Alf
       end
     end
     def self.[](*args); coerce(args); end
-
-    class DomainMethods < Module
-
-      def initialize(master_class, heading)
-        define_method(:heading){
-          heading
-        }
-        define_method(:<=>){|other|
-          return nil unless other.ancestors.include?(master_class)
-          heading <=> other.heading
-        }
-        define_method(:===){|value|
-          super(value) ||
-          (value.is_a?(master_class) && value.heading == heading)
-        }
-        define_method(:hash){
-          @hash ||= 37*master_class.hash + heading.hash
-        }
-        define_method(:==){|other|
-          other.is_a?(Class) && other.superclass==master_class && other.heading==heading
-        }
-        define_method(:coerce){|arg|
-          master_class.coercions.apply(arg, self)
-        }
-        define_method(:to_s){
-          "#{master_class.name}.type(#{Support.to_ruby_literal(heading.to_hash)})"
-        }
-      end
-    end # module DomainMethods
 
     reuse :each, :size, :empty?
     alias_method :tuples, :reused_instance

@@ -51,6 +51,7 @@ module Alf
 
 end # module Alf
 
+require_relative "alf/ext"
 require_relative "alf-predicate/alf/predicate"
 require_relative 'alf-support/alf/support'
 require_relative 'alf-types/alf/types'
