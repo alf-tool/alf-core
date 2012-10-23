@@ -16,7 +16,10 @@ module Alf
       end
 
       def keys
-        raise NotSupportedError
+        @keys ||= begin
+          grouped_attrs = operand.heading[attribute].heading.to_attr_list
+          operand.keys.map{|k| k + grouped_attrs }
+        end
       end
 
     end # class Ungroup

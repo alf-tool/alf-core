@@ -15,9 +15,7 @@ module Alf
       subject{ op.keys }
 
       it{
-        pending "Relation Type must be implemented first" do
-          should be_nil
-        end
+        should eq(Keys[ [:id, :first, :last] ])
       }
 
     end
