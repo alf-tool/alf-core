@@ -80,5 +80,6 @@ module Alf
     alias :inspect :to_ruby_literal
 
     EMPTY = Tuple[{}].new({})
+    DUM   = EMPTY
   end # module Tuple
 end # module Alf
