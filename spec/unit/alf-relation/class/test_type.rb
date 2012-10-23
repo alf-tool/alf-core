@@ -18,5 +18,10 @@ module Alf
       subject.heading.to_hash.should eq(heading)
     end
 
+    it 'is aliased as []' do
+      Relation[heading].should be_a(Class)
+      Relation[heading].should eq(subject)
+    end
+
   end
 end

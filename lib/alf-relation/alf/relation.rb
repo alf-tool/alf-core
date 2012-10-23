@@ -16,8 +16,8 @@ module Alf
   # See main Alf documentation about relational operators.
   #
   class Relation
-    extend Domain::HeadingBased.new(self)
     extend Domain::Reuse.new(::Set)
+    extend Domain::HeadingBased.new(self)
     include Algebra::Operand
     include Enumerable
     include Lang::ObjectOriented

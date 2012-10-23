@@ -7,6 +7,7 @@ module Domain
         meths   = DomainMethods.new(master_class, heading)
         Class.new(master_class).extend(meths)
       }
+      alias_method :[], :type
     end
 
     class DomainMethods < Module
