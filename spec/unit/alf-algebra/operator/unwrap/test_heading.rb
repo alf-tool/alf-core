@@ -4,7 +4,7 @@ module Alf
     describe Unwrap, "heading" do
 
       let(:operand){
-        an_operand.with_heading(:id => Integer, :names => Hash)
+        an_operand.with_heading(id: Integer, names: Tuple[name: String, status: Integer])
       }
       let(:op){
         a_lispy.unwrap(operand, :names)
@@ -12,9 +12,7 @@ module Alf
       subject{ op.heading }
 
       it{
-        pending "Tuple Type must be implemented first" do
-          should be_nil
-        end
+       should eq(Heading.new(id: Integer, name: String, status: Integer))
       }
 
     end

@@ -4,10 +4,10 @@ module Alf
     describe Wrap, 'heading' do
 
       let(:operand){
-        an_operand.with_heading(:id => Integer, :name => String)
+        an_operand.with_heading(id: Integer, name: String)
       }
       let(:expected){
-        Heading[:id => Integer, :names => Hash]
+        Heading[id: Integer, names: Tuple[name: String]]
       }
 
       subject{ op.heading }
@@ -22,7 +22,7 @@ module Alf
 
       context '--allbut' do
         let(:op){ 
-          a_lispy.wrap(operand, [:id], :names, :allbut => true)
+          a_lispy.wrap(operand, [:id], :names, allbut: true)
         }
 
         it { should eq(expected) }

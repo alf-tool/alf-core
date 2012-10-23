@@ -9,9 +9,8 @@ module Alf
 
       def heading
         @heading ||= begin
-          h = operand.heading.to_hash
-          reltype = h.delete(attribute)
-          Heading.new(h.merge(reltype.heading.to_hash))
+          op_h = operand.heading
+          op_h.allbut([attribute]).merge(op_h[attribute].heading)
         end
       end
 

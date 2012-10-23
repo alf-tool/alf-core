@@ -8,11 +8,14 @@ module Alf
       end
 
       def heading
-        raise NotSupportedError
+        @heading ||= begin
+          op_h = operand.heading
+          op_h.allbut([attribute]).merge(op_h[attribute].heading)
+        end
       end
 
       def keys
-        raise NotSupportedError
+        operand.keys
       end
 
     end # class Unwrap

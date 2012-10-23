@@ -10,7 +10,7 @@ module Alf
       end
 
       def heading
-        @heading ||= stay_heading.merge(as => Hash)
+        @heading ||= stay_heading.merge(as => Tuple[wrapped_heading])
       end
 
       def keys
