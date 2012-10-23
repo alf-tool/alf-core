@@ -80,7 +80,7 @@ module Alf
       # @param [Renaming] a renaming instance
       # @return [Heading] a renamed heading
       def rename(renaming)
-        Heading.new renaming.rename_tuple(attributes)
+        Heading.new Renaming.coerce(renaming).rename_tuple(attributes)
       end
 
       # Splits this heading according to an attribute list
