@@ -63,6 +63,29 @@ module Alf
       alias_method :+, :union
       alias_method :join, :union
 
+      # Splits this heading according to an attribute list
+      #
+      # @return [Array[Heading]] an array of two headings.
+      def split(names, allbut=false)
+        l, r = AttrList.coerce(names).split_tuple(attributes, allbut)
+        [Heading.new(l), Heading.new(r)]
+      end
+
+      # Projects this heading on specified names.
+      #
+      # @param [AttrList] names an enumerable of attribute names.
+      # @param [Boolean] allbut apply a allbut projection?
+      def project(names, allbut = false)
+        Heading[AttrList.coerce(names).project_tuple(attributes, allbut)]
+      end
+
+      # Projects this heading on all but specified names.
+      #
+      # @param [AttrList] names an enumerable of attribute names.
+      def allbut(names)
+        project(names, true)
+      end
+
       # Computes the merge of this heading with `other`.
       #
       # When self and other have no common attribute names, compute the
@@ -81,22 +104,6 @@ module Alf
       # @return [Heading] a renamed heading
       def rename(renaming)
         Heading.new Renaming.coerce(renaming).rename_tuple(attributes)
-      end
-
-      # Splits this heading according to an attribute list
-      #
-      # @return [Array[Heading]] an array of two headings.
-      def split(names, allbut=false)
-        l, r = AttrList.coerce(names).split_tuple(attributes, allbut)
-        [Heading.new(l), Heading.new(r)]
-      end
-
-      # Projects this heading on specified names.
-      #
-      # @param [AttrList] names an enumerable of attribute names.
-      # @param [Boolean] allbut apply a allbut projection?
-      def project(names, allbut = false)
-        Heading[AttrList.coerce(names).project_tuple(attributes, allbut)]
       end
 
       # Compares this heading with another one
