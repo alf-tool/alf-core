@@ -21,6 +21,13 @@ module Alf
         }
       end
 
+      def self.infer(arg)
+        return arg.to_heading if arg.respond_to?(:to_heading)
+        return arg.heading    if arg.respond_to?(:heading)
+        arg = [ arg ] if TupleLike===arg
+        Heading.new(Engine::InferHeading.new(arg).first)
+      end
+
       reuse :each, :[], :size, :to_hash, :map
 
       alias_method :attributes, :reused_instance
