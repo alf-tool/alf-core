@@ -56,7 +56,7 @@ module Alf
     end
 
     # Returns the attribute list.
-    def attribute_list
+    def to_attr_list
       heading.to_attr_list
     end
 
