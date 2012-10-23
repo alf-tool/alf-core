@@ -149,6 +149,7 @@ module Alf
           "Alf::Heading::EMPTY" :
           "Alf::Heading[#{Support.to_ruby_literal(attributes)[1...-1]}]"
       end
+      alias_method :to_s,    :to_ruby_literal
       alias_method :inspect, :to_ruby_literal
 
       EMPTY = Heading.new({})
