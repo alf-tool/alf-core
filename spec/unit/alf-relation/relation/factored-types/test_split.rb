@@ -1,8 +1,8 @@
 require 'spec_helper'
 module Alf
-  describe Tuple, 'split' do
+  describe Relation, '.split' do
 
-    let(:type){ Tuple[name: String, status: Integer] }
+    let(:type){ Relation[name: String, status: Integer] }
 
     subject{ type.split(attr_list) }
 
@@ -10,7 +10,7 @@ module Alf
       let(:attr_list){ AttrList.new([]) }
 
       it 'splits as expected' do
-        subject.should eq([ Tuple[{}], type ])
+        subject.should eq([ Relation[{}], type ])
       end
 
       it 'reuses the initial instance' do
@@ -22,7 +22,7 @@ module Alf
       let(:attr_list){ AttrList.new([:name]) }
 
       it 'splits as expected' do
-        subject.should eq([ Tuple[name: String], Tuple[status: Integer] ])
+        subject.should eq([ Relation[name: String], Relation[status: Integer] ])
       end
     end
 

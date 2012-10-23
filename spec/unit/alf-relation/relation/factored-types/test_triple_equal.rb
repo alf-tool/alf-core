@@ -2,15 +2,15 @@ require 'spec_helper'
 module Alf
   describe Relation, '===' do
 
-    let(:reltype){ Relation[heading] }
+    let(:type){ Relation[heading] }
 
-    subject{ reltype === value }
+    subject{ type === value }
 
     context 'when the exact types' do
       let(:heading){ Heading.new(name: String, status: Fixnum) }
 
       context 'on a valid value built with itself' do
-        let(:value){ reltype.coerce(name: "Smith", status: 20) }
+        let(:value){ type.coerce(name: "Smith", status: 20) }
 
         it{ should be_true }
       end
@@ -26,7 +26,7 @@ module Alf
       let(:heading){ Heading.new(name: String, status: Integer) }
 
       context 'on a valid value built with itself' do
-        let(:value){ reltype.coerce(name: "Smith", status: 20) }
+        let(:value){ type.coerce(name: "Smith", status: 20) }
 
         it{ should be_true }
       end

@@ -2,12 +2,12 @@ require 'spec_helper'
 module Alf
   describe Relation, '==' do
 
-    let(:reltype){ Relation[name: String, status: Integer] }
+    let(:type){ Relation[name: String, status: Integer] }
 
-    subject{ reltype == other }
+    subject{ type == other }
 
     context 'with itself' do
-      let(:other){ reltype }
+      let(:other){ type }
 
       it{ should be_true }
     end

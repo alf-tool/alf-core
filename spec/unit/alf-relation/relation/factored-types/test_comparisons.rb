@@ -2,11 +2,11 @@ require 'spec_helper'
 module Alf
   describe Relation, '<=>' do
 
-    let(:reltype)  { Relation[name: String, status: Integer] }
+    let(:type)     { Relation[name: String, status: Integer] }
     let(:supertype){ Relation[name: String, status: Numeric] }
     let(:subtype)  { Relation[name: String, status: Fixnum]  }
 
-    subject{ reltype <=> other }
+    subject{ type <=> other }
 
     context 'on something else' do
       let(:other){ Integer }
@@ -15,7 +15,7 @@ module Alf
     end
 
     context 'on itself' do
-      let(:other){ reltype }
+      let(:other){ type }
 
       it{ should eq(0) }
     end
@@ -42,25 +42,25 @@ module Alf
 
       it 'the > shortcut classifies correctly' do
         (supertype > supertype).should be_false
-        (supertype > reltype).should be_true
+        (supertype > type).should be_true
         (supertype > subtype).should be_true
       end
 
       it 'the >= shortcut classifies correctly' do
         (supertype >= supertype).should be_true
-        (supertype >= reltype).should be_true
+        (supertype >= type).should be_true
         (supertype >= subtype).should be_true
       end
 
       it 'the < shortcut classifies correctly' do
         (supertype < supertype).should be_false
-        (supertype < reltype).should be_false
+        (supertype < type).should be_false
         (supertype < subtype).should be_false
       end
 
       it 'the <= shortcut classifies correctly' do
         (supertype <= supertype).should be_true
-        (supertype <= reltype).should be_false
+        (supertype <= type).should be_false
         (supertype <= subtype).should be_false
       end
     end

@@ -2,10 +2,10 @@ require 'spec_helper'
 module Alf
   describe Relation, '.coerce' do
 
-    subject{ reltype.coerce(tuples) }
+    subject{ type.coerce(tuples) }
 
     context 'on single attributes' do
-      let(:reltype) { Relation[name: String,  status: Integer] }
+      let(:type)    { Relation[name: String,  status: Integer] }
       let(:expected){ Relation(name: "Smith", status: 20)      }
 
       it 'coerces attributes' do

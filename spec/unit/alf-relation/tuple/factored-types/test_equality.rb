@@ -2,12 +2,12 @@ require 'spec_helper'
 module Alf
   describe Tuple, '.==' do
 
-    let(:tuple_type){ Tuple[name: String, status: Integer] }
+    let(:type){ Tuple[name: String, status: Integer] }
 
-    subject{ tuple_type == other }
+    subject{ type == other }
 
     context 'with itself' do
-      let(:other){ tuple_type }
+      let(:other){ type }
 
       it{ should be_true }
     end

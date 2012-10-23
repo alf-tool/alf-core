@@ -51,8 +51,19 @@ module Domain
           heading
         }
         define_method(:split){|attr_list|
-          return [ master_class[{}], self ] if attr_list.empty?
-          heading.split(attr_list).map{|h| master_class[h]}
+          if attr_list.empty?
+            [ master_class::DUM.class, self ]
+          elsif attr_list==heading.to_attr_list
+            [ self, master_class::DUM.class ]
+          else
+            heading.split(attr_list).map{|h| master_class[h]}
+          end
+        }
+        define_method(:project){|attr_list|
+          split(attr_list).first
+        }
+        define_method(:allbut){|attr_list|
+          split(attr_list).last
         }
         define_method(:rename){|renaming|
           master_class[heading.rename(renaming)]
