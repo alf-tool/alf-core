@@ -1,26 +1,26 @@
 module Domain
-  module HeadingBased
+  class HeadingBased < Module
 
-    def self.new(master_class)
-      Module.new{
-        define_method(:type){|heading|
-          heading = Alf::Heading.coerce(heading)
-          meths   = [
-            DomainMethods.new(master_class, heading),
-            Domain::Comparisons
-          ]
-          Class.new(master_class).extend(*meths)
-        }
-        alias_method :[], :type
+    def initialize(master_class)
+      define_method(:new){|*args|
+        raise "#{master_class}.new may not be called directly" if master_class==self
+        super(*args)
       }
+      define_method(:type){|heading|
+        heading = Alf::Heading.coerce(heading)
+        meths   = [
+          DomainMethods.new(master_class, heading),
+          AlgebraMethods.new(master_class, heading),
+          Domain::Comparisons,
+        ]
+        Class.new(master_class).extend(*meths)
+      }
+      alias_method :[], :type
     end
 
     class DomainMethods < Module
 
       def initialize(master_class, heading)
-        define_method(:heading){
-          heading
-        }
         define_method(:<=>){|other|
           return nil unless other.ancestors.include?(master_class)
           heading <=> other.heading
@@ -43,5 +43,21 @@ module Domain
         alias_method :to_s, :to_ruby_literal
       end
     end # module DomainMethods
+
+    class AlgebraMethods < Module
+
+      def initialize(master_class, heading)
+        define_method(:heading){
+          heading
+        }
+        define_method(:split){|attr_list|
+          return [ master_class[{}], self ] if attr_list.empty?
+          heading.split(attr_list).map{|h| master_class[h]}
+        }
+        define_method(:rename){|renaming|
+          master_class[heading.rename(renaming)]
+        }
+      end
+    end
   end # module HeadingBased
 end # module Domain
