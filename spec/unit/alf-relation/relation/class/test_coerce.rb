@@ -2,11 +2,11 @@ require 'spec_helper'
 module Alf
   describe Relation, '.coerce' do
 
-    let(:heading) { {sid: String}               }
-    let(:type)    { Relation[heading]           }
-    let(:tuple)   { {sid: 'S1'}                 }
-    let(:tuples)  { Set.new << Tuple.new(tuple) }
-    let(:expected){ type.new(tuples)            }
+    let(:heading) { {sid: String}           }
+    let(:type)    { Relation[heading]       }
+    let(:tuple)   { {sid: 'S1'}             }
+    let(:tuples)  { Set.new << Tuple(tuple) }
+    let(:expected){ type.new(tuples)        }
 
     subject{ Relation.coerce(arg) }
 

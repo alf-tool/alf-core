@@ -30,7 +30,7 @@ module Alf
     end
 
     specify "ON DEE" do
-      Relation::DEE.to_a.should eq([Tuple.new({})])
+      Relation::DEE.to_a.should eq([Tuple::EMPTY])
     end
 
   end

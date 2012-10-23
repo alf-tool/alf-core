@@ -68,7 +68,7 @@ module Alf
       it_should_behave_like "A value"
       specify{
         subject.cardinality.should == 1
-        subject.to_a.should == [Tuple.new({})]
+        subject.to_a.should == [Tuple::EMPTY]
         subject.should_not be_empty
       }
     end
