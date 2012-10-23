@@ -38,7 +38,7 @@ module Alf
         scope = tuple_scope
         operand.each do |tuple|
           computed = @computation.evaluate(scope.__set_tuple(tuple))
-          yield tuple.merge(computed){|k,v1,v2| v2}
+          yield tuple.merge(computed)
         end
       end
 
