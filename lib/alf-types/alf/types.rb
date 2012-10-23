@@ -36,11 +36,9 @@ module Alf
     require_relative 'types/ordering'
     require_relative 'types/renaming'
     require_relative 'types/summarization'
-    #require_relative 'types/predicate'
     require_relative 'types/tuple_expression'
     require_relative 'types/tuple_computation'
     require_relative 'types/keys'
-    require_relative 'types/tuple'
 
     # Install all types on Alf now
     constants.each do |s|

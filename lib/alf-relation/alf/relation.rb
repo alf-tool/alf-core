@@ -1,3 +1,4 @@
+require_relative 'tuple'
 module Alf
   #
   # Defines an in-memory relation data structure.
