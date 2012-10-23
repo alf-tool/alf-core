@@ -12,7 +12,7 @@ module Alf
       def heading
         @heading ||= begin
           keep, sub = operand.heading.split(attributes, !allbut)
-          keep.merge(as => Relation.type(sub))
+          keep.merge(as => Relation[sub])
         end
       end
 

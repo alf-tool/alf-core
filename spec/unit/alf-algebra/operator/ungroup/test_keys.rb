@@ -4,7 +4,10 @@ module Alf
     describe Ungroup, "keys" do
 
       let(:operand){
-        an_operand.with_heading(:id => Integer, :names => Relation).with_keys([:id])
+        an_operand.with_heading(
+          :id    => Integer,
+          :names => Relation[first: String, last: String]
+        ).with_keys([:id])
       }
       let(:op){
         a_lispy.ungroup(operand, :names)

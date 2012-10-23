@@ -7,7 +7,7 @@ module Alf
         an_operand.with_heading(id: Integer, name: String)
       }
       let(:expected){
-        Heading[:id => Integer, :names => Relation.type(name: String) ]
+        Heading[id: Integer, names: Relation[name: String] ]
       }
 
       subject{ op.heading }
@@ -22,7 +22,7 @@ module Alf
 
       context '--allbut' do
         let(:op){ 
-          a_lispy.group(operand, [:id], :names, :allbut => true)
+          a_lispy.group(operand, [:id], :names, allbut: true)
         }
 
         it { should eq(expected) }

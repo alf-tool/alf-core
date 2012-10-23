@@ -3,7 +3,7 @@ module Alf
   describe Relation, '.coerce' do
 
     let(:heading) { {sid: String}               }
-    let(:type)    { Relation.type(heading)      }
+    let(:type)    { Relation[heading]           }
     let(:tuple)   { {sid: 'S1'}                 }
     let(:tuples)  { Set.new << Tuple.new(tuple) }
     let(:expected){ type.new(tuples)            }

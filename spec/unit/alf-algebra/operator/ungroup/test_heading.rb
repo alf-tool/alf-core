@@ -4,7 +4,7 @@ module Alf
     describe Ungroup, "heading" do
 
       let(:operand){
-        an_operand.with_heading(id: Integer, names: Relation.type(name: String))
+        an_operand.with_heading(id: Integer, names: Relation[name: String])
       }
       let(:op){
         a_lispy.ungroup(operand, :names)

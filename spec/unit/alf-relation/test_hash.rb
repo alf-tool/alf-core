@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Relation, "hash" do
 
-    let(:reltype){ Relation.type(name: String)              }
+    let(:reltype){ Relation[name: String]                   }
     let(:rel)    { reltype.coerce(name: ["Jones", "Smith"]) }
 
     subject{ rel.hash == other.hash }

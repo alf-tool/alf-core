@@ -40,7 +40,7 @@ module Alf
         c.coerce(Alf.reader(v).to_set, t)
       end
       c.coercion(Enumerable) do |v,t|
-        t = Relation.type(Engine::InferHeading.new(v).first) if Relation==t
+        t = Relation[Engine::InferHeading.new(v).first] if Relation==t
         t.new(v)
       end
     end
@@ -80,7 +80,7 @@ module Alf
     end
     alias :inspect :to_ruby_literal
 
-    DUM_TYPE = DEE_TYPE = Relation.type(Heading.new({}))
+    DUM_TYPE = DEE_TYPE = Relation[{}]
     DUM = DUM_TYPE.new([])
     DEE = DEE_TYPE.new([{}])
 
