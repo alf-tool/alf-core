@@ -2,8 +2,7 @@ require 'spec_helper'
 module Alf
   describe Relation, '==' do
 
-    let(:heading){ {name: String, status: Integer } }
-    let(:reltype){ Relation.type(heading)           }
+    let(:reltype){ Relation[name: String, status: Integer] }
 
     subject{ reltype == other }
 
@@ -14,13 +13,13 @@ module Alf
     end
 
     context 'with another equivalent' do
-      let(:other){ Relation.type(heading) }
+      let(:other){ Relation[name: String, status: Integer] }
 
       it{ should be_true }
     end
 
     context 'with another, non equivalent' do
-      let(:other){ Relation.type(name: String) }
+      let(:other){ Relation[name: String] }
 
       it{ should be_false }
     end

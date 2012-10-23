@@ -2,7 +2,7 @@ require 'spec_helper'
 module Alf
   describe Relation, '===' do
 
-    let(:reltype){ Relation.type(heading) }
+    let(:reltype){ Relation[heading] }
 
     subject{ reltype === value }
 
