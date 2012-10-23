@@ -3,7 +3,7 @@ module Alf
   describe "Support#to_tuple" do
 
     let(:expected){
-      Tuple.new(:name => "Alf")
+      Tuple(name: "Alf")
     }
 
     def to_tuple(x, &bl)
@@ -11,7 +11,7 @@ module Alf
     end
 
     it 'returns a tuple already' do
-      to_tuple(:name => "Alf").should eq(expected)
+      to_tuple(name: "Alf").should eq(expected)
     end
 
     it 'symbolizes keys' do
@@ -22,7 +22,7 @@ module Alf
       to_tuple('name' => "alf", 'version' => "foo"){|k,v|
         k.should be_a(Symbol)
         v.upcase
-      }.should eq(Tuple.new(:name => "ALF", :version => "FOO"))
+      }.should eq(Tuple(name: "ALF", version: "FOO"))
     end
 
   end

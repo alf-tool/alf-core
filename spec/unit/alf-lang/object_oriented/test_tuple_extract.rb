@@ -9,8 +9,8 @@ module Alf
       end
 
       context 'on a singleton' do
-        let(:rel)     { [{:name => "Jones"}] }
-        let(:expected){ Tuple.new(:name => "Jones") }
+        let(:rel)     { [{name: "Jones"}] }
+        let(:expected){ Tuple(name: "Jones") }
 
         it 'returns the tuple' do
           subject.should eq(expected)
@@ -32,12 +32,12 @@ module Alf
         end
 
         it 'yields if a block' do
-          subject{ {:id => 12} }.should eq(Tuple.new(:id => 12))
+          subject{ {id: 12} }.should eq(Tuple(id: 12))
         end
       end
 
       context 'on a relation with more than one tuple' do
-        let(:rel){ [{:name => "Jones"}, {:name => "Smith"}] }
+        let(:rel){ [{name: "Jones"}, {name: "Smith"}] }
 
         it 'raises a NoSuchTupleError' do
           lambda{

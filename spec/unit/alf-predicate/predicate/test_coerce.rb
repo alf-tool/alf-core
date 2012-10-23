@@ -55,7 +55,7 @@ module Alf
       end
 
       describe "from Hash (single)" do
-        let(:arg){ {:status => 10} }
+        let(:arg){ {status: 10} }
 
         specify{
           subject.expr.should be_a(Eq)
@@ -64,7 +64,7 @@ module Alf
       end
 
       describe "from Tuple (single)" do
-        let(:arg){ Tuple.new(:status => 10) }
+        let(:arg){ Tuple(status: 10) }
 
         specify{
           subject.expr.should be_a(Eq)
@@ -73,18 +73,18 @@ module Alf
       end
 
       describe "from Hash (multiple)" do
-        let(:arg){ {:status => 10, :name => "Jones"} }
+        let(:arg){ {status: 10, name: "Jones"} }
 
         specify{
-          subject.should eq(Predicate.eq(:status => 10) & Predicate.eq(:name => "Jones"))
+          subject.should eq(Predicate.eq(status: 10) & Predicate.eq(name: "Jones"))
         }
       end
 
       describe "from Tuple (multiple)" do
-        let(:arg){ Tuple.new(:status => 10, :name => "Jones") }
+        let(:arg){ Tuple(status: 10, name: "Jones") }
 
         specify{
-          subject.should eq(Predicate.eq(:status => 10) & Predicate.eq(:name => "Jones"))
+          subject.should eq(Predicate.eq(status: 10) & Predicate.eq(name: "Jones"))
         }
       end
 
@@ -105,7 +105,7 @@ module Alf
       end
 
       describe "from Relation (arity=1)" do
-        let(:arg){ Relation(:status => [10, 20]) }
+        let(:arg){ Relation(status: [10, 20]) }
 
         specify{
           subject.should eq(Predicate.in(:status, [10, 20]))
@@ -114,32 +114,17 @@ module Alf
 
       describe "from Relation (arity>1)" do
         let(:arg){ Relation([
-          {:status => 1, :city => "London"},
-          {:status => 2, :city => "Paris"}
+          {status: 1, city: "London"},
+          {status: 2, city: "Paris"}
         ]) }
         let(:expected){
-          Predicate.eq({:status => 1, :city => "London"}) | Predicate.eq({:status => 2, :city => "Paris"})
+          Predicate.eq({status: 1, city: "London"}) | Predicate.eq({status: 2, city: "Paris"})
         }
 
         specify{
           subject.should eq(expected)
         }
       end
-
-      # describe "from Hash with coercion" do
-      #   let(:arg){ {"status" => "10"} }
-      #   it{ should eql(true) }
-      # end
-      #
-      # describe "from a singleton Array" do
-      #   let(:arg){ ["status == 10"] }
-      #   it{ should eql(true) }
-      # end
-      #
-      # describe "from an Array with coercion" do
-      #   let(:arg){ ["status", "10"] }
-      #   it{ should eql(true) }
-      # end
 
     end
   end
