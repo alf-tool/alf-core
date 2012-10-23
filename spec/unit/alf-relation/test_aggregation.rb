@@ -1,13 +1,8 @@
 require 'spec_helper'
 module Alf
-  describe Relation do
+  describe Relation, "aggregation methods" do
 
-    let(:rel){Alf::Relation[
-      {:qty => 1},
-      {:qty => 2},
-      {:qty => 3},
-      {:qty => 4}
-    ]}
+    let(:rel){ Alf::Relation(qty: [1, 2, 3, 4]) }
 
     it "avg" do
       rel.avg{ qty }.should eq(2.5)

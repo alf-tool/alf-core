@@ -25,12 +25,8 @@ module Alf
         Alf::Tuple(*args, &bl)
       end
 
-      def Relation(first, *args, &bl)
-        if args.empty?
-          Alf::Relation(first, &bl)
-        else
-          Alf::Relation[*args.unshift(first)]
-        end
+      def Relation(*args, &bl)
+        Alf::Relation(*args, &bl)
       end
 
       Aggregator.listen do |name, clazz|

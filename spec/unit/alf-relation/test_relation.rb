@@ -18,7 +18,8 @@ module Alf
     end
 
     it "should have an empty? method" do
-      Alf::Relation[].should be_empty
+      Alf::Relation::DUM.should be_empty
+      Alf::Relation::DEE.should_not be_empty
       rel1.should_not be_empty
     end
 

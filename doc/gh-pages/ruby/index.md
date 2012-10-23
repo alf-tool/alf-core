@@ -62,11 +62,11 @@ puts rel.to_a
 
 * Alf is shipped with a true `Relation` data structure, that is, a set of tuples. Those relations can be used as relation literals in DSL expressions.
 
-<pre><code class="ruby">cities = Alf::Relation[
+<pre><code class="ruby">cities = Alf::Relation([
   {:city => "London"},
   {:city => "Paris"},
   {:city => "Oslo"}
-]
+])
 </code></pre>
 
 * While not idomatic and not recommended, you can also use Alf with an object-oriented style thanks to `Relation`:

@@ -45,12 +45,6 @@ module Alf
       specify{ lambda{ subject }.should raise_error(TypeError) }
     end
 
-    describe 'the [] alias' do
-      it 'supports a list of tuple literals' do
-        Relation[{:sid => 'S1'}, {:sid => 'S2'}].size.should eq(2)
-      end
-    end
-
     context 'with files and IOs' do
       let(:path){ Path.dir/'to_relation.rash' }
 

@@ -4,19 +4,14 @@ module Alf
     describe Group::Hash do
 
       let(:operand){[
-        {:name => "Smith", :city => "London"},
-        {:name => "Jones", :city => "Paris"},
-        {:name => "Blake", :city => "London"},
+        {name: "Smith", city: "London"},
+        {name: "Jones", city: "Paris"},
+        {name: "Blake", city: "London"},
       ]}
 
       let(:expected){[
-        {:city => "London", :suppliers => Relation[
-                              {:name => "Smith"},
-                              {:name => "Blake"}
-                            ]},
-        {:city => "Paris", :suppliers => Relation[
-                              {:name => "Jones"}
-                            ]},
+        { city: "London", suppliers: Relation(name: ["Smith", "Blake"]) },
+        { city: "Paris",  suppliers: Relation(name: ["Jones"])          },
       ].to_set}
 
       it 'should group specified attributes' do

@@ -4,16 +4,16 @@ module Alf
     describe "Relation(...) literal" do
       include Functional
 
-      subject{ Relation(*args) }
-
       describe 'on a single tuple' do
-        let(:args){ [{:name => "Alf"}] }
-        it{ should eq(Relation[*args]) }
+        subject{ Relation(name: "Jones") }
+
+        it{ should eq(Alf::Relation.coerce([{name: "Jones"}])) }
       end
 
-      describe 'on two tuples' do
-        let(:args){ [{:name => "Alf"}, {:name => "Lispy"}] }
-        it{ should eq(Relation[*args]) }
+      describe 'on an array of tuples' do
+        subject{ Relation([{name: "Jones"}, {name: "Smith"}])}
+
+        it{ should eq(Alf::Relation.coerce([{name: "Jones"}, {name: "Smith"}])) }
       end
 
     end

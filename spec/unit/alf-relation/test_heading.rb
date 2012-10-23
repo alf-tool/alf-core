@@ -2,10 +2,12 @@ require 'spec_helper'
 module Alf
   describe "Relation#heading" do
 
-    let(:rel){Alf::Relation[
-      {:max => 2, :name => "Jones"},
-      {:max => 7.3, :name => "Jones"},
-    ]}
+    let(:rel){
+      Relation([
+        {:max => 2,   :name => "Jones"},
+        {:max => 7.3, :name => "Jones"},
+      ])
+    }
 
     subject{ rel.heading }
 

@@ -9,9 +9,9 @@ module Alf
   # Relation values can be obtained in various ways, for example by invoking a relational
   # operator on an existing relation. Relation literals are simply constructed as follows:
   #
-  #     Alf::Relation[
+  #     Alf::Relation([
   #       # ... a comma list of ruby hashes ...
-  #     ]
+  #     ])
   #
   # See main Alf documentation about relational operators.
   #
@@ -44,7 +44,6 @@ module Alf
         t.new(v)
       end
     end
-    def self.[](*args); coerce(args); end
 
     reuse :each, :size, :empty?
     alias_method :tuples, :reused_instance
@@ -77,8 +76,7 @@ module Alf
 
     # Returns a  literal representation of this relation
     def to_ruby_literal
-      "Alf::Relation[" +
-        tuples.map{|t| Support.to_ruby_literal(t) }.join(', ') + "]"
+      "Alf::Relation([" + tuples.map{|t| Support.to_ruby_literal(t) }.join(', ') + "])"
     end
     alias :inspect :to_ruby_literal
 
