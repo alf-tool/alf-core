@@ -7,7 +7,7 @@ module Alf
 
       subject{ tuple.allbut([:name]) }
 
-      it { should eq(Tuple.new(:id => 1)) }
+      it { should eq(Tuple(:id => 1)) }
 
     end
   end

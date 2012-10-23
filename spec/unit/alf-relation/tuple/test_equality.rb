@@ -5,7 +5,7 @@ module Alf
 
       subject{ object == other }
 
-      let(:object){ Tuple.new :name => 'Alf' }
+      let(:object){ Tuple name: 'Alf' }
 
       context 'on self' do
         let(:other){ object }
@@ -20,14 +20,14 @@ module Alf
       end
 
       context 'on an equivalent' do
-        let(:other){ Tuple.new :name => 'Alf' }
+        let(:other){ Tuple name: 'Alf' }
 
         it{ should be_true }
       end
 
       context 'when embedded in a set' do
-        let(:object){ Set.new << Tuple.new(:name => 'Alf') }
-        let(:other) { Set.new << Tuple.new(:name => 'Alf') }
+        let(:object){ Set.new << Tuple(name: 'Alf') }
+        let(:other) { Set.new << Tuple(name: 'Alf') }
 
         it 'should still be equal' do
           object.should eq(other)

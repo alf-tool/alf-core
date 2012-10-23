@@ -1,62 +1,69 @@
 module Alf
   class Tuple
     extend Domain::Reuse.new(Hash)
+    extend Domain::HeadingBased.new(self)
 
     reuse :map, :size, :empty?, :[], :to_a, :keys, :values_at, :has_key?
 
     coercions do |c|
-      c.coercion(Hash){|v,_| Tuple.new Support.symbolize_keys(v) }
+      c.coercion(Hash){|hash,type|
+        type    = Tuple[Heading.infer(hash)] if Tuple==type
+        hash    = Support.symbolize_keys(hash)
+        hash    = hash.merge(type.heading){|k,v,t| Support.coerce(v, t) }
+        type.new(hash).check_internal_representation!
+      }
     end
 
-    def remap(&bl)
-      self.class.new reused_instance.each_with_object({}){|(k,v),h| h[k] = yield(k,v)}
+    def check_internal_representation!
+      raise TypeError, "Hash expected"          unless reused_instance.is_a?(Hash)
+      raise TypeError, "Not a tuple subclass"   unless self.class.superclass == Tuple
+      raise TypeError, "Attributes mistmatch"   unless heading.to_attr_list  == AttrList.coerce(reused_instance.keys)
+      raise TypeError, "Heading type mistmatch" unless heading === reused_instance
+      self
     end
 
-    def merge(other, &bl)
-      self.class.new reused_instance.merge(other.to_hash, &bl)
+    def heading
+      self.class.heading
     end
 
     def split(attr_list)
       return [ EMPTY, self ] if attr_list.empty?
       left, right = {}, to_hash
-      attr_list.each do |a|
+      (heading.to_attr_list & attr_list).each do |a|
         left[a] = right.delete(a)
       end
-      [ Tuple.new(left), Tuple.new(right) ]
+      self.class.split(attr_list).zip([left, right]).map{|t,v| t.new(v) }
     end
 
     def project(attr_list)
-      attrs = self.keys & attr_list.to_a
-      self.class.new attrs.each_with_object({}){|k,h| h[k] = self[k]}
+      split(attr_list).first
     end
 
     def allbut(attr_list)
-      project(AttrList.new(keys) - attr_list)
-    end
-
-    def only(renaming)
-      renaming = Renaming.coerce(renaming)
-      self.class.new renaming.to_hash.each_with_object({}){|(o,n),h| h[n] = self[o] }
+      split(attr_list).last
     end
 
     def rename(renaming)
       renaming = Renaming.coerce(renaming)
-      self.class.new renaming.rename_tuple(self)
-    end
-
-    def coerce(heading)
-      heading = Heading.coerce(heading)
-      remap{|k,v|
-        domain = heading[k]
-        domain ? Support.coerce(v, domain) : v
-      }
+      self.class.rename(renaming).new(renaming.rename_tuple(reused_instance))
     end
 
     def extend(computation)
-      computation = TupleComputation.coerce(computation)
-      scope       = Support::TupleScope.new(self)
-      computed    = computation.evaluate(scope)
-      merge(computed)
+      computation   = TupleComputation.coerce(computation)
+      scope         = Support::TupleScope.new(self)
+      computed      = computation.evaluate(scope)
+      res_heading   = heading.merge(Heading.infer(computed))
+      Tuple[res_heading].new(reused_instance.merge(computed))
+    end
+
+    def remap(&bl)
+      res = reused_instance.each_with_object({}){|(k,v),n| n[k] = bl[k, v]}
+      Tuple[Heading.infer(res)].new(res)
+    end
+
+    def merge(other)
+      res = reused_instance.merge(other.to_hash)
+      Tuple[Heading.infer(res)].new(res)
     end
 
     def to_hash(dup = true)
@@ -72,6 +79,6 @@ module Alf
     end
     alias :inspect :to_ruby_literal
 
-    EMPTY = Tuple.new({})
+    EMPTY = Tuple[{}].new({})
   end # module Tuple
 end # module Alf

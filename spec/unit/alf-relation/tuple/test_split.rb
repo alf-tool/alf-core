@@ -2,8 +2,7 @@ require 'spec_helper'
 module Alf
   describe Tuple, "split" do 
 
-    let(:tuple){ Tuple.new(:a => 1, :b => 2, :c => 3) }
-    let(:list)  { AttrList.new [:a, :b]           }
+    let(:tuple){ Tuple(a: 1, b: 2, c: 3) }
 
     subject{ tuple.split(list) }
 
@@ -16,7 +15,7 @@ module Alf
     context 'with a sublist' do
       let(:list){ [:a, :c] }
 
-      it{ should eq([ Tuple.new(:a => 1, :c => 3), Tuple.new(:b => 2) ]) }
+      it{ should eq([ Tuple(a: 1, c: 3), Tuple(b: 2) ]) }
     end
 
     context 'with an empty list' do

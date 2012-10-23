@@ -7,7 +7,7 @@ module Alf
 
       subject{ tuple.rename(:name => :first_name) }
 
-      it { should eq(Tuple.new(:id => 1, :first_name => "Alf")) }
+      it { should eq(Tuple(:id => 1, :first_name => "Alf")) }
 
     end
   end
