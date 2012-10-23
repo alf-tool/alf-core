@@ -34,7 +34,7 @@ module Alf
       context 'on a valid value but built with Relation' do
         let(:value){ Relation.coerce(name: "Smith", status: 20) }
 
-        it{ pending("super relation type badly implemented"){ should be_true } }
+        it{ should be_true }
       end
     end
 

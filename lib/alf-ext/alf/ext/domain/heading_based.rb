@@ -26,8 +26,7 @@ module Domain
           heading <=> other.heading
         }
         define_method(:===){|value|
-          super(value) ||
-          (value.is_a?(master_class) && value.heading == heading)
+          super(value) || (value.is_a?(master_class) && self >= value.class)
         }
         define_method(:hash){
           @hash ||= 37*master_class.hash + heading.hash
