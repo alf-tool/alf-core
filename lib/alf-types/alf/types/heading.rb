@@ -134,6 +134,13 @@ module Alf
         (types.size == values.size) && types.keys.all?{|k| types[k]===values[k]}
       end
 
+      # Return self
+      #
+      # @return [Heading] this heading
+      def to_heading
+        self
+      end
+
       # Converts this heading to an attribute list.
       #
       # @return [AttrList] heading's attributes as an attribute list
