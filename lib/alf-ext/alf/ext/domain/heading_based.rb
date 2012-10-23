@@ -1,13 +1,18 @@
 module Domain
-  class HeadingBased < Module
+  module HeadingBased
 
-    def initialize(master_class)
-      define_method(:type){|heading|
-        heading = Alf::Heading.coerce(heading)
-        meths   = DomainMethods.new(master_class, heading)
-        Class.new(master_class).extend(meths)
+    def self.new(master_class)
+      Module.new{
+        define_method(:type){|heading|
+          heading = Alf::Heading.coerce(heading)
+          meths   = [
+            DomainMethods.new(master_class, heading),
+            Domain::Comparisons
+          ]
+          Class.new(master_class).extend(*meths)
+        }
+        alias_method :[], :type
       }
-      alias_method :[], :type
     end
 
     class DomainMethods < Module
@@ -33,9 +38,10 @@ module Domain
         define_method(:coerce){|arg|
           master_class.coercions.apply(arg, self)
         }
-        define_method(:to_s){
-          "#{master_class.name}.type(#{Alf::Support.to_ruby_literal(heading.to_hash)})"
+        define_method(:to_ruby_literal){
+          "#{master_class.name}[#{Alf::Support.to_ruby_literal(heading.to_hash)}]"
         }
+        alias_method :to_s, :to_ruby_literal
       end
     end # module DomainMethods
   end # module HeadingBased
