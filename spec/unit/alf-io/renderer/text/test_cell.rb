@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  class Text::Renderer
+  class Renderer::Text
     describe Cell do
      
       let(:f){ Cell.new }

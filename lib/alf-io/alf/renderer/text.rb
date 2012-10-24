@@ -1,10 +1,6 @@
 module Alf
-  module Text
-
-    #
-    # Implements Alf::Renderer for outputting beautiful text tables.
-    #
-    class Renderer < ::Alf::Renderer
+  class Renderer
+    class Text < Renderer
 
       module Utils
 
@@ -13,7 +9,6 @@ module Alf
           return x if y.nil?
           x > y ? x : y
         end
-
       end
       include Utils
 
@@ -35,9 +30,9 @@ module Alf
           if size.nil?
             text_rendering.split(/\n/)
           elsif @value.is_a?(Numeric)
-            rendering_lines(nil).collect{|l| "%#{size}s" % l}
+            rendering_lines(nil).map{|l| "%#{size}s" % l}
           else
-            rendering_lines(nil).collect{|l| "%-#{size}s" % l}
+            rendering_lines(nil).map{|l| "%-#{size}s" % l}
           end
         end
 
@@ -52,7 +47,7 @@ module Alf
             when Hash
               value.inspect
             when RelationLike
-              Text::Renderer.render(value, "", @options)
+              Text.render(value, "", @options)
             when Array
               array_rendering(value)
             when Time, DateTime
@@ -64,7 +59,7 @@ module Alf
 
         def array_rendering(value)
           if TupleLike===value.first
-            Text::Renderer.render(value, "")
+            Text.render(value, "")
           elsif value.empty?
             "[]"
           else
@@ -83,23 +78,23 @@ module Alf
         include Utils
 
         def initialize(values, options = {})
-          @cells = values.collect{|v| Cell.new(v, options)}
+          @cells = values.map{|v| Cell.new(v, options)}
           @options = options
         end
 
         def min_widths
-          @cells.collect{|cell| cell.min_width}
+          @cells.map{|cell| cell.min_width}
         end
 
         def rendering_lines(sizes = min_widths)
           nb_lines = 0
-          by_cell = @cells.zip(sizes).collect do |cell,size|
+          by_cell = @cells.zip(sizes).map do |cell,size|
             lines = cell.rendering_lines(size)
             nb_lines = max(nb_lines, lines.size)
             lines
           end
-          grid = (0...nb_lines).collect do |line_i|
-            "| " + by_cell.zip(sizes).collect{|cell_lines, size|
+          grid = (0...nb_lines).map do |line_i|
+            "| " + by_cell.zip(sizes).map{|cell_lines, size|
               cell_lines[line_i] || " "*size
             }.join(" | ") + " |"
           end
@@ -112,76 +107,47 @@ module Alf
         include Utils
 
         def initialize(records, attributes, options = {})
-          @header = Row.new(attributes)
-          @rows = records.collect{|r| Row.new(r, options)}
+          @header  = Row.new(attributes)
+          @rows    = records.map{|r| Row.new(r, options)}
           @options = options
         end
+        attr_reader :header, :rows, :options
 
-        def render(buffer = "")
-          sizes = @rows.inject(@header.min_widths) do |memo,row|
-            memo.zip(row.min_widths).collect{|x,y| max(x,y)}
+        def sizes
+          @sizes ||= rows.inject(header.min_widths) do |memo,row|
+            memo.zip(row.min_widths).map{|x,y| max(x,y)}
           end
-          sep = '+-' << sizes.collect{|s| '-' * s}.join('-+-') << '-+'
-          buffer << sep << "\n"
-          buffer << @header.rendering_lines(sizes).first << "\n"
-          buffer << sep << "\n"
-          @rows.each do |row|
+        end
+
+        def sep
+          @sep ||= '+-' << sizes.map{|s| '-' * s}.join('-+-') << '-+' << "\n"
+        end
+
+        def each
+          return to_enum unless block_given?
+          yield(sep)
+          yield header.rendering_lines(sizes).first << "\n"
+          yield(sep)
+          rows.each do |row|
             row.rendering_lines(sizes).each do |line|
-              buffer << line << "\n"
+              yield(line << "\n")
             end
           end
-          buffer << sep << "\n"
-          buffer
+          yield(sep)
+        end
+
+        def to_s
+          each.each_with_object(""){|line,buf| buf << line}
         end
 
       end # class Table
 
-      class PrettyBuffer
-
-        def initialize(out, options)
-          @out = out
-          @trim_at = options[:trim_at]
-          @page_at = options[:page_at]
-          @page_line = 0
-        end
-
-        def <<(str)
-          print_a_line trim(str)
-          self
-        end
-
-        def trim(str)
-          return str unless (@trim_at && (str.length > @trim_at))
-          trimmed = (str[0..(@trim_at-4)] + "...")
-          trimmed << "\n" if str =~ /\n$/
-          trimmed
-        end
-
-        def print_a_line(line)
-          @out << line
-          @page_line += 1
-          do_wait if @page_at && (@page_line > @page_at)
-        end
-
-        def do_wait
-          @out << "--- Press ENTER (or quit) ---\n"
-          throw :stop if $stdin.getc =~ /^[qQ](uit)?/
-          @page_line = 0
-        end
-
-      end # class PrettyBuffer
-
-      protected
-
-      def render(input, output)
+      def each(&bl)
         relation = input.to_a
         attrs    = relation.inject([]){|memo,t| (memo | t.keys)}
-        records  = relation.collect{|t| attrs.collect{|a| t[a]}}
+        records  = relation.map{|t| attrs.map{|a| t[a]}}
         table    = Table.new(records, attrs, options)
-        buffer   = options[:pretty] ?
-                   PrettyBuffer.new(output, options) : output
-        catch(:stop){ table.render(buffer) }
-        output
+        table.each(&bl)
       end
 
       def self.render(input, output, options= {})
@@ -189,7 +155,6 @@ module Alf
       end
 
       ::Alf::Renderer.register(:text, "as a text table",  self)
-    end # class Renderer
-
-  end # module Text
+    end # class Text
+  end # class Renderer
 end # module Alf
