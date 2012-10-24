@@ -4,6 +4,10 @@ shared_examples_for "a Renderer class" do
     subject.ancestors.should include(Alf::Renderer)
   end
 
+  it "has a default mime type" do
+    subject.should respond_to(:mime_type)
+  end
+
   describe "an instance" do
     let(:renderer){ subject.new([{id: 1}]) }
 

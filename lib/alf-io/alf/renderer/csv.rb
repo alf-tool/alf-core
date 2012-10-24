@@ -6,6 +6,10 @@ module Alf
     class CSV < Renderer
       include Support::CSVUtils
 
+      def self.mime_type
+        "text/csv"
+      end
+
       def each(&bl)
         return to_enum unless block_given?
         with_csv(ProcIO.new(bl), options) do |csv|

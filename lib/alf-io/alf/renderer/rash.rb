@@ -5,6 +5,10 @@ module Alf
     #
     class Rash < Renderer
 
+      def self.mime_type
+        nil
+      end
+
       def each
         return to_enum unless block_given?
         if options[:pretty]

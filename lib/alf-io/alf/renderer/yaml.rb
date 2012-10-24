@@ -5,6 +5,10 @@ module Alf
     #
     class YAML < ::Alf::Renderer
 
+      def self.mime_type
+        "text/x-yaml"
+      end
+
       def each
         return to_enum unless block_given?
         require "yaml"

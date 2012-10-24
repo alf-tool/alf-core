@@ -2,6 +2,10 @@ module Alf
   class Renderer
     class Text < Renderer
 
+      def self.mime_type
+        "text/plain"
+      end
+
       module Utils
 
         def max(x, y)

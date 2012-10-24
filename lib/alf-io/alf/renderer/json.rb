@@ -5,6 +5,10 @@ module Alf
     #
     class JSON < ::Alf::Renderer
 
+      def self.mime_type
+        "application/json"
+      end
+
       def each
         return to_enum unless block_given?
         require 'json'
