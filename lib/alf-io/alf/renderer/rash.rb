@@ -5,31 +5,27 @@ module Alf
     #
     class Rash < Renderer
 
-      # (see Renderer#render)
-      def render(input, output)
+      def each
+        return to_enum unless block_given?
         if options[:pretty]
           input.each do |tuple|
-            output << "{\n" << tuple.map{|k,v|
-              "  #{lit(k)} => #{lit(v)}"
-            }.join(",\n") << "\n}\n"
+            yield "{\n" << tuple.map{|k,v| "  #{l(k)} => #{l(v)}"}.join(",\n") << "\n}\n"
           end
         else
           input.each do |tuple|
-            output << to_rash(tuple) << "\n"
+            yield to_rash(tuple) << "\n"
           end
         end
-        output
       end
 
-      private
+    private
 
-      def lit(x)
+      def l(x)
         Support.to_ruby_literal(x)
       end
 
       def to_rash(x)
-        x = x.to_hash if x.is_a?(Tuple)
-        lit(x)
+        l(x.is_a?(Tuple) ? x.to_hash : x)
       end
 
       Renderer.register(:rash, "as ruby hashes", self)
