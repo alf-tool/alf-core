@@ -20,6 +20,7 @@ module Alf
   #   r = Renderer.foo([an iterator])
   #
   class Renderer
+    include Enumerable
 
     class << self
       include Support::Registry
@@ -81,19 +82,11 @@ module Alf
     #
     # The default implementation delegates the call to {#render}.
     def execute(output = $stdout)
-      render(input, output)
+      each do |str|
+        output << str
+      end
+      output
     end
-
-    protected
-
-    # Renders tuples served by the iterator to the output buffer provided and
-    # returns the latter.
-    #
-    # This method must be implemented by subclasses unless {#execute} is
-    # overriden.
-    def render(input, output)
-    end
-    undef :render
 
   end # class Renderer
 end # module Alf

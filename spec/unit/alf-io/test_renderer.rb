@@ -3,50 +3,40 @@ module Alf
   describe Renderer do
 
     subject{ Renderer }
+
+    let(:input){ [{:a => 1}] }
+
     it { should respond_to(:rash) }
     it { should respond_to(:text) }
+    it { should respond_to(:csv)  }
+    it { should respond_to(:yaml) }
 
     describe 'renderer' do
       subject{ Renderer.renderer(:rash, []) }
+
       it{ should be_a(Renderer) }
     end
 
     describe 'rash' do
       subject{ Renderer.rash(input) }
-      let(:input){ [{:a => 1}] }
-      let(:output){ "" }
-      let(:expected){ "{:a => 1}\n" }
-      specify{
-        subject.should be_a(Renderer)
-        subject.execute(output).should == expected
-      }
+
+      it{ should be_a(Renderer::Rash) }
     end
 
     describe 'rash --pretty' do
-      subject{ Renderer.rash(input, {:pretty => true}) }
-      let(:input){ [{:a => 1}] }
-      let(:output){ "" }
-      let(:expected){ "{\n  :a => 1\n}\n" }
-      specify{
-        subject.should be_a(Renderer)
-        subject.execute(output).should == expected
-      }
+      subject{ Renderer.rash(input, {pretty: true}) }
+
+      it{ should be_a(Renderer::Rash) }
+
+      it 'should have correct options' do
+        subject.options.should eq(pretty: true)
+      end
     end
 
     describe 'text' do
       subject{ Renderer.text(input) }
-      let(:input){ [{:a => 1}] }
-      let(:output){ "" }
-      let(:expected){ "+----+\n"\
-                      "| :a |\n"\
-                      "+----+\n"\
-                      "|  1 |\n"\
-                      "+----+\n"
-      }
-      specify{
-        subject.should be_a(Renderer)
-        subject.execute(output).should == expected
-      }
+
+      it{ should be_a(Renderer::Text) }
     end
 
   end
