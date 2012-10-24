@@ -1,10 +1,10 @@
 module Alf
-  module CSV
+  class Renderer
     #
     # Implements Alf::Renderer contract for outputting CSV files.
     #
-    class Renderer < Alf::Renderer
-      include CSV::Commons
+    class CSV < Renderer
+      include Support::CSVUtils
 
     protected
 
@@ -23,6 +23,6 @@ module Alf
       end
 
       Alf::Renderer.register(:csv, "in CSV", self)
-    end # class Renderer
-  end # module CSV
+    end # class CSV
+  end # class Renderer
 end # module Alf

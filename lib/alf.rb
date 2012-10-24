@@ -58,7 +58,6 @@ require_relative 'alf-aggregator/alf/aggregator'
 require_relative 'alf-algebra/alf/algebra'
 require_relative "alf-engine/alf/engine"
 require_relative 'alf-io/alf/io'
-require_relative 'alf-csv/alf/csv'
 require_relative "alf-lang/alf/lang"
 require_relative 'alf-relation/alf/relation'
 require_relative 'alf-relvar/alf/relvar'

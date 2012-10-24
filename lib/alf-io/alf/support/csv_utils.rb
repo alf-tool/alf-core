@@ -1,9 +1,9 @@
 module Alf
-  module CSV
+  module Support
     #
     # Provides common tooling to CSV renderer and readers
     #
-    module Commons
+    module CSVUtils
 
       DEFAULT_OPTIONS = {
         :headers => true
@@ -13,9 +13,10 @@ module Alf
 
       # Returns a CSV instance bound to a given io and options
       def get_csv(io)
-        ::CSV.new io, Alf::Tuple(options).project(::CSV::DEFAULT_OPTIONS.keys)
+        require 'csv'
+        ::CSV.new io, Tuple(options).project(::CSV::DEFAULT_OPTIONS.keys)
       end
 
-    end # module Commons
-  end # module CSV
+    end # module CSVUtils
+  end # module Support
 end # module Alf

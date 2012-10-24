@@ -7,6 +7,16 @@ module Alf
 
     protected
 
+      def each
+        return to_enum unless block_given?
+        yield "["
+        input.each_with_index do |t,i|
+          yield ',' unless i==0
+          yield ::JSON.dump(t)
+        end
+        yield "]"
+      end
+
       # (see Alf::Renderer#render)
       def render(input, output)
         require "json"

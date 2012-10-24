@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
-  module CSV
-    describe Reader do
+  class Reader
+    describe CSV do
     
       describe "without options" do
         let(:input){ 
@@ -14,21 +14,21 @@ module Alf
           
         describe "when called on a reader directly" do
           let(:reader){
-            ::Alf::CSV::Reader.new(input)
+            CSV.new(input)
           }
           it{ should eq(expected) }
         end
         
         describe "when called through registered one" do
           let(:reader){
-            ::Alf::Reader.reader(Path.dir / 'input.csv')
+            Reader.reader(Path.dir / 'input.csv')
           }
           it{ should eq(expected) }
         end
         
         describe "when called through factory method" do
           let(:reader){
-            ::Alf::Reader.csv(input)
+            Reader.csv(input)
           }
           it{ should eq(expected) }
         end
@@ -48,14 +48,14 @@ module Alf
           
         describe "when called on a reader directly" do
           let(:reader){
-            ::Alf::CSV::Reader.new(input, options)
+            CSV.new(input, options)
           }
           it{ should eq(expected) }
         end
         
         describe "when called through factory method" do
           let(:reader){
-            ::Alf::Reader.csv(input, options)
+            Reader.csv(input, options)
           }
           it{ should eq(expected) }
         end

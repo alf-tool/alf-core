@@ -70,7 +70,7 @@ module Alf
         when Reader       then arg
         when IO, StringIO then rash(arg)
         else
-          raise ArgumentError, "Unable to coerce #{arg.inspect} to a reader"
+          raise ArgumentError, "Unable to coerce `#{arg}` to a reader"
         end
       end
 
@@ -134,12 +134,10 @@ module Alf
     # opened in read mode and then yield.
     def with_input_io(&bl)
       case input
-      when IO, StringIO
-        yield input
-      when String, Path
-        Path(input).open('r', &bl)
+      when IO, StringIO then yield input
+      when String, Path then Path(input).open('r', &bl)
       else
-        raise "Unable to convert #{input} to an IO object"
+        raise "Unable to convert `#{input}` to an IO object"
       end
     end
 
@@ -173,3 +171,4 @@ module Alf
   end # class Reader
 end # module Alf
 require_relative 'reader/rash'
+require_relative 'reader/csv'

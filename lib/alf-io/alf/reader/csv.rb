@@ -1,10 +1,10 @@
 module Alf
-  module CSV
+  class Reader
     #
     # Implements Alf::Reader contract for reading CSV files.
     #
-    class Reader < Alf::Reader
-      include CSV::Commons
+    class CSV < Reader
+      include Support::CSVUtils
 
       def each
         with_input_io do |io|
@@ -17,6 +17,6 @@ module Alf
       end
 
       Alf::Reader.register(:csv, [".csv"], self)
-    end # class Reader
-  end # module CSV
+    end # class CSV
+  end # class Reader
 end # module Alf
