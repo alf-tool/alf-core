@@ -5,15 +5,14 @@ module Alf
     #
     class YAML < ::Alf::Renderer
 
-    protected
-
-      # (see Alf::Renderer#render)
-      def render(input, output)
-         require "yaml"
-        # TODO: refactor this to avoid loading all tuples
-        # in memory
-        output << input.to_a.to_yaml << "\n"
-        output
+      def each
+        return to_enum unless block_given?
+        require "yaml"
+        yield("---\n")
+        input.each do |tuple|
+          yield "-" << tuple.to_hash.to_yaml[4..-1].gsub(/^/, "  ")[1..-1]
+        end
+        yield("\n")
       end
 
       Alf::Renderer.register(:yaml, "in YAML",  self)
