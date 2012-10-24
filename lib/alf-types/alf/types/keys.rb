@@ -27,6 +27,12 @@ module Alf
         reject{|k| k.empty? }
       end
 
+      def to_ruby_literal
+        "Alf::Keys[" << reused_instance.map{|k| Support.to_ruby_literal(k.to_a)}.join(',') << "]"
+      end
+      alias_method :to_s, :to_ruby_literal
+      alias_method :inspect, :to_ruby_literal
+
       EMPTY = Keys.new([])
     end # class Keys
   end # module Types
