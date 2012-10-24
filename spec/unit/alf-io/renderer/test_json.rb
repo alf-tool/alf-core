@@ -1,14 +1,14 @@
 require 'spec_helper'
 module Alf
   class Renderer
-    describe JSON, 'execute' do
+    describe JSON do
 
       subject{ JSON.new(input).execute("") }
 
       let(:input){ Relation[{:id => 1}, {:id => 2}] }
 
       it 'outputs as expected' do
-        subject.should eq('[{"id":1},{"id":2}]')
+        subject.should eq('[{"id":1},{"id":2}]' << "\n")
       end
 
       it 'allows roundtripping' do
@@ -18,4 +18,3 @@ module Alf
     end
   end
 end
-  

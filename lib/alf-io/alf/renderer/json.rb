@@ -5,30 +5,15 @@ module Alf
     #
     class JSON < ::Alf::Renderer
 
-    protected
-
       def each
         return to_enum unless block_given?
+        require 'json'
         yield "["
         input.each_with_index do |t,i|
           yield ',' unless i==0
           yield ::JSON.dump(t)
         end
-        yield "]"
-      end
-
-      # (see Alf::Renderer#render)
-      def render(input, output)
-        require "json"
-        first = true
-        output << "["
-        input.each do |t|
-          output << "," unless first
-          output << ::JSON.fast_generate(t)
-          first = false
-        end
-        output << "]"
-        output
+        yield "]\n"
       end
 
       Alf::Renderer.register(:json, "in JSON",  self)
