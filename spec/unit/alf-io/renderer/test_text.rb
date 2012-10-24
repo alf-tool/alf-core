@@ -3,20 +3,25 @@ module Alf
   class Renderer
     describe Text do
 
-      subject{ Text.new(input).execute("") }
+      subject{ Text }
 
-      let(:input){ Relation[{:id => 1}, {:id => 2}] }
+      it_should_behave_like "a Renderer class"
 
-      let(:expected){ "+-----+\n"\
-                      "| :id |\n"\
-                      "+-----+\n"\
-                      "|   1 |\n"\
-                      "|   2 |\n"\
-                      "+-----+\n"
-      }
+      describe "execute" do
+        subject{ Text.new(input).execute("") }
 
-      it 'outputs as expected' do
-        subject.should eq(expected)
+        let(:input){ Relation[{:id => 1}, {:id => 2}] }
+        let(:expected){ "+-----+\n"\
+                        "| :id |\n"\
+                        "+-----+\n"\
+                        "|   1 |\n"\
+                        "|   2 |\n"\
+                        "+-----+\n"
+        }
+
+        it 'outputs as expected' do
+          subject.should eq(expected)
+        end
       end
 
     end

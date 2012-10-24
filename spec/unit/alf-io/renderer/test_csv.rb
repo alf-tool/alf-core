@@ -2,72 +2,37 @@ require 'spec_helper'
 module Alf
   class Renderer
     describe CSV do
-    
+
+      subject{ CSV }
+
+      it_should_behave_like "a Renderer class"
+
+      let(:input){
+        [{:id => 1, :name => "Smith"}, {:id => 2, :name => "Jones"}]
+      }
+
       describe "without options" do
-        let(:input){ 
-          [{:size => 10}, {:size => 20}]
-        }
+        let(:renderer){ CSV.new(input) }
         let(:expected){
-          "size\n10\n20\n"
+          "id,name\n1,Smith\n2,Jones\n"
+        }
+
+        subject{ renderer.execute(StringIO.new).string }
+
+        it{ should eq(expected) }
+      end
+
+      describe "with options" do
+        let(:renderer){ CSV.new(input, options) }
+        let(:options){ {col_sep: ";"} }
+        let(:expected){
+          "id;name\n1;Smith\n2;Jones\n"
         }
         subject{ renderer.execute(StringIO.new).string }
-          
-        describe "when called on a renderer directly" do
-          let(:renderer){
-            CSV.new(input)
-          }
-          it{ should eq(expected) }
-        end
-        
-        describe "when called through registererd one" do
-          let(:renderer){
-            Renderer.renderer(:csv, input)
-          }
-          it{ should eq(expected) }
-        end
-        
-        describe "when called through factory method" do
-          let(:renderer){
-            Renderer.csv(input)
-          }
-          it{ should eq(expected) }
-        end
+
+        it{ should eq(expected) }
       end
-      
-      describe "with options", :ruby19 => true do
-        let(:input){ 
-          [{:size => 10, :name => "blambeau"}, {:size => 20, :name => "mmathieu"}]
-        }
-        let(:expected){
-          "size;name\n10;blambeau\n20;mmathieu\n"
-        }
-        let(:options){
-          {:col_sep => ";"}
-        }
-        subject{ renderer.execute(StringIO.new).string }
-          
-        describe "when called on a renderer directly" do
-          let(:renderer){
-            CSV.new(input, options)
-          }
-          it{ should eq(expected) }
-        end
-        
-        describe "when called through registererd one" do
-          let(:renderer){
-            Renderer.renderer(:csv, input, options)
-          }
-          it{ should eq(expected) }
-        end
-        
-        describe "when called through factory method" do
-          let(:renderer){
-            Renderer.csv(input, options)
-          }
-          it{ should eq(expected) }
-        end
-      end
-      
+
     end
   end
 end

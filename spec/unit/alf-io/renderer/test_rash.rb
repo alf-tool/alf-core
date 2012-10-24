@@ -3,14 +3,20 @@ module Alf
   class Renderer
     describe Rash do
 
-      subject{ Rash.new(input).execute("") }
+      subject{ Rash }
 
-      let(:input){ Relation[{:id => 1}, {:id => 2}] }
+      it_should_behave_like "a Renderer class"
 
-      let(:expected){ "{:id => 1}\n{:id => 2}\n" }
+      describe "execute" do
+        subject{ Rash.new(input).execute("") }
 
-      it 'outputs as expected' do
-        subject.should eq(expected)
+        let(:input){ Relation[{:id => 1}, {:id => 2}] }
+
+        let(:expected){ "{:id => 1}\n{:id => 2}\n" }
+
+        it 'outputs as expected' do
+          subject.should eq(expected)
+        end
       end
 
     end
