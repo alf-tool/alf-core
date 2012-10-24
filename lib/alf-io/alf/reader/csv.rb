@@ -6,7 +6,12 @@ module Alf
     class CSV < Reader
       include Support::CSVUtils
 
+      def self.mime_type
+        "text/csv"
+      end
+
       def each
+        return to_enum unless block_given?
         with_input_io do |io|
           block = Proc.new{|row|
             next if row.header_row?

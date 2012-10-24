@@ -1,6 +1,7 @@
 require 'spec_helper'
 module Alf
   describe Reader::Rash do
+    it_should_behave_like "a Reader class"
 
     let(:lines){ [{:id => 1},{:id => 2}]                 }
     let(:str)  { lines.collect{|s| s.inspect}.join("\n") }

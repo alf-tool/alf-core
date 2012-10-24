@@ -9,6 +9,10 @@ module Alf
     #
     class Rash < Reader
 
+      def self.mime_type
+        nil
+      end
+
       # (see Reader#line2tuple)
       def line2tuple(line)
         begin

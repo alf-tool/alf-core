@@ -70,7 +70,21 @@ module Alf
         end
       end
 
-      private
+      # Returns a Reader instance for the given mime type.
+      #
+      # @param [String] mime_type a given (simplified) MIME type
+      # @param [...] args other arguments to pass to the reader constructor
+      # @return [Renderer] a Renderer instance, already wired if args are provided
+      #
+      def by_mime_type(mime_type, *args)
+        if r = registered.find{|_,_,c| c.mime_type == mime_type}
+          r.last.new(*args)
+        else
+          raise UnsupportedMimeTypeError, "No reader for `#{mime_type}`"
+        end
+      end
+
+    private
 
       # @return [Class] the reader class to use for `ext` file extension.
       # @raise [ArgumentError] if no such reader class can be found
@@ -110,6 +124,7 @@ module Alf
     # yields the block with <code>line2tuple(line)</code> on each of them. This
     # method may be overriden if this behavior does not fit reader's needs.
     def each
+      return to_enum unless block_given?
       each_input_line do |line|
         tuple = line2tuple(line)
         yield tuple unless tuple.nil?
@@ -168,3 +183,4 @@ module Alf
 end # module Alf
 require_relative 'reader/rash'
 require_relative 'reader/csv'
+require_relative 'reader/json'
