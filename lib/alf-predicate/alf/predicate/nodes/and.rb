@@ -14,6 +14,12 @@ module Alf
         end
       end
 
+      def constant_variables
+        sexpr_body.inject(AttrList::EMPTY) do |cvars,expr|
+          cvars | expr.constant_variables
+        end
+      end
+
     end
   end
 end

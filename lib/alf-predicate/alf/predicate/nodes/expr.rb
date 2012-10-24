@@ -44,6 +44,10 @@ module Alf
         Renamer.call(self, :renaming => renaming.to_hash)
       end
 
+      def constant_variables
+        AttrList::EMPTY
+      end
+
       def to_ruby_code(options = {})
         ToRubyCode.call(self, options)
       end

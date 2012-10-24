@@ -49,6 +49,10 @@ module Alf
       expr.free_variables
     end
 
+    def constant_variables
+      expr.constant_variables
+    end
+
     def &(other)
       return self  if other.tautology? or other==self
       return other if tautology?

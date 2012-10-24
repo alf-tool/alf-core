@@ -7,6 +7,11 @@ module Alf
         :==
       end
 
+      def constant_variables
+        fv = free_variables
+        fv.size == 1 ? fv : AttrList::EMPTY
+      end
+
     end
   end
 end

@@ -19,6 +19,10 @@ module Alf
         @free_variables ||= var_ref.free_variables
       end
 
+      def constant_variables
+        values.size == 1 ? free_variables : AttrList::EMPTY
+      end
+
     end
   end
 end
