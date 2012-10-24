@@ -12,7 +12,8 @@ module Alf
             next if row.header_row?
             yield(::Alf::Support.symbolize_keys(row.to_hash))
           }
-          get_csv(io.is_a?(StringIO) ? io.string : io).each(&block)
+          csv_input = io.is_a?(StringIO) ? io.string : io
+          get_csv(csv_input, options).each(&block)
         end
       end
 

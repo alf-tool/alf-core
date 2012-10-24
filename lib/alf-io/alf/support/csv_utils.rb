@@ -12,10 +12,28 @@ module Alf
       private
 
       # Returns a CSV instance bound to a given io and options
-      def get_csv(io)
+      def get_csv(io, options = {})
         require 'csv'
         ::CSV.new io, Tuple(options).project(::CSV::DEFAULT_OPTIONS.keys)
       end
+
+      # Yields a CSV instance bound to a given io and options
+      def with_csv(io, options = {})
+        yield get_csv(io, options)
+      end
+
+      class ProcIO
+
+        def initialize(proc = nil, &bl)
+          @proc = proc || bl
+        end
+
+        def call(*args, &bl)
+          @proc.call(*args, &bl)
+        end
+        alias :<< :call
+
+      end # ProcIO
 
     end # module CSVUtils
   end # module Support
