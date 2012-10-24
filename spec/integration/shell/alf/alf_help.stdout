@@ -19,7 +19,7 @@ OPTIONS
     --csv                        Render output in CSV
     --examples                   Use the example database for database
     --db=DB                      Set the database to use
-    --input-reader=READER        Specify the kind of reader when reading on $stdin (rash,csv)
+    --input-reader=READER        Specify the kind of reader when reading on $stdin (rash,csv,json)
     -Idirectory                      Specify $LOAD_PATH directory (may be used more than once)
     -rlibrary                        Require the library, before executing alf
     --[no-]pretty                Enable/disable pretty print best effort
