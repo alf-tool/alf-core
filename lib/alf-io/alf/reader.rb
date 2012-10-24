@@ -58,13 +58,9 @@ module Alf
         end
       end
 
-      # Coerces `arg` to a Reader instance, using an optional connection to convert named
-      # datasets.
+      # Coerces `arg` to a Reader instance.
       #
-      # This method automatically provides readers for Strings and Symbols through `connection`
-      # (**not** through the reader factory) and for IO objects through a Rash reader.
-      #
-      # @param [Object] arg any value to coerce to a Reader instance
+      # @param [Object] arg any value coercable to a Reader instance
       def coerce(arg)
         case arg
         when Reader       then arg
