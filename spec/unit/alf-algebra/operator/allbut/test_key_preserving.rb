@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   module Algebra
-    describe Project, 'key_preserving?' do
+    describe "Allbut", 'key_preserving?' do
 
       let(:operand){
         an_operand.with_heading(:id => Integer, :name => String, :status => String).
@@ -12,7 +12,7 @@ module Alf
 
       context 'when conserving at least one key' do
         let(:op){ 
-          a_lispy.project(operand, [:id, :status])
+          a_lispy.allbut(operand, [:name])
         }
 
         it { should be_true }
@@ -20,7 +20,7 @@ module Alf
 
       context 'when projecting all keys away' do
         let(:op){ 
-          a_lispy.project(operand, [:status])
+          a_lispy.allbut(operand, [:id, :name])
         }
 
         it { should be_false }
@@ -32,7 +32,7 @@ module Alf
                     .with_keys([:sid])
         }
         let(:op){
-          a_lispy.project(a_lispy.restrict(operand, sid: 1), [:sid])
+          a_lispy.allbut(a_lispy.restrict(operand, sid: 1), [:name])
         }
 
         it { should be_true }
@@ -44,7 +44,7 @@ module Alf
                     .with_keys([:sid, :pid])
         }
         let(:op){
-          a_lispy.project(a_lispy.restrict(operand, sid: 1), [:pid])
+          a_lispy.allbut(a_lispy.restrict(operand, sid: 1), [:sid])
         }
 
         it { should be_true }

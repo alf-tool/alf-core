@@ -13,14 +13,18 @@ module Alf
       end
 
       def keys
-        @keys ||= operand.keys.
-                          project(attributes, allbut).
-                          compact.
-                          if_empty{ Keys[ heading.to_attr_list ] }
+        @keys ||= begin
+          keys = operand.keys.project(attributes, allbut).compact
+          if keys.empty?
+            has_empty = operand.keys.include?(AttrList::EMPTY)
+            keys = Keys[ has_empty ? AttrList::EMPTY : heading.to_attr_list ]
+          end
+          keys
+        end
       end
 
       def key_preserving?
-        !(operand.keys & keys).empty?
+        keys.any?{|k| operand.keys.any?{|op_k| k.subset?(op_k) } }
       end
 
       def stay_attributes
