@@ -12,7 +12,13 @@ module Alf
       end
 
       def keys
-        @keys ||= operand.keys
+        @keys ||= begin
+          keys = operand.keys
+          unless (cv = predicate.constant_variables).empty?
+            keys = keys.map{|k| k - cv}
+          end
+          keys
+        end
       end
 
     end # class Restrict

@@ -4,14 +4,14 @@ module Alf
     describe Project, 'keys' do
 
       let(:operand){
-        an_operand.with_heading(:id => Integer, :name => String, :status => String).
+        an_operand.with_heading(id: Integer, name: String, status: String).
                    with_keys([:id], [:name])
       }
 
       subject{ op.keys }
 
       context 'when conserving at least one key' do
-        let(:op){ 
+        let(:op){
           a_lispy.project(operand, [:id, :status])
         }
         let(:expected){
@@ -22,8 +22,8 @@ module Alf
       end
 
       context 'when conserving at least one key with --allbut' do
-        let(:op){ 
-          a_lispy.project(operand, [:name], :allbut => true)
+        let(:op){
+          a_lispy.project(operand, [:name], allbut: true)
         }
         let(:expected){
           Keys[ [:id] ]
@@ -33,7 +33,7 @@ module Alf
       end
 
       context 'when projecting all keys away' do
-        let(:op){ 
+        let(:op){
           a_lispy.project(operand, [:status])
         }
         let(:expected){
@@ -44,11 +44,26 @@ module Alf
       end
 
       context 'when projecting all keys away through --allbut' do
-        let(:op){ 
-          a_lispy.project(operand, [:id, :name], :allbut => true)
+        let(:op){
+          a_lispy.project(operand, [:id, :name], allbut: true)
         }
         let(:expected){
           Keys[ [:status] ]
+        }
+
+        it { should eq(expected) }
+      end
+
+      context 'when a key is projected due to a constant restriction' do
+        let(:operand){
+          an_operand.with_heading(sid: Integer, pid: Integer)
+                    .with_keys([:sid, :pid])
+        }
+        let(:op){
+          a_lispy.project(a_lispy.restrict(operand, sid: 1), [:pid])
+        }
+        let(:expected){
+          Keys[ [:pid] ]
         }
 
         it { should eq(expected) }
