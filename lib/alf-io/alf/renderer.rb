@@ -57,6 +57,21 @@ module Alf
         end
       end
 
+      #
+      # Returns a Renderer instance for the given mime type.
+      #
+      # @param [String] mime_type a given (simplified) MIME type
+      # @param [...] args other arguments to pass to the renderer constructor
+      # @return [Renderer] a Renderer instance, already wired if args are provided
+      #
+      def by_mime_type(mime_type, *args)
+        if r = registered.find{|_,_,c| c.mime_type == mime_type}
+          r.last.new(*args)
+        else
+          raise UnsupportedMimeTypeError, "No renderer for `#{mime_type}`"
+        end
+      end
+
     end # class << self
 
     # Default renderer options
