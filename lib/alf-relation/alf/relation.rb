@@ -40,10 +40,20 @@ module Alf
       c.coercion(Path.like) do |v,t|
         c.coerce(Alf.reader(v).to_set, t)
       end
-      c.coercion(Enumerable) do |v,t|
-        t = Relation[Engine::InferHeading.new(v).first] if Relation==t
-        t.new(v)
+      c.coercion(Enumerable) do |v,rt|
+        rt = Relation[Engine::InferHeading.new(v).first] if Relation==rt
+        tt = Tuple[rt.heading]
+        rt.new(v.map{|t| tt.coerce(t) }.to_set).check_internal_representation!
       end
+    end
+
+    def check_internal_representation!
+      error = lambda{|msg|
+        raise TypeError, "Invalid value `#{reused_instance}` for #{self.class} (#{msg})"
+      }
+      error["Set expected"]        unless reused_instance.is_a?(Set)
+      error["Superclass mismatch"] unless self.class.superclass == Relation
+      self
     end
 
     reuse :each, :size, :empty?

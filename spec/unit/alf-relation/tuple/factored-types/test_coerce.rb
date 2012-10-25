@@ -7,12 +7,19 @@ module Alf
     subject{ type.coerce(tuple) }
 
     context 'on single attributes' do
-      let(:tuple){ {name: "Jones", status: "20"} }
+      let(:tuple){ {'name' => "Jones", 'status' => "20"} }
 
       it 'coerces the attributes' do
-        subject.should be_a(Tuple)
-        subject.should be_a(type)
-        subject.to_hash.should eq(name: "Jones", status: 20)
+        subject.should eq(Tuple(name: "Jones", status: 20))
+      end
+    end
+
+    context 'with a wrapped tuple-valued attribute' do
+      let(:type){ Tuple[name: String,  hobbies: Tuple[name: String, major: Boolean]] }
+      let(:tuple){ {'name' => "Smith", 'hobbies' => {'name' => "Programming", "major" => "true"} } }
+
+      it 'coerces wrapped attributes' do
+        subject.should eq(Tuple(name: "Smith", hobbies: Tuple(name: "Programming", major: true)))
       end
     end
 
