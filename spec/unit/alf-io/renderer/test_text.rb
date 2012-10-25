@@ -10,7 +10,7 @@ module Alf
       describe "execute" do
         subject{ Text.new(input).execute("") }
 
-        let(:input){ Relation[{:id => 1}, {:id => 2}] }
+        let(:input){ Relation(id: [1, 2]) }
         let(:expected){ "+-----+\n"\
                         "| :id |\n"\
                         "+-----+\n"\

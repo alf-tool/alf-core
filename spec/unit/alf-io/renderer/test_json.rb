@@ -10,7 +10,7 @@ module Alf
       describe "execute" do
         subject{ JSON.new(input).execute("") }
 
-        let(:input){ Relation[{:id => 1}, {:id => 2}] }
+        let(:input){ Relation(id: [1, 2]) }
 
         it 'outputs as expected' do
           subject.should eq('[{"id":1},{"id":2}]' << "\n")
