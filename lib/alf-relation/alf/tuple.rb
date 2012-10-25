@@ -8,7 +8,7 @@ module Alf
     coercions do |c|
       c.coercion(Hash){|hash,type|
         type    = Tuple[Heading.infer(hash)] if Tuple==type
-        hash    = type.heading.coerce(Support.symbolize_keys(hash))
+        hash    = type.heading.coerce(hash)
         type.new(hash).check_internal_representation!
       }
     end
