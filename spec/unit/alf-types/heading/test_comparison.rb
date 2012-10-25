@@ -70,5 +70,27 @@ module Alf
       it{ should be_nil }
     end
 
+    context 'when RVAs are present' do
+      let(:heading){ Heading.new(prices: Relation[price: Numeric]) }
+
+      context 'with a sub-heading' do
+        let(:other){ Heading.new(prices: Relation[price: Float]) }
+
+        it{ should eq(1) }
+      end
+
+      context 'with a super-heading' do
+        let(:other){ Heading.new(prices: Relation[price: Object]) }
+
+        it{ should eq(-1) }
+      end
+
+      context 'with a master heading' do
+        let(:other){ Heading.new(prices: Relation) }
+
+        it{ should eq(-1) }
+      end
+    end
+
   end
 end
