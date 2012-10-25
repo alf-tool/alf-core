@@ -33,7 +33,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         scope = tuple_scope
         agg = operand.inject(@summarization.least) do |memo,tuple|
           @summarization.happens(memo, scope.__set_tuple(tuple))

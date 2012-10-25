@@ -19,7 +19,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each(&block)
+      def _each(&block)
         index = nil
         left.each do |left_tuple|
           index ||= Materialize::Hash.new(right, lambda{|t|

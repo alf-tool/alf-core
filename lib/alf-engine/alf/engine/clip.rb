@@ -42,7 +42,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         @operand.each do |tuple|
           yield @attributes.project_tuple(tuple, @allbut)
         end

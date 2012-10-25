@@ -19,7 +19,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each(&block)
+      def _each(&block)
         Sort::InMemory.new(operand, ordering).each(&block)
       end
 

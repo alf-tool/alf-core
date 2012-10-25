@@ -37,7 +37,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         cur = offset
         count.times do |i|
           yield(@as => cur)

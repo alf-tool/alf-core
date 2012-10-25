@@ -24,7 +24,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         index = Materialize::Hash.new(operand, by, allbut)
         index.each_pair do |k, v|
           yield k.merge(summarization.summarize(v))

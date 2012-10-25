@@ -15,7 +15,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each(&block)
+      def _each(&block)
         operand.each(&block)
       end
 

@@ -27,7 +27,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each(&block)
+      def _each(&block)
         atr, alb = @attributes, @allbut
         index = Materialize::Hash.new(operand, atr, !alb)
         index.each_pair do |k,v|

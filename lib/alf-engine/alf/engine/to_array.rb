@@ -32,7 +32,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each(&block)
+      def _each(&block)
         Sort.new(operand, ordering).each do |tuple|
           yield recurse(tuple)
         end

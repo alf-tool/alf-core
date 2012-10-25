@@ -27,7 +27,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         operand.each do |tuple|
           rest, key = @attributes.split_tuple(tuple, @allbut)
           key[@as] = rest

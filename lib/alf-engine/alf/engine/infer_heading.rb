@@ -13,7 +13,7 @@ module Alf
         @operand = operand
       end
 
-      def each
+      def _each
         heading = operand.inject(Alf::Heading::EMPTY){|h,t| h + heading(t) }
         yield(heading.to_h)
       end

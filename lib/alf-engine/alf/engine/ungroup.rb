@@ -16,7 +16,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         operand.each do |tuple|
           tuple = tuple.dup
           tuple.delete(@attribute).each do |subtuple|

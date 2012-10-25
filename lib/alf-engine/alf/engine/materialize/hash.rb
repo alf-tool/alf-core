@@ -58,7 +58,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each(&block)
+      def _each(&block)
         materialized.each_value do |rel|
           rel.each(&block)
         end

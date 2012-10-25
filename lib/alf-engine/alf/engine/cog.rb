@@ -7,6 +7,11 @@ module Alf
         Relation.coerce(to_a)
       end
 
+      def each(&bl)
+        return to_enum unless block_given?
+        _each(&bl)
+      end
+
     protected
 
       def tuple_scope(tuple = nil)

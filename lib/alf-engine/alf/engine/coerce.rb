@@ -33,7 +33,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         @operand.each do |tuple|
           yield tuple.merge(Hash[@coercions.map{|k,d|
             [k, Support.coerce(tuple[k], d)]

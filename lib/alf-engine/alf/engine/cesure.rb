@@ -5,6 +5,7 @@ module Alf
 
       # (see Cog#each)
       def each(&receiver)
+        return to_enum unless block_given?
         dup._each(&receiver)
       end
 

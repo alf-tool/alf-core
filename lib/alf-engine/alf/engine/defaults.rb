@@ -31,7 +31,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         scope = tuple_scope
         operand.each do |tuple|
           defs = @defaults.evaluate(scope.__set_tuple(tuple))

@@ -32,7 +32,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each
+      def _each
         autonum = 0
         @operand.each do |tuple|
           yield tuple.merge(@as => autonum)

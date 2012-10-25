@@ -31,7 +31,7 @@ module Alf
       end
 
       # (see Cog#each)
-      def each(&block)
+      def _each(&block)
         operand.to_a.sort!(&ordering.sorter).each(&block)
       end
 
