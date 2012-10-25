@@ -8,16 +8,14 @@ module Alf
         Size.coerce("10").should eq(10)
       end
 
-      it 'should raise Myrrha::Error on negative integers' do
+      it 'should raise TypeError on negative integers' do
         lambda{ Size.coerce("-1") }.should raise_error(TypeError)
       end
 
       it 'should raise on non integers' do
-        pending 'type errors are badly handled' do
-          lambda{
-            Size.coerce("hello")
-          }.should raise_error(TypeError)
-        end
+        lambda{
+          Size.coerce("hello")
+        }.should raise_error(TypeError)
       end
 
     end

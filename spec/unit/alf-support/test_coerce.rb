@@ -14,10 +14,10 @@ module Alf
       Support.coerce("2012-05-11 12:00:00.000000+0200", DateTime).should be_a(DateTime)
     end
 
-    it 'should raise a Alf::CoercionError in case of error' do
+    it 'should raise a TypeError in case of error' do
       lambda{ 
         Support.coerce("abc", Integer)
-      }.should raise_error(Alf::CoercionError)
+      }.should raise_error(TypeError)
     end
 
   end

@@ -3,6 +3,9 @@ module Alf
 
     # Defines all coercion rules, through Myrrha inheritance
     Coercions = Myrrha::Coerce.dup.append do |g|
+      g.error_handler = lambda{|v,t,c|
+        raise TypeError, "Unable to coerce `#{v.inspect}` to `#{t}`", caller
+      }
       g.coercion String, Time,     lambda{|s,t| Time.parse(s) }
       g.coercion String, DateTime, lambda{|s,t| DateTime.parse(s) }
     end
@@ -19,8 +22,6 @@ module Alf
     # @raise [Myrrha::CoercionError] if something goes wrong
     def coerce(val, domain)
       Coercions.apply(val, domain)
-    rescue Myrrha::Error => ex
-      raise CoercionError, ex.message, caller
     end
 
   end # module Support

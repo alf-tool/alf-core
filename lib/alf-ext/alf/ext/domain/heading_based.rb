@@ -40,7 +40,9 @@ module Domain
         define_method(:to_ruby_literal){
           "#{master_class.name}[#{Alf::Support.to_ruby_literal(heading.to_hash)}]"
         }
+        alias_method :name, :to_ruby_literal
         alias_method :to_s, :to_ruby_literal
+        alias_method :inspect, :to_ruby_literal
       end
     end # module DomainMethods
 

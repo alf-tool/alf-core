@@ -53,7 +53,7 @@ module Alf
           raise ConfigError, "No such option `#{k}`"
         end
         self.send(setter, v)
-      rescue CoercionError
+      rescue TypeError
         raise ConfigError, "Invalid option value `#{k}`: `#{v}`"
       end
 
