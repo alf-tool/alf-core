@@ -1,32 +1,26 @@
 require 'spec_helper'
 module Alf
-  describe Relation, "hash" do
+  describe Relation, 'hash' do
 
-    let(:reltype){ Relation[name: String]                   }
-    let(:rel)    { reltype.coerce(name: ["Jones", "Smith"]) }
+    let(:tuple){ Relation[id: Integer].coerce(id: 12) }
 
-    subject{ rel.hash == other.hash }
+    subject{ tuple.hash == other.hash }
 
-    before do
-      (reltype === rel).should be_true
-      rel.should be_a(reltype)
-    end
+    context 'on purely equal relation' do
+      let(:other){ Relation[id: Integer].coerce(id: 12) }
 
-    context 'with itself' do
-      let(:other){ rel }
-    
       it{ should be_true }
     end
-    
-    context 'with an equivalent based on same type' do
-      let(:other){ reltype.coerce(name: ["Smith", "Jones"]) }
-    
+
+    context 'on equal relation but a subtype' do
+      let(:other){ Relation[id: Fixnum].coerce(id: 12) }
+
       it{ should be_true }
     end
-    
-    context 'with an equivalent based on equivalent type' do
-      let(:other){ Relation.coerce(name: ["Smith", "Jones"]) }
-    
+
+    context 'on equal relation but a supertype' do
+      let(:other){ Relation[id: Numeric].coerce(id: 12) }
+
       it{ should be_true }
     end
 
