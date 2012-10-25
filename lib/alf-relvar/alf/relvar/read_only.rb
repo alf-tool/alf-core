@@ -10,6 +10,10 @@ module Alf
 
       ### Static analysis & inference
 
+      def type
+        value.class
+      end
+
       def heading
         value.heading
       end

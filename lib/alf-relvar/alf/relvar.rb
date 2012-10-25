@@ -3,6 +3,10 @@ module Alf
     include Algebra::Operand
     include Lang::ObjectOriented
 
+    def type
+      @type ||= Relation[heading]
+    end
+
     def each(&bl)
       to_cog.each(&bl)
     end
