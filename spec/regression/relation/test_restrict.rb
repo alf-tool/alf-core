@@ -12,10 +12,8 @@ module Alf
     context 'on Relation' do
       subject{ arg.restrict(sid: 'S5') }
 
-      it 'works' do
-        pending("most-specific types issue"){
-          subject.should be_a(Relation)
-        }
+      it 'does not raise a TypeError' do
+        subject.should be_a(Relation)
       end
     end
 

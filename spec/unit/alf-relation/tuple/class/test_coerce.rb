@@ -24,7 +24,6 @@ module Alf
 
         it{ should eq(expected) }
       end
-
     end
   end
 end

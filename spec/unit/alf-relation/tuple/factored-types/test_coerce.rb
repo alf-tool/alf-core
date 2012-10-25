@@ -30,6 +30,13 @@ module Alf
       it{ should be(tuple) }
     end
 
+    context 'from a Tuple whose declared type hides the compatibility' do
+      let(:type) { Tuple[price: Fixnum] }
+      let(:tuple){ Tuple[price: Numeric].new(price: 12) }
+
+      it{ should eq(type.new(price: 12))}
+    end
+
     context 'on coercion failure' do
       let(:tuple){ {name: "Jones", status: "bar"} }
 

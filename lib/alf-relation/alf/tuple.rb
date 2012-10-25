@@ -6,6 +6,9 @@ module Alf
     reuse :map, :size, :empty?, :[], :to_a, :keys, :values_at, :has_key?
 
     coercions do |c|
+      c.coercion(Tuple){|tuple,type|
+        c.coerce(tuple.to_hash, type)
+      }
       c.coercion(Hash){|hash,type|
         type    = Tuple[Heading.infer(hash)] if Tuple==type
         hash    = type.heading.coerce(hash)
