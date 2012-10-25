@@ -38,5 +38,19 @@ module Alf
       end
     end
 
+    context 'with a DUM RVA' do
+      let(:heading){ {sid: String, supplies: Relation[{}]} }
+      let(:value){ Tuple.coerce(sid: "S5", supplies: Alf::Relation([])) }
+
+      it{ should be_true }
+    end
+
+    context 'with a DUM RVA and a master Relation type' do
+      let(:heading){ {sid: String, supplies: Relation} }
+      let(:value){ Tuple.coerce(sid: "S5", supplies: Alf::Relation([])) }
+
+      it{ should be_true }
+    end
+
   end
 end

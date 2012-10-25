@@ -23,6 +23,13 @@ module Alf
       end
     end
 
+    context 'with a DUM RVA' do
+      let(:type){ Tuple[sid: String, supplies: Relation[{}]] }
+      let(:tuple){ Tuple(sid: "S5", supplies: Alf::Relation([])) }
+
+      it{ should be(tuple) }
+    end
+
     context 'on coercion failure' do
       let(:tuple){ {name: "Jones", status: "bar"} }
 

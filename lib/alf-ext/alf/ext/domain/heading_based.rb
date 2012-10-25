@@ -23,6 +23,7 @@ module Domain
       def initialize(master_class, heading)
         define_method(:<=>){|other|
           return nil unless other.ancestors.include?(master_class)
+          return -1 if other == master_class
           heading <=> other.heading
         }
         define_method(:===){|value|
