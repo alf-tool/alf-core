@@ -4,7 +4,7 @@ group :runtime do
   gem "quickl", "~> 0.4.3"
   gem "myrrha", "~> 3.0.0.rc7"
   #gem "myrrha", :path => "../../myrrha"
-  gem "domain", "~> 1.0.0.rc3"
+  gem "domain", "~> 1.0.0.rc4"
   #gem "domain", :path => "../../domain"
   gem "backports", "~> 2.6"
   gem "path", "~> 1.3"
