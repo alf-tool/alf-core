@@ -20,11 +20,12 @@ module Alf
     # @param [Class] c2 a data type, respresented by a ruby class
     # @return [Class] the least common super type of c1 and c2
     def common_super_type(c1, c2)
-      return c1 if c1 == c2
-      ancestors = [c1, c2].map{|c|
-        c.ancestors.select{|a| a.is_a?(Class)}
-      }
-      (ancestors[0] & ancestors[1]).first
+      if x = (c1 <=> c2)
+        x >= 0 ? c1 : c2
+      else
+        ancestors = [c1, c2].map{|c| c.ancestors.select{|a| a.is_a?(Class)} }
+        (ancestors[0] & ancestors[1]).first
+      end
     end
     module_function :common_super_type
 
