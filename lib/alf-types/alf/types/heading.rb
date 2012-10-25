@@ -35,6 +35,29 @@ module Alf
       alias_method :count, :size
       alias_method :to_h, :to_hash
 
+      # Apply coercions to `arg`.
+      #
+      # If `arg` is a Hash or a Tuple, returns a Hash with coercion applied to known
+      # attributes. Otherwise, the method supposes that `arg` responds to `map` and
+      # recursively collects coercions on its members.
+      #
+      # This methods have no effect on missing attributes (with respect to heading)
+      # or unknown ones. In other words, it does not apply strong typing constraints
+      # with respect to the Heading.
+      #
+      # @param [Hash|Tuple|Enumerable] arg an object for which coercions must be applied.
+      # @return [Hash|Array[Hash]] the result of applied coercions.
+      def coerce(arg)
+        case arg
+        when TupleLike
+          attributes.each_with_object(arg.to_hash.dup){|(k,t),h|
+            h[k] = Support.coerce(h[k], t) if h.has_key?(k)
+          }
+        else
+          arg.map{|t| coerce(t) }
+        end
+      end
+
       # Computes the intersection of this heading with another one.
       #
       # @param [Heading] other another heading
