@@ -2,8 +2,10 @@ source 'http://rubygems.org'
 
 group :runtime do
   gem "quickl", "~> 0.4.3"
-  gem "myrrha", "~> 3.0.0.rc6"
+  gem "myrrha", "~> 3.0.0.rc7"
+  #gem "myrrha", :path => "../../myrrha"
   gem "domain", "~> 1.0.0.rc3"
+  #gem "domain", :path => "../../domain"
   gem "backports", "~> 2.6"
   gem "path", "~> 1.3"
   gem "sexpr", "~> 0.5.1"
