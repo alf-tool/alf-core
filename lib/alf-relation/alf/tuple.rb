@@ -8,17 +8,18 @@ module Alf
     coercions do |c|
       c.coercion(Hash){|hash,type|
         type    = Tuple[Heading.infer(hash)] if Tuple==type
-        hash    = Support.symbolize_keys(hash)
-        hash    = hash.merge(type.heading){|k,v,t| Support.coerce(v, t) }
+        hash    = type.heading.coerce(Support.symbolize_keys(hash))
         type.new(hash).check_internal_representation!
       }
     end
 
     def check_internal_representation!
-      raise TypeError, "Hash expected"          unless reused_instance.is_a?(Hash)
-      raise TypeError, "Not a tuple subclass"   unless self.class.superclass == Tuple
-      raise TypeError, "Attributes mistmatch"   unless heading.to_attr_list  == AttrList.coerce(reused_instance.keys)
-      raise TypeError, "Heading type mistmatch" unless heading === reused_instance
+      error = lambda{|msg|
+        raise TypeError, "Invalid value `#{reused_instance}` for #{self.class} (#{msg})"
+      }
+      error["Hash expected for representation"] unless reused_instance.is_a?(Hash)
+      error["Superclass mismatch"]              unless self.class.superclass == Tuple
+      error["Heading mismatch"]                 unless heading === reused_instance
       self
     end
 
