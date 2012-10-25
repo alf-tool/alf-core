@@ -79,10 +79,6 @@ module Alf
         matching(other)
       end
 
-      def to_relation
-        Relation.coerce(_self_operand)
-      end
-
       def to_array(options = {})
         _with_ordering(options) do |o|
           op = Alf::Engine::ToArray.new(to_cog, o)
