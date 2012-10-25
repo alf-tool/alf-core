@@ -14,6 +14,13 @@ module Alf
         it{ should eq(name: "Smith", status: 20) }
       end
 
+      context 'when applied to a Hash with String keys' do
+        let(:arg){ {'name' => "Smith", 'status' => "20"} }
+
+        it{ should be_a(Hash) }
+        it{ should eq(name: "Smith", status: 20) }
+      end
+
       context 'when applied to a Tuple' do
         let(:arg){ Tuple(name: "Smith", status: "20") }
 

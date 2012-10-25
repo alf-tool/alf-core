@@ -45,7 +45,7 @@ module Alf
     # @param  [Hash]  tuple a tuple, represented by a Hash
     # @return [Tuple] the same tuple, with all keys as Symbols
     def symbolize_keys(tuple)
-      Hash[tuple.map{|k,v| [k.to_sym, v] }]
+      tuple.each_with_object({}){|(k,v),h| h[k.to_sym] = v}
     end
 
   end # module Support

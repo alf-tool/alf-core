@@ -50,9 +50,10 @@ module Alf
       def coerce(arg)
         case arg
         when TupleLike
-          attributes.each_with_object(arg.to_hash.dup){|(k,t),h|
-            h[k] = Support.coerce(h[k], t) if h.has_key?(k)
-          }
+          arg.to_hash.each_with_object({}) do |(k,v),h|
+            k = k.to_sym
+            h[k] = attributes.has_key?(k) ? Support.coerce(v, self[k]) : v
+          end
         else
           arg.map{|t| coerce(t) }
         end
