@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
-  describe Tuple, 'equality' do
+  describe Tuple, 'hash' do
 
     let(:tuple){ Tuple[id: Integer].new(id: 12) }
 
-    subject{ tuple == other }
+    subject{ tuple.hash == other.hash }
 
     context 'on purely equal tuple' do
       let(:other){ Tuple[id: Integer].new(id: 12) }
