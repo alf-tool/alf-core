@@ -6,7 +6,7 @@ module Alf
       ### overridings
 
       def call(expr, tuples)
-        super(expr, Alf::Algebra::Operand.coerce(tuples))
+        super(expr, Algebra::Operand.coerce(tuples))
       end
 
       def not_supported(expr, *args)
