@@ -13,8 +13,9 @@ module Alf
 
       coercions do |c|
         c.delegate :to_attr_list
-        c.coercion(Symbol){|v,_| AttrList.new([v]) }
+        c.coercion(Hash)  {|v,_| c.coerce(v.keys) }
         c.coercion(Array) {|v,_| AttrList.new(v.map{|a| AttrName.coerce(a) })}
+        c.coercion(Symbol){|v,_| AttrList.new([v]) }
       end
       def self.[](*args); coerce(args); end
 

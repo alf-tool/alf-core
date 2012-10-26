@@ -4,27 +4,42 @@ module Alf
 
     subject{ AttrList.coerce(arg) }
 
-    describe "when passed an AttrList" do
+    let(:expected){ AttrList.new [:a, :b] }
+
+    describe "with an AttrList" do
       let(:arg){ AttrList.new [:a, :b] }
+
       it{ should be(arg) }
     end
 
-    describe "when passed a a list of attribute names as Symbols" do
-      let(:arg){ [:a, :b] } 
-      it{ should eq(AttrList.new(arg)) }
+    describe "with a list of Symbols" do
+      let(:arg){ [:a, :b] }
+
+      it{ should eq(expected) }
     end
 
-    describe "when passed an Ordering" do
+    describe "with a Hash" do
+      let(:arg){ {a: 12, b: "Smith"} }
+
+      it{ should eq(expected) }
+    end
+
+    describe "with a Hash to be symbolized" do
+      let(:arg){ {'a' => 12, 'b' => "Smith"} }
+
+      it{ should eq(expected) }
+    end
+
+    describe "with an Ordering" do
       let(:arg){ Ordering.new [[:a, :asc], [:b, :asc]] }
-      it{ should eq(AttrList.new([:a, :b])) }
+
+      it{ should eq(expected) }
     end
 
-    describe "when passed a TupleComputation" do
-      let(:arg){ TupleComputation[:a => 12, :b => "Smith"] }
-      specify{ 
-        subject.should be_a(AttrList) 
-        subject.to_a.to_set.should eq([:a, :b].to_set)
-      }
+    describe "with a TupleComputation" do
+      let(:arg){ TupleComputation[a: 12, b: "Smith"] }
+
+      it{ should eq(expected) }
     end
 
     describe "when passed an unrecognized argument" do
