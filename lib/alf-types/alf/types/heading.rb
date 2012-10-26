@@ -148,9 +148,7 @@ module Alf
       #
       # @return [Boolean] true if the tuple conforms to this heading, false otherwise.
       def ===(tuple)
-        return false unless tuple.respond_to?(:to_hash)
-        types, values = attributes, tuple.to_hash
-        (types.size == values.size) && types.keys.all?{|k| types[k]===values[k]}
+        TypeCheck.new(self, true)===tuple
       end
 
       # Return self
