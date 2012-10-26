@@ -23,7 +23,6 @@ module Alf
 
       alias :on_coerce     :not_supported
       alias :on_generator  :not_supported
-      alias :on_type_safe :not_supported
 
       def on_autonum(expr, inserted)
         apply(expr.operand, allbut(inserted, [expr.as]))
@@ -44,6 +43,10 @@ module Alf
 
       def on_sort(expr, inserted)
         apply(expr.operand, sort(inserted, expr.ordering))
+      end
+
+      def on_type_safe(expr, inserted)
+        apply(expr.operand, type_safe(inserted, expr.type_safe_heading, strict: expr.strict))
       end
 
       ### relational
