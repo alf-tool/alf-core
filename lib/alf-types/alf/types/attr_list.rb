@@ -84,12 +84,10 @@ module Alf
       def set_compare(other)
         return nil unless other.is_a?(AttrList)
         s1, s2 = to_set, other.to_set
-        if s1==s2 
-          0
-        elsif s1.subset?(s2)
-          -1
-        elsif s1.superset?(s2)
-          1
+        if s1==s2              then 0
+        elsif s1.subset?(s2)   then -1
+        elsif s1.superset?(s2) then 1
+        else nil
         end
       end
 

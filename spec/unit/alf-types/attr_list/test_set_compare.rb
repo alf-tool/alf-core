@@ -30,6 +30,12 @@ module Alf
       it{ should be_nil }
     end
 
+    context 'when a mix' do
+      let(:right){ AttrList[:id, :status] }
+
+      it{ should be_nil }
+    end
+
     context 'with an empty one' do
       let(:right){ AttrList[] }
 
