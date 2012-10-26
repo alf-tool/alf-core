@@ -71,6 +71,11 @@ module Alf
         allbut ? self - attrs : self & attrs
       end
 
+      # Shortcut for project(attrs, true)
+      def allbut(attrs)
+        project(attrs, true)
+      end
+
       # Compares this attribute list with `other` on a set basis.
       #
       # @param [AttrList] other another attribute list
