@@ -145,8 +145,11 @@ module Alf
     # opened in read mode and then yield.
     def with_input_io(&bl)
       case input
-      when IO, StringIO then yield input
-      when String, Path then Path(input).open('r', &bl)
+      when IO, StringIO
+        input.rewind unless input.pos==0
+        yield input
+      when String, Path
+        Path(input).open('r', &bl)
       else
         raise "Unable to convert `#{input}` to an IO object"
       end
