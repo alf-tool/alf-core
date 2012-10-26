@@ -8,4 +8,5 @@ module Alf
   class FactAssertionError < Error; end
   class CoercionError < Error; end
   class ReadOnlyError < Error; end
+  class TypeCheckError < Error; end
 end
