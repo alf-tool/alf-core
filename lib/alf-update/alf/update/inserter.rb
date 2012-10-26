@@ -23,7 +23,7 @@ module Alf
 
       alias :on_coerce     :not_supported
       alias :on_generator  :not_supported
-      alias :on_type_check :not_supported
+      alias :on_type_safe :not_supported
 
       def on_autonum(expr, inserted)
         apply(expr.operand, allbut(inserted, [expr.as]))

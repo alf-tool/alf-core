@@ -45,7 +45,7 @@ module Alf
       end
 
       alias :on_generator  :not_supported
-      alias :on_type_check :not_supported
+      alias :on_type_safe :not_supported
 
       alias :on_sort :on_unary_delegate
 

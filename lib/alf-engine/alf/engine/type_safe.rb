@@ -1,12 +1,12 @@
 module Alf
   module Engine
-    class TypeCheck
+    class TypeSafe
       include Cog
 
       # @return [Enumerable] The operand
       attr_reader :operand
 
-      # @return [Types::TypeChecker] Type checker to use
+      # @return [TypeChecker] Type checker to use
       attr_reader :checker
 
       # Creates an Coerce instance
@@ -23,6 +23,6 @@ module Alf
         end
       end
 
-    end # class TypeCheck
+    end # class TypeSafe
   end # module Engine
 end # module Alf

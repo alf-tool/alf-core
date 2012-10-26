@@ -111,7 +111,7 @@ require_relative 'operator/compact'
 require_relative 'operator/sort'
 require_relative 'operator/clip'
 require_relative 'operator/coerce'
-require_relative 'operator/type_check'
+require_relative 'operator/type_safe'
 require_relative 'operator/generator'
 
 require_relative 'operator/extend'

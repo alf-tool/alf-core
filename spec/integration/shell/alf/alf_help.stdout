@@ -52,14 +52,14 @@ EXPERIMENTAL RELATIONAL OPERATORS
 
 NON-RELATIONAL OPERATORS
 
-    autonum        Extend its operand with an unique autonumber attribute
-    clip           Clip input tuples to a subset of attributes
-    coerce         Force attribute coercion according to a heading
-    compact        Remove tuple duplicates
-    defaults       Force default values on missing/nil attributes
-    generator      Generate a relation with an auto-numbered attribute
-    sort           Sort input tuples according to an order relation
-    type-check     Type checks input tuples against a specific heading
+    autonum       Extend its operand with an unique autonumber attribute
+    clip          Clip input tuples to a subset of attributes
+    coerce        Force attribute coercion according to a heading
+    compact       Remove tuple duplicates
+    defaults      Force default values on missing/nil attributes
+    generator     Generate a relation with an auto-numbered attribute
+    sort          Sort input tuples according to an order relation
+    type-safe     Check that input tuples are of a specified heading
 
 OTHER NON-RELATIONAL COMMANDS
 

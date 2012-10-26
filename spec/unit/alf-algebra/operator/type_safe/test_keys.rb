@@ -13,7 +13,7 @@ module Alf
       subject{ op.keys }
 
       let(:op){ 
-        a_lispy.type_check(operand, heading)
+        a_lispy.type_safe(operand, heading)
       }
       let(:expected){
         Keys[ [ :id ] ]

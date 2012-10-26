@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   module Algebra
-    describe TypeCheck, 'heading' do
+    describe TypeSafe, 'heading' do
 
       let(:heading){
         {:id => String, :name => String}
@@ -13,7 +13,7 @@ module Alf
       subject{ op.heading }
 
       let(:op){ 
-        a_lispy.type_check(operand, heading)
+        a_lispy.type_safe(operand, heading)
       }
       let(:expected){
         Heading[heading]

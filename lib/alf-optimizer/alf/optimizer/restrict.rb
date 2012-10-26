@@ -34,7 +34,7 @@ module Alf
       alias :on_clip        :on_pass_through
       alias :on_compact     :on_pass_through
       alias :on_sort        :on_pass_through
-      alias :on_type_check  :on_pass_through
+      alias :on_type_safe  :on_pass_through
       alias :on_project     :on_pass_through
       alias :on_intersect   :on_pass_through
       alias :on_minus       :on_pass_through

@@ -14,7 +14,7 @@ module Alf
           Defaults,
           Generator,
           Sort,
-          TypeCheck
+          TypeSafe
         ]
       end
     

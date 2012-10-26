@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
   module Engine
-    describe TypeCheck do
+    describe TypeSafe do
 
       let(:heading){ Heading.new(name: String, status: Fixnum) }
-      let(:cog){ TypeCheck.new(tuples, Types::TypeCheck.new(heading, false)) }
+      let(:cog){ TypeSafe.new(tuples, TypeCheck.new(heading, false)) }
 
       context 'when all valid tuples' do
         let(:tuples){
