@@ -35,7 +35,7 @@ module Alf
         connection!.delete(name, predicate)
       end
 
-      def update(updating, predicate)
+      def update(updating, predicate = Predicate.tautology)
         connection!.update(name, updating, predicate)
       end
 
