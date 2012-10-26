@@ -15,8 +15,7 @@ class UpdateContext
   end
 
   def insert(name, tuples)
-    tuples = Alf::Engine::Compiler.new.call(tuples).to_a
-    requests << [:insert, name, tuples]
+    requests << [:insert, name, tuples.to_a]
   end
 
   def delete(name, predicate)

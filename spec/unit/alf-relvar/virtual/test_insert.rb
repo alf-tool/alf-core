@@ -8,8 +8,8 @@ module Alf
       let(:tuples)    { Relation.coerce(:id => 1)                     }
       let(:connection){ self                                          }
 
-      def insert(*args)
-        @seen = args
+      def insert(name, tuples)
+        @seen = [name, tuples.to_relation]
       end
 
       def relvar(name)
