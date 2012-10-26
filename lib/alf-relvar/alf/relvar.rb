@@ -30,13 +30,37 @@ module Alf
       to_relation
     end
 
+    def lock(*)
+      raise NotSupportedError
+    end
+
     def affect(value)
       delete
       insert(value)
     end
 
+    def insert(tuples)
+      raise NotSupportedError
+    end
+
+    def delete(predicate = Predicate.tautology)
+      raise NotSupportedError
+    end
+
+    def update(updating, predicate = Predicate.tautology)
+      raise NotSupportedError
+    end
+
+    def safe(*args, &bl)
+      Safe.new(self, *args, &bl)
+    end
+
     def to_relvar
       self
+    end
+
+    def to_lispy
+      raise NotImplementedError
     end
 
     def to_relation
