@@ -82,7 +82,7 @@ module Alf
       # @param [AttrList] other another attribute list
       # @return [Integer] 0 if same set of attribute names, -1 if self is a subset of
       # other, 1 if a superset, nil otherwise.
-      def set_compare(other)
+      def <=>(other)
         return nil unless other.is_a?(AttrList)
         s1, s2 = to_set, other.to_set
         if s1==s2              then 0
@@ -91,6 +91,7 @@ module Alf
         else nil
         end
       end
+      alias_method :set_compare, :<=>
 
       # Returns true if this attribute list captures the same set of attribute names than
       # `other`.
