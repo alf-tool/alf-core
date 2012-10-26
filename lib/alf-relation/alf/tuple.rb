@@ -82,6 +82,10 @@ module Alf
       to_hash.to_json(*args, &bl)
     end
 
+    def to_attr_list
+      heading.to_attr_list
+    end
+
     def to_ruby_literal
       "Tuple(#{Support.to_ruby_literal(to_hash)})"
     end
