@@ -44,7 +44,8 @@ module Alf
         apply_and_split(expr, predicate, expr.defaults.to_attr_list)
       end
 
-      alias :on_generator :not_supported
+      alias :on_generator  :not_supported
+      alias :on_type_check :not_supported
 
       alias :on_sort :on_unary_delegate
 

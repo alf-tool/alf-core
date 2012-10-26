@@ -46,6 +46,11 @@ module Alf
         Sort.new(apply(expr.operand), expr.ordering)
       end
 
+      def on_type_check(expr)
+        checker = Types::TypeCheck.new(expr.heading, expr.strict)
+        TypeCheck.new(apply(expr.operand), checker)
+      end
+
       ### relational
 
       def on_extend(expr)

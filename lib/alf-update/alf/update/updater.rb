@@ -16,13 +16,14 @@ module Alf
 
       ### non relational
 
-      alias :on_autonum   :not_supported
-      alias :on_clip      :not_supported
-      alias :on_coerce    :not_supported
-      alias :on_compact   :not_supported
-      alias :on_defaults  :not_supported
-      alias :on_generator :not_supported
-      alias :on_sort      :not_supported
+      alias :on_autonum    :not_supported
+      alias :on_clip       :not_supported
+      alias :on_coerce     :not_supported
+      alias :on_compact    :not_supported
+      alias :on_defaults   :not_supported
+      alias :on_generator  :not_supported
+      alias :on_sort       :not_supported
+      alias :on_type_check :not_supported
 
       ### relational
 

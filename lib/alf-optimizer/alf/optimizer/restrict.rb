@@ -31,13 +31,14 @@ module Alf
       def on_pass_through(expr, predicate)
         expr.with_operands(*expr.operands.map{|op| apply(op, predicate)})
       end
-      alias :on_clip      :on_pass_through
-      alias :on_compact   :on_pass_through
-      alias :on_sort      :on_pass_through
-      alias :on_project   :on_pass_through
-      alias :on_intersect :on_pass_through
-      alias :on_minus     :on_pass_through
-      alias :on_union     :on_pass_through
+      alias :on_clip        :on_pass_through
+      alias :on_compact     :on_pass_through
+      alias :on_sort        :on_pass_through
+      alias :on_type_check  :on_pass_through
+      alias :on_project     :on_pass_through
+      alias :on_intersect   :on_pass_through
+      alias :on_minus       :on_pass_through
+      alias :on_union       :on_pass_through
 
       def on_unoptimizable(expr, predicate)
         restrict(expr, predicate)
