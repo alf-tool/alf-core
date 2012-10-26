@@ -36,6 +36,10 @@ module Alf
           @attributes[:keys] || Keys::EMPTY
         end
 
+        def to_relvar
+          Relvar::Fake.new(heading)
+        end
+
         def to_cog
           Engine::Leaf.new([])
         end
