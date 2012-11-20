@@ -26,10 +26,6 @@ module Alf
       self
     end
 
-    def coerce(heading)
-      Tuple[Heading.coerce(heading)].coerce(self.to_hash)
-    end
-
     def heading
       self.class.heading
     end
