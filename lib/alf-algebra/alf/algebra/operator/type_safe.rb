@@ -4,7 +4,7 @@ module Alf
       include Operator, NonRelational, Unary
 
       signature do |s|
-        s.argument :type_safe_heading, Heading
+        s.argument :type_safe_heading, Heading, nil
         s.option   :strict, Boolean,  false, 'Be strict, not allowing tuple projections?'
       end
 
