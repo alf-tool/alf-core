@@ -1,3 +1,4 @@
+Tuple    = Alf::Tuple
 Relation = Alf::Relation
 DUM      = Alf::Relation::DUM
 DEE      = Alf::Relation::DEE
