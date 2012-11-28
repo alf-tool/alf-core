@@ -8,17 +8,22 @@ module Alf
       end
 
       def heading
-        @heading ||= begin
-          op_h = operand.heading
-          op_h.allbut([attribute]).merge(op_h[attribute].heading)
-        end
+        @heading ||= operand.heading.allbut([attribute]).merge(group_heading)
       end
 
       def keys
         @keys ||= begin
-          grouped_attrs = operand.heading[attribute].heading.to_attr_list
+          grouped_attrs = group_heading.to_attr_list
           operand.keys.map{|k| k + grouped_attrs }
         end
+      end
+
+    private
+
+      def group_heading
+        op_h = operand.heading
+        raise NotSupportedError unless op_h[attribute].respond_to?(:heading)
+        op_h[attribute].heading
       end
 
     end # class Ungroup
