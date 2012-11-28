@@ -16,7 +16,7 @@ module Alf
     context 'on an non empty relvar' do
       let(:to_cog){ [ 1 ] }
 
-      it{ should be_true }
+      it{ should be(self) }
     end
 
     context 'on an empty relvar with an error message' do

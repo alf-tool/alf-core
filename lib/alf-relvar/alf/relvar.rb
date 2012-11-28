@@ -18,12 +18,12 @@ module Alf
 
     def empty!(msg = "relvar is empty")
       raise FactAssertionError, msg unless empty?
-      true
+      self
     end
 
     def not_empty!(msg = "relvar is not empty")
       raise FactAssertionError, msg if empty?
-      true
+      self
     end
 
     def value
