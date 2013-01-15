@@ -167,7 +167,7 @@ module Alf
       end
 
       def default_renderer_class
-        $stdout.tty? ? Text::Renderer : Renderer::Rash
+        $stdout.tty? ? Renderer::Text : Renderer::Rash
       end
 
     end # class Main
