@@ -86,6 +86,7 @@ module Alf
       "Tuple(#{Support.to_ruby_literal(to_hash)})"
     end
     alias_method :inspect, :to_ruby_literal
+    alias_method :to_s, :to_ruby_literal
 
     EMPTY = Tuple[{}].new({})
     DUM   = EMPTY
