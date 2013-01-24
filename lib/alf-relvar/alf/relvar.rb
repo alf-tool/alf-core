@@ -51,6 +51,10 @@ module Alf
       raise NotSupportedError
     end
 
+    def upsert(tuples)
+      empty? ? insert(tuples) : update(tuples)
+    end
+
     def safe(*args, &bl)
       Safe.new(self, *args, &bl)
     end
