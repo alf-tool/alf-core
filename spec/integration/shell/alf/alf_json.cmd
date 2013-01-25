@@ -1,1 +1,0 @@
-alf --json show suppliers

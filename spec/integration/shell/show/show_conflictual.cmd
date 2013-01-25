@@ -1,1 +1,0 @@
-alf --yaml show suppliers --rash

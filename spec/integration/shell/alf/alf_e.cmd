@@ -1,1 +1,0 @@
-alf -e "(restrict suppliers, lambda{ status > 10})"

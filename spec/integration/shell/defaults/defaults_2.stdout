@@ -1,9 +1,0 @@
-+------+-------+---------+--------+----------+
-| :sid | :name | :status | :city  | :country |
-+------+-------+---------+--------+----------+
-| S1   | Smith |      20 | London | London   |
-| S2   | Jones |      10 | Paris  | Paris    |
-| S3   | Blake |      30 | Paris  | Paris    |
-| S4   | Clark |      20 | London | London   |
-| S5   | Adams |      30 | Athens | Athens   |
-+------+-------+---------+--------+----------+

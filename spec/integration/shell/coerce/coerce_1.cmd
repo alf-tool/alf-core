@@ -1,1 +1,0 @@
-alf coerce suppliers -- sid Symbol status Integer

@@ -1,1 +1,0 @@
-alf -ruri extend suppliers -- uri "URI::parse(name).to_s"

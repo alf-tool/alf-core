@@ -1,9 +1,0 @@
-+------+-------+--------------------------------+
-| :sid | :name | :loc_and_status                |
-+------+-------+--------------------------------+
-| S1   | Smith | {:city=>"London", :status=>20} |
-| S2   | Jones | {:city=>"Paris", :status=>10}  |
-| S3   | Blake | {:city=>"Paris", :status=>30}  |
-| S4   | Clark | {:city=>"London", :status=>20} |
-| S5   | Adams | {:city=>"Athens", :status=>30} |
-+------+-------+--------------------------------+
