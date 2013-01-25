@@ -30,7 +30,7 @@ task :"gh-pages" do
 
   html    = File.join(indir, 'templates', "html.wtpl")
   context = {
-    :version => Alf::VERSION,
+    :version => Alf::Core::VERSION,
     :outdir  => outdir,
     :main    => Alf::Shell::Main
   }

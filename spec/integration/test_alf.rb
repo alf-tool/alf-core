@@ -1,8 +1,8 @@
 require 'spec_helper'
-describe Alf do
+describe Alf::Core do
   
   it "has a version number" do
-    Alf.const_defined?(:VERSION).should be_true
+    Alf::Core.const_defined?(:VERSION).should be_true
   end
   
 end

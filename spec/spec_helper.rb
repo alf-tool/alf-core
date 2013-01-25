@@ -1,7 +1,6 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'alf'
+require 'alf-core'
 require "rspec"
-require 'path'
 
 def _(path, file)
   File.expand_path("../#{path}", file)

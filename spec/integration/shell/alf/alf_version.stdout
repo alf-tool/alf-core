@@ -1,2 +1,2 @@
-alf $(Alf::VERSION) (c) 2011, Bernard Lambeau
+alf $(Alf::Core::VERSION) (c) 2011, Bernard Lambeau
 SystemExit

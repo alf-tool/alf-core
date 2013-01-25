@@ -1,8 +1,8 @@
 # We require your library, mainly to have access to the VERSION number.
 # Feel free to set $version manually.
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-require "alf/version"
-$version = Alf::Version.to_s
+require "alf-core/version"
+$version = Alf::Core::Version.to_s
 
 #
 # This is your Gem specification. Default values are provided so that your library
@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   ################################################################### ABOUT YOUR GEM
 
   # Gem name (required)
-  s.name = "alf"
+  s.name = "alf-core"
 
   # Gem version (required)
   s.version = $version
@@ -133,7 +133,6 @@ Gem::Specification.new do |s|
   s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("myrrha", "~> 3.0.0.rc7")
   s.add_dependency("domain", "~> 1.0.0.rc4")
-  s.add_dependency("backports", "~> 2.6")
   s.add_dependency("path", "~> 1.3")
   s.add_dependency("sexpr", "~> 0.5.1")
 
