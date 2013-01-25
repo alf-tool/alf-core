@@ -8,7 +8,6 @@ require 'time'
 # Third party gems
 require "path"
 require "sexpr"
-require "quickl"
 require "myrrha"
 require 'myrrha/to_ruby_literal'
 require 'myrrha/coerce'

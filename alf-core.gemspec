@@ -129,7 +129,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency("bluecloth", "~> 2.2")
   s.add_development_dependency("redcarpet", "~> 2.2")
   s.add_development_dependency("highline", "~> 1.6")
-  s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("myrrha", "~> 3.0.0.rc7")
   s.add_dependency("domain", "~> 1.0.0.rc4")
   s.add_dependency("path", "~> 1.3")

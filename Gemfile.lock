@@ -9,7 +9,6 @@ GEM
     myrrha (3.0.0.rc7)
       domain (~> 1.0.0.rc3)
     path (1.3.1)
-    quickl (0.4.3)
     rake (10.0.3)
     redcarpet (2.2.2)
     rspec (2.12.0)
@@ -33,7 +32,6 @@ DEPENDENCIES
   json
   myrrha (~> 3.0.0.rc7)
   path (~> 1.3)
-  quickl (~> 0.4.3)
   rake (~> 10.0.3)
   redcarpet (~> 2.2)
   rspec (~> 2.10)

@@ -41,7 +41,6 @@ variables:
     - http://rubygems.org/gems/alf
     - http://rubydoc.info/gems/alf
   dependencies:
-    - {name: quickl,       version: "~> 0.4.3",     groups: [runtime      ]}
     - {name: myrrha,       version: "~> 3.0.0.rc7", groups: [runtime      ]}
     - {name: domain,       version: "~> 1.0.0.rc4", groups: [runtime      ]}
     - {name: path,         version: "~> 1.3",       groups: [runtime      ]}

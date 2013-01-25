@@ -1,7 +1,6 @@
 source 'http://rubygems.org'
 
 group :runtime do
-  gem "quickl", "~> 0.4.3"
   gem "myrrha", "~> 3.0.0.rc7"
   #gem "myrrha", :path => "../../myrrha"
   gem "domain", "~> 1.0.0.rc4"
