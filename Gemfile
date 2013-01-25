@@ -12,20 +12,19 @@ group :runtime do
 end
 
 group :test do
-  gem "rake", "~> 0.9.2"
+  gem "rake", "~> 10.0.3"
   gem "rspec", "~> 2.10"
 end
 
 group :release do
-  gem "rake", "~> 0.9.2"
+  gem "rake", "~> 10.0.3"
   gem "rspec", "~> 2.10"
-  gem "wlang", "~> 0.10.2"
 end
 
 group :doc do
   gem "yard", "~> 0.8.2"
-  gem "bluecloth", "~> 2.2.0"
-  gem "redcarpet", "~> 2.1.0"
+  gem "bluecloth", "~> 2.2"
+  gem "redcarpet", "~> 2.2"
 end
 
 group :extra do

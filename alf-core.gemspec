@@ -123,12 +123,11 @@ Gem::Specification.new do |s|
   # One call to add_development_dependency('gem_name', 'gem version requirement')
   # for each development dependency. These gems are required for developers
   #
-  s.add_development_dependency("rake", "~> 0.9.2")
+  s.add_development_dependency("rake", "~> 10.0.3")
   s.add_development_dependency("rspec", "~> 2.10")
-  s.add_development_dependency("wlang", "~> 0.10.2")
   s.add_development_dependency("yard", "~> 0.8.2")
-  s.add_development_dependency("bluecloth", "~> 2.2.0")
-  s.add_development_dependency("redcarpet", "~> 2.1.0")
+  s.add_development_dependency("bluecloth", "~> 2.2")
+  s.add_development_dependency("redcarpet", "~> 2.2")
   s.add_development_dependency("highline", "~> 1.6")
   s.add_dependency("quickl", "~> 0.4.3")
   s.add_dependency("myrrha", "~> 3.0.0.rc7")
