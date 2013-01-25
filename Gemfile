@@ -6,7 +6,6 @@ group :runtime do
   #gem "myrrha", :path => "../../myrrha"
   gem "domain", "~> 1.0.0.rc4"
   #gem "domain", :path => "../../domain"
-  gem "backports", "~> 2.6"
   gem "path", "~> 1.3"
   gem "sexpr", "~> 0.5.1"
 end
