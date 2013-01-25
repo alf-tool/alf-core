@@ -29,7 +29,6 @@ group :doc do
 end
 
 group :extra do
-  gem "letters"
   gem "highline", "~> 1.6"
   gem 'json', :platforms => [:ruby_18, :jruby, :mingw_18]
 end

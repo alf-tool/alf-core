@@ -1,50 +1,28 @@
 GEM
   remote: http://rubygems.org/
   specs:
-    activesupport (3.2.9)
-      i18n (~> 0.6)
-      multi_json (~> 1.0)
-    awesome_print (1.1.0)
-    backports (2.6.5)
+    backports (2.7.1)
     bluecloth (2.2.0)
-    colorize (0.5.8)
-    columnize (0.3.6)
-    debugger (1.2.2)
-      columnize (>= 0.3.1)
-      debugger-linecache (~> 1.1.1)
-      debugger-ruby_core_source (~> 1.1.5)
-    debugger-linecache (1.1.2)
-      debugger-ruby_core_source (>= 1.1.1)
-    debugger-ruby_core_source (1.1.5)
     diff-lcs (1.1.3)
     domain (1.0.0.rc4)
     highline (1.6.15)
-    i18n (0.6.1)
-    json (1.7.5)
-    letters (0.3.1)
-      activesupport
-      awesome_print
-      colorize
-      debugger
-      xml-simple
-    multi_json (1.3.7)
+    json (1.7.6)
     myrrha (3.0.0.rc7)
       domain (~> 1.0.0.rc3)
     path (1.3.1)
     quickl (0.4.3)
-    rake (0.9.5)
+    rake (0.9.6)
     redcarpet (2.1.1)
     rspec (2.12.0)
       rspec-core (~> 2.12.0)
       rspec-expectations (~> 2.12.0)
       rspec-mocks (~> 2.12.0)
-    rspec-core (2.12.0)
-    rspec-expectations (2.12.0)
+    rspec-core (2.12.2)
+    rspec-expectations (2.12.1)
       diff-lcs (~> 1.1.3)
-    rspec-mocks (2.12.0)
+    rspec-mocks (2.12.1)
     sexpr (0.5.1)
     wlang (0.10.2)
-    xml-simple (1.1.2)
     yard (0.8.3)
 
 PLATFORMS
@@ -56,7 +34,6 @@ DEPENDENCIES
   domain (~> 1.0.0.rc4)
   highline (~> 1.6)
   json
-  letters
   myrrha (~> 3.0.0.rc7)
   path (~> 1.3)
   quickl (~> 0.4.3)
