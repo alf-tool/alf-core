@@ -12,7 +12,7 @@ module Alf
 
       def each(&bl)
         return to_enum unless block_given?
-        with_csv(ProcIO.new(bl), options) do |csv|
+        with_csv(ProcIO.new(bl), options.merge(row_sep: "\n")) do |csv|
           header = nil
           input.each do |tuple|
             unless header
