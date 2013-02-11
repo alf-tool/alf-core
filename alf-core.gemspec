@@ -123,8 +123,8 @@ Gem::Specification.new do |s|
   # One call to add_development_dependency('gem_name', 'gem version requirement')
   # for each development dependency. These gems are required for developers
   #
-  s.add_development_dependency("rake", "~> 10.0.3")
-  s.add_development_dependency("rspec", "~> 2.10")
+  s.add_development_dependency("rake", "~> 10.0")
+  s.add_development_dependency("rspec", "~> 2.12")
   s.add_development_dependency("yard", "~> 0.8.2")
   s.add_development_dependency("bluecloth", "~> 2.2")
   s.add_development_dependency("redcarpet", "~> 2.2")
