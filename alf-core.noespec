@@ -1,6 +1,6 @@
 template-info:
   name: "rubygem.noe"
-  version: 1.7.6
+  version: 2.0.1
   manifest:
     lib/__lower__/loader.rb:
       safe-override: false
@@ -41,8 +41,8 @@ variables:
     - http://rubygems.org/gems/alf
     - http://rubydoc.info/gems/alf
   dependencies:
-    - {name: myrrha,       version: "~> 3.0.0.rc7", groups: [runtime      ]}
-    - {name: domain,       version: "~> 1.0.0.rc4", groups: [runtime      ]}
+    - {name: myrrha,       version: "~> 3.0",       groups: [runtime      ]}
+    - {name: domain,       version: "~> 1.0",       groups: [runtime      ]}
     - {name: path,         version: "~> 1.3",       groups: [runtime      ]}
     - {name: sexpr,        version: "~> 0.5.1",     groups: [runtime      ]}
     - {name: rake,         version: "~> 10.0",      groups: [test, release]}
