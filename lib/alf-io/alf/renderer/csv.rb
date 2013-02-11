@@ -14,7 +14,7 @@ module Alf
         return to_enum unless block_given?
         with_csv(ProcIO.new(bl), options.merge(row_sep: "\n")) do |csv|
           header = nil
-          input.each do |tuple|
+          each_tuple do |tuple|
             unless header
               header = tuple.keys
               csv << header.map(&:to_s)

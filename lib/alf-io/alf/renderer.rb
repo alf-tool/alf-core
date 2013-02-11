@@ -103,6 +103,13 @@ module Alf
       output
     end
 
+  private
+
+    def each_tuple(&bl)
+      return bl.call(input) if TupleLike===input
+      input.each(&bl)
+    end
+
   end # class Renderer
 end # module Alf
 require_relative 'renderer/rash'

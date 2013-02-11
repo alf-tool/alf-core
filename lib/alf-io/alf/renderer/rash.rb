@@ -12,11 +12,11 @@ module Alf
       def each
         return to_enum unless block_given?
         if options[:pretty]
-          input.each do |tuple|
+          each_tuple do |tuple|
             yield "{\n" << tuple.map{|k,v| "  #{l(k)} => #{l(v)}"}.join(",\n") << "\n}\n"
           end
         else
-          input.each do |tuple|
+          each_tuple do |tuple|
             yield to_rash(tuple) << "\n"
           end
         end

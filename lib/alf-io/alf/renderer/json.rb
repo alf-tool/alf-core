@@ -12,14 +12,19 @@ module Alf
       def each
         return to_enum unless block_given?
         require 'json'
-        i = 0
-        yield "["
-        input.each do |t|
-          yield ',' unless i==0
-          yield ::JSON.dump(t)
-          i += 1
+        if TupleLike===input
+          yield ::JSON.dump(input.to_hash)
+          yield "\n"
+        else
+          i = 0
+          yield "["
+          input.each do |t|
+            yield ',' unless i==0
+            yield ::JSON.dump(t)
+            i += 1
+          end
+          yield "]\n"
         end
-        yield "]\n"
       end
 
       Alf::Renderer.register(:json, "in JSON",  self)

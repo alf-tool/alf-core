@@ -3,19 +3,31 @@ module Alf
   class Renderer
     describe Rash do
 
-      subject{ Rash }
+      context 'the class' do
+        subject{ Rash }
 
-      it_should_behave_like "a Renderer class"
+        it_should_behave_like "a Renderer class"
+      end
 
-      describe "execute" do
+      context 'an instance' do
         subject{ Rash.new(input).execute("") }
 
-        let(:input){ Relation(id: [1, 2]) }
+        context "when a Relation" do
+          let(:input){ Relation(id: [1, 2]) }
+          let(:expected){ "{:id => 1}\n{:id => 2}\n" }
 
-        let(:expected){ "{:id => 1}\n{:id => 2}\n" }
+          it 'outputs as expected' do
+            subject.should eq(expected)
+          end
+        end
 
-        it 'outputs as expected' do
-          subject.should eq(expected)
+        context "when a Hash" do
+          let(:input){ {id: 1} }
+          let(:expected){ "{:id => 1}\n" }
+
+          it 'outputs as expected' do
+            subject.should eq(expected)
+          end
         end
       end
 

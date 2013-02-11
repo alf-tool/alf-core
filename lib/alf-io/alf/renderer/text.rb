@@ -147,6 +147,8 @@ module Alf
       end # class Table
 
       def each(&bl)
+        input    = self.input
+        input    = [input.to_hash] if TupleLike===input
         relation = input.to_a
         attrs    = relation.inject([]){|memo,t| (memo | t.keys)}
         records  = relation.map{|t| attrs.map{|a| t[a]}}
