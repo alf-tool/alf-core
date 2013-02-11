@@ -9,4 +9,6 @@ module Alf
   class CoercionError < Error; end
   class ReadOnlyError < Error; end
   class TypeCheckError < Error; end
+  class IllegalStateError < Error; end
+  class UnsupportedError < Error; end
 end
