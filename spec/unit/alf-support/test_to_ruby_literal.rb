@@ -2,6 +2,10 @@ require 'spec_helper'
 module Alf
   describe "Support#to_ruby_literal" do
 
+    it 'works on Symbols' do
+      Support.to_ruby_literal(:name).should eql(":name")
+    end
+
     it 'works on Integers' do
       Support.to_ruby_literal(12).should eql("12")
     end
