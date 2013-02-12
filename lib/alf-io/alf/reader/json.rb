@@ -12,7 +12,7 @@ module Alf
       def each
         return to_enum unless block_given?
         require 'json'
-        p = ::JSON.parse(input_text)
+        p = ::JSON.parse(input_text, create_additions: false)
         p = [p] if TupleLike===p
         p.each do |t|
           yield Support.symbolize_keys(t)
