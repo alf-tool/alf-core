@@ -19,6 +19,7 @@ module Alf
       def _each
         operand.each do |tuple|
           tuple = tuple.dup
+          tuple = tuple.to_hash unless tuple.is_a?(Hash)
           tuple.delete(@attribute).each do |subtuple|
             yield tuple.merge(subtuple)
           end
