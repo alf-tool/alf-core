@@ -108,7 +108,19 @@ module Alf
     private
 
       def compile(expr)
-        compilation_chain.inject(expr){|e,c| c.call(e) }
+        if df = options.debug_folder
+          where, i = options.debug_naming.call(expr), 1
+          debug_dot(expr, df/"#{where}/#{i}-Algebra.dot")
+          compilation_chain.inject(expr){|e,c|
+            c.call(e).tap{|mid|
+              name = "#{i}-#{Alf::Support.class_name(c.class)}"
+              debug_dot(mid, df/"#{where}/#{name}.dot")
+              i += 1
+            }
+          }
+        else
+          compilation_chain.inject(expr){|e,c| c.call(e) }
+        end
       end
 
       def optimizer
@@ -121,6 +133,16 @@ module Alf
 
       def parser
         options.default_viewpoint.parser(self)
+      end
+
+      def debug_dot(e, where)
+        where.parent.mkdir_p
+        where.open('w') do |io|
+          e.to_dot(io)
+        end
+      rescue => ex
+        $stderr.puts ex.message
+        $stderr.puts ex.backtrace.join("\n")
       end
 
     end # class Connection

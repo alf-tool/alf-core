@@ -8,6 +8,12 @@ module Alf
       # What viewpoint to use by default?
       option :default_viewpoint, Module, Viewpoint::NATIVE
 
+      # Path to a folder where debugging graphs can be found
+      option :debug_folder, Path, nil
+
+      # A lambda that names .dot files
+      option :debug_naming, Proc, lambda{|x| Time.now.strftime("%Y%m%d-%H%M%S-%6N") }
+
     end # class Options
   end # class Database
 end # module Alf
