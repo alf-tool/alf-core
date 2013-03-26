@@ -12,6 +12,10 @@ module Alf
         _each(&bl)
       end
 
+      def to_dot(buffer = "")
+        Engine::ToDot.new.call(self, buffer)
+      end
+
     protected
 
       def tuple_scope(tuple = nil)
