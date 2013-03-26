@@ -42,6 +42,10 @@ module Alf
         to_relvar.to_relation
       end
 
+      def to_dot(buffer = "")
+        Algebra::ToDot.new.call(self, buffer)
+      end
+
     end # module Operand
   end # module Algebra
 end # module Alf
