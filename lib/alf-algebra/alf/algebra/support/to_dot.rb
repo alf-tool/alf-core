@@ -182,6 +182,10 @@ module Alf
         "#{expr.heading}"
       end
 
+      def ordering(expr)
+        "#{expr.ordering}"
+      end
+
       def strict(expr)
         expr.strict ? "strict " : ''
       end
