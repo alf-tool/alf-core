@@ -19,7 +19,7 @@ module Alf
         end
       end
 
-      Alf::Reader.register(:yaml, [".yaml"], self)
+      Alf::Reader.register(:yaml, [".yaml", ".yml"], self)
     end # class YAML
   end # class Reader
 end # module Alf
