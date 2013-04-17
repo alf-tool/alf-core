@@ -91,6 +91,7 @@ module Alf
         "Alf::TupleComputation[#{Support.to_ruby_literal(reused_instance)}]"
       end
       alias :inspect :to_ruby_literal
+      alias :to_s :to_ruby_literal
 
     private
 

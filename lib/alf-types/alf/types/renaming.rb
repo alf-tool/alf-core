@@ -67,6 +67,7 @@ module Alf
         "Alf::Renaming[#{Support.to_ruby_literal(reused_instance)}]"
       end
       alias :inspect :to_ruby_literal
+      alias :to_s :to_ruby_literal
 
     end # class Renaming
   end # module Types

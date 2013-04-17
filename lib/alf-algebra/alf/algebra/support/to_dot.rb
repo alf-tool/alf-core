@@ -1,6 +1,7 @@
 module Alf
   module Algebra
     class ToDot < Compiler
+      include Alf::Support::DotUtils
 
       def call(expr, buf = "")
         buf << "/* #{expr} */\n"
@@ -12,13 +13,13 @@ module Alf
       end
 
       def on_unary_operator(expr, buf, label)
-        buf << "#{expr.object_id} [label=#{lbl(label)}];\n"
+        buf << "#{expr.object_id} [label=#{dot_label(label)}];\n"
         apply(expr.operand, buf)
         buf << "#{expr.object_id} -> #{expr.operand.object_id} [label=\"operand\"];\n"
       end
 
       def on_binary_operator(expr, buf, label)
-        buf << "#{expr.object_id} [label=#{lbl(label)}];\n"
+        buf << "#{expr.object_id} [label=#{dot_label(label)}];\n"
         apply(expr.left, buf)
         apply(expr.right, buf)
         buf << "#{expr.object_id} -> #{expr.left.object_id} [label=\"left\"];\n"
@@ -28,9 +29,9 @@ module Alf
       def on_leaf_operand(expr, buf = "")
         case expr
         when Operand::Named
-          buf << "#{expr.object_id} [label=#{lbl(expr.name)}];\n"
+          buf << "#{expr.object_id} [label=#{dot_label(expr.name)}];\n"
         when Operand::Proxy
-          buf << "#{expr.object_id} [label=#{lbl(expr.subject)}];\n"
+          buf << "#{expr.object_id} [label=#{dot_label(expr.subject)}];\n"
         when Relvar::Virtual
           buf << "#{expr.object_id} [label=\"Relvar::Virtual\"];\n"
           apply(expr.expr, buf)
@@ -38,7 +39,7 @@ module Alf
         when Relation
           buf << "#{expr.object_id} [label=\"Relation\"];\n"
         else
-          buf << "#{expr.object_id} [label=#{lbl(expr)}];\n"
+          buf << "#{expr.object_id} [label=#{dot_label(expr)}];\n"
         end
       end
 
@@ -188,10 +189,6 @@ module Alf
 
       def strict(expr)
         expr.strict ? "strict " : ''
-      end
-
-      def lbl(label)
-        %Q{"#{label.to_s[0..100].gsub(/"/, '\"').gsub(/\n/, '\n')}"}
       end
 
     end # class ToDot

@@ -1,6 +1,7 @@
 module Alf
   module Engine
     class ToDot
+      include Alf::Support::DotUtils
 
       def call(cog, buf = "")
         buf << "/* #{cog} */\n"
@@ -12,13 +13,13 @@ module Alf
       end
 
       def on_unary_operator(cog, buf, label)
-        buf << "#{cog.object_id} [label=#{lbl(label)}];\n"
+        buf << "#{cog.object_id} [label=#{dot_label(label)}];\n"
         apply(cog.operand, buf)
         buf << "#{cog.object_id} -> #{cog.operand.object_id} [label=\"operand\"];\n"
       end
 
       def on_binary_operator(cog, buf, label)
-        buf << "#{cog.object_id} [label=#{lbl(label)}];\n"
+        buf << "#{cog.object_id} [label=#{dot_label(label)}];\n"
         apply(cog.left, buf)
         apply(cog.right, buf)
         buf << "#{cog.object_id} -> #{cog.left.object_id} [label=\"left\"];\n"
@@ -26,10 +27,10 @@ module Alf
       end
 
       def on_nary_operator(cog, buf, label)
-        buf << "#{cog.object_id} [label=#{lbl(label)}];\n"
+        buf << "#{cog.object_id} [label=#{dot_label(label)}];\n"
         cog.operands.each_with_index do |op, i|
           apply(op, buf)
-          buf << "#{cog.object_id} -> #{op.object_id} [label=#{lbl(i)}];\n"
+          buf << "#{cog.object_id} -> #{op.object_id} [label=#{dot_label(i)}];\n"
         end
       end
 
@@ -38,7 +39,7 @@ module Alf
         when Relation
           buf << "#{cog.object_id} [label=\"Relation\"];\n"
         else
-          buf << "#{cog.object_id} [label=#{lbl(cog)}];\n"
+          buf << "#{cog.object_id} [label=#{dot_label(cog)}];\n"
         end
       end
 
@@ -52,10 +53,6 @@ module Alf
         else
           on_leaf_operand(cog, buf)
         end
-      end
-
-      def lbl(label)
-        %Q{"#{label.to_s[0..55].gsub(/"/, '\"').gsub(/\n/, '\n')}"}
       end
 
     end # class ToDot
