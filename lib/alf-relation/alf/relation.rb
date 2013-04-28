@@ -60,6 +60,14 @@ module Alf
     alias_method :tuples, :reused_instance
     alias_method :cardinality, :size
 
+    def [](*args)
+      if args.size==1 && Hash===args.first
+        rename(args.first)
+      else
+        project(args)
+      end
+    end
+
     # Returns the relation heading
     def heading
       self.class.heading
