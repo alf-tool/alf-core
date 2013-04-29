@@ -22,7 +22,7 @@ module Alf
         when nil    # both missing and extra attributes
           return nil
         end
-        tuple.to_hash.all?{|(k,v)| @heading[k] === v}
+        tuple.to_hash.all?{|(k,v)| v.nil? or (@heading[k] === v) }
       end
 
     end # class TypeCheck
