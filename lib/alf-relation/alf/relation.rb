@@ -61,11 +61,19 @@ module Alf
     alias_method :cardinality, :size
 
     def [](*args)
-      if args.size==1 && Hash===args.first
-        rename(args.first)
-      else
-        project(args)
+      attrs = args.map{|arg| arg.is_a?(Hash) ? arg.keys : arg }.flatten
+      handler = ->(v){ v.is_a?(Symbol) ? ->{ __send__(v) } : v }
+      extension = args.each_with_object({}) do |arg, ext|
+        case arg
+        when Symbol
+          ext[arg] = handler[arg]
+        when Hash
+          arg.each_pair do |k,v|
+            ext[k] = handler[v]
+          end
+        end
       end
+      self.extend(extension).project(attrs)
     end
 
     # Returns the relation heading
