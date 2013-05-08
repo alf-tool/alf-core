@@ -40,6 +40,10 @@ module Alf
           matching(other)
         end
 
+        def !~(other)
+          not_matching(other)
+        end
+
         def tuple_extract
           tuple = nil
           each do |t|

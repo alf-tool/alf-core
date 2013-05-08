@@ -54,5 +54,9 @@ module Alf
       (rel1 =~ rel2).should == Alf::Relation(sid: 'S2')
     end # intersect
 
+    specify "not matching" do
+      (rel1 !~ rel2).should == Alf::Relation(sid: ['S1', 'S3'])
+    end # intersect
+
   end
 end
