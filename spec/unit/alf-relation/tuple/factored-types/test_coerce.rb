@@ -47,23 +47,43 @@ module Alf
       end
     end
 
-    context 'on missing attributes' do
+    context 'on missing attribute' do
       let(:tuple){ {name: "Jones"} }
 
       it 'raises an error' do
         lambda{
           subject
-        }.should raise_error(TypeError, /Heading mismatch/)
+        }.should raise_error(TypeError, /Missing attribute `status`/)
       end
     end
 
-    context 'on too much attributes' do
-      let(:tuple){ {name: "Jones", foo: "bar"} }
+    context 'on missing attributes' do
+      let(:tuple){ {} }
 
       it 'raises an error' do
         lambda{
           subject
-        }.should raise_error(TypeError, /Heading mismatch/)
+        }.should raise_error(TypeError, /Missing attributes `name, status`/)
+      end
+    end
+
+    context 'on too much attribute' do
+      let(:tuple){ {name: "Jones", status: 10, foo: "bar"} }
+
+      it 'raises an error' do
+        lambda{
+          subject
+        }.should raise_error(TypeError, /Unexpected attribute `foo`/)
+      end
+    end
+
+    context 'on too much attributes' do
+      let(:tuple){ {name: "Jones", status: 10, foo: "bar", foo2: "blah"} }
+
+      it 'raises an error' do
+        lambda{
+          subject
+        }.should raise_error(TypeError, /Unexpected attributes `foo, foo2`/)
       end
     end
 

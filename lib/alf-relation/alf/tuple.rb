@@ -17,13 +17,13 @@ module Alf
     end
 
     def check_internal_representation!
-      error = lambda{|msg|
-        raise TypeError, "Invalid value `#{reused_instance}` for #{self.class} (#{msg})"
-      }
+      error = lambda{|msg| raise TypeError, msg }
       error["Hash expected for representation"] unless reused_instance.is_a?(Hash)
       error["Superclass mismatch"]              unless self.class.superclass == Tuple
-      error["Heading mismatch"]                 unless heading === reused_instance
+      TypeCheck.new(heading, true).check!(reused_instance)
       self
+    rescue TypeCheck::Error => ex
+      error[ex.message]
     end
 
     def heading
