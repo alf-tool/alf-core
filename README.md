@@ -7,5 +7,5 @@ Core modules of Alf.
 
 ## Links
 
-http://github.com/alf-tool/alf
-http://github.com/alf-tool/alf-core
+* http://github.com/alf-tool/alf
+* http://github.com/alf-tool/alf-core
