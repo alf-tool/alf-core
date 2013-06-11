@@ -38,6 +38,9 @@ module Domain
         define_method(:coerce){|arg|
           master_class.coercions.apply(arg, self)
         }
+        define_method(:to_heading){
+          heading
+        }
         define_method(:to_ruby_literal){
           "#{master_class.name}[#{Alf::Support.to_ruby_literal(heading.to_hash)}]"
         }

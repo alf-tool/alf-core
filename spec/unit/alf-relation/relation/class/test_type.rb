@@ -18,6 +18,10 @@ module Alf
       subject.heading.to_hash.should eq(heading)
     end
 
+    it 'supports a tuple type' do
+      Relation[Tuple[heading]].should eq(Relation[heading])
+    end
+
     it 'is aliased as []' do
       Relation[heading].should be_a(Class)
       Relation[heading].should eq(subject)
