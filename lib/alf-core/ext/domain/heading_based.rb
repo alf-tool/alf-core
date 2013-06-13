@@ -13,9 +13,12 @@ module Domain
           AlgebraMethods.new(master_class, heading),
           Domain::Comparisons,
         ]
-        Class.new(master_class).extend(*meths)
+        Class.new(master_class).heading_based_factored(heading).extend(*meths)
       }
       alias_method :[], :type
+      define_method(:heading_based_factored) do |heading|
+        self
+      end
     end
 
     class DomainMethods < Module
@@ -76,5 +79,6 @@ module Domain
         }
       end
     end
+
   end # module HeadingBased
 end # module Domain

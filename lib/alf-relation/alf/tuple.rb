@@ -16,6 +16,16 @@ module Alf
       }
     end
 
+    def self.heading_based_factored(heading)
+      heading.each do |attrname,attrtype|
+        define_method(attrname) do |*args, &bl|
+          return super(*args, &bl) unless args.empty? && bl.nil?
+          reused_instance[attrname]
+        end
+      end
+      self
+    end
+
     def check_internal_representation!
       error = lambda{|msg| raise TypeError, msg }
       error["Hash expected for representation"] unless reused_instance.is_a?(Hash)
