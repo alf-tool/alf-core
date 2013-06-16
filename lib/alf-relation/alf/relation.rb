@@ -42,7 +42,7 @@ module Alf
       end
       c.coercion(Enumerable) do |v,rt|
         rt = Relation[Engine::InferHeading.new(v).first] if Relation==rt
-        tt = Tuple[rt.heading]
+        tt = rt.generating_type.is_a?(Class) ? rt.generating_type : Tuple[rt.heading]
         rt.new(v.map{|t| tt.coerce(t) }.to_set).check_internal_representation!
       end
     end

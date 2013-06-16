@@ -16,7 +16,7 @@ module Alf
       }
     end
 
-    def self.heading_based_factored(heading)
+    def self.heading_based_factored
       heading.each do |attrname,attrtype|
         define_method(attrname) do |*args, &bl|
           return super(*args, &bl) unless args.empty? && bl.nil?

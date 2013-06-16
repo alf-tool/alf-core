@@ -29,5 +29,17 @@ module Alf
       end
     end
 
+    context 'with a subclass of tuple' do
+      let(:tuple_type){ Class.new(Tuple[price: Integer]) }
+      let(:type){ Relation[tuple_type] }
+      let(:tuples){
+        [{'price' => '12'}]
+      }
+
+      it 'coerces the tuples as correct instances' do
+        subject.all?{|t| t.is_a?(tuple_type) }.should be_true
+      end
+    end
+
   end
 end
