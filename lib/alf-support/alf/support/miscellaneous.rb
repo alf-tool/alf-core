@@ -48,5 +48,13 @@ module Alf
       tuple.each_with_object({}){|(k,v),h| h[k.to_sym] = v}
     end
 
+    # Unsymbolizes all keys of `tuple`
+    #
+    # @param  [Hash]  tuple a tuple, represented by a Hash
+    # @return [Tuple] the same tuple, with all keys as Symbols
+    def unsymbolize_keys(tuple)
+      tuple.each_with_object({}){|(k,v),h| h[k.to_s] = v}
+    end
+
   end # module Support
 end # module Alf
