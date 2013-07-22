@@ -21,7 +21,12 @@ module Alf
         end
 
         def to_s
-          "Lispy(#{@extensions.map(&:name).reject{|x| x =~ /OwnMethods/}.join(',')})"
+          mods = @extensions
+            .map(&:name)
+            .compact
+            .reject{|x| x =~ /^Alf::|OwnMethods/}
+            .join(',')
+          "Lispy(#{mods})"
         end
         alias_method :inspect, :to_s
 

@@ -7,7 +7,7 @@ module Alf
 
       subject{ lispy.to_s }
 
-      it{ should eq("Lispy(Alf::Lang::Functional,Alf::Lang::Predicates)") }
+      it{ should eq("Lispy()") }
 
     end
   end

@@ -48,6 +48,9 @@ module Alf
         # Delegated to parent if any.
         def method_missing(name, *args, &bl)
           @parent ? @parent.__send__(name, *args, &bl) : super
+        rescue NoMethodError => ex
+          name = ex.message[/`(.*?)'/, 1]
+          ::Kernel.raise NoMethodError, "Not found `#{name}` on #{self}"
         end
 
         # Returns the binding to use for an evaluation
