@@ -48,7 +48,7 @@ module Alf
         # Delegated to parent if any.
         def method_missing(name, *args, &bl)
           @parent ? @parent.__send__(name, *args, &bl) : super
-        rescue NoMethodError, NameError => ex
+        rescue NoMethodError => ex
           name = ex.message[/`(.*?)'/, 1]
           ::Kernel.raise NoMethodError, "Not found `#{name}` on #{self}"
         end
