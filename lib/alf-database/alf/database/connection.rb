@@ -5,7 +5,9 @@ module Alf
       extend Forwardable
 
       def initialize(db, options = Options.new, &connection_handler)
-        @db, @options, @connection_handler = db, options.freeze, connection_handler
+        @db = db
+        @options = options.freeze
+        @connection_handler = connection_handler
         open!
       end
       attr_reader :db, :options, :connection_handler
