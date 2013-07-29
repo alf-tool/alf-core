@@ -41,6 +41,11 @@ module Alf
         raise NotSupportedError, "Unable to serve keys of `#{name}` in `#{self}`"
       end
 
+      # Migrate the undelrying database according to adapter semantics.
+      def migrate!(opts)
+        raise NotSupportedError, "Unable to migrate using `#{self}`"
+      end
+
       ### read-only methods
 
       # Returns a cog for a given name

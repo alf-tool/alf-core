@@ -99,6 +99,10 @@ module Alf
                                           :delete,
                                           :update
 
+      def migrate!
+        adapter_connection.migrate!(options)
+      end
+
       ### others
 
       def to_s

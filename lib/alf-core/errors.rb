@@ -10,5 +10,7 @@ module Alf
   class ReadOnlyError < Error; end
   class TypeCheckError < Error; end
   class IllegalStateError < Error; end
+
+  # deprecated
   class UnsupportedError < Error; end
 end

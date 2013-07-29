@@ -17,6 +17,9 @@ module Alf
       # A lambda that names .dot files
       option :debug_naming, Proc, lambda{|x| Time.now.strftime("%Y%m%d-%H%M%S-%6N") }
 
+      # Where migrations are located
+      option :migrations_folder, Path, nil
+
     end # class Options
   end # class Database
 end # module Alf
