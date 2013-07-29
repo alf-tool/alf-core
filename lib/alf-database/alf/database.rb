@@ -17,7 +17,8 @@ module Alf
     end
 
     def initialize(adapter, options)
-      @adapter, @default_options = adapter, options.freeze
+      @adapter = adapter
+      @default_options = options.freeze
       @schema_cache = Adapter::Connection::SchemaCached.empty_cache
     end
     attr_reader :adapter, :default_options
