@@ -1,9 +1,6 @@
 bin/**/*
-doc/commands/**/*
-doc/operators/**/*
 examples/**/*
 lib/**/*
-spec/**/*
 tasks/**/*
 Rakefile
 alf.gemspec
