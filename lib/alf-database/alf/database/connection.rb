@@ -138,7 +138,7 @@ module Alf
       end
 
       def parser
-        options.default_viewpoint.parser(self)
+        options.viewpoint.parser(self)
       end
 
       def debug_dot(e, where)

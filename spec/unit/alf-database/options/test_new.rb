@@ -7,12 +7,23 @@ module Alf
 
       subject{ Options.new(h) }
 
-      context 'when valid, coercable options' do
+      context 'when valid, coercable options with default_viewpoint' do
         let(:h){ {schema_cache: "false", default_viewpoint: viewpoint} }
 
         it 'sets the options as expected' do
           subject.schema_cache?.should eq(false)
           subject.default_viewpoint.should be(viewpoint)
+          subject.viewpoint.should be(viewpoint)
+        end
+      end
+
+      context 'when valid, coercable options with viewpoint' do
+        let(:h){ {schema_cache: "false", viewpoint: viewpoint} }
+
+        it 'sets the options as expected' do
+          subject.schema_cache?.should eq(false)
+          subject.default_viewpoint.should be(viewpoint)
+          subject.viewpoint.should be(viewpoint)
         end
       end
 
