@@ -1,47 +1,48 @@
 require 'spec_helper'
-module Alf
 
-  shared_examples_for "a predicate" do
+shared_examples_for "a predicate" do
 
-    let(:x){ 12 }
-    let(:y){ 13 }
+  let(:x){ 12 }
+  let(:y){ 13 }
 
-    it 'can be compiled to valid ruby code' do
-      code = subject.to_ruby_code
-      got  = Kernel::eval code, binding
-      msg  = "Expected `#{code}` to return truth value (#{subject.expr.inspect})"
-      [ TrueClass, FalseClass ].should include(got.class), msg
-    end
-
-    it 'provides a proc for easy evaluation' do
-      got = instance_exec(&subject.to_proc)
-      [ TrueClass, FalseClass ].should include(got.class)
-    end
-
-    it 'can be negated easily' do
-      (!subject).should be_a(Predicate)
-    end
-
-    it 'detects stupid AND' do
-      (subject & Predicate.tautology).should be(subject)
-    end
-
-    it 'detects stupid OR' do
-      (subject | Predicate.contradiction).should be(subject)
-    end
-
-    it 'has free variables' do
-      (fv = subject.free_variables).should be_a(AttrList)
-      (fv - AttrList[ :x, :y ]).should be_empty
-    end
-
-    it 'always splits around and trivially when no free variables are touched' do
-      top, down = subject.and_split(AttrList[:z])
-      top.should be_tautology
-      down.should eq(subject)
-    end
-
+  it 'can be compiled to valid ruby code' do
+    code = subject.to_ruby_code
+    got  = Kernel::eval code, binding
+    msg  = "Expected `#{code}` to return truth value (#{subject.expr.inspect})"
+    [ TrueClass, FalseClass ].should include(got.class), msg
   end
+
+  it 'provides a proc for easy evaluation' do
+    got = instance_exec(&subject.to_proc)
+    [ TrueClass, FalseClass ].should include(got.class)
+  end
+
+  it 'can be negated easily' do
+    (!subject).should be_a(Alf::Predicate)
+  end
+
+  it 'detects stupid AND' do
+    (subject & Alf::Predicate.tautology).should be(subject)
+  end
+
+  it 'detects stupid OR' do
+    (subject | Alf::Predicate.contradiction).should be(subject)
+  end
+
+  it 'has free variables' do
+    (fv = subject.free_variables).should be_a(Alf::AttrList)
+    (fv - Alf::AttrList[ :x, :y ]).should be_empty
+  end
+
+  it 'always splits around and trivially when no free variables are touched' do
+    top, down = subject.and_split(Alf::AttrList[:z])
+    top.should be_tautology
+    down.should eq(subject)
+  end
+
+end
+
+module Alf
 
   describe 'Predicate.tautology' do
     subject{ Predicate.tautology }

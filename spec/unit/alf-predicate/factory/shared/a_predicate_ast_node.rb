@@ -1,24 +1,20 @@
 require 'spec_helper'
-module Alf
-  class Predicate
-    shared_examples_for "a predicate AST node" do
+shared_examples_for "a predicate AST node" do
 
-      it{ should be_a(Sexpr) }
+  it{ should be_a(Sexpr) }
 
-      it{ should be_a(Expr) }
+  it{ should be_a(Alf::Predicate::Expr) }
 
-      specify{
-        (subject.tautology? == subject.is_a?(Tautology)).should be_true
-      }
+  specify{
+    (subject.tautology? == subject.is_a?(Alf::Predicate::Tautology)).should be_true
+  }
 
-      specify{
-        (subject.contradiction? == subject.is_a?(Contradiction)).should be_true
-      }
+  specify{
+    (subject.contradiction? == subject.is_a?(Alf::Predicate::Contradiction)).should be_true
+  }
 
-      specify{
-        subject.free_variables.should be_a(AttrList) unless subject.is_a?(Native)
-      }
+  specify{
+    subject.free_variables.should be_a(Alf::AttrList) unless subject.is_a?(Alf::Predicate::Native)
+  }
 
-    end
-  end
 end
