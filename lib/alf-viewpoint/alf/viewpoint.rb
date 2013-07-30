@@ -22,6 +22,14 @@ module Alf
           Lang::Lispy.new(viewpoints, connection)
         end
       end
+
+      def members
+        @members ||= []
+      end
+
+      def method_added(m)
+        super.tap{ members << m }
+      end
     end
     extend ClassMethods
 
