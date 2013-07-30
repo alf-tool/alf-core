@@ -15,11 +15,12 @@ module Alf
 
       # (see Reader#line2tuple)
       def line2tuple(line)
+        return nil if line.strip.empty?
         begin
           h = Kernel.eval(line)
-          raise "Tuple expected, got #{h}" unless TupleLike===h
+          raise "Tuple expected, got `#{h.inspect}`" unless TupleLike===h
         rescue Exception => ex
-          $stderr << "Skipping #{line.strip}: #{ex.message}\n"
+          $stderr << "Skipping `#{line.strip}`: #{ex.message}\n"
           nil
         else
           return h
