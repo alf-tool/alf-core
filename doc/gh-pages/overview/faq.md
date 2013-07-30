@@ -10,7 +10,7 @@
 
 * Does Alf compile to SQL code?
 
->> No. Our roadmap does not go in that particular direction. Have a look at Dan Kubb's [Veritas](https://github.com/dkubb/veritas) project instead.
+>> No. Our roadmap does not go in that particular direction. Have a look at Dan Kubb's [Axiom](https://github.com/dkubb/axiom) project instead.
 
 * Does Alf optimize queries?
 
