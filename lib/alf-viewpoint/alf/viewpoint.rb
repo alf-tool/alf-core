@@ -3,6 +3,24 @@ module Alf
 
     module ClassMethods
 
+      def metadata
+        @metadata ||= Metadata.new
+      end
+
+      def expects(*viewpoints)
+        metadata.expects(viewpoints)
+      end
+
+      def depends(as, *viewpoints)
+        metadata.depends(as => viewpoints)
+      end
+
+      def build(context = {})
+        x = self
+        metadata.to_module(context){ include(x) }
+      end
+      alias :[] :build
+
       def parser(connection = nil)
         Lang::Lispy.new([ self ], connection)
       end

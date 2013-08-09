@@ -1,3 +1,9 @@
+# 0.13.2 / FIX ME
+
+* Added `Viewpoint.(expects,depends)` for declaring expectations and dependencies
+* Added `Viewpoint.metadata` to query those expectations and dependencies
+* Added `Viewpoint.build` to build viewpoints (with particular contexts)
+
 # 0.13.1 / 2013-08-05
 
 * Empty lines are silently ignored by .rash reader
