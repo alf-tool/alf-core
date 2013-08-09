@@ -47,3 +47,4 @@ module Alf
 
   end # module Viewpoint
 end # module Alf
+require_relative 'viewpoint/metadata'

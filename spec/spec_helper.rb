@@ -54,6 +54,13 @@ module Helpers
     Alf::Algebra::Operand::Fake.new
   end
 
+  def viewpoint(&bl)
+    Module.new{
+      include Alf::Viewpoint
+      instance_exec(&bl)
+    }
+  end
+
 end
 
 module HelpersInScope
