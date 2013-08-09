@@ -6,11 +6,11 @@ module Alf
       subject{ metadata.expand }
 
       let(:metadata) do 
-        @base  = base = viewpoint{ }
-        @user  = user = viewpoint{ expects(base) }
-        @util1 = util = viewpoint{ expects(base); depends(:user, user) }
-        @util2 = viewpoint{ expects(base); depends(:user, user) }
-        @term  = viewpoint{ expects(util) }
+        @base  = base  = viewpoint{ }
+        @user  = user  = viewpoint{ expects(base) }
+        @util1 = util1 = viewpoint{ expects(base); depends(:user, user) }
+        @util2 = util2 = viewpoint{ expects(util1); depends(:user, user) }
+        @term  = viewpoint{ expects(util2) }
         @term.metadata
       end
 
@@ -19,7 +19,7 @@ module Alf
       end
 
       it 'should have expected expectations' do
-        subject.expectations.should eq([ @base, @util1 ])
+        subject.expectations.should eq([ @base, @util1, @util2 ])
       end
 
       it 'should have expected dependencies' do

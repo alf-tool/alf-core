@@ -23,7 +23,7 @@ module Alf
 
       def expand
         Metadata.new do |m|
-          expectations.map(&:metadata).each do |m2|
+          expectations.map(&:metadata).map(&:expand).each do |m2|
             m.expects(m2.expectations)
             m.depends(m2.dependencies)
           end
