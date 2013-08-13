@@ -37,6 +37,16 @@ module Alf
 
       reuse :to_a
 
+      # Returns the directions associated with an attribute name, nil
+      # if no such attribute.
+      #
+      # @param [Symbol] an attribute name.
+      # @return [Symbol] the associated direction or nil
+      def [](attribute)
+        pair = reused_instance.find{|p| p.first == attribute }
+        pair && pair.last
+      end
+
       # Compares two tuples according to this ordering.
       #
       # Both t1 and t2 should have all attributes used by this ordering.
@@ -58,14 +68,35 @@ module Alf
 
       # Computes the union of this ordering with another one.
       #
-      # The union is simply defined by extension of self with other's attributes
-      # and directions.
+      # The union is simply defined by extension of self with other's
+      # attributes and directions. Duplicates are automatically removed.
+      #
+      # When a conflict arise (same attribute but not same direction),
+      # the block is yield with the attribute name, then `self`'s and `other`'s
+      # directions as arguments. The block is expected to return the direction
+      # to use to the attribute. A default block is provided that always favors
+      # the direction found in `other`.
       #
       # @param [Ordering] other another Ordering (coercions will apply)
       # @return [Ordering] the union ordering
-      def +(other)
-        Ordering.new(reused_instance + Ordering.coerce(other).reused_instance)
+      def merge(other, &bl)
+        bl ||= lambda{|attr,d1,d2| d2 }
+        other = Ordering.coerce(other)
+        attributes = to_attr_list + other.to_attr_list
+        directions = attributes.to_a.map{|a|
+          left, right = self[a], other[a]
+          direction = if left.nil? or right.nil?
+                        left || right
+                      elsif left == right
+                        left
+                      else
+                        bl.call(a, left, right)
+                      end
+          [a, direction]
+        }
+        Ordering.new(directions)
       end
+      alias :+ :merge
 
       # Converts to an attribute list.
       #
@@ -88,6 +119,7 @@ module Alf
       def to_ruby_literal
         "Alf::Ordering[#{Support.to_ruby_literal(reused_instance)}]"
       end
+
       alias :inspect :to_ruby_literal
 
     end # class Ordering
