@@ -29,7 +29,7 @@ module Alf
         end
 
         def heading
-          @attributes[:heading] || connection!.heading(name)
+          @attributes[:heading] || (connection && connection.heading(name)) || super
         end
 
         def keys
