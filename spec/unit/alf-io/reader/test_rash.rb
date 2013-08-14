@@ -19,7 +19,7 @@ module Alf
     
     describe "when called on a String" do
       
-      let(:file){ File.expand_path('../input.rb', __FILE__) }
+      let(:file){ File.expand_path('../input.rash', __FILE__) }
       let(:reader){ Reader::Rash.new(file) }
   
       it "should be enumerable" do

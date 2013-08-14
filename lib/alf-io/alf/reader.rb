@@ -187,3 +187,4 @@ end # module Alf
 require_relative 'reader/rash'
 require_relative 'reader/csv'
 require_relative 'reader/json'
+require_relative 'reader/ruby'

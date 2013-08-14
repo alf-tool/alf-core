@@ -9,6 +9,7 @@
   arbitrate conflicts.
 * Added `page` operator implemented through `sort+take` where `take` is a new
   engine cog.
+* Added a `Ruby` input reader mapping to '.rb' and '.ruby' files.
 
 # 0.13.1 / 2013-08-05
 
