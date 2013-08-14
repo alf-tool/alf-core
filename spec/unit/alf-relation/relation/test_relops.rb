@@ -2,8 +2,8 @@ require 'spec_helper'
 module Alf
   describe Relation do
 
-    let(:rel1){Alf::Relation(sid: ['S1', 'S2', 'S3']) }
-    let(:rel2){Alf::Relation(sid: ['S5', 'S2'])       }
+    let(:rel1){ Alf::Relation(sid: ['S1', 'S2', 'S3']) }
+    let(:rel2){ Alf::Relation(sid: ['S5', 'S2'])       }
 
     it 'should have all relational operators installed' do
       Algebra::Operator.each do |op|
@@ -57,6 +57,11 @@ module Alf
     specify "not matching" do
       (rel1 !~ rel2).should == Alf::Relation(sid: ['S1', 'S3'])
     end # intersect
+
+    specify "page" do
+      rel1.page([], 1, page_size: 2).should == Alf::Relation(sid: ['S1', 'S2'])
+      rel1.page([], 2, page_size: 2).should == Alf::Relation(sid: ['S3'])
+    end
 
   end
 end

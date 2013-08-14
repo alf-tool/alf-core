@@ -57,6 +57,14 @@ module Alf
         SetAttr.new(apply(expr.operand), expr.ext)
       end
 
+      def on_page(expr)
+        op = Sort.new(apply(expr.operand), expr.full_ordering)
+        Take.new(op, expr.offset, expr.page_size)
+      rescue NotSupportedError
+        op = Sort.new(apply(expr.operand), expr.ordering)
+        Take.new(op, expr.offset, expr.page_size)
+      end
+
       def on_group(expr)
         Group::Hash.new(apply(expr.operand), expr.attributes, expr.as, expr.allbut)
       end

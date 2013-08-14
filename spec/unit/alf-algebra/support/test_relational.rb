@@ -15,6 +15,7 @@ module Alf
           Matching,
           Minus,
           NotMatching,
+          Page,
           Project,
           Quota,
           Rank,

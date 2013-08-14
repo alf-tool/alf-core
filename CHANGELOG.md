@@ -7,6 +7,8 @@
 * Fixed Ordering#+ to avoid duplicate attributes. This operator is now called
   `merge` (with alias to `+`) and looks like Hash#merge, including an block to
   arbitrate conflicts.
+* Added `page` operator implemented through `sort+take` where `take` is a new
+  engine cog.
 
 # 0.13.1 / 2013-08-05
 
