@@ -174,7 +174,8 @@ module Alf
       # @return the name to use in shell for `option`
       def option_name(option)
         name, domain, defa, = option
-        domain == Boolean ? "--#{name}" : "--#{name}=#{name.to_s.upcase}"
+        name = name.to_s.gsub(/_/, '-')
+        domain == Boolean ? "--#{name}" : "--#{name}=#{name.upcase}"
       end
 
       # Yields `(name,dom,value)` triples for each argument value
