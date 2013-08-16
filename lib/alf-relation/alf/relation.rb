@@ -94,6 +94,22 @@ module Alf
       Engine::Leaf.new(self)
     end
 
+    def to_hash(from, to=nil)
+      if from.is_a?(Hash) and to.nil?
+        raise ArgumentError "Hash of size 1 expected. " unless from.size==1
+        to_hash(from.keys.first, from.values.first)
+      else
+        each.each_with_object({}) do |tuple, hash|
+          key, value = tuple[from], tuple[to]
+          if hash.has_key?(key) and hash[key] != value
+            raise "Key expected for `#{from}`, divergence found on `#{key}`"
+          else
+            hash[key] = value
+          end
+        end
+      end
+    end
+
     # Returns a textual representation of this relation
     def to_s
       to_text

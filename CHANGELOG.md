@@ -10,6 +10,7 @@
 * Added `page` operator implemented through `sort+take` where `take` is a new
   engine cog.
 * Added a `Ruby` input reader mapping to '.rb' and '.ruby' files.
+* Added Relation#to_hash for getting hashes from any attribute pair.
 
 # 0.13.1 / 2013-08-05
 
