@@ -98,6 +98,16 @@ module Alf
       end
       alias :+ :merge
 
+      # Reverse this ordering.
+      #
+      # @return [Ordering] another ordering where the direction of every
+      #         attribute has been flipped (asc <-> desc)
+      def reverse
+        Ordering.new(reused_instance.map{|attr,dir|
+          [ attr, dir == :asc ? :desc : :asc ]
+        })
+      end
+
       # Converts to an attribute list.
       #
       # @return [AttrList] a list of attribute names that participate to the

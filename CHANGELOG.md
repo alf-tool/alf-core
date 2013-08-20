@@ -4,6 +4,7 @@
 * Added `Viewpoint.metadata` to query those expectations and dependencies
 * Added `Viewpoint.build` to build viewpoints (with particular contexts)
 * Added Ordering#[] that returns the direction associated to an attribute.
+* Added Ordering#reverse that reverse the direction of every attribute.
 * Fixed Ordering#+ to avoid duplicate attributes. This operator is now called
   `merge` (with alias to `+`) and looks like Hash#merge, including an block to
   arbitrate conflicts.
