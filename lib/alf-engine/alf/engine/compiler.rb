@@ -147,6 +147,14 @@ module Alf
         Wrap.new(apply(expr.operand), expr.attributes, expr.as, expr.allbut)
       end
 
+    protected
+
+      def unsupported(fallback, &bl)
+        bl.call
+      rescue NotSupportedError
+        fallback
+      end
+
     end # class Compiler
   end # module Engine
 end # module Alf
