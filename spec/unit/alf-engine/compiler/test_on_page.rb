@@ -5,6 +5,14 @@ module Alf
 
       subject{ Compiler.new.call(expr) }
 
+      shared_examples_for "a traceable take" do
+        it_should_behave_like "a traceable cog"
+
+        it {
+          should be_a(Engine::Take)
+        }
+      end
+
       context 'when keys are known and a positive index' do
         let(:operand){
           an_operand.with_heading(id: Fixnum, name: String).with_keys([:id])
@@ -13,9 +21,7 @@ module Alf
           a_lispy.page(operand, [], 3, page_size: 8)
         }
 
-        it {
-          should be_a(Engine::Take)
-        }
+        it_should_behave_like "a traceable take"
 
         it 'should have correct offset' do
           subject.offset.should eq(16)
@@ -43,9 +49,7 @@ module Alf
           a_lispy.page(operand, [], 1)
         }
 
-        it {
-          should be_a(Engine::Take)
-        }
+        it_should_behave_like "a traceable take"
 
         it 'should have offset 0' do
           subject.offset.should eq(0)
@@ -60,9 +64,7 @@ module Alf
           a_lispy.page(operand, [], -3, page_size: 8)
         }
 
-        it {
-          should be_a(Engine::Take)
-        }
+        it_should_behave_like "a traceable take"
 
         it 'should have correct offset' do
           subject.offset.should eq(16)
@@ -90,9 +92,7 @@ module Alf
           a_lispy.page(operand, [], -1)
         }
 
-        it {
-          should be_a(Engine::Take)
-        }
+        it_should_behave_like "a traceable take"
 
         it 'should have offset 0' do
           subject.offset.should eq(0)
@@ -107,9 +107,7 @@ module Alf
           a_lispy.page(operand, [[:id, :asc]], 3, page_size: 8)
         }
 
-        it {
-          should be_a(Engine::Take)
-        }
+        it_should_behave_like "a traceable take"
 
         it 'should have correct offset' do
           subject.offset.should eq(16)

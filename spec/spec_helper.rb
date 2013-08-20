@@ -5,6 +5,7 @@ require 'shared/an_operator_class'
 require 'shared/a_valid_type_implementation'
 require 'shared/a_value'
 require 'shared/a_scope'
+require 'shared/a_cog'
 
 (Path.dir/"unit").glob("**/shared_examples/*").each do |f|
   require(f)

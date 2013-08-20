@@ -12,6 +12,20 @@ module Alf
         @expr = expr
       end
 
+      def heading
+        return expr.heading if expr
+        raise NotSupportedError, "Cog#heading without expr traceability"
+      end
+
+      def keys
+        return expr.keys if expr
+        raise NotSupportedError, "Cog#keys without expr traceability"
+      end
+
+      def to_cog
+        self
+      end
+
       def to_relation
         Relation.coerce(to_a)
       end

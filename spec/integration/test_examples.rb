@@ -8,31 +8,22 @@ Dir["#{File.expand_path('../../../examples', __FILE__)}/**/*.alf"].each do |file
 
     let(:source){ File.read(example_path) }
 
-    def has_tracking!(compiled)
-      case compiled
-      when Alf::Engine::Leaf
-        compiled.expr.should be_a(Alf::Algebra::Operand)
-      when Alf::Engine::Cog
-        compiled.expr.should be_a(Alf::Algebra::Operand)
-        operands = compiled.respond_to?(:operands) ?
-                   compiled.operands :
-                   [ compiled.operand ]
-        operands.each do |op|
-          has_tracking!(op)
-        end
-      else
-        raise "Unexpected cog: #{compiled}"
+    context 'when compiled' do
+      subject{
+        example_db.compile(example_db.parse(source))
+      }
+
+      it_should_behave_like "a traceable cog"
+    end
+
+    context 'when queried' do
+      subject{
+        example_db.query(source, example_path)
+      }
+      
+      it "should run without error" do
+        subject.should be_a(Relation)
       end
-    end
-
-    it 'should properly compile and keep track of expressions' do
-      expr     = example_db.parse(source)
-      compiled = example_db.compile(expr)
-      has_tracking!(compiled)
-    end
-
-    it "should run without error" do
-      example_db.query(source, example_path)
     end
   end
 
