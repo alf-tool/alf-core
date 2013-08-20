@@ -6,8 +6,9 @@ module Alf
   end # module Engine
 end # module Alf
 require_relative 'engine/cog'
+require_relative 'engine/support/cesure'
+
 require_relative 'engine/leaf'
-require_relative 'engine/cesure'
 require_relative 'engine/autonum'
 require_relative 'engine/clip'
 require_relative 'engine/coerce'
