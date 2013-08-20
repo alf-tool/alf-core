@@ -60,15 +60,9 @@ module Alf
       def on_page(expr)
         index, size = expr.page_index, expr.page_size
         ordering = unsupported(expr.ordering){ expr.full_ordering }
-        if expr.page_index >= 0
-          op = Sort.new(apply(expr.operand), ordering)
-          op = Take.new(op, (index - 1) * size, size)
-          op
-        else
-          op = Sort.new(apply(expr.operand), ordering.reverse)
-          op = Take.new(op, (-index - 1) * size, size)
-          op
-        end
+        ordering = ordering.reverse if index < 0
+        op = Sort.new(apply(expr.operand), ordering)
+        op = Take.new(op, (index.abs - 1) * size, size)
       end
 
       def on_group(expr)
