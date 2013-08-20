@@ -19,6 +19,10 @@ module Alf
         operand.each(&block)
       end
 
+      def to_s
+        "Engine::Leaf(#{operand})"
+      end
+
     end # class Leaf
   end # module Engine
 end # module Alf

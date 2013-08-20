@@ -130,6 +130,7 @@ module Alf
         "Alf::Ordering[#{Support.to_ruby_literal(reused_instance)}]"
       end
 
+      alias :to_s :to_ruby_literal
       alias :inspect :to_ruby_literal
 
     end # class Ordering

@@ -19,6 +19,10 @@ module Alf
           super
         end
 
+        def to_s
+          "Operand::Proxy(#{subject})"
+        end
+
       end # class Proxy
     end # module Operand
   end # module Algebra
