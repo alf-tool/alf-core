@@ -9,6 +9,16 @@ module Alf
         end
         attr_reader :subject
 
+        def heading
+          return subject.heading if subject.respond_to?(:heading)
+          super
+        end
+
+        def keys
+          return subject.keys if subject.respond_to?(:keys)
+          super
+        end
+
         def to_cog
           return subject.to_cog if subject.respond_to?(:to_cog)
           Alf::Engine::Leaf.new(subject)
