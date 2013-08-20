@@ -17,8 +17,12 @@ module Alf
         subject.ordering.should eq(Ordering.coerce([[:name, :asc]]))
       end
 
-      it 'should have correct offset' do
-        subject.offset.should eq(30)
+      it 'should have correct page index' do
+        subject.page_index.should eq(2)
+      end
+
+      it 'should have default page size' do
+        subject.page_size.should eq(25)
       end
 
     end

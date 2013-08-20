@@ -59,8 +59,10 @@ module Alf
     end # intersect
 
     specify "page" do
-      rel1.page([], 1, page_size: 2).should == Alf::Relation(sid: ['S1', 'S2'])
-      rel1.page([], 2, page_size: 2).should == Alf::Relation(sid: ['S3'])
+      rel1.page([[:sid, :asc]], 1, page_size: 2).should == Alf::Relation(sid: ['S1', 'S2'])
+      rel1.page([[:sid, :asc]], -1, page_size: 2).should == Alf::Relation(sid: ['S2', 'S3'])
+      rel1.page([[:sid, :asc]], 2, page_size: 2).should == Alf::Relation(sid: ['S3'])
+      rel1.page([[:sid, :asc]], -2, page_size: 2).should == Alf::Relation(sid: ['S1'])
     end
 
   end

@@ -6,7 +6,7 @@ module Alf
       signature do |s|
         s.argument :ordering, Ordering, []
         s.argument :page_index, Integer, 1
-        s.option   :page_size,  Integer, 30, 'Size of the pages to compute'
+        s.option   :page_size,  Integer, 25, 'Size of the pages to compute'
       end
 
       def heading
@@ -26,10 +26,6 @@ module Alf
         else
           ordering.merge(heading.to_attr_list.to_ordering){|a,d1,d2| d1 }
         end
-      end
-
-      def offset
-        (page_index - 1) * page_size
       end
 
     end # class Page

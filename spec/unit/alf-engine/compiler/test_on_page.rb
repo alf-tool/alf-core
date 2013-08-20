@@ -5,7 +5,7 @@ module Alf
 
       subject{ Compiler.new.call(expr) }
 
-      context 'when keys are known' do
+      context 'when keys are known and a positive index' do
         let(:operand){
           an_operand.with_heading(id: Fixnum, name: String).with_keys([:id])
         }
@@ -32,6 +32,70 @@ module Alf
 
         it 'should have a leaf as child.child' do
           subject.operand.operand.should be_a(Leaf)
+        end
+      end
+
+      context 'when keys are known and a page 1' do
+        let(:operand){
+          an_operand.with_heading(id: Fixnum, name: String).with_keys([:id])
+        }
+        let(:expr){
+          a_lispy.page(operand, [], 1)
+        }
+
+        it {
+          should be_a(Engine::Take)
+        }
+
+        it 'should have offset 0' do
+          subject.offset.should eq(0)
+        end
+      end
+
+      context 'when keys are known and a negative index' do
+        let(:operand){
+          an_operand.with_heading(id: Fixnum, name: String).with_keys([:id])
+        }
+        let(:expr){
+          a_lispy.page(operand, [], -3, page_size: 8)
+        }
+
+        it {
+          should be_a(Engine::Take)
+        }
+
+        it 'should have correct offset' do
+          subject.offset.should eq(16)
+        end
+
+        it 'should have correct limit' do
+          subject.limit.should eq(8)
+        end
+
+        it 'should have a sort with inverse ordering as child' do
+          subject.operand.should be_a(Engine::Sort)
+          subject.operand.ordering.should eq(Ordering.new([[:id, :desc]]))
+        end
+
+        it 'should have a leaf as child.child' do
+          subject.operand.operand.should be_a(Leaf)
+        end
+      end
+
+      context 'when keys are known and a page -1' do
+        let(:operand){
+          an_operand.with_heading(id: Fixnum, name: String).with_keys([:id])
+        }
+        let(:expr){
+          a_lispy.page(operand, [], -1)
+        }
+
+        it {
+          should be_a(Engine::Take)
+        }
+
+        it 'should have offset 0' do
+          subject.offset.should eq(0)
         end
       end
 

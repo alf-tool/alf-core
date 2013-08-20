@@ -58,11 +58,17 @@ module Alf
       end
 
       def on_page(expr)
-        op = Sort.new(apply(expr.operand), expr.full_ordering)
-        Take.new(op, expr.offset, expr.page_size)
-      rescue NotSupportedError
-        op = Sort.new(apply(expr.operand), expr.ordering)
-        Take.new(op, expr.offset, expr.page_size)
+        index, size = expr.page_index, expr.page_size
+        ordering = unsupported(expr.ordering){ expr.full_ordering }
+        if expr.page_index >= 0
+          op = Sort.new(apply(expr.operand), ordering)
+          op = Take.new(op, (index - 1) * size, size)
+          op
+        else
+          op = Sort.new(apply(expr.operand), ordering.reverse)
+          op = Take.new(op, (-index - 1) * size, size)
+          op
+        end
       end
 
       def on_group(expr)
