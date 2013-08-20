@@ -21,7 +21,7 @@ module Alf
       ### Static analysis & inference
 
       def heading
-        raise NotSupportedError
+        raise NotSupportedError, "Heading inference unsupported on `#{self}`"
       end
 
       def attr_list
@@ -29,7 +29,7 @@ module Alf
       end
 
       def keys
-        raise NotSupportedError
+        raise NotSupportedError, "Key inference unsupported on `#{self}`"
       end
 
       ### to_xxx
