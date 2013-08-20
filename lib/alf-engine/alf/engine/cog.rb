@@ -3,6 +3,15 @@ module Alf
     module Cog
       include Enumerable
 
+      attr_reader :expr
+
+      def initialize(expr)
+        if expr && !expr.is_a?(Algebra::Operand)
+          raise "Operand expected as first cog argument"
+        end
+        @expr = expr
+      end
+
       def to_relation
         Relation.coerce(to_a)
       end

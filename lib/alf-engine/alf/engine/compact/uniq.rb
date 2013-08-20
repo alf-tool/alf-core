@@ -10,7 +10,8 @@ module Alf
       attr_reader :operand
 
       # Creates a Compact::Uniq instance
-      def initialize(operand)
+      def initialize(operand, expr = nil)
+        super(expr)
         @operand = operand
       end
 

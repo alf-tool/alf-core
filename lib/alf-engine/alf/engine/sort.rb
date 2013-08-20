@@ -13,14 +13,15 @@ module Alf
       attr_reader :ordering
 
       # Creates an Autonum instance
-      def initialize(operand, ordering)
+      def initialize(operand, ordering, expr = nil)
+        super(expr)
         @operand = operand
         @ordering = ordering
       end
 
       # (see Cog#each)
       def _each(&block)
-        Sort::InMemory.new(operand, ordering).each(&block)
+        Sort::InMemory.new(operand, ordering, expr).each(&block)
       end
 
     end # class Sort

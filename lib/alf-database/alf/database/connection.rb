@@ -111,8 +111,6 @@ module Alf
         "Alf::Database::Connection(#{adapter_connection})"
       end
 
-    private
-
       def compile(expr)
         if df = options.debug_folder
           where, i = options.debug_naming.call(expr), 1
@@ -128,6 +126,8 @@ module Alf
           compilation_chain.inject(expr){|e,c| c.call(e) }
         end
       end
+
+    private
 
       def optimizer
         Optimizer.new.register(Optimizer::Restrict.new, Algebra::Restrict)

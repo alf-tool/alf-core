@@ -35,7 +35,8 @@ module Alf
       attr_reader :allbut
 
       # Creates an Clip instance
-      def initialize(operand, attributes, allbut)
+      def initialize(operand, attributes, allbut, expr = nil)
+        super(expr)
         @operand = operand
         @attributes = attributes
         @allbut = allbut

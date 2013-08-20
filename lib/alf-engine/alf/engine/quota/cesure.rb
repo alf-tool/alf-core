@@ -13,7 +13,8 @@ module Alf
       attr_reader :summarization
 
       # Creates an Quota::Cesure instance
-      def initialize(operand, by, summarization)
+      def initialize(operand, by, summarization, expr = nil)
+        super(expr)
         @operand = operand
         @by = by.to_attr_list
         @summarization = summarization

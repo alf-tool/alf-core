@@ -11,9 +11,10 @@ module Alf
         end
 
         # Returns a cog for `name`
-        def cog(name)
+        def cog(name, expr = nil)
           if f = find_file(name)
-            Reader.reader(find_file(name))
+            reader = Reader.reader(find_file(name))
+            Alf::Engine::Leaf.new(reader, expr)
           else
             raise NoSuchRelvarError, "Unable to find a file for #{name}"
           end

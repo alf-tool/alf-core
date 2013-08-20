@@ -16,7 +16,8 @@ module Alf
       attr_reader :allbut
 
       # Creates an Summarize::Cesure instance
-      def initialize(operand, by, summarization, allbut)
+      def initialize(operand, by, summarization, allbut, expr = nil)
+        super(expr)
         @operand = operand
         @by = by
         @summarization = summarization

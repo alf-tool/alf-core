@@ -41,7 +41,7 @@ module Alf
         end
 
         def to_cog
-          Engine::Leaf.new([])
+          Engine::Leaf.new([], self)
         end
 
         def to_lispy

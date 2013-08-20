@@ -49,7 +49,7 @@ module Alf
       ### read-only methods
 
       # Returns a cog for a given name
-      def cog(name)
+      def cog(name, expr = nil)
         raise NotSupportedError, "Unable to serve cog `#{name}` in `#{self}`"
       end
 

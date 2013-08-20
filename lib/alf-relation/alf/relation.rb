@@ -91,7 +91,7 @@ module Alf
 
     # Returns an engine Cog
     def to_cog
-      Engine::Leaf.new(self)
+      Engine::Leaf.new(self, self)
     end
 
     def to_hash(from, to=nil)

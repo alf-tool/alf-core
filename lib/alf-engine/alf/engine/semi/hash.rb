@@ -16,10 +16,16 @@ module Alf
       attr_reader :predicate
 
       # Creates a Semi::Hash instance
-      def initialize(left, right, predicate)
+      def initialize(left, right, predicate, expr = nil)
+        super(expr)
         @left = left
         @right = right
         @predicate = predicate
+      end
+
+      # Returns left and right operands in an array
+      def operands
+        [ left, right ]
       end
 
       # (see Cog#each)

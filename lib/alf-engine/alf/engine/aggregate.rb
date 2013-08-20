@@ -27,7 +27,8 @@ module Alf
       attr_reader :summarization
 
       # Creates an Aggregate instance
-      def initialize(operand, summarization)
+      def initialize(operand, summarization, expr = nil)
+        super(expr)
         @operand = operand
         @summarization = summarization
       end

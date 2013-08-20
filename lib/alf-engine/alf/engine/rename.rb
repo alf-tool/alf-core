@@ -23,7 +23,8 @@ module Alf
       attr_reader :renaming
 
       # Creates a Rename instance
-      def initialize(operand, renaming)
+      def initialize(operand, renaming, expr = nil)
+        super(expr)
         @operand = operand
         @renaming = renaming
       end

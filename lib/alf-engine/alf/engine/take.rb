@@ -31,7 +31,8 @@ module Alf
       attr_reader :limit
 
       # Creates a Take instance
-      def initialize(operand, offset, limit)
+      def initialize(operand, offset, limit, expr = nil)
+        super(expr)
         @operand = operand
         @offset  = offset
         @limit   = limit
