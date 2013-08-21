@@ -39,6 +39,16 @@ module Alf
         end
       end
 
+      context 'with a block passed' do
+        subject{
+          conf_subclass.new{|c| c.ready = true }
+        }
+
+        it 'yields the block' do
+          subject.ready?.should be_true
+        end
+      end
+
       context 'when nothing is passed' do
         subject{ conf_subclass.new }
 
