@@ -124,20 +124,33 @@ module Alf
         end
 
         def sep
-          @sep ||= '+-' << sizes.map{|s| '-' * s}.join('-+-') << '-+' << "\n"
+          @sep ||= '+-' << sizes.map{|s| '-' * s}.join('-+-') << '-+'
+        end
+
+        def each_line(pretty = options[:pretty])
+          if pretty
+            trim = options[:trim_at]
+            each_line(false) do |line|
+              yield(line[0..trim])
+            end
+          else
+            yield(sep)
+            yield(header.rendering_lines(sizes).first)
+            yield(sep)
+            rows.each do |row|
+              row.rendering_lines(sizes).each do |line|
+                yield(line)
+              end
+            end
+            yield(sep)
+          end
         end
 
         def each
           return to_enum unless block_given?
-          yield(sep)
-          yield header.rendering_lines(sizes).first << "\n"
-          yield(sep)
-          rows.each do |row|
-            row.rendering_lines(sizes).each do |line|
-              yield(line << "\n")
-            end
+          each_line do |line|
+            yield(line.strip << "\n")
           end
-          yield(sep)
         end
 
         def to_s
