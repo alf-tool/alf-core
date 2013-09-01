@@ -1,16 +1,25 @@
 require 'spec_helper'
 module Alf
   module Algebra
-    describe Page, 'full_ordering' do
+    describe WithOrdering, 'full_ordering' do
+      include WithOrdering
 
-      subject{ op.full_ordering }
+      subject{ full_ordering }
+
+      def keys
+        operand.keys
+      end
+
+      def heading
+        operand.heading
+      end
 
       context 'when the initial ordering covers a key' do
         let(:operand){
           an_operand.with_heading(id: Fixnum, name: String).with_keys([:id])
         }
-        let(:op){
-          a_lispy.page(operand, [[:id, :desc]], 1)
+        let(:ordering){
+          Ordering.new([[:id, :desc]])
         }
         let(:expected){
           Ordering.new([[:id, :desc]])
@@ -23,8 +32,8 @@ module Alf
         let(:operand){
           an_operand.with_heading(id: Fixnum, name: String).with_keys([:id, :name])
         }
-        let(:op){
-          a_lispy.page(operand, [[:name, :desc]], 1)
+        let(:ordering){
+          Ordering.new([[:name, :desc]])
         }
         let(:expected){
           Ordering.new([[:name, :desc], [:id, :asc]])
@@ -37,8 +46,8 @@ module Alf
         let(:operand){
           an_operand.with_heading(id: Fixnum, name: String)
         }
-        let(:op){
-          a_lispy.page(operand, [[:name, :desc]], 1)
+        let(:ordering){
+          Ordering.new([[:name, :desc]])
         }
         let(:expected){
           Ordering.new([[:name, :desc], [:id, :asc]])
