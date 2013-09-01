@@ -65,5 +65,10 @@ module Alf
       rel1.page([[:sid, :asc]], -2, page_size: 2).should == Alf::Relation(sid: ['S1'])
     end
 
+    specify "frame" do
+      rel1.frame([[:sid, :asc]], 1, 2).should == Alf::Relation(sid: ['S2', 'S3'])
+      rel1.frame([[:sid, :asc]], 2, 12).should == Alf::Relation(sid: ['S3'])
+    end
+
   end
 end

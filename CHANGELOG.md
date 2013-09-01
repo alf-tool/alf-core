@@ -20,8 +20,10 @@
 
 ## Algebra
 
-* Added `page` operator implemented through `sort+take` where `take` is a new
-  engine cog.
+* Added `page` operator (page-index, page-size) implemented through `sort+take`
+  where `take` is a new engine cog.
+* Added `frame` operator (offset, limit àla SQL) implemented through `sort+take`
+  as well.
 
 ## Engine & compilation
 

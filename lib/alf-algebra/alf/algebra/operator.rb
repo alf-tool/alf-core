@@ -115,6 +115,7 @@ require_relative 'operator/type_safe'
 require_relative 'operator/generator'
 
 require_relative 'operator/extend'
+require_relative 'operator/frame'
 require_relative 'operator/project'
 require_relative 'operator/restrict'
 require_relative 'operator/rename'

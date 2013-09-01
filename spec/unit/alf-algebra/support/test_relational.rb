@@ -8,6 +8,7 @@ module Alf
         Relational.each{|m| x << m}
         x.sort{|m1,m2| m1.name.to_s <=> m2.name.to_s}.should == [
           Extend,
+          Frame,
           Group,
           InferHeading,
           Intersect,
