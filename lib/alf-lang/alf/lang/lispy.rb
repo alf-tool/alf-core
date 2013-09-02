@@ -1,42 +1,56 @@
 module Alf
   module Lang
-    class Lispy < Support::Scope
-
-      module OwnMethods
-
-        def parse(expr = nil, path = nil, line = nil, &block)
-          if (expr && block) || (expr.nil? and block.nil?)
-            raise ArgumentError, "Either `expr` or `block` should be specified"
-          end
-          expr = evaluate(expr, path, line, &block) if block or expr.is_a?(String)
-          expr = __send__(expr)                     if expr.is_a?(Symbol)
-          expr = expr.bind(connection)              if expr.is_a?(Support::Bindable) && connection
-          expr
-        end
-
-        attr_reader :connection
-
-        def connection!
-          connection.tap{|c| ::Kernel.raise(UnboundError, "#{self} not bound") unless c }
-        end
-
-        def to_s
-          mods = @extensions
-            .map(&:name)
-            .compact
-            .reject{|x| x =~ /^Alf::|OwnMethods/}
-            .join(',')
-          "Lispy(#{mods})"
-        end
-        alias_method :inspect, :to_s
-
-      end # OwnMethods
+    class Lispy
+      include Functional
+      include Predicates
 
       # Creates a language instance
       def initialize(helpers = [ ], connection = nil)
         @connection = connection
-        super [ OwnMethods, Functional, Predicates ] + helpers
+        @extensions = helpers
+        helpers.each do |helper|
+          helper.send(:extend_object, self)
+        end
       end
+
+      attr_reader :connection
+
+      def connection!
+        connection.tap{|c| ::Kernel.raise(UnboundError, "#{self} not bound") unless c }
+      end
+
+      def evaluate(expr = nil, path=nil, line=nil, &bl)
+        return instance_exec(&bl) if bl
+        ::Kernel.eval expr, __eval_binding, *[path, line].compact
+      end
+
+      def parse(expr = nil, path = nil, line = nil, &block)
+        if (expr && block) || (expr.nil? and block.nil?)
+          raise ArgumentError, "Either `expr` or `block` should be specified"
+        end
+        expr = evaluate(expr, path, line, &block) if block or expr.is_a?(String)
+        expr = __send__(expr)                     if expr.is_a?(Symbol)
+        expr = expr.bind(connection)              if expr.is_a?(Support::Bindable) && connection
+        expr
+      end
+
+      def to_s
+        mods = @extensions
+          .map(&:name)
+          .compact
+          .reject{|x| x =~ /^Alf::|OwnMethods/}
+          .join(',')
+        "Lispy(#{mods})"
+      end
+      alias_method :inspect, :to_s
+
+    private
+
+      def __eval_binding
+        ::Kernel.binding
+      end
+
+    public
 
       # Resolve DUM and DEE in ruby 1.9.2 context
       def self.const_missing(name)
