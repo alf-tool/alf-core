@@ -45,6 +45,8 @@ module Alf
       end
       alias :on_generator     :on_unoptimizable
       alias :on_infer_heading :on_unoptimizable
+      alias :on_page          :on_unoptimizable
+      alias :on_frame         :on_unoptimizable
 
       def on_binary_optimizable(expr, predicate)
         binary_split(expr, predicate)
