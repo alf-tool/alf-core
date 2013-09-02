@@ -35,12 +35,6 @@ module Alf
         end
       end
 
-      def namespace(name, *viewpoints)
-        define_method(name) do
-          Lang::Lispy.new(viewpoints, connection)
-        end
-      end
-
       def members
         @members ||= []
       end

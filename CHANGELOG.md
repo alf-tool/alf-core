@@ -17,6 +17,7 @@
 * Added `Viewpoint.(expects,depends)` for declaring expectations and dependencies
 * Added `Viewpoint.metadata` to query those expectations and dependencies
 * Added `Viewpoint.build` to build viewpoints (with particular contexts)
+* Removed `Viewpoint.namespace`, use `Viewpoint.depends` instead.
 
 ## Algebra
 
