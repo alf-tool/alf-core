@@ -9,8 +9,12 @@ module Alf
       Alf::Database.connect(*args, &bl)
     end
 
+    def examples_adapter
+      Path.backfind('examples/suppliers_and_parts')
+    end
+
     def examples(&bl)
-      Alf::Database.connect Path.backfind('examples/suppliers_and_parts'), &bl
+      Alf::Database.connect examples_adapter, &bl
     end
 
     def reader(source, *args)
