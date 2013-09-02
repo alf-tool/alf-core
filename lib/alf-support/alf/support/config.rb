@@ -94,8 +94,11 @@ module Alf
       # Duplicates this configuration as well as all option values
       def dup
         super.tap do |c|
-          self.class.each_option do |name,_,_|
-            c[name] = (self[name].dup rescue self[name])
+          self.class.each_option do |name,_,default|
+            ivar_name = self.class.ivar_name(name)
+            if instance_variable_defined?(ivar_name) || !default.is_a?(Proc)
+              c[name] = (self[name].dup rescue self[name])
+            end
           end
         end
       end

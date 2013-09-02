@@ -7,6 +7,7 @@ module Alf
         Class.new(Config){
           option :ready, Boolean, false
           option :preferences, Array, []
+          option :aproc, Boolean, ->{ !ready? }
         }
       }
 
@@ -26,6 +27,12 @@ module Alf
             mine.should eq(yours)
             mine.should_not be(yours) unless Boolean===mine
           end
+        end
+
+        it 'should keep the semantics of Proc options' do
+          subject.aproc?.should be_true
+          subject.ready = true
+          subject.aproc?.should be_false
         end
       end
 
