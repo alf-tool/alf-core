@@ -15,6 +15,10 @@ module Alf
         Folder::Connection.new(Path(conn_spec))
       end
 
+      def to_s
+        "Alf::Adapter::Folder(#{conn_spec})"
+      end
+
       Adapter.register(:folder, self)
     end # class Folder
   end # class Adapter
