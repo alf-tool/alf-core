@@ -34,7 +34,7 @@ module Alf
             value = instance_variable_defined?(ivar_name) \
                   ? instance_variable_get(ivar_name)
                   : default_value
-            value.is_a?(Proc) && domain != Proc ? value.call : value
+            value.is_a?(Proc) && domain != Proc ? instance_exec(&value) : value
           end
           define_method(setter_name) do |val|
             val = val.is_a?(Proc) ? val : Support.coerce(val, domain)

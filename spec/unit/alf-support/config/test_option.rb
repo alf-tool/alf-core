@@ -8,6 +8,7 @@ module Alf
           option :ready, Boolean, false
           option :which, String, ->{ "foo" }
           option :done,  Proc, ->{ "bar" }
+          option :cross, String, ->{ which.capitalize }
         }
       }
 
@@ -26,6 +27,10 @@ module Alf
 
       it 'supports procs' do
         conf1.new.which.should eq("foo")
+      end
+
+      it 'executes proc in that context' do
+        conf1.new.cross.should eq("Foo")
       end
 
       it 'does not confuse procs' do

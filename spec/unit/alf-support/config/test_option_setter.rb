@@ -53,7 +53,7 @@ module Alf
       end
 
       context 'on `which` with a Proc' do
-        let(:proc){ ->{ @called = true; "blah" } }
+        let(:proc){ ->{ "blah" } }
 
         subject{ config.which = proc }
 
@@ -61,15 +61,9 @@ module Alf
           subject.should be(proc)
         end
 
-        it 'should not call the proc' do
-          subject
-          @called.should_not be_true
-        end
-
         it 'should call the proc when option is get' do
           subject
           config.which.should eq("blah")
-          @called.should be_true
         end
       end
 
