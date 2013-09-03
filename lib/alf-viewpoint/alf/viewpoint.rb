@@ -1,3 +1,4 @@
+require_relative 'viewpoint/metadata'
 module Alf
   module Viewpoint
 
@@ -36,11 +37,13 @@ module Alf
       end
 
       def members
-        @members ||= []
+        metadata.all_members
       end
 
       def method_added(m)
-        super.tap{ members << m }
+        super.tap{
+          metadata.add_members([m]) if public_method_defined?(m)
+        }
       end
     end
     extend ClassMethods
@@ -59,4 +62,3 @@ module Alf
 
   end # module Viewpoint
 end # module Alf
-require_relative 'viewpoint/metadata'

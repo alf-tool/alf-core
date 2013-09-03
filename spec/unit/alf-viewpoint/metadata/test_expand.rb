@@ -8,7 +8,7 @@ module Alf
       let(:metadata) do 
         @base  = base  = viewpoint{ }
         @user  = user  = viewpoint{ expects(base) }
-        @util1 = util1 = viewpoint{ expects(base); depends(:user, user) }
+        @util1 = util1 = viewpoint{ expects(base);  depends(:user, user) }
         @util2 = util2 = viewpoint{ expects(util1); depends(:user, user) }
         @term  = viewpoint{ expects(util2) }
         @term.metadata

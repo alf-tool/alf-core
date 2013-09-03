@@ -3,7 +3,7 @@ module Alf
   module Viewpoint
     describe Metadata, "#dup" do
 
-      let(:metadata){ Metadata.new([1, 2], a: [3, 4]) }
+      let(:metadata){ Metadata.new([1, 2], {a: [3, 4]}, [:m]) }
 
       subject{ metadata.dup }
 
@@ -20,6 +20,11 @@ module Alf
       it 'should have different yet equal dependencies' do
         subject.dependencies.should_not be(metadata.dependencies)
         subject.dependencies.should eq(metadata.dependencies)
+      end
+
+      it 'should have different yet equal members' do
+        subject.members.should_not be(metadata.members)
+        subject.members.should eq(metadata.members)
       end
 
     end

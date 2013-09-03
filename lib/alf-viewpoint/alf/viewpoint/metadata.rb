@@ -2,12 +2,13 @@ module Alf
   module Viewpoint
     class Metadata
 
-      def initialize(expectations = [], dependencies = {})
+      def initialize(expectations = [], dependencies = {}, members = [])
         @expectations = expectations
         @dependencies = dependencies
+        @members      = members
         yield(self) if block_given?
       end
-      attr_reader :expectations, :dependencies
+      attr_reader :expectations, :dependencies, :members
 
       def expects(viewpoints)
         @expectations |= viewpoints
@@ -21,19 +22,30 @@ module Alf
         self
       end
 
+      def add_members(members)
+        @members |= members
+        self
+      end
+
+      def all_members
+        expand.members
+      end
+
       def expand
         Metadata.new do |m|
-          expectations.map(&:metadata).map(&:expand).each do |m2|
+          expectations.map{|e| e.metadata.expand }.each do |m2|
             m.expects(m2.expectations)
             m.depends(m2.dependencies)
+            m.add_members(m2.members)
           end
           m.expects(expectations)
           m.depends(dependencies)
+          m.add_members(members)
         end
       end
 
       def dup
-        Metadata.new(expectations.dup, dependencies.dup)
+        Metadata.new(expectations.dup, dependencies.dup, members.dup)
       end
 
       def to_module(context = {}, &bl)
@@ -53,17 +65,6 @@ module Alf
             end
           end
           instance_exec(&bl) if bl
-        }
-      end
-
-    private
-
-      def build_module(members, *others, &bl)
-        Module.new{
-          members.each do |m|
-            include(m)
-          end
-          bl.call if bl
         }
       end
 
