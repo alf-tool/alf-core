@@ -8,9 +8,6 @@ module Alf
       # What viewpoint to use by default?
       option :viewpoint, Module, Viewpoint::NATIVE
 
-      alias :default_viewpoint  :viewpoint
-      alias :default_viewpoint= :viewpoint=
-
       # Path to a folder where debugging graphs can be found
       option :debug_folder, Path, nil
 

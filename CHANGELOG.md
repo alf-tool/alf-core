@@ -47,6 +47,10 @@
   correctly adapts its `cog` method to return an Engine::Leaf instance that
   delegated to the reader itself.
 
+## Database
+
+* The `default_viewpoint` option has been renamed `viewpoint`
+
 # 0.13.1 / 2013-08-05
 
 * Empty lines are silently ignored by .rash reader

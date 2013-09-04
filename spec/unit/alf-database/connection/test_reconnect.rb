@@ -28,7 +28,7 @@ module Alf
       end
 
       context 'when only logical options are changed' do
-        let(:opts){ {default_viewpoint: Viewpoint::NATIVE} }
+        let(:opts){ {viewpoint: Viewpoint::NATIVE} }
 
         it 'should not close the underlying connection' do
           subject
