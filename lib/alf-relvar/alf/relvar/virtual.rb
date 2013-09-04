@@ -3,9 +3,8 @@ module Alf
     class Virtual
       include Relvar
 
-      def initialize(expr, connection = nil)
+      def initialize(expr)
         @expr = expr
-        @connection = connection
       end
       attr_reader :expr
 

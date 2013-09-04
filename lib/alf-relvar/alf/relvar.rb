@@ -3,6 +3,26 @@ module Alf
     include Algebra::Operand
     include Lang::ObjectOriented
 
+    def connection
+      expr.connection
+    end
+
+    def connection=(conn)
+      expr.connection = conn
+    end
+
+    def connection!
+      expr.connection!
+    end
+
+    def bind(connection)
+      expr.bind(connection)
+    end
+
+    def bound?
+      expr.bound?
+    end
+
     def type
       @type ||= Relation[heading]
     end
@@ -76,7 +96,7 @@ module Alf
   private
 
     def _operator_output(expr)
-      Relvar::Virtual.new(expr, connection)
+      Relvar::Virtual.new(expr)
     end
 
   end # module Relvar

@@ -3,16 +3,15 @@ module Alf
   module Relvar
     describe Virtual, "delete" do
 
-      let(:rv)        { Virtual.new(expr, connection)                 }
-      let(:expr)      { Algebra.named_operand(:suppliers, connection) }
-      let(:connection){ self                                          }
+      let(:rv)        { Virtual.new(expr)                       }
+      let(:expr)      { Algebra.named_operand(:suppliers, self) }
 
       def delete(*args)
         @seen = args
       end
 
       def relvar(name)
-        Relvar::Base.new(name, connection)
+        Relvar::Base.new(Algebra.named_operand(name, self))
       end
 
       context 'with a predicate' do

@@ -3,11 +3,12 @@ module Alf
   module Relvar
     describe Virtual, "connection" do
 
-      let(:rv){ Virtual.new(:expr, :connection) }
+      let(:expr){ Algebra::Operand::Named.new(:aname, :aconn) }
+      let(:rv)  { Virtual.new(expr)                           }
 
       subject{ rv.connection }
 
-      it{ should eq(:connection) }
+      it{ should eq(:aconn) }
 
     end
   end

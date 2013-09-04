@@ -17,7 +17,7 @@ module Alf
       end
 
       def connection!
-        raise UnboundError unless bound?
+        raise UnboundError, "Not bound `#{self}`" unless bound?
         @connection
       end
 

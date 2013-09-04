@@ -3,7 +3,8 @@ module Alf
   module Relvar
     describe Virtual, "to_relvar" do
 
-      let(:rv){ Virtual.new(:expr, :connection) }
+      let(:expr){ Algebra::Operand::Named.new(:aname, self) }
+      let(:rv)  { Virtual.new(expr)                         }
 
       subject{ rv.to_relvar }
 

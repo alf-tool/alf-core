@@ -19,7 +19,7 @@ module Alf
         end
 
         def to_relvar
-          Relvar::Base.new(name, connection)
+          Relvar::Base.new(self)
         end
 
         def to_s

@@ -3,9 +3,9 @@ module Alf
   module Relvar
     describe Base, "insert" do
 
-      let(:rv)        { Base.new(:suppliers, connection) }
-      let(:tuples)    { Relation.coerce(:id => 1)        }
-      let(:connection){ self                             }
+      let(:expr)  { Algebra::Operand::Named.new(:suppliers, self) }
+      let(:rv)    { Base.new(expr)                                }
+      let(:tuples){ Relation.coerce(:id => 1)                     }
 
       def insert(*args)
         @seen = args

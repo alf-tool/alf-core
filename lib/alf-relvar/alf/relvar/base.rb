@@ -3,12 +3,17 @@ module Alf
     class Base
       include Relvar
 
-      def initialize(name, connection = nil)
-        raise unless name.is_a?(Symbol)
-        @name = name
-        @connection = connection
+      def initialize(expr)
+        raise "Named operand expected, got `#{expr}`" unless expr.is_a?(Algebra::Operand::Named)
+        @expr = expr
       end
-      attr_reader :name
+      attr_reader :expr
+
+      ### Relvar contract
+
+      def name
+        expr.name
+      end
 
       ### Static analysis & inference
 

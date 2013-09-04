@@ -37,7 +37,7 @@ module Alf
         end
 
         def to_relvar
-          Relvar::Fake.new(heading)
+          Relvar::Fake.new(self, heading)
         end
 
         def to_cog

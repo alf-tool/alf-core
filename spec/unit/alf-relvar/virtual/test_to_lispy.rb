@@ -3,16 +3,13 @@ module Alf
   module Relvar
     describe Virtual, "to_lispy" do
 
-      let(:rv){ Virtual.new(self, :connection) }
-
-      def to_lispy
-        "a lispy expression"
-      end
+      let(:expr){ Algebra::Operand::Named.new(:aname, self) }
+      let(:rv)  { Virtual.new(expr)                         }
 
       subject{ rv.to_lispy }
 
       it 'delegates to the expression' do
-        subject.should eq("a lispy expression")
+        subject.should eq("aname")
       end
 
     end

@@ -3,11 +3,17 @@ module Alf
   module Relvar
     describe Base, "connection" do
 
-      let(:rv){ Base.new(:name, :connection) }
+      let(:expr){
+        Algebra::Operand::Named.new(:aname, :aconn)
+      }
+
+      let(:rv){
+        Base.new(expr)
+      }
 
       subject{ rv.connection }
 
-      it{ should eq(:connection) }
+      it{ should eq(:aconn) }
 
     end
   end

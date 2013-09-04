@@ -3,7 +3,8 @@ module Alf
   module Relvar
     describe Base, 'OO relational language' do
 
-      let(:rv){ Base.new(:suppliers, :connection) }
+      let(:expr){ Algebra::Operand::Named.new(:suppliers, self) }
+      let(:rv)  { Base.new(expr)                                }
 
       subject{ rv.project([:sid]) }
 

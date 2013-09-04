@@ -3,7 +3,7 @@ module Alf
   module Relvar
     describe Virtual, "insert" do
 
-      let(:rv)        { Virtual.new(expr, connection)                 }
+      let(:rv)        { Virtual.new(expr)                             }
       let(:expr)      { Algebra.named_operand(:suppliers, connection) }
       let(:tuples)    { Relation.coerce(:id => 1)                     }
       let(:connection){ self                                          }
@@ -13,7 +13,7 @@ module Alf
       end
 
       def relvar(name)
-        Relvar::Base.new(name, connection)
+        Relvar::Base.new(name)
       end
 
       subject{ rv.insert(tuples) }

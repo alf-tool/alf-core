@@ -3,10 +3,11 @@ module Alf
     class Fake
       include Relvar
 
-      def initialize(heading)
+      def initialize(expr, heading)
+        @expr = expr
         @heading = Heading.coerce(heading)
       end
-      attr_reader :heading
+      attr_reader :expr, :heading
 
       def insert(tuples)
         @inserted_tuples = tuples.to_a

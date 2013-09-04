@@ -5,9 +5,25 @@ module Alf
 
         def self.def_operator_method(name, clazz)
           define_method(name) do |*args|
+            # add self operands at begining of args
             args.unshift(_self_operand)
+
+            # split operands vs. arguments
             operands, arguments = args[0...clazz.arity], args[clazz.arity..-1]
-            _operator_output clazz.new(operands, *arguments)
+
+            # build the new expression
+            expr = clazz.new(operands, *arguments)
+
+            # bind it if operands were bound
+            conns = operands.map(&:connection).uniq
+            if conns.size == 1
+              expr.connection = conns.first
+            elsif conns.size > 1
+              raise NotSupportedError, "Multiple connections unsupported"
+            end
+
+            # let the abstraction have a chance to of decorating it
+            _operator_output(expr)
           end
         end
 

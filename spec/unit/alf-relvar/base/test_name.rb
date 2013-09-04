@@ -3,11 +3,12 @@ module Alf
   module Relvar
     describe Base, "name" do
 
-      let(:rv){ Base.new(:name, :connection) }
+      let(:expr){ Algebra::Operand::Named.new(:suppliers, self) }
+      let(:rv)  { Base.new(expr)                                }
 
       subject{ rv.name }
 
-      it{ should eq(:name) }
+      it{ should eq(:suppliers) }
 
     end
   end

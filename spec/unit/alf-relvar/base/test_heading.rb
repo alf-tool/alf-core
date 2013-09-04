@@ -3,8 +3,8 @@ module Alf
   module Relvar
     describe Base, "heading" do
 
-      let(:rv)        { Base.new(:suppliers, connection) }
-      let(:connection){ self                             }
+      let(:expr){ Algebra::Operand::Named.new(:suppliers, self) }
+      let(:rv)  { Base.new(expr) }
 
       def heading(*args)
         @seen = args

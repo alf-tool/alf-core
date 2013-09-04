@@ -3,11 +3,10 @@ module Alf
   module Relvar
     describe Virtual, "update" do
 
-      let(:rv)        { Virtual.new(expr, connection)                 }
-      let(:expr)      { Algebra.named_operand(:suppliers, connection) }
-      let(:updating)  { {sname: 'Jones'}                 }
-      let(:predicate) { Predicate.eq(:sid, 1)            }
-      let(:connection){ self                             }
+      let(:rv)        { Virtual.new(expr)                       }
+      let(:expr)      { Algebra.named_operand(:suppliers, self) }
+      let(:updating)  { {sname: 'Jones'}                        }
+      let(:predicate) { Predicate.eq(:sid, 1)                   }
 
       def update(*args)
         @seen = args

@@ -3,8 +3,9 @@ module Alf
   module Relvar
     describe Virtual, 'OO relational language' do
 
-      let(:base){ Base.new(:suppliers, :connection) }
-      let(:rv)  { Virtual.new(base, :connection)    }
+      let(:expr){ Algebra::Operand::Named.new(:suppliers, self) }
+      let(:base){ Base.new(expr)                                }
+      let(:rv)  { Virtual.new(base)                             }
 
       subject{ rv.project([:sid]) }
 
@@ -22,6 +23,10 @@ module Alf
 
       it 'should have the base relvar as projection operand' do
         subject.expr.operand.should be(base)
+      end
+
+      it 'should be kept bound' do
+        subject.should be_bound
       end
 
     end

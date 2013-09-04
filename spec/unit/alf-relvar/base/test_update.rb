@@ -3,10 +3,11 @@ module Alf
   module Relvar
     describe Base, "update" do
 
-      let(:rv)        { Base.new(:suppliers, connection) }
-      let(:updating)  { {sname: 'Jones'}                 }
-      let(:predicate) { Predicate.eq(:sid, 1)            }
-      let(:connection){ self                             }
+      let(:expr){ Algebra::Operand::Named.new(:suppliers, self) }
+      let(:rv)  { Base.new(expr)                                }
+
+      let(:updating)  { {sname: 'Jones'}      }
+      let(:predicate) { Predicate.eq(:sid, 1) }
 
       def update(*args)
         @seen = args

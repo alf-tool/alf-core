@@ -70,7 +70,7 @@ module Alf
       alias :to_s :to_lispy
 
       def to_relvar
-        Relvar::Virtual.new(self, connection)
+        Relvar::Virtual.new(self)
       end
 
     ### identity and pseudo-mutability
