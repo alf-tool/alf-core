@@ -22,8 +22,20 @@ module Alf
         raise NotSupportedError, "Cog#keys without expr traceability"
       end
 
+      def cog_orders
+        []
+      end
+
+      def orderedby?(order)
+        cog_orders.any?{|o| order <= o }
+      end
+
       def to_cog
         self
+      end
+
+      def to_compilable
+        Compilable.new(self)
       end
 
       def to_relation

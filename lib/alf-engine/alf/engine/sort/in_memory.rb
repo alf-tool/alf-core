@@ -32,6 +32,11 @@ module Alf
         @ordering = ordering
       end
 
+      # (see Cog#cog_orders)
+      def cog_orders
+        @cog_orders ||= [ ordering ]
+      end
+
       # (see Cog#each)
       def _each(&block)
         operand.to_a.sort!(&ordering.sorter).each(&block)
