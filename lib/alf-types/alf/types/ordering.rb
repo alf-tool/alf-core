@@ -150,6 +150,12 @@ module Alf
         reused_instance.map(&:first)
       end
 
+      # Check if this ordering subsumes another one.
+      def <=(other)
+        size = reused_instance.size
+        reused_instance == other.to_a[0...size]
+      end
+
       # Converts to an attribute list.
       #
       # @return [AttrList] a list of attribute names that participate to the
