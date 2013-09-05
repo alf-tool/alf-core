@@ -23,6 +23,10 @@ module Helpers
     Alf::Lang::Lispy.new
   end
 
+  def parse(*args, &bl)
+    a_lispy.parse(*args, &bl)
+  end
+
   def supplier_names
     SUPPLIER_NAMES
   end
