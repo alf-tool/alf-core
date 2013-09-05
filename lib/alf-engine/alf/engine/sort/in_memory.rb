@@ -16,6 +16,7 @@ module Alf
     #     #    ]
     #
     class Sort::InMemory
+      include Sort
       include Cog
 
       # @return [Enumerable] The operand
