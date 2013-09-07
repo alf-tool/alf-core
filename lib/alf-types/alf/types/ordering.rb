@@ -12,9 +12,9 @@ module Alf
           if arg.all?{|a| a.is_a?(Array)}
             Ordering.new(arg)
           else
-            symbolized = arg.map{|s| AttrName.coerce(s) }
+            symbolized = arg.map{|s| Selector.coerce(s) }
             sliced = symbolized.each_slice(2)
-            if sliced.all?{|a,o| [:asc,:desc].include?(o)}
+            if sliced.all?{|a,o| [:asc,:desc].include?(o) }
               Ordering.new sliced.to_a
             else
               Ordering.new symbolized.map{|a| [a, :asc]}
@@ -57,8 +57,9 @@ module Alf
       # @return [-1, 0 or 1] according to the classical ruby semantics of
       #         `(t1 <=> t2)`
       def compare(t1, t2)
+        extract = proc{|t,x| Array(x).inject(t){|m,a| m[a]} }
         reused_instance.each do |atr, dir|
-          x, y = t1[atr], t2[atr]
+          x, y = extract[t1,atr], extract[t2,atr]
           comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
           comp *= -1 if dir == :desc
           return comp unless comp == 0
@@ -71,7 +72,7 @@ module Alf
       # The union is simply defined by extension of self with other's
       # attributes and directions. Duplicates are automatically removed.
       #
-      # When a conflict arise (same attribute but not same direction),
+      # When a conflict arises (same attribute but not same direction),
       # the block is yield with the attribute name, then `self`'s and `other`'s
       # directions as arguments. The block is expected to return the direction
       # to use to the attribute. A default block is provided that always favors
@@ -82,7 +83,7 @@ module Alf
       def merge(other, &bl)
         bl ||= lambda{|attr,d1,d2| d2 }
         other = Ordering.coerce(other)
-        attributes = to_attr_list + other.to_attr_list
+        attributes = self.selectors | other.selectors
         directions = attributes.to_a.map{|a|
           left, right = self[a], other[a]
           direction = if left.nil? or right.nil?
@@ -108,12 +109,20 @@ module Alf
         })
       end
 
+      # Returns the list of selectors
+      #
+      # @return [Array[Selector]] the list of selectors
+      def selectors
+        reused_instance.map(&:first)
+      end
+
       # Converts to an attribute list.
       #
       # @return [AttrList] a list of attribute names that participate to the
       #         ordering
       def to_attr_list
-        AttrList.new(reused_instance.map(&:first))
+        warn("Ordering.to_attr_list is deprecated (#{caller.first})")
+        AttrList.new(selectors.map{|x| Array(x).first })
       end
 
       # Returns a lispy expression.
@@ -133,6 +142,7 @@ module Alf
       alias :to_s :to_ruby_literal
       alias :inspect :to_ruby_literal
 
+      EMPTY = Ordering.new([])
     end # class Ordering
   end # module Types
 end # module Alf

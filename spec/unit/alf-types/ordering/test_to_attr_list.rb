@@ -2,12 +2,24 @@ require 'spec_helper'
 module Alf
   describe Ordering, "to_attr_list" do
 
-    it 'should work on an empty ordering' do
-      Ordering.new([]).to_attr_list.should eq(AttrList.new [])
+    subject{ ordering.to_attr_list }
+
+    context 'on an empty ordering' do
+      let(:ordering){ Ordering::EMPTY }
+
+      it{ should eq(AttrList::EMPTY) }
     end
 
-    it 'should return the correct list of attribute names' do
-      Ordering.new([[:a, :asc], [:b, :desc]]).to_attr_list.should eq(AttrList[:a, :b])
+    context 'on an ordering with single names' do
+      let(:ordering){ Ordering.new([[:a, :asc], [:b, :desc]]) }
+
+      it{ should eq(AttrList[:a, :b]) }
+    end
+
+    context 'on an ordering with hirarchical names' do
+      let(:ordering){ Ordering.new([[[:x, :a], :asc], [:b, :desc]]) }
+
+      it{ should eq(AttrList[:x, :b]) }
     end
 
   end # Ordering
