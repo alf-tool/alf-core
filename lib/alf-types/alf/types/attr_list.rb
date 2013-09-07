@@ -83,7 +83,7 @@ module Alf
       # @return [Integer] 0 if same set of attribute names, -1 if self is a subset of
       # other, 1 if a superset, nil otherwise.
       def <=>(other)
-        return nil unless other.is_a?(AttrList)
+        return nil unless other.respond_to?(:to_set)
         s1, s2 = to_set, other.to_set
         if s1==s2              then 0
         elsif s1.subset?(s2)   then -1
@@ -105,12 +105,14 @@ module Alf
         c = set_compare(other)
         c and (c >= (proper ? 1 : 0))
       end
+      alias :supersetOf? :superset?
 
       # Returns true if self is a (proper) subset of `other`
       def subset?(other, proper = false)
         c = set_compare(other)
         c and (c <= (proper ? -1 : 0))
       end
+      alias :subsetOf? :subset?
 
       # Returns true if self intersects another attribute list
       def intersect?(other)

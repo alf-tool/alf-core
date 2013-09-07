@@ -3,8 +3,8 @@ module Alf
     module WithOrdering
 
       def full_ordering
-        attrlist = ordering.to_attr_list
-        if keys.any?{|key| key.subset?(attrlist) }
+        selectors = ordering.selectors
+        if keys.any?{|key| key.subsetOf?(selectors) }
           ordering
         elsif key = keys.first
           ordering.merge(key.to_ordering){|a,d1,d2| d1 }

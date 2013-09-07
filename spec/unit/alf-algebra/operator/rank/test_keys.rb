@@ -4,7 +4,7 @@ module Alf
     describe Rank, 'keys' do
 
       let(:operand){
-        an_operand.with_heading(:id => Integer, :name => String).with_keys([:id])
+        an_operand.with_heading(id: Integer, name: String, hobby: Tuple[name: String]).with_keys([:id])
       }
 
       subject{ op.keys }
@@ -22,7 +22,7 @@ module Alf
 
       context 'when the order relation does contain a key' do
         let(:op){ 
-          a_lispy.rank(operand, [[:name, :asc], [:id, :desc]], :rank)
+          a_lispy.rank(operand, [[[:hobby, :name], :asc], [:id, :desc]], :rank)
         }
         let(:expected){
           Keys[ [:id], [:rank] ]

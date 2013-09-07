@@ -121,7 +121,6 @@ module Alf
       # @return [AttrList] a list of attribute names that participate to the
       #         ordering
       def to_attr_list
-        warn("Ordering.to_attr_list is deprecated (#{caller.first})")
         AttrList.new(selectors.map{|x| Array(x).first })
       end
 

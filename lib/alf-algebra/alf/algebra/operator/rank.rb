@@ -14,8 +14,8 @@ module Alf
 
       def keys
         @keys ||= begin
-          keys, order_attrs = operand.keys, order.to_attr_list
-          if keys.any?{|k| order_attrs.superset?(k)}
+          keys, selectors = operand.keys, order.selectors
+          if keys.any?{|k| k.subsetOf?(selectors) }
             keys + [ AttrList[as] ]
           else
             keys

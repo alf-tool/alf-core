@@ -114,7 +114,7 @@ module Alf
 
       def on_rank(expr)
         op = Sort.new(apply(expr.operand), expr.order, expr)
-        op = Rank::Cesure.new(op, expr.order, expr.as, expr)
+        op = Rank::Cesure.new(op, expr.order.to_attr_list, expr.as, expr)
         op
       end
 
