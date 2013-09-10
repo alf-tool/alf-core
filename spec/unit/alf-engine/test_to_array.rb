@@ -3,40 +3,57 @@ module Alf
   module Engine
     describe ToArray do
 
-      it 'should work on an empty operand' do
-        ToArray.new([], Ordering[[]]).to_a.should eq([])
+      subject{ ToArray.new(rel, ordering).to_a }
+
+      context 'when both empty' do
+        let(:rel)     { [] }
+        let(:ordering){ Ordering::EMPTY }
+
+        it{ should eq(rel) }
       end
 
-      it 'should work with ascending' do
-        rel = [
-          {:name => "Jones"},
-          {:name => "Smith"}
-        ]
-        ToArray.new(rel, Ordering[[:name, :asc]]).to_a.should eq(rel)
+      context 'when ascending on single attribute' do
+        let(:rel){[
+          {name: "Jones"},
+          {name: "Smith"}
+        ]}
+        let(:ordering){ Ordering.new([[:name, :asc]]) }
+
+        it{ should eq(rel) }
       end
 
-      it 'should work with descending' do
-        rel = [
-          {:name => "Jones"},
-          {:name => "Smith"}
-        ]
-        exp = [
-          {:name => "Smith"},
-          {:name => "Jones"}
-        ]
-        ToArray.new(rel, Ordering[[:name, :desc]]).to_a.should eq(exp)
+      context 'when descending on single attribute' do
+        let(:rel){[
+          {name: "Jones"},
+          {name: "Smith"}
+        ]}
+        let(:ordering){ Ordering.new([[:name, :desc]]) }
+
+        it{ should eq(rel.reverse) }
       end
 
-      it 'should work with RVAs' do
-        rel = [
-          {:name => "Smith", :rva => Relation(:id => [8, 7]) },
-          {:name => "Jones", :rva => Relation(:id => [1, 3]) }
-        ]
-        exp = [
-          {:name => "Jones", :rva => [Tuple(:id => 1), Tuple(:id => 3)] },
-          {:name => "Smith", :rva => [Tuple(:id => 7), Tuple(:id => 8)] }
-        ]
-        ToArray.new(rel, Ordering[[:name, :id]]).to_a.should eq(exp)
+      context 'when TVAs are involved' do
+        let(:rel){[
+          {name: "Jones", hobby: { score: 10 }},
+          {name: "Jones", hobby: { score: 12 }}
+        ]}
+        let(:ordering){ Ordering.new([[:name, :asc], [[:hobby, :score], :desc]]) }
+
+        it{ should eq(rel.reverse) }
+      end
+
+      context 'when RVAs are involved' do
+        let(:rel){[
+          {name: "Smith", rva: Relation(id: [8, 7]) },
+          {name: "Jones", rva: Relation(id: [1, 3]) }
+        ]}
+        let(:expected){[
+          {name: "Jones", rva: [Tuple(id: 1), Tuple(id: 3)] },
+          {name: "Smith", rva: [Tuple(id: 7), Tuple(id: 8)] }
+        ]}
+        let(:ordering){ Ordering.new([[:name, :asc], [[:rva, :id], :asc]]) }
+
+        it{ should eq(expected) }
       end
 
     end # describe ToArray

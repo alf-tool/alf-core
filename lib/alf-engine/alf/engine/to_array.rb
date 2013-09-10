@@ -44,15 +44,15 @@ module Alf
       def recurse(tuple)
         case tuple
         when Hash
-          Hash[tuple.map{|k,v| [k, reorder(v)] }]
+          Hash[tuple.map{|k,v| [ k, reorder(k,v) ] }]
         when Tuple
-          tuple.remap{|k,v| reorder(v) }
+          tuple.remap{|k,v| reorder(k, v) }
         end
       end
 
-      def reorder(value)
+      def reorder(key, value)
         if RelationLike===value
-          ToArray.new(value, ordering).to_a
+          ToArray.new(value, ordering.dive(key)).to_a
         else
           value
         end
