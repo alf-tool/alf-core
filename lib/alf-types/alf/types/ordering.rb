@@ -109,6 +109,16 @@ module Alf
         })
       end
 
+      # Dives into a relation/tuple valued attribute `attr`.
+      #
+      # @return [Ordering] the sub-ordering to use for `attr`
+      def dive(attr)
+        attrs = reused_instance
+              .select{|x| x.first.is_a?(Array) && (x.first.first == attr) }
+              .map{|x| [x.first.last, x.last] }
+        Ordering.new(attrs)
+      end
+
       # Returns the list of selectors
       #
       # @return [Array[Selector]] the list of selectors
