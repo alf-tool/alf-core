@@ -15,7 +15,7 @@ describe Alf::Relation, 'to_array' do
     ]
   }
 
-  let(:ordering){ [:city, :name] }
+  let(:ordering){ [:city, [:incity, :name]] }
 
   it 'recursively converts to sorted arrays' do
     rel.to_array(:sort => ordering).should eq(expected)
