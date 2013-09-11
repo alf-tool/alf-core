@@ -14,7 +14,7 @@ module Alf
 
       it 'delegates to the connection' do
         subject
-        @seen.should eq([:suppliers, rv])
+        @seen.should eq([:suppliers, expr])
       end
 
     end

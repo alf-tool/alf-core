@@ -1,31 +1,29 @@
 module Alf
   module Relvar
+    extend Forwardable
     include Algebra::Operand
     include Lang::ObjectOriented
 
-    def connection
-      expr.connection
+    def initialize(expr = nil)
+      @expr = expr
     end
+    attr_reader :expr
 
-    def connection=(conn)
-      expr.connection = conn
-    end
-
-    def connection!
-      expr.connection!
-    end
-
-    def bind(connection)
-      expr.bind(connection)
-    end
-
-    def bound?
-      expr.bound?
-    end
+    def_delegators :expr, :connection,
+                          :connection=,
+                          :connection!,
+                          :bind,
+                          :bound?,
+                          :heading,
+                          :keys,
+                          :to_cog,
+                          :to_lispy
 
     def type
       @type ||= Relation[heading]
     end
+
+    ###
 
     def each(&bl)
       to_cog.each(&bl)
@@ -83,10 +81,6 @@ module Alf
       self
     end
 
-    def to_lispy
-      raise NotImplementedError
-    end
-
     def to_relation
       type.new(to_cog.to_set)
     rescue NotSupportedError
@@ -94,6 +88,10 @@ module Alf
     end
 
   private
+
+    def _self_operand
+      expr
+    end
 
     def _operator_output(expr)
       Relvar::Virtual.new(expr)

@@ -20,8 +20,8 @@ module Alf
         subject.expr.should be_a(Algebra::Project)
       end
 
-      it 'should have the base relvar as projection operand' do
-        subject.expr.operand.should be(rv)
+      it 'should have the initial expression as projection operand' do
+        subject.expr.operand.should be(expr)
       end
 
     end

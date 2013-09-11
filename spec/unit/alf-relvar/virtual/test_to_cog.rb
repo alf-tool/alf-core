@@ -8,11 +8,11 @@ module Alf
 
       subject{ rv.to_cog }
 
-      def cog(expr)
-        [:seen, expr]
+      def cog(*args)
+        @seen = args
       end
 
-      it{ should eq([:seen, expr]) }
+      it{ should eq([:aname, expr]) }
 
     end
   end

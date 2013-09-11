@@ -4,10 +4,10 @@ module Alf
       include Relvar
 
       def initialize(expr, heading)
-        @expr = expr
+        super(expr)
         @heading = Heading.coerce(heading)
       end
-      attr_reader :expr, :heading
+      attr_reader :heading
 
       def insert(tuples)
         @inserted_tuples = tuples.to_a

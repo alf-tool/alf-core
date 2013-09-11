@@ -3,23 +3,6 @@ module Alf
     class Virtual
       include Relvar
 
-      def initialize(expr)
-        @expr = expr
-      end
-      attr_reader :expr
-
-      ### Static analysis & inference
-
-      def heading
-        expr.heading
-      end
-
-      def keys
-        expr.keys
-      end
-
-      ### Update
-
       # Inserts some tuples inside this relation variable.
       def insert(tuples)
         tuples = [ tuples ] if TupleLike===tuples
@@ -38,22 +21,8 @@ module Alf
 
       ### to_xxx
 
-      def to_cog
-        connection!.cog(expr)
-      end
-
-      def to_lispy
-        expr.to_lispy
-      end
-
       def to_s
         "Relvar::Virtual(#{expr})"
-      end
-
-    private
-
-      def _self_operand
-        expr
       end
 
     end # class Base
