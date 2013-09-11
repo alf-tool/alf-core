@@ -20,6 +20,10 @@ module Alf
         mod.extend(ClassMethods)
       end
 
+      def compile
+        Engine::Compilable.new(nil).compile(self)
+      end
+
     end # module Nullary
   end # module Algebra
 end # module Alf

@@ -7,6 +7,12 @@ module Alf
         @parser = Lang::Lispy.new
       end
 
+      ### main
+
+      def compile(expr)
+        send(expr.class.rubycase_name, expr).to_cog
+      end
+
       ### non relational
 
       def autonum(expr, traceability = expr)

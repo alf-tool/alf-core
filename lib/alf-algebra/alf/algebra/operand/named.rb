@@ -18,6 +18,10 @@ module Alf
           connection!.heading(name)
         end
 
+        def compile
+          connection!.cog(name)
+        end
+
         def to_relvar
           Relvar::Base.new(self)
         end

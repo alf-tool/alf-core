@@ -46,6 +46,10 @@ module Alf
         @common_attributes ||= common_heading.to_attr_list
       end
 
+      def compile
+        left.compile.to_compilable.compile(self)
+      end
+
     end # module Binary
   end # module Algebra
 end # module Alf

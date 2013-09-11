@@ -19,6 +19,11 @@ module Alf
           super
         end
 
+        def compile
+          return subject.compile if subject.respond_to?(:compile)
+          Alf::Engine::Leaf.new(subject)
+        end
+
         def to_cog
           return subject.to_cog if subject.respond_to?(:to_cog)
           Alf::Engine::Leaf.new(subject)

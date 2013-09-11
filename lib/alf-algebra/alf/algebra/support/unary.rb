@@ -29,6 +29,10 @@ module Alf
         with_operands(operand)
       end
 
+      def compile
+        operand.compile.to_compilable.compile(self)
+      end
+
     end # module Unary
   end # module Algebra
 end # module Alf
