@@ -1,12 +1,12 @@
 require 'spec_helper'
-Dir["#{File.expand_path('../../../examples', __FILE__)}/**/*.alf"].each do |file|
+Path.backfind("examples").glob("**/*.alf").each do |file|
 
   describe "Alf example: #{file}" do
     let(:example_path){ file }
-    let(:example_dir) { File.dirname(file) }
-    let(:example_db) { Alf.connect(example_dir) }
+    let(:example_dir) { file.parent }
+    let(:example_db)  { Alf.connect(example_dir) }
 
-    let(:source){ File.read(example_path) }
+    let(:source){ example_path.read }
 
     context 'when compiled' do
       subject{

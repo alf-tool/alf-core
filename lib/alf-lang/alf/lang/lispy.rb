@@ -21,7 +21,7 @@ module Alf
 
       def evaluate(expr = nil, path=nil, line=nil, &bl)
         return instance_exec(&bl) if bl
-        ::Kernel.eval expr, __eval_binding, *[path, line].compact
+        ::Kernel.eval expr, __eval_binding, *[path, line].compact.map(&:to_s)
       end
 
       def parse(expr = nil, path = nil, line = nil, &block)

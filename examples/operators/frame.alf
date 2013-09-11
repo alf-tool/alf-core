@@ -1,0 +1,2 @@
+#!/usr/bin/env alf
+(frame suppliers, [[:sid, :asc]], 1, 2)
