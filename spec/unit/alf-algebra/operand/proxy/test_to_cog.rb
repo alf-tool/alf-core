@@ -2,10 +2,10 @@ require 'spec_helper'
 module Alf
   module Algebra
     module Operand
-      describe Proxy, "compile" do
+      describe Proxy, "to_cog" do
 
         subject{
-          proxy.compile
+          proxy.to_cog
         }
 
         let(:proxy){
@@ -14,11 +14,11 @@ module Alf
 
         context 'when delegable' do
           let(:proxied){
-            Struct.new(:compile).new(:compiled)
+            Struct.new(:to_cog).new(:compiled)
           }
 
           before do
-            proxied.should respond_to(:compile)
+            proxied.should respond_to(:to_cog)
           end
 
           it{ should eq(:compiled) }

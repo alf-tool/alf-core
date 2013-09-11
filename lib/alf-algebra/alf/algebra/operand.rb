@@ -32,16 +32,10 @@ module Alf
         raise NotSupportedError, "Key inference unsupported on `#{self}`"
       end
 
-      ### optimization and compilation
-
-      def compile
-        raise NotSupportedError, "Compilation unsupported on `#{self}`"
-      end
-
       ### to_xxx
 
       def to_cog
-        to_relvar.to_cog
+        raise NotSupportedError, "Compilation unsupported on `#{self}`"
       end
 
       def to_relation

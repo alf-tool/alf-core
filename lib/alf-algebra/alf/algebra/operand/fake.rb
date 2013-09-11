@@ -36,10 +36,6 @@ module Alf
           @attributes[:keys] || Keys::EMPTY
         end
 
-        def compile
-          Engine::Leaf.new([], self)
-        end
-
         def to_relvar
           Relvar::Fake.new(self, heading)
         end

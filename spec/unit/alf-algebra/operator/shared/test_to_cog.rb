@@ -1,11 +1,11 @@
 require 'spec_helper'
 module Alf
   module Algebra
-    describe Operator, "compile" do
+    describe Operator, "to_cog" do
 
-      subject{ op.compile }
+      subject{ op.to_cog }
 
-      context 'on zero-ary' do
+      context 'on nullary' do
         let(:op){
           a_lispy.generator(100)
         }

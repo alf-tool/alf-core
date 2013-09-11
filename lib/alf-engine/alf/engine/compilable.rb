@@ -7,9 +7,13 @@ module Alf
         @parser = Lang::Lispy.new
       end
 
+      def expr
+        @cog.expr
+      end
+
       ### main
 
-      def compile(expr)
+      def to_cog(expr)
         send(expr.class.rubycase_name, expr)
       end
 
@@ -72,23 +76,23 @@ module Alf
       end
 
       def intersect(expr, traceability = expr)
-        Join::Hash.new(@cog, expr.right.compile, traceability)
+        Join::Hash.new(@cog, expr.right.to_cog, traceability)
       end
 
       def join(expr, traceability = expr)
-        Join::Hash.new(@cog, expr.right.compile, traceability)
+        Join::Hash.new(@cog, expr.right.to_cog, traceability)
       end
 
       def matching(expr, traceability = expr)
-        Semi::Hash.new(@cog, expr.right.compile, true, traceability)
+        Semi::Hash.new(@cog, expr.right.to_cog, true, traceability)
       end
 
       def minus(expr, traceability = expr)
-        Semi::Hash.new(@cog, expr.right.compile, false, traceability)
+        Semi::Hash.new(@cog, expr.right.to_cog, false, traceability)
       end
 
       def not_matching(expr, traceability = expr)
-        Semi::Hash.new(@cog, expr.right.compile, false, traceability)
+        Semi::Hash.new(@cog, expr.right.to_cog, false, traceability)
       end
 
       def page(expr, traceability = expr)
@@ -151,7 +155,7 @@ module Alf
       end
 
       def union(expr, traceability = expr)
-        compiled = Concat.new([@cog, expr.right.compile], traceability)
+        compiled = Concat.new([@cog, expr.right.to_cog], traceability)
         compiled = Compact.new(compiled, expr)
         #
         compiled
@@ -163,18 +167,6 @@ module Alf
 
       def wrap(expr, traceability = expr)
         Wrap.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
-      end
-
-      ### traceability
-
-      def expr
-        to_cog.expr
-      end
-
-      ### to_xxx
-
-      def to_cog
-        @cog
       end
 
     end # class Compilable

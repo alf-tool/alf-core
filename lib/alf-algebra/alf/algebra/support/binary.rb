@@ -46,8 +46,8 @@ module Alf
         @common_attributes ||= common_heading.to_attr_list
       end
 
-      def compile
-        left.compile.to_compilable.compile(self)
+      def to_cog
+        left.to_cog.to_compilable.to_cog(self)
       end
 
     end # module Binary

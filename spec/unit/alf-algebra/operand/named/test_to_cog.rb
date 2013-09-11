@@ -2,13 +2,14 @@ require 'spec_helper'
 module Alf
   module Algebra
     module Operand
-      describe Named, "compile" do
+      describe Named, "to_cog" do
 
         let(:operand){ Named.new(:foo).bind(self) }
 
-        subject{ operand.compile }
+        subject{ operand.to_cog }
 
-        def cog(name)
+        def cog(name, expr)
+          expr.should be(operand)
           [:a_cog, name]
         end
 

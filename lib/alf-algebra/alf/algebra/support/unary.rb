@@ -29,8 +29,8 @@ module Alf
         with_operands(operand)
       end
 
-      def compile
-        operand.compile.to_compilable.compile(self)
+      def to_cog
+        operand.to_cog.to_compilable.to_cog(self)
       end
 
     end # module Unary

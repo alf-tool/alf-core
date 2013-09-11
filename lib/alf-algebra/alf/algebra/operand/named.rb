@@ -18,8 +18,8 @@ module Alf
           connection!.heading(name)
         end
 
-        def compile
-          connection!.cog(name)
+        def to_cog
+          connection!.cog(name, self)
         end
 
         def to_relvar
