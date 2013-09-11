@@ -4,6 +4,7 @@ module Alf
     # Provides hash-based grouping.
     #
     class Group::Hash
+      include Group
       include Cog
 
       # @return [Enumerable] The operand

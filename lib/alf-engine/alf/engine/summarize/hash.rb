@@ -1,6 +1,7 @@
 module Alf
   module Engine
     class Summarize::Hash
+      include Engine::Summarize
       include Cog
 
       # @return [Enumerable] The operand
