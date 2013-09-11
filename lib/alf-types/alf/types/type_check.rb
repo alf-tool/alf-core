@@ -9,6 +9,7 @@ module Alf
         @attr_list = heading.to_attr_list
         @strict    = strict
       end
+      attr_reader :heading
 
       def strict?
         @strict
