@@ -67,6 +67,15 @@ module Alf
         SetAttr.new(@cog, expr.ext, traceability)
       end
 
+      def frame(expr, traceability = expr)
+        ordering = expr.full_ordering rescue expr.ordering
+        #
+        compiled = sort(@parser.sort(expr, ordering))
+        compiled = Take.new(compiled, expr.offset, expr.limit, traceability)
+        #
+        compiled
+      end
+
       def group(expr, traceability = expr)
         Group::Hash.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
       end
