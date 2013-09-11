@@ -1,7 +1,10 @@
 module Alf
   module Algebra
     class Quota
-      include Operator, Relational, Unary, Experimental
+      include Operator
+      include Relational
+      include Unary
+      include Experimental
 
       signature do |s|
         s.argument :by,            AttrList, []

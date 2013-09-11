@@ -1,7 +1,10 @@
 module Alf
   module Algebra
     class InferHeading
-      include Operator, Relational, Unary, Experimental
+      include Operator
+      include Relational
+      include Unary
+      include Experimental
 
       signature do |s|
       end

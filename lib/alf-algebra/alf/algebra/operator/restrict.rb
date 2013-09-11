@@ -1,7 +1,9 @@
 module Alf
   module Algebra
     class Restrict
-      include Operator, Relational, Unary
+      include Operator
+      include Relational
+      include Unary
 
       signature do |s|
         s.argument :predicate, Predicate, Predicate.tautology

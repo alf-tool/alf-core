@@ -1,7 +1,9 @@
 module Alf
   module Algebra
     class Group
-      include Operator, Relational, Unary
+      include Operator
+      include Relational
+      include Unary
 
       signature do |s|
         s.argument :attributes, AttrList, []

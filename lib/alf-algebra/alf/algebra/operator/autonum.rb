@@ -1,7 +1,9 @@
 module Alf
   module Algebra
     class Autonum
-      include Operator, NonRelational, Unary
+      include Operator
+      include NonRelational
+      include Unary
 
       signature do |s|
         s.argument :as, AttrName, :autonum

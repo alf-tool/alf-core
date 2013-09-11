@@ -1,7 +1,9 @@
 module Alf
   module Algebra
     class Clip
-      include Operator, NonRelational, Unary
+      include Operator
+      include NonRelational
+      include Unary
 
       signature do |s|
         s.argument :attributes, AttrList, []

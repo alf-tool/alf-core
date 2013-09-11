@@ -1,7 +1,10 @@
 module Alf
   module Algebra
     class Frame
-      include Operator, Relational, Unary, WithOrdering
+      include Operator
+      include Relational
+      include Unary
+      include WithOrdering
 
       signature do |s|
         s.argument :ordering, Ordering, []

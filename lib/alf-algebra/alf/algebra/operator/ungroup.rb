@@ -1,7 +1,9 @@
 module Alf
   module Algebra
     class Ungroup
-      include Operator, Relational, Unary
+      include Operator
+      include Relational
+      include Unary
 
       signature do |s|
         s.argument :attribute, AttrName, :grouped

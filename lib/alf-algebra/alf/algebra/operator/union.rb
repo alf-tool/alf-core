@@ -1,7 +1,9 @@
 module Alf
   module Algebra
     class Union
-      include Operator, Relational, Binary
+      include Operator
+      include Relational
+      include Binary
 
       signature do |s|
       end

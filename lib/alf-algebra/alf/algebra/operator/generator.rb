@@ -1,7 +1,9 @@
 module Alf
   module Algebra
     class Generator
-      include Operator, NonRelational, Nullary
+      include Operator
+      include NonRelational
+      include Nullary
 
       signature do |s|
         s.argument :size, Size, 10
