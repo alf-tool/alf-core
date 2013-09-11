@@ -28,7 +28,7 @@ module Alf
             end
           end
 
-          context "with #{method} with knowing victim" do
+          context "with #{method} with unknowing victim" do
             let(:method){
               method
             }
