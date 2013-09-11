@@ -15,10 +15,6 @@ module Alf
         sort(an_operand, ordering)
       }
 
-      before do
-        subject.should be_a(Compilable)
-      end
-
       context 'when the cog is not sorted at all' do
         let(:cog){ leaf }
 

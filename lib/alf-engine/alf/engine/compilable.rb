@@ -10,170 +10,159 @@ module Alf
       ### main
 
       def compile(expr)
-        send(expr.class.rubycase_name, expr).to_cog
+        send(expr.class.rubycase_name, expr)
       end
 
       ### non relational
 
       def autonum(expr, traceability = expr)
-        compiled = Autonum.new(@cog, expr.as, traceability)
-        compiled.to_compilable
+        Autonum.new(@cog, expr.as, traceability)
       end
 
       def clip(expr, traceability = expr)
-        compiled = Clip.new(@cog, expr.attributes, expr.allbut, traceability)
-        compiled.to_compilable
+        Clip.new(@cog, expr.attributes, expr.allbut, traceability)
       end
 
       def coerce(expr, traceability = expr)
-        compiled = Coerce.new(@cog, expr.coercions, traceability)
-        compiled.to_compilable
+        Coerce.new(@cog, expr.coercions, traceability)
       end
 
       def compact(expr, traceability = expr)
-        compiled = Compact.new(@cog, traceability)
-        compiled.to_compilable
+        Compact.new(@cog, traceability)
       end
 
       def defaults(expr, traceability = expr)
-        defaults = expr.defaults
-        compiled = Defaults.new(@cog, defaults, traceability)
+        compiled = Defaults.new(@cog, expr.defaults, traceability)
         if expr.strict
-          clipping = @parser.clip(expr, defaults.to_attr_list)
-          compiled = compiled.to_compilable.clip(clipping, traceability).to_cog
+          clipping = @parser.clip(expr, expr.defaults.to_attr_list)
+          compiled = compiled.to_compilable.clip(clipping, traceability)
         end
-        compiled.to_compilable
+        compiled
       end
 
       def generator(expr, traceability = expr)
-        compiled = Generator.new(expr.as, 1, 1, expr.size, traceability)
-        compiled.to_compilable
+        Generator.new(expr.as, 1, 1, expr.size, traceability)
       end
 
       def sort(expr, traceability = expr)
-        ordering = expr.ordering
         compiled = @cog
-        unless @cog.orderedby?(ordering)
-          compiled = Sort.new(compiled, ordering, traceability)
+        unless @cog.orderedby?(expr.ordering)
+          compiled = Sort.new(compiled, expr.ordering, traceability)
         end
-        compiled.to_compilable
+        compiled
       end
 
       def type_safe(expr, traceability = expr)
-        checker  = TypeCheck.new(expr.heading, expr.strict)
-        compiled = TypeSafe.new(@cog, checker, traceability)
-        compiled.to_compilable
+        checker = TypeCheck.new(expr.heading, expr.strict)
+        TypeSafe.new(@cog, checker, traceability)
       end
 
       ### relational
 
       def extend(expr, traceability = expr)
-        compiled = SetAttr.new(@cog, expr.ext, traceability)
-        compiled.to_compilable
+        SetAttr.new(@cog, expr.ext, traceability)
       end
 
       def group(expr, traceability = expr)
-        compiled = Group::Hash.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
-        compiled.to_compilable
+        Group::Hash.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
       end
 
       def infer_heading(expr, traceability = expr)
-        compiled = InferHeading.new(@cog, traceability)
-        compiled.to_compilable
+        InferHeading.new(@cog, traceability)
       end
 
       def intersect(expr, traceability = expr)
-        compiled = Join::Hash.new(@cog, expr.right.compile, traceability)
-        compiled.to_compilable
+        Join::Hash.new(@cog, expr.right.compile, traceability)
       end
 
       def join(expr, traceability = expr)
-        compiled = Join::Hash.new(@cog, expr.right.compile, traceability)
-        compiled.to_compilable
+        Join::Hash.new(@cog, expr.right.compile, traceability)
       end
 
       def matching(expr, traceability = expr)
-        compiled = Semi::Hash.new(@cog, expr.right.compile, true, traceability)
-        compiled.to_compilable
+        Semi::Hash.new(@cog, expr.right.compile, true, traceability)
       end
 
       def minus(expr, traceability = expr)
-        compiled = Semi::Hash.new(@cog, expr.right.compile, false, traceability)
-        compiled.to_compilable
+        Semi::Hash.new(@cog, expr.right.compile, false, traceability)
       end
 
       def not_matching(expr, traceability = expr)
-        compiled = Semi::Hash.new(@cog, expr.right.compile, false, traceability)
-        compiled.to_compilable
+        Semi::Hash.new(@cog, expr.right.compile, false, traceability)
       end
 
       def page(expr, traceability = expr)
         index, size = expr.page_index, expr.page_size
+        #
         ordering = expr.full_ordering rescue expr.ordering
         ordering = ordering.reverse if index < 0
-        compiled = sort(@parser.sort(expr, ordering)).to_cog
+        #
+        compiled = sort(@parser.sort(expr, ordering))
         compiled = Take.new(compiled, (index.abs - 1) * size, size, traceability)
-        compiled.to_compilable
+        #
+        compiled
       end
 
       def project(expr, traceability = expr)
-        compiled   = Clip.new(@cog, expr.attributes, expr.allbut, traceability)
         preserving = expr.key_preserving? rescue false
-        compiled   = Compact.new(compiled, traceability) unless preserving
-        compiled.to_compilable
+        #
+        compiled = Clip.new(@cog, expr.attributes, expr.allbut, traceability)
+        compiled = Compact.new(compiled, traceability) unless preserving
+        #
+        compiled
       end
 
       def quota(expr, traceability = expr)
-        compiled = sort(@parser.sort(expr, expr.by.to_ordering + expr.order)).to_cog
+        compiled = sort(@parser.sort(expr, expr.by.to_ordering + expr.order))
         compiled = Quota::Cesure.new(compiled, expr.by, expr.summarization, traceability)
-        compiled.to_compilable
+        #
+        compiled
       end
 
       def rank(expr, traceability = expr)
-        compiled = sort(@parser.sort(expr, expr.order)).to_cog
+        compiled = sort(@parser.sort(expr, expr.order))
         compiled = Rank::Cesure.new(compiled, expr.order, expr.as, traceability)
-        compiled.to_compilable
+        #
+        compiled
       end
 
       def rename(expr, traceability = expr)
-        compiled = Rename.new(@cog, expr.renaming, traceability)
-        compiled.to_compilable
+        Rename.new(@cog, expr.renaming, traceability)
       end
 
       def restrict(expr, traceability = expr)
-        compiled = Filter.new(@cog, expr.predicate, traceability)
-        compiled.to_compilable
+        Filter.new(@cog, expr.predicate, traceability)
       end
 
       def summarize(expr, traceability = expr)
-        if expr.allbut
-          compiled = Summarize::Hash.new(@cog, expr.by, expr.summarization, expr.allbut, traceability)
-        else
-          compiled = sort(@parser.sort(expr, expr.by.to_ordering)).to_cog
-          compiled = Summarize::Cesure.new(compiled, expr.by, expr.summarization, expr.allbut, traceability)
+        clazz = expr.allbut ? Summarize::Hash : Summarize::Cesure
+        #
+        compiled = @cog
+        unless expr.allbut
+          compiled = compiled.to_compilable.sort(@parser.sort(expr, expr.by.to_ordering))
         end
-        compiled.to_compilable
+        compiled = clazz.new(compiled, expr.by, expr.summarization, expr.allbut, traceability)
+        #
+        compiled
       end
 
       def ungroup(expr, traceability = expr)
-        compiled = Ungroup.new(@cog, expr.attribute, traceability)
-        compiled.to_compilable
+        Ungroup.new(@cog, expr.attribute, traceability)
       end
 
       def union(expr, traceability = expr)
         compiled = Concat.new([@cog, expr.right.compile], traceability)
         compiled = Compact.new(compiled, expr)
-        compiled.to_compilable
+        #
+        compiled
       end
 
       def unwrap(expr, traceability = expr)
-        compiled = Unwrap.new(@cog, expr.attribute, traceability)
-        compiled.to_compilable
+        Unwrap.new(@cog, expr.attribute, traceability)
       end
 
       def wrap(expr, traceability = expr)
-        compiled = Wrap.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
-        compiled.to_compilable
+        Wrap.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
       end
 
       ### traceability
