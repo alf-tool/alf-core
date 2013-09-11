@@ -88,6 +88,11 @@ module Alf
       heading.to_attr_list
     end
 
+    # Returns self
+    def to_relation
+      self
+    end
+
     # Returns a ReadOnly relvar
     def to_relvar
       Relvar::ReadOnly.new(self)
@@ -132,11 +137,11 @@ module Alf
   private
 
     def _operator_output(op)
-      Engine::Compiler.new.call(op).to_relation
+      op.to_relation
     end
 
     def _self_operand
-      self
+      Algebra::Operand::Proxy.new(self)
     end
 
   end # class Relation

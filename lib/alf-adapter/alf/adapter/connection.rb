@@ -75,13 +75,6 @@ module Alf
         raise NotSupportedError, "Unable to update in `#{self}`"
       end
 
-      ### compilation chain
-
-      # Returns a compiler instance
-      def compiler
-        Engine::Compiler.new
-      end
-
     end # class Connection
   end # class Adapter
 end # module Alf

@@ -39,7 +39,7 @@ module Alf
       end
 
       def to_relation
-        to_relvar.to_relation
+        to_cog.to_relation
       end
 
       def to_dot(buffer = "")

@@ -5,7 +5,7 @@ module Alf
 
         def self.def_aggregator_method(name, clazz)
           define_method(name) do |*args, &block|
-            clazz.new(*args, &block).aggregate(_self_operand)
+            clazz.new(*args, &block).aggregate(_self_operand.to_cog)
           end
         end
 

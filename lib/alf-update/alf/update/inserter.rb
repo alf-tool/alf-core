@@ -16,7 +16,7 @@ module Alf
       ### leaf Operand, recursion end :-)
 
       def on_leaf_operand(expr, inserted)
-        inserted = Engine::Compiler.new.call(inserted)
+        inserted = inserted.to_cog if inserted.respond_to?(:to_cog)
         expr.to_relvar.insert(inserted)
       end
 

@@ -134,7 +134,7 @@ module Alf
       end
 
       def compilation_chain
-        [ optimizer, adapter_connection.compiler ]
+        [ optimizer, lambda{|expr| expr.to_cog } ]
       end
 
       def parser
