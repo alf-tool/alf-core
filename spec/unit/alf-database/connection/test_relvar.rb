@@ -11,7 +11,7 @@ module Alf
         it{ should be_a(Relvar::Base) }
 
         it 'has the expected name' do
-          subject.name.should eq(:suppliers)
+          subject.expr.name.should eq(:suppliers)
         end
 
         it 'is bound to the serving connection' do

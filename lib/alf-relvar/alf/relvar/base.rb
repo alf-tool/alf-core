@@ -3,29 +3,23 @@ module Alf
     class Base
       include Relvar
 
-      ### Relvar contract
-
-      def name
-        expr.name
-      end
-
       ### Update
 
       def lock(mode = :exclusive, &bl)
-        connection!.lock(name, mode, &bl)
+        connection!.lock(expr.name, mode, &bl)
       end
 
       def insert(tuples)
         tuples = [ tuples ] if TupleLike===tuples
-        connection!.insert(name, tuples)
+        connection!.insert(expr.name, tuples)
       end
 
       def delete(predicate = Predicate.tautology)
-        connection!.delete(name, predicate)
+        connection!.delete(expr.name, predicate)
       end
 
       def update(updating, predicate = Predicate.tautology)
-        connection!.update(name, updating, predicate)
+        connection!.update(expr.name, updating, predicate)
       end
 
       def to_s
