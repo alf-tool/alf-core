@@ -15,7 +15,7 @@ module Alf
       def to_method_name(expr, prefix = "on_")
         case expr
         when Algebra::Operator
-          name = Support.ruby_case(Support.class_name(expr.class))
+          name = expr.class.rubycase_name
           meth = :"#{prefix}#{name}"
           meth = :"#{prefix}missing" unless respond_to?(meth)
           meth
