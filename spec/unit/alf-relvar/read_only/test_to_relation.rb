@@ -1,15 +1,15 @@
 require 'spec_helper'
 module Alf
   module Relvar
-    describe ReadOnly, "type" do
+    describe ReadOnly, "to_relation" do
 
       let(:value){ Relation(id: 1)     }
       let(:rv)   { ReadOnly.new(value) }
 
-      subject{ rv.type }
+      subject{ rv.to_relation }
 
       it 'is as expected' do
-        subject.should eq(Relation[id: Fixnum])
+        subject.should be(value)
       end
 
     end

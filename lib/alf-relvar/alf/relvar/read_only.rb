@@ -1,25 +1,15 @@
 module Alf
   module Relvar
     class ReadOnly
+      extend Forwardable
       include Relvar
 
       def initialize(value)
-        @value = value
-      end
-      attr_reader :value
-
-      ### Static analysis & inference
-
-      def type
-        value.class
+        super(Algebra::Operand::Proxy.new(value))
       end
 
-      def heading
-        value.heading
-      end
-
-      def keys
-        value.keys
+      def to_relation
+        expr.subject
       end
 
       ### Update
@@ -42,24 +32,8 @@ module Alf
 
       ### to_xxx
 
-      alias_method :to_relation, :value
-
-      def to_cog
-        value.to_cog
-      end
-
-      def to_lispy
-        value.to_lispy
-      end
-
       def to_s
         "Relvar::ReadOnly(#{value.to_s})"
-      end
-
-    private
-
-      def _self_operand
-        value
       end
 
     end # class Base
