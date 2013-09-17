@@ -21,160 +21,160 @@ module Alf
 
       ### non relational
 
-      def autonum(expr, traceability = expr)
-        Autonum.new(self.cog, expr.as, traceability)
+      def autonum(expr)
+        Autonum.new(self.cog, expr.as, expr)
       end
 
-      def clip(expr, traceability = expr)
-        Clip.new(self.cog, expr.attributes, expr.allbut, traceability)
+      def clip(expr, t = expr)
+        Clip.new(self.cog, expr.attributes, expr.allbut, t)
       end
 
-      def coerce(expr, traceability = expr)
-        Coerce.new(self.cog, expr.coercions, traceability)
+      def coerce(expr)
+        Coerce.new(self.cog, expr.coercions, expr)
       end
 
-      def compact(expr, traceability = expr)
-        Compact.new(self.cog, traceability)
+      def compact(expr)
+        Compact.new(self.cog, expr)
       end
 
-      def defaults(expr, traceability = expr)
-        compiled = Defaults.new(self.cog, expr.defaults, traceability)
+      def defaults(expr)
+        compiled = Defaults.new(self.cog, expr.defaults, expr)
         if expr.strict
           clipping = parser.clip(expr, expr.defaults.to_attr_list)
-          compiled = compiled.to_compilable.clip(clipping, traceability)
+          compiled = compiled.to_compilable.clip(clipping, expr)
         end
         compiled
       end
 
-      def generator(expr, traceability = expr)
-        Generator.new(expr.as, 1, 1, expr.size, traceability)
+      def generator(expr)
+        Generator.new(expr.as, 1, 1, expr.size, expr)
       end
 
-      def sort(expr, traceability = expr)
+      def sort(expr)
         return self.cog if self.cog.orderedby?(expr.ordering)
-        Sort.new(self.cog, expr.ordering, traceability)
+        Sort.new(self.cog, expr.ordering, expr)
       end
 
-      def type_safe(expr, traceability = expr)
+      def type_safe(expr)
         checker = TypeCheck.new(expr.heading, expr.strict)
-        TypeSafe.new(self.cog, checker, traceability)
+        TypeSafe.new(self.cog, checker, expr)
       end
 
       ### relational
 
-      def extend(expr, traceability = expr)
-        SetAttr.new(self.cog, expr.ext, traceability)
+      def extend(expr)
+        SetAttr.new(self.cog, expr.ext, expr)
       end
 
-      def frame(expr, traceability = expr)
+      def frame(expr)
         ordering = expr.full_ordering rescue expr.ordering
         #
         compiled = sort(parser.sort(expr, ordering))
-        compiled = Take.new(compiled, expr.offset, expr.limit, traceability)
+        compiled = Take.new(compiled, expr.offset, expr.limit, expr)
         #
         compiled
       end
 
-      def group(expr, traceability = expr)
-        Group::Hash.new(self.cog, expr.attributes, expr.as, expr.allbut, traceability)
+      def group(expr)
+        Group::Hash.new(self.cog, expr.attributes, expr.as, expr.allbut, expr)
       end
 
-      def infer_heading(expr, traceability = expr)
-        InferHeading.new(self.cog, traceability)
+      def infer_heading(expr)
+        InferHeading.new(self.cog, expr)
       end
 
-      def intersect(expr, traceability = expr)
-        Join::Hash.new(self.cog, expr.right.to_cog, traceability)
+      def intersect(expr)
+        Join::Hash.new(self.cog, expr.right.to_cog, expr)
       end
 
-      def join(expr, traceability = expr)
-        Join::Hash.new(self.cog, expr.right.to_cog, traceability)
+      def join(expr)
+        Join::Hash.new(self.cog, expr.right.to_cog, expr)
       end
 
-      def matching(expr, traceability = expr)
-        Semi::Hash.new(self.cog, expr.right.to_cog, true, traceability)
+      def matching(expr)
+        Semi::Hash.new(self.cog, expr.right.to_cog, true, expr)
       end
 
-      def minus(expr, traceability = expr)
-        Semi::Hash.new(self.cog, expr.right.to_cog, false, traceability)
+      def minus(expr)
+        Semi::Hash.new(self.cog, expr.right.to_cog, false, expr)
       end
 
-      def not_matching(expr, traceability = expr)
-        Semi::Hash.new(self.cog, expr.right.to_cog, false, traceability)
+      def not_matching(expr)
+        Semi::Hash.new(self.cog, expr.right.to_cog, false, expr)
       end
 
-      def page(expr, traceability = expr)
+      def page(expr)
         index, size = expr.page_index, expr.page_size
         #
         ordering = expr.full_ordering rescue expr.ordering
         ordering = ordering.reverse if index < 0
         #
         compiled = sort(parser.sort(expr, ordering))
-        compiled = Take.new(compiled, (index.abs - 1) * size, size, traceability)
+        compiled = Take.new(compiled, (index.abs - 1) * size, size, expr)
         #
         compiled
       end
 
-      def project(expr, traceability = expr)
+      def project(expr)
         preserving = expr.key_preserving? rescue false
         #
-        compiled = Clip.new(self.cog, expr.attributes, expr.allbut, traceability)
-        compiled = Compact.new(compiled, traceability) unless preserving
+        compiled = Clip.new(self.cog, expr.attributes, expr.allbut, expr)
+        compiled = Compact.new(compiled, expr) unless preserving
         #
         compiled
       end
 
-      def quota(expr, traceability = expr)
+      def quota(expr)
         compiled = sort(parser.sort(expr, expr.by.to_ordering + expr.order))
-        compiled = Quota::Cesure.new(compiled, expr.by, expr.summarization, traceability)
+        compiled = Quota::Cesure.new(compiled, expr.by, expr.summarization, expr)
         #
         compiled
       end
 
-      def rank(expr, traceability = expr)
+      def rank(expr)
         compiled = sort(parser.sort(expr, expr.order))
-        compiled = Rank::Cesure.new(compiled, expr.order, expr.as, traceability)
+        compiled = Rank::Cesure.new(compiled, expr.order, expr.as, expr)
         #
         compiled
       end
 
-      def rename(expr, traceability = expr)
-        Rename.new(self.cog, expr.renaming, traceability)
+      def rename(expr)
+        Rename.new(self.cog, expr.renaming, expr)
       end
 
-      def restrict(expr, traceability = expr)
-        Filter.new(self.cog, expr.predicate, traceability)
+      def restrict(expr)
+        Filter.new(self.cog, expr.predicate, expr)
       end
 
-      def summarize(expr, traceability = expr)
+      def summarize(expr)
         clazz = expr.allbut ? Summarize::Hash : Summarize::Cesure
         #
         compiled = self.cog
         unless expr.allbut
           compiled = compiled.to_compilable.sort(parser.sort(expr, expr.by.to_ordering))
         end
-        compiled = clazz.new(compiled, expr.by, expr.summarization, expr.allbut, traceability)
+        compiled = clazz.new(compiled, expr.by, expr.summarization, expr.allbut, expr)
         #
         compiled
       end
 
-      def ungroup(expr, traceability = expr)
-        Ungroup.new(self.cog, expr.attribute, traceability)
+      def ungroup(expr)
+        Ungroup.new(self.cog, expr.attribute, expr)
       end
 
-      def union(expr, traceability = expr)
-        compiled = Concat.new([self.cog, expr.right.to_cog], traceability)
+      def union(expr)
+        compiled = Concat.new([self.cog, expr.right.to_cog], expr)
         compiled = Compact.new(compiled, expr)
         #
         compiled
       end
 
-      def unwrap(expr, traceability = expr)
-        Unwrap.new(self.cog, expr.attribute, traceability)
+      def unwrap(expr)
+        Unwrap.new(self.cog, expr.attribute, expr)
       end
 
-      def wrap(expr, traceability = expr)
-        Wrap.new(self.cog, expr.attributes, expr.as, expr.allbut, traceability)
+      def wrap(expr)
+        Wrap.new(self.cog, expr.attributes, expr.as, expr.allbut, expr)
       end
 
     end # class Compilable
