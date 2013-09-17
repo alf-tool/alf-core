@@ -6,9 +6,11 @@ module Alf
         @cog = cog
         @parser = Lang::Lispy.new
       end
+      attr_reader :cog
+      attr_reader :parser
 
       def expr
-        @cog.expr
+        cog.expr
       end
 
       ### main
@@ -20,25 +22,25 @@ module Alf
       ### non relational
 
       def autonum(expr, traceability = expr)
-        Autonum.new(@cog, expr.as, traceability)
+        Autonum.new(self.cog, expr.as, traceability)
       end
 
       def clip(expr, traceability = expr)
-        Clip.new(@cog, expr.attributes, expr.allbut, traceability)
+        Clip.new(self.cog, expr.attributes, expr.allbut, traceability)
       end
 
       def coerce(expr, traceability = expr)
-        Coerce.new(@cog, expr.coercions, traceability)
+        Coerce.new(self.cog, expr.coercions, traceability)
       end
 
       def compact(expr, traceability = expr)
-        Compact.new(@cog, traceability)
+        Compact.new(self.cog, traceability)
       end
 
       def defaults(expr, traceability = expr)
-        compiled = Defaults.new(@cog, expr.defaults, traceability)
+        compiled = Defaults.new(self.cog, expr.defaults, traceability)
         if expr.strict
-          clipping = @parser.clip(expr, expr.defaults.to_attr_list)
+          clipping = parser.clip(expr, expr.defaults.to_attr_list)
           compiled = compiled.to_compilable.clip(clipping, traceability)
         end
         compiled
@@ -49,8 +51,8 @@ module Alf
       end
 
       def sort(expr, traceability = expr)
-        compiled = @cog
-        unless @cog.orderedby?(expr.ordering)
+        compiled = self.cog
+        unless self.cog.orderedby?(expr.ordering)
           compiled = Sort.new(compiled, expr.ordering, traceability)
         end
         compiled
@@ -58,50 +60,50 @@ module Alf
 
       def type_safe(expr, traceability = expr)
         checker = TypeCheck.new(expr.heading, expr.strict)
-        TypeSafe.new(@cog, checker, traceability)
+        TypeSafe.new(self.cog, checker, traceability)
       end
 
       ### relational
 
       def extend(expr, traceability = expr)
-        SetAttr.new(@cog, expr.ext, traceability)
+        SetAttr.new(self.cog, expr.ext, traceability)
       end
 
       def frame(expr, traceability = expr)
         ordering = expr.full_ordering rescue expr.ordering
         #
-        compiled = sort(@parser.sort(expr, ordering))
+        compiled = sort(parser.sort(expr, ordering))
         compiled = Take.new(compiled, expr.offset, expr.limit, traceability)
         #
         compiled
       end
 
       def group(expr, traceability = expr)
-        Group::Hash.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
+        Group::Hash.new(self.cog, expr.attributes, expr.as, expr.allbut, traceability)
       end
 
       def infer_heading(expr, traceability = expr)
-        InferHeading.new(@cog, traceability)
+        InferHeading.new(self.cog, traceability)
       end
 
       def intersect(expr, traceability = expr)
-        Join::Hash.new(@cog, expr.right.to_cog, traceability)
+        Join::Hash.new(self.cog, expr.right.to_cog, traceability)
       end
 
       def join(expr, traceability = expr)
-        Join::Hash.new(@cog, expr.right.to_cog, traceability)
+        Join::Hash.new(self.cog, expr.right.to_cog, traceability)
       end
 
       def matching(expr, traceability = expr)
-        Semi::Hash.new(@cog, expr.right.to_cog, true, traceability)
+        Semi::Hash.new(self.cog, expr.right.to_cog, true, traceability)
       end
 
       def minus(expr, traceability = expr)
-        Semi::Hash.new(@cog, expr.right.to_cog, false, traceability)
+        Semi::Hash.new(self.cog, expr.right.to_cog, false, traceability)
       end
 
       def not_matching(expr, traceability = expr)
-        Semi::Hash.new(@cog, expr.right.to_cog, false, traceability)
+        Semi::Hash.new(self.cog, expr.right.to_cog, false, traceability)
       end
 
       def page(expr, traceability = expr)
@@ -110,7 +112,7 @@ module Alf
         ordering = expr.full_ordering rescue expr.ordering
         ordering = ordering.reverse if index < 0
         #
-        compiled = sort(@parser.sort(expr, ordering))
+        compiled = sort(parser.sort(expr, ordering))
         compiled = Take.new(compiled, (index.abs - 1) * size, size, traceability)
         #
         compiled
@@ -119,40 +121,40 @@ module Alf
       def project(expr, traceability = expr)
         preserving = expr.key_preserving? rescue false
         #
-        compiled = Clip.new(@cog, expr.attributes, expr.allbut, traceability)
+        compiled = Clip.new(self.cog, expr.attributes, expr.allbut, traceability)
         compiled = Compact.new(compiled, traceability) unless preserving
         #
         compiled
       end
 
       def quota(expr, traceability = expr)
-        compiled = sort(@parser.sort(expr, expr.by.to_ordering + expr.order))
+        compiled = sort(parser.sort(expr, expr.by.to_ordering + expr.order))
         compiled = Quota::Cesure.new(compiled, expr.by, expr.summarization, traceability)
         #
         compiled
       end
 
       def rank(expr, traceability = expr)
-        compiled = sort(@parser.sort(expr, expr.order))
+        compiled = sort(parser.sort(expr, expr.order))
         compiled = Rank::Cesure.new(compiled, expr.order, expr.as, traceability)
         #
         compiled
       end
 
       def rename(expr, traceability = expr)
-        Rename.new(@cog, expr.renaming, traceability)
+        Rename.new(self.cog, expr.renaming, traceability)
       end
 
       def restrict(expr, traceability = expr)
-        Filter.new(@cog, expr.predicate, traceability)
+        Filter.new(self.cog, expr.predicate, traceability)
       end
 
       def summarize(expr, traceability = expr)
         clazz = expr.allbut ? Summarize::Hash : Summarize::Cesure
         #
-        compiled = @cog
+        compiled = self.cog
         unless expr.allbut
-          compiled = compiled.to_compilable.sort(@parser.sort(expr, expr.by.to_ordering))
+          compiled = compiled.to_compilable.sort(parser.sort(expr, expr.by.to_ordering))
         end
         compiled = clazz.new(compiled, expr.by, expr.summarization, expr.allbut, traceability)
         #
@@ -160,22 +162,22 @@ module Alf
       end
 
       def ungroup(expr, traceability = expr)
-        Ungroup.new(@cog, expr.attribute, traceability)
+        Ungroup.new(self.cog, expr.attribute, traceability)
       end
 
       def union(expr, traceability = expr)
-        compiled = Concat.new([@cog, expr.right.to_cog], traceability)
+        compiled = Concat.new([self.cog, expr.right.to_cog], traceability)
         compiled = Compact.new(compiled, expr)
         #
         compiled
       end
 
       def unwrap(expr, traceability = expr)
-        Unwrap.new(@cog, expr.attribute, traceability)
+        Unwrap.new(self.cog, expr.attribute, traceability)
       end
 
       def wrap(expr, traceability = expr)
-        Wrap.new(@cog, expr.attributes, expr.as, expr.allbut, traceability)
+        Wrap.new(self.cog, expr.attributes, expr.as, expr.allbut, traceability)
       end
 
     end # class Compilable
