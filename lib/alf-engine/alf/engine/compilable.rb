@@ -51,11 +51,8 @@ module Alf
       end
 
       def sort(expr, traceability = expr)
-        compiled = self.cog
-        unless self.cog.orderedby?(expr.ordering)
-          compiled = Sort.new(compiled, expr.ordering, traceability)
-        end
-        compiled
+        return self.cog if self.cog.orderedby?(expr.ordering)
+        Sort.new(self.cog, expr.ordering, traceability)
       end
 
       def type_safe(expr, traceability = expr)
