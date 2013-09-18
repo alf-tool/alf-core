@@ -4,12 +4,19 @@ module Alf
       include Enumerable
 
       attr_reader :expr
+      attr_reader :compiler
 
       def initialize(expr)
         if expr && !expr.is_a?(Algebra::Operand)
           raise "Operand expected as first cog argument"
         end
         @expr = expr
+      end
+
+      def compiled_by(compiler)
+        raise "Compiler already set" if @compiler
+        @compiler = compiler
+        self
       end
 
       def heading

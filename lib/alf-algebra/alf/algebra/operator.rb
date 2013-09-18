@@ -60,6 +60,10 @@ module Alf
 
     ### -> to_xxx
 
+      def to_cog
+        Alf::Compiler::Default.new.call(self)
+      end
+
       def to_lispy
         cmdname  = self.class.rubycase_name
         oper, args, opts = signature.collect_on(self)

@@ -29,10 +29,6 @@ module Alf
         with_operands(operand)
       end
 
-      def to_cog
-        operand.to_cog.to_compilable.to_cog(self)
-      end
-
     end # module Unary
   end # module Algebra
 end # module Alf

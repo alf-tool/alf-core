@@ -14,6 +14,7 @@ require_relative 'alf-support/alf/support'
 require_relative 'alf-types/alf/types'
 require_relative 'alf-aggregator/alf/aggregator'
 require_relative 'alf-algebra/alf/algebra'
+require_relative 'alf-compiler/alf/compiler'
 require_relative "alf-engine/alf/engine"
 require_relative 'alf-io/alf/io'
 require_relative 'alf-lang/alf/lang'

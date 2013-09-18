@@ -60,6 +60,10 @@ module Alf
         TypeSafe.new(self.cog, checker, expr)
       end
 
+      def infer_heading(expr)
+        InferHeading.new(self.cog, expr)
+      end
+
       ### relational
 
       def extend(expr)
@@ -77,10 +81,6 @@ module Alf
 
       def group(expr)
         Group::Hash.new(self.cog, expr.attributes, expr.as, expr.allbut, expr)
-      end
-
-      def infer_heading(expr)
-        InferHeading.new(self.cog, expr)
       end
 
       def intersect(expr)

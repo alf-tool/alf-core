@@ -20,10 +20,6 @@ module Alf
         mod.extend(ClassMethods)
       end
 
-      def to_cog
-        Engine::Compilable.new(nil).to_cog(self)
-      end
-
     end # module Nullary
   end # module Algebra
 end # module Alf

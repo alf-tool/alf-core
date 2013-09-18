@@ -4,9 +4,10 @@ module Alf
       class Fake
         include Operand
 
-        def initialize(connection = nil)
+        def initialize(connection = nil, cog = nil)
           @connection = connection
           @attributes = {}
+          @cog = cog
         end
 
         def with_heading(h)
@@ -41,7 +42,7 @@ module Alf
         end
 
         def to_cog
-          Engine::Leaf.new([], self)
+          @cog || Engine::Leaf.new([], self)
         end
 
         def to_lispy

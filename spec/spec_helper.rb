@@ -55,8 +55,8 @@ module Helpers
     Alf::Algebra.named_operand(:suppliers, examples_database)
   end
 
-  def an_operand
-    Alf::Algebra::Operand::Fake.new
+  def an_operand(cog = nil)
+    Alf::Algebra::Operand::Fake.new(nil, cog)
   end
 
   def viewpoint(&bl)
