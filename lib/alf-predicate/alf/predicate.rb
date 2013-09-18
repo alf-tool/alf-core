@@ -74,7 +74,12 @@ module Alf
     end
 
     def evaluate(scope)
-      scope.instance_exec(&to_proc)
+      proc = to_proc
+      if proc.arity == 1
+        proc.call(scope)
+      else
+        scope.instance_exec(&to_proc)
+      end
     end
 
     def and_split(attr_list)

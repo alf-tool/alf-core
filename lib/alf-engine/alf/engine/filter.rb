@@ -32,9 +32,16 @@ module Alf
 
       # (see Cog#each)
       def _each
-        scope = tuple_scope
-        operand.each do |tuple|
-          yield(tuple) if @predicate.evaluate(scope.__set_tuple(tuple))
+        proc = predicate.to_proc
+        if proc.arity == 1
+          operand.each do |tuple|
+            yield(tuple) if proc.call(tuple)
+          end
+        else
+          scope = tuple_scope
+          operand.each do |tuple|
+            yield(tuple) if @predicate.evaluate(scope.__set_tuple(tuple))
+          end
         end
       end
 

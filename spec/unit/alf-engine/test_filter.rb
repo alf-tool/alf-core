@@ -3,19 +3,51 @@ module Alf
   module Engine
     describe Filter do
 
-      it 'should work on an empty operand' do
-        Filter.new(Leaf.new([]), Predicate.coerce(true)).to_a.should eq([])
+      subject{ Filter.new(operand, predicate).to_a }
+
+      context 'on an empty operand' do
+        let(:operand)  { Leaf.new([])           }
+        let(:predicate){ Predicate.coerce(true) }
+
+        it{ should eq([]) }
       end
 
-      it 'should filter according to the predicate' do
-        rel = Leaf.new [
-          {:name => "Jones"},
-          {:name => "Smith"}
-        ]
-        exp = [
-          {:name => "Jones"},
-        ]
-        Filter.new(rel, Predicate.parse("name =~ /^J/")).to_a.should eq(exp)
+      context 'on a non-empty operand' do
+        let(:operand){
+          Leaf.new [
+            {:name => "Jones"},
+            {:name => "Smith"}
+          ]
+        }
+        let(:predicate){
+          Predicate.parse("name =~ /^J/")
+        }
+        let(:expected){
+          [
+            {:name => "Jones"},
+          ]
+        }
+
+        it{ should eq(expected) }
+      end
+
+      context 'on a predicate of arity 1' do
+        let(:operand){
+          Leaf.new [
+            {:name => "Jones"},
+            {:name => "Smith"}
+          ]
+        }
+        let(:predicate){
+          Predicate.native(->(t){ t[:name] =~ /^J/})
+        }
+        let(:expected){
+          [
+            {:name => "Jones"},
+          ]
+        }
+
+        it{ should eq(expected) }
       end
 
     end
