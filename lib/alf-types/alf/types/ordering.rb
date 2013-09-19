@@ -6,20 +6,27 @@ module Alf
     class Ordering
       extend Domain::Reuse.new(Array)
 
+      def self.new(array)
+        super(array.map{|(x,y)| [Selector.coerce(x), y.to_sym] })
+      end
+
+      ArrayOfArray = ->(x){
+        x.is_a?(Array) && x.all?{|y| y.is_a?(Array)}
+      }
+      ArrayWithDirections = ->(x){
+        x.each_with_index.all?{|elm,i| (i%2==0) || elm.to_s =~ /^asc|desc$/ }
+      }
+
       coercions do |c|
         c.delegate :to_ordering
+        c.coercion(ArrayOfArray){|arg,_|
+          Ordering.new(arg)
+        }
+        c.coercion(ArrayWithDirections){|arg,_|
+          Ordering.new(arg.each_slice(2).to_a)
+        }
         c.coercion(Array){|arg,_|
-          if arg.all?{|a| a.is_a?(Array)}
-            Ordering.new(arg)
-          else
-            symbolized = arg.map{|s| Selector.coerce(s) }
-            sliced = symbolized.each_slice(2)
-            if sliced.all?{|a,o| [:asc,:desc].include?(o) }
-              Ordering.new sliced.to_a
-            else
-              Ordering.new symbolized.map{|a| [a, :asc]}
-            end
-          end
+          Ordering.new(arg.map{|x| [x, :asc] })
         }
       end
 
@@ -43,6 +50,7 @@ module Alf
       # @param [Symbol] an attribute name.
       # @return [Symbol] the associated direction or nil
       def [](attribute)
+        attribute = Selector.coerce(attribute)
         pair = reused_instance.find{|p| p.first == attribute }
         pair && pair.last
       end
@@ -114,8 +122,8 @@ module Alf
       # @return [Ordering] the sub-ordering to use for `attr`
       def dive(attr)
         attrs = reused_instance
-              .select{|x| x.first.is_a?(Array) && (x.first.first == attr) }
-              .map{|x| [x.first.last, x.last] }
+              .map   {|(s,d)| [s.dive(attr), d] }
+              .reject{|(s,d)| s.nil? }
         Ordering.new(attrs)
       end
 
@@ -138,7 +146,7 @@ module Alf
       #
       # @return [String] a lispy expression for this ordering
       def to_lispy
-        Support.to_ruby_literal(to_a)
+        Support.to_ruby_literal(to_a.map{|(x,d)| [x.outcoerce, d]})
       end
 
       # Returns a ruby literal for this ordering.

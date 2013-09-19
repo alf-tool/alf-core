@@ -47,7 +47,7 @@ module Alf
 
       subject{
         Ordering.coerce(left).merge(right){|attr,d1,d2|
-          attr.should eq(:a)
+          attr.should eq(Selector[:a])
           d1.should eq(:asc)
           d2.should eq(:desc)
           d1

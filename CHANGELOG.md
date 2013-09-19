@@ -2,6 +2,9 @@
 
 ## Types
 
+* Introduced Selector as an ordered list of attribute names. An Ordering is now
+  a list of [Selector, (:asc|:desc)] pairs.
+* Accordingly, orderings may now include selections on tuple-valued attributes.
 * Added Ordering#[] that returns the direction associated to an attribute.
 * Added Ordering#reverse that reverse the direction of every attribute.
 * Fixed Ordering#+ to avoid duplicate attributes. This operator is now called
