@@ -37,6 +37,10 @@ module Alf
 
     end
 
+    def native?
+      Native===expr
+    end
+
     def tautology?
       expr.tautology?
     end

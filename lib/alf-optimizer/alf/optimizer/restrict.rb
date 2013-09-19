@@ -97,7 +97,11 @@ module Alf
       end
 
       def on_restrict(expr, predicate)
-        apply(expr.operand, predicate & expr.predicate)
+        if predicate.native? or expr.predicate.native?
+          restrict(expr, predicate)
+        else
+          apply(expr.operand, predicate & expr.predicate)
+        end
       end
 
       def on_summarize(expr, predicate)
