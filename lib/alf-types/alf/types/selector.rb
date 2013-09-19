@@ -19,6 +19,11 @@ module Alf
         reused_instance
       end
 
+      def select(tuple)
+        return tuple[reused_instance] unless reused_instance.is_a?(Array)
+        reused_instance.inject(tuple){|t,a| t && t[a] }
+      end
+
       def dive(attr)
         components = to_a
         return nil unless (components.first == attr) && components.size > 1

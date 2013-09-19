@@ -33,6 +33,7 @@ module Alf
     require_relative 'types/size'
     require_relative 'types/attr_name'
     require_relative 'types/selector'
+    require_relative 'types/selection'
     require_relative 'types/attr_list'
     require_relative 'types/heading'
     require_relative 'types/ordering'
