@@ -1,13 +1,8 @@
 module Alf
   class Compiler
-    include Algebra::Visitor
 
     def parser
       @parser ||= Lang::Lispy.new
-    end
-
-    def chain(other)
-      Chain.new(self, other)
     end
 
     def &(other)
@@ -23,15 +18,48 @@ module Alf
       _call(expr, compiled)
     end
 
-    # Post-DFS
-    def _call(expr, compiled, &fallback)
+    # Post-DFS, Pre-responsibility
+    def _call(expr, compiled)
       compiler = responsible_compiler(compiled)
-      compiler.send(to_method_name(expr), expr, *compiled, &fallback)
+      compiler.__call(expr, compiled){
+        __call(expr, compiled)
+      }
     end
 
+    # Post-responsibility
+    def __call(expr, compiled, &fallback)
+      send(to_method_name(expr), expr, *compiled, &fallback)
+    end
+
+    def on_missing(expr, *compiled, &fallback)
+      raise "Unable to compile `#{expr}` (#{self})" unless fallback
+      fallback.call
+    end
+
+  private
+
     def responsible_compiler(compiled)
-      return self if compiled.empty?
-      compiled.map(&:compiler).reduce(&:&)
+      candidates = compiled.map(&:compiler).compact.uniq
+      case candidates.size
+      when 0 then self
+      when 1 then candidates.first
+      else
+        Default===self ? self: Default.new
+      end
+    end
+
+    def to_method_name(expr)
+      case expr
+      when Algebra::Operator
+        name = expr.class.rubycase_name
+        meth = :"on_#{name}"
+        meth = :"on_missing" unless respond_to?(meth)
+        meth
+      when Algebra::Operand
+        :on_leaf_operand
+      else
+        :on_unsupported
+      end
     end
 
   end # class Compiler

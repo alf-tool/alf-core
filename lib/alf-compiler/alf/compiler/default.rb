@@ -5,7 +5,7 @@ module Alf
       ###
 
       def on_leaf_operand(expr)
-        expr.to_cog.compiled_by(self)
+        expr.to_cog
       end
 
       ### non relational

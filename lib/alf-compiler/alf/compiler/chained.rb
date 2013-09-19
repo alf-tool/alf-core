@@ -7,9 +7,9 @@ module Alf
         @tail = tail
       end
 
-      def _call(expr, compiled)
-        @head._call(expr, compiled){
-          @tail._call(expr, compiled)
+      def __call(expr, compiled, &fallback)
+        @head.__call(expr, compiled){
+          @tail.__call(expr, compiled)
         }
       end
 

@@ -6,11 +6,12 @@ module Alf
       attr_reader :expr
       attr_reader :compiler
 
-      def initialize(expr)
+      def initialize(expr, compiler = nil)
         if expr && !expr.is_a?(Algebra::Operand)
           raise "Operand expected as first cog argument"
         end
         @expr = expr
+        @compiler = compiler
       end
 
       def compiled_by(compiler)
