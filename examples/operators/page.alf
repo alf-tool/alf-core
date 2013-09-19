@@ -1,4 +1,4 @@
 #!/usr/bin/env alf
 
 # second suppliers page, with page size of 50
-(page suppliers, [[city, :asc]], 2, page_size: 50)
+(page suppliers, [[:city, :asc]], 2, page_size: 50)
