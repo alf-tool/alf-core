@@ -117,6 +117,22 @@ module Alf
         })
       end
 
+      # Returns a total ordering given some key definitions.
+      #
+      # @return [Ordering]
+      def total(keys, &bl)
+        list = to_attr_list
+        if k = keys.to_a.find{|k| k.to_attr_list.subsetOf?(list) }
+          self
+        elsif k = keys.first
+          merge(k.to_ordering){|k,d1,d2| d1 }
+        elsif bl && (key = bl.call.to_attr_list)
+          merge(key.to_ordering){|k,d1,d2| d1 }
+        else
+          raise NotSupportedError, "Unable to find a total order (no key available)"
+        end
+      end
+
       # Dives into a relation/tuple valued attribute `attr`.
       #
       # @return [Ordering] the sub-ordering to use for `attr`

@@ -1,10 +1,10 @@
 require 'spec_helper'
 module Alf
   module Algebra
-    describe WithOrdering, 'full_ordering' do
+    describe WithOrdering, 'total_ordering' do
       include WithOrdering
 
-      subject{ full_ordering }
+      subject{ total_ordering }
 
       def keys
         operand.keys

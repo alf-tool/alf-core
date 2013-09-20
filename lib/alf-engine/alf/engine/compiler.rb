@@ -59,14 +59,14 @@ module Alf
 
       def on_frame(expr)
         offset, limit = expr.offset, expr.limit
-        ordering = unsupported(expr.ordering){ expr.full_ordering }
+        ordering = unsupported(expr.ordering){ expr.total_ordering }
         op = Sort.new(apply(expr.operand), ordering, expr)
         op = Take.new(op, offset, limit, expr)
       end
 
       def on_page(expr)
         index, size = expr.page_index, expr.page_size
-        ordering = unsupported(expr.ordering){ expr.full_ordering }
+        ordering = unsupported(expr.ordering){ expr.total_ordering }
         ordering = ordering.reverse if index < 0
         op = Sort.new(apply(expr.operand), ordering, expr)
         op = Take.new(op, (index.abs - 1) * size, size, expr)
