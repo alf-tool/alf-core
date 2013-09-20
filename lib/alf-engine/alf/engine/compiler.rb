@@ -76,6 +76,10 @@ module Alf
         Group::Hash.new(apply(expr.operand), expr.attributes, expr.as, expr.allbut, expr)
       end
 
+      def on_hierarchize(expr)
+        Hierarchize.new(apply(expr.operand), expr.id, expr.parent, expr.as)
+      end
+
       def on_infer_heading(expr)
         InferHeading.new(apply(expr.operand), expr)
       end

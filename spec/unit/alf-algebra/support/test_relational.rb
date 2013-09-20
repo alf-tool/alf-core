@@ -10,6 +10,7 @@ module Alf
           Extend,
           Frame,
           Group,
+          Hierarchize,
           InferHeading,
           Intersect,
           Join,

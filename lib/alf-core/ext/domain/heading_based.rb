@@ -51,9 +51,6 @@ module Domain
         define_method(:coerce){|arg|
           master_class.coercions.apply(arg, self)
         }
-        define_method(:empty){
-          new([].to_set)
-        }
         define_method(:to_heading){
           @heading ||= Alf::Heading.coerce(generating_type)
         }

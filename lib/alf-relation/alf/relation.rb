@@ -47,6 +47,10 @@ module Alf
       end
     end
 
+    def self.empty
+      @empty ||= new([].to_set)
+    end
+
     def check_internal_representation!
       error = lambda{|msg| raise TypeError, msg }
       error["Set expected"]        unless reused_instance.is_a?(Set)
