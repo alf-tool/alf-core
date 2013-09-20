@@ -11,6 +11,7 @@
 * Fixed Ordering#+ to avoid duplicate attributes. This operator is now called
   `merge` (with alias to `+`) and looks like Hash#merge, including an block to
   arbitrate conflicts.
+* Removed Keys#compact which was seriously confusing.
 
 ## Relation
 
@@ -25,6 +26,7 @@
 
 ## Algebra
 
+* Fixed Project#keys and Project#key_preserving? (same for Clip)
 * Added `page` operator (page-index, page-size) implemented through `sort+take`
   where `take` is a new engine cog.
 * Added `frame` operator (offset, limit àla SQL) implemented through `sort+take`

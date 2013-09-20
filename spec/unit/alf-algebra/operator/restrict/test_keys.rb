@@ -24,7 +24,7 @@ module Alf
           an_operand.with_heading(id: Fixnum, name: String).with_keys([:id, :name])
         }
         let(:op){
-          a_lispy.restrict(operand, Predicate.eq(:id, 12))
+          a_lispy.restrict(operand, id: 12)
         }
         let(:expected){
           Keys[ [:name] ]
@@ -38,7 +38,7 @@ module Alf
           an_operand.with_heading(id: Fixnum, name: String).with_keys([:id, :name])
         }
         let(:op){
-          a_lispy.restrict(operand, Predicate.eq(:id, 12) & Predicate.eq(:name, "Smith"))
+          a_lispy.restrict(operand, id: 12, name: "Smith")
         }
         let(:expected){
           Keys[ [] ]

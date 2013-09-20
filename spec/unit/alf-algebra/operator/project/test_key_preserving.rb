@@ -27,10 +27,13 @@ module Alf
       end
 
       context 'when the operand is a restriction on the key' do
+        ## [:sid]
         let(:operand){
           an_operand.with_heading(sid: Integer, name: String)
                     .with_keys([:sid])
         }
+        # restrict: []
+        # project: []
         let(:op){
           a_lispy.project(a_lispy.restrict(operand, sid: 1), [:sid])
         }

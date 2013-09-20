@@ -23,10 +23,6 @@ module Alf
         map{|k| renaming.rename_attr_list(k) }
       end
 
-      def compact
-        reject{|k| k.empty? }
-      end
-
       def to_ruby_literal
         "Alf::Keys[" << reused_instance.map{|k| Support.to_ruby_literal(k.to_a) }.join(',') << "]"
       end
