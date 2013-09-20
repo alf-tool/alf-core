@@ -6,13 +6,18 @@ module Domain
         raise "#{master_class}.new may not be called directly" if master_class==self
         super(*args)
       }
-      define_method(:type){|generating_type|
-        meths   = [
+      define_method(:type){|generating_type={},&bl|
+        clazz = Class.new(master_class)
+        if bl
+          generating_type = generating_type.to_heading.to_hash unless generating_type.is_a?(Hash)
+          generating_type = generating_type.merge(bl.call(clazz))
+        end
+        meths = [
           DomainMethods.new(master_class, generating_type),
           AlgebraMethods.new(master_class, generating_type),
           Domain::Comparisons,
         ]
-        Class.new(master_class).extend(*meths).heading_based_factored
+        clazz.extend(*meths).heading_based_factored
       }
       alias_method :[], :type
       define_method(:heading_based_factored) do
@@ -27,6 +32,7 @@ module Domain
           gt
         }
         define_method(:<=>){|other|
+          return 0 if self == other
           return nil unless other.ancestors.include?(master_class)
           return -1 if other == master_class
           to_heading <=> other.to_heading
@@ -45,11 +51,20 @@ module Domain
         define_method(:coerce){|arg|
           master_class.coercions.apply(arg, self)
         }
+        define_method(:empty){
+          new([].to_set)
+        }
         define_method(:to_heading){
           @heading ||= Alf::Heading.coerce(generating_type)
         }
+        define_method(:recursive?){
+          h = to_heading
+          h.to_attr_list.any?{|a| h[a] == self}
+        }
         define_method(:to_ruby_literal){
-          "#{master_class.name}[#{Alf::Support.to_ruby_literal(to_heading.to_hash)}]"
+          recursive? ?
+            "#{master_class.name}[...]" :
+            "#{master_class.name}[#{Alf::Support.to_ruby_literal(to_heading.to_hash)}]"
         }
         alias_method :name, :to_ruby_literal
         alias_method :to_s, :to_ruby_literal

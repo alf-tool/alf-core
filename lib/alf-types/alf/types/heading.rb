@@ -136,7 +136,10 @@ module Alf
       #                  nil if not comparable.
       def <=>(other)
         return nil unless other.is_a?(Heading) && to_attr_list==other.to_attr_list
-        comparisons = attributes.keys.map{|k| self[k] <=> other[k] }.reject{|x| x == 0}.uniq
+        comparisons = attributes.keys
+                    .map{|k| self[k] <=> other[k] }
+                    .reject{|x| x == 0}
+                    .uniq
         case comparisons.size
         when 0 then 0
         when 1 then comparisons.first
