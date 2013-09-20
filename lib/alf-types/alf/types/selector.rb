@@ -15,6 +15,14 @@ module Alf
         }
       end
 
+      def simple?
+        reused_instance.is_a?(Symbol)
+      end
+
+      def composite?
+        !simple?
+      end
+
       def outcoerce
         reused_instance
       end
