@@ -19,6 +19,13 @@
   the connection and returns the resulting relation. TupleComputation delegates
   accordingly.
 
+## Support
+
+* TupleScope now delegates to_s, inspect and [] to the underlying tuple. This
+  should fix the freezing bug that occured when an error was raised during
+  TupleScope-driven evaluations.
+* Removed TupleScope#query and TupleScoe#tuple_extract
+
 ## Relation
 
 * Added Relation#to_hash for getting hashes from any attribute pair.

@@ -51,12 +51,16 @@ module Alf
           self
         end
 
-        def query
-          @parent.query(yield)
+        def [](what)
+          @tuple[what]
         end
 
-        def tuple_extract
-          @parent.tuple_extract(yield)
+        def to_s
+          @tuple.to_s
+        end
+
+        def inspect
+          @tuple.inspect
         end
 
       end # module OwnMethods

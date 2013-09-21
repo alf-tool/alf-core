@@ -7,6 +7,12 @@ module Alf
         let(:scope){ TupleScope.new }
 
         it_behaves_like "A scope"
+
+        it 'responds to [], to_s and inspect' do
+          scope.respond_to?(:[]).should be_true
+          scope.respond_to?(:to_s).should be_true
+          scope.respond_to?(:inspect).should be_true
+        end
       end
 
       context 'on a TupleScope that decorates a tuple' do
