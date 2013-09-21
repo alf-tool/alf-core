@@ -13,7 +13,8 @@
   arbitrate conflicts.
 * Removed Keys#compact which was seriously confusing.
 * TupleExpression now recognizes Procs of arity 1 and simply call them with the
-  tuple scope instead of `instance_exec`uting them on the scope.
+  tuple scope instead of `instance_exec`uting them on the scope. Predicate does
+  something similar when native predicates are used.
 * TupleExpression optionnaly accepts a connection argument. When the evaluated
   expression ends-up being a relational expression, the latter is evaluated on
   the connection and returns the resulting relation. TupleComputation delegates

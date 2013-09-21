@@ -5,19 +5,37 @@ module Alf
 
       subject{ predicate.evaluate(scope) }
 
-      context 'on a native predicate of arity 1' do
+      context 'on a native predicate of arity 1, used through tuple#[]' do
         let(:predicate){
           Predicate.native(->(t){ t[:name] =~ /foo/ })
         }
 
         context 'on a matching tuple' do
-          let(:scope){ {name: "foo"} }
+          let(:scope){ Support::TupleScope.new(:name => "foo") }
 
           it{ should be_true }
         end
 
         context 'on a non-matching tuple' do
-          let(:scope){ {name: "bar"} }
+          let(:scope){ Support::TupleScope.new(:name => "bar") }
+
+          it{ should be_false }
+        end
+      end
+
+      context 'on a native predicate of arity 1, used through tuple.xxx' do
+        let(:predicate){
+          Predicate.native(->(t){ t.name =~ /foo/ })
+        }
+
+        context 'on a matching tuple' do
+          let(:scope){ Support::TupleScope.new(:name => "foo") }
+
+          it{ should be_true }
+        end
+
+        context 'on a non-matching tuple' do
+          let(:scope){ Support::TupleScope.new(:name => "bar") }
 
           it{ should be_false }
         end
