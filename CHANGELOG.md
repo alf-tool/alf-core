@@ -12,6 +12,12 @@
   `merge` (with alias to `+`) and looks like Hash#merge, including an block to
   arbitrate conflicts.
 * Removed Keys#compact which was seriously confusing.
+* TupleExpression now recognizes Procs of arity 1 and simply call them with the
+  tuple scope instead of `instance_exec`uting them on the scope.
+* TupleExpression optionnaly accepts a connection argument. When the evaluated
+  expression ends-up being a relational expression, the latter is evaluated on
+  the connection and returns the resulting relation. TupleComputation delegates
+  accordingly.
 
 ## Relation
 
@@ -31,6 +37,10 @@
   where `take` is a new engine cog.
 * Added `frame` operator (offset, limit àla SQL) implemented through `sort+take`
   as well.
+* Extend now recognizes Procs of arity 1. Instead of relying on instance_exec,
+  underlying expressions are evaluated by passing a TupleScope to the proc.
+* Extend automatically evaluates relational expressions returned by procs,
+  bounding them to the current connection if needed.
 
 ## Engine & compilation
 

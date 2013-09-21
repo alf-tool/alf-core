@@ -33,6 +33,19 @@ module Alf
         SetAttr.new(rel, comp).to_a.should eq(exp)
       end
 
+      it 'should support lambda of arity 1' do
+        rel = Leaf.new [
+          {:name => "Jones"},
+          {:name => "Smith"}
+        ]
+        exp = [
+          {:name => "Jones", :up => "JONES"},
+          {:name => "Smith", :up => "SMITH"}
+        ]
+        comp = TupleComputation[:up => lambda{|t| t.name.upcase }]
+        SetAttr.new(rel, comp).to_a.should eq(exp)
+      end
+
     end
   end # module Engine
 end # module Alf

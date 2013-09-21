@@ -60,8 +60,18 @@ module Alf
       # @param [TupleScope] scope a tuple scope instance.
       # @return [Object] the result of evaluating the expression in the context
       #         of `scope`
-      def evaluate(scope = nil)
-        scope.instance_exec(&@expr_lambda)
+      def evaluate(scope = nil, connection = nil)
+        result = if @expr_lambda.arity == 1
+          @expr_lambda.call(scope)
+        else
+          scope.instance_exec(&@expr_lambda)
+        end
+        if looks_an_expression?(result)
+          result = result.bind(connection) unless result.bound?
+          result.to_relation
+        else
+          result
+        end
       end
 
       # Infers the resulting type.
@@ -125,6 +135,12 @@ module Alf
         else
           source
         end
+      end
+
+    private
+
+      def looks_an_expression?(y)
+        Algebra::Operand::Named === y || Algebra::Operator === y
       end
 
     end # class TupleExpression

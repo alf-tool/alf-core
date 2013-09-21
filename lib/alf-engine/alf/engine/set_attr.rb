@@ -38,8 +38,8 @@ module Alf
       def _each
         scope = tuple_scope
         operand.each do |tuple|
-          computed = @computation.evaluate(scope.__set_tuple(tuple))
-          yield tuple.merge(computed)
+          t, c = scope.__set_tuple(tuple), expr && expr.connection
+          yield tuple.merge(@computation.evaluate(t, c))
         end
       end
 
