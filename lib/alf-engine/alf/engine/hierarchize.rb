@@ -34,6 +34,7 @@ module Alf
       def _each(&block)
         by_id = Hash.new{|h,k| h[k] = {children => nil} }
         operand.each do |tuple|
+          tuple = tuple.to_hash
           infer_types(tuple) unless @relation_type
 
           # extract my key and my parent's key
