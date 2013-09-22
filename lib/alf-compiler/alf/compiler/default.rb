@@ -72,6 +72,10 @@ module Alf
         factor(Engine::Group::Hash, expr, compiled, expr.attributes, expr.as, expr.allbut)
       end
 
+      def on_hierarchize(expr, compiled)
+        factor(Engine::Hierarchize, expr, compiled, expr.id, expr.parent, expr.as)
+      end
+
       def on_intersect(expr, left, right)
         factor(Engine::Join::Hash, expr, left, right)
       end
