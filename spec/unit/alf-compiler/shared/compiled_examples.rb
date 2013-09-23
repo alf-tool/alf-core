@@ -1,6 +1,16 @@
+shared_examples_for 'a compiled' do
+
+  it { should be_a(Alf::Compiler::Cog) }
+
+  it 'should return self on to_cog' do
+    subject.to_cog.should be(subject)
+  end
+
+end
+
 shared_examples_for 'a traceable compiled' do
 
-  it_should_behave_like "a cog"
+  it_should_behave_like "a compiled"
 
   def has_tracking!(compiled)
     compiled.expr.should_not be_nil

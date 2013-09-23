@@ -64,5 +64,6 @@ module Alf
 
   end # class Compiler
 end # module Alf
+require_relative 'compiler/cog'
 require_relative 'compiler/chained'
 require_relative 'compiler/default'
