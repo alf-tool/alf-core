@@ -30,6 +30,20 @@ module Alf
       end
       attr_reader :operands
 
+      def left
+        unless operands && operands.size == 2
+          raise "Unexpected operands `#{operands.inspect}`"
+        end
+        operands.first
+      end
+
+      def right
+        unless operands && operands.size == 2
+          raise "Unexpected operands `#{operands.inspect}`"
+        end
+        operands.last
+      end
+
       def operand
         unless operands && operands.size == 1
           raise "Unexpected operands `#{operands.inspect}`"
@@ -193,5 +207,53 @@ module Alf
         subject.operand.operand.compiler.should be(dedicated)
       end
     end
+
+    context 'on a dyadic operator compiled by two different compilers' do
+      # the first compiler compiles the left leaf and the projection.
+      # the second compiler compiles the right leaf and the projection.
+      # the this compiler compiles the union.
+
+      let(:expr){
+        join(project(an_operand(left), [:a]), project(an_operand(right), [:a]))
+      }
+
+      let(:compilo1){
+        DedicatedCompiler.new
+      }
+
+      let(:compilo2){
+        DedicatedCompiler.new
+      }
+
+      let(:left){
+        DedicatedCog.new(nil, compilo1)
+      }
+
+      let(:right){
+        DedicatedCog.new(nil, compilo2)
+      }
+
+      let(:default){
+        Compiler::Default.new
+      }
+
+      it{ should be_a(Engine::Join) }
+
+      it 'should have correct expr' do
+        subject.expr.should be(expr)
+      end
+
+      it 'should have correct sub-cogs' do
+        subject.left.should be_a(DedicatedCog)
+        subject.right.should be_a(DedicatedCog)
+      end
+
+      it 'should have expected compilers' do
+        subject.compiler.should be(default)
+        subject.left.compiler.should be(compilo1)
+        subject.right.compiler.should be(compilo2)
+      end
+    end
+
   end
 end
