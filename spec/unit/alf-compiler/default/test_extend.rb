@@ -1,32 +1,32 @@
 require 'compiler_helper'
 module Alf
-  module Engine
-    describe Compilable, "extend" do
+  class Compiler
+    describe Default, "extend" do
 
       subject{
-        Compilable.new(leaf).extend(expr)
+        Default.new.call(expr)
       }
 
       let(:expr){
-        extend(an_operand, computation)
+        extend(an_operand(leaf), computation)
       }
 
       let(:computation){
         TupleComputation[{ foo: "12" }]
       }
 
-      it_should_behave_like "a compilable"
+      it_should_behave_like "a traceable cog"
 
       it 'has a SetAttr cog' do
-        resulting_cog.should be_a(SetAttr)
+        subject.should be_a(Engine::SetAttr)
       end
 
       it 'has the correct computation' do
-        resulting_cog.computation.should be(computation)
+        subject.computation.should be(computation)
       end
 
       it 'has the correct sub-cog' do
-        resulting_cog.operand.should be(leaf)
+        subject.operand.should be(leaf)
       end
 
     end

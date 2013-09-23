@@ -15,6 +15,8 @@ module Alf
         a_lispy.hierarchize(an_operand(leaf), :id, :parent, :as)
       }
 
+      it_should_behave_like "a traceable cog"
+
       it{ should be_a(Engine::Hierarchize) }
 
       it 'should have correct id list' do

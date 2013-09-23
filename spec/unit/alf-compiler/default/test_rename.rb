@@ -1,24 +1,24 @@
 require 'compiler_helper'
 module Alf
   class Compiler
-    describe Default, "autonum" do
+    describe Default, "rename" do
 
       subject{
         Default.new.call(expr)
       }
 
       let(:expr){
-        autonum(an_operand(leaf), :foo)
+        rename(an_operand(leaf), a: :b)
       }
 
       it_should_behave_like "a traceable cog"
 
-      it 'is an Autonum cog' do
-        subject.should be_a(Engine::Autonum)
+      it 'has a Rename cog' do
+        subject.should be_a(Engine::Rename)
       end
 
-      it 'has the correct autonum attribute name' do
-        subject.as.should eq(:foo)
+      it 'has the correct rename attributes' do
+        subject.renaming.should eq(Renaming[a: :b])
       end
 
       it 'has the correct sub-cog' do

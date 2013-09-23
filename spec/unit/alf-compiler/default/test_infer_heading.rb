@@ -1,24 +1,20 @@
 require 'compiler_helper'
 module Alf
   class Compiler
-    describe Default, "autonum" do
+    describe Default, "infer_heading" do
 
       subject{
         Default.new.call(expr)
       }
 
       let(:expr){
-        autonum(an_operand(leaf), :foo)
+        infer_heading(an_operand(leaf))
       }
 
       it_should_behave_like "a traceable cog"
 
-      it 'is an Autonum cog' do
-        subject.should be_a(Engine::Autonum)
-      end
-
-      it 'has the correct autonum attribute name' do
-        subject.as.should eq(:foo)
+      it 'has a InferHeading cog' do
+        subject.should be_a(Engine::InferHeading)
       end
 
       it 'has the correct sub-cog' do

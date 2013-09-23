@@ -11,7 +11,7 @@ module Alf
         generator(100, :foo)
       }
 
-      #it_should_behave_like "a compilable"
+      it_should_behave_like "a traceable cog"
 
       it 'is a Generator cog' do
         subject.should be_a(Engine::Generator)

@@ -1,24 +1,24 @@
 require 'compiler_helper'
 module Alf
   class Compiler
-    describe Default, "autonum" do
+    describe Default, "type_safe" do
 
       subject{
         Default.new.call(expr)
       }
 
       let(:expr){
-        autonum(an_operand(leaf), :foo)
+        type_safe(an_operand(leaf), a: String)
       }
 
       it_should_behave_like "a traceable cog"
 
-      it 'is an Autonum cog' do
-        subject.should be_a(Engine::Autonum)
+      it 'has a TypeSafe cog' do
+        subject.should be_a(Engine::TypeSafe)
       end
 
-      it 'has the correct autonum attribute name' do
-        subject.as.should eq(:foo)
+      it 'has the correct type safe heading' do
+        subject.checker.heading.should eq(Heading[a: String])
       end
 
       it 'has the correct sub-cog' do

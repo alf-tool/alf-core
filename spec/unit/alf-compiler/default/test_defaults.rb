@@ -1,29 +1,29 @@
 require 'compiler_helper'
 module Alf
-  module Engine
-    describe Compilable, "defaults" do
+  class Compiler
+    describe Default, "defaults" do
 
       subject{
-        Compilable.new(leaf).defaults(expr)
+        Default.new.call(expr)
       }
 
       context "when non strict" do
         let(:expr){
-          defaults(an_operand, b: 1)
+          defaults(an_operand(leaf), b: 1)
         }
 
-        it_should_behave_like "a compilable"
+        it_should_behave_like "a traceable cog"
 
         it 'has a Defaults cog' do
-          resulting_cog.should be_a(Defaults)
+          subject.should be_a(Engine::Defaults)
         end
 
         it 'has the correct defaults' do
-          resulting_cog.defaults.to_hash.should eq(b: 1)
+          subject.defaults.to_hash.should eq(b: 1)
         end
 
         it 'has the correct sub-cog' do
-          resulting_cog.operand.should be(leaf)
+          subject.operand.should be(leaf)
         end
 
         it 'has correct traceability on cog' do
@@ -33,22 +33,22 @@ module Alf
 
       context "when strict" do
         let(:expr){
-          defaults(an_operand, {b: 1}, strict: true)
+          defaults(an_operand(leaf), {b: 1}, strict: true)
         }
 
-        it_should_behave_like "a compilable"
+        it_should_behave_like "a traceable cog"
 
         it 'has a Clip cog' do
-          resulting_cog.should be_a(Clip)
+          subject.should be_a(Engine::Clip)
         end
 
         it 'has a Defaults sub-cog with correct defaults' do
-          resulting_cog.operand.should be_a(Defaults)
-          resulting_cog.operand.defaults.to_hash.should eq(b: 1)
+          subject.operand.should be_a(Engine::Defaults)
+          subject.operand.defaults.to_hash.should eq(b: 1)
         end
 
         it 'has the correct sub-sub-cog' do
-          resulting_cog.operand.operand.should be(leaf)
+          subject.operand.operand.should be(leaf)
         end
       end
 

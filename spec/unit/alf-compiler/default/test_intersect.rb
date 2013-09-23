@@ -1,23 +1,23 @@
 require 'compiler_helper'
 module Alf
   class Compiler
-    describe Default, "join" do
+    describe Default, "intersect" do
 
       subject{
         Default.new.call(expr)
       }
 
       let(:right){
-        compact(an_operand)
+        compact(an_operand(leaf))
       }
 
       let(:expr){
-        join(an_operand(leaf), right)
+        intersect(an_operand(leaf), right)
       }
 
       it_should_behave_like "a traceable cog"
 
-      it 'is a Join::Hash cog' do
+      it 'has a Join::Hash cog' do
         subject.should be_a(Engine::Join::Hash)
       end
 

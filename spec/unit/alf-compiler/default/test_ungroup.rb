@@ -1,24 +1,24 @@
 require 'compiler_helper'
 module Alf
   class Compiler
-    describe Default, "autonum" do
+    describe Default, "ungroup" do
 
       subject{
         Default.new.call(expr)
       }
 
       let(:expr){
-        autonum(an_operand(leaf), :foo)
+        ungroup(an_operand(leaf), :a)
       }
 
       it_should_behave_like "a traceable cog"
 
-      it 'is an Autonum cog' do
-        subject.should be_a(Engine::Autonum)
+      it 'has a Ungroup cog' do
+        subject.should be_a(Engine::Ungroup)
       end
 
-      it 'has the correct autonum attribute name' do
-        subject.as.should eq(:foo)
+      it 'has the correct ungrouping attribute' do
+        subject.attribute.should eq(:a)
       end
 
       it 'has the correct sub-cog' do

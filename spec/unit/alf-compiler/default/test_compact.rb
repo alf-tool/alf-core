@@ -1,24 +1,20 @@
 require 'compiler_helper'
 module Alf
   class Compiler
-    describe Default, "autonum" do
+    describe Default, "compact" do
 
       subject{
         Default.new.call(expr)
       }
 
       let(:expr){
-        autonum(an_operand(leaf), :foo)
+        compact(an_operand(leaf))
       }
 
       it_should_behave_like "a traceable cog"
 
-      it 'is an Autonum cog' do
-        subject.should be_a(Engine::Autonum)
-      end
-
-      it 'has the correct autonum attribute name' do
-        subject.as.should eq(:foo)
+      it 'has a Compact cog' do
+        subject.should be_a(Engine::Compact)
       end
 
       it 'has the correct sub-cog' do
