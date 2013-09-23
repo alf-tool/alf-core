@@ -24,8 +24,8 @@ module Alf
       attr_reader :predicate
 
       # Creates a Filter instance
-      def initialize(operand, predicate, expr = nil)
-        super(expr)
+      def initialize(operand, predicate, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @predicate = predicate
       end

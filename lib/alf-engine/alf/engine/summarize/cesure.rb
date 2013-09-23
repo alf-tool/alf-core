@@ -1,8 +1,8 @@
 module Alf
   module Engine
     class Summarize::Cesure
-      include Engine::Summarize
-      include Engine::Cesure
+      include Summarize
+      include Cesure
 
       # @return [Enumerable] The operand
       attr_reader :operand
@@ -17,8 +17,8 @@ module Alf
       attr_reader :allbut
 
       # Creates an Summarize::Cesure instance
-      def initialize(operand, by, summarization, allbut, expr = nil)
-        super(expr)
+      def initialize(operand, by, summarization, allbut, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @by = by
         @summarization = summarization

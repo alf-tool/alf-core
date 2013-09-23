@@ -38,6 +38,7 @@ module Alf
     #     # => []
     #
     class Materialize::Hash
+      include Materialize
       include Cog
 
       # @return [Enumerable] The operand
@@ -50,8 +51,8 @@ module Alf
       attr_reader :allbut
 
       # Creates a Materialize::Hash instance
-      def initialize(operand, key, allbut = false, expr = nil)
-        super(expr)
+      def initialize(operand, key, allbut = false, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @key = key
         @allbut = allbut

@@ -14,8 +14,8 @@ module Alf
       attr_reader :right
 
       # Creates a Join::Hash instance
-      def initialize(left, right, expr = nil)
-        super(expr)
+      def initialize(left, right, expr = nil, compiler = nil)
+        super(expr, compiler)
         @left = left
         @right = right
       end

@@ -3,8 +3,8 @@ module Alf
     module Sort
 
       # Delegates to Sort::InMemory
-      def self.new(operand, ordering, expr = nil)
-        Sort::InMemory.new(operand, ordering, expr)
+      def self.new(operand, ordering, expr = nil, compiler = nil)
+        Sort::InMemory.new(operand, ordering, expr, compiler)
       end
 
     end # module Sort

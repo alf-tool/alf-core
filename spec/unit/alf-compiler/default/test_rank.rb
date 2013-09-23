@@ -4,7 +4,7 @@ module Alf
     describe Default, "rank" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:ordering){
@@ -12,7 +12,7 @@ module Alf
       }
 
       shared_examples_for "the expected Rank::Cesure" do
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "a traceable compiled"
 
         it 'has a Rank::Cesure cog' do
           subject.should be_a(Engine::Rank::Cesure)
@@ -30,7 +30,7 @@ module Alf
         }
 
         it_should_behave_like "the expected Rank::Cesure"
-        it_should_behave_like "a cog adding a sub Sort"
+        it_should_behave_like "a compiled based on an added sub Sort"
       end
 
       context 'when already sorted' do
@@ -44,7 +44,7 @@ module Alf
           }
 
           it_should_behave_like "the expected Rank::Cesure"
-          it_should_behave_like "a cog reusing a sub Sort"
+          it_should_behave_like "a compiled reusing a sub Sort"
         end
 
         context 'in a completely different way' do
@@ -53,7 +53,7 @@ module Alf
           }
 
           it_should_behave_like "the expected Rank::Cesure"
-          it_should_behave_like "a cog not reusing a sub Sort"
+          it_should_behave_like "a compiled not reusing a sub Sort"
         end
 
         context 'in incompatible way' do
@@ -62,7 +62,7 @@ module Alf
           }
 
           it_should_behave_like "the expected Rank::Cesure"
-          it_should_behave_like "a cog not reusing a sub Sort"
+          it_should_behave_like "a compiled not reusing a sub Sort"
         end
       end
 

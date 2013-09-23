@@ -14,12 +14,6 @@ module Alf
         @compiler = compiler
       end
 
-      def compiled_by(compiler)
-        raise "Compiler already set" if @compiler
-        @compiler = compiler
-        self
-      end
-
       def heading
         return expr.heading if expr
         raise NotSupportedError, "Cog#heading without expr traceability"

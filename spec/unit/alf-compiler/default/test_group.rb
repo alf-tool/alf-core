@@ -4,14 +4,14 @@ module Alf
     describe Default, "group" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
         group(an_operand(leaf), [:foo, :bar], :baz, allbut: true)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'has a Group cog' do
         subject.should be_a(Engine::Group)

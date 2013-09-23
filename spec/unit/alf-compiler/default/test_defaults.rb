@@ -4,7 +4,7 @@ module Alf
     describe Default, "defaults" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       context "when non strict" do
@@ -12,7 +12,7 @@ module Alf
           defaults(an_operand(leaf), b: 1)
         }
 
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "a traceable compiled"
 
         it 'has a Defaults cog' do
           subject.should be_a(Engine::Defaults)
@@ -25,10 +25,6 @@ module Alf
         it 'has the correct sub-cog' do
           subject.operand.should be(leaf)
         end
-
-        it 'has correct traceability on cog' do
-          subject.expr.should be(expr)
-        end
       end
 
       context "when strict" do
@@ -36,7 +32,7 @@ module Alf
           defaults(an_operand(leaf), {b: 1}, strict: true)
         }
 
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "a traceable compiled"
 
         it 'has a Clip cog' do
           subject.should be_a(Engine::Clip)

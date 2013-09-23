@@ -4,7 +4,7 @@ module Alf
     describe Default, "quota" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:summarization){
@@ -16,7 +16,7 @@ module Alf
       }
 
       shared_examples_for "the expected Quota::Cesure" do
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "a traceable compiled"
 
         it 'has a Quota::Cesure cog' do
           subject.should be_a(Engine::Quota::Cesure)
@@ -56,7 +56,7 @@ module Alf
           }
 
           it_should_behave_like "the expected Quota::Cesure"
-          it_should_behave_like "a cog reusing a sub Sort"
+          it_should_behave_like "a compiled reusing a sub Sort"
         end
 
         context 'in an incompatible way' do

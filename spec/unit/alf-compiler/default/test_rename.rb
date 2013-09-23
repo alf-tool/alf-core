@@ -4,14 +4,14 @@ module Alf
     describe Default, "rename" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
         rename(an_operand(leaf), a: :b)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'has a Rename cog' do
         subject.should be_a(Engine::Rename)

@@ -4,7 +4,7 @@ module Alf
     describe Default, "summarize" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:by){
@@ -20,7 +20,7 @@ module Alf
       }
 
       shared_examples_for "the expected Summarize" do
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "a traceable compiled"
 
         it 'has a Summarize' do
           subject.should be_a(Engine::Summarize)
@@ -59,7 +59,7 @@ module Alf
           end
 
           it_should_behave_like "the expected Summarize"
-          it_should_behave_like "a cog adding a sub Sort"
+          it_should_behave_like "a compiled based on an added sub Sort"
         end
 
         context 'when already in good direction' do
@@ -76,7 +76,7 @@ module Alf
           end
 
           it_should_behave_like "the expected Summarize"
-          it_should_behave_like "a cog reusing a sub Sort"
+          it_should_behave_like "a compiled reusing a sub Sort"
         end
       end
 

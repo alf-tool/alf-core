@@ -26,8 +26,8 @@ module Alf
       attr_reader :ordering
 
       # Creates an ToArray instance
-      def initialize(operand, ordering, expr = nil)
-        super(expr)
+      def initialize(operand, ordering, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @ordering = ordering
       end

@@ -4,7 +4,7 @@ module Alf
     describe Default, "restrict" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
@@ -15,7 +15,7 @@ module Alf
         Predicate.native(->{ true })
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'has a Filter cog' do
         subject.should be_a(Engine::Filter)

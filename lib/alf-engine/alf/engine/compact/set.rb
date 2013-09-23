@@ -10,8 +10,8 @@ module Alf
       attr_reader :operand
 
       # Creates a Compact::Set instance
-      def initialize(operand, expr = nil)
-        super(expr)
+      def initialize(operand, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
       end
 

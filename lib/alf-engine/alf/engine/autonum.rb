@@ -26,8 +26,8 @@ module Alf
       attr_reader :as
 
       # Creates an Autonum instance
-      def initialize(operand, as, expr = nil)
-        super(expr)
+      def initialize(operand, as, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @as = as
       end

@@ -4,7 +4,7 @@ module Alf
     describe Default, "frame" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:ordering){
@@ -12,7 +12,7 @@ module Alf
       }
 
       shared_examples_for "the expected Take" do
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "a traceable compiled"
 
         it 'has a Take cog' do
           subject.should be_a(Engine::Take)
@@ -30,7 +30,7 @@ module Alf
         }
 
         it_should_behave_like "the expected Take"
-        it_should_behave_like "a cog adding a sub Sort"
+        it_should_behave_like "a compiled based on an added sub Sort"
       end
 
       context 'when already sorted' do
@@ -44,7 +44,7 @@ module Alf
           }
 
           it_should_behave_like "the expected Take"
-          it_should_behave_like "a cog reusing a sub Sort"
+          it_should_behave_like "a compiled reusing a sub Sort"
         end
 
         context 'in incompatible way' do
@@ -53,7 +53,7 @@ module Alf
           }
 
           it_should_behave_like "the expected Take"
-          it_should_behave_like "a cog not reusing a sub Sort"
+          it_should_behave_like "a compiled not reusing a sub Sort"
         end
       end
 

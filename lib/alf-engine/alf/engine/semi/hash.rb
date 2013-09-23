@@ -4,6 +4,7 @@ module Alf
     # Filters tuples from `left` that match or do not match tuples from `right`.
     #
     class Semi::Hash
+      include Semi
       include Cog
 
       # @return [Enumerable] The left operand
@@ -16,8 +17,8 @@ module Alf
       attr_reader :predicate
 
       # Creates a Semi::Hash instance
-      def initialize(left, right, predicate, expr = nil)
-        super(expr)
+      def initialize(left, right, predicate, expr = nil, compiler = nil)
+        super(expr, compiler)
         @left = left
         @right = right
         @predicate = predicate

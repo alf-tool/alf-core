@@ -25,8 +25,8 @@ module Alf
       attr_reader :defaults
 
       # Creates a Defaults instance
-      def initialize(operand, defaults, expr = nil)
-        super(expr)
+      def initialize(operand, defaults, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @defaults = defaults
       end

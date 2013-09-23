@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
+require 'path'
 
 def rewrite(pattern, rx, to)
-  Dir["**/#{pattern}"].each do |file|
+  Path.pwd.glob("**/#{pattern}").each do |file|
     before = File.read(file)
     if before =~ rx
       puts "Rewriting #{file}"

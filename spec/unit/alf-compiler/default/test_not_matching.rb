@@ -4,7 +4,7 @@ module Alf
     describe Default, "not_matching" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:right){
@@ -15,7 +15,7 @@ module Alf
         not_matching(an_operand(leaf), right)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'has a Join::Hash cog' do
         subject.should be_a(Engine::Semi::Hash)

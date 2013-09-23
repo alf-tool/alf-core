@@ -4,7 +4,7 @@ module Alf
     describe Compiler, 'on_hierarchize' do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:operand){
@@ -15,7 +15,7 @@ module Alf
         a_lispy.hierarchize(an_operand(leaf), :id, :parent, :as)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it{ should be_a(Engine::Hierarchize) }
 

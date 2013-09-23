@@ -27,8 +27,8 @@ module Alf
       attr_reader :coercions
 
       # Creates an Coerce instance
-      def initialize(operand, coercions, expr = nil)
-        super(expr)
+      def initialize(operand, coercions, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @coercions = coercions
       end

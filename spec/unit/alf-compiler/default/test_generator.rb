@@ -4,14 +4,14 @@ module Alf
     describe Default, "generator" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
         generator(100, :foo)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'is a Generator cog' do
         subject.should be_a(Engine::Generator)

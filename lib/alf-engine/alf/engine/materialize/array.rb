@@ -28,6 +28,7 @@ module Alf
     #          ]
     #
     class Materialize::Array
+      include Materialize
       include Cog
 
       # @return [Enumerable] The operand
@@ -37,8 +38,8 @@ module Alf
       attr_reader :ordering
 
       # Creates a Materialize::Array instance
-      def initialize(operand, ordering = nil, expr = nil)
-        super(expr)
+      def initialize(operand, ordering = nil, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @ordering = ordering
         @materialized = nil

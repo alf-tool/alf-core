@@ -4,22 +4,27 @@ module Alf
     describe Default, "sort" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:ordering){
         Ordering.new([[:a, :asc]])
       }
 
+      shared_examples_for "the expected Sort" do
+        it_should_behave_like "a traceable compiled"
+
+        it{ should be_a(Engine::Sort) }
+      end
+
       context 'when the cog is not sorted at all' do
         let(:expr){
           sort(an_operand(leaf), ordering)
         }
 
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "the expected Sort"
 
         it 'should add a Sort' do
-          subject.should be_a(Engine::Sort)
           subject.ordering.should be(ordering)
           subject.operand.should be(leaf)
         end
@@ -35,10 +40,9 @@ module Alf
             Ordering.new([[:a, :asc]])
           }
 
-          it_should_behave_like "a traceable cog"
+          it_should_behave_like "the expected Sort"
 
           it 'should reuse the cog itself' do
-            subject.should be_a(Engine::Sort)
             subject.operand.should be(leaf)
             subject.ordering.should be(subordering)
           end
@@ -49,10 +53,9 @@ module Alf
             Ordering.new([[:a, :asc], [:b, :desc]])
           }
 
-          it_should_behave_like "a traceable cog"
+          it_should_behave_like "the expected Sort"
 
           it 'should reuse the cog itself' do
-            subject.should be_a(Engine::Sort)
             subject.operand.should be(leaf)
             subject.ordering.should be(subordering)
           end
@@ -63,10 +66,9 @@ module Alf
             Ordering.new([[:a, :desc]])
           }
 
-          it_should_behave_like "a traceable cog"
+          it_should_behave_like "the expected Sort"
 
           it 'should add a Sort' do
-            subject.should be_a(Engine::Sort)
             subject.ordering.should be(ordering)
             subject.operand.should be_a(Engine::Sort)
             subject.operand.ordering.should be(subordering)

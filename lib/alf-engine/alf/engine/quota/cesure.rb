@@ -1,6 +1,7 @@
 module Alf
   module Engine
     class Quota::Cesure
+      include Quota
       include Engine::Cesure
 
       # @return [Enumerable] The operand
@@ -13,8 +14,8 @@ module Alf
       attr_reader :summarization
 
       # Creates an Quota::Cesure instance
-      def initialize(operand, by, summarization, expr = nil)
-        super(expr)
+      def initialize(operand, by, summarization, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @by = by.to_attr_list
         @summarization = summarization

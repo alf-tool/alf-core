@@ -4,14 +4,14 @@ module Alf
     describe Default, "coerce" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
         coerce(an_operand(leaf), a: String)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'has a Coerce cog' do
         subject.should be_a(Engine::Coerce)

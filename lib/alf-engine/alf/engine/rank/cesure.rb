@@ -1,6 +1,7 @@
 module Alf
   module Engine
     class Rank::Cesure
+      include Rank
       include Engine::Cesure
 
       # @return [Enumerable] The operand
@@ -13,8 +14,8 @@ module Alf
       attr_reader :as
 
       # Creates an Rank::Cesure instance
-      def initialize(operand, by, as, expr = nil)
-        super(expr)
+      def initialize(operand, by, as, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @by = by.to_attr_list
         @as = as

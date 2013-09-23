@@ -4,14 +4,14 @@ module Alf
     describe Default, "autonum" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
         autonum(an_operand(leaf), :foo)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'is an Autonum cog' do
         subject.should be_a(Engine::Autonum)

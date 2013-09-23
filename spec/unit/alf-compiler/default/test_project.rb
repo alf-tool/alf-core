@@ -4,12 +4,12 @@ module Alf
     describe Default, "project" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       shared_examples_for "a compacted compilation result" do
 
-        it_should_behave_like "a traceable cog"
+        it_should_behave_like "a traceable compiled"
 
         it 'has a Compact cog' do
           subject.should be_a(Engine::Compact)

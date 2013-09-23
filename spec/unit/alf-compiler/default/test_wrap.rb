@@ -4,14 +4,14 @@ module Alf
     describe Default, "wrap" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
         wrap(an_operand(leaf), [:foo, :bar], :baz, allbut: true)
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'has a Wrap cog' do
         subject.should be_a(Engine::Wrap)

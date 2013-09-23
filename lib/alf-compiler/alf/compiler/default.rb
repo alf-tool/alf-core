@@ -170,7 +170,7 @@ module Alf
     private
 
       def factor(clazz, expr, *args)
-        clazz.new(*args, expr).compiled_by(self)
+        clazz.new(*args, expr, self)
       end
 
     end # class Default

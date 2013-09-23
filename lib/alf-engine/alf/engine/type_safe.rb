@@ -10,8 +10,8 @@ module Alf
       attr_reader :checker
 
       # Creates an Coerce instance
-      def initialize(operand, checker, expr = nil)
-        super(expr)
+      def initialize(operand, checker, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @checker = checker
       end

@@ -4,14 +4,14 @@ module Alf
     describe Default, "clip" do
 
       subject{
-        Default.new.call(expr)
+        compiler.call(expr)
       }
 
       let(:expr){
         clip(an_operand(leaf), [:a])
       }
 
-      it_should_behave_like "a traceable cog"
+      it_should_behave_like "a traceable compiled"
 
       it 'has a Clip cog' do
         subject.should be_a(Engine::Clip)

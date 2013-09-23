@@ -28,8 +28,8 @@ module Alf
       attr_reader :computation
 
       # Creates a SetAttr instance
-      def initialize(operand, computation, expr = nil)
-        super(expr)
+      def initialize(operand, computation, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @computation = computation
       end

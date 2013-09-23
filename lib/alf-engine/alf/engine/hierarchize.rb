@@ -22,8 +22,8 @@ module Alf
       attr_reader :tuple_type
 
       # Creates a Hierarchize instance
-      def initialize(operand, id, parent, children, expr = nil)
-        super(expr)
+      def initialize(operand, id, parent, children, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @id = id
         @parent = parent

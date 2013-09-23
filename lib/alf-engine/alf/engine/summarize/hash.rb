@@ -1,7 +1,7 @@
 module Alf
   module Engine
     class Summarize::Hash
-      include Engine::Summarize
+      include Summarize
       include Cog
 
       # @return [Enumerable] The operand
@@ -17,8 +17,8 @@ module Alf
       attr_reader :allbut
 
       # Creates an Summarize::Hash instance
-      def initialize(operand, by, summarization, allbut, expr = nil)
-        super(expr)
+      def initialize(operand, by, summarization, allbut, expr = nil, compiler = nil)
+        super(expr, compiler)
         @operand = operand
         @by = by
         @summarization = summarization
