@@ -42,10 +42,6 @@ module Alf
         self
       end
 
-      def to_compilable
-        Compilable.new(self)
-      end
-
       def to_relation
         Relation.coerce(to_a)
       end

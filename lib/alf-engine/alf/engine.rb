@@ -38,4 +38,3 @@ require_relative 'engine/type_safe'
 require_relative 'engine/to_array'
 require_relative 'engine/to_dot'
 
-require_relative 'engine/compilable'
