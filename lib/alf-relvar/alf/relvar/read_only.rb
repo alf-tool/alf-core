@@ -1,7 +1,6 @@
 module Alf
   module Relvar
     class ReadOnly
-      extend Forwardable
       include Relvar
 
       def initialize(value)
