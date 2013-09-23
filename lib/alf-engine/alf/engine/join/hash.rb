@@ -4,6 +4,7 @@ module Alf
     # Provides hash-based join.
     #
     class Join::Hash
+      include Join
       include Cog
 
       # @return [Enumerable] The left operand
