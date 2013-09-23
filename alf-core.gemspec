@@ -132,7 +132,7 @@ Gem::Specification.new do |s|
   s.add_dependency("myrrha", "~> 3.0")
   s.add_dependency("domain", "~> 1.0")
   s.add_dependency("path", "~> 1.3")
-  s.add_dependency("sexpr", "~> 0.5.1")
+  s.add_dependency("sexpr", "~> 0.6.0")
 
   # The version of ruby required by this gem
   #

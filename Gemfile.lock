@@ -1,3 +1,8 @@
+PATH
+  remote: ../../sexpr
+  specs:
+    sexpr (0.6.0)
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -20,7 +25,6 @@ GEM
     rspec-expectations (2.14.0)
       diff-lcs (>= 1.1.3, < 2.0)
     rspec-mocks (2.14.1)
-    sexpr (0.5.1)
     yard (0.8.7)
 
 PLATFORMS
@@ -37,5 +41,5 @@ DEPENDENCIES
   rake (~> 10.1)
   redcarpet (~> 2.2)
   rspec (~> 2.14)
-  sexpr (~> 0.5.1)
+  sexpr!
   yard (~> 0.8.2)
