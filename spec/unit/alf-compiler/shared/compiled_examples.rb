@@ -74,6 +74,19 @@ shared_examples_for "a compiled based on an added sub Sort" do
 
 end
 
+shared_examples_for "a compiled based on an added sub Sort with total ordering" do
+
+  it 'has a Sort as sub-cog' do
+    subject.operand.should be_a(Alf::Engine::Sort)
+    subject.operand.ordering.should eq(total_ordering)
+  end
+
+  it 'has the leaf has sub-sub cog' do
+    subject.operand.operand.should be(leaf)
+  end
+
+end
+
 shared_examples_for "a compiled based on an added reversed Sort" do
 
   it 'has a Sort as sub-cog' do

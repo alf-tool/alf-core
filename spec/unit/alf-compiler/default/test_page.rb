@@ -24,13 +24,33 @@ module Alf
         end
       end
 
-      context 'when positive page' do
+      context 'when positive page (no inference possible)' do
         let(:expr){
           page(an_operand(leaf), ordering, 3, page_size: 20)
         }
 
         it_should_behave_like "the expected Take"
         it_should_behave_like "a compiled based on an added sub Sort"
+
+        it "should have the expected Sort" do
+          subject.operand.should be_a(Engine::Sort)
+          subject.operand.ordering.should eq(ordering)
+        end
+      end
+
+      context 'when positive page (inference possible)' do
+        let(:expr){
+          op = an_operand(leaf).with_heading(a: String, b: String)
+                               .with_keys([:b])
+          page(op, ordering, 3, page_size: 20)
+        }
+
+        let(:total_ordering){
+          Ordering.new([[:a, :asc], [:b, :asc]])
+        }
+
+        it_should_behave_like "the expected Take"
+        it_should_behave_like "a compiled based on an added sub Sort with total ordering"
       end
 
       context 'when a negative page' do

@@ -60,7 +60,7 @@ module Alf
       end
 
       def on_frame(expr, compiled)
-        ordering = expr.full_ordering rescue expr.ordering
+        ordering = expr.total_ordering rescue expr.ordering
         #
         compiled = self._call(parser.sort(expr, ordering), [compiled])
         compiled = factor(Engine::Take, expr, compiled, expr.offset, expr.limit)
@@ -99,7 +99,7 @@ module Alf
       def on_page(expr, compiled)
         index, size = expr.page_index, expr.page_size
         #
-        ordering = expr.full_ordering rescue expr.ordering
+        ordering = expr.total_ordering rescue expr.ordering
         ordering = ordering.reverse if index < 0
         #
         compiled = self._call(parser.sort(expr, ordering), [compiled])

@@ -33,6 +33,21 @@ module Alf
         it_should_behave_like "a compiled based on an added sub Sort"
       end
 
+      context 'when not already sorted (inference possible)' do
+        let(:expr){
+          op = an_operand(leaf).with_heading(a: String, b: String)
+                               .with_keys([:b])
+          frame(op, ordering, 10, 20)
+        }
+
+        let(:total_ordering){
+          Ordering.new([[:a, :asc], [:b, :asc]])
+        }
+
+        it_should_behave_like "the expected Take"
+        it_should_behave_like "a compiled based on an added sub Sort with total ordering"
+      end
+
       context 'when already sorted' do
         let(:expr){
           frame(sort(an_operand(leaf), subordering), ordering, 10, 20)
