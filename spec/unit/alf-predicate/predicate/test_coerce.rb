@@ -31,8 +31,8 @@ module Alf
         let(:arg){ :status }
 
         specify{
-          subject.expr.should be_a(VarRef)
-          subject.expr.var_name.should eq(arg)
+          subject.expr.should be_a(Identifier)
+          subject.expr.name.should eq(arg)
         }
       end
 
@@ -59,7 +59,7 @@ module Alf
 
         specify{
           subject.expr.should be_a(Eq)
-          subject.expr.should eq([:eq, [:var_ref, :status], [:literal, 10]])
+          subject.expr.should eq([:eq, [:identifier, :status], [:literal, 10]])
         }
       end
 
@@ -68,7 +68,7 @@ module Alf
 
         specify{
           subject.expr.should be_a(Eq)
-          subject.expr.should eq([:eq, [:var_ref, :status], [:literal, 10]])
+          subject.expr.should eq([:eq, [:identifier, :status], [:literal, 10]])
         }
       end
 

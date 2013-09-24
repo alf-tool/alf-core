@@ -10,7 +10,13 @@ module Alf
 
         it{ should eq("self.x == 2") }
       end
-      
+
+      describe "with qualified identifiers" do
+        let(:p){ Predicate.eq(Factory.qualified_identifier(:t, :y), 2) }
+
+        it{ should eq("t.y == 2") }
+      end
+
     end
   end
 end

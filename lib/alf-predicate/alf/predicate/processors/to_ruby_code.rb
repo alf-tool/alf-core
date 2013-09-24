@@ -10,7 +10,11 @@ module Alf
         "false"
       end
 
-      def on_var_ref(sexpr)
+      def on_qualified_identifier(sexpr)
+        "#{sexpr.qualifier}.#{sexpr.name}"
+      end
+
+      def on_identifier(sexpr)
         if s = options[:scope]
           "#{s}.#{sexpr.last.to_s}"
         else
@@ -43,7 +47,7 @@ module Alf
       alias :on_gte :on_dyadic
 
       def on_in(sexpr)
-        "#{Support.to_ruby_literal(sexpr.values)}.include?(#{apply(sexpr.var_ref)})"
+        "#{Support.to_ruby_literal(sexpr.values)}.include?(#{apply(sexpr.identifier)})"
       end
 
       def on_native(sexpr)

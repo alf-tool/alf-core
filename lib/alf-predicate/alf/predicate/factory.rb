@@ -10,8 +10,12 @@ module Alf
         _factor_predicate([:contradiction, false])
       end
 
-      def var_ref(name)
-        _factor_predicate([:var_ref, name])
+      def identifier(name)
+        _factor_predicate([:identifier, name])
+      end
+
+      def qualified_identifier(qualifier, name)
+        _factor_predicate([:qualified_identifier, qualifier, name])
       end
 
       def and(left, right = nil)
@@ -41,9 +45,9 @@ module Alf
         end
       end
 
-      def in(var_ref, values)
-        var_ref = sexpr(var_ref) if var_ref.is_a?(Symbol)
-        _factor_predicate([:in, var_ref, values])
+      def in(identifier, values)
+        identifier = sexpr(identifier) if identifier.is_a?(Symbol)
+        _factor_predicate([:in, identifier, values])
       end
 
       def comp(op, h)
@@ -86,7 +90,7 @@ module Alf
         when Predicate  then expr.expr
         when TrueClass  then Grammar.sexpr([:tautology, true])
         when FalseClass then Grammar.sexpr([:contradiction, false])
-        when Symbol     then Grammar.sexpr([:var_ref, expr])
+        when Symbol     then Grammar.sexpr([:identifier, expr])
         when Proc       then Grammar.sexpr([:native, expr])
         when Array      then Grammar.sexpr(expr)
         else

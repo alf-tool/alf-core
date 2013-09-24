@@ -18,14 +18,14 @@ module Alf
         it{ should eq([p.tautology, pred]) }
       end
 
-      context "on var_ref (included)" do
-        let(:pred){ p.var_ref(:x) }
+      context "on identifier (included)" do
+        let(:pred){ p.identifier(:x) }
 
         it{ should eq([ pred, p.tautology ]) }
       end
 
-      context "on var_ref (excluded)" do
-        let(:pred){ p.var_ref(:y) }
+      context "on identifier (excluded)" do
+        let(:pred){ p.identifier(:y) }
 
         it{ should eq([ p.tautology, pred ]) }
       end

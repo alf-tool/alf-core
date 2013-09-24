@@ -20,7 +20,7 @@ module Alf
       context "on not" do
         let(:pred){ Predicate.not(:x) }
 
-        it{ should eq(Predicate.var_ref(:x)) }
+        it{ should eq(Predicate.identifier(:x)) }
       end
 
       context "on comp" do

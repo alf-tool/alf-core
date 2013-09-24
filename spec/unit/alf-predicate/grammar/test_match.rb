@@ -25,15 +25,15 @@ module Alf
         end
       end
 
-      context "var_ref" do
-        subject{ Grammar[:var_ref] }
+      context "identifier" do
+        subject{ Grammar[:identifier] }
 
         it 'matches a valid ast' do
-          subject.should be_match([:var_ref, :id])
+          subject.should be_match([:identifier, :id])
         end
 
         it 'does not match an invalid ast' do
-          subject.should_not be_match([:var_ref, 12])
+          subject.should_not be_match([:identifier, 12])
         end
       end
 
@@ -50,7 +50,7 @@ module Alf
         subject{ Grammar[:in] }
 
         it 'matches valid ASTs' do
-          subject.should be_match([:in, [:var_ref, :x], [2, 3]])
+          subject.should be_match([:in, [:identifier, :x], [2, 3]])
         end
         it 'does not match invalid ASTs' do
           subject.should_not be_match([:in, :x])
@@ -61,10 +61,10 @@ module Alf
         subject{ Grammar[:eq] }
 
         it 'matches valid ASTs' do
-          subject.should be_match([:eq, [:var_ref, :age], [:literal, 12]])
+          subject.should be_match([:eq, [:identifier, :age], [:literal, 12]])
         end
         it 'does not match invalid ASTs' do
-          subject.should_not be_match([:neq, [:var_ref, :age], [:literal, 12]])
+          subject.should_not be_match([:neq, [:identifier, :age], [:literal, 12]])
         end
       end
 
@@ -72,10 +72,10 @@ module Alf
         subject{ Grammar[:neq] }
 
         it 'matches valid ASTs' do
-          subject.should be_match([:neq, [:var_ref, :age], [:literal, 12]])
+          subject.should be_match([:neq, [:identifier, :age], [:literal, 12]])
         end
         it 'does not match invalid ASTs' do
-          subject.should_not be_match([:eq, [:var_ref, :age], [:literal, 12]])
+          subject.should_not be_match([:eq, [:identifier, :age], [:literal, 12]])
         end
       end
 

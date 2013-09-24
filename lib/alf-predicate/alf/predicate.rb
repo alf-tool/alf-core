@@ -18,7 +18,7 @@ module Alf
         when Predicate   then arg
         when TrueClass   then tautology
         when FalseClass  then contradiction
-        when Symbol      then var_ref(arg)
+        when Symbol      then identifier(arg)
         when Proc        then native(arg)
         when Hash, Tuple then eq(arg)
         when String      then Predicate.new(Grammar.parse(arg))
@@ -71,6 +71,10 @@ module Alf
 
     def !
       Predicate.new(!expr)
+    end
+
+    def qualify(qualifier)
+      Predicate.new(expr.qualify(qualifier))
     end
 
     def rename(renaming)

@@ -1,7 +1,7 @@
 require 'update_helper'
 module Alf
   module Update
-    describe Deleter, 'var_ref' do
+    describe Deleter, 'identifier' do
 
       let(:expr)     { suppliers            }
       let(:inserted) { [ {:id => 1} ]       }

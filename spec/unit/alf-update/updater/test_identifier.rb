@@ -1,7 +1,7 @@
 require 'update_helper'
 module Alf
   module Update
-    describe Updater, 'var_ref' do
+    describe Updater, 'identifier' do
 
       let(:expr)     { suppliers            }
       let(:updating) { {:city => "London"}  }

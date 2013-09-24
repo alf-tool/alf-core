@@ -4,8 +4,15 @@ module Alf
 
       grammar Grammar
 
-      def on_var_ref(sexpr)
-        [:var_ref, options[:renaming][sexpr.var_name] || sexpr.var_name]
+      def on_identifier(sexpr)
+        [:identifier,
+          options[:renaming][sexpr.name] || sexpr.name]
+      end
+
+      def on_qualified_identifier(sexpr)
+        [:qualified_identifier,
+          sexpr.qualifier,
+          options[:renaming][sexpr.name] || sexpr.name]
       end
 
       def on_native(sexpr)

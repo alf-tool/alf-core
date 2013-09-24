@@ -8,8 +8,8 @@ module Alf
       let(:contradiction){
         [:contradiction, false]
       }
-      let(:var_ref){
-        [:var_ref, :name]
+      let(:identifier){
+        [:identifier, :name]
       }
 
       before do
@@ -28,10 +28,10 @@ module Alf
         it{ should be_a(Contradiction) }
       end
 
-      describe "var_ref" do
-        let(:expr){ [:var_ref, :name] }
+      describe "identifier" do
+        let(:expr){ [:identifier, :name] }
 
-        it{ should be_a(VarRef) }
+        it{ should be_a(Identifier) }
       end
 
       describe "and" do
@@ -53,37 +53,37 @@ module Alf
       end
 
       describe "eq" do
-        let(:expr){ [:eq, var_ref, var_ref] }
+        let(:expr){ [:eq, identifier, identifier] }
 
         it{ should be_a(Eq) }
       end
 
       describe "neq" do
-        let(:expr){ [:neq, var_ref, var_ref] }
+        let(:expr){ [:neq, identifier, identifier] }
 
         it{ should be_a(Neq) }
       end
 
       describe "gt" do
-        let(:expr){ [:gt, var_ref, var_ref] }
+        let(:expr){ [:gt, identifier, identifier] }
 
         it{ should be_a(Gt) }
       end
 
       describe "gte" do
-        let(:expr){ [:gte, var_ref, var_ref] }
+        let(:expr){ [:gte, identifier, identifier] }
 
         it{ should be_a(Gte) }
       end
 
       describe "lt" do
-        let(:expr){ [:lt, var_ref, var_ref] }
+        let(:expr){ [:lt, identifier, identifier] }
 
         it{ should be_a(Lt) }
       end
 
       describe "lte" do
-        let(:expr){ [:lte, var_ref, var_ref] }
+        let(:expr){ [:lte, identifier, identifier] }
 
         it{ should be_a(Lte) }
       end

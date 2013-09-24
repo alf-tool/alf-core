@@ -15,8 +15,8 @@ module Alf
         let(:h){ {:x => 12, :y => :z} }
         let(:expected){
           [:and,
-            [:eq, [:var_ref, :x], [:literal, 12]],
-            [:eq, [:var_ref, :y], [:var_ref, :z]]]
+            [:eq, [:identifier, :x], [:literal, 12]],
+            [:eq, [:identifier, :y], [:identifier, :z]]]
         }
 
         it_should_behave_like "a predicate AST node"
@@ -29,7 +29,7 @@ module Alf
 
         it_should_behave_like "a predicate AST node"
         it{ should be_a(Eq) }
-        it{ should eq([:eq, [:var_ref, :x], [:literal, 12]]) }
+        it{ should eq([:eq, [:identifier, :x], [:literal, 12]]) }
       end
 
     end

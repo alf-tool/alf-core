@@ -2,7 +2,7 @@ rules:
   predicate:
     - tautology
     - contradiction
-    - var_ref
+    - identifier
     - not
     - and
     - or
@@ -18,8 +18,10 @@ rules:
     - [ true ]
   contradiction:
     - [ false ]
-  var_ref:
-    - [ var_name ]
+  identifier:
+    - [ name ]
+  qualified_identifier:
+    - [ name, name ]
   not:
     - [ predicate ]
   and:
@@ -39,16 +41,18 @@ rules:
   gte:
     - [ term, term ]
   in:
-    - [ var_ref, values ]
+    - [ varref, values ]
   term:
-    - var_ref
+    - varref
     - literal
+  varref:
+    - qualified_identifier
+    - identifier
   native:
     - [ "::Proc" ]
   literal:
     - "::Object"
   values:
     - "::Object"
-  var_name:
+  name:
     !ruby/regexp /^[a-zA-Z0-9_]+[?!]?$/
-

@@ -1,9 +1,9 @@
 require 'spec_helper'
 module Alf
   class Predicate
-    describe VarRef, "and_split" do
+    describe Identifier, "and_split" do
 
-      let(:predicate){ Factory.var_ref(:id) }
+      let(:predicate){ Factory.identifier(:id) }
       let(:tautology){ Factory.tautology    }
 
       subject{ predicate.and_split(list) }

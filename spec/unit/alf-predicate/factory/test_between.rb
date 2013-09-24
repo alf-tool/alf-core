@@ -7,7 +7,7 @@ module Alf
 
       it{ should be_a(And) }
 
-      it{ should eq([:and, [:gte, [:var_ref, :x], [:literal, 2]], [:lte, [:var_ref, :x], [:literal, 3]]]) }
+      it{ should eq([:and, [:gte, [:identifier, :x], [:literal, 2]], [:lte, [:identifier, :x], [:literal, 3]]]) }
 
     end
   end

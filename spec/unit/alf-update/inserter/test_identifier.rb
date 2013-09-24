@@ -1,7 +1,7 @@
 require 'update_helper'
 module Alf
   module Update
-    describe Inserter, 'var_ref' do
+    describe Inserter, 'identifier' do
 
       let(:expr)     { suppliers          }
       let(:inserted) { [ {:id => 1} ]     }

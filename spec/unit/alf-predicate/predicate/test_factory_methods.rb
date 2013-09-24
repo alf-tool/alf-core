@@ -20,8 +20,8 @@ module Alf
         specify{ subject.to_ruby_code.should eq("false") }
       end
 
-      context "var_ref" do
-        subject{ Predicate.var_ref(:x) }
+      context "identifier" do
+        subject{ Predicate.identifier(:x) }
 
         specify{ subject.to_ruby_code.should eq("self.x") }
       end

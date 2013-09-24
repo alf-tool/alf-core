@@ -1,9 +1,9 @@
 require 'spec_helper'
 module Alf
   class Predicate
-    describe VarRef, "free_variables" do
+    describe QualifiedIdentifier, "free_variables" do
 
-      let(:expr){ Factory.var_ref(:id) }
+      let(:expr){ Factory.qualified_identifier(:t, :id) }
 
       subject{ expr.free_variables }
 

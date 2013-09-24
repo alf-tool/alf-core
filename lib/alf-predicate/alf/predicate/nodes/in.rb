@@ -7,7 +7,7 @@ module Alf
         80
       end
 
-      def var_ref
+      def identifier
         self[1]
       end
 
@@ -16,7 +16,7 @@ module Alf
       end
 
       def free_variables
-        @free_variables ||= var_ref.free_variables
+        @free_variables ||= identifier.free_variables
       end
 
       def constant_variables

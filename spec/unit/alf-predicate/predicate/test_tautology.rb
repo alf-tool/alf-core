@@ -17,8 +17,8 @@ module Alf
         it{ should be_false }
       end
 
-      context "var_ref" do
-        subject{ Predicate.var_ref(:x) }
+      context "identifier" do
+        subject{ Predicate.identifier(:x) }
 
         it{ should be_false }
       end

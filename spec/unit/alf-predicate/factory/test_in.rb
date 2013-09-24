@@ -7,7 +7,7 @@ module Alf
 
       it{ should be_a(In) }
 
-      it{ should eq([:in, [:var_ref, :x], [2, 3]]) }
+      it{ should eq([:in, [:identifier, :x], [2, 3]]) }
 
     end
   end

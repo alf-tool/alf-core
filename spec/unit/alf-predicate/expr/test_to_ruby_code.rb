@@ -27,8 +27,8 @@ module Alf
         it{ should eq("false") }
       end
 
-      describe "var_ref" do
-        let(:expr){ f.var_ref(:name) }
+      describe "identifier" do
+        let(:expr){ f.identifier(:name) }
 
         it{ should eq("name") }
       end

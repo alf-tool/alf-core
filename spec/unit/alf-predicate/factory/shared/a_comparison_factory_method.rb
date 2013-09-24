@@ -13,7 +13,7 @@ shared_examples_for "a comparison factory method" do
   context 'with a Hash operand (singleton)' do
     subject{ self.send(method, :x => :y) }
     let(:expected){
-      [method, [:var_ref, :x], [:var_ref, :y]]
+      [method, [:identifier, :x], [:identifier, :y]]
     }
 
     it_should_behave_like "a predicate AST node"
@@ -24,8 +24,8 @@ shared_examples_for "a comparison factory method" do
     subject{ self.send(method, :x => :y, :v => 2) }
     let(:expected){
       [:and,
-        [method, [:var_ref, :x], [:var_ref, :y]],
-        [method, [:var_ref, :v], [:literal, 2]]]
+        [method, [:identifier, :x], [:identifier, :y]],
+        [method, [:identifier, :v], [:literal, 2]]]
     }
 
     it_should_behave_like "a predicate AST node"

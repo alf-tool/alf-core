@@ -20,6 +20,10 @@
   the connection and returns the resulting relation. TupleComputation delegates
   accordingly.
 
+## Predicate
+
+* Added support for qualified identifiers and Predicate#qualify.
+
 ## Support
 
 * TupleScope now delegates to_s, inspect and [] to the underlying tuple. This

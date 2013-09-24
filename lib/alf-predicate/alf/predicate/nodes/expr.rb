@@ -44,6 +44,10 @@ module Alf
         Renamer.call(self, :renaming => renaming.to_hash)
       end
 
+      def qualify(qualifier)
+        Qualifier.new(qualifier).call(self)
+      end
+
       def constant_variables
         AttrList::EMPTY
       end
