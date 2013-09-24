@@ -18,7 +18,7 @@ module Alf
         it 'has a Clip sub-cog' do
           subject.operand.should be_a(Engine::Clip)
           subject.operand.attributes.should eq(AttrList[:a])
-          subject.operand.allbut.should be_false
+          subject.operand.allbut.should eq(allbut)
         end
 
         it 'has the corect sub-sub cog' do
@@ -26,10 +26,21 @@ module Alf
         end
       end
 
+      let(:allbut){ false }
+
       context 'when keys not available' do
         let(:expr){
           project(an_operand(leaf), [:a])
         }
+
+        it_should_behave_like "a compacted compilation result"
+      end
+
+      context 'when keys not available (allbut)' do
+        let(:expr){
+          project(an_operand(leaf), [:a], allbut: true)
+        }
+        let(:allbut){ true }
 
         it_should_behave_like "a compacted compilation result"
       end
