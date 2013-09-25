@@ -145,7 +145,10 @@ module Alf
     def with_input_io(&bl)
       case input
       when IO, StringIO
-        input.rewind unless input.pos==0
+        begin
+          input.rewind unless input.pos==0
+        rescue Errno::ESPIPE => ex
+        end
         yield input
       when String, Path
         Path(input).open('r', &bl)
