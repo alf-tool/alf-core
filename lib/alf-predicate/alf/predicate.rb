@@ -5,10 +5,11 @@ require_relative 'predicate/processors'
 module Alf
   class Predicate
 
-    def initialize(expr)
-      @expr = expr
+    def initialize(sexpr)
+      @sexpr = sexpr
     end
-    attr_reader :expr
+    attr_reader :sexpr
+    alias :expr :sexpr
 
     class << self
       include Factory
