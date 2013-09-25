@@ -5,14 +5,15 @@ module Alf
       grammar Grammar
 
       def on_identifier(sexpr)
-        [:identifier,
-          options[:renaming][sexpr.name] || sexpr.name]
+        return sexpr unless new_name = options[:renaming][sexpr.name]
+        return new_name if Sexpr===new_name
+        [:identifier, new_name]
       end
 
       def on_qualified_identifier(sexpr)
-        [:qualified_identifier,
-          sexpr.qualifier,
-          options[:renaming][sexpr.name] || sexpr.name]
+        return sexpr unless new_name = options[:renaming][sexpr.name]
+        return new_name if Sexpr===new_name
+        [:qualified_identifier, sexpr.qualifier, new_name]
       end
 
       def on_native(sexpr)

@@ -41,7 +41,7 @@ module Alf
       end
 
       def rename(renaming)
-        Renamer.call(self, :renaming => renaming.to_hash)
+        Renamer.call(self, :renaming => renaming)
       end
 
       def qualify(qualifier)
