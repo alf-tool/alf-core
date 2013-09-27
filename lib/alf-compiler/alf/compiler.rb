@@ -46,12 +46,11 @@ module Alf
   private
 
     def responsible_compiler(compiled)
-      candidates = compiled.map(&:compiler).compact.uniq
-      case candidates.size
-      when 0 then self
-      when 1 then candidates.first
+      candidates = compiled.map(&:compiler).uniq
+      if (candidates.size != 1) or candidates.first.nil?
+        Default===self ? self : Default.new
       else
-        Default===self ? self: Default.new
+        candidates.first
       end
     end
 
