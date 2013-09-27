@@ -13,6 +13,10 @@ module Alf
         fallback.call
       end
 
+      def on_ungroup(expr, compiled, &fallback)
+        raise NotSupportedError
+      end
+
       def on_union(expr, left, right, &fallback)
         DedicatedCog.new(expr, self, [left, right])
       end
@@ -163,6 +167,26 @@ module Alf
       }
 
       it{ should be_a(Engine::Unwrap) }
+
+      it 'should have the cog as operand' do
+        subject.operand.should be(cog)
+      end
+
+      it 'should have expected compilers' do
+        subject.compiler.should be(default)
+      end
+    end
+
+    context 'on a partly supported operator through a NotSupportedError' do
+      # the first compiler compiles the leaf.
+      # the second compiler fails at compiling the ungroup and fallsback.
+      # the first compiler compiles the ungroup.
+
+      let(:expr){
+        ungroup(an_operand(cog), :a)
+      }
+
+      it{ should be_a(Engine::Ungroup) }
 
       it 'should have the cog as operand' do
         subject.operand.should be(cog)

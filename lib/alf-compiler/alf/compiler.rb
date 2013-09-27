@@ -29,11 +29,18 @@ module Alf
     # Post-responsibility
     def __call(expr, compiled, &fallback)
       send(to_method_name(expr), expr, *compiled, &fallback)
+    rescue NotSupportedError
+      return fallback.call if fallback
+      raise
     end
 
     def on_missing(expr, *compiled, &fallback)
       raise "Unable to compile `#{expr}` (#{self})" unless fallback
       fallback.call
+    end
+
+    def on_unsupported(expr, *args)
+      raise NotSupportedError, "Unsupported expression `#{expr}`"
     end
 
   private
