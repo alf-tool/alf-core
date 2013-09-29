@@ -98,6 +98,7 @@ module Alf
     def ==(other)
       other.is_a?(Predicate) && (other.expr==expr)
     end
+    alias :eql? :==
 
     def hash
       expr.hash

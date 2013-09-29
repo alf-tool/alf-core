@@ -90,16 +90,25 @@ module Alf
         bl.nil? ? super : super.tap(&bl)
       end
 
-      def ==(other)
-        (other.object_id == self.object_id) ||
-        ((other.class == self.class) &&
-         (other.operands == self.operands) &&
-         (other.signature.collect_on(self) == self.signature.collect_on(self)))
+      def hash
+        @hash ||= [ self.class,
+                    operands,
+                    connection,
+                    signature.collect_on(self) ].hash
       end
+
+      def ==(other)
+        super || ((other.class == self.class) &&
+                  (other.operands == self.operands) &&
+                  (other.connection == self.connection) &&
+                  (other.signature.collect_on(self) == self.signature.collect_on(self)))
+      end
+      alias :eql? :==
 
     protected
 
       def clean_computed_attributes!
+        @hash = nil
         @heading = nil
         @common_heading = nil
         @common_attributes = nil

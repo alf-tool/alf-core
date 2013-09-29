@@ -18,6 +18,17 @@ module Alf
           connection!.heading(name)
         end
 
+        def hash
+          @hash ||= name.hash + 37*connection.hash
+        end
+
+        def ==(other)
+          super || (other.is_a?(Named) &&
+                    other.name==name   &&
+                    other.connection == connection)
+        end
+        alias :eql? :==
+
         def to_cog
           connection!.cog(name, self)
         end
