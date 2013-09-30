@@ -5,11 +5,6 @@ module Alf
       @parser ||= Lang::Lispy.new
     end
 
-    def &(other)
-      return self if self==other
-      raise "Unable to negociate with `#{other}`"
-    end
-
     # Pre-DFS
     def call(expr)
       compiled = expr.is_a?(Algebra::Operator) ?
@@ -71,5 +66,4 @@ module Alf
   end # class Compiler
 end # module Alf
 require_relative 'compiler/cog'
-require_relative 'compiler/chained'
 require_relative 'compiler/default'
