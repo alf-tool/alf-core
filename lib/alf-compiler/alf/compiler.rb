@@ -1,40 +1,33 @@
 module Alf
   class Compiler
 
-    def parser
-      @parser ||= Lang::Lispy.new
-    end
-
     # Pre-DFS
     def call(expr)
-      compiled = expr.is_a?(Algebra::Operator) ?
-                 expr.operands.map{|op| call(op) } :
-                 []
-      _call(expr, compiled)
+      Plan.new(self).compile(expr)
     end
 
     # Post-DFS, Pre-responsibility
-    def _call(expr, compiled)
+    def _call(plan, expr, compiled)
       compiler = responsible_compiler(compiled)
-      compiler.__call(expr, compiled){
-        __call(expr, compiled)
+      compiler.__call(plan, expr, compiled){
+        __call(plan, expr, compiled)
       }
     end
 
     # Post-responsibility
-    def __call(expr, compiled, &fallback)
-      send(to_method_name(expr), expr, *compiled, &fallback)
+    def __call(plan, expr, compiled, &fallback)
+      send(to_method_name(expr), plan, expr, *compiled, &fallback)
     rescue NotSupportedError
       return fallback.call if fallback
       raise
     end
 
-    def on_missing(expr, *compiled, &fallback)
+    def on_missing(plan, expr, *compiled, &fallback)
       raise "Unable to compile `#{expr}` (#{self})" unless fallback
       fallback.call
     end
 
-    def on_unsupported(expr, *args)
+    def on_unsupported(plan, expr, *args)
       raise NotSupportedError, "Unsupported expression `#{expr}`"
     end
 
@@ -66,5 +59,6 @@ module Alf
 
   end # class Compiler
 end # module Alf
+require_relative 'compiler/plan'
 require_relative 'compiler/cog'
 require_relative 'compiler/default'

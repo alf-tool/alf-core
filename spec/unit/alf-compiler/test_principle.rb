@@ -5,19 +5,30 @@ module Alf
     # This is a compiler dedicated to specific adapters, e.g. SQL
     class DedicatedCompiler < Compiler
 
-      def on_project(expr, compiled)
+      def on_project(plan, expr, compiled)
         DedicatedCog.new(expr, self, [compiled])
       end
 
-      def on_unwrap(expr, compiled, &fallback)
+      def on_unwrap(plan, expr, compiled, &fallback)
         fallback.call
       end
 
-      def on_ungroup(expr, compiled, &fallback)
+      def on_sort(plan, expr, compiled)
+        Engine::Sort.new(compiled, expr.ordering)
+      end
+
+      def on_page(plan, expr, compiled)
+        compiled = plan.compile{|p|
+          p.sort(expr.operand, expr.ordering)
+        }
+        DedicatedCog.new(expr, self, [compiled])
+      end
+
+      def on_ungroup(plan, expr, compiled, &fallback)
         raise NotSupportedError
       end
 
-      def on_union(expr, left, right, &fallback)
+      def on_union(plan, expr, left, right, &fallback)
         DedicatedCog.new(expr, self, [left, right])
       end
 
@@ -130,6 +141,27 @@ module Alf
 
       it 'should have correct operands' do
         subject.operands.should eq([cog, cog2])
+      end
+
+      it 'should have expected compiler' do
+        subject.compiler.should be(dedicated)
+      end
+    end
+
+    context 'on an operator requiring compiling sub-expressions' do
+
+      let(:expr){
+        page(an_operand(cog), [:name, :asc], 2)
+      }
+
+      it{ should be_a(DedicatedCog) }
+
+      it 'has the sort as sub-cog' do
+        subject.operand.should be_a(Engine::Sort)
+      end
+
+      it 'has the cog as sub-sub operand' do
+        subject.operand.operand.should be(cog)
       end
 
       it 'should have expected compiler' do
