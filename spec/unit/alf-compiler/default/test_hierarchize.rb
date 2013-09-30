@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'compiler_helper'
 module Alf
   class Compiler
     describe Compiler, 'on_hierarchize' do
