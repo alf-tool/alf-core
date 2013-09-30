@@ -41,6 +41,7 @@ module Alf
   private
 
     def responsible_compiler(compiled)
+      return self if compiled.size == 0
       candidates = compiled.map(&:compiler).uniq
       if (candidates.size != 1) or candidates.first.nil?
         Default===self ? self : Default.new
