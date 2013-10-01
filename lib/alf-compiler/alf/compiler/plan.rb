@@ -16,6 +16,10 @@ module Alf
           @cogs ||= children.map(&:cog)
         end
 
+        def compilers
+          cogs.map(&:compiler).uniq
+        end
+
         def each_child(&bl)
           children.each(&bl)
         end
@@ -31,7 +35,7 @@ module Alf
         @compiler = compiler
         @subplans = {}
       end
-      attr_reader :parser, :compiler
+      attr_reader :parser
 
       def [](expr)
         @subplans[expr] ||= SubPlan.new(self, expr, nil)
@@ -44,8 +48,21 @@ module Alf
           subplan.each_child do |child|
             child.cog ||= compile(child.expr)
           end
-          compiler._call(self, expr, subplan.cogs)
+          compiler = compiler(subplan)
+          compiler.compile(self, expr, subplan.cogs){
+            main_compiler.compile(self, expr, subplan.cogs)
+          }
         end
+      end
+
+      def main_compiler
+        @compiler
+      end
+
+      def compiler(subplan)
+        candidates = subplan.compilers
+        candidates.size > 1 ? main_compiler \
+                            : candidates.first || main_compiler
       end
 
     end # class Plan

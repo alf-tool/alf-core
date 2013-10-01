@@ -1,21 +1,11 @@
 module Alf
   class Compiler
 
-    # Pre-DFS
     def call(expr)
       Plan.new(self).compile(expr)
     end
 
-    # Post-DFS, Pre-responsibility
-    def _call(plan, expr, compiled)
-      compiler = responsible_compiler(compiled)
-      compiler.__call(plan, expr, compiled){
-        __call(plan, expr, compiled)
-      }
-    end
-
-    # Post-responsibility
-    def __call(plan, expr, compiled, &fallback)
+    def compile(plan, expr, compiled, &fallback)
       send(to_method_name(expr), plan, expr, *compiled, &fallback)
     rescue NotSupportedError
       return fallback.call if fallback
