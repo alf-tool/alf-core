@@ -55,7 +55,7 @@ module Alf
 
     ### -> to_xxx
 
-      def to_cog
+      def to_cog(plan = nil)
         Alf::Compiler::Default.new.call(self)
       end
 
