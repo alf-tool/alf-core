@@ -41,7 +41,7 @@ module Alf
           Relvar::Fake.new(self, heading)
         end
 
-        def to_cog
+        def to_cog(plan = nil)
           @cog || Engine::Leaf.new([], self)
         end
 

@@ -48,9 +48,10 @@ module Alf
 
       ### read-only methods
 
-      # Returns a cog for a given name
-      def cog(name, expr = nil)
-        raise NotSupportedError, "Unable to serve cog `#{name}` in `#{self}`"
+      # Returns a base cog for the compilation of `expr` inside the compilation
+      # plan `plan`. `expr` is guaranteed to be a `Algebra::Operand::Named`.
+      def cog(plan = nil, expr = nil)
+        raise NotSupportedError, "Unable to serve cog `#{expr}` in `#{self}`"
       end
 
       ### update methods

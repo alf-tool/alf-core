@@ -23,7 +23,7 @@ shared_examples_for "an adapter with readable cogs" do
 
     it 'returns a Cog instance' do
       readable_cogs.each do |cog_name|
-        connection.cog(cog_name).should be_a(Alf::Engine::Cog)
+        connection.cog(nil, Alf::Algebra::Operand::Named.new(cog_name)).should be_a(Alf::Engine::Cog)
       end
     end
   end

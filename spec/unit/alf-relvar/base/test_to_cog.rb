@@ -10,11 +10,11 @@ module Alf
         @seen = args
       end
 
-      subject{ rv.to_cog }
+      subject{ rv.to_cog(12) }
 
       it 'delegates to the connection' do
         subject
-        @seen.should eq([:suppliers, expr])
+        @seen.should eq([12, expr])
       end
 
     end

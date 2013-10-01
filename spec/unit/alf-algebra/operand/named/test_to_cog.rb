@@ -6,11 +6,12 @@ module Alf
 
         let(:operand){ Named.new(:foo, self) }
 
-        subject{ operand.to_cog }
+        subject{ operand.to_cog(12) }
 
-        def cog(name, expr)
+        def cog(plan, expr)
+          plan.should eq(12)
           expr.should be(operand)
-          [:a_cog, name]
+          [:a_cog, expr.name]
         end
 
         it 'delegates to the underlying connection when bound' do

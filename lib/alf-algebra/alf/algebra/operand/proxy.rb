@@ -19,8 +19,8 @@ module Alf
           super
         end
 
-        def to_cog
-          return subject.to_cog if subject.respond_to?(:to_cog)
+        def to_cog(*args, &bl)
+          return subject.to_cog(*args, &bl) if subject.respond_to?(:to_cog)
           Alf::Engine::Leaf.new(subject)
         end
 

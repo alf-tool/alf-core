@@ -10,8 +10,9 @@ module Alf
           !find_file(name).nil?
         end
 
-        # Returns a cog for `name`
-        def cog(name, expr = nil)
+        # Returns a cog for `expr` inside the compilation plan `plan`
+        def cog(plan, expr)
+          name = expr.name
           if f = find_file(name)
             reader = Reader.reader(find_file(name))
             Alf::Engine::Leaf.new(reader, expr)

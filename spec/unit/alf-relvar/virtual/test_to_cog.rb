@@ -6,13 +6,13 @@ module Alf
       let(:expr){ Algebra::Operand::Named.new(:aname, self) }
       let(:rv)  { Virtual.new(expr)                         }
 
-      subject{ rv.to_cog }
+      subject{ rv.to_cog(12) }
 
       def cog(*args)
         @seen = args
       end
 
-      it{ should eq([:aname, expr]) }
+      it{ should eq([12, expr]) }
 
     end
   end

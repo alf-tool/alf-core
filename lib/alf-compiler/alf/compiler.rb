@@ -22,6 +22,10 @@ module Alf
       raise
     end
 
+    def on_leaf_operand(plan, expr)
+      expr.to_cog(plan)
+    end
+
     def on_missing(plan, expr, *compiled, &fallback)
       raise "Unable to compile `#{expr}` (#{self})" unless fallback
       fallback.call

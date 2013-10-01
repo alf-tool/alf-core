@@ -34,8 +34,8 @@ module Alf
         end
         alias :eql? :==
 
-        def to_cog
-          connection!.cog(name, self)
+        def to_cog(plan = nil)
+          connection!.cog(plan, self)
         end
 
         def to_relvar

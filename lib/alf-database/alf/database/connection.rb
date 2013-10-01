@@ -72,31 +72,14 @@ module Alf
         raise FactAssertionError, msg
       end
 
-      ### middleware level
-
-      def cog(expr, *args, &bl)
-        case expr
-        when Symbol           then adapter_connection.cog(*args.unshift(expr), &bl)
-        when Algebra::Operand then compile(expr)
-        else
-          raise ArgumentError, "Unable to compile `#{expr}` to a cog"
-        end
-      end
-
-      def lock(expr, mode = :exclusive, &bl)
-        case expr
-        when Symbol then adapter_connection.lock(expr, mode, &bl)
-        else
-          raise NotImplementedError, "Unable to lock virtual relvars"
-        end
-      end
-
       ### physical level
 
       def_delegators :adapter_connection, :in_transaction,
                                           :knows?,
                                           :heading,
                                           :keys,
+                                          :cog,
+                                          :lock,
                                           :insert,
                                           :delete,
                                           :update

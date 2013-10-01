@@ -2,12 +2,6 @@ module Alf
   class Compiler
     class Default < Compiler
 
-      ###
-
-      def on_leaf_operand(plan, expr)
-        expr.to_cog
-      end
-
       ### non relational
 
       def on_autonum(plan, expr, compiled)

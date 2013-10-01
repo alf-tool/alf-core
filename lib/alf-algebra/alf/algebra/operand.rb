@@ -33,7 +33,7 @@ module Alf
 
       ### to_xxx
 
-      def to_cog
+      def to_cog(plan = nil)
         raise NotSupportedError, "Compilation unsupported on `#{self}`"
       end
 

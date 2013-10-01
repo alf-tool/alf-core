@@ -99,7 +99,7 @@ module Alf
     end
 
     # Returns an engine Cog
-    def to_cog
+    def to_cog(plan = nil)
       Engine::Leaf.new(self, self)
     end
 
