@@ -1,3 +1,9 @@
+# 0.15.0 / FIX ME
+
+* Compiler infrastructure entirely rewritten in alf-compiler
+* Changed signature of `Adapter::Connection#cog` and associated `#to_cog`
+* Removed `#bind` of algebra expressions everywhere
+
 # 0.14.0 / 01-10-2013
 
 ## Types
