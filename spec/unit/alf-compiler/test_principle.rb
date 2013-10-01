@@ -9,26 +9,22 @@ module Alf
         DedicatedCog.new(expr, self, [compiled])
       end
 
-      def on_unwrap(plan, expr, compiled, &fallback)
-        fallback.call
-      end
-
       def on_sort(plan, expr, compiled)
         Engine::Sort.new(compiled, expr.ordering)
       end
 
       def on_page(plan, expr, compiled)
-        compiled = plan.compile{|p|
+        compiled = plan.recompile(compiled){|p|
           p.sort(expr.operand, expr.ordering)
         }
         DedicatedCog.new(expr, self, [compiled])
       end
 
-      def on_ungroup(plan, expr, compiled, &fallback)
+      def on_ungroup(plan, expr, compiled)
         raise NotSupportedError
       end
 
-      def on_union(plan, expr, left, right, &fallback)
+      def on_union(plan, expr, left, right)
         DedicatedCog.new(expr, self, [left, right])
       end
 

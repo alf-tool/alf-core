@@ -21,7 +21,7 @@ module Alf
       end
 
       def on_defaults(plan, expr, compiled)
-        compiled = plan.compile{|p|
+        compiled = plan.recompile(compiled){|p|
           p.clip(expr.operand, expr.defaults.to_attr_list)
         } if expr.strict
         factor(Engine::Defaults, expr, compiled, expr.defaults)
@@ -52,7 +52,7 @@ module Alf
       end
 
       def on_frame(plan, expr, compiled)
-        compiled = plan.compile{|p|
+        compiled = plan.recompile(compiled){|p|
           ordering = expr.total_ordering rescue expr.ordering
           p.sort(expr.operand, ordering)
         }
@@ -89,7 +89,7 @@ module Alf
 
       def on_page(plan, expr, compiled)
         index, size = expr.page_index, expr.page_size
-        compiled = plan.compile{|p|
+        compiled = plan.recompile(compiled){|p|
           ordering = expr.total_ordering rescue expr.ordering
           ordering = ordering.reverse if index < 0
           p.sort(expr.operand, ordering)
@@ -99,7 +99,7 @@ module Alf
 
       def on_project(plan, expr, compiled)
         preserving = expr.key_preserving? rescue false
-        compiled = plan.compile{|p|
+        compiled = plan.recompile(compiled){|p|
           p.clip(expr.operand, expr.attributes, allbut: expr.allbut)
         }
         compiled = factor(Engine::Compact, expr, compiled) unless preserving
@@ -107,14 +107,14 @@ module Alf
       end
 
       def on_quota(plan, expr, compiled)
-        compiled = plan.compile{|p|
+        compiled = plan.recompile(compiled){|p|
           p.sort(expr.operand, expr.by.to_ordering + expr.order)
         }
         factor(Engine::Quota::Cesure, expr, compiled, expr.by, expr.summarization)
       end
 
       def on_rank(plan, expr, compiled)
-        compiled = plan.compile{|p|
+        compiled = plan.recompile(compiled){|p|
           p.sort(expr.operand, expr.order)
         }
         factor(Engine::Rank::Cesure, expr, compiled, expr.order, expr.as)
@@ -132,7 +132,7 @@ module Alf
         if expr.allbut
           factor(Engine::Summarize::Hash, expr, compiled, expr.by, expr.summarization, expr.allbut)
         else
-          compiled = plan.compile{|p|
+          compiled = plan.recompile(compiled){|p|
             p.sort(expr.operand, expr.by.to_ordering)
           }
           factor(Engine::Summarize::Cesure, expr, compiled, expr.by, expr.summarization, expr.allbut)

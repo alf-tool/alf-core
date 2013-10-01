@@ -9,20 +9,16 @@ module Alf
       Plan.new(self).compile(expr)
     end
 
-    def compile(plan, expr, compiled, &fallback)
-      send(to_method_name(expr), plan, expr, *compiled, &fallback)
-    rescue NotSupportedError
-      return fallback.call if fallback
-      raise
+    def compile(plan, expr, compiled)
+      send(to_method_name(expr), plan, expr, *compiled)
     end
 
     def on_leaf_operand(plan, expr)
       expr.to_cog(plan)
     end
 
-    def on_missing(plan, expr, *compiled, &fallback)
-      raise "Unable to compile `#{expr}` (#{self})" unless fallback
-      fallback.call
+    def on_missing(plan, expr, *compiled)
+      raise NotSupportedError, "Unable to compile `#{expr}` (#{self})"
     end
 
     def on_unsupported(plan, expr, *args)
@@ -30,16 +26,6 @@ module Alf
     end
 
   private
-
-    def responsible_compiler(compiled)
-      return self if compiled.size == 0
-      candidates = compiled.map(&:compiler).uniq
-      if (candidates.size != 1) or candidates.first.nil?
-        Default===self ? self : Default.new
-      else
-        candidates.first
-      end
-    end
 
     def to_method_name(expr)
       case expr
