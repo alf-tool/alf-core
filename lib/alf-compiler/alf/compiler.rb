@@ -1,6 +1,10 @@
 module Alf
   class Compiler
 
+    def join(plan)
+      nil
+    end
+
     def call(expr)
       Plan.new(self).compile(expr)
     end

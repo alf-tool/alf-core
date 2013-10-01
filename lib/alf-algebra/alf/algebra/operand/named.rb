@@ -34,7 +34,7 @@ module Alf
         end
         alias :eql? :==
 
-        def to_cog(plan = nil)
+        def to_cog(plan = Alf::Compiler::Plan.new)
           connection!.cog(plan, self)
         end
 

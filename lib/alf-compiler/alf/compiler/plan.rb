@@ -30,12 +30,23 @@ module Alf
 
       end # class SubPlan
 
-      def initialize(compiler)
-        @parser = Lang::Lispy.new
-        @compiler = compiler
-        @subplans = {}
+      def initialize(compiler = Compiler.new)
+        @parser        = Lang::Lispy.new
+        @compilers     = {}
+        @main_compiler = compiler
+        @subplans      = {}
+        join(compiler)
       end
       attr_reader :parser
+
+      def join(compiler)
+        @compilers[compiler] ||= compiler.join(self)
+        compiler
+      end
+
+      def options(compiler)
+        @compilers[compiler]
+      end
 
       def [](expr)
         @subplans[expr] ||= SubPlan.new(self, expr, nil)
@@ -56,7 +67,7 @@ module Alf
       end
 
       def main_compiler
-        @compiler
+        @main_compiler
       end
 
       def compiler(subplan)
