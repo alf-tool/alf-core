@@ -9,12 +9,7 @@ module Alf
     end
     attr_reader :expr
 
-    def_delegators :expr, :connection,
-                          :connection=,
-                          :connection!,
-                          :bind,
-                          :bound?,
-                          :heading,
+    def_delegators :expr, :heading,
                           :keys,
                           :to_cog,
                           :to_lispy

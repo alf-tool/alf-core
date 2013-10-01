@@ -12,8 +12,6 @@ module Alf
           subject.should be_a(Operand::Named)
           subject.name.should eq(:suppliers)
         end
-
-        it{ should_not be_bound }
       end
 
       context "on a Hash" do
@@ -23,8 +21,6 @@ module Alf
           subject.should be_a(Operand::Proxy)
           subject.subject.should eq([ arg ])
         end
-
-        it{ should_not be_bound }
       end
 
       context "on a Tuple" do
@@ -34,8 +30,6 @@ module Alf
           subject.should be_a(Operand::Proxy)
           subject.subject.should eq([ arg ])
         end
-
-        it{ should_not be_bound }
       end
 
     end

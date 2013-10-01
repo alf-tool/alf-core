@@ -34,8 +34,8 @@ module Alf
       def _each
         scope = tuple_scope
         operand.each do |tuple|
-          t, c = scope.__set_tuple(tuple), expr && expr.connection
-          yield(tuple) if @predicate.evaluate(t, c)
+          t = scope.__set_tuple(tuple)
+          yield(tuple) if @predicate.evaluate(t)
         end
       end
 

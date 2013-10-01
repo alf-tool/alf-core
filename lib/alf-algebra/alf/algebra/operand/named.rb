@@ -8,7 +8,12 @@ module Alf
           @name = name
           @connection = connection
         end
-        attr_reader :name
+        attr_reader :name, :connection
+
+        def connection!
+          raise UnboundError, "Expression not bound `#{name}`" unless connection
+          connection
+        end
 
         def keys
           connection!.keys(name)

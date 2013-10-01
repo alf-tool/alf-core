@@ -4,7 +4,7 @@ module Alf
     module Operand
       describe Named, "keys" do
 
-        let(:operand){ Named.new(:foo).bind(self) }
+        let(:operand){ Named.new(:foo, self) }
 
         subject{ operand.keys }
 

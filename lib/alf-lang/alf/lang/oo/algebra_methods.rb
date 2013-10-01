@@ -14,14 +14,6 @@ module Alf
             # build the new expression
             expr = clazz.new(operands, *arguments)
 
-            # bind it if operands were bound
-            conns = operands.map(&:connection).uniq
-            if conns.size == 1
-              expr.connection = conns.first
-            elsif conns.size > 1
-              raise NotSupportedError, "Multiple connections unsupported"
-            end
-
             # let the abstraction have a chance to of decorating it
             _operator_output(expr)
           end

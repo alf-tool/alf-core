@@ -82,7 +82,7 @@ module Alf
       Predicate.new(expr.rename(renaming))
     end
 
-    def evaluate(scope, connection = nil)
+    def evaluate(scope)
       proc = to_proc
       if proc.arity == 1
         proc.call(scope)

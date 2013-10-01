@@ -28,8 +28,6 @@ module Alf
         it 'deeply binds parsed relational expressions' do
           p = lispy.parse{ project(:suppliers, [:sid]) }
           p.should be_a(Algebra::Project)
-          p.connection!.should eq(12)
-          p.operand.connection!.should eq(12)
         end
       end
 

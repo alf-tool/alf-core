@@ -1,7 +1,11 @@
 module Alf
   module Relvar
     class Base
+      extend Forwardable
       include Relvar
+
+      def_delegators :expr, :connection,
+                            :connection!
 
       ### Update
 

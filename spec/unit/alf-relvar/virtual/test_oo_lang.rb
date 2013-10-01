@@ -25,10 +25,6 @@ module Alf
         subject.expr.operand.should be(base)
       end
 
-      it 'should be kept bound' do
-        subject.should be_bound
-      end
-
     end
   end
 end

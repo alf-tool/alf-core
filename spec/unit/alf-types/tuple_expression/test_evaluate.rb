@@ -26,13 +26,5 @@ module Alf
       it{ should be_a(Relation) }
     end
 
-    context 'when the proc returns a unbound, yet boundable expression' do
-      let(:exp){ TupleExpression[->(t){ Algebra::Operand::Named.new(:suppliers) }] }
-
-      subject{ exp.evaluate(scope, examples_database) }
-
-      it{ should be_a(Relation) }
-    end
-
   end # TupleExpression
 end # Alf

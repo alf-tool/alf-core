@@ -54,8 +54,8 @@ module Alf
       #
       # @param [TupleScope] scope a tuple scope instance.
       # @return [Hash] the resulting tuple
-      def evaluate(scope = nil, connection = nil)
-        hmap{|_,v| v.is_a?(TupleExpression) ? v.evaluate(scope, connection) : v }
+      def evaluate(scope = nil)
+        hmap{|_,v| v.is_a?(TupleExpression) ? v.evaluate(scope) : v }
       end
 
       # Returns self

@@ -48,11 +48,6 @@ module Alf
         signature.parse_args(args, self)
       end
 
-      # Binds to a connection
-      def bind(connection)
-        super{|c| c.operands = operands.map{|op| op.bind(connection) } }
-      end
-
       # @return [Signature] the operator signature.
       def signature
         self.class.signature
@@ -93,14 +88,12 @@ module Alf
       def hash
         @hash ||= [ self.class,
                     operands,
-                    connection,
                     signature.collect_on(self) ].hash
       end
 
       def ==(other)
         super || ((other.class == self.class) &&
                   (other.operands == self.operands) &&
-                  (other.connection == self.connection) &&
                   (other.signature.collect_on(self) == self.signature.collect_on(self)))
       end
       alias :eql? :==

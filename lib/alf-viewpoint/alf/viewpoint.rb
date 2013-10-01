@@ -32,7 +32,7 @@ module Alf
 
       def native(as, native_name = as)
         define_method(as) do
-          Algebra.named_operand(native_name)
+          Algebra.named_operand(native_name, connection)
         end
       end
 
@@ -56,7 +56,7 @@ module Alf
       include ::Alf::Viewpoint
 
       def method_missing(name, *args, &bl)
-        (!args.empty? || bl) ? super : ::Alf::Algebra.named_operand(name)
+        (!args.empty? || bl) ? super : ::Alf::Algebra.named_operand(name, connection)
       end
     }
 
