@@ -12,16 +12,24 @@ module Alf
           @children ||= expr.operands.map{|op| plan[op] }
         end
 
-        def cogs
+        def children_cogs
           @cogs ||= children.map(&:cog)
         end
 
-        def compilers
-          cogs.map(&:compiler).uniq
+        def children_compilers
+          children_cogs.map(&:compiler).uniq
         end
 
-        def each_child(&bl)
-          children.each(&bl)
+        def compiler
+          candidates = children_compilers
+          candidates.size > 1 ? plan.main_compiler \
+                              : candidates.first || plan.main_compiler
+        end
+
+        def cog
+          @cog ||= compiler.compile(plan, expr, children_cogs){
+            plan.main_compiler.compile(plan, expr, children_cogs)
+          }
         end
 
         def to_s
@@ -37,7 +45,7 @@ module Alf
         @subplans      = {}
         join(compiler)
       end
-      attr_reader :parser
+      attr_reader :parser, :main_compiler
 
       def join(compiler)
         @compilers[compiler] ||= compiler.join(self)
@@ -53,27 +61,7 @@ module Alf
       end
 
       def compile(expr = nil, &bl)
-        expr ||= bl.call(parser)
-        subplan = self[expr]
-        subplan.cog ||= begin
-          subplan.each_child do |child|
-            child.cog ||= compile(child.expr)
-          end
-          compiler = compiler(subplan)
-          compiler.compile(self, expr, subplan.cogs){
-            main_compiler.compile(self, expr, subplan.cogs)
-          }
-        end
-      end
-
-      def main_compiler
-        @main_compiler
-      end
-
-      def compiler(subplan)
-        candidates = subplan.compilers
-        candidates.size > 1 ? main_compiler \
-                            : candidates.first || main_compiler
+        self[expr || bl.call(parser)].cog
       end
 
     end # class Plan
