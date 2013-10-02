@@ -20,10 +20,6 @@ module Alf
         @compilers[compiler]
       end
 
-      def parse(&bl)
-        bl.call(parser)
-      end
-
       def compile(expr = nil, compiled = nil, &bl)
         expr     ||= bl.call(parser)
         compiled ||= children(expr).map{|op| compile(op) }
