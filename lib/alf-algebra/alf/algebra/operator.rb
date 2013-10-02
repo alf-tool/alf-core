@@ -56,7 +56,7 @@ module Alf
     ### -> to_xxx
 
       def to_cog(plan = nil)
-        Alf::Compiler::Default.new.call(self)
+        plan ? plan.compile(self) : Alf::Compiler::Default.new.call(self)
       end
 
       def to_lispy
