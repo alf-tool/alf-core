@@ -6,6 +6,8 @@ module Alf
       def initialize(compiler = Compiler.new)
         @parser        = Lang::Lispy.new
         @compilers     = {}
+        @compiled      = {}
+        @usage_count   = Hash.new{|h,k| h[k] = 0 }
         @main_compiler = compiler
         join(compiler)
       end
@@ -20,17 +22,39 @@ module Alf
         @compilers[compiler]
       end
 
-      def compile(expr = nil, compiled = nil, &bl)
-        expr     ||= bl.call(parser)
-        compiled ||= children(expr).map{|op| compile(op) }
-        compiler   = compiler(compiled)
-        compiler.compile(self, expr, compiled)
+      # Pre-visit
+      def compile(sexpr)
+        visit(sexpr)
+        _compile(sexpr)
+      end
+
+      # Post-visit, pre-reuse
+      def _compile(expr)
+        compiled = @compiled[expr]
+        return @compiled[expr] = __compile(expr) unless compiled
+        return __compile(expr) unless compiler = compiled.compiler
+        return __compile(expr) unless compiler.supports_reuse?
+        compiler.reuse(self, compiled)
+      end
+
+      # Real compilation, post-reuse
+      def __compile(expr = nil, compiled = nil, &bl)
+        expr      ||= bl.call(parser)
+        compiled  ||= children(expr).map{|op| _compile(op) }
+        compiler    = compiler(compiled)
+        usage_count = @usage_count[expr]
+        compiler.compile(self, expr, compiled, usage_count)
       rescue NotSupportedError
-        main_compiler.compile(self, expr, compiled)
+        main_compiler.compile(self, expr, compiled, usage_count)
       end
 
       def recompile(*compiled, &bl)
-        compile(nil, compiled, &bl)
+        __compile(nil, compiled, &bl)
+      end
+
+      def visit(expr)
+        @usage_count[expr] += 1
+        children(expr).each{|op| visit(op) }
       end
 
     private

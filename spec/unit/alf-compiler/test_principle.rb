@@ -5,6 +5,14 @@ module Alf
     # This is a compiler dedicated to specific adapters, e.g. SQL
     class DedicatedCompiler < Compiler
 
+      def supports_reuse?
+        true
+      end
+
+      def reuse(plan, compiled)
+        compiled
+      end
+
       def on_project(plan, expr, compiled)
         DedicatedCog.new(expr, self, [compiled])
       end
@@ -304,6 +312,19 @@ module Alf
         subject.compiler.should be(default)
         subject.left.compiler.should be(compilo1)
         subject.right.compiler.should be(compilo2)
+      end
+    end
+
+    context 'on expressions where reuse is possible' do
+      let(:expr){
+        reused = project(an_operand(cog), [:a])
+        union(reused, reused)
+      }
+
+      it{ should be_a(DedicatedCog) }
+
+      it 'should reuse the compilation result' do
+        subject.left.should be(subject.right)
       end
     end
 

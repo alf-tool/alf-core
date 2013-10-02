@@ -1,6 +1,10 @@
 module Alf
   class Compiler
 
+    def supports_reuse?
+      false
+    end
+
     def join(plan)
       nil
     end
@@ -9,7 +13,7 @@ module Alf
       Plan.new(self).compile(expr)
     end
 
-    def compile(plan, expr, compiled)
+    def compile(plan, expr, compiled, usage_count)
       send(to_method_name(expr), plan, expr, *compiled)
     end
 

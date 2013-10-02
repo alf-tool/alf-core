@@ -2,6 +2,14 @@ module Alf
   class Compiler
     class Default < Compiler
 
+      def supports_reuse?
+        true
+      end
+
+      def reuse(plan, cog)
+        cog
+      end
+
       ### non relational
 
       def on_autonum(plan, expr, compiled)
