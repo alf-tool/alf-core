@@ -1,4 +1,3 @@
-require_relative 'optimizer/restrict'
 module Alf
   class Optimizer
 
@@ -7,14 +6,22 @@ module Alf
     end
 
     def call(expr)
-      @processors.inject(expr) do |c, (p,k)|
-        Search.new(p, k).call(c)
-      end
+      @processors.inject(expr){|c,p| p.call(c) }
     end
 
-    def register(processor, interest)
-      @processors << [processor, interest]
+    def register(processor)
+      @processors << processor
       self
+    end
+
+    class Base < Algebra::Rewriter
+      include Lang::Functional
+
+      def call(expr, search = nil)
+        return Search.new(self, search_predicate).call(expr) unless search
+        _call(expr, search)
+      end
+
     end
 
     class Search < Algebra::Rewriter
@@ -36,3 +43,5 @@ module Alf
 
   end # class Optimizer
 end # module Alf
+require_relative 'optimizer/restrict'
+require_relative 'optimizer/project'

@@ -49,7 +49,7 @@ module Alf
       end
 
       def relvar(*args, &bl)
-        parse(*args, &bl).to_relvar
+        optimize(*args, &bl).to_relvar
       end
 
       def query(*args, &bl)
@@ -115,7 +115,10 @@ module Alf
     private
 
       def optimizer
-        Optimizer.new.register(Optimizer::Restrict.new, Algebra::Restrict)
+        Optimizer.new.tap{|op|
+          op.register(Optimizer::Restrict.new)
+          op.register(Optimizer::Project.new)
+        }
       end
 
       def compilation_chain
