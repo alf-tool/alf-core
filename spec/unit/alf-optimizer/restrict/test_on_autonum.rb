@@ -10,7 +10,7 @@ module Alf
 
       context 'when the restriction does not apply to auto at all' do
         let(:predicate){ comp(:x => 12) }
-        let(:expected) { autonum(restrict(inside, predicate)) }
+        let(:expected) { autonum(restrict(inside, predicate), :auto) }
       
         it{ should eq(expected) }
       end
