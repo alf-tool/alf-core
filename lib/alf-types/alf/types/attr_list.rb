@@ -105,14 +105,14 @@ module Alf
         c = set_compare(other)
         c and (c >= (proper ? 1 : 0))
       end
-      alias :supersetOf? :superset?
+      alias :supserset_of? :superset?
 
       # Returns true if self is a (proper) subset of `other`
       def subset?(other, proper = false)
         c = set_compare(other)
         c and (c <= (proper ? -1 : 0))
       end
-      alias :subsetOf? :subset?
+      alias :subset_of? :subset?
 
       # Returns true if self intersects another attribute list
       def intersect?(other)

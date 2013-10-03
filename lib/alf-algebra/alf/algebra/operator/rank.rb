@@ -17,7 +17,7 @@ module Alf
       def keys
         @keys ||= begin
           keys, selectors = operand.keys, order.to_attr_list
-          if keys.any?{|k| k.subsetOf?(selectors) }
+          if keys.any?{|k| k.subset_of?(selectors) }
             keys + [ AttrList[as] ]
           else
             keys

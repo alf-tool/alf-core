@@ -122,7 +122,7 @@ module Alf
       # @return [Ordering]
       def total(keys, &bl)
         list = to_attr_list
-        if k = keys.to_a.find{|k| k.to_attr_list.subsetOf?(list) }
+        if k = keys.to_a.find{|k| k.to_attr_list.subset_of?(list) }
           self
         elsif k = keys.first
           merge(k.to_ordering){|k,d1,d2| d1 }
