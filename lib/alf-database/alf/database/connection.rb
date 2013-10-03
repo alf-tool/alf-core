@@ -24,6 +24,7 @@ module Alf
       def reconnect(opts = {})
         close unless (opts.keys & [:schema_cache]).empty?
         @options = options.merge(opts)
+        @parser = nil
         open!
       end
 
@@ -34,6 +35,7 @@ module Alf
       def close
         adapter_connection.close unless closed?
         @adapter_connection = nil
+        @parser = nil
       end
 
       ### logical level
@@ -121,7 +123,7 @@ module Alf
       end
 
       def parser
-        options.viewpoint.parser(self)
+        @parser ||= options.viewpoint.parser(self)
       end
 
       def debug_dot(e, where)
