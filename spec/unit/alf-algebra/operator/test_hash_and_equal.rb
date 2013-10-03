@@ -25,7 +25,7 @@ module Alf
         it 'distinguises other operands' do
           op1.should_not eq(nil)
           op1.should_not eq(a_lispy.restrict(bar, x: 12))
-          op1.should_not eq(a_lispy.restrict(bar, x: 13))
+          op1.should_not eq(a_lispy.restrict(foo, x: 13))
         end
       end
 

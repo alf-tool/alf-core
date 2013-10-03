@@ -93,7 +93,6 @@ module Alf
 
       def ==(other)
         super || ((other.class == self.class) &&
-                  (other.operands == self.operands) &&
                   (other.signature.collect_on(other) == self.signature.collect_on(self)))
       end
       alias :eql? :==
