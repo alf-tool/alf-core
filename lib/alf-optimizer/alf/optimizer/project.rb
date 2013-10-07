@@ -131,7 +131,22 @@ module Alf
       alias :on_project      :on_clip
       alias :on_quota        :on_todo
       alias :on_rank         :on_todo
-      alias :on_rename       :on_todo
+
+      def on_rename(expr, attributes, allbut, search)
+        inside = expr.renaming.invert.rename_attr_list(attributes)
+
+        # project the operand on renamed attributes
+        rw = apply(expr.operand, inside, allbut, search)
+
+        # apply the renaming unless all attributes have been projected away
+        renaming = inside.project_tuple(expr.renaming.to_hash, allbut)
+        unless renaming.empty?
+          rw = rename(rw, renaming)
+        end
+
+        rw
+      end
+
       alias :on_restrict     :on_todo
 
       def on_sort(expr, attributes, allbut, search)
