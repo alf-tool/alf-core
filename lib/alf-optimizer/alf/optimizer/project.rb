@@ -37,6 +37,7 @@ module Alf
         project(search.call(expr), attributes, allbut: allbut)
       end
       alias :on_missing :on_unoptimizable
+      alias :on_todo    :on_unoptimizable
 
     ### leaf operand, recursion end :-)
 
@@ -44,26 +45,9 @@ module Alf
 
     ### operator callbacks
 
-      def on_sort(expr, attributes, allbut, search)
-        sort_a = expr.ordering.to_attr_list
+      alias :on_autonum :on_todo
 
-        # compute inside projection attributes
-        inside = allbut ? attributes - sort_a : attributes + sort_a
-
-        # project the operand and sort the result
-        rw = apply(expr.operand, inside, allbut, search)
-        rw = sort(rw, expr.ordering)
-
-        # project unless the job has already been done
-        unless inside == attributes
-          outside = allbut ? attributes - inside : attributes
-          rw = project(rw, outside, allbut: allbut)
-        end
-
-        rw
-      end
-
-      def on_project(expr, attributes, allbut, search)
+      def on_clip(expr, attributes, allbut, search)
         inside, outside = expr.attributes, attributes
         if expr.allbut != allbut
           attributes = allbut ? inside - outside : outside - inside
@@ -73,7 +57,10 @@ module Alf
         end
         apply(expr.operand, attributes, allbut, search)
       end
-      alias :on_clip :on_project
+
+      alias :on_coerce   :on_todo
+      alias :on_compact  :on_todo
+      alias :on_defaults :on_todo
 
       def on_extend(expr, attributes, allbut, search)
         ext = expr.ext.project(attributes, allbut)
@@ -84,6 +71,13 @@ module Alf
           project(extend(op, ext), attributes, allbut: allbut)
         end
       end
+
+      alias :on_frame         :on_todo
+      alias :on_generator     :on_unoptimizable
+      alias :on_group         :on_todo
+      alias :on_hierarchize   :on_unoptimizable
+      alias :on_infer_heading :on_unoptimizable
+      alias :on_intersect     :on_unoptimizable
 
       def on_join(expr, attributes, allbut, search)
         commons = expr.left.attr_list & expr.right.attr_list
@@ -132,12 +126,45 @@ module Alf
       end
       alias :on_matching     :on_binary_splitable
       alias :on_not_matching :on_binary_splitable
+      alias :on_minus        :on_unoptimizable
+      alias :on_page         :on_todo
+      alias :on_project      :on_clip
+      alias :on_quota        :on_todo
+      alias :on_rank         :on_todo
+      alias :on_rename       :on_todo
+      alias :on_restrict     :on_todo
+
+      def on_sort(expr, attributes, allbut, search)
+        sort_a = expr.ordering.to_attr_list
+
+        # compute inside projection attributes
+        inside = allbut ? attributes - sort_a : attributes + sort_a
+
+        # project the operand and sort the result
+        rw = apply(expr.operand, inside, allbut, search)
+        rw = sort(rw, expr.ordering)
+
+        # project unless the job has already been done
+        unless inside == attributes
+          outside = allbut ? attributes - inside : attributes
+          rw = project(rw, outside, allbut: allbut)
+        end
+
+        rw
+      end
+
+      alias :on_summarize :on_todo
+      alias :on_type_safe :on_todo
+      alias :on_ungroup   :on_todo
 
       def on_union(expr, attributes, allbut, search)
         left  = apply(expr.left, attributes, allbut, search)
         right = apply(expr.right, attributes, allbut, search)
         union(left, right)
       end
+
+      alias :on_unwrap :on_todo
+      alias :on_wrap   :on_todo
 
     end # class Project
   end # class Optimizer
