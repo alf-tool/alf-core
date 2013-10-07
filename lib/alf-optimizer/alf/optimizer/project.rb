@@ -26,13 +26,42 @@ module Alf
         yield
       end
 
-    ### operator callbacks
+      def on_pass_through(expr, attributes, allbut, search)
+        operands = expr.operands.map{|op|
+          apply(op, attributes, allbut, search)
+        }
+        expr.with_operands(*operans)
+      end
 
       def on_unoptimizable(expr, attributes, allbut, search)
         project(search.call(expr), attributes, allbut: allbut)
       end
-      alias :on_missing      :on_unoptimizable
-      alias :on_leaf_operand :on_unoptimizable
+      alias :on_missing :on_unoptimizable
+
+    ### leaf operand, recursion end :-)
+
+    alias :on_leaf_operand :on_unoptimizable
+
+    ### operator callbacks
+
+      def on_sort(expr, attributes, allbut, search)
+        sort_a = expr.ordering.to_attr_list
+
+        # compute inside projection attributes
+        inside = allbut ? attributes - sort_a : attributes + sort_a
+
+        # project the operand and sort the result
+        rw = apply(expr.operand, inside, allbut, search)
+        rw = sort(rw, expr.ordering)
+
+        # project unless the job has already been done
+        unless inside == attributes
+          outside = allbut ? attributes - inside : attributes
+          rw = project(rw, outside, allbut: allbut)
+        end
+
+        rw
+      end
 
       def on_project(expr, attributes, allbut, search)
         inside, outside = expr.attributes, attributes
