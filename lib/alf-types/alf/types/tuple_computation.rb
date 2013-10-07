@@ -30,7 +30,7 @@ module Alf
         }
       end
 
-      reuse :to_hash, :map
+      reuse :to_hash, :map, :empty?
 
       # Makes the computation in the context of a tuple
       #
