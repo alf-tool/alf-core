@@ -46,10 +46,6 @@ module Alf
         apply(expr.operand, sort(inserted, expr.ordering))
       end
 
-      def on_type_safe(expr, inserted)
-        apply(expr.operand, type_safe(inserted, expr.type_safe_heading, strict: expr.strict))
-      end
-
       ### relational
 
       def on_extend(expr, inserted)
@@ -59,8 +55,6 @@ module Alf
       def on_group(expr, inserted)
         apply(expr.operand, ungroup(inserted, expr.as))
       end
-
-      alias :on_infer_heading :not_supported
 
       def on_intersect(expr, inserted)
         apply(expr.left, inserted)

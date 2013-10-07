@@ -23,13 +23,11 @@ module Alf
       alias :on_defaults   :not_supported
       alias :on_generator  :not_supported
       alias :on_sort       :not_supported
-      alias :on_type_safe :not_supported
 
       ### relational
 
       alias :on_extend        :not_supported
       alias :on_group         :not_supported
-      alias :on_infer_heading :not_supported
       alias :on_intersect     :not_supported
       alias :on_join          :not_supported
       alias :on_matching      :not_supported

@@ -45,7 +45,6 @@ module Alf
       end
 
       alias :on_generator  :not_supported
-      alias :on_type_safe :not_supported
 
       alias :on_sort :on_unary_delegate
 
@@ -58,8 +57,6 @@ module Alf
       def on_group(expr, predicate)
         apply_and_split(expr, predicate, AttrList[expr.as])
       end
-
-      alias :on_infer_heading :not_supported
 
       def on_intersect(expr, predicate)
         apply(expr.left, predicate)

@@ -44,15 +44,6 @@ module Alf
         factor(Engine::Sort, expr, compiled, expr.ordering)
       end
 
-      def on_type_safe(plan, expr, compiled)
-        checker = TypeCheck.new(expr.heading, expr.strict)
-        factor(Engine::TypeSafe, expr, compiled, checker)
-      end
-
-      def on_infer_heading(plan, expr, compiled)
-        factor(Engine::InferHeading, expr, compiled)
-      end
-
       ### relational
 
       def on_extend(plan, expr, compiled)

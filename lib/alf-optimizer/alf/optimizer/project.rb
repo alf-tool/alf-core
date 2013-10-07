@@ -76,7 +76,6 @@ module Alf
       alias :on_generator     :on_unoptimizable
       alias :on_group         :on_todo
       alias :on_hierarchize   :on_unoptimizable
-      alias :on_infer_heading :on_unoptimizable
       alias :on_intersect     :on_unoptimizable
 
       def on_join(expr, attributes, allbut, search)
@@ -169,7 +168,6 @@ module Alf
       end
 
       alias :on_summarize :on_todo
-      alias :on_type_safe :on_todo
       alias :on_ungroup   :on_todo
 
       def on_union(expr, attributes, allbut, search)

@@ -37,7 +37,6 @@ module Alf
       alias :on_clip        :on_pass_through
       alias :on_compact     :on_pass_through
       alias :on_sort        :on_pass_through
-      alias :on_type_safe   :on_pass_through
       alias :on_project     :on_pass_through
       alias :on_intersect   :on_pass_through
       alias :on_minus       :on_pass_through
@@ -47,7 +46,6 @@ module Alf
         restrict(search.call(expr), predicate)
       end
       alias :on_generator     :on_unoptimizable
-      alias :on_infer_heading :on_unoptimizable
       alias :on_page          :on_unoptimizable
       alias :on_frame         :on_unoptimizable
 

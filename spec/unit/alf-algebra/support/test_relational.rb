@@ -11,7 +11,6 @@ module Alf
           Frame,
           Group,
           Hierarchize,
-          InferHeading,
           Intersect,
           Join,
           Matching,

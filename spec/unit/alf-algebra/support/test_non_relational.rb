@@ -13,8 +13,7 @@ module Alf
           Compact,
           Defaults,
           Generator,
-          Sort,
-          TypeSafe
+          Sort
         ]
       end
     

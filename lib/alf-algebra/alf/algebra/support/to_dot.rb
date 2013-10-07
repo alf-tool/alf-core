@@ -77,10 +77,6 @@ module Alf
         on_unary_operator(expr, buf, "Group|#{allbut(expr)}#{attributes(expr)}#{as(expr)}")
       end
 
-      def on_infer_heading(expr, buf = "")
-        on_unary_operator(expr, buf, "InferHeading")
-      end
-
       def on_intersect(expr, buf = "")
         on_binary_operator(expr, buf, "Intersect")
       end
@@ -127,10 +123,6 @@ module Alf
 
       def on_summarize(expr, buf = "")
         on_unary_operator(expr, buf, "Sumarize|#{allbut(expr)}#{by(expr)}")
-      end
-
-      def on_type_safe(expr, buf = "")
-        on_unary_operator(expr, buf, "TypeSafe|#{strict(expr)}#{heading(expr)}")
       end
 
       def on_ungroup(expr, buf = "")
