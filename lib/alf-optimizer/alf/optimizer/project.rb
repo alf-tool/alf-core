@@ -42,6 +42,12 @@ module Alf
         end
       end
 
+      def on_union(expr, attributes, allbut, search)
+        left  = apply(expr.left, attributes, allbut, search)
+        right = apply(expr.right, attributes, allbut, search)
+        union(left, right)
+      end
+
     end # class Project
   end # class Optimizer
 end # module Alf
