@@ -24,6 +24,12 @@ module Alf
         end
       end
 
+    private
+
+      def _type_check(options)
+        joinable_headings!(left.heading, right.heading, options)
+      end
+
     end # class Join
   end # module Algebra
 end # module Alf

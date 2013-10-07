@@ -18,6 +18,11 @@ module Alf
         @keys ||= Keys[ [as] ]
       end
 
+    private
+
+      def _type_check(options)
+      end
+
     end # class Generator
   end # module Algebra
 end # module Alf

@@ -9,6 +9,8 @@ require_relative 'support/experimental'
 require_relative 'support/classification'
 require_relative 'support/signature'
 
+require_relative 'support/type_check'
+
 require_relative 'support/with_ordering'
 
 require_relative 'support/visitor'

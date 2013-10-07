@@ -25,6 +25,13 @@ module Alf
         end
       end
 
+    private
+
+      def _type_check(options)
+        no_unknown!(by - operand.attr_list)
+        no_name_clash!(operand.attr_list, summarization.to_attr_list)
+      end
+
     end # class Summarize
   end # module Algebra
 end # module Alf

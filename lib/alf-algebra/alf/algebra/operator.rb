@@ -2,6 +2,7 @@ module Alf
   module Algebra
     module Operator
       include Operand
+      include TypeCheck
 
     ### Class-based tools
 
@@ -53,10 +54,27 @@ module Alf
         self.class.signature
       end
 
+    ### heading, keys, and others
+
+      def type_check(options = {strict: false})
+        operands.each{|op| op.type_check(options) }
+        _type_check(options)
+        heading
+      end
+
     ### -> to_xxx
 
       def to_cog(plan = nil)
         plan ? plan.compile(self) : Alf::Compiler::Default.new.call(self)
+      end
+
+      def to_lispy_short
+        cmdname  = self.class.rubycase_name
+        _, args, opts = signature.collect_on(self)
+        args = opts.empty? ? args : args + [ opts ]
+        args = args.map{|arg| Support.to_lispy(arg) rescue arg.to_s }
+        args.unshift("...")
+        "#{cmdname}(#{args.join(', ')})"
       end
 
       def to_lispy

@@ -31,6 +31,10 @@ module Alf
         raise NotSupportedError, "Key inference unsupported on `#{self}`"
       end
 
+      def type_check(options = {strict: false})
+        heading
+      end
+
       ### to_xxx
 
       def to_cog(plan = nil)

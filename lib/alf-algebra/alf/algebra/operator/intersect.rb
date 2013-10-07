@@ -21,6 +21,12 @@ module Alf
         end
       end
 
+    private
+
+      def _type_check(options)
+        same_heading!(left.heading, right.heading)
+      end
+
     end # class Intersect
   end # module Algebra
 end # module Alf

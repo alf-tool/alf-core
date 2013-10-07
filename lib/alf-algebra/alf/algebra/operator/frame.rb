@@ -20,6 +20,14 @@ module Alf
         operand.keys
       end
 
+    private
+
+      def _type_check(options)
+        valid_ordering!(ordering, operand.attr_list)
+        type_check_error!("invalid offset `#{offset}`") unless offset >= 0
+        type_check_error!("invalid limit `#{limit}`")   unless limit >= 0
+      end
+
     end # class Frame
   end # module Algebra
 end # module Alf

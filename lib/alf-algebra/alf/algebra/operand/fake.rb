@@ -9,6 +9,11 @@ module Alf
           @attributes = {}
           @cog = cog
         end
+        attr_accessor :connection
+
+        def with_connection(conn)
+          dup.tap{|d| d.connection = conn }
+        end
 
         def with_heading(h)
           dup.set!(:heading => Alf::Heading.coerce(h))
@@ -38,7 +43,11 @@ module Alf
         end
 
         def to_relvar
-          Relvar::Fake.new(self, heading)
+          if connection && name
+            Operand::Named.new(name, connection).to_relvar
+          else
+            Relvar::Fake.new(self, heading)
+          end
         end
 
         def to_cog(plan = nil)

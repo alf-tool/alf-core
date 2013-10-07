@@ -17,10 +17,16 @@ module Alf
         @keys ||= begin
           keys = operand.keys
           unless (cv = predicate.constant_variables).empty?
-            keys = keys.map{|k| k - cv}
+            keys = keys.map{|k| k - cv }
           end
           keys
         end
+      end
+
+    private
+
+      def _type_check(options)
+        no_unknown!(predicate.free_variables - operand.attr_list)
       end
 
     end # class Restrict

@@ -28,6 +28,14 @@ module Alf
         op_h[attribute].heading
       end
 
+      def _type_check(options)
+        ungrouped = operand.heading[attribute]
+        unless ungrouped.ancestors.include?(Relation)
+          type_check_error!("not a relation-valued attribute `#{attribute}` (#{ungrouped})")
+        end
+        no_name_clash!(operand.attr_list, ungrouped.heading.to_attr_list)
+      end
+
     end # class Ungroup
   end # module Algebra
 end # module Alf

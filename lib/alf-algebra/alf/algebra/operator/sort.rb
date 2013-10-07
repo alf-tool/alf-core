@@ -17,6 +17,12 @@ module Alf
         @keys ||= operand.keys
       end
 
+    private
+
+      def _type_check(options)
+        valid_ordering!(ordering, operand.attr_list)
+      end
+
     end # class Sort
   end # module Algebra
 end # module Alf

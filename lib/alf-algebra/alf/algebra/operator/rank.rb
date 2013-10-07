@@ -25,6 +25,13 @@ module Alf
         end
       end
 
+    private
+
+      def _type_check(options)
+        valid_ordering!(order, operand.attr_list)
+        no_name_clash!(operand.attr_list, AttrList[as])
+      end
+
     end # class Rank
   end # module Algebra
 end # module Alf

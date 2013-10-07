@@ -6,6 +6,7 @@ module Alf
       def initialize(expr, heading)
         super(expr)
         @heading = Heading.coerce(heading)
+        @connection = connection
       end
       attr_reader :heading
 

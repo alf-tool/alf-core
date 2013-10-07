@@ -39,11 +39,27 @@ module Helpers
   end
 
   def suppliers
-    Alf::Algebra.named_operand(:suppliers, db_context)
+    @suppliers ||= an_operand
+      .with_connection(db_context)
+      .with_name(:suppliers)
+      .with_heading(sid: String, name: String, status: Integer, city: String)
+      .with_keys([:sid], [:name])
+  end
+
+  def supplies
+    @supplies ||= an_operand
+      .with_connection(db_context)
+      .with_name(:supplies)
+      .with_heading(sid: String, pid: String, qty: Integer)
+      .with_keys([:sid, :pid])
   end
 
   def parts
-    Alf::Algebra.named_operand(:parts, db_context)
+    @parts ||= an_operand
+      .with_connection(db_context)
+      .with_name(:parts)
+      .with_heading(pid: String, name: String, color: String, weight: Float, city: String)
+      .with_keys([:pid])
   end
 
   def some_tuples

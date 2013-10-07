@@ -21,6 +21,11 @@ module Alf
         @keys ||= operand.keys
       end
 
+    private
+
+      def _type_check(options)
+      end
+
     end # class Defaults
   end # module Algebra
 end # module Alf

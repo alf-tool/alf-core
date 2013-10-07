@@ -28,6 +28,12 @@ module Alf
         allbut ? heading.to_attr_list : attributes
       end
 
+    private
+
+      def _type_check(options)
+        no_unknown!(attributes - operand.attr_list)
+      end
+
     end # class Project
   end # module Algebra
 end # module Alf

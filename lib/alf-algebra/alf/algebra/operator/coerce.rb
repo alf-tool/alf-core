@@ -17,6 +17,12 @@ module Alf
         @keys ||= operand.keys
       end
 
+    private
+
+      def _type_check(options)
+        no_unknown!(coercions.to_attr_list - operand.attr_list)
+      end
+
     end # class Coerce
   end # module Algebra
 end # module Alf

@@ -16,6 +16,12 @@ module Alf
         @keys ||= left.keys
       end
 
+    private
+
+      def _type_check(options)
+        joinable_headings!(left.heading, right.heading, options)
+      end
+
     end # class NotMatching
   end # module Algebra
 end # module Alf

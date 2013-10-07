@@ -16,6 +16,11 @@ module Alf
         @keys ||= operand.keys.if_empty{ Keys[ heading.to_attr_list ] }
       end
 
+    private
+
+      def _type_check(options)
+      end
+
     end # class Compact
   end # module Algebra
 end # module Alf

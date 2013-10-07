@@ -20,6 +20,12 @@ module Alf
         end
       end
 
+    private
+
+      def _type_check(options)
+        no_name_clash!(operand.attr_list, ext.to_attr_list)
+      end
+
     end # class Extend
   end # module Algebra
 end # module Alf
