@@ -58,6 +58,15 @@ module Alf
         hmap{|_,v| v.is_a?(TupleExpression) ? v.evaluate(scope) : v }
       end
 
+      # Projects this tuple computation on specified attribute names.
+      #
+      # @param [AttrList] attributes some attribute names.
+      # @param [Boolean] allbut apply a allbut projection?
+      def project(attributes, allbut = false)
+        TupleComputation.new\
+          AttrList.coerce(attributes).project_tuple(reused_instance, allbut)
+      end
+
       # Returns self
       def to_tuple_computation
         self
