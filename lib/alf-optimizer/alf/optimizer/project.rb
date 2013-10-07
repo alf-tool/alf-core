@@ -147,7 +147,7 @@ module Alf
         rw
       end
 
-      alias :on_restrict     :on_todo
+      alias :on_restrict :on_todo
 
       def on_sort(expr, attributes, allbut, search)
         sort_a = expr.ordering.to_attr_list

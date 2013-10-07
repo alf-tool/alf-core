@@ -91,11 +91,7 @@ module Alf
       end
 
       def on_rename(expr, predicate, search)
-        begin
-          predicate = predicate.rename(expr.renaming.invert)
-        rescue NotSupportedError
-          return restrict(expr, predicate)
-        end
+        predicate = predicate.rename(expr.renaming.invert)
         on_pass_through(expr, predicate, search)
       end
 

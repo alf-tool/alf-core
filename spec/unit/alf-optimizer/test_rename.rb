@@ -15,5 +15,12 @@ module Alf
       it_behaves_like "a pass-through expression for restrict"
     end
 
+    context 'on a native predicate' do
+      let(:predicate){ Predicate.native(->(t){ t.x == 2 }) }
+      let(:renaming) { {:x => :y} }
+
+      it_behaves_like "an unoptimizable expression for restrict"
+    end
+
   end
 end
