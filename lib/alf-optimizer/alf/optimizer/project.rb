@@ -32,6 +32,16 @@ module Alf
       end
       alias :on_clip :on_project
 
+      def on_extend(expr, attributes, allbut, search)
+        ext = expr.ext.project(attributes, allbut)
+        if ext.empty?
+          apply(expr.operand, attributes, allbut, search)
+        else
+          op = search.call(expr.operand)
+          project(extend(op, ext), attributes, allbut: allbut)
+        end
+      end
+
     end # class Project
   end # class Optimizer
 end # module Alf
