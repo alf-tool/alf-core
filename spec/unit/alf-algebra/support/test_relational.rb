@@ -7,6 +7,7 @@ module Alf
         x = []
         Relational.each{|m| x << m}
         x.sort{|m1,m2| m1.name.to_s <=> m2.name.to_s}.should == [
+          Allbut,
           Extend,
           Frame,
           Group,

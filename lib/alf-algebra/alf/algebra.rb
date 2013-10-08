@@ -1,6 +1,7 @@
 require_relative 'algebra/support'
 require_relative 'algebra/operand'
 require_relative 'algebra/operator'
+require_relative 'algebra/shortcut'
 module Alf
   module Algebra
 

@@ -1,7 +1,7 @@
 require 'spec_helper'
 module Alf
   module Algebra
-    describe "Allbut", 'key_preserving?' do
+    describe Allbut, 'key_preserving?' do
 
       let(:operand){
         an_operand.with_heading(:id => Integer, :name => String, :status => String).

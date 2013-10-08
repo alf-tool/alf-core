@@ -23,10 +23,6 @@ module Alf
           def_operator_method(name, clazz)
         end
 
-        def allbut(attributes)
-          project(attributes, :allbut => true)
-        end
-
         def +(other)
           union(other)
         end

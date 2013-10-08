@@ -21,6 +21,10 @@ module Alf
       expr.to_cog(plan)
     end
 
+    def on_shortcut(plan, expr, *compiled)
+      plan.recompile(*compiled){|p| expr.expand }
+    end
+
     def on_missing(plan, expr, *compiled)
       raise NotSupportedError, "Unable to compile `#{expr}` (#{self})"
     end
@@ -36,7 +40,8 @@ module Alf
       when Algebra::Operator
         name = expr.class.rubycase_name
         meth = :"on_#{name}"
-        meth = :"on_missing" unless respond_to?(meth)
+        meth = :"on_shortcut" if expr.is_a?(Algebra::Shortcut) and !respond_to?(meth)
+        meth = :"on_missing"  if !respond_to?(meth)
         meth
       when Algebra::Operand
         :on_leaf_operand

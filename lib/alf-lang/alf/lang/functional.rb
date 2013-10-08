@@ -37,10 +37,6 @@ module Alf
         def_operator_method(name, clazz)
       end
 
-      def allbut(operand, attributes)
-        project(operand, attributes, :allbut => true)
-      end
-
     private
 
       def _op_wrap(expr)
