@@ -41,9 +41,11 @@ module Alf
       end
 
       def method_added(m)
-        super.tap{
-          metadata.add_members([m]) if public_method_defined?(m)
-        }
+        res = super
+        if public_method_defined?(m) && (m.to_s != 'contextual_params')
+          metadata.add_members([m])
+        end
+        res
       end
     end
     extend ClassMethods
@@ -54,9 +56,9 @@ module Alf
 
     NATIVE = Module.new{
       include ::Alf::Viewpoint
-
       def method_missing(name, *args, &bl)
-        (!args.empty? || bl) ? super : ::Alf::Algebra.named_operand(name, connection)
+        return super unless args.empty? and bl.nil?
+        ::Alf::Algebra.named_operand(name, connection)
       end
     }
 

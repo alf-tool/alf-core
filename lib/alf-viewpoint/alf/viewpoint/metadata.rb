@@ -17,7 +17,10 @@ module Alf
 
       def depends(pairs)
         @dependencies.merge!(pairs) do |k,v1,v2|
-          v1 == v2 ? v1 : raise("Composition conflict on `#{k}`: #{v1.inspect} vs. #{v2.inspect}")
+          unless v1 == v2
+            raise("Composition conflict on `#{k}`: #{v1} vs. #{v2}")
+          end
+          v1
         end
         self
       end
