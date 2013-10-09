@@ -15,6 +15,11 @@ module Alf
           connection
         end
 
+        def type_check(options = {strict: false})
+          return heading if connection!.knows?(name)
+          raise TypeCheckError, "No such relvar `#{name}`"
+        end
+
         def keys
           connection!.keys(name)
         end
