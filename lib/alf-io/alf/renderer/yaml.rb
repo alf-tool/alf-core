@@ -13,7 +13,7 @@ module Alf
         return to_enum unless block_given?
         require "yaml"
         yield("---\n")
-        input.each do |tuple|
+        Engine::ToArray.new(input).each do |tuple|
           yield "-" << tuple.to_hash.to_yaml[4..-1].gsub(/^/, "  ")[1..-1]
         end
         yield("\n")

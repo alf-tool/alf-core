@@ -17,6 +17,17 @@ module Alf
         end
       end
 
+      describe "when relation-valued attributes" do
+        subject{ YAML.new(input).execute("") }
+
+        let(:input){ Relation(sid: "S1", parts: Relation(pid: ["P1", "P2"])) }
+
+        it 'converts to arrays and hashes' do
+          subject.should_not =~ /Relation/
+          subject.should_not =~ /Tuple/
+        end
+      end
+
     end
   end
 end
