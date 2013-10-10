@@ -27,6 +27,8 @@ module Alf
 
       def _type_check(options)
         no_unknown!(predicate.free_variables - operand.attr_list)
+      rescue NotSupportedError => ex
+        raise ex if options[:strict]
       end
 
     end # class Restrict
