@@ -11,7 +11,7 @@ module Alf
         }
 
         it 'returns the expected tree' do
-          subject.should eq("project [:sid, :name]\n+-- suppliers\n")
+          subject.should eq("project(..., [:sid, :name])\n+-- suppliers\n")
         end
       end
 
@@ -21,7 +21,7 @@ module Alf
         }
 
         it 'returns the expected tree' do
-          subject.should eq("project [:sid, :name], {:allbut => true}\n+-- suppliers\n")
+          subject.should eq("project(..., [:sid, :name], {:allbut => true})\n+-- suppliers\n")
         end
       end
 
@@ -31,7 +31,7 @@ module Alf
         }
 
         it 'returns the expected tree' do
-          subject.should eq("union\n+-- suppliers\n+-- parts\n")
+          subject.should eq("union(...)\n+-- suppliers\n+-- parts\n")
         end
       end
 

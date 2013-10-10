@@ -1,6 +1,8 @@
 module Alf
   module Support
 
+    NOT_PROVIDED = Object.new.freeze
+
     # Converts `value` to a lispy expression.
     #
     # Example:
@@ -13,8 +15,11 @@ module Alf
     #
     # @param [Object] expr any ruby object denoting a lispy expression
     # @return [String] a lispy expression for `value`
-    def to_lispy(expr)
+    def to_lispy(expr, default = NOT_PROVIDED)
       ToLispy.apply(expr)
+    rescue NotSupportedError
+      raise if default == NOT_PROVIDED
+      default
     end
 
     # Myrrha rules for converting to ruby literals

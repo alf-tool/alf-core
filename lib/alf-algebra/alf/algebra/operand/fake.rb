@@ -54,6 +54,10 @@ module Alf
           @cog || Engine::Leaf.new([], self)
         end
 
+        def to_s
+          name.to_s
+        end
+
         def to_lispy
           name
         end

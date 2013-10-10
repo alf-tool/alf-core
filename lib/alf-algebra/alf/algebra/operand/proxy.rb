@@ -30,6 +30,10 @@ module Alf
         end
 
         def to_s
+          subject.to_s
+        end
+
+        def inspect
           "Operand::Proxy(#{subject})"
         end
 

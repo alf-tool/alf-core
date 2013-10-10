@@ -68,13 +68,21 @@ module Alf
         plan ? plan.compile(self) : Alf::Compiler::Default.new.call(self)
       end
 
-      def to_lispy_short
-        cmdname  = self.class.rubycase_name
-        _, args, opts = signature.collect_on(self)
-        args = opts.empty? ? args : args + [ opts ]
-        args = args.map{|arg| Support.to_lispy(arg) rescue arg.to_s }
-        args.unshift("...")
-        "#{cmdname}(#{args.join(', ')})"
+      def to_s
+        label = ""
+        label << self.class.rubycase_name.to_s
+        label << "(..."
+        datasets, arguments, options = signature.collect_on(self)
+        arguments.each_with_index do |arg,i|
+          label << ", "
+          label << Alf::Support.to_lispy(arg, "[native]")
+        end
+        unless options.nil? or options.empty?
+          label << ", "
+          label << Alf::Support.to_lispy(options, "[native]")
+        end
+        label << ")"
+        label
       end
 
       def to_lispy
@@ -84,7 +92,6 @@ module Alf
         args = args.map{|arg| Support.to_lispy(arg) }
         "#{cmdname}(#{args.join(', ')})"
       end
-      alias :to_s :to_lispy
 
       def to_relvar
         Relvar::Virtual.new(self)

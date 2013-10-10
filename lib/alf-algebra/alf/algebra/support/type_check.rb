@@ -9,7 +9,7 @@ module Alf
       def no_unknown!(unknown)
         unknown = unknown.to_a
         unless unknown.empty?
-          msg = "#{to_lispy_short}: no such attribute"
+          msg = "#{to_s}: no such attribute"
           msg << ((unknown.size > 1) ? "s " : " ")
           msg << unknown.map{|a| "`#{a}`" }.join(',')
           type_check_error!(msg)
@@ -20,7 +20,7 @@ module Alf
       def no_name_clash!(left, right)
         commons = (left & right).to_a
         unless commons.empty?
-          msg = "#{to_lispy_short}: cannot override "
+          msg = "#{to_s}: cannot override "
           msg << commons.map{|a| "`#{a}`" }.join(',')
           type_check_error!(msg)
         end

@@ -8,7 +8,7 @@ module Alf
 
       subject{ rv.to_s }
 
-      it{ should eq("Relvar::Virtual(Operand::Named(:aname))") }
+      it{ should eq("Relvar::Virtual(aname)") }
 
     end
   end
