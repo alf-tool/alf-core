@@ -52,12 +52,13 @@ module Alf
         AttrList::EMPTY
       end
 
-      def to_ruby_code(options = {})
-        ToRubyCode.call(self, options)
+      def to_ruby_code(scope = 't')
+        code = ToRubyCode.call(self, scope: scope)
+        "->(t){ #{code} }"
       end
 
-      def to_proc(options = {})
-        ToProc.call(self, options)
+      def to_proc(scope = 't')
+        Kernel.eval(to_ruby_code(scope))
       end
 
       def sexpr(arg)

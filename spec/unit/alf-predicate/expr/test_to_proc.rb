@@ -7,13 +7,11 @@ module Alf
 
       subject{ expr.to_proc }
 
-      before do
-        subject.should be_a(Proc)
-      end
+      it{ should be_a(Proc) }
 
-      specify{
-        subject.to_ruby_literal.should eq("lambda{ x <= 2 }")
-      }
+      it 'has arity 1' do
+        subject.arity.should eq(1)
+      end
 
     end
   end

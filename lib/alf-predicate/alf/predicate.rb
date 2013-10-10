@@ -104,21 +104,21 @@ module Alf
       expr.hash
     end
 
-    def to_ruby_code
-      @ruby_code ||= expr.to_ruby_code(:scope => "self")
+    def to_ruby_code(scope = "t")
+      expr.to_ruby_code(scope)
     end
     alias :to_s :to_ruby_code
 
     def to_proc
-      @proc ||= expr.to_proc(:scope => "self")
+      @proc ||= expr.to_proc("t")
     end
 
     def to_lispy
-      "->{ #{to_ruby_code} }"
+      to_ruby_code
     end
 
     def to_ruby_literal
-      to_proc.to_ruby_literal
+      to_lispy
     end
 
   end # class Predicate

@@ -5,15 +5,8 @@ shared_examples_for "a predicate" do
   let(:x){ 12 }
   let(:y){ 13 }
 
-  it 'can be compiled to valid ruby code' do
-    code = subject.to_ruby_code
-    got  = Kernel::eval code, binding
-    msg  = "Expected `#{code}` to return truth value (#{subject.expr.inspect})"
-    [ TrueClass, FalseClass ].should include(got.class), msg
-  end
-
   it 'provides a proc for easy evaluation' do
-    got = instance_exec(&subject.to_proc)
+    got = subject.to_proc.call(Tuple(x: 12, y: 13))
     [ TrueClass, FalseClass ].should include(got.class)
   end
 

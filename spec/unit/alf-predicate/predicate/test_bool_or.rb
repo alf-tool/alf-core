@@ -27,7 +27,7 @@ module Alf
         let(:right){ Predicate.coerce(y: 3) }
 
         it 'should be a expected' do
-          subject.to_ruby_code.should eq("(self.x == 2) || (self.y == 3)")
+          subject.to_ruby_code.should eq("->(t){ (t.x == 2) || (t.y == 3) }")
         end
       end
 

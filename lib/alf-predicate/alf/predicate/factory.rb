@@ -80,8 +80,15 @@ module Alf
         _factor_predicate([:literal, literal])
       end
 
-      def native(proc)
-        _factor_predicate([:native, proc])
+      def native(arg)
+        if arg.is_a?(String)
+          arg  = "->{ #{arg} }"
+          proc = Kernel.eval(arg)
+          (class << proc; self; end).send(:define_method, :source_code){ arg }
+          _factor_predicate([:native, proc])
+        else
+          _factor_predicate([:native, arg])
+        end
       end
 
       def sexpr(expr)

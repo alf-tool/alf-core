@@ -50,7 +50,7 @@ module Alf
 
         specify{
           subject.expr.should be_a(Native)
-          subject.to_proc.to_ruby_literal.should eq("lambda{ status == 10 }")
+          subject.to_ruby_code.should eq("->{ status == 10 }")
         }
       end
 

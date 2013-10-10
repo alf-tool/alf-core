@@ -3,8 +3,10 @@ module Alf
     class Parser
 
       def parse(input, options = {})
-        raise ArgumentError, "String expected, got `#{input}`" unless input.is_a?(String)
-        Factory.native(ToProc.call(input))
+        unless input.is_a?(String)
+          raise ArgumentError, "String expected, got `#{input}`"
+        end
+        Factory.native(input)
       end
 
     end # class Parser

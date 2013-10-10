@@ -2,20 +2,8 @@ require 'spec_helper'
 module Alf
   describe Support, ".to_lispy" do
 
-    # it "should have a valid example" do
-    #   expr = examples_database.parse{
-    #    (project suppliers, [:name])
-    #   }
-    #   Support.to_lispy(expr).should eq("project(suppliers, [:name])")
-    # end
-
     subject{ Support.to_lispy(value) }
 
-    # describe "on a Relvar" do
-    #   let(:value){ examples_database.relvar(:suppliers) }
-    #   it { should eq("suppliers") }
-    # end
-    #
     describe "on an AttrName" do
       let(:value){ :city }
       it { should eq(":city") }
@@ -66,7 +54,7 @@ module Alf
 
       describe "When built from a boolean" do
         let(:arg){ true }
-        it{ should eq("->{ true }")}
+        it{ should eq("->(t){ true }")}
       end
 
       describe "When built from a String" do
@@ -76,7 +64,7 @@ module Alf
 
       describe "When built from a Hash" do
         let(:arg){ {:status => 10} }
-        it{ should eq("->{ self.status == 10 }")}
+        it{ should eq("->(t){ t.status == 10 }")}
       end
 
     end # Predicate
