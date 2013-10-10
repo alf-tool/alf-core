@@ -46,7 +46,7 @@ module Alf
       end
 
       def to_ascii_tree(buffer = "")
-        ExpressionTree.new(self).to_text(buffer)
+        Support::Tree.new(self).to_text(buffer)
       end
 
       def to_dot(buffer = "")

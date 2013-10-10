@@ -2,17 +2,30 @@ module Alf
   module Support
     class Tree
 
+      EMPTY_CHILDREN = [].freeze
+
       def initialize(root)
         @root = root
       end
       attr_reader :root
 
       def label(node)
-        node.first.to_s
+        case node
+        when Sexpr         then node.first.to_s
+        when Relation::DUM then "DUM"
+        when Relation::DEE then "DEE"
+        else node.to_s
+        end
       end
 
       def children(node)
-        node[1..-1]
+        case node
+        when Sexpr             then node.sexpr_body
+        when Algebra::Operator then node.operands
+        when Algebra::Operand  then EMPTY_CHILDREN
+        when Engine::Cog       then node.children
+        else EMPTY_CHILDREN
+        end
       end
 
       def to_text(buffer = '', node = root, depth = 0, open = [])

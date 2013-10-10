@@ -26,6 +26,10 @@ module Alf
         self
       end
 
+      def to_ascii_tree
+        Support::Tree.new(self).to_text
+      end
+
       def to_relation
         Relation.coerce(each.to_set)
       end
