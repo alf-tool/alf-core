@@ -47,13 +47,16 @@ module Alf
         when Hash
           Hash[tuple.map{|k,v| [ k, reorder(k,v) ] }]
         when Tuple
-          tuple.remap{|k,v| reorder(k, v) }
+          tuple.remap{|k,v| reorder(k, v) }.to_hash
         end
       end
 
       def reorder(key, value)
         if RelationLike===value
-          ToArray.new(value, ordering.dive(key)).to_a
+          subordering = ordering ? ordering.dive(key) : nil
+          ToArray.new(value, subordering).to_a
+        elsif TupleLike===value
+          value.to_hash
         else
           value
         end

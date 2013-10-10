@@ -9,9 +9,9 @@ describe Alf::Relation, 'to_array' do
 
   let(:expected){
     [
-      Tuple(:city => 'Athens', :incity => [ Tuple(:name => 'Adams') ] ),
-      Tuple(:city => 'London', :incity => [ Tuple(:name => 'Clark'), Tuple(:name => 'Smith') ]),
-      Tuple(:city => 'Paris',  :incity => [ Tuple(:name => 'Blake'), Tuple(:name => 'Jones') ]),
+      {:city => 'Athens', :incity => [ {:name => 'Adams'} ]},
+      {:city => 'London', :incity => [ {:name => 'Clark'}, {:name => 'Smith'} ]},
+      {:city => 'Paris',  :incity => [ {:name => 'Blake'}, {:name => 'Jones'} ]},
     ]
   }
 
@@ -21,8 +21,8 @@ describe Alf::Relation, 'to_array' do
     rel.to_array(:sort => ordering).should eq(expected)
   end
 
-  # it 'is aliased as to_a' do
-  #   rel.to_a(:sort => ordering).should eq(expected)
-  # end
+  it 'is aliased as to_a' do
+    rel.to_a(:sort => ordering).should eq(expected)
+  end
 
 end

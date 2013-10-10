@@ -26,7 +26,7 @@ module Alf
         end
 
         def to_a(options = nil)
-          (options.nil? && defined?(super)) ? super() : to_array(options || {})
+          to_array(options || {})
         end
 
         Renderer.listen do |name,clazz|

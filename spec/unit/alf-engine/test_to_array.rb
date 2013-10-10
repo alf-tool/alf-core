@@ -7,12 +7,16 @@ module Alf
 
       context 'when ordering is nil' do
         let(:rel){[
-          {name: "Jones"},
-          {name: "Smith"}
+          {name: "Jones", parts: Relation::DEE},
+          {name: "Smith", parts: Relation::DUM}
         ]}
         let(:ordering){ nil }
+        let(:expected){[
+          {name: "Jones", parts: [{}]},
+          {name: "Smith", parts: []}
+        ]}
 
-        it{ should eq(rel) }
+        it{ should eq(expected) }
       end
 
       context 'when both empty' do
@@ -58,8 +62,8 @@ module Alf
           {name: "Jones", rva: Relation(id: [1, 3]) }
         ]}
         let(:expected){[
-          {name: "Jones", rva: [Tuple(id: 1), Tuple(id: 3)] },
-          {name: "Smith", rva: [Tuple(id: 7), Tuple(id: 8)] }
+          {name: "Jones", rva: [{id: 1}, {id: 3}] },
+          {name: "Smith", rva: [{id: 7}, {id: 8}] }
         ]}
         let(:ordering){ Ordering.new([[:name, :asc], [[:rva, :id], :asc]]) }
 
