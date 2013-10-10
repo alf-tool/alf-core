@@ -26,7 +26,7 @@ module Alf
       attr_reader :ordering
 
       # Creates an ToArray instance
-      def initialize(operand, ordering, expr = nil, compiler = nil)
+      def initialize(operand, ordering = nil, expr = nil, compiler = nil)
         super(expr, compiler)
         @operand = operand
         @ordering = ordering
@@ -34,7 +34,8 @@ module Alf
 
       # (see Cog#each)
       def _each(&block)
-        Sort.new(operand, ordering).each do |tuple|
+        operand = ordering ? Sort.new(self.operand, ordering) : self.operand
+        operand.each do |tuple|
           yield recurse(tuple)
         end
       end

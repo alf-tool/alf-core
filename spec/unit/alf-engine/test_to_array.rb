@@ -5,6 +5,16 @@ module Alf
 
       subject{ ToArray.new(rel, ordering).to_a }
 
+      context 'when ordering is nil' do
+        let(:rel){[
+          {name: "Jones"},
+          {name: "Smith"}
+        ]}
+        let(:ordering){ nil }
+
+        it{ should eq(rel) }
+      end
+
       context 'when both empty' do
         let(:rel)     { [] }
         let(:ordering){ Ordering::EMPTY }
