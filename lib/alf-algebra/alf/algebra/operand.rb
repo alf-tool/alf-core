@@ -45,6 +45,10 @@ module Alf
         to_cog.to_relation
       end
 
+      def to_ascii_tree(buffer = "")
+        ExpressionTree.new(self).to_text(buffer)
+      end
+
       def to_dot(buffer = "")
         Algebra::ToDot.new.call(self, buffer)
       end

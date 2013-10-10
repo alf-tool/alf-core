@@ -162,7 +162,7 @@ module Alf
         "(#{cmd} #{argopt}".strip + ")"
       end
 
-      private
+    private
 
       # @return the default options as a Hash
       def default_options
