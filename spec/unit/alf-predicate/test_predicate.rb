@@ -61,6 +61,12 @@ module Alf
     it_should_behave_like "a predicate"
   end
 
+  describe "Predicate.among" do
+    subject{ Predicate.among(:x, [2, 3]) }
+
+    it_should_behave_like "a predicate"
+  end
+
   describe "Predicate.eq" do
     subject{ Predicate.eq(:x, 2) }
 

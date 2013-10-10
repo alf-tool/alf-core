@@ -3,7 +3,7 @@ module Alf
     module Predicates
 
       [ :tautology, :contradiction,
-        :in, :eq, :neq,
+        :among, :in, :eq, :neq,
         :lt, :lte, :gt, :gte, :between ].each do |m|
 
         define_method(m) do |*args|

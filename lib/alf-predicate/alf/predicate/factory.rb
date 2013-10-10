@@ -49,6 +49,7 @@ module Alf
         identifier = sexpr(identifier) if identifier.is_a?(Symbol)
         _factor_predicate([:in, identifier, values])
       end
+      alias :among :in
 
       def comp(op, h)
         h = h.to_hash
