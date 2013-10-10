@@ -29,7 +29,7 @@ module Alf
     def check_internal_representation!
       error = lambda{|msg| raise TypeError, msg }
       error["Hash expected for representation"] unless reused_instance.is_a?(Hash)
-      TypeCheck.new(heading, true).check!(reused_instance)
+      TypeCheck.new(self.class.heading, true).check!(reused_instance)
       self
     rescue TypeCheck::Error => ex
       error[ex.message]
