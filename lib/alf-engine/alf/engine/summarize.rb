@@ -1,6 +1,11 @@
 module Alf
   module Engine
     module Summarize
+
+      def arguments
+        [ by, summarization, allbut ]
+      end
+
     end
   end
 end

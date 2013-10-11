@@ -21,7 +21,11 @@ module Alf
         @as = as
       end
 
-      protected
+      def arguments
+        [ by, as ]
+      end
+
+    protected
 
       # (see Cesure#project)
       def project(tuple)

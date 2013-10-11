@@ -11,9 +11,11 @@ module Alf
 
       def label(node)
         case node
-        when Sexpr         then node.first.to_s
-        when Relation::DUM then "DUM"
-        when Relation::DEE then "DEE"
+        when Sexpr                   then node.first.to_s
+        when Algebra::Operand::Proxy then label(node.subject)
+        when Relation::DUM           then "DUM"
+        when Relation::DEE           then "DEE"
+        when Relation                then "Relation(...)"
         else node.to_s
         end
       end

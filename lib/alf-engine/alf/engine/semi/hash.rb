@@ -42,6 +42,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ predicate ]
+      end
+
     end # class Semi::Hash
   end # module Engine
 end # module Alf

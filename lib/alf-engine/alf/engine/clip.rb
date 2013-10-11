@@ -49,6 +49,14 @@ module Alf
         end
       end
 
+      def arguments
+        [attributes]
+      end
+
+      def options
+        {allbut: allbut}
+      end
+
     end # class Clip
   end # module Engine
 end # module Alf

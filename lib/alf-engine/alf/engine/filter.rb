@@ -39,6 +39,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ predicate ]
+      end
+
     end # class Filter
   end # module Engine
 end # module Alf

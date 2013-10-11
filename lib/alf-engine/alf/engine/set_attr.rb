@@ -43,6 +43,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ computation ]
+      end
+
     end # class SetAttr
   end # module Engine
 end # module Alf

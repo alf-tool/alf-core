@@ -41,6 +41,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ as ]
+      end
+
     end # class Autonum
   end # module Engine
 end # module Alf

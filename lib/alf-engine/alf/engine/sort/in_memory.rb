@@ -42,6 +42,10 @@ module Alf
         operand.to_a.sort!(&ordering.sorter).each(&block)
       end
 
+      def arguments
+        [ ordering ]
+      end
+
     end # class Sort::InMemory
   end # module Engine
 end # module Alf

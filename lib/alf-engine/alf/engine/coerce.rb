@@ -42,6 +42,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ coercions ]
+      end
+
     end # class Coerce
   end # module Engine
 end # module Alf

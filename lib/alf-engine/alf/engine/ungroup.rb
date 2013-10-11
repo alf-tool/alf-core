@@ -27,6 +27,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ attribute ]
+      end
+
     end # class Ungroup
   end # module Engine
 end # module Alf

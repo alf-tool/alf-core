@@ -59,6 +59,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ id, parent, children ]
+      end
+
       def to_relation
         tuples = to_set
         relation_type.new(tuples)

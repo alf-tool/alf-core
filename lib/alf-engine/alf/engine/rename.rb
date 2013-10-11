@@ -36,6 +36,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ renaming ]
+      end
+
     end # class Rename
   end # module Engine
 end # module Alf

@@ -21,7 +21,11 @@ module Alf
       end
 
       def to_s
-        "Engine::Leaf(#{operand})"
+        "Leaf"
+      end
+
+      def inspect
+        "Engine::Leaf(#{operand.inspect})"
       end
 
     end # class Leaf

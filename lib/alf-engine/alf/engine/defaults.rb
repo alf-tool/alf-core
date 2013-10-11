@@ -40,6 +40,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ defaults ]
+      end
+
     end # class Defaults
   end # module Engine
 end # module Alf

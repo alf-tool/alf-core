@@ -48,6 +48,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ offset, limit ]
+      end
+
     end # class Take
   end # module Engine
 end # module Alf

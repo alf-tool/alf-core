@@ -21,15 +21,15 @@ module Alf
 
       def to_s
         label = ""
-        label << Support.class_name(self.class).to_s
+        label << self.class.name.to_s[/Engine::(.*?)$/, 1].to_s
         label << " ..."
         unless (args = arguments).empty?
           label << ", "
-          label << args.map{|arg| Support.to_lispy(arg) }.join(', ')
+          label << args.map{|arg| Support.to_lispy(arg, "[unsupported]") }.join(', ')
         end
         unless (opts = options).empty?
           label << ", "
-          label << Support.to_lispy(options)
+          label << Support.to_lispy(options, "[unsupported]")
         end
         label
       end

@@ -40,6 +40,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ ordering ]
+      end
+
     private
 
       def recurse(tuple)

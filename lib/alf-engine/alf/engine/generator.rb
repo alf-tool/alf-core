@@ -46,6 +46,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ offset, step, count ]
+      end
+
     end # class Generator
   end # module Engine
 end # module Alf

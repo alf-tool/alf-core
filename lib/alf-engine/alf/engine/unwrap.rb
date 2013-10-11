@@ -29,6 +29,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ attribute ]
+      end
+
     end # class Unwrap
   end # module Engine
 end # module Alf

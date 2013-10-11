@@ -42,6 +42,10 @@ module Alf
         yield @summarization.finalize(agg)
       end
 
+      def arguments
+        [ summarization ]
+      end
+
     end # class Aggregate
   end # module Engine
 end # module Alf

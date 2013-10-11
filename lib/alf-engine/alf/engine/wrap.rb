@@ -36,6 +36,10 @@ module Alf
         end
       end
 
+      def arguments
+        [ attribute ]
+      end
+
     end # class Wrap
   end # module Engine
 end # module Alf

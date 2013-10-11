@@ -25,7 +25,7 @@ module Alf
         @allbut = allbut
       end
 
-      protected
+    protected
 
       # (see Cesure#project)
       def project(tuple)

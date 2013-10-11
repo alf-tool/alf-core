@@ -38,6 +38,14 @@ module Alf
         end
       end
 
+      def arguments
+        [ attributes, as ]
+      end
+
+      def options
+        {allbut: allbut}
+      end
+
     end # class Group::Hash
   end # module Engine
 end # module Alf

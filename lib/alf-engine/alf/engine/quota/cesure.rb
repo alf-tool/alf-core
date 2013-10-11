@@ -21,7 +21,11 @@ module Alf
         @summarization = summarization
       end
 
-      protected
+      def arguments
+        [ by, summarization ]
+      end
+
+    protected
 
       # (see Cesure#project)
       def project(tuple)
