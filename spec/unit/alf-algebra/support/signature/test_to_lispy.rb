@@ -10,7 +10,7 @@ module Alf
 
         describe "on an empty signature" do
           let(:signature){ Signature.new(clazz){|s|} }
-          it{ should eq("(generator)") }
+          it{ should eq("generator()") }
         end
 
         describe "on an option-only signature" do
@@ -19,7 +19,7 @@ module Alf
               s.option :allbut, Boolean
             end
           }
-          it{ should eq("(generator {allbut: Boolean})") }
+          it{ should eq("generator({allbut: Boolean})") }
         end
 
       end # nullary signature
@@ -29,7 +29,7 @@ module Alf
 
         describe "on an empty signature" do
           let(:signature){ Signature.new(clazz){|s|} }
-          it{ should eq("(coerce operand)") }
+          it{ should eq("coerce(operand)") }
         end
 
         describe "on an option-only signature" do
@@ -38,7 +38,7 @@ module Alf
               s.option :allbut, Boolean
             end
           }
-          it{ should eq("(coerce operand, {allbut: Boolean})") }
+          it{ should eq("coerce(operand, {allbut: Boolean})") }
         end
 
         describe "on an option-only signature with multiple options" do
@@ -48,7 +48,7 @@ module Alf
               s.option :newname, AttrName
             end
           }
-          it{ should eq("(coerce operand, {allbut: Boolean, newname: AttrName})") }
+          it{ should eq("coerce(operand, {allbut: Boolean, newname: AttrName})") }
         end
 
         describe "on a signature with one argument only" do
@@ -57,7 +57,7 @@ module Alf
               s.argument :by, AttrList
             end
           }
-          it{ should eq("(coerce operand, by:AttrList)") }
+          it{ should eq("coerce(operand, by:AttrList)") }
         end
 
         describe "on a signature with multiple arguments" do
@@ -67,7 +67,7 @@ module Alf
               s.argument :order, Ordering
             end
           }
-          it{ should eq("(coerce operand, by:AttrList, order:Ordering)") }
+          it{ should eq("coerce(operand, by:AttrList, order:Ordering)") }
         end
 
         describe "on a full signature" do
@@ -78,7 +78,7 @@ module Alf
               s.option :allbut, Boolean
             end
           }
-          it{ should eq("(coerce operand, by:AttrList, order:Ordering, {allbut: Boolean})") }
+          it{ should eq("coerce(operand, by:AttrList, order:Ordering, {allbut: Boolean})") }
         end
 
       end
@@ -92,7 +92,22 @@ module Alf
               s.option :allbut, Boolean
             end
           }
-          it{ should eq("(join left, right, {allbut: Boolean})") }
+          it{ should eq("join(left, right, {allbut: Boolean})") }
+        end
+
+      end
+
+      describe "on a operator having standard argument classes" do
+        let(:clazz){ Frame }
+
+        describe "on an option-only signature" do
+          let(:signature){
+            Signature.new(clazz) do |s|
+              s.argument :index, Integer
+              s.option   :size, Integer
+            end
+          }
+          it{ should eq("frame(operand, index:Integer, {size: Integer})") }
         end
 
       end

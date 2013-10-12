@@ -143,23 +143,22 @@ module Alf
       #     # => "(project operand, attributes:AttrList, {allbut: Boolean})"
       def to_lispy
         cmd  = operator.rubycase_name
-        oper = operator.nullary? ? "" :
-              (operator.unary? ? "operand" : "left, right")
+        oper = operator.nullary? ? "" : (operator.unary? ? "operand" : "left, right")
 
         args = arguments.map{|name,dom,_|
-          dom.to_s =~ /::([A-Za-z]+)$/
-          "#{name}:#{$1}"
+          dom = dom.to_s[/::([A-Za-z]+)$/, 1] || dom.to_s
+          "#{name}:#{dom}"
         }.join(", ")
         args = (args.empty? ? "#{oper}" : "#{oper}, #{args}").strip
 
         opts = options.map{|name,dom,_|
-          dom.to_s =~ /::([A-Za-z]+)$/
-          "#{name}: #{$1}"
+          dom = dom.to_s[/::([A-Za-z]+)$/, 1] || dom.to_s
+          "#{name}: #{dom}"
         }.join(', ')
         opts = opts.empty? ? "" : "{#{opts}}"
 
         argopt = [args, opts].select{|s| !s.empty?}.join(', ')
-        "(#{cmd} #{argopt}".strip + ")"
+        "#{cmd}(#{argopt}".strip + ")"
       end
 
     private
