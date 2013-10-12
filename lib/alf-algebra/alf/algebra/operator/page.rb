@@ -20,6 +20,13 @@ module Alf
         operand.keys
       end
 
+    private
+
+      def _type_check(options)
+        valid_ordering!(ordering, operand.attr_list)
+        type_check_error!("invalid page size `#{page_size}`")   unless page_size >= 0
+      end
+
     end # class Page
   end # module Algebra
 end # module Alf
