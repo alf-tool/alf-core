@@ -47,9 +47,6 @@ variables:
     - {name: sexpr,        version: "~> 0.6.0",     groups: [runtime      ]}
     - {name: rake,         version: "~> 10.1",      groups: [test, release]}
     - {name: rspec,        version: "~> 2.14",      groups: [test, release]}
-    - {name: yard,         version: "~> 0.8.2",     groups: [doc          ]}
-    - {name: bluecloth,    version: "~> 2.2",       groups: [doc          ]}
-    - {name: redcarpet,    version: "~> 2.2",       groups: [doc          ]}
     - {name: highline,     version: "~> 1.6",       groups: [extra        ]}
     - {name: ruby_cop,     version: "~> 1.0",       groups: [extra        ]}
 

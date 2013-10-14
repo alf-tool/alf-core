@@ -17,12 +17,6 @@ group :release do
   gem "rspec", "~> 2.14"
 end
 
-group :doc do
-  gem "yard", "~> 0.8.2"
-  gem "bluecloth", "~> 2.2"
-  gem "redcarpet", "~> 2.2"
-end
-
 group :extra do
   gem "highline", "~> 1.6"
   gem "ruby_cop", "~> 1.0"
