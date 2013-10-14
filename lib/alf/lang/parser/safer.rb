@@ -45,8 +45,13 @@ module Alf
             super && !ALF_CALL_BLACKLIST.include?(node.identifier.token.to_s)
           end
 
+          ALF_CONSTANT_WHITELIST = %w[
+            DEE
+            DUM
+          ].to_set.freeze
+
           def visit_Constant(node)
-            raise SecurityError, "Forbidden: usage of `#{node.token}`"
+            ALF_CONSTANT_WHITELIST.include?(node.token.to_s)
           end
 
           def visit_ConstantAssignment(node)
