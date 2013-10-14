@@ -106,7 +106,7 @@ module Alf
       end
 
       def parser
-        @parser ||= options.viewpoint.parser(self)
+        @parser ||= options.parser.new([ options.viewpoint ], self)
       end
 
     end # class Connection
