@@ -1,7 +1,7 @@
 # We require your library, mainly to have access to the VERSION number.
 # Feel free to set $version manually.
 $LOAD_PATH.unshift File.expand_path('../lib', __FILE__)
-require "alf-core/version"
+require "alf/core/version"
 $version = Alf::Core::Version.to_s
 
 #
