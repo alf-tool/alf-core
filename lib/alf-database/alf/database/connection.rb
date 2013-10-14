@@ -96,10 +96,6 @@ module Alf
         "Alf::Database::Connection(#{adapter_connection})"
       end
 
-      def compile(expr)
-        compilation_chain.inject(expr){|e,c| c.call(e) }
-      end
-
     private
 
       def optimizer
@@ -107,10 +103,6 @@ module Alf
           op.register(Optimizer::Restrict.new)
           op.register(Optimizer::Project.new)
         }
-      end
-
-      def compilation_chain
-        [ optimizer, lambda{|expr| expr.to_cog } ]
       end
 
       def parser

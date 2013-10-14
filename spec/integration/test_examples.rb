@@ -8,9 +8,9 @@ Path.backfind("examples").glob("**/*.alf").each do |file|
 
     let(:source){ example_path.read }
 
-    context 'when compiled through Connection#compile' do
+    context 'when optimized through relvar' do
       subject{
-        example_db.compile(example_db.parse(source))
+        example_db.relvar(example_db.parse(source)).to_cog
       }
 
       it_should_behave_like "a traceable cog"
