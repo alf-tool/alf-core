@@ -1,6 +1,7 @@
 $LOAD_PATH.unshift File.expand_path('../../lib', __FILE__)
-require 'alf-core'
 require "rspec"
+require 'alf-core'
+require 'alf/lang/parser/safer'
 require 'shared/an_operator_class'
 require 'shared/a_valid_type_implementation'
 require 'shared/a_value'

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'alf-lang/alf/lang/parser/safer'
 module Alf
   module Lang
     module Parser

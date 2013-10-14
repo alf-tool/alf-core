@@ -11,7 +11,5 @@ module Alf
   class TypeCheckError < Error; end
   class IllegalStateError < Error; end
   class SecurityError < Error; end
-
-  # deprecated
-  class UnsupportedError < Error; end
+  class UnsupportedMimeTypeError < Error; end
 end

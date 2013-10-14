@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'ruby_cop'
-require 'alf-lang/alf/lang/parser/safer'
 module Alf
   class Database
     describe Options, "parser" do
