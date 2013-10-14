@@ -64,7 +64,7 @@ module Alf
           expanded.dependencies.each_pair do |as, vps|
             provider = Metadata.new(vps).to_module(context)
             define_method(as) do
-              Lang::Lispy.new([provider], connection)
+              Lang::Parser::Lispy.new([provider], connection)
             end
           end
           instance_exec(&bl) if bl

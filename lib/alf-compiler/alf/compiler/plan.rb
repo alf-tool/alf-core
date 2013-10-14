@@ -4,7 +4,7 @@ module Alf
     class Plan
 
       def initialize(compiler = Compiler.new)
-        @parser        = Lang::Lispy.new
+        @parser        = Lang::Parser::Lispy.new
         @compilers     = {}
         @compiled      = {}
         @usage_count   = Hash.new{|h,k| h[k] = 0 }

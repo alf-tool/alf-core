@@ -23,7 +23,7 @@ module Alf
       alias :[] :build
 
       def parser(connection = nil)
-        Lang::Lispy.new([ self ], connection)
+        Lang::Parser::Lispy.new([ self ], connection)
       end
 
       def parse(*args, &bl)

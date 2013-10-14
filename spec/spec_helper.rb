@@ -20,7 +20,7 @@ module Helpers
   end
 
   def a_lispy
-    Alf::Lang::Lispy.new
+    Alf::Lang::Parser::Lispy.new
   end
 
   def parse(*args, &bl)

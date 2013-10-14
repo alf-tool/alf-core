@@ -13,7 +13,7 @@ module Alf
     end
 
     it 'should allow being used in a Lispy' do
-      Lang::Lispy.new([subject]).parse{
+      Lang::Parser::Lispy.new([subject]).parse{
         suppliers
       }.should be_a(Algebra::Operand::Named)
     end

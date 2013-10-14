@@ -8,6 +8,9 @@ module Alf
       # What viewpoint to use by default?
       option :viewpoint, Module, Viewpoint::NATIVE
 
+      # What parser (class) to use for parsing expressions
+      option :parser, Class, Lang::Parser::Lispy
+
       # Where migrations are located
       option :migrations_folder, Path, nil
 
