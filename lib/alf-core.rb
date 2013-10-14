@@ -1,5 +1,5 @@
-require_relative 'alf/loader'
-require_relative 'alf/version'
+require_relative 'alf/core/loader'
+require_relative 'alf/core/version'
 require_relative 'alf/errors'
 require_relative 'alf/ext'
 require_relative 'alf/facade'
