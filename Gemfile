@@ -25,5 +25,5 @@ end
 
 group :extra do
   gem "highline", "~> 1.6"
-  gem 'json', :platforms => [:ruby_18, :jruby, :mingw_18]
+  gem "ruby_cop", "~> 1.0"
 end

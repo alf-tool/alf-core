@@ -1,0 +1,14 @@
+`ls -lA`
+::Kernel
+exit
+require "blah"
+load "blah"
+gem 'unsecure'
+suppliers.to_relvar
+suppliers.insert
+suppliers.delete
+suppliers.update
+Alf::Adapter::Connection
+Alf.connect
+Relation.new
+Tuple.new

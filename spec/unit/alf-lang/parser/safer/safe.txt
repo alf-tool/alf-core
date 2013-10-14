@@ -1,0 +1,3 @@
+project(:suppliers, [:sid])
+Tuple(sid: 1)
+Relation(sid: 1)
