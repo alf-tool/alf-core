@@ -13,8 +13,9 @@ module Alf
           if expr.nil? and bl
             raise SecurityError, "Parsing of ruby blocks forbidden"
           end
-          check_safety!(expr)
-          @lispy.parse(expr, *rest, &bl)
+          return expr if expr.is_a?(Algebra::Operand)
+          check_safety!(expr.to_s)
+          @lispy.parse(expr.to_s, *rest, &bl)
         end
 
       private
