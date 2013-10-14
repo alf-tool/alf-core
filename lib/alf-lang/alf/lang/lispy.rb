@@ -12,16 +12,10 @@ module Alf
           helper.send(:extend_object, self)
         end
       end
-
       attr_reader :connection
 
       def connection!
         connection.tap{|c| ::Kernel.raise(UnboundError, "#{self} not bound") unless c }
-      end
-
-      def evaluate(expr = nil, path=nil, line=nil, &bl)
-        return instance_exec(&bl) if bl
-        ::Kernel.eval expr, __eval_binding, *[path, line].compact.map(&:to_s)
       end
 
       def parse(expr = nil, path = nil, line = nil, &block)
@@ -42,6 +36,11 @@ module Alf
       end
 
     private
+
+      def evaluate(expr = nil, path=nil, line=nil, &bl)
+        return instance_exec(&bl) if bl
+        ::Kernel.eval expr, __eval_binding, *[path, line].compact.map(&:to_s)
+      end
 
       def __eval_binding
         ::Kernel.binding
