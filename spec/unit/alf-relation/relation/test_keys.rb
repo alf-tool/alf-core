@@ -1,6 +1,6 @@
 require 'spec_helper'
 module Alf
-  describe "Relation#heading" do
+  describe "Relation#keys" do
 
     let(:rel){
       Relation([
@@ -9,9 +9,9 @@ module Alf
       ])
     }
 
-    subject{ rel.heading }
+    subject{ rel.keys }
 
-    it{ should eq(Heading(:max => Numeric, :name => String)) }
+    it{ should eq(Keys[[:max, :name]]) }
 
   end
 end

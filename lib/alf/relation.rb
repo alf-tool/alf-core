@@ -83,6 +83,11 @@ module Alf
       self.class.heading
     end
 
+    # Returns the relation keys
+    def keys
+      Keys[to_attr_list]
+    end
+
     # Returns the attribute list.
     def to_attr_list
       heading.to_attr_list
