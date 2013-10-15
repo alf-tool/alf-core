@@ -35,6 +35,10 @@ module Alf
         heading
       end
 
+      def resulting_type
+        Relation[heading]
+      end
+
       ### to_xxx
 
       def to_cog(plan = nil)
