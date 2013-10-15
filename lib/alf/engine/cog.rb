@@ -42,10 +42,6 @@ module Alf
         EMPTY_OPTIONS
       end
 
-      def to_dot(buffer = "")
-        Engine::ToDot.new.call(self, buffer)
-      end
-
     protected
 
       def tuple_scope(tuple = nil)

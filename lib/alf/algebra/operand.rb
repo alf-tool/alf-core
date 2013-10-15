@@ -53,10 +53,6 @@ module Alf
         Support::Tree.new(self).to_text(buffer)
       end
 
-      def to_dot(buffer = "")
-        Algebra::ToDot.new.call(self, buffer)
-      end
-
     end # module Operand
   end # module Algebra
 end # module Alf

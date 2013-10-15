@@ -36,5 +36,3 @@ require_relative 'engine/ungroup'
 require_relative 'engine/infer_heading'
 require_relative 'engine/type_safe'
 require_relative 'engine/to_array'
-require_relative 'engine/to_dot'
-
