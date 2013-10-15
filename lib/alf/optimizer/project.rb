@@ -2,6 +2,12 @@ module Alf
   class Optimizer
     class Project < Optimizer::Base
 
+    ###
+
+      def project(operand, attributes, options)
+        options[:allbut] ? allbut(operand, attributes) : super
+      end
+
     ### overridings
 
       def search_predicate
@@ -26,24 +32,16 @@ module Alf
         yield
       end
 
-      def on_pass_through(expr, attributes, allbut, search)
-        operands = expr.operands.map{|op|
-          apply(op, attributes, allbut, search)
-        }
-        expr.with_operands(*operans)
-      end
+    ### callbacks
 
       def on_unoptimizable(expr, attributes, allbut, search)
         project(search.call(expr), attributes, allbut: allbut)
       end
-      alias :on_missing :on_unoptimizable
-      alias :on_todo    :on_unoptimizable
+      alias :on_missing      :on_unoptimizable
+      alias :on_todo         :on_unoptimizable
+      alias :on_leaf_operand :on_unoptimizable
 
-    ### leaf operand, recursion end :-)
-
-    alias :on_leaf_operand :on_unoptimizable
-
-    ### operator callbacks
+    ###
 
       alias :on_autonum :on_todo
 

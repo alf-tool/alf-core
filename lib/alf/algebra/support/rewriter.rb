@@ -19,6 +19,10 @@ module Alf
         expr
       end
 
+      def on_shortcut(expr, *args, &bl)
+        apply(expr.expand, *args, &bl)
+      end
+
       def on_missing(expr, *args, &bl)
         copy_and_apply(expr, *args, &bl)
       end

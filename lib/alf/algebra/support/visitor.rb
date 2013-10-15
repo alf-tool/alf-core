@@ -17,6 +17,7 @@ module Alf
         when Algebra::Operator
           name = expr.class.rubycase_name
           meth = :"#{prefix}#{name}"
+          meth = :"#{prefix}shortcut" if expr.is_a?(Algebra::Shortcut) and !respond_to?(meth)
           meth = :"#{prefix}missing" unless respond_to?(meth)
           meth
         when Algebra::Operand

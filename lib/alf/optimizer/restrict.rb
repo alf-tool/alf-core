@@ -34,6 +34,7 @@ module Alf
       def on_pass_through(expr, predicate, search)
         expr.with_operands(*expr.operands.map{|op| apply(op, predicate, search) })
       end
+      alias :on_allbut      :on_pass_through
       alias :on_clip        :on_pass_through
       alias :on_compact     :on_pass_through
       alias :on_sort        :on_pass_through

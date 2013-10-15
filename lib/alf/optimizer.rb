@@ -21,7 +21,6 @@ module Alf
         return Search.new(self, search_predicate).call(expr) unless search
         _call(expr, search)
       end
-
     end
 
     class Search < Algebra::Rewriter
