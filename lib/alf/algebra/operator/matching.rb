@@ -13,7 +13,7 @@ module Alf
       end
 
       def keys
-        @keys ||= (left.keys + right.keys.select{|k| k.subset?(common_attributes) })
+        @keys ||= left.keys
       end
 
     private

@@ -32,7 +32,7 @@ module Alf
         }
 
         let(:expected){
-          Keys[ [:name], [:id] ]
+          Keys[ [:name] ]
         }
 
         it { should eq(expected) }
