@@ -10,6 +10,7 @@ end
 group :test do
   gem "rake", "~> 10.1"
   gem "rspec", "~> 2.14"
+  gem "ruby_cop", "~> 1.0"
 end
 
 group :release do
@@ -19,5 +20,4 @@ end
 
 group :extra do
   gem "highline", "~> 1.6"
-  gem "ruby_cop", "~> 1.0"
 end
