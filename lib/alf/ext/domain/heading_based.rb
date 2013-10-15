@@ -1,6 +1,8 @@
 module Domain
   class HeadingBased < Module
 
+    EMPTY_SET = Set.new.freeze
+
     def initialize(master_class)
       define_method(:new){|*args|
         raise "#{master_class}.new may not be called directly" if master_class==self
@@ -30,6 +32,9 @@ module Domain
       def initialize(master_class, gt)
         define_method(:generating_type){
           gt
+        }
+        define_method(:dum){
+          @dum ||= new(EMPTY_SET)
         }
         define_method(:<=>){|other|
           return 0 if self == other
