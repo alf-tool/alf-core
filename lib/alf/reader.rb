@@ -130,7 +130,12 @@ module Alf
       end
     end
 
-    protected
+    # Returns a string representation
+    def to_s
+      "#{self.class.name}(#{Path(input_path).basename || '...'})"
+    end
+
+  protected
 
     # @return the input file path, or nil if this Reader is bound to an IO
     # directly.

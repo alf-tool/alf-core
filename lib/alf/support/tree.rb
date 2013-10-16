@@ -16,6 +16,7 @@ module Alf
         when Relation::DUM           then "DUM"
         when Relation::DEE           then "DEE"
         when Relation                then "Relation(...)"
+        when Relvar                  then "#{node.class} ..."
         else node.to_s
         end
       end
@@ -23,6 +24,7 @@ module Alf
       def children(node)
         case node
         when Sexpr             then node.sexpr_body
+        when Relvar            then [node.expr]
         when Algebra::Operator then node.operands
         when Algebra::Operand  then EMPTY_CHILDREN
         when Engine::Cog       then node.children
