@@ -13,12 +13,26 @@ module Alf
         {:tested => 30, :other => "a", :upcase => "A"},
       ]}
 
-      it "should have sum" do
-        sum{ qty }.should be_a(Aggregator::Sum)
+      context 'on sum' do
+        it "should have sum with immediate block" do
+          sum{|t| t.qty }.should be_a(Aggregator::Sum)
+        end
+
+        it "should have sum with a Proc" do
+          sum(->(t){ qty }).should be_a(Aggregator::Sum)
+        end
       end
 
-      it "should have stddev aggregator" do
-        stddev{ qty }.should be_a(Aggregator::Stddev)
+      context 'on concat' do
+        it "should have concat with immediate block" do
+          concat{|t| t.name }.should be_a(Aggregator::Concat)
+        end
+
+        it "should have sum with a Proc" do
+          agg = concat(->(t){ t.name }, between: ', ')
+          agg.should be_a(Aggregator::Concat)
+          agg.options[:between].should eq(', ')
+        end
       end
 
     end

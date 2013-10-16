@@ -102,10 +102,17 @@ module Alf
     #
     #   Aggregator.new{ size * price }
     #
-    def initialize(options = {}, &block)
-      options, block = {}, options if options.is_a?(Symbol) && block.nil?
-      @options = default_options.merge(options)
-      @functor = Support.coerce(block, TupleExpression)
+    def initialize(*args, &block)
+      @options = default_options
+      args.push(block) if block
+      args.each do |arg|
+        case arg
+        when Symbol, Proc then @functor = Support.coerce(arg, TupleExpression)
+        when Hash         then @options = @options.merge(arg)
+        else
+          raise ArgumentError, "Unexpected `#{arg}`"
+        end
+      end
     end
 
     # Returns the default options to use

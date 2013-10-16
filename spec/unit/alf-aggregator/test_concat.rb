@@ -15,6 +15,14 @@ module Alf
         Concat.new{ qty }.aggregate(rel).should eq("10203040")
       end
 
+      it 'should work when used standalone with Proc of arity 1' do
+        Concat.new{|t| t.qty }.aggregate(rel).should eq("10203040")
+      end
+
+      it 'should work when used standalone with Proc of arity 1 passed as arg' do
+        Concat.new(->(t){ t.qty }).aggregate(rel).should eq("10203040")
+      end
+
       it 'should install factory methods' do
         Aggregator.concat{ qty }.should be_a(Concat)
         Aggregator.concat{ qty }.aggregate(rel).should eq("10203040")
