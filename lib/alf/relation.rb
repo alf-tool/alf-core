@@ -146,7 +146,7 @@ module Alf
     end
 
     def _self_operand
-      Algebra::Operand::Proxy.new(self)
+      self
     end
 
   end # class Relation
