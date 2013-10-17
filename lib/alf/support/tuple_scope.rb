@@ -55,6 +55,14 @@ module Alf
           @tuple[what]
         end
 
+        def to_tuple
+          Tuple(@tuple)
+        end
+
+        def to_relation
+          Relation(@tuple)
+        end
+
         def to_s
           @tuple.to_s
         end
@@ -67,7 +75,7 @@ module Alf
 
       # Creates a scope instance
       def initialize(tuple = nil, extensions = [], parent = nil)
-        super [ OwnMethods ] + extensions, parent
+        super [ OwnMethods, ::Alf::Dsl ] + extensions, parent
         __build(@tuple = tuple) if tuple
       end
 

@@ -30,6 +30,17 @@ module Alf
         scope.evaluate{ path < 1 }.should be_false
       end
 
+      it "should support calling Tuple and Relation" do
+        scope.__set_tuple(:path => 1)
+        scope.evaluate{ Tuple(sid: path) }.should eq(Tuple(sid: 1))
+        scope.evaluate{ Relation(sid: path) }.should eq(Relation(sid: 1))
+      end
+
+      it "should support being converted to Relation" do
+        scope.__set_tuple(:path => 1)
+        Relation(scope).should eq(Relation(path: 1))
+      end
+
     end
   end
 end

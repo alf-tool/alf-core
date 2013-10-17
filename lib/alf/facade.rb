@@ -21,14 +21,22 @@ module Alf
       Alf::Reader.reader(source, *args)
     end
 
-    def Relation(*args, &bl)
-      Alf::Relation.coerce(*args, &bl)
+    def Relation(first, *rest, &bl)
+      if first.respond_to?(:to_relation) && rest.empty? && bl.nil?
+        return first.to_relation
+      else
+        Alf::Relation.coerce(*rest.unshift(first), &bl)
+      end
     end
 
-    def Tuple(*args, &bl)
-      tuple = Alf::Tuple.coerce(*args)
-      tuple = tuple.remap(&bl) if bl
-      tuple
+    def Tuple(first, *rest, &bl)
+      if first.respond_to?(:to_tuple) && rest.empty? && bl.nil?
+        return first.to_tuple
+      else
+        tuple = Alf::Tuple.coerce(*rest.unshift(first))
+        tuple = tuple.remap(&bl) if bl
+        tuple
+      end
     end
 
     def Heading(*args, &bl)
