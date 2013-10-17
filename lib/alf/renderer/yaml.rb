@@ -6,7 +6,7 @@ module Alf
     class YAML < ::Alf::Renderer
 
       def self.mime_type
-        "text/x-yaml"
+        "text/yaml"
       end
 
       def each
