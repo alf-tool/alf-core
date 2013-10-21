@@ -60,5 +60,18 @@ module Alf
       end
     end
 
+    context 'coming from ARGV' do
+      let(:argv){
+        ["city", "asc", "status", "desc", "sid", "asc"]
+      }
+      let(:expected){
+        Ordering.new([[:city, :asc], [:status, :desc], [:sid, :asc]])
+      }
+
+      it "should work as expected" do
+        Ordering.coerce(argv).should eq(expected)
+      end
+    end
+
   end # Ordering
 end # Alf
