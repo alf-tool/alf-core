@@ -4,7 +4,10 @@ module Alf
       include Relvar
 
       def initialize(value)
-        super(Algebra::Operand::Proxy.new(value))
+        unless value.is_a?(Algebra::Operand::Proxy)
+          value = Algebra::Operand::Proxy.new(value)
+        end
+        super(value)
       end
 
       def to_relation

@@ -26,7 +26,7 @@ module Alf
 
         def to_relvar
           return subject.to_relvar if subject.respond_to?(:to_relvar)
-          super
+          Relvar::ReadOnly.new(self)
         end
 
         def to_s
