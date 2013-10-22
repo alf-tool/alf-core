@@ -33,12 +33,15 @@ module Alf
 
           ALF_CALL_BLACKLIST = %w[
             gem
+            puts
             to_cog
             to_relvar
             to_relation
             insert
             delete
             update
+            affect
+            upsert
           ].to_set.freeze
 
           def visit_Call(node)
