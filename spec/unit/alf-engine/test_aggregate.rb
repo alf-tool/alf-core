@@ -12,8 +12,8 @@ module Alf
           {:name => "Jones", :price => 12.0, :id => 1},
           {:name => "Smith", :price => 10.0, :id => 2}
         ]
-        agg = Summarization[:size  => "count", 
-                            :total => "sum{ price }"]
+        agg = Summarization[:size  => Aggregator.count,
+                            :total => Aggregator.sum{|t| t.price }]
         exp = [
           {:size => 2, :total => 22.0}
         ]

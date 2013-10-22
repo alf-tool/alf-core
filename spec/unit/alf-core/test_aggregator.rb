@@ -29,30 +29,6 @@ module Alf
         let(:arg){ Aggregator.sum{a} }
         it{ should eq(arg) }
       end
-
-      describe "from a String" do
-        let(:arg){ "sum{a}" }
-
-        it {
-          should be_a(Aggregator::Sum)
-        }
-
-        it 'should have source code' do
-          subject.has_source_code!.should eq("sum{a}")
-        end
-
-        specify{
-          subject.aggregate(input).should eql(7)
-        }
-
-      end
-
-    end
-
-    it 'should implement optimistic equality based on source code' do
-      ag1 = Aggregator.coerce("sum{ qty }")
-      ag2 = Aggregator.coerce("sum{ qty }")
-      ag1.should eq(ag2)
     end
 
   end

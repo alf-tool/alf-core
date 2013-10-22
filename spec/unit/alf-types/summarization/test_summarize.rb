@@ -7,7 +7,7 @@ module Alf
         {:qty => 10, :size => 12},
         {:qty => 5,  :size => 5}
       ]
-      sum = Summarization.coerce(["s", "avg{ qty }", "m", "max{ size }"])
+      sum = Summarization.coerce(["s", Aggregator.avg{ qty }, "m", Aggregator.max{ size }])
       sum.summarize(rel).should eq({:s => 7.5, :m => 12})
     end
 

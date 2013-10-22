@@ -3,7 +3,7 @@ module Alf
   describe "quota" do
 
     let(:summarization){
-      Summarization.coerce(:total => "sum{ qty }")
+      Summarization.coerce(:total => Aggregator.sum{ qty })
     }
 
     subject{ quota(an_operand, [:id], [[:x, :asc]], summarization) }

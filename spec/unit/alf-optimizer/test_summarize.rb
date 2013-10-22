@@ -3,7 +3,7 @@ module Alf
   describe "summarize" do
 
     let(:summarization){
-      Summarization.coerce(:total => "sum{ qty }")
+      Summarization.coerce(:total => Aggregator.sum{ qty })
     }
     subject{ summarize(an_operand, [:id], summarization) }
 

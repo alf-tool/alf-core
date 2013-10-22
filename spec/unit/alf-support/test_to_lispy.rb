@@ -30,8 +30,10 @@ module Alf
     end
 
     describe "on an Aggregation" do
-      let(:value){ Aggregator.coerce("sum{ qty*price }") }
-      it { should eq("sum{ qty*price }") }
+      let(:expr){ ->(t){ t.qty*t.price } }
+      let(:value){ Aggregator.coerce(Aggregator.sum(expr)) }
+
+      it { should eq("sum{|t| [code unavailable] }") }
     end
 
     describe "on a TupleExpression" do

@@ -77,10 +77,6 @@ module Alf
         case arg
         when Aggregator
           arg
-        when String
-          agg = instance_eval(arg)
-          agg.source = arg
-          agg
         else
           raise ArgumentError, "Invalid arg `arg` for Aggregator()"
         end

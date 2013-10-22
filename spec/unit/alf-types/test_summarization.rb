@@ -6,7 +6,7 @@ module Alf
       let(:type){ Summarization }
       def Summarization.exemplars
         [
-          ["total", "sum{ qty }"]
+          ["total", Aggregator.sum{ qty }]
         ].map{|x| Summarization.coerce(x)}
       end
       it_should_behave_like 'A valid type implementation'
@@ -14,7 +14,7 @@ module Alf
 
     specify "least -> happens -> finalize" do
       scope = Support::TupleScope.new
-      summ = Summarization.coerce(["s", "sum{ qty }", "m", "max{ size }"])
+      summ = Summarization.coerce(["s", Aggregator.sum{ qty }, "m", Aggregator.max{ size }])
       (x = summ.least).should eql(:s => 0, :m => nil)
       (x = summ.happens(x, scope.__set_tuple(:qty => 10, :size => 12))).should eq(:s => 10, :m => 12)
       (x = summ.happens(x, scope.__set_tuple(:qty => 5, :size => 5))).should eq(:s => 15, :m => 12)

@@ -10,7 +10,7 @@ module Alf
     end
 
     describe "from a Hash" do
-      let(:arg){ { :s => "sum{ qty }", :m => Aggregator.max{ size } } }
+      let(:arg){ { :s => Aggregator.sum{ qty }, :m => Aggregator.max{ size } } }
       it{ should be_a(Summarization) }
       specify{ 
         subject.to_hash.keys.to_set.should eq([:s, :m].to_set)
@@ -19,7 +19,7 @@ module Alf
     end
 
     describe "from an Array" do
-      let(:arg){ ["s", "sum{ qty }", "m", "max{ size }"] }
+      let(:arg){ ["s", Aggregator.sum{ qty }, "m", Aggregator.max{ size }] }
       it{ should be_a(Summarization) }
       specify{ 
         subject.to_hash.keys.to_set.should eq([:s, :m].to_set)
