@@ -48,10 +48,11 @@ module Alf
       describe "from String" do
         let(:arg){ "status == 10" }
 
-        specify{
-          subject.expr.should be_a(Native)
-          subject.to_ruby_code.should eq("->{ status == 10 }")
-        }
+        it 'raises an error' do
+          lambda{
+            subject
+          }.should raise_error(ArgumentError)
+        end
       end
 
       describe "from Hash (single)" do

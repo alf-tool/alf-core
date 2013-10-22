@@ -11,10 +11,6 @@ module Alf
         Expr
       end
 
-      def parser
-        Parser.new
-      end
-
     end
   end # class Predicate
 end # module Alf

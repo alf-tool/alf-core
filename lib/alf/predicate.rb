@@ -1,4 +1,3 @@
-require_relative 'predicate/parser'
 require_relative 'predicate/factory'
 require_relative 'predicate/grammar'
 require_relative 'predicate/processors'
@@ -22,7 +21,6 @@ module Alf
         when Symbol      then identifier(arg)
         when Proc        then native(arg)
         when Hash, Tuple then eq(arg)
-        when String      then Predicate.new(Grammar.parse(arg))
         when Relation    then relation(arg)
         else
           raise ArgumentError, "Unable to coerce `#{arg}` to a predicate"

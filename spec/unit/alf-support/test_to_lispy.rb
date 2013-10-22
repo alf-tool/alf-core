@@ -52,11 +52,6 @@ module Alf
         it{ should eq("->(t){ true }")}
       end
 
-      describe "When built from a String" do
-        let(:arg){ "status > 10" }
-        it{ should eq("->{ status > 10 }")}
-      end
-
       describe "When built from a Hash" do
         let(:arg){ {:status => 10} }
         it{ should eq("->(t){ t.status == 10 }")}

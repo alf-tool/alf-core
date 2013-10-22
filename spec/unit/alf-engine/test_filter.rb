@@ -20,7 +20,7 @@ module Alf
           ]
         }
         let(:predicate){
-          Predicate.parse("name =~ /^J/")
+          Predicate.native(->(t){ t.name =~ /^J/ })
         }
         let(:expected){
           [
