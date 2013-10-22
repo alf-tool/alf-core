@@ -37,11 +37,6 @@ module Alf
     describe "on a TupleExpression" do
       let(:value){ TupleExpression.coerce(arg) }
 
-      describe "When built from a string" do
-        let(:arg){ "status.upcase" }
-        it{ should eq("->{ status.upcase }")}
-      end
-
       describe "When built from a symbol" do
         let(:arg){ :status }
         it{ should eq("->{ status }")}
@@ -71,20 +66,22 @@ module Alf
 
     describe "on a TupleComputation" do
       let(:value){ TupleComputation.coerce(arg) }
+      let(:expr){ ->(t){ status.upcase } }
 
       describe "When built from a Hash" do
-        let(:arg){ {"upcased" => "status.upcase"} }
-        it{ should eq("{upcased: ->{ status.upcase }}")}
+        let(:arg){ {"upcased" => expr} }
+        it{ should eq("{upcased: ->{ [code unavailable] }}")}
       end
 
     end # TupleComputation
 
     describe "on a Summarization" do
       let(:value){ Summarization.coerce(arg) }
+      let(:expr){ Aggregator.sum{|t| t.qty*t.price } }
 
       describe "When built from an Array" do
-        let(:arg){ {"total" => "sum{ qty*price }"} }
-        it{ should eq("{total: sum{ qty*price }}") }
+        let(:arg){ {"total" => expr} }
+        it{ should eq("{total: sum{|t| [code unavailable] }}") }
       end
 
     end # Summarization

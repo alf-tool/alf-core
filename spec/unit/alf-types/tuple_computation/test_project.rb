@@ -1,8 +1,8 @@
 require 'spec_helper'
 module Alf
   describe TupleComputation, "project" do
-    big = TupleExpression["status > 20"]
-    who = TupleExpression["first"]
+    big = TupleExpression.coerce(->(t){ t.status > 10 })
+    who = TupleExpression.coerce(->(t){ t.name })
 
     let(:comp){
       TupleComputation[big?: big, who: who]

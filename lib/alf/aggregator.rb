@@ -193,7 +193,7 @@ module Alf
     def to_lispy
       has_source_code!
     rescue NotImplementedError
-      "[lispy code unavailable]"
+      "#{Support.rubycase_name(self.class)}{|t| [code unavailable] }"
     end
 
     # Checks equality with another aggregator

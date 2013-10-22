@@ -16,21 +16,20 @@ module Alf
     describe "from a Hash without coercion" do
       let(:arg){
         {:hello  => TupleExpression.coerce(:who),
-         :hello2 => 2,
-         :hello3 => lambda{ who } }
+         :hello2 => ->(t){ t.who } }
       }
       let(:expected){
-        {hello: "alf", :hello2 => 2, :hello3 => "alf"}
+        {hello: "alf", :hello2 => "alf"}
       }
       it{ should eql(expected) }
     end
 
     describe "from a Hash with coercion" do
       let(:arg){
-        {"hello" => "who", "hello2" => "2"}
+        {"hello" => :who}
       }
       let(:expected){
-        {hello: "alf", :hello2 => 2}
+        {hello: "alf"}
       }
       it{ should eql(expected) }
     end
@@ -39,14 +38,6 @@ module Alf
       let(:arg){ Tuple(hello: TupleExpression.coerce(:who)) }
       let(:expected){ {hello: "alf"} }
 
-      it{ should eql(expected) }
-    end
-
-    describe "from an Array with coercions" do
-      let(:arg){ ["hello", "who", "hello2", "2"] }
-      let(:expected){
-        {hello: "alf", hello2: 2}
-      }
       it{ should eql(expected) }
     end
 

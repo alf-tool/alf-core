@@ -97,7 +97,7 @@ module Alf
       #
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
-        "Alf::TupleComputation[#{Support.to_ruby_literal(reused_instance)}]"
+        "Alf::TupleComputation[#{to_lispy[1...-1]}]"
       end
       alias :inspect :to_ruby_literal
       alias :to_s :to_ruby_literal

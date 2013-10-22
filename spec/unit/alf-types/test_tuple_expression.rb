@@ -4,8 +4,8 @@ module Alf
 
     def TupleExpression.exemplars
       [
-        "10",
-        "status > 10",
+        ->{ 10 },
+        ->(t){ t.status > 10 },
       ].map{|x| TupleExpression.coerce(x)}
     end
 

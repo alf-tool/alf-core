@@ -33,7 +33,6 @@ module Alf
         # Implemented coercions are:
         # - TupleExpression -> self
         # - Proc            -> TupleExpression.new(arg, nil)
-        # - String          -> TupleExpression.new(..., arg)
         # - Symbol          -> TupleExpression.new(..., arg)
         #
         # @param [Object] arg a value to convert to a tuple expression
@@ -45,7 +44,7 @@ module Alf
             arg
           when Proc
             TupleExpression.new(arg, nil)
-          when String, Symbol
+          when AttrName
             TupleExpression.new(eval("lambda{ #{arg} }"), arg)
           else
             raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
@@ -111,13 +110,6 @@ module Alf
       # @return [String] a literal s.t. `eval(self.to_ruby_literal) == self`
       def to_ruby_literal
         "Alf::#{Support.class_name(self.class)}[#{Support.to_ruby_literal(has_source_code!)}]"
-      end
-
-      # Returns a string representation of this expression
-      def inspect
-        to_ruby_literal
-      rescue NotImplementedError
-        super
       end
 
       # Asserts that this expression knows its source code or raises a

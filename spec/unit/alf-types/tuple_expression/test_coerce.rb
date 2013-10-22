@@ -13,15 +13,6 @@ module Alf
       specify{ lambda{ subject }.should raise_error(ArgumentError) }
     end
 
-    describe "with a String" do
-      let(:arg){ "true" }
-      it { should be_a(TupleExpression) }
-      specify{
-        subject.evaluate(scope).should eql(true)
-        subject.source.should eq("true")
-      }
-    end
-
     describe "with a Symbol" do
       let(:arg){ :status }
       it { should be_a(TupleExpression) }
