@@ -45,7 +45,7 @@ module Alf
           when Proc
             TupleExpression.new(arg, nil)
           when AttrName
-            TupleExpression.new(eval("lambda{ #{arg} }"), arg)
+            TupleExpression.new(eval("->(t){ t.#{arg} }"), "t.#{arg}")
           else
             raise ArgumentError, "Invalid argument `#{arg}` for TupleExpression()"
           end
@@ -100,9 +100,9 @@ module Alf
       #
       # @return [String] a lispy expression for this tuple expression
       def to_lispy
-        "->{ #{has_source_code!} }"
+        "->(t){ #{has_source_code!} }"
       rescue NotImplementedError => ex
-        "->{ [code unavailable] }"
+        "->(t){ [code unavailable] }"
       end
 
       # Returns a ruby literal for this expression.

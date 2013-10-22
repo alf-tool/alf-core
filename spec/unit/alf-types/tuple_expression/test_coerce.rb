@@ -18,7 +18,7 @@ module Alf
       it { should be_a(TupleExpression) }
       specify{
         subject.evaluate(scope).should eql(10)
-        subject.source.should eq(:status)
+        subject.source.should eq("t.status")
       }
     end
 

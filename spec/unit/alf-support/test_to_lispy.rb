@@ -41,7 +41,7 @@ module Alf
 
       describe "When built from a symbol" do
         let(:arg){ :status }
-        it{ should eq("->{ status }")}
+        it{ should eq("->(t){ t.status }")}
       end
 
     end # TupleExpression
@@ -67,7 +67,7 @@ module Alf
 
       describe "When built from a Hash" do
         let(:arg){ {"upcased" => expr} }
-        it{ should eq("{upcased: ->{ [code unavailable] }}")}
+        it{ should eq("{upcased: ->(t){ [code unavailable] }}")}
       end
 
     end # TupleComputation
