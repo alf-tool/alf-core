@@ -22,9 +22,11 @@ module Alf
       # (see Cog#each)
       def _each
         operand.each do |tuple|
-          tuple = tuple.dup
-          tuple = tuple.to_hash unless tuple.is_a?(Hash)
-          tuple.merge!(tuple.delete(@attribute) || {})
+          tuple   = tuple.dup
+          tuple   = tuple.to_hash unless tuple.is_a?(Hash)
+          wrapped = tuple.delete(@attribute) || {}
+          wrapped = symbolize(wrapped)
+          tuple.merge!(wrapped)
           yield tuple
         end
       end

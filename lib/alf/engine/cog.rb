@@ -48,6 +48,11 @@ module Alf
         Support::TupleScope.new tuple, []
       end
 
+      def symbolize(tuple)
+        tuple = Support.symbolize_keys(tuple) if tuple.keys.any?{|k| String===k }
+        tuple
+      end
+
     end # module Cog
   end # module Engine
 end # module Alf

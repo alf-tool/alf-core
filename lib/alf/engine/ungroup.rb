@@ -22,6 +22,7 @@ module Alf
           tuple = tuple.dup
           tuple = tuple.to_hash unless tuple.is_a?(Hash)
           tuple.delete(@attribute).each do |subtuple|
+            subtuple = symbolize(subtuple)
             yield tuple.merge(subtuple)
           end
         end
