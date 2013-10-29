@@ -49,4 +49,3 @@ variables:
     - {name: rspec,        version: "~> 2.14",      groups: [test, release]}
     - {name: highline,     version: "~> 1.6",       groups: [extra        ]}
     - {name: ruby_cop,     version: "~> 1.0",       groups: [extra        ]}
-
