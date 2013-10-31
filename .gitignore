@@ -11,3 +11,5 @@ examples/bench.txt
 *.rbc
 coverage
 .rbx
+Gemfile.lock
+Gemfile.ci.lock
