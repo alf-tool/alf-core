@@ -1,4 +1,8 @@
-# 0.15.0 / FIX ME
+# 0.15.1 / FIX ME
+
+* Fixed Tuple(), it now accepts no argument and returns an empty tuple.
+
+# 0.15.0 / 2013-11-01
 
 * Compiler infrastructure entirely rewritten in alf-compiler
 * Changed signature of `Adapter::Connection#cog` and associated `#to_cog`
