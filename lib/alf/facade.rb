@@ -35,8 +35,10 @@ module Alf
       end
     end
 
-    def Tuple(first, *rest, &bl)
-      if first.respond_to?(:to_tuple) && rest.empty? && bl.nil?
+    def Tuple(first = nil, *rest, &bl)
+      if first.nil? or (first.is_a?(Hash) && first.empty?)
+        Alf::Tuple::EMPTY
+      elsif first.respond_to?(:to_tuple) && rest.empty? && bl.nil?
         return first.to_tuple
       else
         tuple = Alf::Tuple.coerce(*rest.unshift(first))
