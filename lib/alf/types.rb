@@ -20,6 +20,8 @@ module Alf
     # @param [Class] c2 a data type, respresented by a ruby class
     # @return [Class] the least common super type of c1 and c2
     def common_super_type(c1, c2)
+      return c1 if c1==c2
+      return Boolean if ([c1, c2] - [Boolean, TrueClass, FalseClass]).empty?
       if x = (c1 <=> c2)
         x >= 0 ? c1 : c2
       else

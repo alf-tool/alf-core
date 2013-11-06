@@ -14,6 +14,13 @@ module Alf
         common_super_type(Fixnum, Float).should eq(Numeric)
       end
 
+      it 'works with true/false/boolean classes' do
+        common_super_type(TrueClass, FalseClass).should eq(Boolean)
+        common_super_type(TrueClass, Boolean).should eq(Boolean)
+        common_super_type(Boolean, TrueClass).should eq(Boolean)
+        common_super_type(Boolean, Boolean).should eq(Boolean)
+      end
+
       it 'fallbacks to Object' do
         common_super_type(Fixnum, String).should eq(Object)
       end

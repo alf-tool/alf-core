@@ -1,6 +1,8 @@
 # 0.15.1 / FIX ME
 
 * Fixed Tuple(), it now accepts no argument and returns an empty tuple.
+* Fixed inference of common super type when TrueClass/FalseClass/Boolean are
+  involved (for Relation#heading when infered from data).
 
 # 0.15.0 / 2013-11-01
 
