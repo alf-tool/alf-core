@@ -128,8 +128,7 @@ module Alf
         end
 
         def each_line(pretty = options[:pretty])
-          if pretty
-            trim = options[:trim_at]
+          if pretty && trim = options[:trim_at]
             each_line(false) do |line|
               yield(line[0..trim])
             end
