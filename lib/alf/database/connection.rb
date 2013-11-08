@@ -41,7 +41,7 @@ module Alf
       ### logical level
 
       def parse(*args, &bl)
-        parser.parse(*args, &bl)
+        Algebra::Operand.coerce parser.parse(*args, &bl)
       end
 
       def optimize(*args, &bl)
