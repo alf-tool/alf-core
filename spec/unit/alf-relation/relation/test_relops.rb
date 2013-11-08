@@ -35,7 +35,7 @@ module Alf
     end # union
 
     specify "difference" do
-      (rel1 - rel1).should == Alf::Relation::DUM
+      (rel1 - rel1).should == rel1.class.empty
       (rel1 - rel2).should == Alf::Relation(sid: ['S1', 'S3'])
       (rel2 - rel1).should == Alf::Relation(sid: 'S5')
     end # difference

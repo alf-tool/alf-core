@@ -31,6 +31,9 @@ module Alf
       end
 
       def to_relation
+        raise NotSupportedError unless expr
+        Relation[heading].new(each.to_set)
+      rescue NotSupportedError
         Relation.coerce(each.to_set)
       end
 
