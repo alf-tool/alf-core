@@ -11,7 +11,7 @@ module Alf
       end
 
       def to_relation
-        expr.subject
+        Relation.coerce(expr.subject)
       end
 
       ### Update
