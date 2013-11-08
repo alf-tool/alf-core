@@ -5,6 +5,7 @@
   involved (for Relation#heading when infered from data).
 * Fixed compilation of shortcut operators involving complex expressions.
 * Make Ordering#compare robust to the presence of `nil`.
+* Ensured Engine::Leaf correctly symbolize tuple keys of its input operand.
 
 # 0.15.0 / 2013-11-01
 

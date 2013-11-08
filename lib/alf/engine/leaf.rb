@@ -16,8 +16,10 @@ module Alf
       end
 
       # (see Cog#each)
-      def _each(&block)
-        operand.each(&block)
+      def _each
+        operand.each do |tuple|
+          yield(symbolize(tuple))
+        end
       end
 
       def to_s
