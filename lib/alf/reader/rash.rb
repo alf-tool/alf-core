@@ -27,6 +27,11 @@ module Alf
         end
       end
 
+      # Register .rash files for Relation loading
+      Path.register_loader('.rash'){|file|
+        Alf::Reader::Rash.new(file).to_a
+      }
+
       Reader.register(:rash, [".rash"], self)
     end # class Rash
   end # class Reader
