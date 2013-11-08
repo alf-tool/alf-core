@@ -4,6 +4,7 @@
 * Fixed inference of common super type when TrueClass/FalseClass/Boolean are
   involved (for Relation#heading when infered from data).
 * Fixed compilation of shortcut operators involving complex expressions.
+* Make Ordering#compare robust to the presence of `nil`.
 
 # 0.15.0 / 2013-11-01
 

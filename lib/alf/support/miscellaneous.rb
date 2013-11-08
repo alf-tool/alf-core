@@ -56,5 +56,14 @@ module Alf
       tuple.each_with_object({}){|(k,v),h| h[k.to_s] = v}
     end
 
+    # Compare `x` and `y` in a robust way, that is, by handling `nil` without
+    # failure.
+    def robust_compare(x, y)
+      return 0  if x==y
+      return -1 if x.nil?
+      return 1  if y.nil?
+      x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
+    end
+
   end # module Support
 end # module Alf

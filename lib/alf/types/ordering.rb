@@ -39,7 +39,7 @@ module Alf
       # @param [Array] ordering the underlying ordering info
       def initialize(ordering = [])
         super
-        @sorter = lambda{|t1,t2| compare(t1, t2)}
+        @sorter = lambda{|t1,t2| compare(t1, t2) }
       end
 
       reuse :to_a
@@ -68,7 +68,7 @@ module Alf
         extract = proc{|t,x| Array(x).inject(t){|m,a| m[a]} }
         reused_instance.each do |atr, dir|
           x, y = extract[t1,atr], extract[t2,atr]
-          comp = x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
+          comp = Support.robust_compare(x, y)
           comp *= -1 if dir == :desc
           return comp unless comp == 0
         end

@@ -25,5 +25,12 @@ module Alf
       key.compare({:a => 1, :b => 1}, {:a => 1, :b => 1}).should == 0
     end
 
+    it "should work when nils are involved" do
+      key = Ordering.coerce [:a]
+      key.compare({:a => nil}, {:a => nil}).should == 0
+      key.compare({:a => 1}, {:a => nil}).should == 1
+      key.compare({:a => nil}, {:a => 1}).should == -1
+    end
+
   end # compare
 end # Alf
