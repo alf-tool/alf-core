@@ -77,9 +77,7 @@ module Alf
     end
 
     def to_relation
-      type.new(to_cog.to_set)
-    rescue NotSupportedError
-      Relation.coerce(to_cog.each.to_a)
+      to_cog.to_relation
     end
 
   private
