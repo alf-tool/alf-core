@@ -22,7 +22,7 @@ module Alf
     end
 
     def on_shortcut(plan, expr, *compiled)
-      plan.recompile(*compiled){|p| expr.expand }
+      plan.__compile{|p| expr.expand }
     end
 
     def on_missing(plan, expr, *compiled)

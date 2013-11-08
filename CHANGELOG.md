@@ -3,6 +3,7 @@
 * Fixed Tuple(), it now accepts no argument and returns an empty tuple.
 * Fixed inference of common super type when TrueClass/FalseClass/Boolean are
   involved (for Relation#heading when infered from data).
+* Fixed compilation of shortcut operators involving complex expressions.
 
 # 0.15.0 / 2013-11-01
 
