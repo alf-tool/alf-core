@@ -1,28 +1,22 @@
 template-info:
-  name: "rubygem.noe"
-  version: 2.0.1
+  name: "alf.noe"
+  version: 0.2.0
   manifest:
-    lib/__lower__/loader.rb:
-      safe-override: false
-    lib/__lower__/version.rb:
-      safe-override: false
-    tasks/spec_test.rake:
+    tasks/test.rake:
       ignore: true
+    lib/alf/__lower__/loader.rb:
+      safe-override: false
     spec/test___lower__.rb:
       ignore: true
-    tasks/unit_test.rake:
-      safe-override: false
-    tasks/debug_mail.txt:
-      ignore: true
-    tasks/debug_mail.rake:
-      ignore: true
     Gemfile:
-      ignore: true
+      safe-override: false
+    Gemfile.ci:
+      safe-override: false
 variables:
   lower:
-    alf-core
+    core
   upper:
-    Alf::Core
+    Core
   version:
     0.15.1
   summary: |-
