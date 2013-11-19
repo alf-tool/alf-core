@@ -12,6 +12,7 @@ module Alf
           Frame,
           Group,
           Hierarchize,
+          Image,
           Intersect,
           Join,
           Matching,

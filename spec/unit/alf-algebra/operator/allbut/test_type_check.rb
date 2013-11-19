@@ -13,7 +13,7 @@ module Alf
         it{ should eq(op.heading) }
       end
 
-      context 'when projectping unexisting attribute' do
+      context 'when projecting unexisting attribute' do
         let(:op){ 
           allbut(suppliers, [:sid, :unknown])
         }
@@ -25,7 +25,7 @@ module Alf
         end
       end
 
-      context 'when projectping unexisting attributes' do
+      context 'when projecting unexisting attributes' do
         let(:op){ 
           allbut(suppliers, [:sid, :foo, :bar])
         }
