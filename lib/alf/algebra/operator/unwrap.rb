@@ -11,8 +11,11 @@ module Alf
 
       def heading
         @heading ||= begin
-          op_h = operand.heading
-          op_h.allbut([attribute]).merge(op_h[attribute].heading)
+          op_h   = operand.heading
+          type   = op_h[attribute]
+          raise NotSupportedError unless type.respond_to?(:heading)
+          down_h = type.heading
+          op_h.allbut([attribute]).merge(down_h)
         end
       end
 
