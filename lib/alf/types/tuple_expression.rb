@@ -17,13 +17,17 @@ module Alf
       # @return [String] the expression source code (may be nil)
       attr_reader :source
 
+      # @return [Class] the resulting type (Object by default)
+      attr_reader :result_type
+
       # Creates a tuple expression from a Proc object
       #
       # @param [Proc] expr a Proc for the expression
       # @param [String] source the source code of the expression (optional)
-      def initialize(expr, source = nil)
+      def initialize(expr, source = nil, result_type = Object)
         @expr_lambda = expr
         @source = source
+        @result_type = result_type
       end
 
       class << self
@@ -43,7 +47,7 @@ module Alf
           when TupleExpression
             arg
           when Proc
-            TupleExpression.new(arg, nil)
+            TupleExpression.new(arg)
           when AttrName
             TupleExpression.new(eval("->(t){ t.#{arg} }"), "t.#{arg}")
           else
@@ -72,7 +76,7 @@ module Alf
       #
       # @return [Class] the type inferred from expression source code
       def infer_type
-        Object
+        result_type || Object
       end
 
       # Returns a hash code.

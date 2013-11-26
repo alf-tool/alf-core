@@ -6,7 +6,7 @@ module Alf
       let(:operand){
         an_operand.with_heading(:name => String)
       }
-      let(:op){ 
+      let(:op){
         a_lispy.extend(operand, :computed => lambda{ 12 })
       }
 
@@ -22,6 +22,17 @@ module Alf
             should eq(expected)
           end
         }
+      end
+
+      context 'when types are known on tuple expressions' do
+        let(:op){
+          a_lispy.extend(operand, :computed => TupleExpression.new(lambda{ 12 }, nil, Integer))
+        }
+        let(:expected){
+          Heading[:name => String, :computed => Integer]
+        }
+
+        it{ should eq(expected) }
       end
 
       context 'with current expression analysis' do
