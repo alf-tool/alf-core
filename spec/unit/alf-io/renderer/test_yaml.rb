@@ -15,7 +15,7 @@ module Alf
         let(:input){ Relation(id: [1, 2]) }
 
         it 'outputs as expected' do
-          ::YAML.load(subject).should eq([{id: 1}, {id: 2}])
+          ::YAML.load(subject).should eq([{"id" => 1}, {"id" => 2}])
         end
       end
 

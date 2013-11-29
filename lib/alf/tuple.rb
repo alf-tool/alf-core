@@ -41,7 +41,7 @@ module Alf
 
     def split(attr_list)
       return [ EMPTY, self ] if attr_list.empty?
-      left, right = {}, to_hash
+      left, right = {}, to_hash(true)
       (heading.to_attr_list & attr_list).each do |a|
         left[a] = right.delete(a)
       end
@@ -79,7 +79,7 @@ module Alf
       Tuple[Heading.infer(res)].new(res)
     end
 
-    def to_hash(dup = true)
+    def to_hash(dup = false)
       dup ? reused_instance.dup : reused_instance
     end
 

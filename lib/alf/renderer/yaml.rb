@@ -9,6 +9,13 @@ module Alf
         "text/yaml"
       end
 
+      def execute(output = $stdout)
+        require "psych"
+        visitor = Psych::Visitors::YAMLTree.new
+        visitor << self
+        output << visitor.tree.to_yaml
+      end
+
       def each
         return to_enum unless block_given?
         require "yaml"
