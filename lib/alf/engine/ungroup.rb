@@ -21,7 +21,10 @@ module Alf
         operand.each do |tuple|
           tuple = tuple.dup
           tuple = tuple.to_hash unless tuple.is_a?(Hash)
-          tuple.delete(@attribute).each do |subtuple|
+          unless rva = tuple.delete(@attribute)
+            raise "No such RVA `#{@attribute}` on #{tuple.inspect}"
+          end
+          rva.each do |subtuple|
             subtuple = symbolize(subtuple)
             yield tuple.merge(subtuple)
           end
