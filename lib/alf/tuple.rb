@@ -79,7 +79,7 @@ module Alf
       Tuple[Heading.infer(res)].new(res)
     end
 
-    def to_hash(dup = false)
+    def to_hash(dup = true)
       dup ? reused_instance.dup : reused_instance
     end
 
