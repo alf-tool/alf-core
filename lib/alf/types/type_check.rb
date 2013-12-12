@@ -29,22 +29,10 @@ module Alf
       end
 
       def check!(tuple)
-        unless TupleLike===tuple
-          error("not a tuple")
-        end
-        expec_keys, tuple_keys = @attr_list, AttrList.new(tuple.keys)
-        unless (missing = expec_keys - tuple_keys).empty?
-          error("Missing attribute", missing.to_a)
-        end
-        unless (extra = tuple_keys - expec_keys).empty?
-          error("Unexpected attribute", extra.to_a)
-        end
-        tuple.to_hash.each_pair do |k,v|
-          expected = @heading[k]
-          unless v.nil? or (expected === v)
-            error("Invalid value `#{k}` for `#{expected}`")
-          end
-        end
+        check_type!(tuple)
+        check_missing_attributes!(tuple)
+        check_extra_attributes!(tuple)
+        check_values!(tuple)
       end
 
       def error(msg, what = nil)
@@ -52,6 +40,35 @@ module Alf
           msg << (what.size == 1 ? " `" : "s `") << what.join(', ') << "`"
         end
         raise Error, msg
+      end
+
+    private
+
+      def check_type!(tuple)
+        error("not a tuple") unless TupleLike===tuple
+      end
+
+      def check_missing_attributes!(tuple)
+        expec_keys, tuple_keys = @attr_list, AttrList.new(tuple.keys)
+        unless (missing = expec_keys - tuple_keys).empty?
+          error("Missing attribute", missing.to_a)
+        end
+      end
+
+      def check_extra_attributes!(tuple)
+        expec_keys, tuple_keys = @attr_list, AttrList.new(tuple.keys)
+        unless (extra = tuple_keys - expec_keys).empty?
+          error("Unexpected attribute", extra.to_a)
+        end
+      end
+
+      def check_values!(tuple)
+        tuple.to_hash.each_pair do |k,v|
+          expected = @heading[k]
+          unless v.nil? or v.is_a?(expected) or (expected === v)
+            error("Invalid value `#{k}` for `#{expected}`")
+          end
+        end
       end
 
     end # class TypeCheck
