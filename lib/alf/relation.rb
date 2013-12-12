@@ -24,7 +24,8 @@ module Alf
     include Lang::ObjectOriented
 
     def initialize(tuples)
-      super(tuples.map{|x| Tuple.coerce(x)}.to_set)
+      tuple_type = self.class.to_tuple_type
+      super(tuples.map{|x| tuple_type.coerce(x) }.to_set)
     end
 
     coercions do |c|
@@ -42,8 +43,7 @@ module Alf
       end
       c.coercion(Enumerable) do |v,rt|
         rt = Relation[Engine::InferHeading.new(v).first] if Relation==rt
-        tt = rt.generating_type.is_a?(Class) ? rt.generating_type : Tuple[rt.heading]
-        rt.new(v.map{|t| tt.coerce(t) }.to_set).check_internal_representation!
+        rt.new(v).check_internal_representation!
       end
     end
 

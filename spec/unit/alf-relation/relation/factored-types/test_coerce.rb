@@ -37,7 +37,11 @@ module Alf
       }
 
       it 'coerces the tuples as correct instances' do
-        subject.all?{|t| t.is_a?(tuple_type) }.should be_true
+        subject.all?{|t|
+          puts t.class unless t.is_a?(tuple_type)
+          (tuple_type === t).should be_true
+          t.should be_a(tuple_type)
+        }.should be_true
       end
     end
 

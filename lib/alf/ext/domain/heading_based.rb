@@ -54,10 +54,16 @@ module Domain
           other.to_heading==to_heading
         }
         define_method(:coerce){|arg|
+          return arg if self==arg.class
           master_class.coercions.apply(arg, self)
         }
         define_method(:to_heading){
           @heading ||= Alf::Heading.coerce(generating_type)
+        }
+        define_method(:to_tuple_type){
+          return self if Alf::Tuple==master_class
+          return gt   if gt.is_a?(Class) && gt < Alf::Tuple
+          @tuple_type ||= Alf::Tuple[to_heading]
         }
         define_method(:recursive?){
           h = to_heading
