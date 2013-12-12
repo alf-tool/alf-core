@@ -30,11 +30,15 @@ module Alf
         Support::Tree.new(self).to_text
       end
 
+      def relation_type
+        @relation_type ||= Relation[heading]
+      end
+
       def to_relation
         raise NotSupportedError unless expr
-        Relation[heading].new(each.to_set)
+        relation_type.new(each)
       rescue NotSupportedError
-        Relation.coerce(each.to_set)
+        Relation.coerce(each)
       end
 
     end # module Cog
