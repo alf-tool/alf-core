@@ -25,7 +25,7 @@ module Alf
       end
 
       def group_type
-        Relation[right.heading.allbut(common_attrs)]
+        @group_type ||= Relation[right.heading.allbut(common_attrs)]
       end
 
     end # class Image
