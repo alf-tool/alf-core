@@ -6,6 +6,7 @@
 * Fixed compilation of shortcut operators involving complex expressions.
 * Make Ordering#compare robust to the presence of `nil`.
 * Ensured Engine::Leaf correctly symbolize tuple keys of its input operand.
+* Selection now also accepts non-array selections from Symbol and String.
 
 # 0.15.0 / 2013-11-01
 

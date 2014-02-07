@@ -8,30 +8,52 @@ module Alf
       subject.should be_a(Selection)
     end
 
-    let(:expected){
-      Selection.new([ Selector.new(:name), Selector.new(:city) ])
-    }
-
-    context 'on an array of strings' do
-      let(:arg){ ["name", "city"] }
-
-      it { should eq(expected) }
-    end
-
-    context 'on an array of strings with composite selections' do
-      let(:arg){ ["name", "city.name"] }
+    context 'with a Symbol' do
+      let(:arg){ :name }
 
       let(:expected){
-        Selection.new([ Selector.new(:name), Selector.new([:city, :name]) ])
+        Selection.new(:name)
       }
 
-      it { should eq(expected) }
+      it{ should eq(expected) }
     end
 
-    context 'on an array of symbols' do
-      let(:arg){ [:name, :city] }
+    context 'with a String' do
+      let(:arg){ "name" }
 
-      it { should eq(expected) }
+      let(:expected){
+        Selection.new(:name)
+      }
+
+      it{ should eq(expected) }
+    end
+
+    context 'with arrays' do
+      let(:expected){
+        Selection.new([ Selector.new(:name), Selector.new(:city) ])
+      }
+
+      context 'on an array of strings' do
+        let(:arg){ ["name", "city"] }
+
+        it { should eq(expected) }
+      end
+
+      context 'on an array of strings with composite selections' do
+        let(:arg){ ["name", "city.name"] }
+
+        let(:expected){
+          Selection.new([ Selector.new(:name), Selector.new([:city, :name]) ])
+        }
+
+        it { should eq(expected) }
+      end
+
+      context 'on an array of symbols' do
+        let(:arg){ [:name, :city] }
+
+        it { should eq(expected) }
+      end
     end
 
   end
