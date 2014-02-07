@@ -27,5 +27,13 @@ module Alf
       rel.to_hash(:city => :status).should eq('London' => 20)
     end
 
+    specify "with [:sid, :name] => :status" do
+      rel.to_hash([:sid, :name] => :status).should eq(['S1', 'Jones'] => 20, ['S2', 'Blake'] => 20)
+    end
+
+    specify "with :sid => [:name, :status]" do
+      rel.to_hash(:sid => [:name, :status]).should eq('S1' => ['Jones', 20], 'S2' => ['Blake', 20])
+    end
+
   end
 end
