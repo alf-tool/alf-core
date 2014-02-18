@@ -6,7 +6,7 @@ module Alf
       signature do |s|
         s.argument :id,     AttrList, [:id]
         s.argument :parent, AttrList, [:parent]
-        s.argument :as,     AttrName, [:children]
+        s.argument :as,     AttrName, :children
       end
 
       def heading
