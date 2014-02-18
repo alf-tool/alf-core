@@ -66,7 +66,7 @@ module Alf
         tuple.to_hash.each_pair do |k,v|
           expected = @heading[k]
           unless v.nil? or v.is_a?(expected) or (expected === v)
-            error("Invalid value `#{k}` for `#{expected}`")
+            error("Invalid attribute value under `#{k}` for `#{expected}`")
           end
         end
       end
