@@ -1,4 +1,4 @@
-# 0.16.0 / FIX ME
+# 0.16.0 / 2014-02-18
 
 * Fixed Tuple(), it now accepts no argument and returns an empty tuple.
 * Fixed inference of common super type when TrueClass/FalseClass/Boolean are
