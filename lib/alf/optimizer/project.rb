@@ -21,7 +21,7 @@ module Alf
       def apply(expr, attributes, allbut, search)
         check_stop(expr, attributes, allbut, search){ super }
       rescue NotSupportedError
-        project(expr, attributes, allbut)
+        project(expr, attributes, allbut: allbut)
       end
 
       def check_stop(expr, attributes, allbut, search)
