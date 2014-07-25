@@ -1,4 +1,4 @@
-# 0.16.3 - FIX ME
+# 0.16.3 - 2014-07-25
 
 * No change in this submodule.
 
