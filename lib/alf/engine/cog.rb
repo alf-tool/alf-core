@@ -49,7 +49,9 @@ module Alf
       end
 
       def symbolize(tuple)
-        tuple = Support.symbolize_keys(tuple) if tuple.keys.any?{|k| String===k }
+        if tuple.respond_to?(:keys) && tuple.keys.any?{|k| String===k }
+          tuple = Support.symbolize_keys(tuple)
+        end
         tuple
       end
 
