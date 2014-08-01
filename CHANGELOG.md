@@ -1,6 +1,7 @@
 # 0.17.0 - FIX ME
 
-* No change in this submodule.
+* Added a Relvar::Memory abstraction, a test helper for Alf itself and client
+  code.
 
 # 0.16.3 - 2014-07-25
 
