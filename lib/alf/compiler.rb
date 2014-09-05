@@ -17,6 +17,14 @@ module Alf
       send(to_method_name(expr), plan, expr, *compiled)
     end
 
+    def on_relation(plan, expr)
+      expr.to_cog(plan)
+    end
+
+    def on_relvar(plan, expr)
+      expr.to_cog(plan)
+    end
+
     def on_leaf_operand(plan, expr)
       expr.to_cog(plan)
     end
@@ -43,6 +51,10 @@ module Alf
         meth = :"on_shortcut" if expr.is_a?(Algebra::Shortcut) and !respond_to?(meth)
         meth = :"on_missing"  if !respond_to?(meth)
         meth
+      when Relation
+        :on_relation
+      when Relvar
+        :on_relvar
       when Algebra::Operand
         :on_leaf_operand
       else
