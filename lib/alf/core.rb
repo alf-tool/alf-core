@@ -27,6 +27,7 @@ require_relative 'adapter'
 require_relative 'viewpoint'
 require_relative 'database'
 require_relative 'adapter/fs'
+require_relative 'adapter/memory'
 
 module Alf
   extend Facade
