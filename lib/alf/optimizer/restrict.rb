@@ -112,8 +112,13 @@ module Alf
       end
 
       def on_unwrap(expr, predicate, search)
-        # TODO:
-        restrict(expr, predicate)
+        wrapped_type = expr.operand.heading[expr.attribute]
+        if wrapped_type < Tuple
+          attributes = wrapped_type.to_heading.to_attr_list
+          unary_split(expr, predicate, attributes, search)
+        else
+          restrict(expr, predicate)
+        end
       end
 
       def on_wrap(expr, predicate, search)

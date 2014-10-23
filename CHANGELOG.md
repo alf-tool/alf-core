@@ -2,6 +2,8 @@
 
 * Added a Relvar::Memory abstraction, a test helper for Alf itself and client
   code.
+* Added optimization of restrict over unwrap when the resulting type is known
+  and a proper TupleType.
 
 # 0.16.3 - 2014-07-25
 
