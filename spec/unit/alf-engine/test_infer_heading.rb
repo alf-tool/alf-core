@@ -53,6 +53,19 @@ module Alf
         it{ should eq(expected) }
       end
 
+      context 'it favors Boolean' do
+        let(:input){
+          [
+            {tested: true},
+          ]
+        }
+        let(:expected){
+          {tested: Boolean}
+        }
+
+        it{ should eq(expected) }
+      end
+
     end
   end # module Engine
 end # module Alf

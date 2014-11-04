@@ -22,7 +22,11 @@ module Alf
     private
 
       def heading(tuple)
-        Alf::Heading[Hash[tuple.map{|k,v| [k, v.class]}]]
+        Alf::Heading[Hash[tuple.map{|k,v|
+          clazz = v.class
+          clazz = Boolean if clazz==TrueClass || clazz==FalseClass
+          [k, clazz]
+        }]]
       end
 
     end
