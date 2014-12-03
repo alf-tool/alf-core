@@ -13,3 +13,4 @@ coverage
 .rbx
 Gemfile.lock
 Gemfile.ci.lock
+vendor
