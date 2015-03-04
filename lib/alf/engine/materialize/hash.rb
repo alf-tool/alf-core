@@ -44,18 +44,31 @@ module Alf
       # @return [Enumerable] The operand
       attr_reader :operand
 
-      # @return [AttrList] Attributes for the hash key
-      attr_reader :key
+      # @return [AttrList|Proc] Attributes for the hash key
+      attr_accessor :key
 
       # @return [Boolean] Hash on all but specified attributes?
-      attr_reader :allbut
+      attr_accessor :allbut
+
+      # @return [Proc] a proc that returns the neural value for newly found index
+      # keys
+      attr_accessor :neutral
+
+      # @return [Proc] a proc that accumulates tuples (key, accumulator, tuple)
+      attr_accessor :accumulate
 
       # Creates a Materialize::Hash instance
-      def initialize(operand, key, allbut = false, expr = nil, compiler = nil)
+      def initialize(operand, key = [], allbut = false, expr = nil, compiler = nil)
         super(expr, compiler)
         @operand = operand
         @key = key
         @allbut = allbut
+        @neutral = ->(key){
+          []
+        }
+        @accumulate = ->(key, accumulator, tuple){
+          accumulator << tuple
+        }
         @materialized = nil
       end
 
@@ -90,9 +103,10 @@ module Alf
       # Prepare through materialization of the operand as a hash
       def prepare
         @materialized ||= begin
-          h = ::Hash.new{|h,k| h[k] = []}
+          h = ::Hash.new{|h,k| h[k] = @neutral.call(h) }
           operand.each do |tuple|
-            h[key_for(tuple)] << tuple
+            index_key = key_for(tuple)
+            @accumulate.call(index_key, h[index_key], tuple)
           end
           h
         end
