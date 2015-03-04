@@ -1,5 +1,9 @@
 # 0.17.0 - FIX ME
 
+* Converted Image as a First-class operator instead of a shortcut one. Comes
+  with a fairly smart implementation that makes a single pass on the right
+  operand, avoid unnecessary memory footprint and puts the proper RVA type,
+  infering it on the fly if required.
 * Added a Relvar::Memory abstraction, a test helper for Alf itself and client
   code.
 * Added optimization of restrict over unwrap when the resulting type is known

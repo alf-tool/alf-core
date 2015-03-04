@@ -66,6 +66,10 @@ module Alf
         factor(Engine::Hierarchize, expr, compiled, expr.id, expr.parent, expr.as)
       end
 
+      def on_image(plan, expr, left, right)
+        factor(Engine::Image::Hash, expr, left, right, expr.as)
+      end
+
       def on_intersect(plan, expr, left, right)
         factor(Engine::Join::Hash, expr, left, right)
       end

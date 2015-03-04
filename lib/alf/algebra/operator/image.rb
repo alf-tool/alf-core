@@ -1,21 +1,20 @@
 module Alf
   module Algebra
     class Image
-      include Shortcut
+      include Operator
+      include Relational
       include Binary
 
       signature do |s|
-        s.argument :name, AttrName, []
+        s.argument :as, AttrName, []
+      end
+
+      def heading
+        @heading ||= left.heading + Heading.coerce(as => group_type)
       end
 
       def keys
         left.keys
-      end
-
-      def expand
-        grouped = join(left, group(right, common_attrs, name, allbut: true))
-        missing = extend(not_matching(left, right), name => group_type.empty)
-        union(grouped, missing)
       end
 
     private
@@ -26,6 +25,11 @@ module Alf
 
       def group_type
         @group_type ||= Relation[right.heading.allbut(common_attrs)]
+      end
+
+      def _type_check(options)
+        joinable_headings!(left.heading, right.heading, options)
+        no_name_clash!(left.attr_list, AttrList[as])
       end
 
     end # class Image

@@ -6,7 +6,7 @@ module Alf
       subject{ op.keys }
 
       let(:op){ 
-        image(suppliers, supplies, :supplying)
+        a_lispy.image(suppliers, supplies, :supplying)
       }
 
       it{ should eq(Keys[[:sid], [:name]]) }

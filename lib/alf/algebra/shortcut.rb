@@ -38,4 +38,3 @@ module Alf
   end # module Algebra
 end # module Alf
 require_relative 'shortcut/allbut'
-require_relative 'shortcut/image'

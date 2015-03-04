@@ -6,7 +6,7 @@ module Alf
       subject{ op.heading }
 
       let(:op){ 
-        image(suppliers, supplies, :supplying)
+        a_lispy.image(suppliers, supplies, :supplying)
       }
 
       let(:expected){
