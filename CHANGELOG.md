@@ -5,6 +5,8 @@
 * Added optimization of restrict over unwrap when the resulting type is known
   and a proper TupleType.
 * Fixed type inference to favor Boolean over TrueClass and FalseClass
+* Fixes YAML rendering under ruby >= 2.1. As a nasty side effect, attribute
+  names in TVAs and RVAs will be dumped as Symbols, not Strings...
 
 # 0.16.3 - 2014-07-25
 

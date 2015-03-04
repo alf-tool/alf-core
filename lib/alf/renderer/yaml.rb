@@ -9,19 +9,13 @@ module Alf
         "text/yaml"
       end
 
-      def execute(output = $stdout)
-        require "psych"
-        visitor = Psych::Visitors::YAMLTree.new
-        visitor << self
-        output << visitor.tree.to_yaml
-      end
-
       def each
         return to_enum unless block_given?
         require "yaml"
         yield("---\n")
         Engine::ToArray.new(input).each do |tuple|
-          yield "-" << tuple.to_hash.to_yaml[4..-1].gsub(/^/, "  ")[1..-1]
+          hash = Alf::Support.unsymbolize_keys(tuple.to_hash)
+          yield "-" << hash.to_yaml[4..-1].gsub(/^/, "  ")[1..-1]
         end
         yield("\n")
       end
