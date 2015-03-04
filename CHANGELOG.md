@@ -1,5 +1,7 @@
 # 0.17.0 - FIX ME
 
+* Improved the engine implementation for matching and not_matching (Semi::Hash)
+  to avoid unnecessary memory footprint.
 * Converted Image as a First-class operator instead of a shortcut one. Comes
   with a fairly smart implementation that makes a single pass on the right
   operand, avoid unnecessary memory footprint and puts the proper RVA type,

@@ -94,8 +94,7 @@ module Alf
       # @return [Cog] the tuples from operand that match `key_tuple`
       def [](key_tuple, project = false)
         key_tuple = key_for(key_tuple) if project
-        m = materialized
-        m.has_key?(key_tuple) ? m[key_tuple] : []
+        materialized[key_tuple]
       end
 
       # (see Cog#prepare)
@@ -106,7 +105,7 @@ module Alf
           h = ::Hash.new{|h,k| h[k] = @neutral.call(h) }
           operand.each do |tuple|
             index_key = key_for(tuple)
-            @accumulate.call(index_key, h[index_key], tuple)
+            h[index_key] = @accumulate.call(index_key, h[index_key], tuple)
           end
           h
         end

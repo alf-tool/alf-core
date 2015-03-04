@@ -33,17 +33,29 @@ module Alf
       def _each
         index = nil
         left.each do |left_tuple|
-          index ||= Materialize::Hash.new(right, lambda{|t|
-            AttrList.new(left_tuple.keys & t.keys)
-          }, false).prepare
-          if index[left_tuple, true].empty? != predicate
-            yield left_tuple 
-          end
+          index ||= build_index(left_tuple, right)
+          yield left_tuple if index[left_tuple, true] == predicate
         end
       end
 
       def arguments
         [ predicate ]
+      end
+
+    private
+
+      def build_index(left_witness, right)
+        index = Materialize::Hash.new(right)
+        index.key = ->(t){
+          AttrList.new(left_witness.keys & t.keys)
+        }
+        index.neutral = ->(t){
+          false
+        }
+        index.accumulate = ->(_,c,_){
+          true
+        }
+        index.prepare
       end
 
     end # class Semi::Hash
