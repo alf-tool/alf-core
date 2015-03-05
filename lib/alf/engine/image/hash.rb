@@ -61,7 +61,7 @@ module Alf
           images[key] << image
           heading += Heading.infer(image) if infer_type
         end
-        [ key_attrs, image_type || Relation[heading], images ]
+        [ key_attrs || AttrList::EMPTY, image_type || Relation[heading], images ]
       end
 
       def image_type

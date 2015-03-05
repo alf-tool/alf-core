@@ -32,8 +32,21 @@ module Alf
           op = Image::Hash.new(left, right, :img)
           op.to_relation.should eq(expected)
         end
+      end
 
-        it 'should allow specifying allbut grouping' do
+      context 'when right is empty' do
+        let(:left){Relation([
+          {sid: "S1", city: "London"}
+        ])}
+
+        let(:right){Relation([
+        ])}
+
+        let(:expected){Relation([
+          {sid: "S1", city: "London", img: Relation::DUM },
+        ])}
+
+        it 'should not fail and behave as expected' do
           op = Image::Hash.new(left, right, :img)
           op.to_relation.should eq(expected)
         end
