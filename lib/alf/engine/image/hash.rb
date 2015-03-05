@@ -41,6 +41,10 @@ module Alf
         end
       end
 
+      def operands
+        [ left, right ]
+      end
+
       def arguments
         [ as ]
       end
