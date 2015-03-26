@@ -43,6 +43,10 @@ module Alf
       to_relation
     end
 
+    def size
+      to_a.size
+    end
+
     def lock(*)
       raise NotSupportedError
     end
