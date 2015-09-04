@@ -3,7 +3,7 @@ module Alf
     extend Domain::Reuse.new(Hash)
     extend Domain::HeadingBased.new(self)
 
-    reuse :map, :size, :empty?, :[], :to_a, :keys, :values_at, :has_key?
+    reuse :map, :size, :empty?, :fetch, :[], :to_a, :keys, :values_at, :has_key?
 
     coercions do |c|
       c.coercion(Tuple){|tuple,type|
