@@ -8,7 +8,7 @@ module Alf
 
       def each
         return to_enum unless block_given?
-        yield "<table class=\"table table-condensed table-bordered table-striped\">"
+        yield "<table>"
         header = nil
         each_tuple do |tuple|
           unless header
