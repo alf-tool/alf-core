@@ -62,7 +62,7 @@ module Alf
       return 0  if x==y
       return -1 if x.nil?
       return 1  if y.nil?
-      x.respond_to?(:<=>) ? (x <=> y) : (x.to_s <=> y.to_s)
+      x.respond_to?(:<=>) && !([true, false].include? x) ? (x <=> y) : (x.to_s <=> y.to_s)
     end
 
   end # module Support
