@@ -1,3 +1,7 @@
+# 0.18.0 - FIX ME
+
+* Relax 'path' version restrictions. Allow 2.x versions too.
+
 # 0.17.0 - FIX ME
 
 * Improved the engine implementation for matching and not_matching (Semi::Hash)
