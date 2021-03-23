@@ -18,7 +18,7 @@ variables:
   upper:
     Core
   version:
-    0.17.0
+    0.18.0
   summary: |-
     Relational Algebra at your fingertips
   description: |-
