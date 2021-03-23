@@ -1,4 +1,4 @@
-# 0.18.0 - FIX ME
+# 0.18.0 - 2021-03-23
 
 * Relax 'path' version restrictions. Allow 2.x versions too.
 
