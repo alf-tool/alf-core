@@ -2,7 +2,7 @@
 
 * Relax 'path' version restrictions. Allow 2.x versions too.
 
-# 0.17.0 - FIX ME
+# 0.17.0 - 2021-03-23
 
 * Improved the engine implementation for matching and not_matching (Semi::Hash)
   to avoid unnecessary memory footprint.
